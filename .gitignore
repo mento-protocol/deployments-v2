@@ -12,3 +12,7 @@ docs/
 
 # Dotenv file
 .env
+
+.crush
+.treb/config.local.json
+node_modules

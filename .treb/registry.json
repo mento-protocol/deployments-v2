@@ -1,1 +1,25 @@
-{}
+{
+  "44787": {
+    "test": {
+      "ProxyAdmin": "0x48fE6f64af13AFEE06bA5326E279Cf159b3002f4",
+      "Reserve:v2.6.5": "0x7B0e1bdA173e3Fe36438D3945380CEe0c9Ac7193",
+      "TransparentUpgradeableProxy:Reserve": "0xda32fdC10c742dF94012Ae0076B7316d8b63F76B"
+    }
+  },
+  "8453": {
+    "virtual": {
+      "AddressSortedLinkedListWithMedian": "0x4A3c2363729321997D943faA4291460fC08c8D56",
+      "ChainlinkRelayerFactory:v2.6.5": "0xA0D5bE942dBea96354f39235FD71a849CbBb85ab",
+      "ChainlinkRelayerV1:USDC/USD": "0x1c1abca7C19dfE67737E833701ed03964Edf2C5f",
+      "ProxyAdmin": "0x59c0c91e6B0efEcf1453824d28450Ca61F3D65b5",
+      "SortedOracles:v2.6.5": "0xE3F0A146b6C378b31F88aB97C8149948a0Cfbecf",
+      "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x0d3d861510FA460bE03380A7b7C03668157e7E25",
+      "TransparentUpgradeableProxy:SortedOracles": "0x0Ae3676D6e2f06bD839749503ceb0090421b2929"
+    }
+  },
+  "84532": {
+    "throwaway": {
+      "ProxyAdmin": "0xAEFdA95f9966fde9e3A60Ce0717CeE9662B92F85"
+    }
+  }
+}

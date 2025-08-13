@@ -1,0 +1,66 @@
+group: Mento Protocol
+components:
+  ProxyAdmin:
+    script: DeployProxyAdmin
+  AddressSortedLinkedListWithMedian:
+    script: DeployAddressSortedLinkedListWithMedian
+  SortedOracles:
+    script: DeploySortedOracles
+    deps:
+      - AddressSortedLinkedListWithMedian
+      - ProxyAdmin
+  BreakerBox:
+    script: DeployBreakerBox
+    deps: 
+      - SortedOracles
+  Broker:
+    script: DeployBroker
+    deps:
+      - ProxyAdmin
+  Reserve:
+    script: DeployReserve
+    deps: 
+      - ProxyAdmin
+  PricingModules:
+    script: DeployPricingModules
+  StableTokenV2Implementation:
+    script: DeployStableTokenV2Implementation
+  Tokens:
+    script: DeployTokens
+    deps: 
+      - ProxyAdmin
+      - Broker
+      - StableTokenV2Implementation
+  BiPoolManager:
+    script: DeployBiPoolManager
+    deps:
+      - ProxyAdmin
+      - Broker
+      - Reserve
+      - SortedOracles
+      - BreakerBox
+  ChainlinkRelayerFactory:
+    script: DeployChainlinkRelayerFactory
+    deps:
+      - ProxyAdmin
+  ConfigureOracleRateFeeds:
+    script: ConfigureOracleRateFeeds
+    deps:
+      - SortedOracles
+  ConfigureChainlinkRelayers:
+    script: ConfigureChainlinkRelayers
+    deps:
+      - SortedOracles
+      - ChainlinkRelayerFactory
+  ConfigureBrokerExchangeProviders:
+    script: ConfigureBrokerExchangeProviders
+    deps:
+      - Broker
+      - BiPoolManager
+      - Reserve
+  CreateExchangePools:
+    script: CreateExchangePools
+    deps:
+      - BiPoolManager
+      - PricingModules
+      - Tokens

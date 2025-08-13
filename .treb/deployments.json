@@ -1,1 +1,376 @@
-{}
+{
+  "test/44787/ProxyAdmin": {
+    "id": "test/44787/ProxyAdmin",
+    "namespace": "test",
+    "chainId": 44787,
+    "contractName": "ProxyAdmin",
+    "label": "",
+    "address": "0x48fE6f64af13AFEE06bA5326E279Cf159b3002f4",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x87f658f33f513f93bce85e8e40443b4e328b65e4c68bc982ea311a31616c3fa0",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81008dfeda08f36c4e2af4a8d0",
+      "initCodeHash": "0x5f66f493988d1ecc9b31775c7af2179ffe0945988232bf5ef18daa7d788d90eb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "test/ProxyAdmin"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x6bd51f9c2ac965c4898b30dd65ced62446f64fb223a3b5c88e82ea72880ad8a0",
+      "scriptPath": "script/deploy/DeployProxyAdmin.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-06T16:13:43.435724+02:00",
+    "updatedAt": "2025-08-06T16:13:43.435724+02:00"
+  },
+  "test/44787/Reserve:v2.6.5": {
+    "id": "test/44787/Reserve:v2.6.5",
+    "namespace": "test",
+    "chainId": 44787,
+    "contractName": "Reserve",
+    "label": "v2.6.5",
+    "address": "0x7B0e1bdA173e3Fe36438D3945380CEe0c9Ac7193",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa1abe54cc2d001b0874cb63fb7d6935108c2897a1f46f6b039fb42cfb70acb79",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100d8f04f154dec506d58f4ec",
+      "initCodeHash": "0xf1007dfefbb77f5f5b117733d58c3f19c4086a4bd5042f685467b7dff5b37800",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "test/lib/mento-core/contracts/swap/Reserve.sol:Reserve:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/swap/Reserve.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x5913763c324912db045c41208a7bb7f240774ca993abcbb9b7f7496202e93100",
+      "scriptPath": "script/deploy/DeployReserve.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-06T16:14:02.856303+02:00",
+    "updatedAt": "2025-08-06T16:14:02.856303+02:00"
+  },
+  "test/44787/TransparentUpgradeableProxy:Reserve": {
+    "id": "test/44787/TransparentUpgradeableProxy:Reserve",
+    "namespace": "test",
+    "chainId": 44787,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "Reserve",
+    "address": "0xda32fdC10c742dF94012Ae0076B7316d8b63F76B",
+    "type": "PROXY",
+    "transactionId": "tx-0x4141ee9d57defebf0a1ea789c46bd885279a164aaf65e30c494a00402c1f979c",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810052f3218a375f2754e8606d",
+      "initCodeHash": "0x4d7e65a4ca09a891cfeee79e0c9b87aa80da8d577e828735e1d5b00c553a04e1",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000007b0e1bda173e3fe36438d3945380cee0c9ac719300000000000000000000000048fe6f64af13afee06ba5326e279cf159b3002f400000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "test/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:Reserve"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x7B0e1bdA173e3Fe36438D3945380CEe0c9Ac7193",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xbfb3476ab3f46ebed5b1ce9cafc40359cba4994fdd3a9e55ced69d80d4019ee5",
+      "scriptPath": "script/deploy/DeployReserve.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-06T16:14:30.785509+02:00",
+    "updatedAt": "2025-08-06T16:14:30.785509+02:00"
+  },
+  "throwaway/84532/ProxyAdmin": {
+    "id": "throwaway/84532/ProxyAdmin",
+    "namespace": "throwaway",
+    "chainId": 84532,
+    "contractName": "ProxyAdmin",
+    "label": "",
+    "address": "0xAEFdA95f9966fde9e3A60Ce0717CeE9662B92F85",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xbc120b5b4452b94b2433a2212591cf3db383520f58b4ebabd3df49a219411b13",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100b7f2cdd12b14eff8dab040",
+      "initCodeHash": "0x5f66f493988d1ecc9b31775c7af2179ffe0945988232bf5ef18daa7d788d90eb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "throwaway/ProxyAdmin"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x6bd51f9c2ac965c4898b30dd65ced62446f64fb223a3b5c88e82ea72880ad8a0",
+      "scriptPath": "script/deploy/DeployProxyAdmin.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-06T16:16:43.178351+02:00",
+    "updatedAt": "2025-08-06T16:16:43.178351+02:00"
+  },
+  "virtual/8453/AddressSortedLinkedListWithMedian": {
+    "id": "virtual/8453/AddressSortedLinkedListWithMedian",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "AddressSortedLinkedListWithMedian",
+    "label": "",
+    "address": "0x4A3c2363729321997D943faA4291460fC08c8D56",
+    "type": "LIBRARY",
+    "transactionId": "tx-0xe40c4d534cc69266f18335a1d6bc0fa016fb50ab81b568cb5a969486f01f21d1",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00416a8859bc179953ad847b",
+      "initCodeHash": "0x3116742ba992edb39a7c925dfd1da6e9c6076b1fdb6e2c8ef07ce779919cb183",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "virtual/AddressSortedLinkedListWithMedian"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/node_modules/@celo/contracts/common/linkedlists/AddressSortedLinkedListWithMedian.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x3116742ba992edb39a7c925dfd1da6e9c6076b1fdb6e2c8ef07ce779919cb183",
+      "scriptPath": "script/deploy/DeployAddressSortedLinkedListWithMedian.s.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:02:20.047644+02:00",
+    "updatedAt": "2025-08-08T16:02:20.047644+02:00"
+  },
+  "virtual/8453/ChainlinkRelayerFactory:v2.6.5": {
+    "id": "virtual/8453/ChainlinkRelayerFactory:v2.6.5",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ChainlinkRelayerFactory",
+    "label": "v2.6.5",
+    "address": "0xA0D5bE942dBea96354f39235FD71a849CbBb85ab",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x28e370ab8505c6db16b2fa7ed65818511645130896b3f26a892b7d375c73587d",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00ca5aecae91325a28cd87c8",
+      "initCodeHash": "0x9ae41cbe83e1533e00f4c69e6a4f2125f78858626813cd1daba1822ad06add86",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "virtual/ChainlinkRelayerFactory:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerFactory.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xee63460e4e948b5a9595b26ef5d3d8f7e4d7589ad7adde5d7f4fe6e1ca31fa9c",
+      "scriptPath": "script/deploy/DeployChainlinkRelayerFactory.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:03:08.672141+02:00",
+    "updatedAt": "2025-08-08T16:03:08.672141+02:00"
+  },
+  "virtual/8453/ChainlinkRelayerV1:USDC/USD": {
+    "id": "virtual/8453/ChainlinkRelayerV1:USDC/USD",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "USDC/USD",
+    "address": "0x1c1abca7C19dfE67737E833701ed03964Edf2C5f",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xb4fec9837b67556d0a4af16c8c054eb1b9e1a2a942dd61e43ac062fe550355cd",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x0f9fcc69372480b73144a49f89395d3ae31a1b02e0ca55d05b64f55445ec6cea",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000007e860098f58bbfc8648a4311b374b1d669a2bc6b0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x0f980cee1170792679061078d047793234ef1380fbf21ac5ad4f68cd8069329b",
+      "scriptPath": "script/deploy/ConfigureChainlinkRelayers.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "FAILED",
+      "reason": "etherscan: etherscan verification failed: Start verifying contract `0x1c1abca7C19dfE67737E833701ed03964Edf2C5f` deployed on base\nCompiler version: 0.8.18+commit.87f61d96\nConstructor args: 00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000007e860098f58bbfc8648a4311b374b1d669a2bc6b0000000000000000000000000000000000000000000000000000000000000000\n\u001b[2m2025-08-08T14:34:30.728243Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2metherscan\u001b[0m\u001b[2m:\u001b[0m Failed to deserialize response: data did not match any variant of untagged enum ResponseData \u001b[3mres\u001b[0m\u001b[2m=\u001b[0m\"{\\\"error\\\":{\\\"id\\\":\\\"b5b83e25-04e4-4e3f-8282-584f641b6134\\\",\\\"slug\\\":\\\"internal_server_error\\\",\\\"message\\\":\\\"Internal server error\\\"}}\"\nError: Failed to deserialize content: data did not match any variant of untagged enum ResponseData\n{\"error\":{\"id\":\"b5b83e25-04e4-4e3f-8282-584f641b6134\",\"slug\":\"internal_server_error\",\"message\":\"Internal server error\"}}; sourcify: sourcify verification failed: Start verifying contract `0x1c1abca7C19dfE67737E833701ed03964Edf2C5f` deployed on base\nCompiler version: 0.8.18+commit.87f61d96\nConstructor args: 00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000007e860098f58bbfc8648a4311b374b1d669a2bc6b0000000000000000000000000000000000000000000000000000000000000000\nError: Invalid API Key",
+      "verifiers": {
+        "etherscan": {
+          "status": "failed",
+          "reason": "etherscan verification failed: Start verifying contract `0x1c1abca7C19dfE67737E833701ed03964Edf2C5f` deployed on base\nCompiler version: 0.8.18+commit.87f61d96\nConstructor args: 00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000007e860098f58bbfc8648a4311b374b1d669a2bc6b0000000000000000000000000000000000000000000000000000000000000000\n\u001b[2m2025-08-08T14:34:30.728243Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2metherscan\u001b[0m\u001b[2m:\u001b[0m Failed to deserialize response: data did not match any variant of untagged enum ResponseData \u001b[3mres\u001b[0m\u001b[2m=\u001b[0m\"{\\\"error\\\":{\\\"id\\\":\\\"b5b83e25-04e4-4e3f-8282-584f641b6134\\\",\\\"slug\\\":\\\"internal_server_error\\\",\\\"message\\\":\\\"Internal server error\\\"}}\"\nError: Failed to deserialize content: data did not match any variant of untagged enum ResponseData\n{\"error\":{\"id\":\"b5b83e25-04e4-4e3f-8282-584f641b6134\",\"slug\":\"internal_server_error\",\"message\":\"Internal server error\"}}"
+        },
+        "sourcify": {
+          "status": "failed",
+          "reason": "sourcify verification failed: Start verifying contract `0x1c1abca7C19dfE67737E833701ed03964Edf2C5f` deployed on base\nCompiler version: 0.8.18+commit.87f61d96\nConstructor args: 00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000007e860098f58bbfc8648a4311b374b1d669a2bc6b0000000000000000000000000000000000000000000000000000000000000000\nError: Invalid API Key"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:33:46.572396+02:00",
+    "updatedAt": "2025-08-08T16:34:32.429937+02:00"
+  },
+  "virtual/8453/ProxyAdmin": {
+    "id": "virtual/8453/ProxyAdmin",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ProxyAdmin",
+    "label": "",
+    "address": "0x59c0c91e6B0efEcf1453824d28450Ca61F3D65b5",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x6c8617814a004841398fe634704aff69ada4cf51289ed0ed9cd0857e8b0bca15",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0091a5c814b5fccaf0aef1fe",
+      "initCodeHash": "0x4f21abf7d0f6826c5382dbe3bada13153ad5537f338694f15c4feb12fe372095",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
+      "entropy": "virtual/ProxyAdmin"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xb3d0a7b194862c86fccd5944e07a24e6c153534c4b51037b8b51e5eacd1d1167",
+      "scriptPath": "script/deploy/DeployProxyAdmin.s.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:02:38.072417+02:00",
+    "updatedAt": "2025-08-08T16:02:38.072417+02:00"
+  },
+  "virtual/8453/SortedOracles:v2.6.5": {
+    "id": "virtual/8453/SortedOracles:v2.6.5",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "SortedOracles",
+    "label": "v2.6.5",
+    "address": "0xE3F0A146b6C378b31F88aB97C8149948a0Cfbecf",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xda955db50f99f7f11d2620d33601172afcd16ffca81aa53a9357f4b8bcfaa590",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f002e54534bb2ceb45448feae",
+      "initCodeHash": "0x93f18721b3897a06f470b30f5951cf8731fbba9d24daa6b90f05f280f733cfdb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/SortedOracles:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/SortedOracles.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xe80e6155fef4e38a7789963900c94a3b634f3707003380bbd51d8e889b5144bd",
+      "scriptPath": "script/deploy/DeploySortedOracles.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:02:52.980883+02:00",
+    "updatedAt": "2025-08-08T16:02:52.980883+02:00"
+  },
+  "virtual/8453/TransparentUpgradeableProxy:ChainlinkRelayerFactory": {
+    "id": "virtual/8453/TransparentUpgradeableProxy:ChainlinkRelayerFactory",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "ChainlinkRelayerFactory",
+    "address": "0x0d3d861510FA460bE03380A7b7C03668157e7E25",
+    "type": "PROXY",
+    "transactionId": "tx-0x28e370ab8505c6db16b2fa7ed65818511645130896b3f26a892b7d375c73587d",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f006ed66f2c169963d7dc51bb",
+      "initCodeHash": "0x03db81b9852e531af2578a5fbc95da01dcbee43769fe6fd12b1acd3c8d99218d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000a0d5be942dbea96354f39235fd71a849cbbb85ab00000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b500000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000044485cc9550000000000000000000000000ae3676d6e2f06bd839749503ceb0090421b292900000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f00000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/TransparentUpgradeableProxy:ChainlinkRelayerFactory"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xA0D5bE942dBea96354f39235FD71a849CbBb85ab",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x93802094420cbe08a8d0fbac856473b742c71e299cd6ba138cd30efa091332e1",
+      "scriptPath": "script/deploy/DeployChainlinkRelayerFactory.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:03:08.672141+02:00",
+    "updatedAt": "2025-08-08T16:03:08.672141+02:00"
+  },
+  "virtual/8453/TransparentUpgradeableProxy:SortedOracles": {
+    "id": "virtual/8453/TransparentUpgradeableProxy:SortedOracles",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "SortedOracles",
+    "address": "0x0Ae3676D6e2f06bD839749503ceb0090421b2929",
+    "type": "PROXY",
+    "transactionId": "tx-0xda955db50f99f7f11d2620d33601172afcd16ffca81aa53a9357f4b8bcfaa590",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00d8569bd67685cd5f0be835",
+      "initCodeHash": "0x2f197951e5892783b61a9c4d4382a0d37ce510a348b8796e5e3c57e887f85fcd",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000e3f0a146b6c378b31f88ab97c8149948a0cfbecf00000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b500000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/TransparentUpgradeableProxy:SortedOracles"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xE3F0A146b6C378b31F88aB97C8149948a0Cfbecf",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x93802094420cbe08a8d0fbac856473b742c71e299cd6ba138cd30efa091332e1",
+      "scriptPath": "script/deploy/DeploySortedOracles.sol",
+      "gitCommit": "0b9461b627e6ba177dff0aaf150b6e7a8e9de4d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-08T16:02:52.980883+02:00",
+    "updatedAt": "2025-08-08T16:02:52.980883+02:00"
+  }
+}

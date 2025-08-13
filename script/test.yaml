@@ -1,0 +1,16 @@
+group: Mento Protocol
+components:
+  ProxyAdmin:
+    script: DeployProxyAdmin
+  AddressSortedLinkedListWithMedian:
+    script: DeployAddressSortedLinkedListWithMedian
+  SortedOracles:
+    script: DeploySortedOracles
+    deps:
+      - AddressSortedLinkedListWithMedian
+      - ProxyAdmin
+  ChainlinkRelayerFactory:
+    script: DeployChainlinkRelayerFactory
+    deps:
+      - SortedOracles
+      - ProxyAdmin

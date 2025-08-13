@@ -4,3 +4,12 @@
 [submodule "lib/treb-sol"]
 	path = lib/treb-sol
 	url = https://github.com/trebuchet-org/treb-sol
+[submodule "lib/mento-std"]
+	path = lib/mento-std
+	url = https://github.com/mento-protocol/mento-std
+[submodule "lib/mento-core"]
+	path = lib/mento-core
+	url = https://github.com/mento-protocol/mento-core
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts

@@ -1,0 +1,189 @@
+{
+  "_comment": "Set MENTO_CONFIG environment variable to use a different config file",
+  "network": {
+    "name": "testnet",
+    "chainId": 31337,
+    "rpcUrl": "http://localhost:8545"
+  },
+  "addresses": {
+    "deployer": "0x0000000000000000000000000000000000000000",
+    "governance": "0x0000000000000000000000000000000000000000",
+    "celoToken": "0x0000000000000000000000000000000000000000",
+    "collateralAssets": [
+      {
+        "symbol": "CELO",
+        "address": "0x0000000000000000000000000000000000000000",
+        "decimals": 18
+      }
+    ],
+    "oracles": [
+      "0x0000000000000000000000000000000000000001",
+      "0x0000000000000000000000000000000000000002",
+      "0x0000000000000000000000000000000000000003"
+    ]
+  },
+  "tokens": [
+    {
+      "symbol": "USDfx",
+      "name": "Mento Dollar",
+      "rateFeedId": "0x0000000000000000000000000000000000001001"
+    },
+    {
+      "symbol": "EURfx",
+      "name": "Mento Euro",
+      "rateFeedId": "0x0000000000000000000000000000000000001002"
+    },
+    {
+      "symbol": "BRLfx",
+      "name": "Mento Brazilian Real",
+      "rateFeedId": "0x0000000000000000000000000000000000001003"
+    },
+    {
+      "symbol": "XOFfx",
+      "name": "Mento West African Franc",
+      "rateFeedId": "0x0000000000000000000000000000000000001004"
+    },
+    {
+      "symbol": "KESfx",
+      "name": "Mento Kenyan Shilling",
+      "rateFeedId": "0x0000000000000000000000000000000000001005"
+    },
+    {
+      "symbol": "COPfx",
+      "name": "Mento Colombian Peso",
+      "rateFeedId": "0x0000000000000000000000000000000000001006"
+    },
+    {
+      "symbol": "PHPfx",
+      "name": "Mento Philippine Peso",
+      "rateFeedId": "0x0000000000000000000000000000000000001007"
+    },
+    {
+      "symbol": "CADfx",
+      "name": "Mento Canadian Dollar",
+      "rateFeedId": "0x0000000000000000000000000000000000001008"
+    },
+    {
+      "symbol": "GBPfx",
+      "name": "Mento British Pound",
+      "rateFeedId": "0x0000000000000000000000000000000000001009"
+    },
+    {
+      "symbol": "CHFfx",
+      "name": "Mento Swiss Franc",
+      "rateFeedId": "0x000000000000000000000000000000000000100A"
+    },
+    {
+      "symbol": "JPYfx",
+      "name": "Mento Japanese Yen",
+      "rateFeedId": "0x000000000000000000000000000000000000100B"
+    },
+    {
+      "symbol": "AUDfx",
+      "name": "Mento Australian Dollar",
+      "rateFeedId": "0x000000000000000000000000000000000000100C"
+    },
+    {
+      "symbol": "GHSfx",
+      "name": "Mento Ghanaian Cedi",
+      "rateFeedId": "0x000000000000000000000000000000000000100D"
+    },
+    {
+      "symbol": "INRfx",
+      "name": "Mento Indian Rupee",
+      "rateFeedId": "0x000000000000000000000000000000000000100E"
+    },
+    {
+      "symbol": "NGNfx",
+      "name": "Mento Nigerian Naira",
+      "rateFeedId": "0x000000000000000000000000000000000000100F"
+    },
+    {
+      "symbol": "ZARfx",
+      "name": "Mento South African Rand",
+      "rateFeedId": "0x0000000000000000000000000000000000001010"
+    }
+  ],
+  "oracle": {
+    "reportExpirySeconds": 300,
+    "tokenSpecificExpirySeconds": {}
+  },
+  "breakerBox": {
+    "defaultCooldownTime": 300,
+    "rateFeedConfigs": [
+      {
+        "rateFeedId": "0x0000000000000000000000000000000000001001",
+        "medianDelta": {
+          "enabled": true,
+          "threshold": 0.1,
+          "cooldownTime": 300
+        },
+        "valueDelta": {
+          "enabled": true,
+          "threshold": 0.2,
+          "cooldownTime": 300
+        }
+      }
+    ]
+  },
+  "reserve": {
+    "tobinTaxStalenessThreshold": 86400,
+    "spendingRatio": "1000000000000000000000000",
+    "frozenGold": "0",
+    "frozenDays": "0",
+    "assetAllocationSymbols": ["cGLD"],
+    "assetAllocationWeights": ["1000000000000000000000000"],
+    "tobinTax": "0",
+    "tobinTaxReserveRatio": "0",
+    "collateralAssetDailySpendingRatios": ["1000000000000000000000000"]
+  },
+  "broker": {
+    "tradingLimits": {
+      "timestep0": 300,
+      "timestep1": 86400,
+      "limit0": "100000000000000000000000",
+      "limit1": "1000000000000000000000000",
+      "limitGlobal": "10000000000000000000000000",
+      "flags": 0
+    }
+  },
+  "pools": {
+    "defaultSpread": "5000000000000000",
+    "defaultBucketSize": "1000000000000000000000000",
+    "minimumReports": 5,
+    "referenceRateResetFrequency": 86400,
+    "stablePoolResetSize": "1000000000000000000000000",
+    "pricingModule": "ConstantProduct",
+    "poolConfigs": []
+  },
+  "rateFeeds": [
+    {
+      "id": "USDfx/CELO",
+      "asset0": "USDfx",
+      "asset1": "CELO"
+    },
+    {
+      "id": "EURfx/CELO",
+      "asset0": "EURfx",
+      "asset1": "CELO"
+    },
+    {
+      "id": "BRLfx/CELO",
+      "asset0": "BRLfx",
+      "asset1": "CELO"
+    }
+  ],
+  "chainlinkRelayers": [
+    {
+      "rateFeedId": "USDfx/CELO",
+      "rateFeedDescription": "USDfx/CELO",
+      "maxTimestampSpread": 86400,
+      "aggregators": [
+        {
+          "aggregator": "0x0000000000000000000000000000000000000000",
+          "invert": false
+        }
+      ]
+    }
+  ]
+}

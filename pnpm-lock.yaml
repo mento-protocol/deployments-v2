@@ -1,0 +1,22 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      '@celo/contracts':
+        specifier: ^13.0.0
+        version: 13.0.0
+
+packages:
+
+  '@celo/contracts@13.0.0':
+    resolution: {integrity: sha512-UTjgLvEFzkOOUwehQxu3cI624VlTyTHtN9vEkFyD8rZLdAwlCF+8vTCU9KKtPtGKGWADaK943cg7KbbhWDVG8Q==}
+
+snapshots:
+
+  '@celo/contracts@13.0.0': {}
