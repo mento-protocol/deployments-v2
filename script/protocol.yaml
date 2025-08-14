@@ -12,6 +12,7 @@ components:
   BreakerBox:
     script: DeployBreakerBox
     deps: 
+      - ConfigureChainlinkRelayers
       - SortedOracles
   Broker:
     script: DeployBroker
@@ -23,14 +24,11 @@ components:
       - ProxyAdmin
   PricingModules:
     script: DeployPricingModules
-  StableTokenV2Implementation:
-    script: DeployStableTokenV2Implementation
   Tokens:
     script: DeployTokens
     deps: 
       - ProxyAdmin
       - Broker
-      - StableTokenV2Implementation
   BiPoolManager:
     script: DeployBiPoolManager
     deps:
@@ -42,15 +40,11 @@ components:
   ChainlinkRelayerFactory:
     script: DeployChainlinkRelayerFactory
     deps:
-      - ProxyAdmin
-  ConfigureOracleRateFeeds:
-    script: ConfigureOracleRateFeeds
-    deps:
       - SortedOracles
+      - ProxyAdmin
   ConfigureChainlinkRelayers:
     script: ConfigureChainlinkRelayers
     deps:
-      - SortedOracles
       - ChainlinkRelayerFactory
   ConfigureBrokerExchangeProviders:
     script: ConfigureBrokerExchangeProviders
@@ -61,6 +55,8 @@ components:
   CreateExchangePools:
     script: CreateExchangePools
     deps:
+      - ConfigureChainlinkRelayers
+      - ConfigureBrokerExchangeProviders
       - BiPoolManager
       - PricingModules
       - Tokens

@@ -1,25 +1,30 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
+import {console} from "forge-std/console.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+
+import {IMentoConfig, IBiPoolManager, ITradingLimits, IPricingModule, FixidityLib} from "../interfaces/IMentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 
-abstract contract MentoConfig is IMentoConfig {
+abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     // ========== Storage ==========
 
     TokenConfig[] internal _tokens;
-    RateFeedConfig[] internal _rateFeeds;
-    CollateralAsset[] internal _collateralAssets;
+    address[] internal _rateFeedIds;
+    address[] internal _collateralAssets;
+    ExchangeConfig[] internal _exchanges;
     address[] internal _oracleAddresses;
 
     OracleConfig internal _oracleConfig;
     BreakerBoxConfig internal _breakerBoxConfig;
     ReserveConfig internal _reserveConfig;
-    TradingLimitsConfig internal _tradingLimitsConfig;
-    PoolDefaultConfig internal _poolDefaultConfig;
 
     mapping(address rateFeedId => ChainlinkRelayerConfig)
         internal _chainlinkRelayers;
+
+    mapping(string symbol => address) _collateral;
     address[] _chainlinkRelayerRateFeedIds;
 
     // ========== Constructor ==========
@@ -38,19 +43,7 @@ abstract contract MentoConfig is IMentoConfig {
         return _tokens;
     }
 
-    function getRateFeedConfigs()
-        external
-        view
-        returns (RateFeedConfig[] memory)
-    {
-        return _rateFeeds;
-    }
-
-    function getCollateralAssets()
-        external
-        view
-        returns (CollateralAsset[] memory)
-    {
+    function getCollateralAssets() external view returns (address[] memory) {
         return _collateralAssets;
     }
 
@@ -74,22 +67,6 @@ abstract contract MentoConfig is IMentoConfig {
         return _reserveConfig;
     }
 
-    function getTradingLimitsConfig()
-        external
-        view
-        returns (TradingLimitsConfig memory)
-    {
-        return _tradingLimitsConfig;
-    }
-
-    function getPoolDefaultConfig()
-        external
-        view
-        returns (PoolDefaultConfig memory)
-    {
-        return _poolDefaultConfig;
-    }
-
     function getChainlinkRelayerConfigs()
         external
         view
@@ -107,15 +84,25 @@ abstract contract MentoConfig is IMentoConfig {
         }
     }
 
+    function getExchanges()
+        external
+        view
+        returns (ExchangeConfig[] memory exchanges)
+    {
+        return _exchanges;
+    }
+
+    function getRateFeedIds() external view returns (address[] memory) {
+        return _rateFeedIds;
+    }
+
     // ========== Helper Functions ==========
 
-    function getRateFeedId(
-        string memory asset0,
-        string memory asset1
-    ) public pure returns (address) {
-        string memory pair = string(abi.encodePacked(asset0, "/", asset1));
-        return address(uint160(uint256(keccak256(abi.encodePacked(pair)))));
-    }
+    function emptyTradingLimits()
+        internal
+        pure
+        returns (ITradingLimits.Config memory)
+    {}
 
     function getRateFeedIdFromString(
         string memory feedId
@@ -125,22 +112,20 @@ abstract contract MentoConfig is IMentoConfig {
 
     // ========== Internal Helper Functions ==========
 
-    function _addToken(string memory symbol, string memory name) internal {
+    function _addStableToken(
+        string memory symbol,
+        string memory name
+    ) internal {
         _tokens.push(TokenConfig({symbol: symbol, name: name}));
     }
 
-    function _addRateFeed(
-        string memory id,
-        string memory asset0,
-        string memory asset1
-    ) internal {
-        _rateFeeds.push(
-            RateFeedConfig({id: id, asset0: asset0, asset1: asset1})
-        );
+    function _addCollateral(string memory symbol, address addy) internal {
+        _collateralAssets.push(addy);
+        _collateral[symbol] = addy;
     }
 
-    function _addCollateralAsset(address addr) internal {
-        _collateralAssets.push(CollateralAsset({addr: addr}));
+    function _addRateFeed(string memory rateFeed) internal {
+        _rateFeedIds.push(getRateFeedIdFromString(rateFeed));
     }
 
     function _addOracleAddress(address oracle) internal {
@@ -196,5 +181,64 @@ abstract contract MentoConfig is IMentoConfig {
             _chainlinkRelayers[rateFeedId].aggregators.push(aggregators[i]);
         }
     }
-}
 
+    function _addExchange(
+        string memory asset0,
+        string memory asset1,
+        string memory pricingModule,
+        uint256 spread,
+        string memory rateFeed,
+        uint256 resetFrequency,
+        uint256 stablePoolResetSize,
+        ExchangeTrandingLimitsConfig memory tradingLimits
+    ) internal {
+        address _asset0 = _resolveExchangeAsset(asset0);
+        address _asset1 = _resolveExchangeAsset(asset1);
+        address _pricingModule = lookup(pricingModule);
+        if (
+            _asset0 == address(0) ||
+            _asset1 == address(0) ||
+            _pricingModule == address(0)
+        ) {
+            console.log(
+                string.concat(
+                    "[WARN] Skipping pool ",
+                    asset0,
+                    asset1,
+                    ": Could not resolve assets or pricing module"
+                )
+            );
+            return;
+        }
+        _exchanges.push(
+            ExchangeConfig({
+                pool: IBiPoolManager.PoolExchange({
+                    asset0: _asset0,
+                    asset1: _asset1,
+                    pricingModule: IPricingModule(_pricingModule),
+                    bucket0: 0,
+                    bucket1: 0,
+                    lastBucketUpdate: 0,
+                    config: IBiPoolManager.PoolConfig({
+                        spread: FixidityLib.wrap(spread),
+                        referenceRateFeedID: getRateFeedIdFromString(rateFeed),
+                        referenceRateResetFrequency: resetFrequency,
+                        minimumReports: 1,
+                        stablePoolResetSize: stablePoolResetSize
+                    })
+                }),
+                tradingLimits: tradingLimits
+            })
+        );
+    }
+
+    function _resolveExchangeAsset(
+        string memory symbol
+    ) internal view returns (address) {
+        if (_collateral[symbol] != address(0)) {
+            return _collateral[symbol];
+        } else {
+            return lookupProxy(symbol);
+        }
+    }
+}

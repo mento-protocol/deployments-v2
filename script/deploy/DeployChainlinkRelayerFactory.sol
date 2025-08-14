@@ -5,10 +5,11 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
+import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
 
 import {IChainlinkRelayerFactory} from "lib/mento-core/contracts/interfaces/IChainlinkRelayerFactory.sol";
 
-contract DeployChainlinkRelayerFactory is TrebScript {
+contract DeployChainlinkRelayerFactory is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -26,25 +27,20 @@ contract DeployChainlinkRelayerFactory is TrebScript {
             .setLabel("v2.6.5")
             .deploy(abi.encode(true));
 
-        // Get ProxyAdmin
-        address proxyAdmin = lookup("ProxyAdmin");
-        require(proxyAdmin != address(0), "ProxyAdmin not deployed");
+        address sortedOracles = lookupProxyOrFail("SortedOracles");
 
         // Deploy proxy
-        chainlinkRelayerFactoryProxy = deployer
-            .create3("TransparentUpgradeableProxy")
-            .setLabel("ChainlinkRelayerFactory")
-            .deploy(
-                abi.encode(
-                    chainlinkRelayerFactoryImpl,
-                    proxyAdmin,
-                    abi.encodeWithSelector(
-                        IChainlinkRelayerFactory.initialize.selector,
-                        lookup("TransparentUpgradeableProxy:SortedOracles"),
-                        deployer.account
-                    )
-                )
-            );
+        chainlinkRelayerFactoryProxy = deployProxy(
+            ProxyType.OZTUP,
+            deployer,
+            "ChainlinkRelayerFactory",
+            chainlinkRelayerFactoryImpl,
+            abi.encodeWithSelector(
+                IChainlinkRelayerFactory.initialize.selector,
+                sortedOracles,
+                deployer.account
+            )
+        );
 
         console.log(
             "ChainlinkRelayerFactory implementation:",

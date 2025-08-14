@@ -9,12 +9,25 @@
   "8453": {
     "virtual": {
       "AddressSortedLinkedListWithMedian": "0x4A3c2363729321997D943faA4291460fC08c8D56",
+      "BiPoolManager:v2.6.5": "0x5b49162d4CdD7be3DcF2eb07BaF9922c82670990",
+      "BreakerBox:v2.6.5": "0x6d5deC48D7f0C7fEE5521f53B4A6E6cE4622c818",
+      "Broker:v2.6.5": "0xfd0922081374bBbc9785cf91FeEa856456f15Fc1",
       "ChainlinkRelayerFactory:v2.6.5": "0xA0D5bE942dBea96354f39235FD71a849CbBb85ab",
-      "ChainlinkRelayerV1:USDC/USD": "0x1c1abca7C19dfE67737E833701ed03964Edf2C5f",
+      "ChainlinkRelayerV1:USDC/USD": "0xBeE8bf69531c327B5359Fcb7309a5dbEA318ECB2",
+      "ConstantProductPricingModule:v2.6.5": "0xD46FFe35B7DDA71218910d081A6333cb642c910C",
+      "ConstantSumPricingModule:v2.6.5": "0x2722BbaaC5b16A06CbA4591a392A70e5A9274947",
+      "MedianDeltaBreaker:v2.6.5": "0x1bAB9f441DBB9E99157E2875bB269CbA33DF4072",
+      "Proxy:BiPoolManager": "0x11625beA35264A0DF5C89E89a849cC47f83059B3",
+      "Proxy:Broker": "0x4740Ad3E0052d3E792b3dB3368317402bAb90F87",
+      "Proxy:Reserve": "0x75889508756d100423180d50bBee058C433584Aa",
+      "Proxy:SortedOracles": "0x759e5318df8583Dc84cC46222BBc053141Ca6948",
+      "Proxy:USDfx": "0xA65a2853fE883df11c4Ba1FCdFED99B7b00f0b78",
       "ProxyAdmin": "0x59c0c91e6B0efEcf1453824d28450Ca61F3D65b5",
+      "Reserve:v2.6.5": "0xAE58f577a79cddA649758E744F3060D3da8Ade2d",
       "SortedOracles:v2.6.5": "0xE3F0A146b6C378b31F88aB97C8149948a0Cfbecf",
+      "StableTokenV2:v2.6.5": "0xABe15b1200a0A801e834FDF71832920C65c966aA",
       "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x0d3d861510FA460bE03380A7b7C03668157e7E25",
-      "TransparentUpgradeableProxy:SortedOracles": "0x0Ae3676D6e2f06bD839749503ceb0090421b2929"
+      "ValueDeltaBreaker:v2.6.5": "0xC19C93760cD5e37F79dB23C485cc5CFda093e40F"
     }
   },
   "84532": {

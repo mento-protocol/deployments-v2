@@ -12,8 +12,9 @@ import {Config} from "../config/Config.sol";
 import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
 import {ITrebEvents} from "lib/treb-sol/src/internal/ITrebEvents.sol";
 import {Harness} from "lib/treb-sol/src/internal/Harness.sol";
+import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
 
-contract ConfigureChainlinkRelayers is TrebScript {
+contract ConfigureChainlinkRelayers is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -25,22 +26,11 @@ contract ConfigureChainlinkRelayers is TrebScript {
 
         Senders.Sender storage deployer = sender("deployer");
 
-        // Check if ChainlinkRelayerFactory is deployed
-        address chainlinkRelayerFactoryProxy = lookup(
-            "TransparentUpgradeableProxy:ChainlinkRelayerFactory"
+        address chainlinkRelayerFactoryProxy = lookupProxyOrFail(
+            "ChainlinkRelayerFactory",
+            ProxyType.OZTUP
         );
-        if (chainlinkRelayerFactoryProxy == address(0)) {
-            console.log(
-                "ChainlinkRelayerFactory not deployed, skipping Chainlink configuration"
-            );
-            return;
-        }
-
-        // Get SortedOracles
-        address sortedOraclesProxy = lookup(
-            "TransparentUpgradeableProxy:SortedOracles"
-        );
-        require(sortedOraclesProxy != address(0), "SortedOracles not deployed");
+        address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
 
         IChainlinkRelayerFactory factory = IChainlinkRelayerFactory(
             deployer.harness(chainlinkRelayerFactoryProxy)
@@ -114,4 +104,3 @@ contract ConfigureChainlinkRelayers is TrebScript {
         console.log("Configured", relayerConfigs.length, "Chainlink relayers");
     }
 }
-

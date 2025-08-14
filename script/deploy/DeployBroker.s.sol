@@ -5,9 +5,7 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-
-// Import proxy contract
-import {TransparentUpgradeableProxy} from "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 
 // Interface for Broker initialization
 interface IBroker {
@@ -17,13 +15,9 @@ interface IBroker {
     ) external;
 }
 
-contract DeployBroker is TrebScript {
+contract DeployBroker is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
-
-    // Constant for proxy artifact path
-    string constant PROXY_ARTIFACT =
-        "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
 
     address brokerImpl;
     address brokerProxy;
@@ -34,10 +28,6 @@ contract DeployBroker is TrebScript {
     function run() public broadcast {
         // Get the sender
         Senders.Sender storage deployer = sender("deployer");
-
-        // Get the ProxyAdmin address (should be deployed already)
-        address proxyAdmin = lookup("ProxyAdmin");
-        require(proxyAdmin != address(0), "ProxyAdmin not deployed");
 
         // Step 1: Deploy Broker implementation (0.8.18)
         brokerImpl = deployer
@@ -58,26 +48,15 @@ contract DeployBroker is TrebScript {
         );
 
         // Step 3: Deploy proxy with initialization
-        brokerProxy = deployer
-            .create3(PROXY_ARTIFACT)
-            .setLabel("Broker")
-            .deploy(
-                abi.encode(
-                    brokerImpl, // implementation address
-                    proxyAdmin, // admin address
-                    initData // initialization data
-                )
-            );
+        brokerProxy = deployProxy(deployer, "Broker", brokerImpl, initData);
         console.log("Broker proxy deployed at:", brokerProxy);
 
         // Step 4: Verify deployment
         console.log("Broker deployment completed:");
         console.log("- Implementation:", brokerImpl);
         console.log("- Proxy:", brokerProxy);
-        console.log("- ProxyAdmin:", proxyAdmin);
 
         // Note: Exchange providers and reserves can be added later via:
         // IBroker(brokerProxy).addExchangeProvider(provider, reserve)
     }
 }
-

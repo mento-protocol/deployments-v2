@@ -2,43 +2,49 @@
 pragma solidity ^0.8.18;
 
 import {console} from "forge-std/console.sol";
-import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
-import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
+import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {IBreakerBox} from "lib/mento-core/contracts/interfaces/IBreakerBox.sol";
 
-contract DeployBreakerBox is TrebScript {
+import {IBreakerBox} from "lib/mento-core/contracts/interfaces/IBreakerBox.sol";
+import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
+
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
+import {Config} from "../config/Config.sol";
+
+contract DeployBreakerBox is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    address breakerBox;
+    address breakerBoxAddy;
     address medianDeltaBreaker;
     address valueDeltaBreaker;
 
+    IMentoConfig config;
+
     /// @custom:senders deployer
     function run() public broadcast {
+        // Get configuration
+        config = Config.get();
+
         Senders.Sender storage deployer = sender("deployer");
 
         deployBreakerBox(deployer);
         deployBreakers(deployer);
 
         // Initialize BreakerBox with deployed breakers
-        IBreakerBox breakerBoxContract = IBreakerBox(
-            deployer.harness(breakerBox)
-        );
+        IBreakerBox breakerBox = IBreakerBox(deployer.harness(breakerBoxAddy));
+        breakerBox.addBreaker(medianDeltaBreaker, 1);
+        breakerBox.addBreaker(valueDeltaBreaker, 1);
 
-        // Add MedianDeltaBreaker
-        breakerBoxContract.addBreaker(medianDeltaBreaker, 1);
-
-        // Add ValueDeltaBreaker
-        breakerBoxContract.addBreaker(valueDeltaBreaker, 1);
+        ISortedOracles(deployer.harness(lookupProxyOrFail("SortedOracles")))
+            .setBreakerBox(IBreakerBox(breakerBoxAddy));
     }
 
     function deployBreakers(Senders.Sender storage deployer) internal {
-        address sortedOraclesProxy = lookup(
-            "TransparentUpgradeableProxy:SortedOracles"
-        );
+        address sortedOraclesProxy = lookupProxy("SortedOracles");
 
         address owner = deployer.account;
         uint256 defaultCooldownTime;
@@ -56,7 +62,7 @@ contract DeployBreakerBox is TrebScript {
                     defaultCooldownTime,
                     defaultRateChangeThreshold,
                     sortedOraclesProxy,
-                    breakerBox,
+                    breakerBoxAddy,
                     rateFeedIds,
                     defaultRateChangeThresholds,
                     cooldownTimes,
@@ -83,14 +89,15 @@ contract DeployBreakerBox is TrebScript {
 
     function deployBreakerBox(Senders.Sender storage deployer) internal {
         // Deploy BreakerBox with empty rate feed IDs and SortedOracles dependency
-        address sortedOraclesProxy = lookup(
-            "TransparentUpgradeableProxy:SortedOracles"
-        );
-        console.log(sortedOraclesProxy);
-        address[] memory emptyRateFeedIDs = new address[](0);
+        address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
+        address[] memory rateFeedIds = config.getRateFeedIds();
+        require(rateFeedIds.length > 0);
 
-        breakerBox = deployer.create3("BreakerBox").setLabel("v2.6.5").deploy(
-            abi.encode(emptyRateFeedIDs, sortedOraclesProxy, deployer.account)
-        );
+        breakerBoxAddy = deployer
+            .create3("BreakerBox")
+            .setLabel("v2.6.5")
+            .deploy(
+                abi.encode(rateFeedIds, sortedOraclesProxy, deployer.account)
+            );
     }
 }

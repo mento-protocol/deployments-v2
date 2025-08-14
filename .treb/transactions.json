@@ -1,94 +1,10 @@
 {
-  "tx-0x28e370ab8505c6db16b2fa7ed65818511645130896b3f26a892b7d375c73587d": {
-    "id": "tx-0x28e370ab8505c6db16b2fa7ed65818511645130896b3f26a892b7d375c73587d",
+  "tx-0x01cda5cc716fd58ccdd0492398b04e05167b1977460286a4f89914201476e370": {
+    "id": "tx-0x01cda5cc716fd58ccdd0492398b04e05167b1977460286a4f89914201476e370",
     "chainId": 8453,
-    "hash": "0x28e370ab8505c6db16b2fa7ed65818511645130896b3f26a892b7d375c73587d",
+    "hash": "0x01cda5cc716fd58ccdd0492398b04e05167b1977460286a4f89914201476e370",
     "status": "EXECUTED",
-    "blockNumber": 33805276,
-    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-    "nonce": 0,
-    "deployments": [
-      "virtual/8453/ChainlinkRelayerFactory:v2.6.5"
-    ],
-    "operations": [],
-    "safeContext": {
-      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-      "safeTxHash": "0x4131d12d8ce6ea0dc9968abf98efb958e9bc3e25782214c2c9ccbb97140a5422",
-      "batchIndex": 0,
-      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
-    },
-    "environment": "virtual",
-    "createdAt": "2025-08-08T16:03:08.672141+02:00"
-  },
-  "tx-0x6c8617814a004841398fe634704aff69ada4cf51289ed0ed9cd0857e8b0bca15": {
-    "id": "tx-0x6c8617814a004841398fe634704aff69ada4cf51289ed0ed9cd0857e8b0bca15",
-    "chainId": 8453,
-    "hash": "0x6c8617814a004841398fe634704aff69ada4cf51289ed0ed9cd0857e8b0bca15",
-    "status": "EXECUTED",
-    "blockNumber": 33805274,
-    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-    "nonce": 0,
-    "deployments": [
-      "virtual/8453/ProxyAdmin"
-    ],
-    "operations": [],
-    "safeContext": {
-      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-      "safeTxHash": "0xd28951e92991c6da6c200da848e7ee1dbbb519f44000644b966f13fd6fe228e7",
-      "batchIndex": 0,
-      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
-    },
-    "environment": "virtual",
-    "createdAt": "2025-08-08T16:02:38.072417+02:00"
-  },
-  "tx-0xb4fec9837b67556d0a4af16c8c054eb1b9e1a2a942dd61e43ac062fe550355cd": {
-    "id": "tx-0xb4fec9837b67556d0a4af16c8c054eb1b9e1a2a942dd61e43ac062fe550355cd",
-    "chainId": 8453,
-    "hash": "0xb4fec9837b67556d0a4af16c8c054eb1b9e1a2a942dd61e43ac062fe550355cd",
-    "status": "EXECUTED",
-    "blockNumber": 33805277,
-    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-    "nonce": 0,
-    "deployments": [
-      "virtual/8453/ChainlinkRelayerV1:USDC/USD"
-    ],
-    "operations": [],
-    "safeContext": {
-      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-      "safeTxHash": "0x5618465f44a06ab3d8a82e27521da39b9f0ccabf337b170651d92cad573d630a",
-      "batchIndex": 0,
-      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
-    },
-    "environment": "virtual",
-    "createdAt": "2025-08-08T16:33:46.572396+02:00"
-  },
-  "tx-0xda955db50f99f7f11d2620d33601172afcd16ffca81aa53a9357f4b8bcfaa590": {
-    "id": "tx-0xda955db50f99f7f11d2620d33601172afcd16ffca81aa53a9357f4b8bcfaa590",
-    "chainId": 8453,
-    "hash": "0xda955db50f99f7f11d2620d33601172afcd16ffca81aa53a9357f4b8bcfaa590",
-    "status": "EXECUTED",
-    "blockNumber": 33805275,
-    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-    "nonce": 0,
-    "deployments": [
-      "virtual/8453/SortedOracles:v2.6.5"
-    ],
-    "operations": [],
-    "safeContext": {
-      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
-      "safeTxHash": "0x78a9a2870d7f45c795c52bb3239b2e40d6ce5312a53f8515b4f3da284578aa45",
-      "batchIndex": 0,
-      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
-    },
-    "environment": "virtual",
-    "createdAt": "2025-08-08T16:02:52.980883+02:00"
-  },
-  "tx-0xe40c4d534cc69266f18335a1d6bc0fa016fb50ab81b568cb5a969486f01f21d1": {
-    "id": "tx-0xe40c4d534cc69266f18335a1d6bc0fa016fb50ab81b568cb5a969486f01f21d1",
-    "chainId": 8453,
-    "hash": "0xe40c4d534cc69266f18335a1d6bc0fa016fb50ab81b568cb5a969486f01f21d1",
-    "status": "EXECUTED",
-    "blockNumber": 33805273,
+    "blockNumber": 34198311,
     "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
     "nonce": 0,
     "deployments": [
@@ -102,7 +18,217 @@
       "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
     },
     "environment": "virtual",
-    "createdAt": "2025-08-08T16:02:20.047644+02:00"
+    "createdAt": "2025-08-14T18:15:46.069139+02:00"
+  },
+  "tx-0x19b67a0d977802332d62af665a964661c726d0778d940e2733769d540df9aebd": {
+    "id": "tx-0x19b67a0d977802332d62af665a964661c726d0778d940e2733769d540df9aebd",
+    "chainId": 8453,
+    "hash": "0x19b67a0d977802332d62af665a964661c726d0778d940e2733769d540df9aebd",
+    "status": "EXECUTED",
+    "blockNumber": 34198315,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/Reserve:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0xb656025f81ab6132bb078367c4fb72ba8ca3df3805bb2d61792933c59ee91d26",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:17.498644+02:00"
+  },
+  "tx-0x3fe0e64bc56bd87f274b3134e6d384b0e7fcf05d62fd5deedf515abe2a5eaecc": {
+    "id": "tx-0x3fe0e64bc56bd87f274b3134e6d384b0e7fcf05d62fd5deedf515abe2a5eaecc",
+    "chainId": 8453,
+    "hash": "0x3fe0e64bc56bd87f274b3134e6d384b0e7fcf05d62fd5deedf515abe2a5eaecc",
+    "status": "EXECUTED",
+    "blockNumber": 34198316,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/SortedOracles:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0x9f6299758d2199d05409fd78843d7f77701c5e0aadfe7fc3bdd01132671cabbd",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:25.034535+02:00"
+  },
+  "tx-0x6653016009fbe0ae14c6e4964dc44c6cee15b5d66ce301cbf8756e42bb62d927": {
+    "id": "tx-0x6653016009fbe0ae14c6e4964dc44c6cee15b5d66ce301cbf8756e42bb62d927",
+    "chainId": 8453,
+    "hash": "0x6653016009fbe0ae14c6e4964dc44c6cee15b5d66ce301cbf8756e42bb62d927",
+    "status": "EXECUTED",
+    "blockNumber": 34198313,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/ProxyAdmin"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0x7788525eeeb16967e5e3bf5796fa89fe2ee37614a9d2e175e9d5b228b54bccbc",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:01.482722+02:00"
+  },
+  "tx-0x6c856c5fe454a415aa7c87a2b4acda1b96226f520ef6362f41811ca5fe5d9f12": {
+    "id": "tx-0x6c856c5fe454a415aa7c87a2b4acda1b96226f520ef6362f41811ca5fe5d9f12",
+    "chainId": 8453,
+    "hash": "0x6c856c5fe454a415aa7c87a2b4acda1b96226f520ef6362f41811ca5fe5d9f12",
+    "status": "EXECUTED",
+    "blockNumber": 34198320,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/BiPoolManager:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0x3ce209350810bcf3a8db8d2e0b48d2866158f057c45effff571508d5467b2442",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:58.880554+02:00"
+  },
+  "tx-0x8d648dec9101dc6b73a2510758ec6682177e2d3555a07ac28668a79456cbbc8c": {
+    "id": "tx-0x8d648dec9101dc6b73a2510758ec6682177e2d3555a07ac28668a79456cbbc8c",
+    "chainId": 8453,
+    "hash": "0x8d648dec9101dc6b73a2510758ec6682177e2d3555a07ac28668a79456cbbc8c",
+    "status": "EXECUTED",
+    "blockNumber": 34198317,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/ChainlinkRelayerFactory:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0x7ae173b8b7d5ea5712e9de79c146103147e9dde9d5a223a7a75bf7a14254ae0d",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:32.798801+02:00"
+  },
+  "tx-0x9feb6e362bb5560fefb9a675c1e41de2afca520637bd1bd7c30d07c6b52682ec": {
+    "id": "tx-0x9feb6e362bb5560fefb9a675c1e41de2afca520637bd1bd7c30d07c6b52682ec",
+    "chainId": 8453,
+    "hash": "0x9feb6e362bb5560fefb9a675c1e41de2afca520637bd1bd7c30d07c6b52682ec",
+    "status": "EXECUTED",
+    "blockNumber": 34198314,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/Broker:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0xfb577e561de3b02760adb92a02574933e079ad524e16b272282c759cbeef4449",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:09.513338+02:00"
+  },
+  "tx-0xaeea521826de775d5a1d31abf50b4a54e5a3e7b77f8003b6ef96830c8e5c1a13": {
+    "id": "tx-0xaeea521826de775d5a1d31abf50b4a54e5a3e7b77f8003b6ef96830c8e5c1a13",
+    "chainId": 8453,
+    "hash": "0xaeea521826de775d5a1d31abf50b4a54e5a3e7b77f8003b6ef96830c8e5c1a13",
+    "status": "EXECUTED",
+    "blockNumber": 34198312,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/ConstantProductPricingModule:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0x7bda0ba9f06d978b35f176cd60377071f24afcb353fe922ab8565a7ec47a3fe9",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:15:54.140089+02:00"
+  },
+  "tx-0xca7a67b40225a881fe24776f3f6d8920802b4141f281e88650c71646af629131": {
+    "id": "tx-0xca7a67b40225a881fe24776f3f6d8920802b4141f281e88650c71646af629131",
+    "chainId": 8453,
+    "hash": "0xca7a67b40225a881fe24776f3f6d8920802b4141f281e88650c71646af629131",
+    "status": "EXECUTED",
+    "blockNumber": 34198319,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/BreakerBox:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0x53982cf27dab1ace73ba19d3d21360520796158b001a21df5fb2ba044074431b",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:51.375592+02:00"
+  },
+  "tx-0xccf635383cc3e507ee0e7efc1752904dda48ef5a69fb2c51d3b42373123a3b24": {
+    "id": "tx-0xccf635383cc3e507ee0e7efc1752904dda48ef5a69fb2c51d3b42373123a3b24",
+    "chainId": 8453,
+    "hash": "0xccf635383cc3e507ee0e7efc1752904dda48ef5a69fb2c51d3b42373123a3b24",
+    "status": "EXECUTED",
+    "blockNumber": 34198322,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/StableTokenV2:v2.6.5"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0xd6f9d9a2f21657c5118ba3766ef56fb99347c430ddd32b45eee107db5186a823",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:17:14.052253+02:00"
+  },
+  "tx-0xdf8e368607f23c2ea0d99aaf2b1ad0f9623c5909bd20abc87a37f5aa300857a3": {
+    "id": "tx-0xdf8e368607f23c2ea0d99aaf2b1ad0f9623c5909bd20abc87a37f5aa300857a3",
+    "chainId": 8453,
+    "hash": "0xdf8e368607f23c2ea0d99aaf2b1ad0f9623c5909bd20abc87a37f5aa300857a3",
+    "status": "EXECUTED",
+    "blockNumber": 34198318,
+    "sender": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+    "nonce": 0,
+    "deployments": [
+      "virtual/8453/ChainlinkRelayerV1:USDC/USD"
+    ],
+    "operations": [],
+    "safeContext": {
+      "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
+      "safeTxHash": "0xd8e39d9233975eb4d06fc4d69166affa2f3587441d8cf33bd45b6c4b35313783",
+      "batchIndex": 0,
+      "proposerAddress": "0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81"
+    },
+    "environment": "virtual",
+    "createdAt": "2025-08-14T18:16:42.405581+02:00"
   },
   "tx-internal-01ecf419ab2fc8e6498e8f57eecb94f1ac3b164d33848cdc862f44e7ac285477": {
     "id": "tx-internal-01ecf419ab2fc8e6498e8f57eecb94f1ac3b164d33848cdc862f44e7ac285477",

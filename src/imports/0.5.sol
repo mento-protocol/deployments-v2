@@ -18,6 +18,7 @@ import "lib/mento-core/contracts/swap/ConstantProductPricingModule.sol";
 import "lib/mento-core/contracts/oracles/BreakerBox.sol";
 import "lib/mento-core/contracts/oracles/breakers/MedianDeltaBreaker.sol";
 import "lib/mento-core/contracts/oracles/breakers/ValueDeltaBreaker.sol";
+import "node_modules/@celo/contracts/common/Proxy.sol";
 
 // Note: The following contracts use Solidity 0.8.18 and cannot be imported here:
 // - Broker
