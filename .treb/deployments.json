@@ -137,31 +137,31 @@
     "chainId": 8453,
     "contractName": "AddressSortedLinkedListWithMedian",
     "label": "",
-    "address": "0x4A3c2363729321997D943faA4291460fC08c8D56",
+    "address": "0x498FB531985aD936f1A98813F92625084a67d02F",
     "type": "LIBRARY",
-    "transactionId": "tx-0x01cda5cc716fd58ccdd0492398b04e05167b1977460286a4f89914201476e370",
+    "transactionId": "tx-0x93a6697e4fcac2019d09c0ac86c24a8bbd7be7aff8ce4eec20f11062b386100b",
     "deploymentStrategy": {
       "method": "CREATE2",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00416a8859bc179953ad847b",
-      "initCodeHash": "0x3116742ba992edb39a7c925dfd1da6e9c6076b1fdb6e2c8ef07ce779919cb183",
+      "initCodeHash": "0x25ac6bce0af279487b7402886b8dd2c5a23d8d952b8036b8265797a2361f56a1",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x",
       "entropy": "virtual/AddressSortedLinkedListWithMedian"
     },
     "proxyInfo": null,
     "artifact": {
-      "path": "lib/mento-core/node_modules/@celo/contracts/common/linkedlists/AddressSortedLinkedListWithMedian.sol",
+      "path": "node_modules/@celo/contracts/common/linkedlists/AddressSortedLinkedListWithMedian.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x3116742ba992edb39a7c925dfd1da6e9c6076b1fdb6e2c8ef07ce779919cb183",
+      "bytecodeHash": "0x25ac6bce0af279487b7402886b8dd2c5a23d8d952b8036b8265797a2361f56a1",
       "scriptPath": "script/deploy/DeployAddressSortedLinkedListWithMedian.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:15:46.069139+02:00",
-    "updatedAt": "2025-08-14T18:15:46.069139+02:00"
+    "createdAt": "2025-08-27T13:18:16.440323+03:00",
+    "updatedAt": "2025-08-27T13:18:16.45212+03:00"
   },
   "virtual/8453/BiPoolManager:v2.6.5": {
     "id": "virtual/8453/BiPoolManager:v2.6.5",
@@ -171,11 +171,11 @@
     "label": "v2.6.5",
     "address": "0x5b49162d4CdD7be3DcF2eb07BaF9922c82670990",
     "type": "SINGLETON",
-    "transactionId": "tx-0x6c856c5fe454a415aa7c87a2b4acda1b96226f520ef6362f41811ca5fe5d9f12",
+    "transactionId": "tx-0x06534ff561a6ba08ed26dd3c02ec29e993a644853e0250c5d190f07b53cbe0a5",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00d585cf66bcb607761cc768",
-      "initCodeHash": "0xc3b66375d6079cdc1d05b18746ca71b8a858775959087d312fdcd0bb9b1dbbb4",
+      "initCodeHash": "0x21343422a105f0b1f65097e9c5a8782e9fe49ad87ecb781efc814882f4a5be86",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/BiPoolManager:v2.6.5"
@@ -184,16 +184,16 @@
     "artifact": {
       "path": "lib/mento-core/contracts/swap/BiPoolManager.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0xca68e5268cd6c794f5b4af4200b5084d4fe5931799c096e0a1e8712b483785b4",
+      "bytecodeHash": "0xb6087710a69a3445e10cc511e58b8e6d96a2cf86cd7b6dadf8bf4fcd5bb7e02b",
       "scriptPath": "script/deploy/DeployBiPoolManager.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:58.880554+02:00",
-    "updatedAt": "2025-08-14T18:16:58.880554+02:00"
+    "createdAt": "2025-08-27T13:19:55.650957+03:00",
+    "updatedAt": "2025-08-27T13:19:55.6673+03:00"
   },
   "virtual/8453/BreakerBox:v2.6.5": {
     "id": "virtual/8453/BreakerBox:v2.6.5",
@@ -203,29 +203,29 @@
     "label": "v2.6.5",
     "address": "0x6d5deC48D7f0C7fEE5521f53B4A6E6cE4622c818",
     "type": "SINGLETON",
-    "transactionId": "tx-0xca7a67b40225a881fe24776f3f6d8920802b4141f281e88650c71646af629131",
+    "transactionId": "tx-0xc69e5faf3555b01c5128676c61622d551d23d91333eda4163b9c965176417a0a",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00e705a5ea3f919f115895ab",
-      "initCodeHash": "0x3830da906efbea959a226d7c671659879ecc93933c39accaa06f5abd5deb9299",
+      "initCodeHash": "0xea1efc20a4157cd8d820e9949e88ede3b69e17fcc72860cc6f2c5ae334a0b358",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
-      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000759e5318df8583dc84cc46222bbc053141ca694800000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f000000000000000000000000000000000000000000000000000000000000000100000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000759e5318df8583dc84cc46222bbc053141ca694800000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f000000000000000000000000000000000000000000000000000000000000000500000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca000000000000000000000000ea4103a6a122fbe2cdb07a80d4d293be07bb29fa00000000000000000000000002996d13041557032ffb3e910966f9ea784dfec40000000000000000000000005c0c9efb14a767ce50a687ac4658cce705407380",
       "entropy": "virtual/BreakerBox:v2.6.5"
     },
     "proxyInfo": null,
     "artifact": {
       "path": "lib/mento-core/contracts/oracles/BreakerBox.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x307f10c30cf97a0e6cad2d024449659b7e6d032b32a55739fdeed1e5c359afc8",
+      "bytecodeHash": "0xe8774ce325a76c48694b43beada8aac0077053610903e84b2933ab4d39f6ee85",
       "scriptPath": "script/deploy/DeployBreakerBox.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:51.375592+02:00",
-    "updatedAt": "2025-08-14T18:16:51.375592+02:00"
+    "createdAt": "2025-08-27T13:19:46.73219+03:00",
+    "updatedAt": "2025-08-27T13:19:46.743949+03:00"
   },
   "virtual/8453/Broker:v2.6.5": {
     "id": "virtual/8453/Broker:v2.6.5",
@@ -235,11 +235,11 @@
     "label": "v2.6.5",
     "address": "0xfd0922081374bBbc9785cf91FeEa856456f15Fc1",
     "type": "SINGLETON",
-    "transactionId": "tx-0x9feb6e362bb5560fefb9a675c1e41de2afca520637bd1bd7c30d07c6b52682ec",
+    "transactionId": "tx-0x50d6fac6a86ae0bf5b87df7b0c1c8ec3f758849c28f33fac22dc6cbf5ad7add2",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0048a70d4dab34feec72f295",
-      "initCodeHash": "0xb183dfd3330015def7dd8df072b6f3de8bfb097aebcd9f78cf1a8b6e9395d56f",
+      "initCodeHash": "0x61ce37592aaf693017c7ebd02913b1ced7ae8ca5c88400531056e078893f2185",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/lib/mento-core/contracts/swap/Broker.sol:Broker:v2.6.5"
@@ -248,16 +248,16 @@
     "artifact": {
       "path": "lib/mento-core/contracts/swap/Broker.sol",
       "compilerVersion": "0.8.18+commit.87f61d96",
-      "bytecodeHash": "0x052cebf2b63b04e138c7d06982ed2771afae70ad3397c93ec95e83c2e04f73e4",
+      "bytecodeHash": "0xf19c5f2648733774e773c8f9da919c567b15f7c5fa5b8ecc4912e7fda5f1916a",
       "scriptPath": "script/deploy/DeployBroker.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:09.513338+02:00",
-    "updatedAt": "2025-08-14T18:16:09.513338+02:00"
+    "createdAt": "2025-08-27T13:18:40.420627+03:00",
+    "updatedAt": "2025-08-27T13:18:40.431696+03:00"
   },
   "virtual/8453/ChainlinkRelayerFactory:v2.6.5": {
     "id": "virtual/8453/ChainlinkRelayerFactory:v2.6.5",
@@ -267,11 +267,11 @@
     "label": "v2.6.5",
     "address": "0xA0D5bE942dBea96354f39235FD71a849CbBb85ab",
     "type": "SINGLETON",
-    "transactionId": "tx-0x8d648dec9101dc6b73a2510758ec6682177e2d3555a07ac28668a79456cbbc8c",
+    "transactionId": "tx-0xb14adac9f053a9fa06e16b6d3d3a94c57bb1cb6b522854c61c5229a9d94ecc20",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00ca5aecae91325a28cd87c8",
-      "initCodeHash": "0x9ae41cbe83e1533e00f4c69e6a4f2125f78858626813cd1daba1822ad06add86",
+      "initCodeHash": "0xc24f5ca73c291c9c63c44e6e25ad07c96ce3a2cb9300a2dbd4dd5fde1142b657",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
       "entropy": "virtual/ChainlinkRelayerFactory:v2.6.5"
@@ -280,16 +280,140 @@
     "artifact": {
       "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerFactory.sol",
       "compilerVersion": "0.8.18+commit.87f61d96",
-      "bytecodeHash": "0xee63460e4e948b5a9595b26ef5d3d8f7e4d7589ad7adde5d7f4fe6e1ca31fa9c",
+      "bytecodeHash": "0xb5a555c66977e4a43e741322b035bb0648e36c2575a33cc87432cd524141c45a",
       "scriptPath": "script/deploy/DeployChainlinkRelayerFactory.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:32.798801+02:00",
-    "updatedAt": "2025-08-14T18:16:32.798801+02:00"
+    "createdAt": "2025-08-27T13:19:14.233352+03:00",
+    "updatedAt": "2025-08-27T13:19:14.243948+03:00"
+  },
+  "virtual/8453/ChainlinkRelayerV1:AUD/USD": {
+    "id": "virtual/8453/ChainlinkRelayerV1:AUD/USD",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "AUD/USD",
+    "address": "0x49c39F7933EC6F7477Eb93c9900E35351e400fFd",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3917273b7701731e16ce140a9edfd80799a7ceda8e1cd4b1fb910f77494e20da",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xf3c8463ec2ec830a9877e4f3e25bfbddd33b0c6b532b335a4a435975653097ee",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000005c0c9efb14a767ce50a687ac4658cce7054073800000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074155442f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000046e51b8ca41d709928eda9ae43e42193e6cdf2290000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x19cbc58f117a500d3b4a3cea7abc12a4388db72a20c94ff474eac073905f40e3",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:19:36.54888+03:00",
+    "updatedAt": "2025-08-27T13:19:36.573465+03:00"
+  },
+  "virtual/8453/ChainlinkRelayerV1:CAD/USD": {
+    "id": "virtual/8453/ChainlinkRelayerV1:CAD/USD",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "CAD/USD",
+    "address": "0xf97b9F9D7f3d24934055EcFB546041F8038F66f8",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3917273b7701731e16ce140a9edfd80799a7ceda8e1cd4b1fb910f77494e20da",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xb93336e4588686bc621c47fbf7fba4fa0b621f183086e4ed238dc9be93d083c1",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000002996d13041557032ffb3e910966f9ea784dfec40000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074341442f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000a840145f87572e82519d578b1f36340368a25d5d0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x19cbc58f117a500d3b4a3cea7abc12a4388db72a20c94ff474eac073905f40e3",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:19:36.54888+03:00",
+    "updatedAt": "2025-08-27T13:19:36.573465+03:00"
+  },
+  "virtual/8453/ChainlinkRelayerV1:EUR/USD": {
+    "id": "virtual/8453/ChainlinkRelayerV1:EUR/USD",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "EUR/USD",
+    "address": "0xE01939d10AFA909E87255c51e5dfa0D7ba876Ecb",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3917273b7701731e16ce140a9edfd80799a7ceda8e1cd4b1fb910f77494e20da",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x4b4060a3839f4d5ac3347b313f0bf015b25866767c387e8a8fae085ac984282d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074555522f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000c91d87e81fab8f93699ecf7ee9b44d11e1d53f0f0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x19cbc58f117a500d3b4a3cea7abc12a4388db72a20c94ff474eac073905f40e3",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:19:36.54888+03:00",
+    "updatedAt": "2025-08-27T13:19:36.573465+03:00"
+  },
+  "virtual/8453/ChainlinkRelayerV1:GBP/USD": {
+    "id": "virtual/8453/ChainlinkRelayerV1:GBP/USD",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "GBP/USD",
+    "address": "0x12725fF023BF712D28C8ddB2Dc4eD84789182381",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3917273b7701731e16ce140a9edfd80799a7ceda8e1cd4b1fb910f77494e20da",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x59ee5c11350572775863f14c410b170f9782f0a6cd56db494cb1399bf5995371",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ea4103a6a122fbe2cdb07a80d4d293be07bb29fa0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074742502f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000ccea6576904c118037695eb71195a5425e69fa150000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x19cbc58f117a500d3b4a3cea7abc12a4388db72a20c94ff474eac073905f40e3",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:19:36.54888+03:00",
+    "updatedAt": "2025-08-27T13:19:36.573465+03:00"
   },
   "virtual/8453/ChainlinkRelayerV1:USDC/USD": {
     "id": "virtual/8453/ChainlinkRelayerV1:USDC/USD",
@@ -297,13 +421,13 @@
     "chainId": 8453,
     "contractName": "ChainlinkRelayerV1",
     "label": "USDC/USD",
-    "address": "0xBeE8bf69531c327B5359Fcb7309a5dbEA318ECB2",
+    "address": "0xEcdbE1181104E35286439e5b618B480B1fEA7d75",
     "type": "SINGLETON",
-    "transactionId": "tx-0xdf8e368607f23c2ea0d99aaf2b1ad0f9623c5909bd20abc87a37f5aa300857a3",
+    "transactionId": "tx-0x3917273b7701731e16ce140a9edfd80799a7ceda8e1cd4b1fb910f77494e20da",
     "deploymentStrategy": {
       "method": "CREATE2",
       "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
-      "initCodeHash": "0x0f9fcc69372480b73144a49f89395d3ae31a1b02e0ca55d05b64f55445ec6cea",
+      "initCodeHash": "0xcb6ff6ad587fa27092de1012ab5b86b400821db1282766ca79a492397fcbbfe0",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000007e860098f58bbfc8648a4311b374b1d669a2bc6b0000000000000000000000000000000000000000000000000000000000000000"
     },
@@ -311,16 +435,16 @@
     "artifact": {
       "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
       "compilerVersion": "0.8.18+commit.87f61d96",
-      "bytecodeHash": "0x0f980cee1170792679061078d047793234ef1380fbf21ac5ad4f68cd8069329b",
-      "scriptPath": "script/deploy/ConfigureChainlinkRelayers.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "bytecodeHash": "0x19cbc58f117a500d3b4a3cea7abc12a4388db72a20c94ff474eac073905f40e3",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:42.405581+02:00",
-    "updatedAt": "2025-08-14T18:16:42.405581+02:00"
+    "createdAt": "2025-08-27T13:19:36.54888+03:00",
+    "updatedAt": "2025-08-27T13:19:36.573465+03:00"
   },
   "virtual/8453/ConstantProductPricingModule:v2.6.5": {
     "id": "virtual/8453/ConstantProductPricingModule:v2.6.5",
@@ -330,11 +454,11 @@
     "label": "v2.6.5",
     "address": "0xD46FFe35B7DDA71218910d081A6333cb642c910C",
     "type": "SINGLETON",
-    "transactionId": "tx-0xaeea521826de775d5a1d31abf50b4a54e5a3e7b77f8003b6ef96830c8e5c1a13",
+    "transactionId": "tx-0x94ce3ce82e15994e52c4a9208dd2fd979e234c0010d2541812a119f8ac1741cf",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00bcad20e2ece1f3c65ebf90",
-      "initCodeHash": "0x38b50fe6b7449988052b5b2a3008683c6a0ba5890e91f6bf782d66ee28ebef36",
+      "initCodeHash": "0xd29d23cc9da52e7c1a7a24687875908f15a4a6b1c68d40bb16d7ea1d4c37253b",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x",
       "entropy": "virtual/ConstantProductPricingModule:v2.6.5"
@@ -343,16 +467,16 @@
     "artifact": {
       "path": "lib/mento-core/contracts/swap/ConstantProductPricingModule.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x38b50fe6b7449988052b5b2a3008683c6a0ba5890e91f6bf782d66ee28ebef36",
+      "bytecodeHash": "0xd29d23cc9da52e7c1a7a24687875908f15a4a6b1c68d40bb16d7ea1d4c37253b",
       "scriptPath": "script/deploy/DeployPricingModules.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:15:54.140089+02:00",
-    "updatedAt": "2025-08-14T18:15:54.140089+02:00"
+    "createdAt": "2025-08-27T13:18:25.314504+03:00",
+    "updatedAt": "2025-08-27T13:18:25.323697+03:00"
   },
   "virtual/8453/ConstantSumPricingModule:v2.6.5": {
     "id": "virtual/8453/ConstantSumPricingModule:v2.6.5",
@@ -362,11 +486,11 @@
     "label": "v2.6.5",
     "address": "0x2722BbaaC5b16A06CbA4591a392A70e5A9274947",
     "type": "SINGLETON",
-    "transactionId": "tx-0xaeea521826de775d5a1d31abf50b4a54e5a3e7b77f8003b6ef96830c8e5c1a13",
+    "transactionId": "tx-0x94ce3ce82e15994e52c4a9208dd2fd979e234c0010d2541812a119f8ac1741cf",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00a9e50488c84f63ee7b53d1",
-      "initCodeHash": "0x6657cf0dd61172df9ef7d4db6453c85a387266a95aa5ec5bac29a6212b7863dd",
+      "initCodeHash": "0xe1ffd0b267bba58269f41dfad419d3600e9a63c31fc8b50d562d9eef5b48cb01",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x",
       "entropy": "virtual/ConstantSumPricingModule:v2.6.5"
@@ -375,16 +499,80 @@
     "artifact": {
       "path": "lib/mento-core/contracts/swap/ConstantSumPricingModule.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x6657cf0dd61172df9ef7d4db6453c85a387266a95aa5ec5bac29a6212b7863dd",
+      "bytecodeHash": "0xe1ffd0b267bba58269f41dfad419d3600e9a63c31fc8b50d562d9eef5b48cb01",
       "scriptPath": "script/deploy/DeployPricingModules.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:15:54.140089+02:00",
-    "updatedAt": "2025-08-14T18:15:54.140089+02:00"
+    "createdAt": "2025-08-27T13:18:25.314504+03:00",
+    "updatedAt": "2025-08-27T13:18:25.323697+03:00"
+  },
+  "virtual/8453/Emission:v2.6.5": {
+    "id": "virtual/8453/Emission:v2.6.5",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "Emission",
+    "label": "v2.6.5",
+    "address": "0x55FD175fF7882dEEe396A7551d4a946d615d6006",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xacb52879758ac3a36a70d12938fb43c7decafbc074c9f3f4702c02fc6f899bdb",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0044505f633a2b96a9164ab1",
+      "initCodeHash": "0xecc565dd36273b0d701fc3b1220ce41367f006fbee91c63d8331e91dde145ee3",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "virtual/Emission:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/Emission.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xf8ed45aae2cf1b8ec57225c7cd02ff29579954a2e6bc60399321534325686766",
+      "scriptPath": "script/deploy/DeployEmission.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:30:46.647032+03:00",
+    "updatedAt": "2025-08-27T15:30:46.65938+03:00"
+  },
+  "virtual/8453/Locking:v2.6.5": {
+    "id": "virtual/8453/Locking:v2.6.5",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "Locking",
+    "label": "v2.6.5",
+    "address": "0x97546e179EEdc37D5f76C97223165999abE5AFc1",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x2cce2f9f2231b22078a3cb69b492fa3491778ae5fdabec40a7654b07c86e9802",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00c9c75fff1ad280ff244dda",
+      "initCodeHash": "0x65affabb961ad62dc40c7f577958023b9fff4af39ba6f13141395141f3c797d7",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "virtual/Locking:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/locking/Locking.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x0d3b00d9b25e0d538f9d3fdb40635514fc9c432c0e856f56ee340be174697267",
+      "scriptPath": "script/deploy/DeployLocking.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:42:22.91742+03:00",
+    "updatedAt": "2025-08-27T15:42:22.933214+03:00"
   },
   "virtual/8453/MedianDeltaBreaker:v2.6.5": {
     "id": "virtual/8453/MedianDeltaBreaker:v2.6.5",
@@ -394,11 +582,11 @@
     "label": "v2.6.5",
     "address": "0x1bAB9f441DBB9E99157E2875bB269CbA33DF4072",
     "type": "SINGLETON",
-    "transactionId": "tx-0xca7a67b40225a881fe24776f3f6d8920802b4141f281e88650c71646af629131",
+    "transactionId": "tx-0xc69e5faf3555b01c5128676c61622d551d23d91333eda4163b9c965176417a0a",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00303e9a1193657f5be29913",
-      "initCodeHash": "0xa7a981419b35e46acdc27ef435ce1cf785dbaf84e25115c570b1aca95c2d7759",
+      "initCodeHash": "0x5823b2b8f04d3a0b21b9f19d01993ed3ad3086a01e99c1d15463b8c2655f918e",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000759e5318df8583dc84cc46222bbc053141ca69480000000000000000000000006d5dec48d7f0c7fee5521f53b4a6e6ce4622c81800000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000014000000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/MedianDeltaBreaker:v2.6.5"
@@ -407,16 +595,148 @@
     "artifact": {
       "path": "lib/mento-core/contracts/oracles/breakers/MedianDeltaBreaker.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0xbdafdd69a61811cd956f62780fcd875d1655129bbe8492f70eeab1d258222782",
+      "bytecodeHash": "0x437ed10360cae6b44461b4a346b6185dc7ec06daf48c3255e342d847d56510e4",
       "scriptPath": "script/deploy/DeployBreakerBox.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:51.375592+02:00",
-    "updatedAt": "2025-08-14T18:16:51.375592+02:00"
+    "createdAt": "2025-08-27T13:19:46.73219+03:00",
+    "updatedAt": "2025-08-27T13:19:46.743949+03:00"
+  },
+  "virtual/8453/MentoGovernor:v2.6.5": {
+    "id": "virtual/8453/MentoGovernor:v2.6.5",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "MentoGovernor",
+    "label": "v2.6.5",
+    "address": "0x855fCB038A76aff1ED86A4B1756EBb475ceF4512",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xe795ddf489a6028b207916c38299b83e26de2d75d0050f61f36fe43432d8f5a4",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0009184523367b0096c8202e",
+      "initCodeHash": "0x139f17303c5c4ed092998950147ef097a957a58495006ce18e398f707751ffa3",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "virtual/MentoGovernor:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/MentoGovernor.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xcf70b03e08f25fac6c612e62e6e486ebdaaec0259e58a88e47fadf8703145e2e",
+      "scriptPath": "script/deploy/DeployMentoGovernor.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:50:05.072437+03:00",
+    "updatedAt": "2025-08-27T15:50:05.085551+03:00"
+  },
+  "virtual/8453/MentoRouter:v1.0.0": {
+    "id": "virtual/8453/MentoRouter:v1.0.0",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "MentoRouter",
+    "label": "v1.0.0",
+    "address": "0xeb6ac0E30211399D0CC00e449fA82fb8C7a2A3c6",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x09548414b07d266e498f92176212de5fae1bc94f45d9dccc01f635453a128b6c",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f001915693baccef5c9ac19dd",
+      "initCodeHash": "0x808fb7174366c862cd2dc9f7570596fdc5312cc7169377ea0b8b9e7d2dc5526d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000004740ad3e0052d3e792b3db3368317402bab90f8700000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
+      "entropy": "virtual/MentoRouter:v1.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-router/src/MentoRouter.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xf6f5eb41a72ffb6a43acd045f2ba452b4b3add82af4acae748010892af3dd946",
+      "scriptPath": "script/deploy/DeployMentoRouter.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:18:47.322283+03:00",
+    "updatedAt": "2025-08-27T13:18:47.331884+03:00"
+  },
+  "virtual/8453/MentoToken": {
+    "id": "virtual/8453/MentoToken",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "MentoToken",
+    "label": "",
+    "address": "0xBCA033A02Fed9433d2761a3119B228d47b591c16",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x122b55ac1f126af4d1b737a92fbbaa889298e713d9c75d0f2eefabd8300f437f",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00babedf0e3372c3235b67e7",
+      "initCodeHash": "0x34f4b9963c0ba1a1683b73235a1d71cd0bea7da648f337a1ee182b84c4960105",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000001c73b95a686a16439c2f63a549fb7e998bff751000000000000000000000000dde0c60f424dfd29d17df61dfc8548d38e9b39c700000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f000000000000000000000000000000000000000000000000000000000000000200000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f000000000000000000000000c69fb5d41d26e7bc649cec9522ee4c6b65dace0b000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000c800000000000000000000000000000000000000000000000000000000000000c8",
+      "entropy": "virtual/MentoToken"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/MentoToken.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x0dc433b729e9e9d4be835239a00c080adf39d304ab728a55ec37f1203cd80d6b",
+      "scriptPath": "script/deploy/DeployMentoToken.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:19:42.6942+03:00",
+    "updatedAt": "2025-08-27T15:19:42.712781+03:00"
+  },
+  "virtual/8453/Proxy:AUDfx": {
+    "id": "virtual/8453/Proxy:AUDfx",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "Proxy",
+    "label": "AUDfx",
+    "address": "0x4d4b4dC85Cf5c9E25Ff5143ba1469Ca4B550daF8",
+    "type": "PROXY",
+    "transactionId": "tx-0x080a155eb7313743716fb09cc25b38e50d39892f884875d24aecb1beee7691ba",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00d288e4bdcbd5d2ce5fda53",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
+      "entropy": "virtual/src/Proxy.sol:Proxy:AUDfx"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xABe15b1200a0A801e834FDF71832920C65c966aA",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:20:09.029301+03:00",
+    "updatedAt": "2025-08-27T13:20:09.052966+03:00"
   },
   "virtual/8453/Proxy:BiPoolManager": {
     "id": "virtual/8453/Proxy:BiPoolManager",
@@ -426,11 +746,11 @@
     "label": "BiPoolManager",
     "address": "0x11625beA35264A0DF5C89E89a849cC47f83059B3",
     "type": "PROXY",
-    "transactionId": "tx-0x6c856c5fe454a415aa7c87a2b4acda1b96226f520ef6362f41811ca5fe5d9f12",
+    "transactionId": "tx-0x06534ff561a6ba08ed26dd3c02ec29e993a644853e0250c5d190f07b53cbe0a5",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00ee4932d7c6fb35565a0cbf",
-      "initCodeHash": "0x5921db6fed835193f3388d9894e55d14aadbd312f9f026bcefa1945225c834e6",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
       "entropy": "virtual/src/Proxy.sol:Proxy:BiPoolManager"
@@ -443,16 +763,16 @@
     "artifact": {
       "path": "src/Proxy.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x4bafd98398bcfbb07ee152082956276ecf441a63eed79edb6fb004e7dfeb0859",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
       "scriptPath": "script/deploy/DeployBiPoolManager.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:58.880554+02:00",
-    "updatedAt": "2025-08-14T18:16:58.880554+02:00"
+    "createdAt": "2025-08-27T13:19:55.650957+03:00",
+    "updatedAt": "2025-08-27T13:19:55.6673+03:00"
   },
   "virtual/8453/Proxy:Broker": {
     "id": "virtual/8453/Proxy:Broker",
@@ -462,11 +782,11 @@
     "label": "Broker",
     "address": "0x4740Ad3E0052d3E792b3dB3368317402bAb90F87",
     "type": "PROXY",
-    "transactionId": "tx-0x9feb6e362bb5560fefb9a675c1e41de2afca520637bd1bd7c30d07c6b52682ec",
+    "transactionId": "tx-0x50d6fac6a86ae0bf5b87df7b0c1c8ec3f758849c28f33fac22dc6cbf5ad7add2",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00ff41477de9de8d7dc57649",
-      "initCodeHash": "0x5921db6fed835193f3388d9894e55d14aadbd312f9f026bcefa1945225c834e6",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
       "entropy": "virtual/src/Proxy.sol:Proxy:Broker"
@@ -479,16 +799,124 @@
     "artifact": {
       "path": "src/Proxy.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x4bafd98398bcfbb07ee152082956276ecf441a63eed79edb6fb004e7dfeb0859",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
       "scriptPath": "script/deploy/DeployBroker.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:09.513338+02:00",
-    "updatedAt": "2025-08-14T18:16:09.513338+02:00"
+    "createdAt": "2025-08-27T13:18:40.420627+03:00",
+    "updatedAt": "2025-08-27T13:18:40.431696+03:00"
+  },
+  "virtual/8453/Proxy:CADfx": {
+    "id": "virtual/8453/Proxy:CADfx",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "Proxy",
+    "label": "CADfx",
+    "address": "0x7BCfA45ce989d72F7841d050d33Dca8c0f6703c4",
+    "type": "PROXY",
+    "transactionId": "tx-0x080a155eb7313743716fb09cc25b38e50d39892f884875d24aecb1beee7691ba",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00c753efc7743374164d1d48",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
+      "entropy": "virtual/src/Proxy.sol:Proxy:CADfx"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xABe15b1200a0A801e834FDF71832920C65c966aA",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:20:09.029301+03:00",
+    "updatedAt": "2025-08-27T13:20:09.052966+03:00"
+  },
+  "virtual/8453/Proxy:EURfx": {
+    "id": "virtual/8453/Proxy:EURfx",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "Proxy",
+    "label": "EURfx",
+    "address": "0xA08259fE8205e0FB9117e6B7Ee2b34357C2D266F",
+    "type": "PROXY",
+    "transactionId": "tx-0x080a155eb7313743716fb09cc25b38e50d39892f884875d24aecb1beee7691ba",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0094bca1c0dd3c6767948715",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
+      "entropy": "virtual/src/Proxy.sol:Proxy:EURfx"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xABe15b1200a0A801e834FDF71832920C65c966aA",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:20:09.029301+03:00",
+    "updatedAt": "2025-08-27T13:20:09.052966+03:00"
+  },
+  "virtual/8453/Proxy:GBPfx": {
+    "id": "virtual/8453/Proxy:GBPfx",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "Proxy",
+    "label": "GBPfx",
+    "address": "0xADA17D11cCdcC6E7883069Fb73447F0ED9D007F4",
+    "type": "PROXY",
+    "transactionId": "tx-0x080a155eb7313743716fb09cc25b38e50d39892f884875d24aecb1beee7691ba",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00409a43c2b6a045f521530f",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
+      "entropy": "virtual/src/Proxy.sol:Proxy:GBPfx"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xABe15b1200a0A801e834FDF71832920C65c966aA",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T13:20:09.029301+03:00",
+    "updatedAt": "2025-08-27T13:20:09.052966+03:00"
   },
   "virtual/8453/Proxy:Reserve": {
     "id": "virtual/8453/Proxy:Reserve",
@@ -498,11 +926,11 @@
     "label": "Reserve",
     "address": "0x75889508756d100423180d50bBee058C433584Aa",
     "type": "PROXY",
-    "transactionId": "tx-0x19b67a0d977802332d62af665a964661c726d0778d940e2733769d540df9aebd",
+    "transactionId": "tx-0xe694aac2ad6e24065a74c07ab8435860cd2a77821ff3bf5b03e4f52f842fa568",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0045095c5093a9f7140ab002",
-      "initCodeHash": "0x5921db6fed835193f3388d9894e55d14aadbd312f9f026bcefa1945225c834e6",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
       "entropy": "virtual/src/Proxy.sol:Proxy:Reserve"
@@ -515,16 +943,16 @@
     "artifact": {
       "path": "src/Proxy.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x4bafd98398bcfbb07ee152082956276ecf441a63eed79edb6fb004e7dfeb0859",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
       "scriptPath": "script/deploy/DeployReserve.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:17.498644+02:00",
-    "updatedAt": "2025-08-14T18:16:17.498644+02:00"
+    "createdAt": "2025-08-27T13:18:56.814836+03:00",
+    "updatedAt": "2025-08-27T13:18:56.826997+03:00"
   },
   "virtual/8453/Proxy:SortedOracles": {
     "id": "virtual/8453/Proxy:SortedOracles",
@@ -534,11 +962,11 @@
     "label": "SortedOracles",
     "address": "0x759e5318df8583Dc84cC46222BBc053141Ca6948",
     "type": "PROXY",
-    "transactionId": "tx-0x3fe0e64bc56bd87f274b3134e6d384b0e7fcf05d62fd5deedf515abe2a5eaecc",
+    "transactionId": "tx-0x4a112403cb81d30dab1fb3fb32203ca7d120687a499b08c10dd796468a92e2d7",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00b6e0b1976bd1efd1c5ea5e",
-      "initCodeHash": "0x5921db6fed835193f3388d9894e55d14aadbd312f9f026bcefa1945225c834e6",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
       "entropy": "virtual/src/Proxy.sol:Proxy:SortedOracles"
@@ -551,16 +979,16 @@
     "artifact": {
       "path": "src/Proxy.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x4bafd98398bcfbb07ee152082956276ecf441a63eed79edb6fb004e7dfeb0859",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
       "scriptPath": "script/deploy/DeploySortedOracles.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:25.034535+02:00",
-    "updatedAt": "2025-08-14T18:16:25.034535+02:00"
+    "createdAt": "2025-08-27T13:19:04.941532+03:00",
+    "updatedAt": "2025-08-27T13:19:04.952905+03:00"
   },
   "virtual/8453/Proxy:USDfx": {
     "id": "virtual/8453/Proxy:USDfx",
@@ -570,11 +998,11 @@
     "label": "USDfx",
     "address": "0xA65a2853fE883df11c4Ba1FCdFED99B7b00f0b78",
     "type": "PROXY",
-    "transactionId": "tx-0xccf635383cc3e507ee0e7efc1752904dda48ef5a69fb2c51d3b42373123a3b24",
+    "transactionId": "tx-0x080a155eb7313743716fb09cc25b38e50d39892f884875d24aecb1beee7691ba",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00dc36d4816338c9d9e93ca3",
-      "initCodeHash": "0x5921db6fed835193f3388d9894e55d14aadbd312f9f026bcefa1945225c834e6",
+      "initCodeHash": "0x6ecb4b315b65bc215fa1fa931dddcb12a1fca810ce5229215c7bac8491af05f0",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
       "entropy": "virtual/src/Proxy.sol:Proxy:USDfx"
@@ -587,16 +1015,16 @@
     "artifact": {
       "path": "src/Proxy.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x4bafd98398bcfbb07ee152082956276ecf441a63eed79edb6fb004e7dfeb0859",
+      "bytecodeHash": "0x855ef303ee57166ab8d73c7ee204e21361220766d5ab7f0975f04e7910a9c494",
       "scriptPath": "script/deploy/DeployTokens.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:17:14.052253+02:00",
-    "updatedAt": "2025-08-14T18:17:14.052253+02:00"
+    "createdAt": "2025-08-27T13:20:09.029301+03:00",
+    "updatedAt": "2025-08-27T13:20:09.052966+03:00"
   },
   "virtual/8453/ProxyAdmin": {
     "id": "virtual/8453/ProxyAdmin",
@@ -606,11 +1034,11 @@
     "label": "",
     "address": "0x59c0c91e6B0efEcf1453824d28450Ca61F3D65b5",
     "type": "SINGLETON",
-    "transactionId": "tx-0x6653016009fbe0ae14c6e4964dc44c6cee15b5d66ce301cbf8756e42bb62d927",
+    "transactionId": "tx-0xa04f7b2635198229f5ebf9adfb5662738495ba785655b088df752f8de36d3a5d",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f0091a5c814b5fccaf0aef1fe",
-      "initCodeHash": "0x4f21abf7d0f6826c5382dbe3bada13153ad5537f338694f15c4feb12fe372095",
+      "initCodeHash": "0xd6dff12d9ad1287ca2db944bb1797dfeda5dd88aaada83f54bb98780ded5d13b",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f",
       "entropy": "virtual/ProxyAdmin"
@@ -619,16 +1047,16 @@
     "artifact": {
       "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol",
       "compilerVersion": "0.8.30+commit.73712a01",
-      "bytecodeHash": "0xb3d0a7b194862c86fccd5944e07a24e6c153534c4b51037b8b51e5eacd1d1167",
+      "bytecodeHash": "0x3e0938fc9ee44c69e91a1b5a19c39fc259c064ebf5b6cfc61beebe419b1a5adc",
       "scriptPath": "script/deploy/DeployProxyAdmin.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:01.482722+02:00",
-    "updatedAt": "2025-08-14T18:16:01.482722+02:00"
+    "createdAt": "2025-08-27T13:18:32.123163+03:00",
+    "updatedAt": "2025-08-27T13:18:32.141864+03:00"
   },
   "virtual/8453/Reserve:v2.6.5": {
     "id": "virtual/8453/Reserve:v2.6.5",
@@ -638,11 +1066,11 @@
     "label": "v2.6.5",
     "address": "0xAE58f577a79cddA649758E744F3060D3da8Ade2d",
     "type": "SINGLETON",
-    "transactionId": "tx-0x19b67a0d977802332d62af665a964661c726d0778d940e2733769d540df9aebd",
+    "transactionId": "tx-0xe694aac2ad6e24065a74c07ab8435860cd2a77821ff3bf5b03e4f52f842fa568",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f000efc3140c4a0b9f3fdba03",
-      "initCodeHash": "0x3400f106285adce7409e5ac681a24978f38e10ee2e334a83222d64272ebc59cc",
+      "initCodeHash": "0xcc6572fc414b665133cd8a58491c59fb9dc135ce51273d39771af86201f72a98",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/Reserve:v2.6.5"
@@ -651,16 +1079,16 @@
     "artifact": {
       "path": "lib/mento-core/contracts/swap/Reserve.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0x8ef450775d5949c42ecffe00ef33ecbdf589e35f0daeaccce2439a184ccab896",
+      "bytecodeHash": "0x03261c4897d07191891c0e79e9819a7f2275d345c658070223a69250b5ff8a36",
       "scriptPath": "script/deploy/DeployReserve.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:17.498644+02:00",
-    "updatedAt": "2025-08-14T18:16:17.498644+02:00"
+    "createdAt": "2025-08-27T13:18:56.814836+03:00",
+    "updatedAt": "2025-08-27T13:18:56.826997+03:00"
   },
   "virtual/8453/SortedOracles:v2.6.5": {
     "id": "virtual/8453/SortedOracles:v2.6.5",
@@ -670,11 +1098,11 @@
     "label": "v2.6.5",
     "address": "0xE3F0A146b6C378b31F88aB97C8149948a0Cfbecf",
     "type": "SINGLETON",
-    "transactionId": "tx-0x3fe0e64bc56bd87f274b3134e6d384b0e7fcf05d62fd5deedf515abe2a5eaecc",
+    "transactionId": "tx-0x4a112403cb81d30dab1fb3fb32203ca7d120687a499b08c10dd796468a92e2d7",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f002e54534bb2ceb45448feae",
-      "initCodeHash": "0x93f18721b3897a06f470b30f5951cf8731fbba9d24daa6b90f05f280f733cfdb",
+      "initCodeHash": "0x8cc2d4bff90f9e1f7f1df6a19c55d0c18482c11d8564ee8e96409b115d07616b",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/SortedOracles:v2.6.5"
@@ -683,16 +1111,16 @@
     "artifact": {
       "path": "src/SortedOracles.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0xe80e6155fef4e38a7789963900c94a3b634f3707003380bbd51d8e889b5144bd",
+      "bytecodeHash": "0x353185f18456024840c592e34ae8de1ee1d9bcf4e6c57cadfec493c6fbeb5b7b",
       "scriptPath": "script/deploy/DeploySortedOracles.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:25.034535+02:00",
-    "updatedAt": "2025-08-14T18:16:25.034535+02:00"
+    "createdAt": "2025-08-27T13:19:04.941532+03:00",
+    "updatedAt": "2025-08-27T13:19:04.952905+03:00"
   },
   "virtual/8453/StableTokenV2:v2.6.5": {
     "id": "virtual/8453/StableTokenV2:v2.6.5",
@@ -702,11 +1130,11 @@
     "label": "v2.6.5",
     "address": "0xABe15b1200a0A801e834FDF71832920C65c966aA",
     "type": "SINGLETON",
-    "transactionId": "tx-0xccf635383cc3e507ee0e7efc1752904dda48ef5a69fb2c51d3b42373123a3b24",
+    "transactionId": "tx-0x080a155eb7313743716fb09cc25b38e50d39892f884875d24aecb1beee7691ba",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00badd9c1a47e0e629995428",
-      "initCodeHash": "0x7f622f7e9747ccffdeaf1982411c0c6b5cd50cb9d7557373d5a12100a55ceb23",
+      "initCodeHash": "0xdaee5b85859417063216799a2e2de34cac4804c96f4dd9d3864ff58f8ccb3405",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/StableTokenV2:v2.6.5"
@@ -715,16 +1143,48 @@
     "artifact": {
       "path": "lib/mento-core/contracts/tokens/StableTokenV2.sol",
       "compilerVersion": "0.8.18+commit.87f61d96",
-      "bytecodeHash": "0xdfdf61290b719e73414dba6b8a4823e8b3c5647b64b7fc6f9ecc9a1aed3e15f1",
+      "bytecodeHash": "0xa35d928826d54b031e59bf12afdd2ef03906388568a6960077c28a7460304d44",
       "scriptPath": "script/deploy/DeployTokens.s.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:17:14.052253+02:00",
-    "updatedAt": "2025-08-14T18:17:14.052253+02:00"
+    "createdAt": "2025-08-27T13:20:09.029301+03:00",
+    "updatedAt": "2025-08-27T13:20:09.052966+03:00"
+  },
+  "virtual/8453/TimelockController:v2.6.5": {
+    "id": "virtual/8453/TimelockController:v2.6.5",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TimelockController",
+    "label": "v2.6.5",
+    "address": "0x6bccf6E5760347F593781D4949166570eD4cD716",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xb8ccba0468d0d764eb63bd30b185421f6628ec9f49994eecbab54758cfdf4e06",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f004766c232244a692d086501",
+      "initCodeHash": "0xb4ed6e7de3ab41e1741be587b1d5fda676a9ebb50e23f29f4af73136b755d54f",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "virtual/TimelockController:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/TimelockController.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xb71dfefd9d8ceadb8761ee7d6faf30dc54b23675a597ddc342867a34c0dcd8ec",
+      "scriptPath": "script/deploy/DeployTimelockController.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:44:13.288635+03:00",
+    "updatedAt": "2025-08-27T15:44:13.2983+03:00"
   },
   "virtual/8453/TransparentUpgradeableProxy:ChainlinkRelayerFactory": {
     "id": "virtual/8453/TransparentUpgradeableProxy:ChainlinkRelayerFactory",
@@ -734,11 +1194,11 @@
     "label": "ChainlinkRelayerFactory",
     "address": "0x0d3d861510FA460bE03380A7b7C03668157e7E25",
     "type": "PROXY",
-    "transactionId": "tx-0x8d648dec9101dc6b73a2510758ec6682177e2d3555a07ac28668a79456cbbc8c",
+    "transactionId": "tx-0xb14adac9f053a9fa06e16b6d3d3a94c57bb1cb6b522854c61c5229a9d94ecc20",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f006ed66f2c169963d7dc51bb",
-      "initCodeHash": "0xda93b0278c1c53fac27f5dad12169857f15cb3e8beabf9f8bc78c8a37c385e89",
+      "initCodeHash": "0x6e4572e95a9ba1d76dc02b9d0ecef389a19f1336064656fb005cee5789d719b3",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x000000000000000000000000a0d5be942dbea96354f39235fd71a849cbbb85ab00000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b500000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000044485cc955000000000000000000000000759e5318df8583dc84cc46222bbc053141ca694800000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f00000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/TransparentUpgradeableProxy:ChainlinkRelayerFactory"
@@ -751,16 +1211,160 @@
     "artifact": {
       "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
       "compilerVersion": "0.8.30+commit.73712a01",
-      "bytecodeHash": "0x93802094420cbe08a8d0fbac856473b742c71e299cd6ba138cd30efa091332e1",
+      "bytecodeHash": "0xb174b9d3a1be6169d99c189dff292e0608079a1d5a812f3aa7005df8621a608f",
       "scriptPath": "script/deploy/DeployChainlinkRelayerFactory.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:32.798801+02:00",
-    "updatedAt": "2025-08-14T18:16:32.798801+02:00"
+    "createdAt": "2025-08-27T13:19:14.233352+03:00",
+    "updatedAt": "2025-08-27T13:19:14.243948+03:00"
+  },
+  "virtual/8453/TransparentUpgradeableProxy:Emission": {
+    "id": "virtual/8453/TransparentUpgradeableProxy:Emission",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "Emission",
+    "address": "0xb3099388B9884688CEe21D8397C3763C36E18905",
+    "type": "PROXY",
+    "transactionId": "tx-0xacb52879758ac3a36a70d12938fb43c7decafbc074c9f3f4702c02fc6f899bdb",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00c07ad29b8ef6a64287b3c1",
+      "initCodeHash": "0xb3430d784e81d97b4c5e7c8b56ddff5f043d755986eeb76b2410b8cb7020c2e8",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000055fd175ff7882deee396a7551d4a946d615d600600000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b500000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000084be203094000000000000000000000000bca033a02fed9433d2761a3119b228d47b591c16000000000000000000000000c69fb5d41d26e7bc649cec9522ee4c6b65dace0b000000000000000000000000000000000000000001f04ef12cb04cf15800000000000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f00000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/TransparentUpgradeableProxy:Emission"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x55FD175fF7882dEEe396A7551d4a946d615d6006",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xb174b9d3a1be6169d99c189dff292e0608079a1d5a812f3aa7005df8621a608f",
+      "scriptPath": "script/deploy/DeployEmission.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:30:46.647032+03:00",
+    "updatedAt": "2025-08-27T15:30:46.65938+03:00"
+  },
+  "virtual/8453/TransparentUpgradeableProxy:Locking": {
+    "id": "virtual/8453/TransparentUpgradeableProxy:Locking",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "Locking",
+    "address": "0xdDE0C60f424DfD29d17DF61DfC8548D38e9b39C7",
+    "type": "PROXY",
+    "transactionId": "tx-0x2cce2f9f2231b22078a3cb69b492fa3491778ae5fdabec40a7654b07c86e9802",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f005c9df1f8a61266f0609fa3",
+      "initCodeHash": "0x4c93cb4aba0ce0db204732c6692646a77e59b7cd5056f6ddf9f257c5027aede6",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000097546e179eedc37d5f76c97223165999abe5afc100000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b5000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a4c9a5b589000000000000000000000000bca033a02fed9433d2761a3119b228d47b591c16000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f00000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/TransparentUpgradeableProxy:Locking"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x97546e179EEdc37D5f76C97223165999abE5AFc1",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xb174b9d3a1be6169d99c189dff292e0608079a1d5a812f3aa7005df8621a608f",
+      "scriptPath": "script/deploy/DeployLocking.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:42:22.91742+03:00",
+    "updatedAt": "2025-08-27T15:42:22.933214+03:00"
+  },
+  "virtual/8453/TransparentUpgradeableProxy:MentoGovernor": {
+    "id": "virtual/8453/TransparentUpgradeableProxy:MentoGovernor",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "MentoGovernor",
+    "address": "0x4EC64b2f1cEEEA72eB9BA9527f1c4BA0F4084431",
+    "type": "PROXY",
+    "transactionId": "tx-0xe795ddf489a6028b207916c38299b83e26de2d75d0050f61f36fe43432d8f5a4",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00e59ed7429e0a86be21808c",
+      "initCodeHash": "0x265784bbf2341091d420a9526c9ef8ac5a646db9d79a18ae86e699448727dea4",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000855fcb038a76aff1ed86a4b1756ebb475cef451200000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b5000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c4a2910789000000000000000000000000dde0c60f424dfd29d17df61dfc8548d38e9b39c7000000000000000000000000c69fb5d41d26e7bc649cec9522ee4c6b65dace0b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001d88000000000000000000000000000000000000000000000021e19e0c9bab2400000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/TransparentUpgradeableProxy:MentoGovernor"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x855fCB038A76aff1ED86A4B1756EBb475ceF4512",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xb174b9d3a1be6169d99c189dff292e0608079a1d5a812f3aa7005df8621a608f",
+      "scriptPath": "script/deploy/DeployMentoGovernor.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:50:05.072437+03:00",
+    "updatedAt": "2025-08-27T15:50:05.085551+03:00"
+  },
+  "virtual/8453/TransparentUpgradeableProxy:TimelockController": {
+    "id": "virtual/8453/TransparentUpgradeableProxy:TimelockController",
+    "namespace": "virtual",
+    "chainId": 8453,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "TimelockController",
+    "address": "0xC69fb5d41D26E7Bc649cEC9522eE4C6b65daCe0b",
+    "type": "PROXY",
+    "transactionId": "tx-0xb8ccba0468d0d764eb63bd30b185421f6628ec9f49994eecbab54758cfdf4e06",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00cb2ffb4c0b975f06e6bebd",
+      "initCodeHash": "0x32b84081688a6270819da1d9fbd3eb58d099f9ea1a6bf8420bc1c0b14de52faf",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000006bccf6e5760347f593781d4949166570ed4cd71600000000000000000000000059c0c91e6b0efecf1453824d28450ca61f3d65b500000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000124672f70c5000000000000000000000000000000000000000000000000000000000002a30000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f00000000000000000000000000000000000000000000000000000000000000010000000000000000000000004ec64b2f1ceeea72eb9ba9527f1c4ba0f40844310000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "virtual/TransparentUpgradeableProxy:TimelockController"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x6bccf6E5760347F593781D4949166570eD4cD716",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xb174b9d3a1be6169d99c189dff292e0608079a1d5a812f3aa7005df8621a608f",
+      "scriptPath": "script/deploy/DeployTimelockController.s.sol",
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-08-27T15:44:13.288635+03:00",
+    "updatedAt": "2025-08-27T15:44:13.2983+03:00"
   },
   "virtual/8453/ValueDeltaBreaker:v2.6.5": {
     "id": "virtual/8453/ValueDeltaBreaker:v2.6.5",
@@ -770,11 +1374,11 @@
     "label": "v2.6.5",
     "address": "0xC19C93760cD5e37F79dB23C485cc5CFda093e40F",
     "type": "SINGLETON",
-    "transactionId": "tx-0xca7a67b40225a881fe24776f3f6d8920802b4141f281e88650c71646af629131",
+    "transactionId": "tx-0xc69e5faf3555b01c5128676c61622d551d23d91333eda4163b9c965176417a0a",
     "deploymentStrategy": {
       "method": "CREATE3",
       "salt": "0x32cb58b145d3f7e28c45ce4b2cc31fa94248b23f00d680ea04477331dfa3e834",
-      "initCodeHash": "0x23fd5db905b3e50586488cad33b940eef2093d8cd3772fb14454c897af32b3ec",
+      "initCodeHash": "0x535cdca6dc9c2db991d536b805b90b81802df958d09a8235aab1993b48f16b46",
       "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
       "constructorArgs": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000759e5318df8583dc84cc46222bbc053141ca694800000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000012000000000000000000000000032cb58b145d3f7e28c45ce4b2cc31fa94248b23f000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
       "entropy": "virtual/ValueDeltaBreaker:v2.6.5"
@@ -783,15 +1387,15 @@
     "artifact": {
       "path": "lib/mento-core/contracts/oracles/breakers/ValueDeltaBreaker.sol",
       "compilerVersion": "0.5.17+commit.d19bba13",
-      "bytecodeHash": "0xfbb7a1cae0d162c19ba67452e30499caa0dc83a50c2fc3a572bdf1810ef60c8a",
+      "bytecodeHash": "0x2291971ab05fdec2b525bc729f4f090e8172e96bd8b012e697c31b85bf8daea2",
       "scriptPath": "script/deploy/DeployBreakerBox.sol",
-      "gitCommit": "0602aaaef2b9a32d589f007c024982afc34c9d63"
+      "gitCommit": "604343afe4ac18314b93de6f953f34835548c87a"
     },
     "verification": {
       "status": "UNVERIFIED"
     },
     "tags": null,
-    "createdAt": "2025-08-14T18:16:51.375592+02:00",
-    "updatedAt": "2025-08-14T18:16:51.375592+02:00"
+    "createdAt": "2025-08-27T13:19:46.73219+03:00",
+    "updatedAt": "2025-08-27T13:19:46.743949+03:00"
   }
 }

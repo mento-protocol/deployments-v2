@@ -110,6 +110,27 @@ contract ProxyHelper is TrebScript {
         require(addy != address(0), string.concat(identifier, " not deployed"));
     }
 
+    function predictProxy(
+        Senders.Sender storage deployer,
+        string memory label
+    ) internal returns (address proxy) {
+        return predictProxy(defaultProxyType, deployer, label);
+    }
+
+    function predictProxy(
+        ProxyType _proxyType,
+        Senders.Sender storage deployer,
+        string memory label
+    ) internal returns (address proxy) {
+        if (_proxyType == ProxyType.CELO) {
+            proxy = deployer.create3(CELO_ARTIFACT).setLabel(label).predict();
+        } else if (_proxyType == ProxyType.OZTUP) {
+            proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).predict();
+        } else {
+            revert UnsupportedProxyType(_proxyType);
+        }
+    }
+
     function deployProxy(
         Senders.Sender storage deployer,
         string memory label,

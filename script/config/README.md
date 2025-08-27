@@ -18,9 +18,6 @@ Create a new contract that extends `BaseMentoConfig`:
 ```solidity
 contract MyNetworkConfig is BaseMentoConfig {
     function _initialize() internal override {
-        // Set network details
-        _networkName = "mynetwork";
-        _chainId = 12345;
         
         // Set addresses  
         // Note: addresses will be set by the network-specific config
@@ -33,7 +30,7 @@ contract MyNetworkConfig is BaseMentoConfig {
         _addCollateralAsset(0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913); // USDC on Base
         
         // Add rate feeds - can be between any two assets
-        _addRateFeed("USDfx/USDC", "USDfx", "USDC");
+        _addRateFeed("USD/USDC");
         
         // Configure other settings...
     }

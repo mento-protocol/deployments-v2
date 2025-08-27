@@ -10,22 +10,21 @@ import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkR
 
 abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     // ========== Storage ==========
-
     TokenConfig[] internal _tokens;
-    address[] internal _rateFeedIds;
-    address[] internal _collateralAssets;
     ExchangeConfig[] internal _exchanges;
-    address[] internal _oracleAddresses;
-
     OracleConfig internal _oracleConfig;
     BreakerBoxConfig internal _breakerBoxConfig;
     ReserveConfig internal _reserveConfig;
 
+    address[] internal _rateFeedIds;
+    address[] internal _collateralAssets;
+    address[] internal _chainlinkRelayerRateFeedIds;
+
     mapping(address rateFeedId => ChainlinkRelayerConfig)
         internal _chainlinkRelayers;
-
-    mapping(string symbol => address) _collateral;
-    address[] _chainlinkRelayerRateFeedIds;
+    mapping(string symbol => address) internal _collateral;
+    mapping(address rateFeedId => bool) internal _isRateFeed;
+    mapping(string symbol => bool) internal _isStableToken;
 
     // ========== Constructor ==========
 
@@ -45,10 +44,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getCollateralAssets() external view returns (address[] memory) {
         return _collateralAssets;
-    }
-
-    function getOracleAddresses() external view returns (address[] memory) {
-        return _oracleAddresses;
     }
 
     function getOracleConfig() external view returns (OracleConfig memory) {
@@ -116,6 +111,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory symbol,
         string memory name
     ) internal {
+        _isStableToken[symbol] = true;
         _tokens.push(TokenConfig({symbol: symbol, name: name}));
     }
 
@@ -125,22 +121,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addRateFeed(string memory rateFeed) internal {
+        _isRateFeed[getRateFeedIdFromString(rateFeed)] = true;
         _rateFeedIds.push(getRateFeedIdFromString(rateFeed));
-    }
-
-    function _addOracleAddress(address oracle) internal {
-        _oracleAddresses.push(oracle);
-    }
-
-    function _createChainlinkAggregator(
-        address aggregator,
-        bool invert
-    ) internal pure returns (IChainlinkRelayer.ChainlinkAggregator memory) {
-        return
-            IChainlinkRelayer.ChainlinkAggregator({
-                aggregator: aggregator,
-                invert: invert
-            });
     }
 
     function _addChainlinkRelayer(
@@ -172,13 +154,18 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         IChainlinkRelayer.ChainlinkAggregator[] memory aggregators
     ) internal {
         address rateFeedId = getRateFeedIdFromString(rateFeed);
+        require(
+            _isRateFeed[rateFeedId],
+            string.concat(rateFeed, " is not a registered rate feed")
+        );
         _chainlinkRelayerRateFeedIds.push(rateFeedId);
-        _chainlinkRelayers[rateFeedId].rateFeedId = rateFeedId;
-        _chainlinkRelayers[rateFeedId].rateFeed = rateFeed;
-        _chainlinkRelayers[rateFeedId].rateFeedDescription = description;
-        _chainlinkRelayers[rateFeedId].maxTimestampSpread = maxTimestampSpread;
+        ChainlinkRelayerConfig storage relayer = _chainlinkRelayers[rateFeedId];
+        relayer.rateFeedId = rateFeedId;
+        relayer.rateFeed = rateFeed;
+        relayer.rateFeedDescription = description;
+        relayer.maxTimestampSpread = maxTimestampSpread;
         for (uint i = 0; i < aggregators.length; i++) {
-            _chainlinkRelayers[rateFeedId].aggregators.push(aggregators[i]);
+            relayer.aggregators.push(aggregators[i]);
         }
     }
 
@@ -192,6 +179,22 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         uint256 stablePoolResetSize,
         ExchangeTrandingLimitsConfig memory tradingLimits
     ) internal {
+        require(
+            _isStableToken[asset0],
+            string.concat(
+                "MentoConfig: ",
+                asset0,
+                " is not a registered stableToken"
+            )
+        );
+        require(
+            _isStableToken[asset1] || _collateral[asset1] != address(0),
+            string.concat(
+                "MentoConfig: ",
+                asset1,
+                " is not a registered stableToken or collateral"
+            )
+        );
         address _asset0 = _resolveExchangeAsset(asset0);
         address _asset1 = _resolveExchangeAsset(asset1);
         address _pricingModule = lookup(pricingModule);
@@ -202,8 +205,9 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         ) {
             console.log(
                 string.concat(
-                    "[WARN] Skipping pool ",
+                    "MentoConfig: Skipping pool ",
                     asset0,
+                    "/",
                     asset1,
                     ": Could not resolve assets or pricing module"
                 )

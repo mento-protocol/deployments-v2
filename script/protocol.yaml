@@ -12,12 +12,16 @@ components:
   BreakerBox:
     script: DeployBreakerBox
     deps: 
-      - ConfigureChainlinkRelayers
+      - ChainlinkRelayers
       - SortedOracles
   Broker:
     script: DeployBroker
     deps:
       - ProxyAdmin
+  MentoRouter:
+    script: DeployMentoRouter
+    deps:
+      - Broker
   Reserve:
     script: DeployReserve
     deps: 
@@ -32,7 +36,7 @@ components:
   BiPoolManager:
     script: DeployBiPoolManager
     deps:
-      - ProxyAdmin
+      - PricingModules
       - Broker
       - Reserve
       - SortedOracles
@@ -42,21 +46,13 @@ components:
     deps:
       - SortedOracles
       - ProxyAdmin
-  ConfigureChainlinkRelayers:
-    script: ConfigureChainlinkRelayers
+  ChainlinkRelayers:
+    script: DeployChainlinkRelayers
     deps:
       - ChainlinkRelayerFactory
-  ConfigureBrokerExchangeProviders:
-    script: ConfigureBrokerExchangeProviders
-    deps:
-      - Broker
-      - BiPoolManager
-      - Reserve
   CreateExchangePools:
     script: CreateExchangePools
     deps:
-      - ConfigureChainlinkRelayers
-      - ConfigureBrokerExchangeProviders
+      - ChainlinkRelayers
       - BiPoolManager
-      - PricingModules
       - Tokens

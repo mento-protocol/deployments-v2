@@ -59,8 +59,6 @@ interface IMentoConfig {
 
     function getCollateralAssets() external view returns (address[] memory);
 
-    function getOracleAddresses() external view returns (address[] memory);
-
     function getChainlinkRelayerConfigs()
         external
         view

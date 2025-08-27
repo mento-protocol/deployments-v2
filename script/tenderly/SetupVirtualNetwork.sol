@@ -26,26 +26,46 @@ contract SetupVirtualNetwork is Script {
 
     function run() public {
         // 1. Set threshold to 1
-        Tenderly.setStorageAt(SAFE, bytes32(THRESHOLD_SLOT), bytes32(uint256(1)));
+        Tenderly.setStorageAt(
+            SAFE,
+            bytes32(THRESHOLD_SLOT),
+            bytes32(uint256(1))
+        );
 
         // 2. Clear existing owners by setting SENTINEL_OWNERS to point to itself
         bytes32 sentinelSlot = keccak256(
             abi.encode(SENTINEL_OWNERS, OWNERS_MAPPING_SLOT)
         );
-        Tenderly.setStorageAt(SAFE, sentinelSlot, bytes32(uint256(uint160(SENTINEL_OWNERS))));
+        Tenderly.setStorageAt(
+            SAFE,
+            sentinelSlot,
+            bytes32(uint256(uint160(SENTINEL_OWNERS)))
+        );
 
         // 3. Add PROPOSER as the only owner
         // SENTINEL_OWNERS -> PROPOSER
-        Tenderly.setStorageAt(SAFE, sentinelSlot, bytes32(uint256(uint160(PROPOSER))));
+        Tenderly.setStorageAt(
+            SAFE,
+            sentinelSlot,
+            bytes32(uint256(uint160(PROPOSER)))
+        );
 
         // PROPOSER -> SENTINEL_OWNERS (complete the linked list)
         bytes32 proposerSlot = keccak256(
             abi.encode(PROPOSER, OWNERS_MAPPING_SLOT)
         );
-        Tenderly.setStorageAt(SAFE, proposerSlot, bytes32(uint256(uint160(SENTINEL_OWNERS))));
+        Tenderly.setStorageAt(
+            SAFE,
+            proposerSlot,
+            bytes32(uint256(uint160(SENTINEL_OWNERS)))
+        );
 
         // 4. Set owner count to 1
-        Tenderly.setStorageAt(SAFE, bytes32(OWNER_COUNT_SLOT), bytes32(uint256(1)));
+        Tenderly.setStorageAt(
+            SAFE,
+            bytes32(OWNER_COUNT_SLOT),
+            bytes32(uint256(1))
+        );
 
         // Query and log the changes
         ISafe safe = ISafe(SAFE);
@@ -64,4 +84,3 @@ contract SetupVirtualNetwork is Script {
         console.log("- PROPOSER address:", PROPOSER);
     }
 }
-
