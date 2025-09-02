@@ -8,10 +8,11 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IBreakerBox} from "lib/mento-core/contracts/interfaces/IBreakerBox.sol";
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
+import {IMedianDeltaBreaker} from "lib/mento-core/contracts/interfaces/IMedianDeltaBreaker.sol";
+import {IValueDeltaBreaker} from "lib/mento-core/contracts/interfaces/IValueDeltaBreaker.sol";
 
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
-import {Config} from "../config/Config.sol";
+import {Config, IMentoConfig, BreakerType} from "../config/Config.sol";
 
 contract DeployBreakerBox is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
@@ -19,8 +20,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper {
     using Senders for Senders.Sender;
 
     address breakerBoxAddy;
-    address medianDeltaBreaker;
-    address valueDeltaBreaker;
+    address sortedOraclesProxy;
 
     IMentoConfig config;
 
@@ -28,68 +28,107 @@ contract DeployBreakerBox is TrebScript, ProxyHelper {
     function run() public broadcast {
         // Get configuration
         config = Config.get();
+        sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
 
         Senders.Sender storage deployer = sender("deployer");
 
         deployBreakerBox(deployer);
-        deployBreakers(deployer);
+        address[] memory breakers = deployBreakers(deployer);
 
         // Initialize BreakerBox with deployed breakers
         IBreakerBox breakerBox = IBreakerBox(deployer.harness(breakerBoxAddy));
-        breakerBox.addBreaker(medianDeltaBreaker, 1);
-        breakerBox.addBreaker(valueDeltaBreaker, 1);
+        for (uint i = 0; i < breakers.length; i++) {
+            breakerBox.addBreaker(breakers[i], 1);
+        }
 
-        ISortedOracles(deployer.harness(lookupProxyOrFail("SortedOracles")))
-            .setBreakerBox(IBreakerBox(breakerBoxAddy));
+        ISortedOracles(deployer.harness(sortedOraclesProxy)).setBreakerBox(
+            IBreakerBox(breakerBoxAddy)
+        );
     }
 
-    function deployBreakers(Senders.Sender storage deployer) internal {
-        address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
+    function deployBreakers(
+        Senders.Sender storage deployer
+    ) internal returns (address[] memory breakers) {
+        IMentoConfig.BreakerConfig[] memory breakerConfigs = config
+            .getBreakerConfigs();
+        breakers = new address[](breakerConfigs.length);
+        for (uint i = 0; i < breakerConfigs.length; i++) {
+            if (breakerConfigs[i].breakerType == BreakerType.Value) {
+                breakers[i] = deployValueDeltaBreaker(
+                    deployer,
+                    breakerConfigs[i]
+                );
+            } else if (breakerConfigs[i].breakerType == BreakerType.Median) {
+                breakers[i] = deployMedianDeltaBreaker(
+                    deployer,
+                    breakerConfigs[i]
+                );
+            } else {
+                revert("Invalid breaker type");
+            }
+        }
+    }
 
-        address owner = deployer.account;
-        uint256 defaultCooldownTime;
-        uint256 defaultRateChangeThreshold;
-        address[] memory rateFeedIds = new address[](0);
-        uint256[] memory defaultRateChangeThresholds = new uint256[](0);
-        uint256[] memory cooldownTimes = new uint256[](0);
-
-        // Deploy MedianDeltaBreaker
-        medianDeltaBreaker = deployer
+    function deployMedianDeltaBreaker(
+        Senders.Sender storage deployer,
+        IMentoConfig.BreakerConfig memory breakerConfig
+    ) internal returns (address breakerAddy) {
+        breakerAddy = deployer
             .create3("MedianDeltaBreaker")
             .setLabel("v2.6.5")
             .deploy(
                 abi.encode(
-                    defaultCooldownTime,
-                    defaultRateChangeThreshold,
+                    breakerConfig.defaultCooldownTime,
+                    breakerConfig.defaultThreshold,
                     sortedOraclesProxy,
                     breakerBoxAddy,
-                    rateFeedIds,
-                    defaultRateChangeThresholds,
-                    cooldownTimes,
-                    owner
+                    breakerConfig.rateFeedIds,
+                    breakerConfig.thresholds,
+                    breakerConfig.cooldownTimes,
+                    deployer.account
                 )
             );
 
-        // Deploy ValueDeltaBreaker
-        valueDeltaBreaker = deployer
+        IMedianDeltaBreaker breaker = IMedianDeltaBreaker(
+            deployer.harness(breakerAddy)
+        );
+        for (uint i = 0; i < breakerConfig.rateFeedIds.length; i++) {
+            if (breakerConfig.smoothingFactors[i] > 0) {
+                breaker.setSmoothingFactor(
+                    breakerConfig.rateFeedIds[i],
+                    breakerConfig.smoothingFactors[i]
+                );
+            }
+        }
+    }
+
+    function deployValueDeltaBreaker(
+        Senders.Sender storage deployer,
+        IMentoConfig.BreakerConfig memory breakerConfig
+    ) internal returns (address breakerAddy) {
+        breakerAddy = deployer
             .create3("ValueDeltaBreaker")
             .setLabel("v2.6.5")
             .deploy(
                 abi.encode(
-                    defaultCooldownTime,
-                    defaultRateChangeThreshold,
+                    breakerConfig.defaultCooldownTime,
+                    breakerConfig.defaultThreshold,
                     sortedOraclesProxy,
-                    rateFeedIds,
-                    defaultRateChangeThresholds,
-                    cooldownTimes,
-                    owner
+                    breakerConfig.rateFeedIds,
+                    breakerConfig.thresholds,
+                    breakerConfig.cooldownTimes,
+                    deployer.account
                 )
             );
+
+        IValueDeltaBreaker(deployer.harness(breakerAddy)).setReferenceValues(
+            breakerConfig.rateFeedIds,
+            breakerConfig.referenceValues
+        );
     }
 
     function deployBreakerBox(Senders.Sender storage deployer) internal {
         // Deploy BreakerBox with empty rate feed IDs and SortedOracles dependency
-        address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
         address[] memory rateFeedIds = config.getRateFeedIds();
         require(rateFeedIds.length > 0);
 

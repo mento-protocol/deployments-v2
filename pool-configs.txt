@@ -1,0 +1,43 @@
+
+===============================
+Mento Pool Config Visualizer
+===============================
+
+Using RPC URL: https://forno.celo.org
+Network: Chain ID 42220
+
+
+Pool Configuration Details:
+==========================================================================================================================================================================================================
+Exchange ID                                                        | Asset 0      | Asset 1      | Spread (%)   | Ref Rate Feed                              | Reset Freq (m) | Min Reports  | Reset Size
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+0xacc988382b66ee5456086643dcfd9a5ca43dd8f428f6ef22503d8b8013bcffd7 | cUSD         | USDC         | 0.0000       | 0xA1A8003936862E7a15092A91898D69fa8bCE290c | 6.0            | 1            | 12,000,000
+0x0d739efbfc30f303e8d1976c213b4040850d1af40f174f4169b846f6fd3d2f20 | cUSD         | axlUSDC      | 0.0000       | 0xA1A8003936862E7a15092A91898D69fa8bCE290c | 6.0            | 1            | 12,000,000
+0x773bcec109cee923b5e04706044fd9d6a5121b1a6a4c059c36fdbe5b845d4e9b | cUSD         | USD₮         | 0.0000       | 0xE06C10C63377cD098b589c0b90314bFb55751558 | 6.0            | 1            | 12,000,000
+0xd580d237231109e6a96d67d82450611c610a805a26660c90281bdc0cd04a95c7 | cUSD         | cAUD         | 0.1500       | 0x646bD504C3864Ea5b8A6B6D25743721f61864A07 | 6.0            | 1            | 10,000,000
+0x517ccc3bcab9f35e2e24143a0c1809068efc649f740846cfb6a1c5703735c1ee | cUSD         | cCAD         | 0.1500       | 0x20869cF54Ead821C45DFb2aB0C23d2e10Fbb65A4 | 6.0            | 1            | 10,000,000
+0x3135b662c38265d0655177091f1b647b4fef511103d06c016efdf18b46930d2c | cUSD         | CELO         | 0.2500       | 0x765DE816845861e75A25fCA122bb6898B8B1282a | 6.0            | 1            | 3,000,000 
+0x6c369bfb1598b2f7718671221bc524c84874ad1ed7ba02a61121e7a06722e2ce | cUSD         | cGBP         | 0.3000       | 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88 | 6.0            | 1            | 10,000,000
+0x4206e101b13bf29e40b2bfed4cf167271c41677720f2ee786ac1bf5efac101cb | cUSD         | cZAR         | 0.3000       | 0x17ef04Af0c52465694a841552fc2415169b1114c | 6.0            | 1            | 10,000,000
+0x3ddbc61433314a4b7d3cbb56a001fc4cc0f1d52d64338336d5f2083a580ce4fc | cUSD         | cCHF         | 0.3000       | 0x0f61BA9c30ef7CaEE7E5CC1F96BFFCb0f52ccD64 | 6.0            | 1            | 10,000,000
+0x7952984d7278ca3417febf52815c321984ac3147ced2c02bb6a02b0bcab08413 | cUSD         | PUSO         | 0.3000       | 0xab921d6ab1057601A9ae19879b111fC381a2a8E9 | 6.0            | 1            | 10,000,000
+0x7c3b41fbd140c6fb54ff9f8f7b7b0c954606682d44ed5e56b0080f40faaf652c | cUSD         | cJPY         | 0.3000       | 0xFDE35B45cBd2504FB5dC514F007bC2DE27034274 | 6.0            | 1            | 10,000,000
+0x1c9378bd0973ff313a599d3effc654ba759f8ccca655ab6d6ce5bd39a212943b | cUSD         | cCOP         | 0.3000       | 0x0196D1F4FdA21fA442e53EaF18Bf31282F6139F1 | 6.0            | 1            | 10,000,000
+0xd11d52b973ddbb983cc2087aabcafd915fc3140cf9996aacc61db9710d1bde05 | cUSD         | cREAL        | 0.3000       | 0x9dB83bE97C82912cB342407dd7b880983052B9c1 | 6.0            | 1            | 10,000,000
+0xfca6d94b46122eb9a4b86cf9d3e1e856fea8a826d0fc26c5baf17c43fbaf0f48 | cEUR         | axlEUROC     | 0.5000       | 0x26076B9702885d475ac8c3dB3Bd9F250Dc5A318B | 6.0            | 1            | 12,000,000
+0x746455363e8f55d04e0a2cc040d1b348a6c031b336ba6af6ae91515c194929c8 | cUSD         | cEUR         | 0.5000       | 0xF4f9bBdA9CD6841fCB9b1510f9269E2dB42a6e3a | 6.0            | 1            | 10,000,000
+0x3562f9d29eba092b857480a82b03375839c752346b9ebe93a57ab82410328187 | cUSD         | cGHS         | 1.0000       | 0x44D99a013a0DAdbB4C06F9Cc9397BFd3AC12b017 | 6.0            | 1            | 10,000,000
+0x67a5122dab72931be57196e0abba81690461f327bc60fb98ca7eef0ac58906cc | cUSD         | cNGN         | 1.0000       | 0xC13D42556f1baeab4a8600C735afcd5344048d3C | 6.0            | 1            | 10,000,000
+0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b | cUSD         | cKES         | 1.0000       | 0xbAcEE37d31b9f022Ef5d232B9fD53F05a531c169 | 6.0            | 1            | 10,000,000
+0xc9664df358594c5eaf2f410ab371e2deb8b532ca26162d2bc36d99b8d174567b | cUSD         | eXOF         | 2.0000       | 0x43620310c2FEADbFEcFd71b5A93E6e28946d64a5 | 6.0            | 1            | 10,000,000
+==========================================================================================================================================================================================================
+Total exchanges: 19
+
+Usage:
+  yarn poolConfigs [--token|-t <symbol>] [--exchange|-e <exchangeId>] [--network|-n <network>] [--chainId|-c <chainId>]
+
+Network options:
+  --network celo       # Celo mainnet
+  --network alfajores  # Alfajores testnet
+  --chainId 42220      # Celo mainnet (same as --network celo)
+  --chainId 44787      # Alfajores testnet

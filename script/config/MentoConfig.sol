@@ -3,28 +3,43 @@ pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
+import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
-import {IMentoConfig, IBiPoolManager, ITradingLimits, IPricingModule, FixidityLib} from "../interfaces/IMentoConfig.sol";
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {IMentoConfig, BreakerType, IBiPoolManager, ITradingLimits, IPricingModule, FixidityLib} from "./IMentoConfig.sol";
+
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
+import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
+    using Deployer for Senders.Sender;
+    using Deployer for Deployer.Deployment;
+    using Senders for Senders.Sender;
+
     // ========== Storage ==========
     TokenConfig[] internal _tokens;
     ExchangeConfig[] internal _exchanges;
     OracleConfig internal _oracleConfig;
-    BreakerBoxConfig internal _breakerBoxConfig;
     ReserveConfig internal _reserveConfig;
+    GovernanceConfig internal _governanceConfig;
+    LockingConfig internal _lockingConfig;
 
+    address public mockAggregatorReporter;
+
+    string[] internal _mockCollateralAssets;
     address[] internal _rateFeedIds;
     address[] internal _collateralAssets;
     address[] internal _chainlinkRelayerRateFeedIds;
+    MockAggregatorConfig[] internal _mockAggregatorConfigs;
 
     mapping(address rateFeedId => ChainlinkRelayerConfig)
         internal _chainlinkRelayers;
     mapping(string symbol => address) internal _collateral;
     mapping(address rateFeedId => bool) internal _isRateFeed;
     mapping(string symbol => bool) internal _isStableToken;
+    mapping(bytes32 breakerId => BreakerConfig) _breakers;
+    bytes32[] _breakerIds;
 
     // ========== Constructor ==========
 
@@ -50,16 +65,42 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _oracleConfig;
     }
 
-    function getBreakerBoxConfig()
+    function getGovernanceConfig()
         external
         view
-        returns (BreakerBoxConfig memory)
+        returns (GovernanceConfig memory)
     {
-        return _breakerBoxConfig;
+        return _governanceConfig;
+    }
+
+    function getLockingConfig() external view returns (LockingConfig memory) {
+        return _lockingConfig;
+    }
+
+    function getBreakerConfigs()
+        external
+        view
+        returns (BreakerConfig[] memory configs)
+    {
+        configs = new BreakerConfig[](_breakerIds.length);
+        for (uint i = 0; i < _breakerIds.length; i++) {
+            configs[i] = abi.decode(
+                abi.encode(_breakers[_breakerIds[i]]),
+                (BreakerConfig)
+            );
+        }
     }
 
     function getReserveConfig() external view returns (ReserveConfig memory) {
         return _reserveConfig;
+    }
+
+    function getMockAggregatorConfigs()
+        external
+        view
+        returns (MockAggregatorConfig[] memory)
+    {
+        return _mockAggregatorConfigs;
     }
 
     function getChainlinkRelayerConfigs()
@@ -91,6 +132,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _rateFeedIds;
     }
 
+    function getMockCollaterals() external view returns (string[] memory) {
+        return _mockCollateralAssets;
+    }
+
+    function getAddress(string memory token) external view returns (address) {
+        return _resolveExchangeAsset(token);
+    }
+
     // ========== Helper Functions ==========
 
     function emptyTradingLimits()
@@ -103,6 +152,38 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory feedId
     ) public pure returns (address) {
         return address(uint160(uint256(keccak256(abi.encodePacked(feedId)))));
+    }
+
+    function getExchangeId(
+        address asset0,
+        address asset1
+    ) public view returns (bytes32) {
+        for (uint i = 0; i < _exchanges.length; i++) {
+            ExchangeConfig storage exchange = _exchanges[i];
+            if (
+                (exchange.pool.asset0 == asset0 &&
+                    exchange.pool.asset1 == asset1) ||
+                (exchange.pool.asset1 == asset0 &&
+                    exchange.pool.asset0 == asset1)
+            ) {
+                return
+                    keccak256(
+                        abi.encodePacked(
+                            IERC20Metadata(exchange.pool.asset0).symbol(),
+                            IERC20Metadata(exchange.pool.asset1).symbol(),
+                            exchange.pool.pricingModule.name()
+                        )
+                    );
+            }
+        }
+        revert(
+            string.concat(
+                "Could not find exchange for ",
+                vm.toString(asset0),
+                " and ",
+                vm.toString(asset1)
+            )
+        );
     }
 
     // ========== Internal Helper Functions ==========
@@ -120,6 +201,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _collateral[symbol] = addy;
     }
 
+    function _addMockCollateral(string memory symbol) internal {
+        address addy = _predict("MockERC20", symbol);
+        _collateralAssets.push(addy);
+        _mockCollateralAssets.push(symbol);
+        _collateral[symbol] = addy;
+    }
+
     function _addRateFeed(string memory rateFeed) internal {
         _isRateFeed[getRateFeedIdFromString(rateFeed)] = true;
         _rateFeedIds.push(getRateFeedIdFromString(rateFeed));
@@ -128,7 +216,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     function _addChainlinkRelayer(
         string memory rateFeed,
         string memory description,
-        uint256 maxTimestampSpread,
         address aggregator0,
         bool invert0
     ) internal {
@@ -137,6 +224,29 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         aggregators[0] = IChainlinkRelayer.ChainlinkAggregator({
             aggregator: aggregator0,
             invert: invert0
+        });
+
+        _addChainlinkRelayer(rateFeed, description, 0, aggregators);
+    }
+
+    function _addChainlinkRelayer(
+        string memory rateFeed,
+        string memory description,
+        uint256 maxTimestampSpread,
+        address aggregator0,
+        bool invert0,
+        address aggregator1,
+        bool invert1
+    ) internal {
+        IChainlinkRelayer.ChainlinkAggregator[]
+            memory aggregators = new IChainlinkRelayer.ChainlinkAggregator[](1);
+        aggregators[0] = IChainlinkRelayer.ChainlinkAggregator({
+            aggregator: aggregator0,
+            invert: invert0
+        });
+        aggregators[1] = IChainlinkRelayer.ChainlinkAggregator({
+            aggregator: aggregator1,
+            invert: invert1
         });
 
         _addChainlinkRelayer(
@@ -167,6 +277,67 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         for (uint i = 0; i < aggregators.length; i++) {
             relayer.aggregators.push(aggregators[i]);
         }
+    }
+
+    function _addMockAggregator(
+        string memory description,
+        uint8 decimals,
+        int256 initialReport
+    ) internal {
+        _mockAggregatorConfigs.push(
+            MockAggregatorConfig({
+                description: description,
+                decimals: decimals,
+                initialReport: initialReport
+            })
+        );
+    }
+
+    function _addBreaker(
+        BreakerType breakerType,
+        uint256 defaultCooldownTime,
+        uint256 defaultThreshold
+    ) internal returns (bytes32 breakerId) {
+        breakerId = keccak256(abi.encode(breakerType, _breakerIds.length));
+        BreakerConfig storage breaker = _breakers[breakerId];
+        breaker.breakerType = breakerType;
+        breaker.defaultCooldownTime = defaultCooldownTime;
+        breaker.defaultThreshold = defaultThreshold;
+    }
+
+    function _addToBreaker(
+        bytes32 breakerId,
+        string memory rateFeed,
+        uint256 cooldown,
+        uint256 threshold,
+        uint256 smoothingFactor,
+        uint256 referenceValue
+    ) internal {
+        BreakerConfig storage breaker = _breakers[breakerId];
+        if (breaker.breakerType == BreakerType.Value) {
+            require(
+                smoothingFactor == 0,
+                "ValueBreaker shouldn't have smoothing factor"
+            );
+            require(
+                referenceValue > 0,
+                "ValueBreaker should have reference value"
+            );
+        } else {
+            require(
+                smoothingFactor > 0,
+                "MedianBreaker should have smoothing factor"
+            );
+            require(
+                referenceValue == 0,
+                "MedianBreaker should have reference value"
+            );
+        }
+        breaker.rateFeedIds.push(getRateFeedIdFromString(rateFeed));
+        breaker.cooldownTimes.push(cooldown);
+        breaker.thresholds.push(threshold);
+        breaker.smoothingFactors.push(smoothingFactor);
+        breaker.referenceValues.push(referenceValue);
     }
 
     function _addExchange(
@@ -244,5 +415,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         } else {
             return lookupProxy(symbol);
         }
+    }
+
+    function _predict(
+        string memory artifact,
+        string memory label
+    ) internal returns (address) {
+        return sender("deployer").create3(artifact).setLabel(label).predict();
     }
 }

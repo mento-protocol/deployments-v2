@@ -5,10 +5,11 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {Config} from "../config/Config.sol";
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+
 import {IReserve} from "lib/mento-core/contracts/interfaces/IReserve.sol";
+
+import {Config, IMentoConfig} from "../config/Config.sol";
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 
 // Interface for StableTokenV2 initialization
 interface IStableTokenV2 {

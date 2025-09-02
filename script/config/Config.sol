@@ -3,8 +3,10 @@ pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
 import {Vm} from "forge-std/Vm.sol";
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
+import {IMentoConfig} from "./IMentoConfig.sol";
+
 import "./MentoConfig_vbase.sol";
+import "./MentoConfig_celo_sepolia.sol";
 
 library Config {
     address private constant VM_ADDRESS =
@@ -43,8 +45,6 @@ library Config {
                 vm.envString("NETWORK")
             );
         }
-        console.log("Using config contract:", artifactName);
-
         address configContract = vm.deployCode(artifactName);
         require(
             configContract != address(0),
@@ -56,7 +56,10 @@ library Config {
             sstore(slot, configContract)
         }
 
-        console.log("Deployed config contract at:", configContract);
+        console.log(
+            string.concat("Deployed ", artifactName, " at:"),
+            configContract
+        );
         return IMentoConfig(configContract);
     }
 
@@ -71,4 +74,3 @@ library Config {
         }
     }
 }
-

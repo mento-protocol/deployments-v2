@@ -1,0 +1,19 @@
+group: Mento Governance
+components: 
+  MentoToken:
+    script: DeployMentoToken
+  Emission:
+    script: DeployEmission
+    deps: 
+      - MentoToken
+  Locking:
+    script: DeployLocking
+    deps:
+      - MentoToken
+  TimelockController:
+    script: DeployTimelockController
+  MentoGovernor:
+    script: DeployMentoGovernor
+    deps:
+      - Locking
+      - TimelockController

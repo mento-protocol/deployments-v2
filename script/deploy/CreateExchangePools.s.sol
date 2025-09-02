@@ -5,12 +5,14 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
+
 import {IBiPoolManager} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
 import {IBroker} from "lib/mento-core/contracts/interfaces/IBroker.sol";
 import {IPricingModule} from "lib/mento-core/contracts/interfaces/IPricingModule.sol";
+
 import {FixidityLib} from "@celo/common/FixidityLib.sol";
-import {Config} from "../config/Config.sol";
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
+
+import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 
 contract CreateExchangePools is TrebScript, ProxyHelper {
@@ -63,4 +65,3 @@ contract CreateExchangePools is TrebScript, ProxyHelper {
         }
     }
 }
-

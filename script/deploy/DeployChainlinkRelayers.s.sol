@@ -5,13 +5,14 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
+import {ITrebEvents} from "lib/treb-sol/src/internal/ITrebEvents.sol";
+import {Harness} from "lib/treb-sol/src/internal/Harness.sol";
+
 import {IChainlinkRelayerFactory} from "lib/mento-core/contracts/interfaces/IChainlinkRelayerFactory.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
-import {Config} from "../config/Config.sol";
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
-import {ITrebEvents} from "lib/treb-sol/src/internal/ITrebEvents.sol";
-import {Harness} from "lib/treb-sol/src/internal/Harness.sol";
+
+import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
 
 contract DeployChainlinkRelayers is TrebScript, ProxyHelper {

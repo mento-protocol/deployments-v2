@@ -4,14 +4,12 @@ pragma solidity ^0.8.18;
 import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
-import {Config} from "../config/Config.sol";
-import {IMentoConfig} from "../interfaces/IMentoConfig.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {Deployer} from "lib/treb-sol/src/internal/sender/Deployer.sol";
 
-// Import proxy contract
-import {TransparentUpgradeableProxy} from "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
+
+import {Config, IMentoConfig} from "../config/Config.sol";
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 
 contract DeploySortedOracles is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

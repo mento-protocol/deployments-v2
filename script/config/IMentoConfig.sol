@@ -5,12 +5,23 @@ import {ITradingLimits} from "lib/mento-core/contracts/interfaces/ITradingLimits
 import {IBiPoolManager, IPricingModule, FixidityLib} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 
+enum BreakerType {
+    Value,
+    Median
+}
+
 interface IMentoConfig {
     // ========== Structs ==========
 
     struct TokenConfig {
         string symbol;
         string name;
+    }
+
+    struct MockAggregatorConfig {
+        string description;
+        uint8 decimals;
+        int256 initialReport;
     }
 
     struct ChainlinkRelayerConfig {
@@ -31,6 +42,21 @@ interface IMentoConfig {
         ITradingLimits.Config asset1;
     }
 
+    struct LockingConfig {
+        uint256 startingPointWeek;
+        uint256 minCliffPeriod;
+        uint256 minSlopePeriod;
+    }
+
+    struct GovernanceConfig {
+        uint256 timelockDelay;
+        uint256 votingDelay;
+        uint256 votingPeriod;
+        uint256 proposalThreshold;
+        uint256 quorum;
+        address watchdog;
+    }
+
     struct ReserveConfig {
         uint256 tobinTaxStalenessThreshold;
         uint256 spendingRatio;
@@ -43,15 +69,20 @@ interface IMentoConfig {
         uint256[] collateralAssetDailySpendingRatios;
     }
 
-    struct BreakerBoxConfig {
+    struct BreakerConfig {
+        BreakerType breakerType;
         uint256 defaultCooldownTime;
+        uint256 defaultThreshold;
+        address[] rateFeedIds;
+        uint256[] cooldownTimes;
+        uint256[] thresholds;
+        uint256[] smoothingFactors;
+        uint256[] referenceValues;
     }
 
     struct OracleConfig {
         uint256 reportExpirySeconds;
     }
-
-    // ========== Arrays ==========
 
     function getTokenConfigs() external view returns (TokenConfig[] memory);
 
@@ -66,20 +97,41 @@ interface IMentoConfig {
 
     function getExchanges() external view returns (ExchangeConfig[] memory);
 
-    // ========== Config Structs ==========
+    function getMockAggregatorConfigs()
+        external
+        view
+        returns (MockAggregatorConfig[] memory);
 
     function getOracleConfig() external view returns (OracleConfig memory);
 
-    function getBreakerBoxConfig()
+    function getLockingConfig() external view returns (LockingConfig memory);
+
+    function getGovernanceConfig()
         external
         view
-        returns (BreakerBoxConfig memory);
+        returns (GovernanceConfig memory);
+
+    function getBreakerConfigs()
+        external
+        view
+        returns (BreakerConfig[] memory configs);
 
     function getReserveConfig() external view returns (ReserveConfig memory);
+
+    function mockAggregatorReporter() external view returns (address);
+
+    function getMockCollaterals() external view returns (string[] memory);
 
     // ========== Helpers ==========
 
     function getRateFeedIdFromString(
         string memory feedId
     ) external pure returns (address);
+
+    function getExchangeId(
+        address asset0,
+        address asset1
+    ) external view returns (bytes32);
+
+    function getAddress(string memory asset) external view returns (address);
 }

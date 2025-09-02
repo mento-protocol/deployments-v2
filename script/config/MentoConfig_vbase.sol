@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits} from "./MentoConfig.sol";
+import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints} from "lib/mento-std/src/Array.sol";
 
@@ -14,8 +14,15 @@ contract MentoConfig_vbase is MentoConfig {
             reportExpirySeconds: 2 days // 5 minutes
         });
 
-        _breakerBoxConfig = BreakerBoxConfig({
-            defaultCooldownTime: 300 // 5 minutes
+        _addBreaker({
+            breakerType: BreakerType.Value,
+            defaultCooldownTime: 0,
+            defaultThreshold: 0
+        });
+        _addBreaker({
+            breakerType: BreakerType.Median,
+            defaultCooldownTime: 0,
+            defaultThreshold: 0
         });
 
         _reserveConfig = ReserveConfig({
@@ -28,6 +35,21 @@ contract MentoConfig_vbase is MentoConfig {
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
             collateralAssetDailySpendingRatios: uints(1e24)
+        });
+
+        _lockingConfig = LockingConfig({
+            startingPointWeek: 42, // XXX: What should this be?
+            minCliffPeriod: 0,
+            minSlopePeriod: 1
+        });
+
+        _governanceConfig = GovernanceConfig({
+            timelockDelay: 2 days,
+            votingDelay: 0,
+            votingPeriod: 120_960, // XXX: Set based on blocktime
+            proposalThreshold: 10000e18,
+            quorum: 2,
+            watchdog: address(1) // XXX: Configure
         });
 
         // =============== Tokens and ratefeeds ============= //
@@ -47,35 +69,30 @@ contract MentoConfig_vbase is MentoConfig {
         _addChainlinkRelayer({
             rateFeed: "USDC/USD",
             description: "USDC/USD",
-            maxTimestampSpread: 0,
             aggregator0: 0x7e860098F58bBFC8648a4311b374B1D669a2bc6B,
             invert0: false
         });
         _addChainlinkRelayer({
             rateFeed: "EUR/USD",
             description: "EUR/USD",
-            maxTimestampSpread: 0,
             aggregator0: 0xc91D87E81faB8f93699ECf7Ee9B44D11e1D53F0F,
             invert0: false
         });
         _addChainlinkRelayer({
             rateFeed: "GBP/USD",
             description: "GBP/USD",
-            maxTimestampSpread: 0,
             aggregator0: 0xCceA6576904C118037695eB71195a5425E69Fa15,
             invert0: false
         });
         _addChainlinkRelayer({
             rateFeed: "CAD/USD",
             description: "CAD/USD",
-            maxTimestampSpread: 0,
             aggregator0: 0xA840145F87572E82519d578b1F36340368a25D5d,
             invert0: false
         });
         _addChainlinkRelayer({
             rateFeed: "AUD/USD",
             description: "AUD/USD",
-            maxTimestampSpread: 0,
             aggregator0: 0x46e51B8cA41d709928EdA9Ae43e42193E6CDf229,
             invert0: false
         });

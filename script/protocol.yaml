@@ -22,10 +22,13 @@ components:
     script: DeployMentoRouter
     deps:
       - Broker
+  MockCollaterals:
+    script: DeployMockCollaterals
   Reserve:
     script: DeployReserve
     deps: 
       - ProxyAdmin
+      - MockCollaterals
   PricingModules:
     script: DeployPricingModules
   Tokens:
@@ -46,9 +49,12 @@ components:
     deps:
       - SortedOracles
       - ProxyAdmin
+  MockChainlinkAggregators:
+    script: DeployMockAggregators
   ChainlinkRelayers:
     script: DeployChainlinkRelayers
     deps:
+      - MockChainlinkAggregators
       - ChainlinkRelayerFactory
   CreateExchangePools:
     script: CreateExchangePools
