@@ -53,11 +53,11 @@ contract MentoConfig_vbase is MentoConfig {
         });
 
         // =============== Tokens and ratefeeds ============= //
-        _addStableToken("USDfx", "Mento US Dollar");
-        _addStableToken("EURfx", "Mento EURO");
-        _addStableToken("GBPfx", "Mento British Pound");
-        _addStableToken("CADfx", "Mento Canadian Dollar");
-        _addStableToken("AUDfx", "Mento Australian Dollar");
+        _addStableToken("USD", "USDfx", "Mento US Dollar");
+        _addStableToken("EUR", "EURfx", "Mento EURO");
+        _addStableToken("GBP", "GBPfx", "Mento British Pound");
+        _addStableToken("CAD", "CADfx", "Mento Canadian Dollar");
+        _addStableToken("AUD", "AUDfx", "Mento Australian Dollar");
         _addCollateral("USDC", 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913);
         _addRateFeed("USDC/USD");
         _addRateFeed("EUR/USD");

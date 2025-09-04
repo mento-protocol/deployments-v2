@@ -41,7 +41,26 @@ contract CreateExchangePools is TrebScript, ProxyHelper {
 
         for (uint256 i = 0; i < exchanges.length; i++) {
             IMentoConfig.ExchangeConfig memory exchange = exchanges[i];
-            bytes32 exchangeId = biPoolManager.createExchange(exchange.pool);
+            bytes32 exchangeId = config.getExchangeId(
+                exchange.pool.asset0,
+                exchange.pool.asset1,
+                address(exchange.pool.pricingModule)
+            );
+
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(
+                biPoolManagerAddy
+            ).exchanges(exchangeId);
+
+            if (pool.asset0 != address(0)) {
+                // pool exists
+                console.log("Skipping pool, it already exits:");
+                console.log("  exchangeId:", uint256(exchangeId));
+                console.log("  asset0:", exchange.pool.asset0);
+                console.log("  asset1:", exchange.pool.asset1);
+                continue;
+            }
+
+            exchangeId = biPoolManager.createExchange(exchange.pool);
 
             if (exchanges[i].tradingLimits.asset0.flags != 0) {
                 broker.configureTradingLimit(

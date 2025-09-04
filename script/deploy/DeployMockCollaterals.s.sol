@@ -29,8 +29,8 @@ contract DeployMockCollaterals is TrebScript {
                 .setLabel(symbol)
                 .deploy(
                     abi.encode(
-                        symbol,
                         string.concat("Mento Mock ", symbol),
+                        symbol,
                         deployer.account
                     )
                 );

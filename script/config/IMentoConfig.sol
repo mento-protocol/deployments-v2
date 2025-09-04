@@ -22,6 +22,7 @@ interface IMentoConfig {
         string description;
         uint8 decimals;
         int256 initialReport;
+        address source;
     }
 
     struct ChainlinkRelayerConfig {
@@ -120,6 +121,10 @@ interface IMentoConfig {
 
     function mockAggregatorReporter() external view returns (address);
 
+    function mockAggregatorSourceFork() external view returns (uint256);
+
+    function baseFork() external view returns (uint256);
+
     function getMockCollaterals() external view returns (string[] memory);
 
     // ========== Helpers ==========
@@ -127,6 +132,12 @@ interface IMentoConfig {
     function getRateFeedIdFromString(
         string memory feedId
     ) external pure returns (address);
+
+    function getExchangeId(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) external view returns (bytes32);
 
     function getExchangeId(
         address asset0,

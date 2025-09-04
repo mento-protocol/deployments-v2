@@ -8,6 +8,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {IMentoConfig, BreakerType, IBiPoolManager, ITradingLimits, IPricingModule, FixidityLib} from "./IMentoConfig.sol";
+import {AggregatorV3Interface} from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
 
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
@@ -19,6 +20,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     // ========== Storage ==========
     TokenConfig[] internal _tokens;
+    mapping(string => string) _symbolForCurrency;
     ExchangeConfig[] internal _exchanges;
     OracleConfig internal _oracleConfig;
     ReserveConfig internal _reserveConfig;
@@ -41,10 +43,15 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
     bytes32[] _breakerIds;
 
+    uint256 public baseFork;
+    uint256 public mockAggregatorSourceFork;
+
     // ========== Constructor ==========
 
     constructor() {
         _initialize();
+        baseFork = vm.createFork(vm.envString("NETWORK"));
+        vm.selectFork(baseFork);
     }
 
     // ========== Abstract Functions ==========
@@ -156,6 +163,21 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getExchangeId(
         address asset0,
+        address asset1,
+        address pricingModule
+    ) public view returns (bytes32) {
+        return
+            keccak256(
+                abi.encodePacked(
+                    IERC20Metadata(asset0).symbol(),
+                    IERC20Metadata(asset1).symbol(),
+                    IPricingModule(pricingModule).name()
+                )
+            );
+    }
+
+    function getExchangeId(
+        address asset0,
         address asset1
     ) public view returns (bytes32) {
         for (uint i = 0; i < _exchanges.length; i++) {
@@ -167,12 +189,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                     exchange.pool.asset0 == asset1)
             ) {
                 return
-                    keccak256(
-                        abi.encodePacked(
-                            IERC20Metadata(exchange.pool.asset0).symbol(),
-                            IERC20Metadata(exchange.pool.asset1).symbol(),
-                            exchange.pool.pricingModule.name()
-                        )
+                    getExchangeId(
+                        exchange.pool.asset0,
+                        exchange.pool.asset1,
+                        address(exchange.pool.pricingModule)
                     );
             }
         }
@@ -189,10 +209,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     // ========== Internal Helper Functions ==========
 
     function _addStableToken(
+        string memory currency,
         string memory symbol,
         string memory name
     ) internal {
         _isStableToken[symbol] = true;
+        _symbolForCurrency[currency] = symbol;
         _tokens.push(TokenConfig({symbol: symbol, name: name}));
     }
 
@@ -239,7 +261,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         bool invert1
     ) internal {
         IChainlinkRelayer.ChainlinkAggregator[]
-            memory aggregators = new IChainlinkRelayer.ChainlinkAggregator[](1);
+            memory aggregators = new IChainlinkRelayer.ChainlinkAggregator[](2);
         aggregators[0] = IChainlinkRelayer.ChainlinkAggregator({
             aggregator: aggregator0,
             invert: invert0
@@ -279,18 +301,35 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         }
     }
 
+    function _setMockAggregatorSource(string memory network) internal {
+        require(
+            mockAggregatorSourceFork == 0,
+            "Mock Aggregator Source already set"
+        );
+        mockAggregatorSourceFork = vm.createFork(network);
+    }
+
     function _addMockAggregator(
         string memory description,
-        uint8 decimals,
-        int256 initialReport
+        address source
     ) internal {
+        uint8 decimals;
+        int256 initialReport;
+        vm.selectFork(mockAggregatorSourceFork);
+        AggregatorV3Interface agg = AggregatorV3Interface(source);
+
+        decimals = agg.decimals();
+        (, initialReport, , , ) = agg.latestRoundData();
+
         _mockAggregatorConfigs.push(
             MockAggregatorConfig({
                 description: description,
                 decimals: decimals,
-                initialReport: initialReport
+                initialReport: initialReport,
+                source: source
             })
         );
+        vm.selectFork(baseFork);
     }
 
     function _addBreaker(

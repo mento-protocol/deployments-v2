@@ -12,6 +12,7 @@ import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IE
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {Config, IMentoConfig} from "../config/Config.sol";
 
+import {AggregatorV3Interface} from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
 import {MockChainlinkAggregator} from "src/MockChainlinkAggregator.sol";
 
 contract UpdateTestnetOracles is TrebScript, ProxyHelper {
@@ -21,14 +22,30 @@ contract UpdateTestnetOracles is TrebScript, ProxyHelper {
 
     IMentoConfig config;
 
-    /// @custom:senders deployer
+    /// @custom:senders reporter,deployer
     function run() public broadcast {
         // Get configuration
         config = Config.get();
-        Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage reporter = sender("reporter");
 
         IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config
             .getMockAggregatorConfigs();
+
+        vm.selectFork(config.mockAggregatorSourceFork());
+
+        int256[] memory answers = new int256[](aggConfigs.length);
+        uint256[] memory timestamps = new uint256[](aggConfigs.length);
+
+        for (uint i = 0; i < aggConfigs.length; i++) {
+            AggregatorV3Interface agg = AggregatorV3Interface(
+                aggConfigs[i].source
+            );
+
+            (, answers[i], , timestamps[i], ) = agg.latestRoundData();
+        }
+
+        vm.selectFork(config.baseFork());
+
         for (uint i = 0; i < aggConfigs.length; i++) {
             address aggAddy = lookupOrFail(
                 string.concat(
@@ -36,9 +53,9 @@ contract UpdateTestnetOracles is TrebScript, ProxyHelper {
                     aggConfigs[i].description
                 )
             );
-            MockChainlinkAggregator(deployer.harness(aggAddy)).report(
-                aggConfigs[i].initialReport,
-                block.timestamp
+            MockChainlinkAggregator(reporter.harness(aggAddy)).report(
+                answers[i],
+                timestamps[i]
             );
         }
 
@@ -50,7 +67,11 @@ contract UpdateTestnetOracles is TrebScript, ProxyHelper {
                 string.concat("ChainlinkRelayerV1:", relayerConfigs[i].rateFeed)
             );
 
-            IChainlinkRelayer(deployer.harness(relayerAddy)).relay();
+            try
+                IChainlinkRelayer(reporter.harness(relayerAddy)).relay()
+            {} catch {
+                console.log("Error reporting: ", relayerAddy);
+            }
         }
     }
 }
