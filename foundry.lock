@@ -1,0 +1,20 @@
+{
+  "lib/forge-std": {
+    "rev": "8bbcf6e3f8f62f419e5429a0bd89331c85c37824"
+  },
+  "lib/mento-core": {
+    "rev": "91794ee4774075041754c80a7b0948735155030b"
+  },
+  "lib/mento-router": {
+    "rev": "80d12779d15c182249bbd4e9a245a9b08c6ba843"
+  },
+  "lib/mento-std": {
+    "rev": "2ad51cd2f91e5d2ade22bce8887a1d733b22cedb"
+  },
+  "lib/openzeppelin-contracts": {
+    "rev": "c64a1edb67b6e3f4a15cca8909c9482ad33a02b0"
+  },
+  "lib/treb-sol": {
+    "rev": "b55f4c5e51fc75fe9c939518908f10b08f8b4011"
+  }
+}
