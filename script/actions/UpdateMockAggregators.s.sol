@@ -15,7 +15,7 @@ import {Config, IMentoConfig} from "../config/Config.sol";
 import {AggregatorV3Interface} from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
 import {MockChainlinkAggregator} from "src/MockChainlinkAggregator.sol";
 
-contract UpdateTestnetOracles is TrebScript, ProxyHelper {
+contract UpdateMockAggregators is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -57,21 +57,6 @@ contract UpdateTestnetOracles is TrebScript, ProxyHelper {
                 answers[i],
                 timestamps[i]
             );
-        }
-
-        IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config
-            .getChainlinkRelayerConfigs();
-
-        for (uint256 i = 0; i < relayerConfigs.length; i++) {
-            address relayerAddy = lookupOrFail(
-                string.concat("ChainlinkRelayerV1:", relayerConfigs[i].rateFeed)
-            );
-
-            try
-                IChainlinkRelayer(reporter.harness(relayerAddy)).relay()
-            {} catch {
-                console.log("Error reporting: ", relayerAddy);
-            }
         }
     }
 }

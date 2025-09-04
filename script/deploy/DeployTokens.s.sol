@@ -11,6 +11,13 @@ import {IReserve} from "lib/mento-core/contracts/interfaces/IReserve.sol";
 import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 
+interface ISortedOracles {
+    function setEquivalentToken(
+        address token,
+        address equivalentToken
+    ) external;
+}
+
 // Interface for StableTokenV2 initialization
 interface IStableTokenV2 {
     function initialize(
@@ -51,6 +58,9 @@ contract DeployTokens is TrebScript, ProxyHelper {
         broker = lookupProxyOrFail("Broker");
         address reserveAddy = lookupProxyOrFail("Reserve");
         IReserve reserve = IReserve(deployer.harness(reserveAddy));
+        ISortedOracles sortedOracles = ISortedOracles(
+            deployer.harness(lookupProxyOrFail("SortedOracles"))
+        );
 
         // Get the StableTokenV2 implementation address (should be deployed with v2.6.5 label)
         stableTokenImpl = deployer
@@ -74,8 +84,15 @@ contract DeployTokens is TrebScript, ProxyHelper {
 
         // Step 2: Initialize each token proxy (separate transactions to preserve msg.sender)
         for (uint256 i = 0; i < tokens.length; i++) {
+            address token = proxies[tokens[i].symbol];
             initializeToken(deployer, tokens[i]);
-            reserve.addToken(proxies[tokens[i].symbol]);
+            reserve.addToken(token);
+            sortedOracles.setEquivalentToken(
+                token,
+                config.getRateFeedIdFromString(
+                    string.concat("CELO/", tokens[i].currency)
+                )
+            );
         }
     }
 

@@ -16,6 +16,7 @@ interface IMentoConfig {
     struct TokenConfig {
         string symbol;
         string name;
+        string currency;
     }
 
     struct MockAggregatorConfig {

@@ -215,7 +215,9 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     ) internal {
         _isStableToken[symbol] = true;
         _symbolForCurrency[currency] = symbol;
-        _tokens.push(TokenConfig({symbol: symbol, name: name}));
+        _tokens.push(
+            TokenConfig({symbol: symbol, name: name, currency: currency})
+        );
     }
 
     function _addCollateral(string memory symbol, address addy) internal {

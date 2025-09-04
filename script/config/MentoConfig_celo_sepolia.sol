@@ -237,6 +237,18 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             aggregator0: _predict("MockChainlinkAggregator", rateFeed),
             invert0: false
         });
+
+        string memory celoRateFeed = string.concat("CELO/", currency);
+        _addRateFeed(celoRateFeed);
+        _addChainlinkRelayer({
+            rateFeed: celoRateFeed,
+            description: celoRateFeed,
+            maxTimestampSpread: 1 days,
+            aggregator0: _predict("MockChainlinkAggregator", "CELO/USD"),
+            invert0: false,
+            aggregator1: _predict("MockChainlinkAggregator", rateFeed),
+            invert1: true
+        });
     }
 
     /// ===================================================================
