@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Tenderly} from "./Tenderly.sol";
+import {Tenderly} from "../helpers/Tenderly.sol";
 
 address constant SAFE = 0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F;
 address constant PROPOSER = 0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81;

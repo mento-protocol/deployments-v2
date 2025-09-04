@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Tenderly} from "./Tenderly.sol";
+import {Tenderly} from "../helpers/Tenderly.sol";
 
 contract CreateSnapshot is Script {
     function run() public returns (string memory) {
@@ -17,4 +17,3 @@ contract CreateSnapshot is Script {
         return snapshotId;
     }
 }
-

@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {Script, console} from "forge-std/Script.sol";
-import {Tenderly} from "./Tenderly.sol";
+import {Tenderly} from "../helpers/Tenderly.sol";
 
 contract RevertSnapshot is Script {
     function run() public {
@@ -34,4 +34,3 @@ contract RevertSnapshot is Script {
         Tenderly.revertTo(snapshotId);
     }
 }
-
