@@ -1,4 +1,2958 @@
 {
+  "monad-testnet-v2-rc0/10143/AddressSortedLinkedListWithMedian": {
+    "id": "monad-testnet-v2-rc0/10143/AddressSortedLinkedListWithMedian",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "AddressSortedLinkedListWithMedian",
+    "label": "",
+    "address": "0xcB985Be7a200D0075155AC2697D6D5F00267a11b",
+    "type": "LIBRARY",
+    "transactionId": "tx-0xa46b2d7da2dcefc7e322e16419b15c2141a317f6207135076de2061e9cfeab9b",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81009395ccf14e9f578a4fb4ca",
+      "initCodeHash": "0x2a2e8b31dd8f6066018da7c22c7a9ec3192de5c7c3f795fe83fd3a04111d7cc2",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "monad-testnet-v2-rc0/AddressSortedLinkedListWithMedian"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "node_modules/@celo/contracts/common/linkedlists/AddressSortedLinkedListWithMedian.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x2a2e8b31dd8f6066018da7c22c7a9ec3192de5c7c3f795fe83fd3a04111d7cc2",
+      "scriptPath": "script/deploy/DeployAddressSortedLinkedListWithMedian.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:37:40.568253+02:00",
+    "updatedAt": "2025-09-08T11:37:40.585538+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/BiPoolManager:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/BiPoolManager:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "BiPoolManager",
+    "label": "v2.6.5",
+    "address": "0x967E6C94e68190336a8108ebCCbcE6B363a25871",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xfd54aec48d3738511bede0ed3af5e762d7e8b065401c90d2f73c5ca885464ef6",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810089aae1b922473b3f8928e8",
+      "initCodeHash": "0xda848aecdffc5516e3b39e9976debc40b4d26fee76cda0b13b5621d08049fbd0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/BiPoolManager:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/swap/BiPoolManager.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x8182ce677a635ee58b7f59986e884f9b20e8d645d1ed701234a5000e4615166a",
+      "scriptPath": "script/deploy/DeployBiPoolManager.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x967E6C94e68190336a8108ebCCbcE6B363a25871#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x967E6C94e68190336a8108ebCCbcE6B363a25871#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x967E6C94e68190336a8108ebCCbcE6B363a25871"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:02:15.998595+02:00",
+    "updatedAt": "2025-09-09T11:40:48.751729+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/BreakerBox:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/BreakerBox:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "BreakerBox",
+    "label": "v2.6.5",
+    "address": "0xb48fBF5e9C3C08DDDDA00ff6B03F79a73436E05b",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x5d248b2f25d94b940e9aece022cb3d16d8ed115b8dc80d6e4ff29407998390ff",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100f1b06ee72244e61a067778",
+      "initCodeHash": "0xda4756f0802ed32f25456e52f685e54bd875806f159a020f66030026f556af32",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000000000000000000000000000000000000000000600000000000000000000000006f505ce256ad2bdcc598a52107f3651deef314b800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81000000000000000000000000000000000000000000000000000000000000001100000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef000000000000000000000000ac414205651f4a62b614b6be9e5318a182c33eb0000000000000000000000000f549d6558bc78524d4beb33cf83a26b4862b2468000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca000000000000000000000000669bcf7bdb701e3b15799d2732c0518cf3b65507000000000000000000000000bb792783141ac5f51eed9c922acf86d21a059ca8000000000000000000000000ef40371a602409f86f9ac4e37580c59dee61199f000000000000000000000000aa04d30cced09ae17815f88d1bcae69a49fb160f000000000000000000000000f7b436583e011794293a04faa440816f3354501f000000000000000000000000812a10b8744a9ad8637e819899d8c33454fe8d20000000000000000000000000ea4103a6a122fbe2cdb07a80d4d293be07bb29fa0000000000000000000000006c4a6765bcfc7e7fc5b01eefe931885a79dde79100000000000000000000000002996d13041557032ffb3e910966f9ea784dfec40000000000000000000000005c0c9efb14a767ce50a687ac4658cce7054073800000000000000000000000002ee56be22d6af8c1b0ac97149b6f42d3b0bfb8c2000000000000000000000000b9addcd1d1ce7d49dbb540e2677f1c572bc8d195000000000000000000000000d772efe6507b7d8cdc8c4d8870931439fbeeb929",
+      "entropy": "monad-testnet-v2-rc0/BreakerBox:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/BreakerBox.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x5807e4dee634b7ed398468107abcbcf9dbbc51d58bfbfc382cd8a931c1f28690",
+      "scriptPath": "script/deploy/DeployBreakerBox.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:22.954607+02:00",
+    "updatedAt": "2025-09-08T11:58:22.967488+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Broker:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/Broker:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Broker",
+    "label": "v2.6.5",
+    "address": "0x3ca453Fe63d2D02FD93558A4908399CF691dc5b8",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xd02ff15cb76193b3ef6590ef202f5100b0697823f178776a1da3074b4aed1fb6",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100c959d4516eee55b26c9843",
+      "initCodeHash": "0xbe9a5fb2580551a198c41087be1238060b409fd950da8887b919c550fe096968",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/lib/mento-core/contracts/swap/Broker.sol:Broker:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/swap/Broker.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xc8f598c678e0dcd49eadd0ead5cbf023081766fe5e0a145edf265259702fd012",
+      "scriptPath": "script/deploy/DeployBroker.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x3ca453Fe63d2D02FD93558A4908399CF691dc5b8#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x3ca453Fe63d2D02FD93558A4908399CF691dc5b8#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x3ca453Fe63d2D02FD93558A4908399CF691dc5b8"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:40.26941+02:00",
+    "updatedAt": "2025-09-09T11:41:22.348115+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerFactory:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerFactory:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerFactory",
+    "label": "v2.6.5",
+    "address": "0x77472881BdeFF338AB6AfDb9d5Ff396bBcD14449",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x1499c7a10e6ce78177a2fb1d6096ab2dc79ebb40e83e23c570f729fb06094861",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81000bbd454be0908713b4a3ef",
+      "initCodeHash": "0x3861c22e26f6e59ba472c4128ff190da7f71aa1de7c2ab3ff430cd09ece1fa13",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "monad-testnet-v2-rc0/ChainlinkRelayerFactory:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerFactory.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xe96f7a809c0007c978d5ef77471091179e70a9cda9c234ffbe06d28f9d3524c2",
+      "scriptPath": "script/deploy/DeployChainlinkRelayerFactory.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x77472881BdeFF338AB6AfDb9d5Ff396bBcD14449#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x77472881BdeFF338AB6AfDb9d5Ff396bBcD14449#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x77472881BdeFF338AB6AfDb9d5Ff396bBcD14449"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:55:43.984987+02:00",
+    "updatedAt": "2025-09-09T11:56:45.972226+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:AUD/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:AUD/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "AUD/USD",
+    "address": "0x35427e9b90a24b0Ea09A492c384fAe8bAB895e2b",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xbcb1f26d4f724eeee8b44becf6c7239da10aa8966badad577323f52c892b1e7a",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x447b6df6a76d5727630d0f00ac096c6a86207579f6936a7d524956bb9a403714",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000005c0c9efb14a767ce50a687ac4658cce7054073800000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074155442f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000048b6bec66a57640f1d3957efb74e77a2ade70d310000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0x35427e9b90a24b0Ea09A492c384fAe8bAB895e2b",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x35427e9b90a24b0Ea09A492c384fAe8bAB895e2b#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x35427e9b90a24b0Ea09A492c384fAe8bAB895e2b"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T12:04:17.13665+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:BRL/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:BRL/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "BRL/USD",
+    "address": "0xc7062Ff65EF4c203A7745907A4222b972dec1bB8",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x7353386d23568f95a38ff25d56625e55d663ed4c191d42c78af90a71d847f1b4",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x5f2143aaee1b137aa221591f4bd68f391cc55809a4d9a6d403b5edd9a67f2e5c",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000669bcf7bdb701e3b15799d2732c0518cf3b655070000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000742524c2f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000006f9b5465802afde16934ece2462955bce857e3650000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xc7062Ff65EF4c203A7745907A4222b972dec1bB8#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xc7062Ff65EF4c203A7745907A4222b972dec1bB8#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xc7062Ff65EF4c203A7745907A4222b972dec1bB8"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:59:03.023576+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:CAD/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:CAD/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "CAD/USD",
+    "address": "0x3660A1D4E3530fd22E630aE36B892280B8e8B661",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3583460bfd89e6bbb3a2b98687bc32810e7e00efa3102d6823e54f05046d01e1",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x9236ce1d80c19a664ce8eb85f13793a3df8bad9c05009d91420e8bf2faf28c80",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000002996d13041557032ffb3e910966f9ea784dfec40000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074341442f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000004dd4617060621e386df45b47c4cc2a1cf9dbd4560000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x3660A1D4E3530fd22E630aE36B892280B8e8B661#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x3660A1D4E3530fd22E630aE36B892280B8e8B661#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x3660A1D4E3530fd22E630aE36B892280B8e8B661"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:50:53.057676+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:CHF/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:CHF/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "CHF/USD",
+    "address": "0x4BcadcC4db4655702D5eFD88E33869a65b461546",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x4f2396ce711d69ac26a93e5e05ac3d03ab98de46201eff1dac53cba0d38dab67",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x8adf324aa1b29f6a55811815ef42d6a2920f6a55a5c8f0a65d9558fc32cc02e6",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002ee56be22d6af8c1b0ac97149b6f42d3b0bfb8c20000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074348462f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000006bcc89071b3ee0b2927b6a6597b3add6379cc5f20000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x4BcadcC4db4655702D5eFD88E33869a65b461546#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x4BcadcC4db4655702D5eFD88E33869a65b461546#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x4BcadcC4db4655702D5eFD88E33869a65b461546"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:58:05.779051+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:COP/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:COP/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "COP/USD",
+    "address": "0xfCD35F388ceaFbe71FC16e65D687E54A923B253D",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xc0a72e42207df24bf016843b26e94857b1fd5c1435bf094ed80e8f08771bf488",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x4abd04ebd8923769141588b73615bad2e581856b0963f17111c0ab02d6904a03",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000f7b436583e011794293a04faa440816f3354501f0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000007434f502f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000bed53c78968e50899bfb42b9edff8cccba3b85fb0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xfCD35F388ceaFbe71FC16e65D687E54A923B253D#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xfCD35F388ceaFbe71FC16e65D687E54A923B253D#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xfCD35F388ceaFbe71FC16e65D687E54A923B253D"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:57:25.774376+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:EUR/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:EUR/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "EUR/USD",
+    "address": "0x18f3ef0487233E46995533D6ED3e5B8fBA40C715",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xca88e70e4e3da9078b902ad4ec3d76505a2d44a114d12a9909061fb3124acf42",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xdb7970ff89c784a4ffe862829faf70e41f8402497e91501bd5a6f09be7b9e346",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074555522f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000017117be87ae0bccb6b0923d096a20042185d8bc80000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x18f3ef0487233E46995533D6ED3e5B8fBA40C715#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x18f3ef0487233E46995533D6ED3e5B8fBA40C715#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x18f3ef0487233E46995533D6ED3e5B8fBA40C715"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:51:33.569166+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:EURC/EUR": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:EURC/EUR",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "EURC/EUR",
+    "address": "0xF1B1F4F5613dC581b90370cA7670b184De37f910",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x7e5cba613db60da55550d57a91f38c298085a21f0fedc66472dc45292e0b9cca",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x3e4d4946e79fcb9474755e1aada269aad22cc5410bc40c633f1b0c62b6885cc8",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000f549d6558bc78524d4beb33cf83a26b4862b24680000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000001518000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008455552432f4555520000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002000000000000000000000000366609f8445b2b33d1e8a592e18eaaff89e8bedb000000000000000000000000000000000000000000000000000000000000000000000000000000000000000017117be87ae0bccb6b0923d096a20042185d8bc80000000000000000000000000000000000000000000000000000000000000001"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0xF1B1F4F5613dC581b90370cA7670b184De37f910",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xF1B1F4F5613dC581b90370cA7670b184De37f910#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xF1B1F4F5613dC581b90370cA7670b184De37f910"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:45:37.034922+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:GBP/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:GBP/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "GBP/USD",
+    "address": "0xd614741f4A649c6bE90F6fE0BCfa757fe07C480c",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xf1b5cc71f94d8fcdbd5116f6d67131263c4fa21c66dcebe4cae416ada6a788a1",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x31be821f14e9aa32a3f942dd729acbf17458c7412b221e51f49b304a434e0cf9",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ea4103a6a122fbe2cdb07a80d4d293be07bb29fa0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074742502f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000fb4caf2ce0488f955aaddd4272bedbffc0ac303a0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xd614741f4A649c6bE90F6fE0BCfa757fe07C480c#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xd614741f4A649c6bE90F6fE0BCfa757fe07C480c#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xd614741f4A649c6bE90F6fE0BCfa757fe07C480c"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T12:06:04.766603+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:GHS/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:GHS/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "GHS/USD",
+    "address": "0xDb7942dc5B4ce2357Da93d51266c1d41D8a640cf",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x8a5806f2c91df103d774fddf0920d31dcd6ee6ee4360df327d75b9556197acd1",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x679c48b2eeda7692f669c0a902c340b259fb5b373bb9b148f0a43b7ad4842842",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000812a10b8744a9ad8637e819899d8c33454fe8d200000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074748532f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000008b31ea83776e31fc3d21e13594be1e1978db0d660000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xDb7942dc5B4ce2357Da93d51266c1d41D8a640cf#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xDb7942dc5B4ce2357Da93d51266c1d41D8a640cf#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xDb7942dc5B4ce2357Da93d51266c1d41D8a640cf"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T12:05:54.92369+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:JPY/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:JPY/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "JPY/USD",
+    "address": "0x9A73CA6Ca679457B1b62D3e356595feddC069221",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x9017452af467bb9fb3a58cf980d0964815f44582313ce94675a0295ef2451e07",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x786091b568c0493b09b55af6c224cf936f33f7e9f4240942d30fa57a7c4e92e3",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000b9addcd1d1ce7d49dbb540e2677f1c572bc8d1950000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074a50592f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000e202ed51731c182bfc189c8d0017977fffefd8bc0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x9A73CA6Ca679457B1b62D3e356595feddC069221#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x9A73CA6Ca679457B1b62D3e356595feddC069221#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x9A73CA6Ca679457B1b62D3e356595feddC069221"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T12:08:10.926308+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:KES/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:KES/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "KES/USD",
+    "address": "0xd60C3fb373d06FC49179049B497f97Fa29443FDd",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x6a8f1aacc29e9a3f52d4793f543ec9ef19c9656dc854ba15bc98760e3f7f7979",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xa69a700b5cfdd8899c95182195f97eb8079bdb1e622e49273d34ce9d17fa2b78",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ef40371a602409f86f9ac4e37580c59dee61199f0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074b45532f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000009b9fe8a5e206047fc442a46ea78d1a55ef9040f40000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xd60C3fb373d06FC49179049B497f97Fa29443FDd#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xd60C3fb373d06FC49179049B497f97Fa29443FDd#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xd60C3fb373d06FC49179049B497f97Fa29443FDd"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:53:15.0402+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:NGN/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:NGN/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "NGN/USD",
+    "address": "0x1256de771124B6A4511d0dB090b20D0e7aa91CEf",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa630c54df532bd94ab594593e542735504a94277d2aa9fb358d7151a0245243c",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x2fb4307847bb0ee22004d7458f5279c9719f6fd7beea2c128727434f681dfe10",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000d772efe6507b7d8cdc8c4d8870931439fbeeb9290000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074e474e2f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000003a2f88440fcf8c86c2e81025d99048f33b090f2e0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x1256de771124B6A4511d0dB090b20D0e7aa91CEf#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x1256de771124B6A4511d0dB090b20D0e7aa91CEf#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x1256de771124B6A4511d0dB090b20D0e7aa91CEf"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T12:07:50.406411+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:PHP/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:PHP/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "PHP/USD",
+    "address": "0x8c6A14C7c8b09012056911Da9F69F4b5B1f6f0F4",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x6ecd5889c5ade0591a0b767beca946eb343c3008e74466bb08bef209f277c98d",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x2245cfd1a562a016a7350f1a67cb548e41aea5890a9276761ef39e912721e201",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000aa04d30cced09ae17815f88d1bcae69a49fb160f0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000075048502f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000006c3c523f4460f7658eccccfd39c76437ad19d7420000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x8c6A14C7c8b09012056911Da9F69F4b5B1f6f0F4#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x8c6A14C7c8b09012056911Da9F69F4b5B1f6f0F4#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x8c6A14C7c8b09012056911Da9F69F4b5B1f6f0F4"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:44:17.607177+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:USDC/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:USDC/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "USDC/USD",
+    "address": "0xFe875DB2d63d1eaFce89B2069015A00BED77B83B",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x7e7fafcef010919b60410e8665f16a4d7576019434457db7284b1966f85cc29b",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x5d698ca4062adf60753c190b6a0e9aacccc3f20b87044a74a3553d35c2d596d0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000002cad821a8ab80a417d682d38a4784ef7887711d0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xFe875DB2d63d1eaFce89B2069015A00BED77B83B#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xFe875DB2d63d1eaFce89B2069015A00BED77B83B#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xFe875DB2d63d1eaFce89B2069015A00BED77B83B"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:59:42.188883+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:USDT/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:USDT/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "USDT/USD",
+    "address": "0x354eB44A117ecaEee4006f1417Ac52bBf395d0E6",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa5cde3cacd2f915452428350cfcf9ef58b0524a7cecc51e98cecddc4d4f10d6a",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xb5492370048f9f218cdd4b929ff9085c372bd05c6aea1a9c12d9230abbfaa1b6",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ac414205651f4a62b614b6be9e5318a182c33eb00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344542f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000c51c67ade4c6a37daa31eac104417705dfc810da0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x354eB44A117ecaEee4006f1417Ac52bBf395d0E6#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x354eB44A117ecaEee4006f1417Ac52bBf395d0E6#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x354eB44A117ecaEee4006f1417Ac52bBf395d0E6"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:55:19.056415+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:XOF/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:XOF/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "XOF/USD",
+    "address": "0x0C0d852B433f8483afC840A6676D9FE218cd38a7",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x1ee3cca5f2988089d982af121012d303a032b2cb2feb4a4a7c6b619ef8b2b6f5",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xa9a2b9e2c43b6b15dadf98bcd0845dbdeeda64bc9bdcc01d6bc3537d6abdee65",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000bb792783141ac5f51eed9c922acf86d21a059ca80000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000007584f462f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000f48d1fe1754a918d0b91113298b5f3fbb90250600000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x0C0d852B433f8483afC840A6676D9FE218cd38a7#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x0C0d852B433f8483afC840A6676D9FE218cd38a7#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x0C0d852B433f8483afC840A6676D9FE218cd38a7"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:47:39.366638+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:ZAR/USD": {
+    "id": "monad-testnet-v2-rc0/10143/ChainlinkRelayerV1:ZAR/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "ZAR/USD",
+    "address": "0x27aa22E6C1277888799977CcE63F4b21EFC07366",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x06b3ab38ddbfc23e61c841e8496cbcea8b8f4ea05f19711c212704b2c39552fe",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xd4bdc2f276fbc947b761479cbd69344faab9828b093265934a719f5972b2b749",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000006c4a6765bcfc7e7fc5b01eefe931885a79dde7910000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000075a41522f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000055054ac67c8f1894ecef32e5d5e71a2204f428790000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0xff2b1fc62347e6d3430dd743fe5be75ef69315ee29a1359d1882addf889c1ab0",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x27aa22E6C1277888799977CcE63F4b21EFC07366#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x27aa22E6C1277888799977CcE63F4b21EFC07366#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x27aa22E6C1277888799977CcE63F4b21EFC07366"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:58:02.594257+02:00",
+    "updatedAt": "2025-09-09T11:36:40.395177+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ConstantProductPricingModule:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/ConstantProductPricingModule:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ConstantProductPricingModule",
+    "label": "v2.6.5",
+    "address": "0x2157970fe0a65bc5830b10efd4FD29c374d3D3C6",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x9aeecc63b7eaad62c97851eb597e1da8cd9f92f9e031e7e9a9388f1e21b72333",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81001e9d01fa3dde4aabfb1e7e",
+      "initCodeHash": "0xa623614a2a173db69815b96bfdc92376f4ff4decb4dbdad47add6bbf99c3d08e",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "monad-testnet-v2-rc0/ConstantProductPricingModule:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/swap/ConstantProductPricingModule.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xa623614a2a173db69815b96bfdc92376f4ff4decb4dbdad47add6bbf99c3d08e",
+      "scriptPath": "script/deploy/DeployPricingModules.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x2157970fe0a65bc5830b10efd4FD29c374d3D3C6#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x2157970fe0a65bc5830b10efd4FD29c374d3D3C6#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x2157970fe0a65bc5830b10efd4FD29c374d3D3C6"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:29.397662+02:00",
+    "updatedAt": "2025-09-09T12:01:38.577633+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ConstantSumPricingModule:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/ConstantSumPricingModule:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ConstantSumPricingModule",
+    "label": "v2.6.5",
+    "address": "0x49503Ffd8da325BfE52B8982A7f9c2E26643c276",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xedf1a2a251094a386601917e29bba23b0e7336260baf17cb40505e6d2833fd06",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81006ad10ddcc3ddb47279c22f",
+      "initCodeHash": "0x0c8f5498b60705232145384a0211ff042cb79cfd11ef70cf299633107fec070b",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "monad-testnet-v2-rc0/ConstantSumPricingModule:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/swap/ConstantSumPricingModule.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x0c8f5498b60705232145384a0211ff042cb79cfd11ef70cf299633107fec070b",
+      "scriptPath": "script/deploy/DeployPricingModules.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x49503Ffd8da325BfE52B8982A7f9c2E26643c276#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x49503Ffd8da325BfE52B8982A7f9c2E26643c276#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x49503Ffd8da325BfE52B8982A7f9c2E26643c276"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:29.397662+02:00",
+    "updatedAt": "2025-09-09T11:25:27.07626+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MentoRouter:v1.0.0": {
+    "id": "monad-testnet-v2-rc0/10143/MentoRouter:v1.0.0",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MentoRouter",
+    "label": "v1.0.0",
+    "address": "0x6a45F164A5a36f1215FCb4Ba55570731ec739a78",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xc32baff12b817d618debeb4d30fe3da62f64bcb467085f1962be7eaa4c5a49c9",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81006f154e6041115a95a6f88e",
+      "initCodeHash": "0x8ab95ecb32783adfbc5c693d2e6b0d5c45e04e8666be284c6a372fdcbef67253",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000388f2c53e77ef33111383a363e0b5fd976b18e7400000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/MentoRouter:v1.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-router/src/MentoRouter.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x5fe648264390112e4f89a674599bb998f4bfe832c84acc8bdd332c6639316f73",
+      "scriptPath": "script/deploy/DeployMentoRouter.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0x6a45F164A5a36f1215FCb4Ba55570731ec739a78",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x6a45F164A5a36f1215FCb4Ba55570731ec739a78#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x6a45F164A5a36f1215FCb4Ba55570731ec739a78"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:44.622594+02:00",
+    "updatedAt": "2025-09-09T11:54:35.204826+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:AUD/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:AUD/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "AUD/USD",
+    "address": "0x48b6bEC66A57640F1D3957EFb74e77A2aDe70d31",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x9fd9545884b5be3261e56d43aaf85aae40c8983110f2db17207fa1a9e2f99da2",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100ddb5a6407b8495f82e6d7c",
+      "initCodeHash": "0xf57f1a7c21002588b7b77ab137ec1d6ca2b34b4d0ea6aae62ee61e677b6b88cf",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074155442f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:AUD/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x48b6bEC66A57640F1D3957EFb74e77A2aDe70d31#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x48b6bEC66A57640F1D3957EFb74e77A2aDe70d31#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x48b6bEC66A57640F1D3957EFb74e77A2aDe70d31"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:46:17.637422+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:BRL/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:BRL/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "BRL/USD",
+    "address": "0x6F9b5465802aFDe16934Ece2462955BCE857E365",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x107bd62919b23ab12a809bf528f399bf94fbe47ac9062a07feca1ceb36a2db11",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100b41a2ef0c739063097cbc0",
+      "initCodeHash": "0xaffb24b1c70d87a5bbe2aa2a75c69e26a1dedd63d5f73b22487420555a446396",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81000000000000000000000000000000000000000000000000000000000000000742524c2f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:BRL/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x6F9b5465802aFDe16934Ece2462955BCE857E365#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x6F9b5465802aFDe16934Ece2462955BCE857E365#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x6F9b5465802aFDe16934Ece2462955BCE857E365"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T12:07:09.532221+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:CAD/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:CAD/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "CAD/USD",
+    "address": "0x4Dd4617060621E386DF45b47C4cc2a1CF9dBd456",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x5bb0655c1a14622c7ebcb013e02068b77085e8562798574aee33e3ec4b367aca",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810023efbe0abfcd259bfb7ac4",
+      "initCodeHash": "0xfadf8aa427739f7e96f2816597e1ceeee50feeb124235d59a2575abf1da8c1b4",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074341442f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:CAD/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x4Dd4617060621E386DF45b47C4cc2a1CF9dBd456#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x4Dd4617060621E386DF45b47C4cc2a1CF9dBd456#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x4Dd4617060621E386DF45b47C4cc2a1CF9dBd456"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:51:53.596981+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:CHF/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:CHF/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "CHF/USD",
+    "address": "0x6BCc89071B3EE0b2927b6a6597b3ADd6379CC5F2",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x7fa8436508aa442d57729447d382761787411ce82425392e3262ca4125d22ad6",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81004f2735d5db7a98f642eed0",
+      "initCodeHash": "0x1d8924828b9c5256451f3cb4481a0ab7708e9010680b0b05d256c7bf2b447c63",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074348462f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:CHF/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x6BCc89071B3EE0b2927b6a6597b3ADd6379CC5F2#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x6BCc89071B3EE0b2927b6a6597b3ADd6379CC5F2#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x6BCc89071B3EE0b2927b6a6597b3ADd6379CC5F2"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:55:47.031608+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:COP/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:COP/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "COP/USD",
+    "address": "0xBEd53C78968e50899Bfb42b9EDff8cCCBa3b85Fb",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xd862543c142ee4cf4c4ef81993b7c3048f1d98a1ee76a9e8c092b4808c8b614f",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810065a0d70449e078660e54b5",
+      "initCodeHash": "0xd03c86eb0f130a91eaca2a4581a44fcdc7a72e0365c582943b64af496d5df574",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d810000000000000000000000000000000000000000000000000000000000000007434f502f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:COP/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xBEd53C78968e50899Bfb42b9EDff8cCCBa3b85Fb#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xBEd53C78968e50899Bfb42b9EDff8cCCBa3b85Fb#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xBEd53C78968e50899Bfb42b9EDff8cCCBa3b85Fb"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T12:05:34.657823+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:EUR/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:EUR/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "EUR/USD",
+    "address": "0x17117be87AE0bccB6B0923d096A20042185D8bc8",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xaf84254fd9f54df31b9edf65ae2605c79113d8222c257ec713dee97fe41476e8",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100bdba5c3fa17aa52feea722",
+      "initCodeHash": "0x18398f4dfd7386f10fec3582664a496081e3fff23dfc987804c0eb838e65cf9e",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074555522f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:EUR/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x17117be87AE0bccB6B0923d096A20042185D8bc8#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x17117be87AE0bccB6B0923d096A20042185D8bc8#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x17117be87AE0bccB6B0923d096A20042185D8bc8"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:52:13.223296+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:EURC/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:EURC/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "EURC/USD",
+    "address": "0x366609F8445B2B33D1e8A592E18EaAFF89E8beDB",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x23c0faceb63b52dde42402947a3518392d43953c3af073d5dbde076b2a7d4cd0",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100cc8f2bc6a868a6b96ce190",
+      "initCodeHash": "0x57df503bb44a0a63051658fb2157af4d52ac088cf630decd8bfde2b0a9171414",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d810000000000000000000000000000000000000000000000000000000000000008455552432f555344000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:EURC/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x366609F8445B2B33D1e8A592E18EaAFF89E8beDB#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x366609F8445B2B33D1e8A592E18EaAFF89E8beDB#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x366609F8445B2B33D1e8A592E18EaAFF89E8beDB"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:56:06.646499+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:GBP/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:GBP/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "GBP/USD",
+    "address": "0xFb4cAF2cE0488F955AADdD4272bedbFfC0Ac303A",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xae5611aab150d190e5c57e6f8b662c53b77b2032e49b03b00f3fe2763ebb026e",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100efed9fe72ae877f9234666",
+      "initCodeHash": "0x95b3093af16774d6ec07f7c9a8184f1a274ddad8fdf832452cbcf16acaffefdb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074742502f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:GBP/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xFb4cAF2cE0488F955AADdD4272bedbFfC0Ac303A#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xFb4cAF2cE0488F955AADdD4272bedbFfC0Ac303A#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xFb4cAF2cE0488F955AADdD4272bedbFfC0Ac303A"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:35:19.667916+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:GHS/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:GHS/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "GHS/USD",
+    "address": "0x8B31Ea83776e31fc3D21e13594Be1E1978dB0D66",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xb076b5773db56c76e67cf81120a4428258bb1ecc0d59c7b13a5b78741299c4e8",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81004cb734a03514a00895fce0",
+      "initCodeHash": "0x6460c8f7d9d61ff08da892e4ee071ae2da61951e392103e96f19b19f992d7726",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074748532f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:GHS/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0x8B31Ea83776e31fc3D21e13594Be1E1978dB0D66",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x8B31Ea83776e31fc3D21e13594Be1E1978dB0D66#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x8B31Ea83776e31fc3D21e13594Be1E1978dB0D66"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T12:01:16.890693+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:JPY/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:JPY/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "JPY/USD",
+    "address": "0xe202eD51731c182BFC189C8D0017977FfFEFD8BC",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x4d921d6a0b3367682492bafd5f770ffbf770bcae9c1242a596b513b6f0eb771c",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81002dd9f560fc005c5b336e7c",
+      "initCodeHash": "0xc98c8c20f123dde001bcbaed0af0aff5d807dbf0e4ccd489991a7f1d37e0b626",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074a50592f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:JPY/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xe202eD51731c182BFC189C8D0017977FfFEFD8BC#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xe202eD51731c182BFC189C8D0017977FfFEFD8BC#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xe202eD51731c182BFC189C8D0017977FfFEFD8BC"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:34:20.243674+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:KES/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:KES/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "KES/USD",
+    "address": "0x9b9fe8A5E206047fC442a46EA78d1A55ef9040f4",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x7796f1e2536696a7044c6cf01a8851f66f1653bd5bee1c7faa88ed37f10b2987",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100f60c21d7a1673e8fd847b0",
+      "initCodeHash": "0xb600a289ba5fab4d045533e6473f83cfd5c8cebfbdd0b4522d56c66f61f815cb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000001200000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074b45532f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:KES/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x9b9fe8A5E206047fC442a46EA78d1A55ef9040f4#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x9b9fe8A5E206047fC442a46EA78d1A55ef9040f4#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x9b9fe8A5E206047fC442a46EA78d1A55ef9040f4"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:57:05.599248+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:NGN/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:NGN/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "NGN/USD",
+    "address": "0x3A2f88440FCF8c86c2E81025D99048f33B090f2E",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x490af5ff3f0306f3cde457518cf09af3888ddf6383a0e25466a9dece01a17ab3",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81003b74cdaa2b28e022780a4f",
+      "initCodeHash": "0xbad35c4f30c63cebc80a18f393a913eac6bf53053a37ea6f1e2b15194171357a",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000001200000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074e474e2f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:NGN/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x3A2f88440FCF8c86c2E81025D99048f33B090f2E#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x3A2f88440FCF8c86c2E81025D99048f33B090f2E#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x3A2f88440FCF8c86c2E81025D99048f33B090f2E"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T12:08:56.012779+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:PHP/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:PHP/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "PHP/USD",
+    "address": "0x6c3C523f4460f7658EccCcfD39C76437aD19D742",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa3574123758d7edc5687faac6b15794b130bb9f210e2a4840c3d73d0002acbe1",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810056c3c813349af84b41eee3",
+      "initCodeHash": "0x423310c3c93ed140275a55a462442593daf53630f8b0ddaa391c91b29191ad37",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000075048502f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:PHP/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x6c3C523f4460f7658EccCcfD39C76437aD19D742#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x6c3C523f4460f7658EccCcfD39C76437aD19D742#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x6c3C523f4460f7658EccCcfD39C76437aD19D742"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:32:18.560325+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:USDC/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:USDC/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "USDC/USD",
+    "address": "0x02cad821A8ab80a417d682D38a4784ef7887711d",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x00d91d6f9949f315692728519fc8fa237bd6590565424a312cf0afd50851a2cd",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100a59aac57752060e372fb9b",
+      "initCodeHash": "0x5d482cbacbb2fb124a6b032b202bfa88e502d09f9756c8799fb001651b5337b7",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d810000000000000000000000000000000000000000000000000000000000000008555344432f555344000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:USDC/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x02cad821A8ab80a417d682D38a4784ef7887711d#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x02cad821A8ab80a417d682D38a4784ef7887711d#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x02cad821A8ab80a417d682D38a4784ef7887711d"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T12:00:56.196498+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:USDT/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:USDT/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "USDT/USD",
+    "address": "0xc51C67ADe4c6a37daa31eaC104417705dFC810da",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3ff055063fafea88bad37d4aaf0f30aadecc1d4ebfddf73b9c4d9291787c6453",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81000fb8c1a397881d97eeeafc",
+      "initCodeHash": "0x030e744b5cb48421e9608c8d94e49611ff6de0e8d4c52a4a2baf5dae4c19c451",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d810000000000000000000000000000000000000000000000000000000000000008555344542f555344000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:USDT/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xc51C67ADe4c6a37daa31eaC104417705dFC810da#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xc51C67ADe4c6a37daa31eaC104417705dFC810da#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xc51C67ADe4c6a37daa31eaC104417705dFC810da"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:53:34.910098+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:XOF/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:XOF/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "XOF/USD",
+    "address": "0xF48D1Fe1754a918d0b91113298B5f3fbb9025060",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x6affaec771a3632dbcf1909ae324e3f6ae481f025f42f3bd90cab6917154fa52",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100f5fc687d865d381413a3f3",
+      "initCodeHash": "0x64c3871b7da888d780ab6be47ccf7986204f6b270de034de18ebc64d264bfff8",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000001200000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d810000000000000000000000000000000000000000000000000000000000000007584f462f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:XOF/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xF48D1Fe1754a918d0b91113298B5f3fbb9025060#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xF48D1Fe1754a918d0b91113298B5f3fbb9025060#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xF48D1Fe1754a918d0b91113298B5f3fbb9025060"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T11:25:03.809421+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:ZAR/USD": {
+    "id": "monad-testnet-v2-rc0/10143/MockChainlinkAggregator:ZAR/USD",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "ZAR/USD",
+    "address": "0x55054aC67c8F1894ECef32E5d5E71a2204f42879",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xfc9570a3d6ad645d52c23343b64308111f4af641b5a582b331e34e7d96fda2d3",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81001ec08816777020d31507eb",
+      "initCodeHash": "0x328d8a36ebefa39640e84eb700dc0a3e800c16b92772dec6aa9221d664eba49b",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000075a41522f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockChainlinkAggregator:ZAR/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xc2d232211f3e22c56b87a92c5097ff11286a94439b7dd2ced5fd312a22bbf8fe",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x55054aC67c8F1894ECef32E5d5E71a2204f42879#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x55054aC67c8F1894ECef32E5d5E71a2204f42879#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x55054aC67c8F1894ECef32E5d5E71a2204f42879"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:10.967288+02:00",
+    "updatedAt": "2025-09-09T12:06:49.523996+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockERC20:USDC": {
+    "id": "monad-testnet-v2-rc0/10143/MockERC20:USDC",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockERC20",
+    "label": "USDC",
+    "address": "0xa9b7E81a312097b0920a0B11543626c9a57155B2",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xdc7225a166c7c83875bed92f8a52a68fa98467e209a68d4ac878e6bbe7af853f",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100b5be22c398e4f4f753f67d",
+      "initCodeHash": "0xfd37be1b377d45174c0d51f831fa3b2c4277b6a5142b434cf384ecbc5dbc6322",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81000000000000000000000000000000000000000000000000000000000000000f4d656e746f204d6f636b2055534443000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000045553444300000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockERC20:USDC"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockERC20.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x0370e722e22215472d450d93886fc369a01902fcb2cbeaa64dfe3d7ccca7c8c6",
+      "scriptPath": "script/deploy/DeployMockCollaterals.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xa9b7E81a312097b0920a0B11543626c9a57155B2#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xa9b7E81a312097b0920a0B11543626c9a57155B2#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xa9b7E81a312097b0920a0B11543626c9a57155B2"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:23.353149+02:00",
+    "updatedAt": "2025-09-09T12:06:09.674122+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/MockERC20:USDT": {
+    "id": "monad-testnet-v2-rc0/10143/MockERC20:USDT",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "MockERC20",
+    "label": "USDT",
+    "address": "0x272E9A32492f3c9B7c31E374f2F7c3627d746DE3",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa20407eab76c7bc1077d795f139d997bd5f67c487ad599baf6ecbb5e28464c88",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81003db0bf6926647559c307f5",
+      "initCodeHash": "0xab659070b45af3aa9f61c379127beace7e2c960dc66774f22b0f80f01d785db9",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81000000000000000000000000000000000000000000000000000000000000000f4d656e746f204d6f636b2055534454000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000045553445400000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/MockERC20:USDT"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockERC20.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x0370e722e22215472d450d93886fc369a01902fcb2cbeaa64dfe3d7ccca7c8c6",
+      "scriptPath": "script/deploy/DeployMockCollaterals.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0x272E9A32492f3c9B7c31E374f2F7c3627d746DE3",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x272E9A32492f3c9B7c31E374f2F7c3627d746DE3#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x272E9A32492f3c9B7c31E374f2F7c3627d746DE3"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:23.353149+02:00",
+    "updatedAt": "2025-09-09T11:57:45.634798+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:AUD.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:AUD.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "AUD.m",
+    "address": "0x109902563DaA6D404F9d30981D03D7070B96E1C8",
+    "type": "PROXY",
+    "transactionId": "tx-0x85a9bd58e1e610a67cfc8b3c846c26dcfd79e62b54ad0fbba6ae1d35f151aef0",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100336ae814275494f2476229",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:AUD.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x109902563DaA6D404F9d30981D03D7070B96E1C8#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x109902563DaA6D404F9d30981D03D7070B96E1C8#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x109902563DaA6D404F9d30981D03D7070B96E1C8"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:30:54.597185+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:BRL.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:BRL.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "BRL.m",
+    "address": "0xCE0da71375DBB11bD275307e735768AcF78D2843",
+    "type": "PROXY",
+    "transactionId": "tx-0x370afdd8f9b8bcf46556e6e3cd533b964e705ea4996331e08ff4822dd133a004",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100b9a8120bc2f7a850e55751",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:BRL.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xCE0da71375DBB11bD275307e735768AcF78D2843#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xCE0da71375DBB11bD275307e735768AcF78D2843#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xCE0da71375DBB11bD275307e735768AcF78D2843"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:06:29.580216+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:BiPoolManager": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:BiPoolManager",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "BiPoolManager",
+    "address": "0x98C6D2a3a39FF5a2803240F597Eb4C8CE76d36ab",
+    "type": "PROXY",
+    "transactionId": "tx-0x9a6ad34c77e56f9fc0d5b8ff0b69cd150f4ff0e83dcab3d39ff177b31bc0a884",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810076d6fa129e3a00c3bd7d9f",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:BiPoolManager"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x967E6C94e68190336a8108ebCCbcE6B363a25871",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployBiPoolManager.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x98C6D2a3a39FF5a2803240F597Eb4C8CE76d36ab#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x98C6D2a3a39FF5a2803240F597Eb4C8CE76d36ab#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x98C6D2a3a39FF5a2803240F597Eb4C8CE76d36ab"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:02:15.998595+02:00",
+    "updatedAt": "2025-09-09T11:41:51.669013+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:Broker": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:Broker",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "Broker",
+    "address": "0x388F2C53E77eF33111383a363e0b5fD976b18e74",
+    "type": "PROXY",
+    "transactionId": "tx-0x268c9eb6b46acbafbf3bef283a5d56966cfcbc17f7d6cb867f30833bf3ddc652",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100ae8fb6958271c5147e795f",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:Broker"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x3ca453Fe63d2D02FD93558A4908399CF691dc5b8",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployBroker.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x388F2C53E77eF33111383a363e0b5fD976b18e74#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x388F2C53E77eF33111383a363e0b5fD976b18e74#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x388F2C53E77eF33111383a363e0b5fD976b18e74"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:40.26941+02:00",
+    "updatedAt": "2025-09-09T11:23:53.45826+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:CAD.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:CAD.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "CAD.m",
+    "address": "0xFdb9576d43148e523F5351De41e43A307a7d2956",
+    "type": "PROXY",
+    "transactionId": "tx-0x3e382b7bc79da186473c3f42dec067bd2fbacf038114d4ad5bc2c9496d00ef88",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81004b0212e77845b97cbaa3d6",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:CAD.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xFdb9576d43148e523F5351De41e43A307a7d2956#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xFdb9576d43148e523F5351De41e43A307a7d2956#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xFdb9576d43148e523F5351De41e43A307a7d2956"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:08:36.353282+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:CHF.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:CHF.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "CHF.m",
+    "address": "0xaFd756571B850B833Ec0A1A66A69Db30AF95Ee94",
+    "type": "PROXY",
+    "transactionId": "tx-0xde036d1c36444e76b32219d97d67d8a4952d0fdb31b0a4998df63109dc1ea2b4",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100c47a275aa5c6a5c81663f1",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:CHF.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xaFd756571B850B833Ec0A1A66A69Db30AF95Ee94#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xaFd756571B850B833Ec0A1A66A69Db30AF95Ee94#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xaFd756571B850B833Ec0A1A66A69Db30AF95Ee94"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:53:55.565131+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:COP.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:COP.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "COP.m",
+    "address": "0xfBD6322586AE7c8F0776918E70b8Eb169737ba57",
+    "type": "PROXY",
+    "transactionId": "tx-0x6a2db6e74d24665e60467fc53b2ba50e48fb45db24e55da97edb397d7007b809",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810054d49fb8614b72bb025dfe",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:COP.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xfBD6322586AE7c8F0776918E70b8Eb169737ba57#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xfBD6322586AE7c8F0776918E70b8Eb169737ba57#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xfBD6322586AE7c8F0776918E70b8Eb169737ba57"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:03:16.864466+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:EUR.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:EUR.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "EUR.m",
+    "address": "0xb5a31A69b58b3B3A61C8704B489F53d6b79016c4",
+    "type": "PROXY",
+    "transactionId": "tx-0x540e146f1c037d49bd3fb160f2eabcec67f92e4ac7cd93182d1aaa1d8b9dfc9c",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81007799d70bfcee7a7afd31bc",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:EUR.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xb5a31A69b58b3B3A61C8704B489F53d6b79016c4#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xb5a31A69b58b3B3A61C8704B489F53d6b79016c4#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xb5a31A69b58b3B3A61C8704B489F53d6b79016c4"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:05:59.386968+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:GBP.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:GBP.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "GBP.m",
+    "address": "0xAf95A360EBaE29Ba1F9dC8B833b8a985DF168a83",
+    "type": "PROXY",
+    "transactionId": "tx-0x197a5e5f446fab19a2f6d766cfce4fb3e76475d29dac5c268bfdef5ca14ad872",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100878c0ff9f6bc54535f15bf",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:GBP.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xAf95A360EBaE29Ba1F9dC8B833b8a985DF168a83#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xAf95A360EBaE29Ba1F9dC8B833b8a985DF168a83#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xAf95A360EBaE29Ba1F9dC8B833b8a985DF168a83"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:00:36.421324+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:GHS.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:GHS.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "GHS.m",
+    "address": "0xE3bdea6Cd6ed7aAFd5aCb1E43D8777714ba31acA",
+    "type": "PROXY",
+    "transactionId": "tx-0x4a506633e08f2c16a6f3615d30cba7178843183c4056ecf02ff821147283b37a",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100ed5eda24234f6bfc495eaa",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:GHS.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0xE3bdea6Cd6ed7aAFd5aCb1E43D8777714ba31acA",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xE3bdea6Cd6ed7aAFd5aCb1E43D8777714ba31acA#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xE3bdea6Cd6ed7aAFd5aCb1E43D8777714ba31acA"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:26:19.798921+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:JPY.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:JPY.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "JPY.m",
+    "address": "0xDdcaf78d5bB0AfE82EC022B7e58758EcC1C6f641",
+    "type": "PROXY",
+    "transactionId": "tx-0xafc4199db1b90ce3bbb6cfe59c96c3fea116054fb86f7156a963c2d11d40f245",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81006120fac03a25d944d68a42",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:JPY.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xDdcaf78d5bB0AfE82EC022B7e58758EcC1C6f641#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xDdcaf78d5bB0AfE82EC022B7e58758EcC1C6f641#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xDdcaf78d5bB0AfE82EC022B7e58758EcC1C6f641"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:39:42.534791+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:KES.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:KES.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "KES.m",
+    "address": "0x66BFF13AfF22c31dF7cd53707e645C9736A6637a",
+    "type": "PROXY",
+    "transactionId": "tx-0xa128979c75d848428d66030181a58eba3f50ece21f45f537fbc37a8ee6118368",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81006077ff247ae1f9c36064de",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:KES.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x66BFF13AfF22c31dF7cd53707e645C9736A6637a#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x66BFF13AfF22c31dF7cd53707e645C9736A6637a#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x66BFF13AfF22c31dF7cd53707e645C9736A6637a"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:55:14.371393+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:NGN.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:NGN.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "NGN.m",
+    "address": "0x823756e447E4db92fd3a52bc5E210c4701E6CebA",
+    "type": "PROXY",
+    "transactionId": "tx-0x0fccebe2630bcb1a1a2c5f54c8bb16894bf74109e3d645048fd336c31547d881",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810032f9acc733aeeb7977d0a0",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:NGN.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0x823756e447E4db92fd3a52bc5E210c4701E6CebA",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x823756e447E4db92fd3a52bc5E210c4701E6CebA#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x823756e447E4db92fd3a52bc5E210c4701E6CebA"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:07:29.754694+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:PHP.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:PHP.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "PHP.m",
+    "address": "0xcDDb469d22f0A15bE11d0acDA962E2CaACd52706",
+    "type": "PROXY",
+    "transactionId": "tx-0xea6252342c449671b6fdeace7f49647f5447db95fc361a68dd416941e36625c4",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810068390c72b7402eb0bfdb74",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:PHP.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xcDDb469d22f0A15bE11d0acDA962E2CaACd52706#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xcDDb469d22f0A15bE11d0acDA962E2CaACd52706#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xcDDb469d22f0A15bE11d0acDA962E2CaACd52706"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:56:26.196674+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:Reserve": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:Reserve",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "Reserve",
+    "address": "0xc865354934161882DDB14470298167AC93A46378",
+    "type": "PROXY",
+    "transactionId": "tx-0x12a3e841e38dc5da0c432a70f9f13579316b6e279939acd5df76df161dd87903",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100e465eb2eb7e4b2d334838f",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:Reserve"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x3aA897a93C38c02154e109BeEDea62d644b288Be",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployReserve.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xc865354934161882DDB14470298167AC93A46378#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xc865354934161882DDB14470298167AC93A46378#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xc865354934161882DDB14470298167AC93A46378"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:55:24.379195+02:00",
+    "updatedAt": "2025-09-09T12:05:14.893654+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:SortedOracles": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:SortedOracles",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "SortedOracles",
+    "address": "0x6F505ce256AD2bDCC598A52107F3651deeF314b8",
+    "type": "PROXY",
+    "transactionId": "tx-0xebd968a9a328d281f9577da083033cae4eb117934edc0b974ab975fdd02411e6",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810022183717c9056204cfe1df",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:SortedOracles"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xF1727dea1840B2F106BF75555677771d63D06ba9",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeploySortedOracles.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x6F505ce256AD2bDCC598A52107F3651deeF314b8#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x6F505ce256AD2bDCC598A52107F3651deeF314b8#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x6F505ce256AD2bDCC598A52107F3651deeF314b8"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:55:37.699347+02:00",
+    "updatedAt": "2025-09-09T11:54:15.420766+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:USD.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:USD.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "USD.m",
+    "address": "0x9E174bc09cEdaDc7a5e39Ba1142b6d95365182CB",
+    "type": "PROXY",
+    "transactionId": "tx-0x43b6928bca39ffa6edc04e36a5abc344da12bc04f2cc7221bfda68021208219d",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100f2b63b087028884c9e42c8",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:USD.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0x9E174bc09cEdaDc7a5e39Ba1142b6d95365182CB#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0x9E174bc09cEdaDc7a5e39Ba1142b6d95365182CB#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x9E174bc09cEdaDc7a5e39Ba1142b6d95365182CB"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:54:54.744857+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:XOF.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:XOF.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "XOF.m",
+    "address": "0xecdb02E9ce57d3B7A523bB7bf539e9E5Ffac3329",
+    "type": "PROXY",
+    "transactionId": "tx-0xe419ab67dc95b879612df7039e4795de845cdece8a3374402f119c1057da81c7",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100c06f8223aa3d63f2bb3a57",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:XOF.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xecdb02E9ce57d3B7A523bB7bf539e9E5Ffac3329#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xecdb02E9ce57d3B7A523bB7bf539e9E5Ffac3329#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xecdb02E9ce57d3B7A523bB7bf539e9E5Ffac3329"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:09:16.048203+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Proxy:ZAR.m": {
+    "id": "monad-testnet-v2-rc0/10143/Proxy:ZAR.m",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Proxy",
+    "label": "ZAR.m",
+    "address": "0xcE1b285691b40F54762d69c40b24Ec4c95add3fc",
+    "type": "PROXY",
+    "transactionId": "tx-0x019a573cce0f76e183f272b1b4c398d080e70dbfafc71c31d5edb3b136cb66b3",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81004fb8e94de52ef1c755daef",
+      "initCodeHash": "0x6ed4430b0b44c9d705b621a0a0d0a871a662a66940492261d3927b9ee1ee6188",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/src/Proxy.sol:Proxy:ZAR.m"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+      "history": []
+    },
+    "artifact": {
+      "path": "src/Proxy.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xc79fde0a03fdea865e78dae57c37d46492332da479dda446d107e1fbb3071d7a",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xcE1b285691b40F54762d69c40b24Ec4c95add3fc#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xcE1b285691b40F54762d69c40b24Ec4c95add3fc#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xcE1b285691b40F54762d69c40b24Ec4c95add3fc"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T12:02:19.170588+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/ProxyAdmin": {
+    "id": "monad-testnet-v2-rc0/10143/ProxyAdmin",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "ProxyAdmin",
+    "label": "",
+    "address": "0xFccdE6F5B87637ADC26BD89144E8Af7C0Fa6b978",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x8780140ef6ae7dd890903ae3d5b836c806839e296c6da8cde94d0a01757ef67f",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100be8de07c49f30327aa6104",
+      "initCodeHash": "0x2b44f2c45f885540fb4e63e2212b2b05b6ca444768196eb0fb44e15b6452090e",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81",
+      "entropy": "monad-testnet-v2-rc0/ProxyAdmin"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x6a5afc04f0a6f479bdd69949bb647c6f3a3399437247ab6c251f2dab9b852134",
+      "scriptPath": "script/deploy/DeployProxyAdmin.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0xFccdE6F5B87637ADC26BD89144E8Af7C0Fa6b978",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xFccdE6F5B87637ADC26BD89144E8Af7C0Fa6b978#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xFccdE6F5B87637ADC26BD89144E8Af7C0Fa6b978"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:45:33.924125+02:00",
+    "updatedAt": "2025-09-09T11:52:18.043708+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/Reserve:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/Reserve:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "Reserve",
+    "label": "v2.6.5",
+    "address": "0x3aA897a93C38c02154e109BeEDea62d644b288Be",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xde4bfc091bbf6ea12a943fcb4d7a0606232da66e6a374ab488da0452056a7b25",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100eec9b28edbc335ad2ff76f",
+      "initCodeHash": "0xbf6a8ffe80848805c84a49c3aa3def68a4a22bba5740f97d52373b84e5796f8f",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/Reserve:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/swap/Reserve.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x1773bbd9a04bd2488c85ce7902a9efa6d101c797bce11303394570b9cd11d05b",
+      "scriptPath": "script/deploy/DeployReserve.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:55:24.379195+02:00",
+    "updatedAt": "2025-09-08T11:55:24.391331+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/SortedOracles:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/SortedOracles:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "SortedOracles",
+    "label": "v2.6.5",
+    "address": "0xF1727dea1840B2F106BF75555677771d63D06ba9",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xbe31513a3f9da5309bb336f41c0bf93e36f42b84650ba93c19ea80890ab9c6d0",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100489036b9f8bd33d959dda1",
+      "initCodeHash": "0x43a3916ed25145feb98705f579f44dfb078ed4927a9dd0685582ca1caca94979",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/SortedOracles:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/SortedOracles.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xa9da073b7da9edab75fcc5513c3058651a183ac1fc7e58317732e4e25719f73e",
+      "scriptPath": "script/deploy/DeploySortedOracles.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://sourcify.dev/#/lookup/0xF1727dea1840B2F106BF75555677771d63D06ba9",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xF1727dea1840B2F106BF75555677771d63D06ba9#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xF1727dea1840B2F106BF75555677771d63D06ba9"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:55:37.699347+02:00",
+    "updatedAt": "2025-09-09T12:08:31.716447+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/StableTokenV2:v2.6.5": {
+    "id": "monad-testnet-v2-rc0/10143/StableTokenV2:v2.6.5",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "StableTokenV2",
+    "label": "v2.6.5",
+    "address": "0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa40c485e9165d6c3fd5228e6e4df6f8c8dbd2ab905e767e6f60a8d877e8c97c0",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100fdb34c4edd68a3fae8dbb2",
+      "initCodeHash": "0xd5859fb1fbbf60488ca9d7239f8bb7e3a2a2deddf543cb79f5ef9537b4127fb5",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/StableTokenV2:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/tokens/StableTokenV2.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x0775627992e25ae60141f3df52b3ba8a2a53e0bc22c28373525385ec44367018",
+      "scriptPath": "script/deploy/DeployTokens.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xc9762F604F79A6Dd8D6A20C45A362a11E871aA24"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T14:03:49.916794+02:00",
+    "updatedAt": "2025-09-09T11:51:13.352837+02:00"
+  },
+  "monad-testnet-v2-rc0/10143/TransparentUpgradeableProxy:ChainlinkRelayerFactory": {
+    "id": "monad-testnet-v2-rc0/10143/TransparentUpgradeableProxy:ChainlinkRelayerFactory",
+    "namespace": "monad-testnet-v2-rc0",
+    "chainId": 10143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "ChainlinkRelayerFactory",
+    "address": "0xd45BFB48f69C7d83e181bA22713f726506a24DA2",
+    "type": "PROXY",
+    "transactionId": "tx-0x7aa55cca5a709c1ae6f8ccc832ceddad2586b817382055206f4ef33233d4968e",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100be2576225f62e9bf56441a",
+      "initCodeHash": "0x9923eb667799f77d0e6b8d8fdf2b85630799c55eea8ae2f7effc45e155791d47",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000077472881bdeff338ab6afdb9d5ff396bbcd14449000000000000000000000000fccde6f5b87637adc26bd89144e8af7c0fa6b97800000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000044485cc9550000000000000000000000006f505ce256ad2bdcc598a52107f3651deef314b800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-testnet-v2-rc0/TransparentUpgradeableProxy:ChainlinkRelayerFactory"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x77472881BdeFF338AB6AfDb9d5Ff396bBcD14449",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xf49d42bcf7e0fb977d5492364d284afc0ec621a5dd6aa72e30662728157dfadd",
+      "scriptPath": "script/deploy/DeployChainlinkRelayerFactory.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.com/api?chain=10143/address/0xd45BFB48f69C7d83e181bA22713f726506a24DA2#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.com/api?chain=10143/address/0xd45BFB48f69C7d83e181bA22713f726506a24DA2#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xd45BFB48f69C7d83e181bA22713f726506a24DA2"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2025-09-08T11:55:43.984987+02:00",
+    "updatedAt": "2025-09-09T12:01:59.497684+02:00"
+  },
   "test/44787/ProxyAdmin": {
     "id": "test/44787/ProxyAdmin",
     "namespace": "test",
@@ -5371,6 +8325,37 @@
     "createdAt": "2025-09-04T16:41:22.840944+02:00",
     "updatedAt": "2025-09-04T16:41:22.860084+02:00"
   },
+  "testnet-v2-rc2/11142220/ChainlinkRelayerV1:CELO/ETH": {
+    "id": "testnet-v2-rc2/11142220/ChainlinkRelayerV1:CELO/ETH",
+    "namespace": "testnet-v2-rc2",
+    "chainId": 11142220,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "CELO/ETH",
+    "address": "0x2785Cc9e103889113CD1e92F1b3E19768a87FddF",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x586a661209d2263f5123557f123c297f0f9ca924a3e1a911500f51a6b898f300",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xc0386b87eed7987e427ca0090908525110398b08558cc5083f9291ba1efe2577",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000005b84f6e68ae010c365c4e53e0d3a8e602f8c56860000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000025800000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000000843454c4f2f455448000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000053637ee07fa3c04eb12a2aaa632c06a657178ebc0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000fd4bef0c73635d0bbfff57ed1e987374bee2252d0000000000000000000000000000000000000000000000000000000000000001"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x33b81eed72be0cb5ddbdd1c26ece09ef10902d89b926c782f9b2250eed14a440",
+      "scriptPath": "script/deploy/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-04T17:49:38.731837+02:00",
+    "updatedAt": "2025-09-04T17:49:38.745089+02:00"
+  },
   "testnet-v2-rc2/11142220/ChainlinkRelayerV1:CELO/EUR": {
     "id": "testnet-v2-rc2/11142220/ChainlinkRelayerV1:CELO/EUR",
     "namespace": "testnet-v2-rc2",
@@ -6402,6 +9387,38 @@
     "tags": null,
     "createdAt": "2025-09-04T16:04:34.414614+02:00",
     "updatedAt": "2025-09-04T16:04:34.430881+02:00"
+  },
+  "testnet-v2-rc2/11142220/MockChainlinkAggregator:ETH/USD": {
+    "id": "testnet-v2-rc2/11142220/MockChainlinkAggregator:ETH/USD",
+    "namespace": "testnet-v2-rc2",
+    "chainId": 11142220,
+    "contractName": "MockChainlinkAggregator",
+    "label": "ETH/USD",
+    "address": "0xFd4bEF0c73635d0bBFff57ED1E987374beE2252D",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xa61ffb92b375fd3d1d03b180be19e2fd6503227a567fe1b686f661f22fda5db8",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d81008c8d750e08ecb349b06310",
+      "initCodeHash": "0x5be7ef4aa8757a28ae78a95da86e741b67d51ba2a5d879f3775aff0c16ce4f2a",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000000000000000000000000800000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000000000074554482f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc2/MockChainlinkAggregator:ETH/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xf0ffaab7ea2d131eda4b948ef43d29086527d47b3abb25abcb3afc78e7c25c76",
+      "scriptPath": "script/deploy/DeployMockAggregators.s.sol",
+      "gitCommit": "cf2176359220fc4b7f2f664f884654c66a4903c2"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-04T17:42:08.927299+02:00",
+    "updatedAt": "2025-09-04T17:42:08.939846+02:00"
   },
   "testnet-v2-rc2/11142220/MockChainlinkAggregator:EUR/USD": {
     "id": "testnet-v2-rc2/11142220/MockChainlinkAggregator:EUR/USD",

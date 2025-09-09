@@ -15,9 +15,11 @@ celo = "https://forno.celo.org"
 celo_alfajores = "https://alfajores-forno.celo-testnet.org"
 celo_sepolia = "https://forno.celo-sepolia.celo-testnet.org"
 base_sepolia = "${TENDERLY_BASE_SEPOLIA_RPC_URL}"
+monad_testnet = "https://rpc.ankr.com/monad_testnet"
 
 [etherscan]
 vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
+monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.com/api?chain=10143"}
 
 [profile.default.treb.senders.deployer]
 type = "private_key"

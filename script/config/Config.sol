@@ -7,6 +7,7 @@ import {IMentoConfig} from "./IMentoConfig.sol";
 
 import "./MentoConfig_vbase.sol";
 import "./MentoConfig_celo_sepolia.sol";
+import "./MentoConfig_monad_testnet.sol";
 
 library Config {
     address private constant VM_ADDRESS =

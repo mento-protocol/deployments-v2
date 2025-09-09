@@ -50,6 +50,14 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
         }
 
         for (uint256 i = 0; i < relayerConfigs.length; i++) {
+            address existingRelayer = IChainlinkRelayerFactory(
+                chainlinkRelayerFactoryProxy
+            ).getRelayer(relayerConfigs[i].rateFeedId);
+
+            if (existingRelayer != address(0)) {
+                continue;
+            }
+
             // Deploy relayer through factory
             address relayer = factory.deployRelayer(
                 relayerConfigs[i].rateFeedId,

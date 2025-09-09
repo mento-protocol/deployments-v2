@@ -67,6 +67,12 @@ contract MockChainlinkAggregator is Ownable {
             uint80 answeredInRound
         )
     {
-        return (uint80(0), savedAnswer, uint256(0), lastUpdated, uint80(0));
+        return (
+            uint80(0),
+            savedAnswer,
+            uint256(0),
+            block.timestamp - 5,
+            uint80(0)
+        );
     }
 }

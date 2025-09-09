@@ -6,7 +6,7 @@ import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
-contract MentoConfig_celo_sepolia is MentoConfig {
+contract MentoConfig_monad_testnet is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
@@ -24,27 +24,24 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     /// @dev On testnets we can use the _addMockCollateral to make it deploy mock
     /// collateral tokens.
     function _initTokens() internal {
-        _addStableToken("USD", "cUSD", "Celo Dollar");
-        _addStableToken("EUR", "cEUR", "Celo Euro");
-        _addStableToken("BRL", "cREAL", "Celo Brazilian Real");
-        _addStableToken("XOF", "eXOF", "ECO CFA");
-        _addStableToken("KES", "cKES", "Celo Kenyan Shilling");
-        _addStableToken("PHP", "PUSO", "PUSO");
-        _addStableToken("COP", "cCOP", "Celo Colombian Peso");
-        _addStableToken("GHS", "cGHS", "Celo Ghanaian Cedi");
-        _addStableToken("GBP", "cGBP", "Celo British Pound");
-        _addStableToken("ZAR", "cZAR", "Celo South African Rand");
-        _addStableToken("CAD", "cCAD", "Celo Canadian Dollar");
-        _addStableToken("AUD", "cAUD", "Celo Australian Dollar");
-        _addStableToken("CHF", "cCHF", "Celo Swiss Franc");
-        _addStableToken("JPY", "cJPY", "Celo Japanese Yen");
-        _addStableToken("NGN", "cNGN", "Celo Nigerian Naira");
+        _addStableToken("USD", "USD.m", "Mento Dollar");
+        _addStableToken("EUR", "EUR.m", "Mento Euro");
+        _addStableToken("BRL", "BRL.m", "Mento Brazilian Real");
+        _addStableToken("XOF", "XOF.m", "Mento West African CFA");
+        _addStableToken("KES", "KES.m", "Mento Kenyan Shilling");
+        _addStableToken("PHP", "PHP.m", "Mento Philippine Peso");
+        _addStableToken("COP", "COP.m", "Mento Colombian Peso");
+        _addStableToken("GHS", "GHS.m", "Mento Ghanaian Cedi");
+        _addStableToken("GBP", "GBP.m", "Mento British Pound");
+        _addStableToken("ZAR", "ZAR.m", "Mento South African Rand");
+        _addStableToken("CAD", "CAD.m", "Mento Canadian Dollar");
+        _addStableToken("AUD", "AUD.m", "Mento Australian Dollar");
+        _addStableToken("CHF", "CHF.m", "Mento Swiss Franc");
+        _addStableToken("JPY", "JPY.m", "Mento Japanese Yen");
+        _addStableToken("NGN", "NGN.m", "Mento Nigerian Naira");
 
-        _addMockCollateral("USDC");
-        _addMockCollateral("USDT");
-        _addMockCollateral("axlUSDC");
-        _addMockCollateral("axlEUROC");
-        _addCollateral("CELO", 0x471EcE3750Da237f93B8E339c536989b8978a438);
+        _addCollateral("USDC", 0xf817257fed379853cDe0fa4F97AB987181B1E5Ea);
+        _addCollateral("USDT", 0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D);
     }
 
     /// ===================================================================
@@ -136,41 +133,6 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             invert1: true
         });
 
-        _addRateFeed("CELO/USD");
-        _addToBreaker({
-            breakerId: medianBreakerId,
-            rateFeed: "CELO/USD",
-            cooldown: 30 minutes,
-            threshold: 0.03 * 1e24,
-            smoothingFactor: 1,
-            referenceValue: 0
-        });
-        _addMockAggregator({
-            description: "CELO/USD",
-            source: 0x0568fD19986748cEfF3301e55c0eb1E729E0Ab7e
-        });
-        _addChainlinkRelayer({
-            rateFeed: "CELO/USD",
-            description: "CELO/USD",
-            aggregator0: _predict("MockChainlinkAggregator", "CELO/USD"),
-            invert0: false
-        });
-
-        _addRateFeed("CELO/ETH");
-        _addMockAggregator({
-            description: "ETH/USD",
-            source: 0x1FcD30A73D67639c1cD89ff5746E7585731c083B
-        });
-        _addChainlinkRelayer({
-            rateFeed: "CELO/ETH",
-            description: "CELO/ETH",
-            maxTimestampSpread: 10 minutes,
-            aggregator0: _predict("MockChainlinkAggregator", "CELO/USD"),
-            invert0: false,
-            aggregator1: _predict("MockChainlinkAggregator", "ETH/USD"),
-            invert1: true
-        });
-
         _configureDefaultFxRateFeed({
             currency: "EUR",
             source: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd
@@ -252,18 +214,6 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             aggregator0: _predict("MockChainlinkAggregator", rateFeed),
             invert0: false
         });
-
-        string memory celoRateFeed = string.concat("CELO/", currency);
-        _addRateFeed(celoRateFeed);
-        _addChainlinkRelayer({
-            rateFeed: celoRateFeed,
-            description: celoRateFeed,
-            maxTimestampSpread: 1 days,
-            aggregator0: _predict("MockChainlinkAggregator", "CELO/USD"),
-            invert0: false,
-            aggregator1: _predict("MockChainlinkAggregator", rateFeed),
-            invert1: true
-        });
     }
 
     /// ===================================================================
@@ -280,17 +230,11 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             assetAllocationWeights: uints(1e24),
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
-            collateralAssetDailySpendingRatios: uints(
-                1e24,
-                1e24,
-                1e24,
-                1e24,
-                1e24
-            )
+            collateralAssetDailySpendingRatios: uints(1e24, 1e24)
         });
 
         _addExchange({
-            asset0: "cUSD",
+            asset0: "USD.m",
             asset1: "USDC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: 0,
@@ -311,28 +255,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addExchange({
-            asset0: "cUSD",
-            asset1: "axlUSDC",
-            pricingModule: "ConstantSumPricingModule:v2.6.5",
-            spread: 0,
-            rateFeed: "USDC/USD",
-            resetFrequency: 6 minutes,
-            stablePoolResetSize: 12_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
-                asset0: ITradingLimits.Config({
-                    timestep0: 5 minutes, // 5 minutes
-                    limit0: 2_500_000,
-                    timestep1: 1 days, // 1 day
-                    limit1: 5_000_000,
-                    limitGlobal: 0,
-                    flags: 1 | 2
-                }),
-                asset1: emptyTradingLimits()
-            })
-        });
-
-        _addExchange({
-            asset0: "cUSD",
+            asset0: "USD.m",
             asset1: "USDT",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: 0,
@@ -349,55 +272,6 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
-        });
-
-        _addExchange({
-            asset0: "cUSD",
-            asset1: "CELO",
-            pricingModule: "ConstantProductPricingModule:v2.6.5",
-            spread: 0.25 * 1e24,
-            rateFeed: "CELO/USD",
-            resetFrequency: 6 minutes,
-            stablePoolResetSize: 3_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
-                asset0: ITradingLimits.Config({
-                    timestep0: 5 minutes,
-                    limit0: 100_000,
-                    timestep1: 1 days,
-                    limit1: 500_000,
-                    limitGlobal: 0,
-                    flags: 1 | 2
-                }),
-                asset1: emptyTradingLimits()
-            })
-        });
-
-        _addExchange({
-            asset0: "cEUR",
-            asset1: "axlEUROC",
-            pricingModule: "ConstantSumPricingModule:v2.6.5",
-            spread: 0.50 * 1e24,
-            rateFeed: "EURC/EUR",
-            resetFrequency: 6 minutes,
-            stablePoolResetSize: 12_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
-                asset0: ITradingLimits.Config({
-                    timestep0: 5 minutes,
-                    limit0: 100_000,
-                    timestep1: 1 days,
-                    limit1: 500_000,
-                    limitGlobal: 0,
-                    flags: 1 | 2
-                }),
-                asset1: ITradingLimits.Config({
-                    timestep0: 5 minutes,
-                    limit0: 100_000,
-                    timestep1: 1 days,
-                    limit1: 500_000,
-                    limitGlobal: 0,
-                    flags: 1 | 2
-                })
             })
         });
 
@@ -486,8 +360,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             string.concat("Currency not recoreded: ", currency)
         );
         _addExchange({
-            asset0: "cUSD",
-            asset1: _symbolForCurrency[currency],
+            asset0: "USD.m",
+            asset1: asset1Symbol,
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: spread,
             rateFeed: string.concat(currency, "/USD"),
