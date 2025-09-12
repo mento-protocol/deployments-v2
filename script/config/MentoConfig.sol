@@ -30,15 +30,16 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     address public mockAggregatorReporter;
 
     string[] internal _mockCollateralAssets;
-    address[] internal _rateFeedIds;
+    RateFeed[] internal _rateFeeds;
     address[] internal _collateralAssets;
     address[] internal _chainlinkRelayerRateFeedIds;
     MockAggregatorConfig[] internal _mockAggregatorConfigs;
 
+    mapping(address rateFeedId => address[] dependencies) _rateFeedDependencies;
+    mapping(address rateFeedId => bool) internal _isRateFeed;
     mapping(address rateFeedId => ChainlinkRelayerConfig)
         internal _chainlinkRelayers;
     mapping(string symbol => address) internal _collateral;
-    mapping(address rateFeedId => bool) internal _isRateFeed;
     mapping(string symbol => bool) internal _isStableToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
     bytes32[] _breakerIds;
@@ -135,8 +136,25 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _exchanges;
     }
 
-    function getRateFeedIds() external view returns (address[] memory) {
-        return _rateFeedIds;
+    function getRateFeeds() external view returns (RateFeed[] memory) {
+        return _rateFeeds;
+    }
+
+    function getRateFeedIds()
+        external
+        view
+        returns (address[] memory rateFeedIds)
+    {
+        rateFeedIds = new address[](_rateFeeds.length);
+        for (uint i = 0; i < _rateFeeds.length; i++) {
+            rateFeedIds[i] = _rateFeeds[i].rateFeedId;
+        }
+    }
+
+    function getRateFeedDependencies(
+        address rateFeed
+    ) external view returns (address[] memory) {
+        return _rateFeedDependencies[rateFeed];
     }
 
     function getMockCollaterals() external view returns (string[] memory) {
@@ -234,7 +252,65 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function _addRateFeed(string memory rateFeed) internal {
         _isRateFeed[getRateFeedIdFromString(rateFeed)] = true;
-        _rateFeedIds.push(getRateFeedIdFromString(rateFeed));
+        _rateFeeds.push(
+            RateFeed({
+                rateFeed: rateFeed,
+                rateFeedId: getRateFeedIdFromString(rateFeed)
+            })
+        );
+    }
+
+    function _addRateFeedDependency(
+        address rateFeedId,
+        address dependency
+    ) internal {
+        _rateFeedDependencies[rateFeedId].push(dependency);
+    }
+
+    function _addRateFeedDependency(
+        address rateFeedId,
+        string memory dependency
+    ) internal {
+        address depId = getRateFeedIdFromString(dependency);
+        require(
+            _isRateFeed[depId],
+            string.concat(dependency, " is not registered as a rate feed.")
+        );
+
+        _addRateFeedDependency(rateFeedId, depId);
+
+        _rateFeedDependencies[rateFeedId].push(depId);
+    }
+
+    function _addRateFeedDependency(
+        string memory rateFeed,
+        string memory dependency
+    ) internal {
+        address rateFeedId = getRateFeedIdFromString(rateFeed);
+        address depId = getRateFeedIdFromString(dependency);
+        require(
+            _isRateFeed[rateFeedId],
+            string.concat(rateFeed, " is not registered as a rate feed.")
+        );
+        require(
+            _isRateFeed[depId],
+            string.concat(dependency, " is not registered as a rate feed.")
+        );
+
+        _addRateFeedDependency(rateFeedId, depId);
+    }
+
+    function _addRateFeed(
+        string memory rateFeed,
+        string[] memory dependencies
+    ) internal {
+        address rateFeedId = getRateFeedIdFromString(rateFeed);
+        _isRateFeed[rateFeedId] = true;
+        _rateFeeds.push(RateFeed({rateFeed: rateFeed, rateFeedId: rateFeedId}));
+
+        for (uint i = 0; i < dependencies.length; i++) {
+            _addRateFeedDependency(rateFeed, dependencies[i]);
+        }
     }
 
     function _addChainlinkRelayer(

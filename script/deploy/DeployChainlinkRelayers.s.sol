@@ -107,7 +107,7 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
 
             // Add relayer as oracle for this rate feed
             sortedOracles.addOracle(relayerConfigs[i].rateFeedId, relayer);
-            IChainlinkRelayer(deployer.harness(relayer)).relay();
+            // IChainlinkRelayer(deployer.harness(relayer)).relay();
         }
 
         console.log("Configured", relayerConfigs.length, "Chainlink relayers");

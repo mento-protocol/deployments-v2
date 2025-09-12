@@ -12,9 +12,10 @@ import {IMedianDeltaBreaker} from "lib/mento-core/contracts/interfaces/IMedianDe
 import {IValueDeltaBreaker} from "lib/mento-core/contracts/interfaces/IValueDeltaBreaker.sol";
 
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {ConfigHelper} from "../helpers/ConfigHelper.sol";
 import {Config, IMentoConfig, BreakerType} from "../config/Config.sol";
 
-contract DeployBreakerBox is TrebScript, ProxyHelper {
+contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -22,12 +23,9 @@ contract DeployBreakerBox is TrebScript, ProxyHelper {
     address breakerBoxAddy;
     address sortedOraclesProxy;
 
-    IMentoConfig config;
-
     /// @custom:senders deployer
     function run() public broadcast {
         // Get configuration
-        config = Config.get();
         sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
 
         Senders.Sender storage deployer = sender("deployer");
@@ -44,6 +42,14 @@ contract DeployBreakerBox is TrebScript, ProxyHelper {
         ISortedOracles(deployer.harness(sortedOraclesProxy)).setBreakerBox(
             IBreakerBox(breakerBoxAddy)
         );
+
+        address[] memory rateFeeds = config.getRateFeedIds();
+        for (uint i = 0; i < rateFeeds.length; i++) {
+            address[] memory deps = config.getRateFeedDependencies(rateFeeds[i]);
+            if (deps.length > 0) {
+                breakerBox.setRateFeedDependencies(rateFeeds[i], deps);
+            }
+        }
     }
 
     function deployBreakers(

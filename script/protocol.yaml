@@ -56,6 +56,10 @@ components:
     deps:
       - MockChainlinkAggregators
       - ChainlinkRelayerFactory
+  Relay:
+    script: Relay.s.sol
+    deps:
+      - ChainlinkRelayers
   CreateExchangePools:
     script: CreateExchangePools
     deps:

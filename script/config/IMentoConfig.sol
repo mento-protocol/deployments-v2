@@ -44,6 +44,11 @@ interface IMentoConfig {
         ITradingLimits.Config asset1;
     }
 
+    struct RateFeed {
+        string rateFeed;
+        address rateFeedId;
+    }
+
     struct LockingConfig {
         uint256 startingPointWeek;
         uint256 minCliffPeriod;
@@ -89,6 +94,10 @@ interface IMentoConfig {
     function getTokenConfigs() external view returns (TokenConfig[] memory);
 
     function getRateFeedIds() external view returns (address[] memory);
+
+    function getRateFeeds() external view returns (RateFeed[] memory);
+
+    function getRateFeedDependencies(address) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
 

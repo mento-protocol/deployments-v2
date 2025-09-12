@@ -13,7 +13,7 @@ vcelo = "${TENDERLY_VCELO_RPC_URL}"
 vcelo_root = "${TENDERLY_VCELO_ROOT_RPC_URL}"
 celo = "https://forno.celo.org"
 celo_alfajores = "https://alfajores-forno.celo-testnet.org"
-celo_sepolia = "https://forno.celo-sepolia.celo-testnet.org"
+celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
 base_sepolia = "${TENDERLY_BASE_SEPOLIA_RPC_URL}"
 monad_testnet = "https://rpc.ankr.com/monad_testnet"
 

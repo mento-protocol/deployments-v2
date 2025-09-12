@@ -46,22 +46,25 @@ library Config {
                 vm.envString("NETWORK")
             );
         }
-        address configContract = vm.deployCode(artifactName);
-        require(
-            configContract != address(0),
-            "Config contract deployment failed"
-        );
 
-        // Cache the deployed config
-        assembly {
-            sstore(slot, configContract)
+        try vm.deployCode(artifactName) returns (address configContract) {
+            require(
+                configContract != address(0),
+                "Config contract deployment failed"
+            );
+            // Cache the deployed config
+            assembly {
+                sstore(slot, configContract)
+            }
+
+            console.log(
+                string.concat("Deployed ", artifactName, " at:"),
+                configContract
+            );
+            return IMentoConfig(configContract);
+        } catch {
+            return IMentoConfig(address(0));
         }
-
-        console.log(
-            string.concat("Deployed ", artifactName, " at:"),
-            configContract
-        );
-        return IMentoConfig(configContract);
     }
 
     /**
