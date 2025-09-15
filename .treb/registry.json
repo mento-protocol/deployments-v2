@@ -432,6 +432,7 @@
       "ChainlinkRelayerV1:ZARUSD": "0x757654C3B851110EEF9304e2297Bd592173Af1e6",
       "ConstantProductPricingModule:v2.6.5": "0x2584a5835e3aE7E901e6462E1de06920c2C68028",
       "ConstantSumPricingModule:v2.6.5": "0x3b199d9EbEbe509bb711BfFb455c2d79102A9602",
+      "MedianDeltaBreaker:v2.6.5": "0xd29B4e743F7B84D63fBF9149B6D983DF2eF5C952",
       "MentoRouter:v1.0.0": "0x8e4Fb12D86D5DF911086a9153e79CA27e0c96156",
       "MockChainlinkAggregator:AUDUSD": "0x94d96BAef28145235fA66758b0B121Bed0ee1361",
       "MockChainlinkAggregator:BRLUSD": "0xF7Ab72Be610821Eccee45f78C490c71356eCab27",
@@ -479,7 +480,8 @@
       "Reserve:v2.6.5": "0xC09D3009De5849E6673c3150c10F0eDD9eb86158",
       "SortedOracles:v2.6.5": "0x0514884378460D86528658543bc8093D8178D7b1",
       "StableTokenV2:v2.6.5": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
-      "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0xd96f786f5a294fb7cbb0847307293b7A871B9d5a"
+      "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0xd96f786f5a294fb7cbb0847307293b7A871B9d5a",
+      "ValueDeltaBreaker:v2.6.5": "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534"
     }
   },
   "42220": {

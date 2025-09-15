@@ -14,18 +14,18 @@ import {FixidityLib} from "@celo/common/FixidityLib.sol";
 
 import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {ConfigHelper} from "../helpers/ConfigHelper.sol";
 
-contract CreateExchangePools is TrebScript, ProxyHelper {
+contract CreateExchangePools is TrebScript, ProxyHelper, ConfigHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
     /// @custom:senders deployer
-    function run() public broadcast {
-        // Get configuration
-        IMentoConfig config = Config.get();
-
+    /// @custom:env {bytes32:optional} exchangeId
+    function run() public virtual broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        bytes32 pickedExchangeId = vm.envOr("exchangeId", bytes32(0));
 
         address biPoolManagerAddy = lookupProxyOrFail("BiPoolManager");
         address brokerAddy = lookupProxyOrFail("Broker");
@@ -35,7 +35,6 @@ contract CreateExchangePools is TrebScript, ProxyHelper {
         IBiPoolManager biPoolManager = IBiPoolManager(
             deployer.harness(biPoolManagerAddy)
         );
-
         // Create pools for all stable tokens
         IMentoConfig.ExchangeConfig[] memory exchanges = config.getExchanges();
 
@@ -46,6 +45,10 @@ contract CreateExchangePools is TrebScript, ProxyHelper {
                 exchange.pool.asset1,
                 address(exchange.pool.pricingModule)
             );
+
+            if (
+                pickedExchangeId != bytes32(0) && exchangeId != pickedExchangeId
+            ) continue;
 
             IBiPoolManager.PoolExchange memory pool = IBiPoolManager(
                 biPoolManagerAddy

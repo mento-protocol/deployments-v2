@@ -31,12 +31,23 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         Senders.Sender storage deployer = sender("deployer");
 
         deployBreakerBox(deployer);
-        address[] memory breakers = deployBreakers(deployer);
+        (
+            address[] memory breakers,
+            address[][] memory rateFeedIds
+        ) = deployBreakers(deployer);
 
         // Initialize BreakerBox with deployed breakers
         IBreakerBox breakerBox = IBreakerBox(deployer.harness(breakerBoxAddy));
+        IBreakerBox breakerBoxRead = IBreakerBox(breakerBoxAddy);
         for (uint i = 0; i < breakers.length; i++) {
-            breakerBox.addBreaker(breakers[i], 1);
+            if (!breakerBoxRead.isBreaker(breakers[i])) {
+                breakerBox.addBreaker(breakers[i], 1);
+            }
+            for (uint j = 0; j < rateFeedIds[i].length; j++) {
+                if (!breakerBoxRead.isBreakerEnabled(breakers[i], rateFeedIds[i][j])) {
+                    breakerBox.toggleBreaker(breakers[i], rateFeedIds[i][j], true);
+                }
+            }
         }
 
         ISortedOracles(deployer.harness(sortedOraclesProxy)).setBreakerBox(
@@ -54,10 +65,12 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
 
     function deployBreakers(
         Senders.Sender storage deployer
-    ) internal returns (address[] memory breakers) {
+    ) internal returns (address[] memory breakers, address[][] memory rateFeeds) {
         IMentoConfig.BreakerConfig[] memory breakerConfigs = config
             .getBreakerConfigs();
         breakers = new address[](breakerConfigs.length);
+        rateFeeds = new address[][](breakerConfigs.length);
+        console.log(breakerConfigs.length);
         for (uint i = 0; i < breakerConfigs.length; i++) {
             if (breakerConfigs[i].breakerType == BreakerType.Value) {
                 breakers[i] = deployValueDeltaBreaker(
@@ -72,6 +85,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
             } else {
                 revert("Invalid breaker type");
             }
+            rateFeeds[i] = breakerConfigs[i].rateFeedIds;
         }
     }
 

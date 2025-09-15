@@ -142,7 +142,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             rateFeed: "CELOUSD",
             cooldown: 30 minutes,
             threshold: 0.03 * 1e24,
-            smoothingFactor: 1,
+            smoothingFactor: 1e24,
             referenceValue: 0
         });
         _addMockAggregator({
@@ -378,7 +378,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             asset0: "cUSD",
             asset1: "CELO",
             pricingModule: "ConstantProductPricingModule:v2.6.5",
-            spread: 0.25 * 1e24,
+            spread: 0.0025 * 1e24,
             rateFeed: "CELOUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 3_000_000 * 1e18,
@@ -399,7 +399,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             asset0: "cEUR",
             asset1: "axlEUROC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
-            spread: 0.50 * 1e24,
+            spread: 0.0050 * 1e24,
             rateFeed: "EUROCEUR",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
@@ -425,72 +425,72 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
         _addFxExchange({
             currency: "EUR",
-            spread: 0.50 * 1e24,
+            spread: 0.0050 * 1e24,
             tradingLimits: _tier1FxTradingLimits(0.86 * 1e3)
         });
         _addFxExchange({
             currency: "AUD",
-            spread: 0.15 * 1e24,
+            spread: 0.0015 * 1e24,
             tradingLimits: _tier1FxTradingLimits(1.54 * 1e3)
         });
         _addFxExchange({
             currency: "CAD",
-            spread: 0.15 * 1e24,
+            spread: 0.0015 * 1e24,
             tradingLimits: _tier1FxTradingLimits(1.38 * 1e3)
         });
         _addFxExchange({
             currency: "GBP",
-            spread: 0.30 * 1e24,
+            spread: 0.0030 * 1e24,
             tradingLimits: _tier1FxTradingLimits(0.75 * 1e3)
         });
         _addFxExchange({
             currency: "ZAR",
-            spread: 0.30 * 1e24,
+            spread: 0.0030 * 1e24,
             tradingLimits: _tier1FxTradingLimits(17.72 * 1e3)
         });
         _addFxExchange({
             currency: "CHF",
-            spread: 0.30 * 1e24,
+            spread: 0.0030 * 1e24,
             tradingLimits: _tier1FxTradingLimits(0.80 * 1e3)
         });
         _addFxExchange({
             currency: "JPY",
-            spread: 0.30 * 1e24,
+            spread: 0.0030 * 1e24,
             tradingLimits: _tier1FxTradingLimits(149 * 1e3)
         });
         _addFxExchange({
             currency: "COP",
-            spread: 0.30 * 1e24,
+            spread: 0.0030 * 1e24,
             tradingLimits: _tier2FxTradingLimits(4015 * 1e3)
         });
         _addFxExchange({
             currency: "BRL",
-            spread: 0.30 * 1e24,
+            spread: 0.0030 * 1e24,
             tradingLimits: _tier1FxTradingLimits(5.45 * 1e3)
         });
         _addFxExchange({
+            currency: "PHP",
+            spread: 0.0030 * 1e24,
+            tradingLimits: _tier2FxTradingLimits(57.40 * 1e3)
+        });
+        _addFxExchange({
             currency: "GHS",
-            spread: 1.0 * 1e24,
+            spread: 0.0100 * 1e24,
             tradingLimits: _tier2FxTradingLimits(11.92 * 1e3)
         });
         _addFxExchange({
             currency: "NGN",
-            spread: 1.0 * 1e24,
+            spread: 0.0100 * 1e24,
             tradingLimits: _tier2FxTradingLimits(1531.98 * 1e3)
         });
         _addFxExchange({
             currency: "KES",
-            spread: 1.0 * 1e24,
+            spread: 0.0100 * 1e24,
             tradingLimits: _tier1FxTradingLimits(129.21 * 1e3)
         });
         _addFxExchange({
-            currency: "PHP",
-            spread: 1.0 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(57.40 * 1e3)
-        });
-        _addFxExchange({
             currency: "XOF",
-            spread: 1.0 * 1e24,
+            spread: 0.0200 * 1e24,
             tradingLimits: _tier2FxTradingLimits(560.46 * 1e3)
         });
     }
@@ -502,13 +502,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         uint256 spread,
         ExchangeTrandingLimitsConfig memory tradingLimits
     ) internal {
-        string memory asset1Symbol = _symbolForCurrency[currency];
-        require(
-            bytes(asset1Symbol).length > 0,
-            string.concat("Currency not recoreded: ", currency)
-        );
         _addExchange({
-            asset0: "cUSD",
+            asset0: _symbolForCurrency["USD"],
             asset1: _symbolForCurrency[currency],
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: spread,

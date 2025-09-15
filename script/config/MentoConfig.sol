@@ -161,8 +161,19 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _mockCollateralAssets;
     }
 
-    function getAddress(string memory token) external view returns (address) {
+    function getAddress(string memory token) public view returns (address) {
         return _resolveExchangeAsset(token);
+    }
+
+    function getTokenForCurrency(
+        string memory currency
+    ) public view returns (address) {
+        string memory symbol = _symbolForCurrency[currency];
+        require(
+            bytes(symbol).length > 0,
+            string.concat("Token not registered for: ", currency)
+        );
+        return getAddress(symbol);
     }
 
     // ========== Helper Functions ==========
@@ -416,6 +427,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         uint256 defaultThreshold
     ) internal returns (bytes32 breakerId) {
         breakerId = keccak256(abi.encode(breakerType, _breakerIds.length));
+        _breakerIds.push(breakerId);
         BreakerConfig storage breaker = _breakers[breakerId];
         breaker.breakerType = breakerType;
         breaker.defaultCooldownTime = defaultCooldownTime;
@@ -526,11 +538,11 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function _resolveExchangeAsset(
         string memory symbol
-    ) internal view returns (address) {
+    ) internal returns (address) {
         if (_collateral[symbol] != address(0)) {
             return _collateral[symbol];
         } else {
-            return lookupProxy(symbol);
+            return predictProxy(sender("deployer"), symbol);
         }
     }
 
