@@ -561,18 +561,13 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     /// ===================================================================
     /// Governance
     /// ===================================================================
-    /// @notice Configure the reserve and exchange pools in the system
+    /// @notice Configure the governance params
     function _initGovernance() internal {
-        _lockingConfig = LockingConfig({
-            startingPointWeek: 42, // XXX: What should this be?
-            minCliffPeriod: 0,
-            minSlopePeriod: 1
-        });
-
+        _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
         _governanceConfig = GovernanceConfig({
-            timelockDelay: 2 days,
+            timelockDelay: 5 minutes,
             votingDelay: 0,
-            votingPeriod: 120_960, // XXX: Set based on blocktime
+            votingPeriod: 10 minutes, // 1 block ~= 1 second
             proposalThreshold: 10000e18,
             quorum: 2,
             watchdog: 0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81 // Mento Deployer

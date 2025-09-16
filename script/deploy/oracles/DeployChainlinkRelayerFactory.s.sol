@@ -5,9 +5,10 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
 
 import {IChainlinkRelayerFactory} from "lib/mento-core/contracts/interfaces/IChainlinkRelayerFactory.sol";
+
+import {ProxyHelper, ProxyType} from "script/helpers/ProxyHelper.sol";
 
 contract DeployChainlinkRelayerFactory is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

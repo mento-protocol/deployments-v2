@@ -5,7 +5,7 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 // Interface for Broker initialization
 interface IBroker {

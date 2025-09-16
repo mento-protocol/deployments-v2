@@ -38,7 +38,6 @@ contract MentoConfig_vbase is MentoConfig {
         });
 
         _lockingConfig = LockingConfig({
-            startingPointWeek: 42, // XXX: What should this be?
             minCliffPeriod: 0,
             minSlopePeriod: 1
         });

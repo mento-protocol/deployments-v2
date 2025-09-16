@@ -50,7 +50,6 @@ interface IMentoConfig {
     }
 
     struct LockingConfig {
-        uint256 startingPointWeek;
         uint256 minCliffPeriod;
         uint256 minSlopePeriod;
     }
@@ -154,5 +153,5 @@ interface IMentoConfig {
         address asset1
     ) external view returns (bytes32);
 
-    function getAddress(string memory asset) external view returns (address);
+    function getAddress(string memory asset) external returns (address);
 }

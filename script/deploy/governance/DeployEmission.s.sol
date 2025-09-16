@@ -4,9 +4,9 @@ pragma solidity ^0.8;
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
-
 import {addresses, uints} from "lib/mento-std/src/Array.sol";
+
+import {ProxyHelper, ProxyType} from "script/helpers/ProxyHelper.sol";
 
 interface IMentoToken {
     function emissionSupply() external returns (uint256);

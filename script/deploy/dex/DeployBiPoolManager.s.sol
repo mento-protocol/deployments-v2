@@ -10,7 +10,7 @@ import {IBroker} from "lib/mento-core/contracts/interfaces/IBroker.sol";
 import {IReserve} from "lib/mento-core/contracts/interfaces/IReserve.sol";
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
 import {IBreakerBox} from "lib/mento-core/contracts/interfaces/IBreakerBox.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 contract DeployBiPoolManager is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

@@ -14394,6 +14394,70 @@
     "createdAt": "2025-09-11T17:50:06.974082+02:00",
     "updatedAt": "2025-09-11T17:50:06.986331+02:00"
   },
+  "testnet-v2-rc5/11142220/Emission:v2.6.5": {
+    "id": "testnet-v2-rc5/11142220/Emission:v2.6.5",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "Emission",
+    "label": "v2.6.5",
+    "address": "0x7c990801cA84e23e8Df85AB2AdB52c8e2e518797",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xe141a5a76aed150c81b9227fb60e566d7134c0737b6bb88f40cfd7ca81ebf240",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810090d45376feee274c8520a8",
+      "initCodeHash": "0xda1eca694c2fd86afa78cbea43cd7139e4a43448ae1f109523de3f63c2c91771",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/Emission:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/Emission.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x019a66790f174107f9b6c78b08c6e3cdaf20bbaab2717891750a063b351d410d",
+      "scriptPath": "script/deploy/governance/DeployEmission.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:15:09.07509+02:00",
+    "updatedAt": "2025-09-15T10:15:09.086596+02:00"
+  },
+  "testnet-v2-rc5/11142220/Locking:v2.6.5": {
+    "id": "testnet-v2-rc5/11142220/Locking:v2.6.5",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "Locking",
+    "label": "v2.6.5",
+    "address": "0xC955e54F7f6a302d926720890ddE96705104db38",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x3408f90098ea081a30846700d8714bbaa70960a1652772688b60239cfd091f92",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100af0dbd03d09823e28fbcfb",
+      "initCodeHash": "0x99b002db8b0c873e0e368b9fb810d331ac7ae17821779db0122da6ca70fa50ae",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/Locking:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/locking/Locking.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x38ccf19faae14fd47fab83e33a79062fe4ab9c8639ecf6b601eed4e3e107b573",
+      "scriptPath": "script/deploy/governance/DeployLocking.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:15:48.992484+02:00",
+    "updatedAt": "2025-09-15T10:15:49.005367+02:00"
+  },
   "testnet-v2-rc5/11142220/MedianDeltaBreaker:v2.6.5": {
     "id": "testnet-v2-rc5/11142220/MedianDeltaBreaker:v2.6.5",
     "namespace": "testnet-v2-rc5",
@@ -14426,6 +14490,38 @@
     "createdAt": "2025-09-12T08:17:42.810192+02:00",
     "updatedAt": "2025-09-12T08:17:42.821375+02:00"
   },
+  "testnet-v2-rc5/11142220/MentoGovernor:v2.6.5": {
+    "id": "testnet-v2-rc5/11142220/MentoGovernor:v2.6.5",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "MentoGovernor",
+    "label": "v2.6.5",
+    "address": "0x910A940a53C12982ae2277392C5Cfa03aa8c602b",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x2f96d952270d72b4803bd650e68fd8cbe5681b4b11160010d83236d52634d619",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100949452b043dcff7b909e89",
+      "initCodeHash": "0x0e3d54009ca7b54a0c4b1c8d6f4575709f0913abef82139d5659eff9ac181f25",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/MentoGovernor:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/MentoGovernor.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x4c61423437dc150230f1e66671b4a5328503b5a6a68d3db1c931963ec956927e",
+      "scriptPath": "script/deploy/governance/DeployMentoGovernor.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:17:18.074961+02:00",
+    "updatedAt": "2025-09-15T10:17:18.087476+02:00"
+  },
   "testnet-v2-rc5/11142220/MentoRouter:v1.0.0": {
     "id": "testnet-v2-rc5/11142220/MentoRouter:v1.0.0",
     "namespace": "testnet-v2-rc5",
@@ -14457,6 +14553,38 @@
     "tags": null,
     "createdAt": "2025-09-11T17:50:43.780072+02:00",
     "updatedAt": "2025-09-11T17:50:43.791093+02:00"
+  },
+  "testnet-v2-rc5/11142220/MentoToken": {
+    "id": "testnet-v2-rc5/11142220/MentoToken",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "MentoToken",
+    "label": "",
+    "address": "0x07867fd40EB56b4380bE39c88D0a7EA59Aa99A20",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xc67a031e6d879b81c06a0faedf57c8dea201cbf3b20dc0b44d75a410a06e150f",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810005c5701650f36767e88bd5",
+      "initCodeHash": "0x380b0daff0f92a9957f5174e7802bd11c120f2aec4dd7a7ad5f3d21ba9dee01e",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000100000000000000000000000000fc860719b5c35517dc77578a333e3b06cf28fbeb000000000000000000000000b72320fc501cb30e55baf0da48c20b11fac9f79d00000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81000000000000000000000000000000000000000000000000000000000000000200000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000074c44be99937815173a3c56274331e0a05611e0d000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000c800000000000000000000000000000000000000000000000000000000000000c8",
+      "entropy": "testnet-v2-rc5/MentoToken"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/MentoToken.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x3b0b901b21f07cb9bb8a6e6a9cc851f906f060878ecae249f0c817e1d0aa9800",
+      "scriptPath": "script/deploy/governance/DeployMentoToken.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:14:53.273409+02:00",
+    "updatedAt": "2025-09-15T10:14:53.284419+02:00"
   },
   "testnet-v2-rc5/11142220/MockChainlinkAggregator:AUDUSD": {
     "id": "testnet-v2-rc5/11142220/MockChainlinkAggregator:AUDUSD",
@@ -16006,6 +16134,38 @@
     "createdAt": "2025-09-12T08:03:03.2007+02:00",
     "updatedAt": "2025-09-12T08:03:03.213418+02:00"
   },
+  "testnet-v2-rc5/11142220/TimelockController:v2.6.5": {
+    "id": "testnet-v2-rc5/11142220/TimelockController:v2.6.5",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TimelockController",
+    "label": "v2.6.5",
+    "address": "0x32346936c5bAf3c7B53Ea3fe40B405EFD3A3e656",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x4870a67020cb8b0baa60be937796671077df52b058d284acb74f4d02ebb9376b",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100fdc8063c732fc46b982d51",
+      "initCodeHash": "0x9d64acebce18e7ff39c9d068439b5eb7f07ceab451c5896b9b4e16605a29f697",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/TimelockController:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/governance/TimelockController.sol",
+      "compilerVersion": "0.8.18+commit.87f61d96",
+      "bytecodeHash": "0x9cc622102ca3ce38fb37c7d965422cbc2498ccaee62f4eca5b07730853f23e78",
+      "scriptPath": "script/deploy/governance/DeployTimelockController.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:16:43.296001+02:00",
+    "updatedAt": "2025-09-15T10:16:43.309751+02:00"
+  },
   "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:ChainlinkRelayerFactory": {
     "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:ChainlinkRelayerFactory",
     "namespace": "testnet-v2-rc5",
@@ -16041,6 +16201,150 @@
     "tags": null,
     "createdAt": "2025-09-11T17:51:47.24301+02:00",
     "updatedAt": "2025-09-11T17:51:47.254987+02:00"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:Emission": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:Emission",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "Emission",
+    "address": "0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69",
+    "type": "PROXY",
+    "transactionId": "tx-0x72c386416dff7bbc436624b3be3aeffb79c5be0feffec0f7531a4b4243a81201",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810061fc76fae1c2da11565d5b",
+      "initCodeHash": "0xd5cc6ea2e54bcd475ef5da7f6754917ee2fd21dacf79aa38a6491ab354a4967e",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000007c990801ca84e23e8df85ab2adb52c8e2e51879700000000000000000000000001bd47aa7b13a75c24e3da760f8a503c435bb4df00000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000084be20309400000000000000000000000007867fd40eb56b4380be39c88d0a7ea59aa99a2000000000000000000000000074c44be99937815173a3c56274331e0a05611e0d000000000000000000000000000000000000000001f04ef12cb04cf15800000000000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/TransparentUpgradeableProxy:Emission"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x7c990801cA84e23e8Df85AB2AdB52c8e2e518797",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x11e4d17addff81b6a22518a7d70611bfacab22dbe5a7dbf08e46d1a9de2bfeb8",
+      "scriptPath": "script/deploy/governance/DeployEmission.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:15:09.07509+02:00",
+    "updatedAt": "2025-09-15T10:15:09.086596+02:00"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:Locking": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:Locking",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "Locking",
+    "address": "0xB72320fC501cb30E55bAF0DA48c20b11fAc9f79D",
+    "type": "PROXY",
+    "transactionId": "tx-0xb6dae175d92a40c5423315eefac7e7a5508ff393b8b9ea2fe793837961e3343f",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100c3162f3d543e8cf3ba4646",
+      "initCodeHash": "0xe2f4bdc03e0b038baf493f17d06da4efc64c3793049593bde644fbbecd906450",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000c955e54f7f6a302d926720890dde96705104db3800000000000000000000000001bd47aa7b13a75c24e3da760f8a503c435bb4df000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a4c9a5b58900000000000000000000000007867fd40eb56b4380be39c88d0a7ea59aa99a2000000000000000000000000000000000000000000000000000000000000000240000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d8100000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/TransparentUpgradeableProxy:Locking"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xC955e54F7f6a302d926720890ddE96705104db38",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x11e4d17addff81b6a22518a7d70611bfacab22dbe5a7dbf08e46d1a9de2bfeb8",
+      "scriptPath": "script/deploy/governance/DeployLocking.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:15:48.992484+02:00",
+    "updatedAt": "2025-09-15T10:15:49.005367+02:00"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:MentoGovernor": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:MentoGovernor",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "MentoGovernor",
+    "address": "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4",
+    "type": "PROXY",
+    "transactionId": "tx-0x30b2d34152a3ed0711e31709d078cf3993338c7888182a8c4930181f1ea7e033",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d810020c4051dd46eda4a9abea7",
+      "initCodeHash": "0x14a133a062f2b86a0280f36024ae92583d2d78f05f551235fea16adfc3b87fd1",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000910a940a53c12982ae2277392c5cfa03aa8c602b00000000000000000000000001bd47aa7b13a75c24e3da760f8a503c435bb4df000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000c4a2910789000000000000000000000000b72320fc501cb30e55baf0da48c20b11fac9f79d00000000000000000000000074c44be99937815173a3c56274331e0a05611e0d0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025800000000000000000000000000000000000000000000021e19e0c9bab2400000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/TransparentUpgradeableProxy:MentoGovernor"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x910A940a53C12982ae2277392C5Cfa03aa8c602b",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x11e4d17addff81b6a22518a7d70611bfacab22dbe5a7dbf08e46d1a9de2bfeb8",
+      "scriptPath": "script/deploy/governance/DeployMentoGovernor.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:17:18.074961+02:00",
+    "updatedAt": "2025-09-15T10:17:18.087476+02:00"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:TimelockController": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:TimelockController",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "TimelockController",
+    "address": "0x74c44Be99937815173A3C56274331e0A05611e0D",
+    "type": "PROXY",
+    "transactionId": "tx-0xe86ae88a988da5a16cf1c287a0aea97e3e6c50db274d169c2c419b004c775ad6",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x56fd3f2bee130e9867942d0f463a16fbe49b8d8100712730b1c7feacc60a6a31",
+      "initCodeHash": "0xd4c358d2e2135b24925c3086006482ed2b03741e737220817e3e2a407d618e78",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000032346936c5baf3c7b53ea3fe40b405efd3a3e65600000000000000000000000001bd47aa7b13a75c24e3da760f8a503c435bb4df00000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000124672f70c5000000000000000000000000000000000000000000000000000000000000012c00000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000056fd3f2bee130e9867942d0f463a16fbe49b8d81000000000000000000000000000000000000000000000000000000000000000100000000000000000000000023173ac37b8e4e5a60d787ac543b3f51e8f398b40000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/TransparentUpgradeableProxy:TimelockController"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x32346936c5bAf3c7B53Ea3fe40B405EFD3A3e656",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x11e4d17addff81b6a22518a7d70611bfacab22dbe5a7dbf08e46d1a9de2bfeb8",
+      "scriptPath": "script/deploy/governance/DeployTimelockController.s.sol",
+      "gitCommit": "7344aa9ab62d335ba052345dbf0da2ac26e6c07c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2025-09-15T10:16:43.296001+02:00",
+    "updatedAt": "2025-09-15T10:16:43.309751+02:00"
   },
   "testnet-v2-rc5/11142220/ValueDeltaBreaker:v2.6.5": {
     "id": "testnet-v2-rc5/11142220/ValueDeltaBreaker:v2.6.5",

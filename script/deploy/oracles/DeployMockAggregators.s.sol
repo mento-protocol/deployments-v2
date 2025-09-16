@@ -6,9 +6,9 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
-import {Config, IMentoConfig} from "../config/Config.sol";
-
 import {MockChainlinkAggregator} from "src/MockChainlinkAggregator.sol";
+
+import {Config, IMentoConfig} from "script/config/Config.sol";
 
 contract DeployMockAggregators is TrebScript {
     using Deployer for Senders.Sender;

@@ -420,11 +420,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
     /// ===================================================================
     /// @notice Configure the reserve and exchange pools in the system
     function _initGovernance() internal {
-        _lockingConfig = LockingConfig({
-            startingPointWeek: 42, // XXX: What should this be?
-            minCliffPeriod: 0,
-            minSlopePeriod: 1
-        });
+        _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
 
         _governanceConfig = GovernanceConfig({
             timelockDelay: 2 days,

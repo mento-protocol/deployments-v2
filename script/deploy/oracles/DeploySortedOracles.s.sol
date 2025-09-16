@@ -8,8 +8,8 @@ import {Deployer} from "lib/treb-sol/src/internal/sender/Deployer.sol";
 
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
 
-import {Config, IMentoConfig} from "../config/Config.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {Config, IMentoConfig} from "script/config/Config.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 contract DeploySortedOracles is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

@@ -8,8 +8,8 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IReserve} from "lib/mento-core/contracts/interfaces/IReserve.sol";
 
-import {Config, IMentoConfig} from "../config/Config.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {Config, IMentoConfig} from "script/config/Config.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 contract DeployReserve is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

@@ -12,8 +12,8 @@ import {IChainlinkRelayerFactory} from "lib/mento-core/contracts/interfaces/ICha
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
 
-import {Config, IMentoConfig} from "../config/Config.sol";
-import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
+import {Config, IMentoConfig} from "script/config/Config.sol";
+import {ProxyHelper, ProxyType} from "script/helpers/ProxyHelper.sol";
 
 contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

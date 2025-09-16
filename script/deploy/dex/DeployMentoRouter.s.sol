@@ -4,7 +4,7 @@ pragma solidity ^0.8.18;
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 contract DeployMentoRouter is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;

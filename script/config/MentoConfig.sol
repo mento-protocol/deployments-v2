@@ -161,13 +161,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _mockCollateralAssets;
     }
 
-    function getAddress(string memory token) public view returns (address) {
+    function getAddress(string memory token) public returns (address) {
         return _resolveExchangeAsset(token);
     }
 
     function getTokenForCurrency(
         string memory currency
-    ) public view returns (address) {
+    ) public returns (address) {
         string memory symbol = _symbolForCurrency[currency];
         require(
             bytes(symbol).length > 0,

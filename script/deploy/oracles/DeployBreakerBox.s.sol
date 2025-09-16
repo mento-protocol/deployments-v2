@@ -11,9 +11,9 @@ import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles
 import {IMedianDeltaBreaker} from "lib/mento-core/contracts/interfaces/IMedianDeltaBreaker.sol";
 import {IValueDeltaBreaker} from "lib/mento-core/contracts/interfaces/IValueDeltaBreaker.sol";
 
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
-import {ConfigHelper} from "../helpers/ConfigHelper.sol";
-import {Config, IMentoConfig, BreakerType} from "../config/Config.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
+import {ConfigHelper} from "script/helpers/ConfigHelper.sol";
+import {Config, IMentoConfig, BreakerType} from "script/config/Config.sol";
 
 contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
     using Deployer for Senders.Sender;
@@ -44,8 +44,17 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
                 breakerBox.addBreaker(breakers[i], 1);
             }
             for (uint j = 0; j < rateFeedIds[i].length; j++) {
-                if (!breakerBoxRead.isBreakerEnabled(breakers[i], rateFeedIds[i][j])) {
-                    breakerBox.toggleBreaker(breakers[i], rateFeedIds[i][j], true);
+                if (
+                    !breakerBoxRead.isBreakerEnabled(
+                        breakers[i],
+                        rateFeedIds[i][j]
+                    )
+                ) {
+                    breakerBox.toggleBreaker(
+                        breakers[i],
+                        rateFeedIds[i][j],
+                        true
+                    );
                 }
             }
         }
@@ -56,7 +65,9 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
 
         address[] memory rateFeeds = config.getRateFeedIds();
         for (uint i = 0; i < rateFeeds.length; i++) {
-            address[] memory deps = config.getRateFeedDependencies(rateFeeds[i]);
+            address[] memory deps = config.getRateFeedDependencies(
+                rateFeeds[i]
+            );
             if (deps.length > 0) {
                 breakerBox.setRateFeedDependencies(rateFeeds[i], deps);
             }
@@ -65,7 +76,10 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
 
     function deployBreakers(
         Senders.Sender storage deployer
-    ) internal returns (address[] memory breakers, address[][] memory rateFeeds) {
+    )
+        internal
+        returns (address[] memory breakers, address[][] memory rateFeeds)
+    {
         IMentoConfig.BreakerConfig[] memory breakerConfigs = config
             .getBreakerConfigs();
         breakers = new address[](breakerConfigs.length);
