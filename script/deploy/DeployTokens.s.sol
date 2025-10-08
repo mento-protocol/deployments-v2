@@ -90,7 +90,7 @@ contract DeployTokens is TrebScript, ProxyHelper {
             sortedOracles.setEquivalentToken(
                 token,
                 config.getRateFeedIdFromString(
-                    string.concat("CELO/", tokens[i].currency)
+                    string.concat("CELO", tokens[i].currency)
                 )
             );
         }
