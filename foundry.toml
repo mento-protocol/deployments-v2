@@ -12,7 +12,6 @@ fs_permissions = [{ access = "read-write", path = "cache"}, { access = "read", p
 # vcelo = "${TENDERLY_VCELO_RPC_URL}"
 # vcelo_root = "${TENDERLY_VCELO_ROOT_RPC_URL}"
 celo = "${CELO_RPC_URL}"
-celo_alfajores = "${CELO_ALFAJORES_RPC_URL}"
 celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
 chain-11142220 = "${CELO_SEPOLIA_SEPOLIA_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"

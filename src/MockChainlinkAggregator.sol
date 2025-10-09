@@ -10,7 +10,7 @@ contract MockChainlinkAggregator is Ownable {
     uint256 public lastUpdated;
 
     // An external address that can set the answer and lastUpdated of the aggregator
-    // Used to run an off-chain script that fetches mainnet chainlink data and relays it to Alfajores
+    // Used to run an off-chain script that fetches mainnet chainlink data and relays it to celo-sepolia
     address public externalProvider;
 
     modifier onlyOwnerOrExternalProvider() {
