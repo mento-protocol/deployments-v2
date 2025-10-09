@@ -1,5 +1,5 @@
 {
-  "name": "mento-xchain-deployment",
+  "name": "mento-deployments-v2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.18.1",
   "dependencies": {
     "@celo/contracts": "^13.0.0"
   }

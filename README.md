@@ -5,6 +5,7 @@ This repository contains the deployment scripts and configuration for deploying 
 ## Overview
 
 This project provides a comprehensive framework for deploying Mento Protocol instances with:
+
 - Multiple stable tokens (cUSD, cEUR, cREAL, etc.)
 - Various collateral assets (CELO, USDC, USDT, axlUSDC, axlEUROC)
 - Configurable exchange pools with different pricing modules
@@ -14,7 +15,7 @@ This project provides a comprehensive framework for deploying Mento Protocol ins
 
 ## Project Structure
 
-```
+```plain
 ├── script/
 │   ├── actions/                     # Actions, one-off dev utils
 │   ├── config/
@@ -31,6 +32,7 @@ This project provides a comprehensive framework for deploying Mento Protocol ins
 ## Supported Assets
 
 ### Stable Tokens
+
 - **cUSD** - Celo Dollar
 - **cEUR** - Celo Euro
 - **cREAL** - Celo Brazilian Real
@@ -48,6 +50,7 @@ This project provides a comprehensive framework for deploying Mento Protocol ins
 - **cNGN** - Celo Nigerian Naira
 
 ### Collateral Assets
+
 - **CELO** - Native Celo token
 - **USDC** - USD Coin
 - **USDT** - Tether USD
@@ -62,6 +65,7 @@ The protocol supports 19 configured exchange pools with two types of pricing mod
 2. **Constant Product Pricing Module** - For volatile pairs (e.g., cUSD/CELO)
 
 Each pool has configurable:
+
 - Spread percentages
 - Rate feed oracles
 - Reset frequencies
@@ -70,6 +74,7 @@ Each pool has configurable:
 ## Oracle Configuration
 
 The system uses Chainlink-compatible oracle feeds with:
+
 - Value-based circuit breakers
 - Median-based circuit breakers
 - Configurable cooldown periods and thresholds
@@ -78,18 +83,27 @@ The system uses Chainlink-compatible oracle feeds with:
 ## Deployment
 
 ### Prerequisites
+
 - [Foundry](https://getfoundry.sh/) installed
+- [treb](https://github.com/trebuchet-org/treb-cli) installed for managing deployments
 - Node.js and npm (for dependencies)
 - Access to target network RPC endpoint
 
 ### Installation
+
 ```bash
 # Clone the repository
-git clone https://github.com/mento-protocol/mento-xchain-deployment
-cd mento-xchain-deployment
+git clone https://github.com/mento-protocol/mento-deployments-v2
+cd mento-deployments-v2
+
+# Create a local .env based on the .env.example and fill out the empty values
+cp .env.example .env
 
 # Install dependencies
 forge install
+
+# Install the celo contracts
+cd lib/mento-core && npm install
 
 # Update submodules
 git submodule update --init --recursive
@@ -98,7 +112,6 @@ git submodule update --init --recursive
 ### Deploy to Testnet
 
 We deploy using [treb](https://github.com/trebuchet-org/treb-cli).
-
 
 ```bash
 # Run deployment
@@ -117,6 +130,7 @@ The main configuration is handled through network-specific config contracts (e.g
 ### Trading Limits
 
 Trading limits are organized in tiers:
+
 - **Tier 1**: 100k/500k/2.5M USD limits
 - **Tier 2**: 50k/250k/1.25M USD limits
 
@@ -125,11 +139,13 @@ Limits are applied per timestep (5 minutes and 1 day) with global caps.
 ## Development
 
 ### Building
+
 ```bash
 forge build
 ```
 
 ### Formatting
+
 ```bash
 forge fmt
 ```
@@ -143,15 +159,12 @@ forge fmt
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Contributing
-
-Please read CONTRIBUTING.md for details on our code of conduct and the process for submitting pull requests.
+This project is licensed under the MIT License
 
 ## Support
 
 For questions and support:
+
 - Open an issue in this repository
 - Join the Mento Discord community
 - Visit [mento.org](https://mento.org) for more information
