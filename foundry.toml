@@ -14,13 +14,13 @@ fs_permissions = [{ access = "read-write", path = "cache"}, { access = "read", p
 celo = "${CELO_RPC_URL}"
 celo_alfajores = "${CELO_ALFAJORES_RPC_URL}"
 celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
-# base_sepolia = "${TENDERLY_BASE_SEPOLIA_RPC_URL}"
+chain-11142220 = "${CELO_SEPOLIA_SEPOLIA_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
-monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.com/api?chain=10143"}
-# celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.com/api?chain=11142220" }
+monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chain=10143"}
+celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
 
 [profile.default.treb.senders.deployer]
