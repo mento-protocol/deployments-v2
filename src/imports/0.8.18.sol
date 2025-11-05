@@ -7,13 +7,6 @@ pragma solidity =0.8.18;
  *         to ensure they are compiled and their artifacts are available for deployment scripts.
  */
 
-// Swap contracts (0.8.18)
-import {Broker} from "lib/mento-core/contracts/swap/Broker.sol";
-
-// Oracle contracts (0.8.18)
-import {ChainlinkRelayerFactory} from "lib/mento-core/contracts/oracles/ChainlinkRelayerFactory.sol";
-import {ChainlinkRelayerV1} from "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol";
-
 // Token contracts (0.8.18)
 import {StableTokenV2} from "lib/mento-core/contracts/tokens/StableTokenV2.sol";
 
