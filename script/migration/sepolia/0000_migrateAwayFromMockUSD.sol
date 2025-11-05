@@ -11,56 +11,218 @@ import {IBroker} from "lib/mento-core/contracts/interfaces/IBroker.sol";
 import {IReserve} from "lib/mento-core/contracts/interfaces/IReserve.sol";
 import {IPricingModule} from "lib/mento-core/contracts/interfaces/IPricingModule.sol";
 import {IExchangeProvider} from "lib/mento-core/contracts/interfaces/IExchangeProvider.sol";
+import {ITradingLimits} from "lib/mento-core/contracts/interfaces/ITradingLimits.sol";
 
 import {FixidityLib} from "@celo/common/FixidityLib.sol";
 
 import {ProxyHelper} from "../../helpers/ProxyHelper.sol";
+
+interface IBrokerWithLimits is IBroker {
+    function tradingLimitsConfig(
+        bytes32
+    ) external view returns (ITradingLimits.Config memory);
+}
 
 contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    address cUSD;
-    address mockUsdc;
-    address mockUsdt;
+    error ExchangeNotFound();
+
+    address internal constant USDT = 0xd077A400968890Eacc75cdc901F0356c943e4fDb;
+    address internal constant USDC = 0x01C5C0122039549AD1493B8220cABEdD739BC44E;
+
+    address internal cUSD;
+    address internal mockUsdc;
+    address internal mockUsdt;
+    IReserve internal reserve;
+    IBiPoolManager internal biPoolManager;
+    IBrokerWithLimits internal broker;
+
+    IReserve internal reserveWrite;
+    IBiPoolManager internal biPoolManagerWrite;
+    IBrokerWithLimits internal brokerWrite;
 
     /// @custom:senders deployer
     /// @custom:env {bytes32:optional} exchangeId
     function run() public virtual broadcast {
         Senders.Sender storage deployer = sender("deployer");
 
+        reserve = IReserve(lookupProxyOrFail("Reserve"));
+        biPoolManager = IBiPoolManager(lookupProxyOrFail("BiPoolManager"));
+        broker = IBrokerWithLimits(lookupProxyOrFail("Broker"));
+
+        reserveWrite = IReserve(deployer.harness(lookupProxyOrFail("Reserve")));
+        biPoolManagerWrite = IBiPoolManager(
+            deployer.harness(lookupProxyOrFail("BiPoolManager"))
+        );
+        brokerWrite = IBrokerWithLimits(
+            deployer.harness(lookupProxyOrFail("Broker"))
+        );
+
         cUSD = lookupProxyOrFail("cUSD");
         mockUsdc = lookupOrFail("MockERC20:USDC");
         mockUsdt = lookupOrFail("MockERC20:USDT");
 
-        IReserve reserve = IReserve(lookupProxyOrFail("Reserve"));
-        IBiPoolManager biPoolManager = IBiPoolManager(lookupProxyOrFail("BiPoolManager"));
+        require(
+            !reserve.isCollateralAsset(USDC),
+            "USDC is already a collateral"
+        );
+        require(
+            !reserve.isCollateralAsset(USDT),
+            "USDT is already a collateral"
+        );
+        require(
+            reserve.collateralAssets(0) == mockUsdc,
+            "Mock USDC is not collateral asset 0"
+        );
+        require(
+            reserve.collateralAssets(1) == mockUsdt,
+            "Mock USDT is not collateral asset 1"
+        );
 
-        require(reserve.isCollateralAsset(mockUsdc));
-        require(reserve.isCollateralAsset(mockUsdt));
+        reserveWrite.removeCollateralAsset(mockUsdt, 1);
+        reserveWrite.removeCollateralAsset(mockUsdc, 0);
 
-        (bytes32 usdtExchangeId, uint256 usdtExchangeIdIndex) = getExchangeId(cUSD, mockUsdt);
-        (bytes32 usdcExchangeId, uint256 usdcExchangeIdIndex) = getExchangeId(cUSD, mockUsdc);
+        require(
+            !reserve.isCollateralAsset(mockUsdc),
+            "Mock USDC is still a collateral"
+        );
+        require(
+            !reserve.isCollateralAsset(mockUsdt),
+            "Mock USDT is still a collateral"
+        );
 
-        require(usdtExchangeId != bytes32(0));
-        require(usdcExchangeId != bytes32(0));
+        reserveWrite.addCollateralAsset(USDC);
+        reserveWrite.addCollateralAsset(USDT);
 
-        console.logBytes32(usdtExchangeId);
-        console.logBytes32(usdcExchangeId);
+        require(
+            reserve.isCollateralAsset(USDC),
+            "USDC is still not a collateral"
+        );
+        require(
+            reserve.isCollateralAsset(USDT),
+            "USDT is still not a collateral"
+        );
+        (
+            IBiPoolManager.PoolExchange memory usdtExchange,
+            uint256 usdtExchangeIdIndex,
+            bytes32 usdtExchangeId
+        ) = getExchange(cUSD, mockUsdt);
+        (
+            IBiPoolManager.PoolExchange memory usdcExchange,
+            uint256 usdcExchangeIdIndex,
+            bytes32 usdcExchangeId
+        ) = getExchange(cUSD, mockUsdc);
+
+        require(usdtExchangeId != bytes32(0), "USDT Exchange not found");
+        require(usdcExchangeId != bytes32(0), "USDC Exchange not found");
+
+        bytes32 usdtLimitId = usdtExchangeId ^ bytes32(uint256(uint160(cUSD)));
+        bytes32 usdcLimitId = usdcExchangeId ^ bytes32(uint256(uint160(cUSD)));
+
+        ITradingLimits.Config memory usdtLimit = broker.tradingLimitsConfig(
+            usdtLimitId
+        );
+        ITradingLimits.Config memory usdcLimit = broker.tradingLimitsConfig(
+            usdcLimitId
+        );
+
+        require(
+            usdtExchange.asset0 == cUSD,
+            "cUSD is not asset0 on the USDT exchange"
+        );
+        require(
+            usdcExchange.asset0 == cUSD,
+            "cUSD is not asset0 on the USDC exchange"
+        );
+
+        usdtExchange.asset1 = USDT;
+        usdcExchange.asset1 = USDC;
+
+        if (usdcExchangeId > usdtExchangeId) {
+            biPoolManagerWrite.destroyExchange(
+                usdcExchangeId,
+                usdcExchangeIdIndex
+            );
+            biPoolManagerWrite.destroyExchange(
+                usdtExchangeId,
+                usdtExchangeIdIndex
+            );
+        } else {
+            biPoolManagerWrite.destroyExchange(
+                usdtExchangeId,
+                usdtExchangeIdIndex
+            );
+            biPoolManagerWrite.destroyExchange(
+                usdcExchangeId,
+                usdcExchangeIdIndex
+            );
+        }
+
+        bytes32 newUsdtExchangeId = biPoolManagerWrite.createExchange(
+            usdtExchange
+        );
+        bytes32 newUsdcExchangeId = biPoolManagerWrite.createExchange(
+            usdcExchange
+        );
+
+        brokerWrite.configureTradingLimit(newUsdtExchangeId, cUSD, usdtLimit);
+        brokerWrite.configureTradingLimit(newUsdcExchangeId, cUSD, usdcLimit);
+
+        bytes32 newUsdtLimitId = newUsdtExchangeId ^
+            bytes32(uint256(uint160(cUSD)));
+        bytes32 newUsdcLimitId = newUsdcExchangeId ^
+            bytes32(uint256(uint160(cUSD)));
+
+        ITradingLimits.Config memory newUsdtLimit = broker.tradingLimitsConfig(
+            newUsdtLimitId
+        );
+        ITradingLimits.Config memory newUsdcLimit = broker.tradingLimitsConfig(
+            newUsdcLimitId
+        );
+
+        require(
+            keccak256(abi.encode(newUsdtLimit)) ==
+                keccak256(abi.encode(usdtLimit)),
+            "New USDT Limits don't match the old one"
+        );
+        require(
+            keccak256(abi.encode(newUsdcLimit)) ==
+                keccak256(abi.encode(usdcLimit)),
+            "New USDC Limits don't match the old one"
+        );
+
+        console.log("Looks good");
     }
 
-    function getExchangeId(address asset0, address asset1) public view returns (bytes32, uint256) {
-        IBiPoolManager biPoolManager = IBiPoolManager(lookupProxyOrFail("BiPoolManager"));
-        IExchangeProvider.Exchange[] memory exchanges = biPoolManager.getExchanges();
+    function getExchange(
+        address asset0,
+        address asset1
+    )
+        public
+        view
+        returns (IBiPoolManager.PoolExchange memory, uint256, bytes32)
+    {
+        IExchangeProvider.Exchange[] memory exchanges = biPoolManager
+            .getExchanges();
         for (uint256 i = exchanges.length - 1; i >= 0; i--) {
             IExchangeProvider.Exchange memory exchange = exchanges[i];
-            if (exchange.assets[0] == asset0 && exchange.assets[1] == asset1 || exchange.assets[0] == asset1 && exchange.assets[1] == asset0) {
-                return (exchange.exchangeId, i);
+            if (
+                (exchange.assets[0] == asset0 &&
+                    exchange.assets[1] == asset1) ||
+                (exchange.assets[0] == asset1 && exchange.assets[1] == asset0)
+            ) {
+                return (
+                    biPoolManager.exchanges(exchange.exchangeId),
+                    i,
+                    exchange.exchangeId
+                );
             }
             if (i == 0) break;
         }
 
-        return (bytes32(0), 0);
+        revert ExchangeNotFound();
     }
 }
