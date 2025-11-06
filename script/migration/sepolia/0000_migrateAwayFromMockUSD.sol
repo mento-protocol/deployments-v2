@@ -33,6 +33,7 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
     address internal constant USDT = 0xd077A400968890Eacc75cdc901F0356c943e4fDb;
     address internal constant USDC = 0x01C5C0122039549AD1493B8220cABEdD739BC44E;
 
+    uint256 internal exchangesBefore;
     address internal cUSD;
     address internal mockUsdc;
     address internal mockUsdt;
@@ -44,9 +45,7 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
     IBiPoolManager internal biPoolManagerWrite;
     IBrokerWithLimits internal brokerWrite;
 
-    /// @custom:senders deployer
-    /// @custom:env {bytes32:optional} exchangeId
-    function run() public virtual broadcast {
+    function setup() public {
         Senders.Sender storage deployer = sender("deployer");
 
         reserve = IReserve(lookupProxyOrFail("Reserve"));
@@ -64,47 +63,70 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
         cUSD = lookupProxyOrFail("cUSD");
         mockUsdc = lookupOrFail("MockERC20:USDC");
         mockUsdt = lookupOrFail("MockERC20:USDT");
+        exchangesBefore = biPoolManager.getExchanges().length;
+    }
 
+    function preChecks() internal view {
         require(
             !reserve.isCollateralAsset(USDC),
-            "USDC is already a collateral"
+            "pre: USDC is already a collateral"
         );
         require(
             !reserve.isCollateralAsset(USDT),
-            "USDT is already a collateral"
+            "pre: USDT is already a collateral"
         );
         require(
             reserve.collateralAssets(0) == mockUsdc,
-            "Mock USDC is not collateral asset 0"
+            "pre: Mock USDC is not collateral asset 0"
         );
         require(
             reserve.collateralAssets(1) == mockUsdt,
-            "Mock USDT is not collateral asset 1"
+            "pre: Mock USDT is not collateral asset 1"
         );
+    }
 
-        reserveWrite.removeCollateralAsset(mockUsdt, 1);
-        reserveWrite.removeCollateralAsset(mockUsdc, 0);
-
+    function postChecks() internal view {
         require(
             !reserve.isCollateralAsset(mockUsdc),
-            "Mock USDC is still a collateral"
+            "post: Mock USDC is still a collateral"
         );
         require(
             !reserve.isCollateralAsset(mockUsdt),
-            "Mock USDT is still a collateral"
+            "post: Mock USDT is still a collateral"
         );
 
-        reserveWrite.addCollateralAsset(USDC);
-        reserveWrite.addCollateralAsset(USDT);
 
         require(
             reserve.isCollateralAsset(USDC),
-            "USDC is still not a collateral"
+            "post: USDC is still not a collateral"
         );
         require(
             reserve.isCollateralAsset(USDT),
-            "USDT is still not a collateral"
+            "post: USDT is still not a collateral"
         );
+
+        require(
+            biPoolManager.getExchanges().length == exchangesBefore,
+            "post: Exchanges length mismatch after"
+        );
+
+        console.log(unicode"✅ Post checks passed 🎉 ");
+    }
+
+    /// @custom:senders deployer
+    function run() public virtual broadcast {
+        setup();
+
+        preChecks();
+
+        console.log(unicode"🫡 Removing mock USDT and USDC as collateral");
+        reserveWrite.removeCollateralAsset(mockUsdt, 1);
+        reserveWrite.removeCollateralAsset(mockUsdc, 0);
+
+        console.log(unicode"🤝 Adding USDC and USDT as collateral");
+        reserveWrite.addCollateralAsset(USDC);
+        reserveWrite.addCollateralAsset(USDT);
+
         (
             IBiPoolManager.PoolExchange memory usdtExchange,
             uint256 usdtExchangeIdIndex,
@@ -141,6 +163,7 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
         usdtExchange.asset1 = USDT;
         usdcExchange.asset1 = USDC;
 
+        console.log(unicode"💀 Destroying USDT and USDC exchanges");
         if (usdcExchangeId > usdtExchangeId) {
             biPoolManagerWrite.destroyExchange(
                 usdcExchangeId,
@@ -161,6 +184,7 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
             );
         }
 
+        console.log(unicode"🔄 Re-creating USDT and USDC exchanges");
         bytes32 newUsdtExchangeId = biPoolManagerWrite.createExchange(
             usdtExchange
         );
@@ -168,6 +192,7 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
             usdcExchange
         );
 
+        console.log(unicode"🔄 Configuring trading limits for new exchanges");
         brokerWrite.configureTradingLimit(newUsdtExchangeId, cUSD, usdtLimit);
         brokerWrite.configureTradingLimit(newUsdcExchangeId, cUSD, usdcLimit);
 
@@ -194,7 +219,7 @@ contract MigrateAwayFromMockUSD is TrebScript, ProxyHelper {
             "New USDC Limits don't match the old one"
         );
 
-        console.log("Looks good");
+        postChecks();
     }
 
     function getExchange(
