@@ -40,10 +40,10 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _addStableToken("JPY", "cJPY", "Celo Japanese Yen");
         _addStableToken("NGN", "cNGN", "Celo Nigerian Naira");
 
-        _addMockCollateral("USDC");
-        _addMockCollateral("USDT");
         _addMockCollateral("axlUSDC");
         _addMockCollateral("axlEUROC");
+        _addCollateral("USDC", 0x01C5C0122039549AD1493B8220cABEdD739BC44E);
+        _addCollateral("USDT", 0xd077A400968890Eacc75cdc901F0356c943e4fDb);
         _addCollateral("CELO", 0x471EcE3750Da237f93B8E339c536989b8978a438);
     }
 
