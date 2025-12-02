@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IOwnable} from "lib/mento-core/contracts/interfaces/IOwnable.sol";
 
+import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20Metadata.sol";
 import {ProxyHelper, ProxyType} from "../../helpers/ProxyHelper.sol";
 
 contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
@@ -34,41 +35,57 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
     address internal timelock;
     address internal deployerAddress;
 
-    function setAddresses() public {
+    function setup() public {
         Senders.Sender storage deployer = sender("deployer");
         deployerAddress = deployer.account;
+        console.log("Deployer address:", deployerAddress);
+        timelock = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
+        console.log("Timelock address:", timelock);
+        console.log("\n");
 
         cUSD = lookupProxyOrFail("cUSD", ProxyType.CELO);
-        cEUR = lookupProxyOrFail("cEUR", ProxyType.CELO);
-        cREAL = lookupProxyOrFail("cREAL", ProxyType.CELO);
-        eXOF = lookupProxyOrFail("eXOF", ProxyType.CELO);
-        cKES = lookupProxyOrFail("cKES", ProxyType.CELO);
-        PUSO = lookupProxyOrFail("PUSO", ProxyType.CELO);
-        cCOP = lookupProxyOrFail("cCOP", ProxyType.CELO);
-        cGHS = lookupProxyOrFail("cGHS", ProxyType.CELO);
-        cGBP = lookupProxyOrFail("cGBP", ProxyType.CELO);
-        cZAR = lookupProxyOrFail("cZAR", ProxyType.CELO);
-        cCAD = lookupProxyOrFail("cCAD", ProxyType.CELO);
-        cAUD = lookupProxyOrFail("cAUD", ProxyType.CELO);
-        cCHF = lookupProxyOrFail("cCHF", ProxyType.CELO);
-        cJPY = lookupProxyOrFail("cJPY", ProxyType.CELO);
-        cNGN = lookupProxyOrFail("cNGN", ProxyType.CELO);
-        timelock = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
-        
         stables.push(cUSD);
+
+        cEUR = lookupProxyOrFail("cEUR", ProxyType.CELO);
         stables.push(cEUR);
+
+        cREAL = lookupProxyOrFail("cREAL", ProxyType.CELO);
         stables.push(cREAL);
+
+        eXOF = lookupProxyOrFail("eXOF", ProxyType.CELO);
         stables.push(eXOF);
+
+        cKES = lookupProxyOrFail("cKES", ProxyType.CELO);
         stables.push(cKES);
+
+        PUSO = lookupProxyOrFail("PUSO", ProxyType.CELO);
         stables.push(PUSO);
+
+        cCOP = lookupProxyOrFail("cCOP", ProxyType.CELO);
         stables.push(cCOP);
+
+        cGHS = lookupProxyOrFail("cGHS", ProxyType.CELO);
         stables.push(cGHS);
+
+        cGBP = lookupProxyOrFail("cGBP", ProxyType.CELO);
         stables.push(cGBP);
+
+        cZAR = lookupProxyOrFail("cZAR", ProxyType.CELO);
         stables.push(cZAR);
+
+        cCAD = lookupProxyOrFail("cCAD", ProxyType.CELO);
         stables.push(cCAD);
+
+        cAUD = lookupProxyOrFail("cAUD", ProxyType.CELO);
         stables.push(cAUD);
+
+        cCHF = lookupProxyOrFail("cCHF", ProxyType.CELO);
         stables.push(cCHF);
+
+        cJPY = lookupProxyOrFail("cJPY", ProxyType.CELO);
         stables.push(cJPY);
+
+        cNGN = lookupProxyOrFail("cNGN", ProxyType.CELO);
         stables.push(cNGN);
     }
 
@@ -83,6 +100,7 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
             require(currentOwner == deployerAddress, "Expected token owner to be deployer");
         }
         console.log(unicode"✅ Pre-checks passed: All tokens owned by deployer");
+        console.log("\n");
     }
 
     function postChecks() internal view {
@@ -92,23 +110,25 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
             address currentOwner = token.owner();
             require(currentOwner == timelock, "Expected token owner to be timelock");
         }
-        console.log(unicode"✅ Post-checks passed: All tokens owned by timelock");
+        console.log("\n");
+        console.log(unicode"✅ Post-checks passed: All tokens (%d) owned by timelock", stables.length);
     }
 
     function transferAllOwnership() internal {
         Senders.Sender storage deployer = sender("deployer");
         
+        console.log("== Transferring ownership of all (%d) tokens ==", stables.length);
         for (uint256 i = 0; i < stables.length; ++i) {
             address tokenAddress = stables[i];
             IOwnable token = IOwnable(deployer.harness(tokenAddress));
-            console.log(unicode"🔄 Transferring ownership of token at", tokenAddress);
+            console.log(unicode"%s (%s)", IERC20Metadata(tokenAddress).symbol(), tokenAddress);
             token.transferOwnership(timelock);
         }
     }
 
     /// @custom:senders deployer
     function run() public virtual broadcast {
-        setAddresses();
+        setup();
 
         preChecks();
 
