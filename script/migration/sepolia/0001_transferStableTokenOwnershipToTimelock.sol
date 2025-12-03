@@ -10,6 +10,7 @@ import {IOwnable} from "lib/mento-core/contracts/interfaces/IOwnable.sol";
 
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20Metadata.sol";
 import {ProxyHelper, ProxyType} from "../../helpers/ProxyHelper.sol";
+import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
 
 contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
@@ -95,9 +96,11 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
         
         for (uint256 i = 0; i < stables.length; ++i) {
             address tokenAddress = stables[i];
-            IOwnable token = IOwnable(tokenAddress);
-            address currentOwner = token.owner();
-            require(currentOwner == deployerAddress, "Expected token owner to be deployer");
+            IOwnable impl = IOwnable(tokenAddress);
+            ICeloProxy proxy = ICeloProxy(tokenAddress);
+
+            require(impl.owner() == deployerAddress, "Expected token impl. owner to be deployer");
+            require(proxy._getOwner() == deployerAddress, "Expected token proxy owner to be deployer");
         }
         console.log(unicode"✅ Pre-checks passed: All tokens owned by deployer");
         console.log("\n");
@@ -106,9 +109,11 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
     function postChecks() internal view {
         for (uint256 i = 0; i < stables.length; ++i) {
             address tokenAddress = stables[i];
-            IOwnable token = IOwnable(tokenAddress);
-            address currentOwner = token.owner();
-            require(currentOwner == timelock, "Expected token owner to be timelock");
+            IOwnable impl = IOwnable(tokenAddress);
+            ICeloProxy proxy = ICeloProxy(tokenAddress);
+
+            require(impl.owner() == timelock, "Expected token impl. owner to be timelock");
+            require(proxy._getOwner() == timelock, "Expected token proxy owner to be timelock");
         }
         console.log("\n");
         console.log(unicode"✅ Post-checks passed: All tokens (%d) owned by timelock", stables.length);
@@ -120,9 +125,13 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
         console.log("== Transferring ownership of all (%d) tokens ==", stables.length);
         for (uint256 i = 0; i < stables.length; ++i) {
             address tokenAddress = stables[i];
-            IOwnable token = IOwnable(deployer.harness(tokenAddress));
+            IOwnable impl = IOwnable(deployer.harness(tokenAddress));
+            ICeloProxy proxy = ICeloProxy(deployer.harness(tokenAddress));
+
             console.log(unicode"%s (%s)", IERC20Metadata(tokenAddress).symbol(), tokenAddress);
-            token.transferOwnership(timelock);
+
+            impl.transferOwnership(timelock);
+            proxy._transferOwnership(timelock);
         }
     }
 
