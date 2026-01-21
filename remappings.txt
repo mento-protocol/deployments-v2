@@ -1,1 +1,2 @@
 src/=src/
+openzeppelin-contracts/=lib/mento-core/lib/openzeppelin-contracts-next/
