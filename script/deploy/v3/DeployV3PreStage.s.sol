@@ -33,12 +33,13 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
     string label = "v3.0.0";
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer,multisig
     function run() public broadcast {
+        Senders.Sender storage governor = sender("multisig");
         Senders.Sender storage deployer = sender("deployer");
 
         proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
-            abi.encode(deployer.account)
+            abi.encode(governor.account)
         );
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
@@ -78,7 +79,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
         oracleAdapter = deployProxy(
             deployer,
-            label,
+            "OracleAdapter",
             oracleAdapterImpl,
             abi.encodeWithSelector(
                 IOracleAdapter.initialize.selector,
