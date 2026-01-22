@@ -35,11 +35,10 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
     /// @custom:senders deployer,multisig
     function run() public broadcast {
-        Senders.Sender storage governor = sender("multisig");
-        Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage deployer = sender("multisig");
 
         proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
-            abi.encode(governor.account)
+            abi.encode(deployer.account)
         );
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(

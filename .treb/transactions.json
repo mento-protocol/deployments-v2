@@ -1842,7 +1842,8 @@
     "deployments": [
       "testnet-v2-rc5/11142220/Proxy:SortedOracles",
       "testnet-v3-rc0/11142220/Proxy:SortedOracles",
-      "testnet-v3-rc0a/11142220/Proxy:SortedOracles"
+      "testnet-v3-rc0a/11142220/Proxy:SortedOracles",
+      "new-test-namespace/11142220/Proxy:SortedOracles:v2"
     ],
     "operations": [],
     "environment": "testnet-v2-rc5",
@@ -17197,7 +17198,8 @@
     "deployments": [
       "testnet-v2-rc5/11142220/SortedOracles:v2.6.5",
       "testnet-v3-rc0/11142220/SortedOracles",
-      "testnet-v3-rc0a/11142220/SortedOracles"
+      "testnet-v3-rc0a/11142220/SortedOracles",
+      "new-test-namespace/11142220/SortedOracles:v2"
     ],
     "operations": [],
     "environment": "testnet-v2-rc5",

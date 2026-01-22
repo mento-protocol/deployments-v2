@@ -15,6 +15,7 @@ import {ConstantSumPricingModule} from "lib/mento-core/contracts/swap/ConstantSu
 import {ConstantProductPricingModule} from "lib/mento-core/contracts/swap/ConstantProductPricingModule.sol";
 
 // Oracle contracts (0.5.13)
+import {SortedOracles} from "celo/contracts/stability/SortedOracles.sol";
 import {BreakerBox} from "lib/mento-core/contracts/oracles/BreakerBox.sol";
 import {MedianDeltaBreaker} from "lib/mento-core/contracts/oracles/breakers/MedianDeltaBreaker.sol";
 import {ValueDeltaBreaker} from "lib/mento-core/contracts/oracles/breakers/ValueDeltaBreaker.sol";

@@ -2953,6 +2953,64 @@
     "createdAt": "2025-09-08T11:55:43.984987+02:00",
     "updatedAt": "2025-09-09T12:01:59.497684+02:00"
   },
+  "new-test-namespace/11142220/Proxy:SortedOracles:v2": {
+    "id": "new-test-namespace/11142220/Proxy:SortedOracles:v2",
+    "namespace": "new-test-namespace",
+    "chainId": 11142220,
+    "contractName": "Proxy:SortedOracles",
+    "label": "v2",
+    "address": "0xfaa7ca2b056e60f6733ae75aa0709140a6eafd20",
+    "type": "PROXY",
+    "transactionId": "tx-0x17ab625dc14e7fd6e33517591beabf1deb540ef61ad255a272240823b4831027",
+    "deploymentStrategy": {
+      "method": "CREATE"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x0514884378460d86528658543bc8093d8178d7b1",
+      "history": []
+    },
+    "artifact": {
+      "path": "",
+      "compilerVersion": "",
+      "bytecodeHash": "",
+      "scriptPath": "",
+      "gitCommit": ""
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": [],
+    "createdAt": "2026-01-22T17:40:26.377544+01:00",
+    "updatedAt": "2026-01-22T17:40:26.377546+01:00"
+  },
+  "new-test-namespace/11142220/SortedOracles:v2": {
+    "id": "new-test-namespace/11142220/SortedOracles:v2",
+    "namespace": "new-test-namespace",
+    "chainId": 11142220,
+    "contractName": "SortedOracles",
+    "label": "v2",
+    "address": "0x0514884378460d86528658543bc8093d8178d7b1",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xd5fb9eda048c9710a8580f255c5d04ecff6f2c16e742a943dc30471c4ed7a35c",
+    "deploymentStrategy": {
+      "method": "CREATE"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "",
+      "compilerVersion": "",
+      "bytecodeHash": "",
+      "scriptPath": "",
+      "gitCommit": ""
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": [],
+    "createdAt": "2026-01-22T17:40:26.409723+01:00",
+    "updatedAt": "2026-01-22T17:40:26.409724+01:00"
+  },
   "sepolia-v3-rc0/11142220/Proxy:USDC": {
     "id": "sepolia-v3-rc0/11142220/Proxy:USDC",
     "namespace": "sepolia-v3-rc0",

@@ -72,6 +72,10 @@
     }
   },
   "11142220": {
+    "new-test-namespace": {
+      "Proxy:SortedOracles:v2": "0xfaa7ca2b056e60f6733ae75aa0709140a6eafd20",
+      "SortedOracles:v2": "0x0514884378460d86528658543bc8093d8178d7b1"
+    },
     "sepolia-v3-rc0": {
       "Proxy:USDC": "0x01c5c0122039549ad1493b8220cabedd739bc44e",
       "USDC": "0x18b2bf98579267d4b108c5d82f816710a17efbb6"
