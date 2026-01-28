@@ -19,7 +19,7 @@ contract DeployV3Depdendencies is TrebScript, ProxyHelper {
     address sortedOracles;
     address breakerBox;
 
-    string label = "v3.0.1";
+    string label = "v3.0.0";
 
     /// @custom:senders deployer,multisig
     function run() public broadcast {

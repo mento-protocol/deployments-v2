@@ -31,9 +31,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
     address factoryRegistry;
     address router;
 
-    string label = "v3.0.1";
+    string label = "v3.0.0";
 
-    /// @custom:senders deployer,multisig
+    /// @custom:senders multisig
     function run() public broadcast {
         Senders.Sender storage deployer = sender("multisig");
 
@@ -78,13 +78,14 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
         oracleAdapter = deployProxy(
             deployer,
-            "OracleAdapter",
+            label,
             oracleAdapterImpl,
             abi.encodeWithSelector(
                 IOracleAdapter.initialize.selector,
                 sortedOracles,
                 breakerBox,
                 marketHoursBreaker,
+                address(0),
                 proxyAdmin
             )
         );
