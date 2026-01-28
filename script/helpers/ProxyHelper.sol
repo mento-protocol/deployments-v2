@@ -110,6 +110,16 @@ contract ProxyHelper is TrebScript {
         require(addy != address(0), string.concat(identifier, " not deployed"));
     }
 
+    function lookupWithCodeOrFail(string memory identifier) internal view returns (address impl) {
+        impl = lookupOrFail(identifier);
+        require(impl.code.length > 0, string.concat(identifier, " has no code"));
+    }
+
+    function lookupProxyWithCodeOrFail(string memory identifier) internal view returns (address proxy) {
+        proxy = lookupProxyOrFail(identifier);
+        require(proxy.code.length > 0, string.concat(identifier, " has no code"));
+    }
+
     function predictProxy(
         Senders.Sender storage deployer,
         string memory label

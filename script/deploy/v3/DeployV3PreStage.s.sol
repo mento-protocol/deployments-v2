@@ -18,6 +18,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
     using Senders for Senders.Sender;
     using GnosisSafe for GnosisSafe.Sender;
 
+    address sortedOracles;
+    address breakerBox;
+
     address fpmmImpl;
     address oneToOneFpmmImpl;
     address fpmmFactoryImpl;
@@ -33,8 +36,36 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
     string label = "v3.0.0";
 
+    function setup() public {
+        sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
+        breakerBox = lookupWithCodeOrFail("BreakerBox");
+    }
+
+    function postChecks() internal view {
+
+    // Verify that contracts are deployed and have code
+        lookupWithCodeOrFail("ProxyAdmin");
+        lookupWithCodeOrFail("FPMM");
+        lookupWithCodeOrFail("OneToOneFPMM");
+        lookupWithCodeOrFail("FPMMFactory");
+        lookupWithCodeOrFail("MarketHoursBreaker");
+        lookupWithCodeOrFail("OracleAdapter");
+        lookupWithCodeOrFail("FactoryRegistry");
+        lookupWithCodeOrFail("VirtualPoolFactory");
+        lookupWithCodeOrFail("Router");
+        lookupWithCodeOrFail("SortedOracles");
+        lookupWithCodeOrFail("BreakerBox");
+
+        lookupProxyWithCodeOrFail("FPMMFactory");
+        lookupProxyWithCodeOrFail("OracleAdapter");
+        lookupProxyWithCodeOrFail("FactoryRegistry");
+        lookupProxyWithCodeOrFail("SortedOracles");
+    }
+
     /// @custom:senders deployer,multisig
     function run() public broadcast {
+        setup();
+
         Senders.Sender storage deployer = sender("multisig");
 
         proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
@@ -148,5 +179,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
         router = deployer.create3("Router").setLabel(label).deploy(
             abi.encode(address(0), factoryRegistry, fpmmFactory)
         );
+        postChecks();
     }
 }
