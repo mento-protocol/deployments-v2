@@ -1,17 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
-import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
 contract PostChecksHelper is TrebScript {
-    using Deployer for Senders.Sender;
-    using Deployer for Deployer.Deployment;
-    using Senders for Senders.Sender;
-
     constructor() {}
 
     function verifyInit(
@@ -47,26 +40,6 @@ contract PostChecksHelper is TrebScript {
         );
     }
 
-    function verifyFPMMImplRegistered(
-        string memory identifier,
-        bool current
-    ) internal pure {
-        require(
-            current == true,
-            string.concat(identifier, " impl not registered")
-        );
-    }
-
-    function verifyFactoryRegistry(
-        string memory identifier,
-        bool current
-    ) internal pure {
-        require(
-            current == true,
-            string.concat(identifier, " impl not registered")
-        );
-    }
-
     function verifyOwnership(
         string memory identifier,
         address contractAddress,
@@ -74,7 +47,7 @@ contract PostChecksHelper is TrebScript {
     ) internal view {
         require(
             IOwnable(contractAddress).owner() == expectedOwner,
-            string.concat(identifier, " owner is not multisug")
+            string.concat(identifier, " owner is not multisig")
         );
     }
 
@@ -103,8 +76,14 @@ contract PostChecksHelper is TrebScript {
         (bool success, bytes memory data) = impl.staticcall(
             abi.encodeWithSignature("initialized()")
         );
-        require(success, string.concat(identifier, " initialized() call failed"));
+        require(
+            success,
+            string.concat(identifier, " initialized() call failed")
+        );
         bool isInitialized = abi.decode(data, (bool));
-        require(isInitialized, string.concat(identifier, " impl init is not disabled"));
+        require(
+            isInitialized,
+            string.concat(identifier, " impl init is not disabled")
+        );
     }
 }

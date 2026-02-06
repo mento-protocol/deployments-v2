@@ -29,7 +29,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address multisig;
 
     address sortedOracles;
-    address sortedOraclesImlp;
+    address sortedOraclesImpl;
     address breakerBox;
 
     address fpmmImpl;
@@ -51,7 +51,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         multisig = sender("multisig").account;
 
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
-        sortedOraclesImlp = lookupWithCodeOrFail("SortedOracles");
+        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles");
         breakerBox = lookupWithCodeOrFail("BreakerBox");
     }
 
@@ -92,7 +92,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             factoryRegistry,
             factoryRegistryImpl
         );
-        verifyProxyImpl("FPMMFactory", fpmmFactory, fpmmFactoryImpl);
+        verifyProxyImpl("SortedOracles", sortedOracles, sortedOraclesImpl);
 
         // 3. Proxy Admin Checks
         // Verifies that ProxyAdmin contract is set as admin for each proxy
@@ -117,7 +117,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         verifyInitDisabled("FPMMFactoryImpl", fpmmFactoryImpl);
         verifyInitDisabled("OracleAdapterImpl", oracleAdapterImpl);
         verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
-        verifyCeloInitDisabled("SortedOraclesImpl", sortedOraclesImlp);
+        verifyCeloInitDisabled("SortedOraclesImpl", sortedOraclesImpl);
 
         // 6. OracleAdapter Initialization
         // Verifies that OracleAdapter is initialized with correct addresses.
