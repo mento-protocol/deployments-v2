@@ -5,6 +5,7 @@ import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
+import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
 
 enum ProxyType {
     CELO, // Celo Legacy Proxy
@@ -110,14 +111,24 @@ contract ProxyHelper is TrebScript {
         require(addy != address(0), string.concat(identifier, " not deployed"));
     }
 
-    function lookupWithCodeOrFail(string memory identifier) internal view returns (address impl) {
+    function lookupWithCodeOrFail(
+        string memory identifier
+    ) internal view returns (address impl) {
         impl = lookupOrFail(identifier);
-        require(impl.code.length > 0, string.concat(identifier, " has no code"));
+        require(
+            impl.code.length > 0,
+            string.concat(identifier, " has no code")
+        );
     }
 
-    function lookupProxyWithCodeOrFail(string memory identifier) internal view returns (address proxy) {
+    function lookupProxyWithCodeOrFail(
+        string memory identifier
+    ) internal view returns (address proxy) {
         proxy = lookupProxyOrFail(identifier);
-        require(proxy.code.length > 0, string.concat(identifier, " has no code"));
+        require(
+            proxy.code.length > 0,
+            string.concat(identifier, " has no code")
+        );
     }
 
     function predictProxy(
@@ -200,6 +211,68 @@ contract ProxyHelper is TrebScript {
         require(proxyAdmin != address(0), "ProxyAdmin not deployed");
         proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
             abi.encode(implementation, proxyAdmin, initData)
+        );
+    }
+
+    // Get proxy admin from CELO and OZTUP proxies dynamically
+    function getProxyAdmin(
+        address proxy
+    ) internal view returns (address proxyAdmin) {
+        // if this is CELO proxy _getOwner() return proxy admin
+        try ICeloProxy(proxy)._getOwner() returns (address owner) {
+            if (owner != address(0)) {
+                return owner;
+            }
+        } catch {
+            // if this is not CELO proxy _getOwner() return 0 address and we take it by adminSlot from OZTUP
+            return
+                address(
+                    uint160(
+                        uint256(
+                            vm.load(
+                                proxy,
+                                0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
+                            )
+                        )
+                    )
+                );
+        }
+    }
+
+    function verifyProxyAdmin(
+        string memory identifier,
+        address proxy,
+        address expectedAdmin
+    ) internal view {
+        require(
+            getProxyAdmin(proxy) == expectedAdmin,
+            string.concat(identifier, " proxy admin mismatch")
+        );
+    }
+
+    function getProxyImplementation(
+        address proxy
+    ) internal view returns (address) {
+        try ICeloProxy(proxy)._getImplementation() returns (address impl) {
+            if (impl != address(0)) {
+                return impl;
+            }
+        } catch {}
+
+        // Fall back to EIP-1967 implementation slot (OZTUP)
+        bytes32 implSlot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+        return address(uint160(uint256(vm.load(proxy, implSlot))));
+    }
+
+    function verifyProxyImpl(
+        string memory identifier,
+        address proxy,
+        address expectedImpl
+    ) internal view {
+        address actualImpl = getProxyImplementation(proxy);
+        require(
+            actualImpl == expectedImpl,
+            string.concat(identifier, " proxy implementation mismatch")
         );
     }
 }
