@@ -14,5 +14,6 @@ docs/
 .env
 
 .crush
+.claude/
 .treb/config.local.json
 node_modules
