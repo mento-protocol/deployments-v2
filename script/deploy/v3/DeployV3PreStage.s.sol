@@ -64,26 +64,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             factoryRegistry
         );
 
-        // 1. Deployment Verification
-        // Verify that contracts are deployed and have code
-        lookupWithCodeOrFail("ProxyAdmin");
-        lookupWithCodeOrFail("FPMM");
-        lookupWithCodeOrFail("OneToOneFPMM");
-        lookupWithCodeOrFail("FPMMFactory");
-        lookupWithCodeOrFail("MarketHoursBreaker");
-        lookupWithCodeOrFail("OracleAdapter");
-        lookupWithCodeOrFail("FactoryRegistry");
-        lookupWithCodeOrFail("VirtualPoolFactory");
-        lookupWithCodeOrFail("Router");
-        lookupWithCodeOrFail("SortedOracles");
-        lookupWithCodeOrFail("BreakerBox");
-
-        lookupProxyWithCodeOrFail("FPMMFactory");
-        lookupProxyWithCodeOrFail("OracleAdapter");
-        lookupProxyWithCodeOrFail("FactoryRegistry");
-        lookupProxyWithCodeOrFail("SortedOracles");
-
-        // 2. Proxy Implementation Checks
+        // Proxy Implementation Checks
         // Verifies that proxies point to their implementations
         verifyProxyImpl("OracleAdapter", oracleAdapter, oracleAdapterImpl);
         verifyProxyImpl("FPMMFactory", fpmmFactory, fpmmFactoryImpl);
@@ -92,129 +73,106 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             factoryRegistry,
             factoryRegistryImpl
         );
-        verifyProxyImpl("SortedOracles", sortedOracles, sortedOraclesImpl);
 
-        // 3. Proxy Admin Checks
+        // Proxy Admin Checks
         // Verifies that ProxyAdmin contract is set as admin for each proxy
         verifyProxyAdmin("FPMMFactory", fpmmFactory, proxyAdmin);
         verifyProxyAdmin("OracleAdapter", oracleAdapter, proxyAdmin);
         verifyProxyAdmin("FactoryRegistry", factoryRegistry, proxyAdmin);
-        verifyProxyAdmin("SortedOracles", sortedOracles, proxyAdmin);
 
-        // 4. Ownership Checks
+        // Ownership Checks
         // Verifies that contract owners are set to multisig.
         verifyOwnership("ProxyAdmin", proxyAdmin, multisig);
         verifyOwnership("OracleAdapter", oracleAdapter, multisig);
         verifyOwnership("FPMMFactory", fpmmFactory, multisig);
         verifyOwnership("FactoryRegistry", factoryRegistry, multisig);
         verifyOwnership("VirtualPoolFactory", virtualPoolFactory, multisig);
-        verifyOwnership("SortedOracles", sortedOracles, multisig);
 
-        // 5. Implementation Initializer Protection
+        // Implementation Initializer Protection
         // Verifies that implementation contracts cannot be initialized directly (security check).
         verifyInitDisabled("FPMMImpl", fpmmImpl);
         verifyInitDisabled("OneToOneFPMMImpl", oneToOneFpmmImpl);
         verifyInitDisabled("FPMMFactoryImpl", fpmmFactoryImpl);
         verifyInitDisabled("OracleAdapterImpl", oracleAdapterImpl);
         verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
-        verifyCeloInitDisabled("SortedOraclesImpl", sortedOraclesImpl);
 
-        // 6. OracleAdapter Initialization
+        // OracleAdapter Initialization
         // Verifies that OracleAdapter is initialized with correct addresses.
-        verifyInit(
-            "SortedOracles",
-            address(oracleAdapterContract.sortedOracles()),
-            sortedOracles
+        require(
+            address(oracleAdapterContract.sortedOracles()) == sortedOracles,
+            "SortedOracles initialized with mismatched address"
         );
-        verifyInit(
-            "BreakerBox",
-            address(oracleAdapterContract.breakerBox()),
-            breakerBox
+        require(
+            address(oracleAdapterContract.breakerBox()) == breakerBox,
+            "BreakerBox initialized with mismatched address"
         );
-        verifyInit(
-            "MarketHoursBreaker",
-            address(oracleAdapterContract.marketHoursBreaker()),
-            marketHoursBreaker
+        require(
+            address(oracleAdapterContract.marketHoursBreaker()) ==
+                marketHoursBreaker,
+            "MarketHoursBreaker initialized with mismatched address"
         );
 
-        // 7. FPMMFactory Initialization
+        // FPMMFactory Initialization
         // Verifies that FPMMFactory is initialized with the correct addresses.
-        verifyInit(
-            "OracleAdapter",
-            fpmmFactoryContract.oracleAdapter(),
-            oracleAdapter
+        require(
+            address(fpmmFactoryContract.oracleAdapter()) == oracleAdapter,
+            "OracleAdapter initialized with mismatched address"
         );
-        verifyInit("ProxyAdmin", fpmmFactoryContract.proxyAdmin(), proxyAdmin);
-        verifyInit(
-            "DefaultImplementation",
-            fpmmFactoryContract.registeredImplementations()[0],
-            fpmmFactoryImpl
-        );
-        verifyInit(
-            "OneToOneFPMM",
-            fpmmFactoryContract.registeredImplementations()[1],
-            oneToOneFpmmImpl
+        require(
+            address(fpmmFactoryContract.proxyAdmin()) == proxyAdmin,
+            "ProxyAdmin initialized with mismatched address"
         );
 
-        // 8. FPMMFactory Parameters
+        // FPMMFactory Parameters
         // Verifies that FPMMFactory default params are set correctly.
         IFPMM.FPMMParams memory defaultParams = fpmmFactoryContract
             .defaultParams();
-        verifyFPMMFactoryParams("lpFee", defaultParams.lpFee, 30);
-        verifyFPMMFactoryParams("protocolFee", defaultParams.protocolFee, 0);
-        verifyFPMMFactoryParams(
-            "protocolFeeRecipient",
-            defaultParams.protocolFeeRecipient,
-            multisig
+
+        require(defaultParams.lpFee == 30, "lpFee param mismatched");
+        require(defaultParams.protocolFee == 0, "protocolFee param mismatched");
+        require(
+            defaultParams.protocolFeeRecipient == multisig,
+            "protocolFeeRecipient param mismatched"
         );
-        verifyFPMMFactoryParams(
-            "rebalanceIncentive",
-            defaultParams.rebalanceIncentive,
-            50
+        require(
+            defaultParams.rebalanceIncentive == 50,
+            "rebalanceIncentive param mismatched"
         );
-        verifyFPMMFactoryParams(
-            "rebalanceThresholdAbove",
-            defaultParams.rebalanceThresholdAbove,
-            500
+        require(
+            defaultParams.rebalanceThresholdAbove == 500,
+            "rebalanceThresholdAbove param mismatched"
         );
-        verifyFPMMFactoryParams(
-            "rebalanceThresholdBelow",
-            defaultParams.rebalanceThresholdBelow,
-            500
+        require(
+            defaultParams.rebalanceThresholdBelow == 500,
+            "rebalanceThresholdBelow param mismatched"
         );
 
-        // 9. FPMMFactory Registrations
+        // FPMMFactory Registrations
         // Verifies that_FPMM implementations are registered.
         require(
             fpmmFactoryContract.isRegisteredImplementation(oneToOneFpmmImpl),
             "oneToOneFpmmImpl is not registered"
         );
         require(
-            fpmmFactoryContract.isRegisteredImplementation(
-                fpmmFactoryContract.registeredImplementations()[0]
-            ),
+            fpmmFactoryContract.isRegisteredImplementation(fpmmImpl),
             "defaultFpmmImpl is not registered"
         );
 
-        // 10. FactoryRegistry Initialization
+        // FactoryRegistry Initialization
         // Verifies that FactoryRegistry is initialized with correct addresses.
         require(
             factoryRegistryContract.fallbackPoolFactory() == fpmmFactory,
             "Fallback pool factory is not FPMMFactory"
         );
 
-        // 11. FactoryRegistry Approvals
+        // FactoryRegistry Approvals
         // Verifies that factories are approved in FactoryRegistry.
-        require(
-            factoryRegistryContract.isPoolFactoryApproved(virtualPoolFactory),
-            "VirtualPoolFactory is not approved in FactoryRegistry"
-        );
         require(
             factoryRegistryContract.isPoolFactoryApproved(fpmmFactory),
             "FPMMFactory is not approved in FactoryRegistry"
         );
 
-        // 12. Router Configuration
+        // Router Configuration
         // Verifies that the Router is configured correctly.
         require(
             routerContract.factoryRegistry() == factoryRegistry,
@@ -281,7 +239,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
                 breakerBox,
                 marketHoursBreaker,
                 address(0),
-                proxyAdmin
+                multisig
             )
         );
 

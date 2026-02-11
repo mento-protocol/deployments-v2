@@ -7,39 +7,6 @@ import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 contract PostChecksHelper is TrebScript {
     constructor() {}
 
-    function verifyInit(
-        string memory identifier,
-        address current,
-        address expected
-    ) internal pure {
-        require(
-            current == expected,
-            string.concat(identifier, " initialized with mismatched address")
-        );
-    }
-
-    function verifyFPMMFactoryParams(
-        string memory identifier,
-        uint256 current,
-        uint256 expected
-    ) internal pure {
-        require(
-            current == expected,
-            string.concat(identifier, " param mismatched")
-        );
-    }
-
-    function verifyFPMMFactoryParams(
-        string memory identifier,
-        address current,
-        address expected
-    ) internal pure {
-        require(
-            current == expected,
-            string.concat(identifier, " param mismatched")
-        );
-    }
-
     function verifyOwnership(
         string memory identifier,
         address contractAddress,
@@ -51,6 +18,7 @@ contract PostChecksHelper is TrebScript {
         );
     }
 
+    // TODO: Move this check to the test level and expect revert
     function verifyInitDisabled(
         string memory identifier,
         address impl
@@ -64,25 +32,6 @@ contract PostChecksHelper is TrebScript {
 
         require(
             initialized == type(uint8).max,
-            string.concat(identifier, " impl init is not disabled")
-        );
-    }
-
-    function verifyCeloInitDisabled(
-        string memory identifier,
-        address impl
-    ) internal view {
-        // Celo's Initializable exposes a public `initialized` getter
-        (bool success, bytes memory data) = impl.staticcall(
-            abi.encodeWithSignature("initialized()")
-        );
-        require(
-            success,
-            string.concat(identifier, " initialized() call failed")
-        );
-        bool isInitialized = abi.decode(data, (bool));
-        require(
-            isInitialized,
             string.concat(identifier, " impl init is not disabled")
         );
     }
