@@ -4,10 +4,12 @@ pragma solidity ^0.8.0;
 import {console} from "forge-std/console.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {IMentoConfig} from "./IMentoConfig.sol";
+import {IMentoV3Config} from "./IMentoV3Config.sol";
 
 import "./MentoConfig_vbase.sol";
 import "./MentoConfig_celo_sepolia.sol";
 import "./MentoConfig_monad_testnet.sol";
+import "./MentoConfig_local.sol";
 
 library Config {
     address private constant VM_ADDRESS =
@@ -15,15 +17,31 @@ library Config {
     Vm private constant vm = Vm(VM_ADDRESS);
 
     // Cache the config contract to avoid multiple deployments
-    address private constant CACHE_SLOT =
-        address(uint160(uint256(keccak256("mento.config.cache"))));
+    address private constant CACHE_SLOT = address(uint160(uint256(keccak256("mento.config.cache"))));
+
+    /**
+     * @notice Gets the Mento configuration contract as a IMentoConfig
+     * @dev This is meant to preserve compatibility with Mento V2 scripts
+     * @return The deployed config contract instance
+     */
+    function get() internal returns (IMentoConfig) {
+        return IMentoConfig(_get("MentoConfig"));
+    }
+
+    /**
+     * @notice Gets the Mento configuration contract as a IMentoV3Config
+     * @return The deployed config contract instance
+     */
+    function getV3() internal returns (IMentoV3Config) {
+        return IMentoV3Config(_get("MentoV3Config"));
+    }
 
     /**
      * @notice Gets the Mento configuration contract
      * @dev Checks MENTO_CONFIG_CONTRACT env var for the artifact name to deploy
      * @return The deployed config contract instance
      */
-    function get() internal returns (IMentoConfig) {
+    function _get(string memory baseName) internal returns (address) {
         // Check if we already have a cached config
         bytes32 slot = keccak256(abi.encode(CACHE_SLOT));
         address cachedConfig;
@@ -32,7 +50,7 @@ library Config {
         }
 
         if (cachedConfig != address(0)) {
-            return IMentoConfig(cachedConfig);
+            return cachedConfig;
         }
 
         // Get the config contract artifact name from environment
@@ -42,7 +60,8 @@ library Config {
         } catch {
             // Default to a base config if not specified
             artifactName = string.concat(
-                "MentoConfig_",
+                baseName,
+                "_",
                 vm.envString("NETWORK")
             );
         }
@@ -61,9 +80,9 @@ library Config {
                 string.concat("Deployed ", artifactName, " at:"),
                 configContract
             );
-            return IMentoConfig(configContract);
+            return configContract;
         } catch {
-            return IMentoConfig(address(0));
+            return address(0);
         }
     }
 

@@ -33,9 +33,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
     string label = "v3.0.0";
 
-    /// @custom:senders multisig
+    /// @custom:senders deployer
     function run() public broadcast {
-        Senders.Sender storage deployer = sender("multisig");
+        Senders.Sender storage deployer = sender("deployer");
 
         proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
             abi.encode(deployer.account)
@@ -57,7 +57,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
         address sortedOracles = lookupProxyOrFail("SortedOracles");
 
-        address breakerBox = lookup("BreakerBox");
+        address breakerBox = lookup(string.concat("BreakerBox:", label));
         require(
             breakerBox != address(0),
             string.concat(
