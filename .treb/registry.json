@@ -494,6 +494,9 @@
     }
   },
   "42220": {
+    "celo": {
+      "SafeProxy:DevMultisig": "0x58099b74f4acd642da77b4b7966b4138ec5ba458"
+    },
     "virtual": {
       "AddressSortedLinkedListWithMedian": "0x498FB531985aD936f1A98813F92625084a67d02F",
       "BiPoolManager:v2.6.5": "0x5b49162d4CdD7be3DcF2eb07BaF9922c82670990",
