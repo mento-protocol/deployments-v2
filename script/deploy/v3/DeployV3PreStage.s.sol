@@ -76,9 +76,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
 
         // Proxy Admin Checks
         // Verifies that ProxyAdmin contract is set as admin for each proxy
-        verifyProxyAdmin("FPMMFactory", fpmmFactory, proxyAdmin);
-        verifyProxyAdmin("OracleAdapter", oracleAdapter, proxyAdmin);
-        verifyProxyAdmin("FactoryRegistry", factoryRegistry, proxyAdmin);
+        verifyProxyAdmin("FPMMFactory", fpmmFactory, multisig);
+        verifyProxyAdmin("OracleAdapter", oracleAdapter, multisig);
+        verifyProxyAdmin("FactoryRegistry", factoryRegistry, multisig);
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
