@@ -317,7 +317,7 @@ contract MGP14 is TrebScript, ProxyHelper {
         Senders.Sender storage govSender = sender("governor");
 
         OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-14: Transfer USDm and EURm ownership to Dev Multisig");
+        ozGovSender.setTitle("MGP-14: Mento V3 Deployment Phase 1");
         ozGovSender.setProposalDescription("./mgps/mgp14.md");
 
         preChecks();
