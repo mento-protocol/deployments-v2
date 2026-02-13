@@ -129,7 +129,10 @@ contract MGP14 is TrebScript, ProxyHelper {
 
     function preChecks() internal view {
         console.log("== Pre-checks ==");
-        console.log(unicode" > 👀 checking current ownership of %d contracts", tokens.length + proxies.length + singletons.length);
+        console.log(
+            unicode" > 👀 checking current ownership of %d contracts",
+            tokens.length + proxies.length + singletons.length
+        );
 
         for (uint256 i = 0; i < tokens.length; ++i) {
             require(equalStrings(IERC20Metadata(tokens[i].addr).symbol(), tokens[i].name), "unexpected token symbol");
@@ -194,8 +197,7 @@ contract MGP14 is TrebScript, ProxyHelper {
             require(StableTokenV3(tokens[i].addr).isMinter(newMinter), "failed to set minter role");
 
             console.log(
-                unicode"  > 🟢 multisig can upgrade %s to stable token v3 and set minter role",
-                tokens[i].name
+                unicode"  > 🟢 multisig can upgrade %s to stable token v3 and set minter role", tokens[i].name
             );
         }
     }
@@ -212,7 +214,10 @@ contract MGP14 is TrebScript, ProxyHelper {
         vm.prank(devMultisig);
         IBiPoolManager(biPoolManager.addr).destroyExchange(exchangeIds[0], 0);
 
-        require(IBiPoolManager(biPoolManager.addr).getExchangeIds().length == exchangeIds.length - 1, "failed to destroy exchange");
+        require(
+            IBiPoolManager(biPoolManager.addr).getExchangeIds().length == exchangeIds.length - 1,
+            "failed to destroy exchange"
+        );
 
         console.log(unicode"  > 🟢 multisig can destroy exchanges on %s", biPoolManager.name);
     }
@@ -226,7 +231,9 @@ contract MGP14 is TrebScript, ProxyHelper {
         address sampleFeed = address(uint160(uint256(keccak256("newToken"))));
         address newOracle = address(1337);
 
-        require(ISortedOracles(sortedOracles.addr).getOracles(sampleFeed).length == 0, "sample feed should have no oracles");
+        require(
+            ISortedOracles(sortedOracles.addr).getOracles(sampleFeed).length == 0, "sample feed should have no oracles"
+        );
 
         vm.prank(devMultisig);
         ISortedOracles(sortedOracles.addr).addOracle(sampleFeed, newOracle);
@@ -263,12 +270,18 @@ contract MGP14 is TrebScript, ProxyHelper {
 
         uint256 defaultSmoothingFactor = IMedianDeltaBreaker(medianDeltaBreaker.addr).DEFAULT_SMOOTHING_FACTOR();
         address sampleFeed = address(uint160(uint256(keccak256("newToken"))));
-        require(IMedianDeltaBreaker(medianDeltaBreaker.addr).getSmoothingFactor(sampleFeed) == defaultSmoothingFactor, "unexpected smoothing factor");
+        require(
+            IMedianDeltaBreaker(medianDeltaBreaker.addr).getSmoothingFactor(sampleFeed) == defaultSmoothingFactor,
+            "unexpected smoothing factor"
+        );
 
         vm.prank(devMultisig);
         IMedianDeltaBreaker(medianDeltaBreaker.addr).setSmoothingFactor(sampleFeed, 1e18);
 
-        require(IMedianDeltaBreaker(medianDeltaBreaker.addr).getSmoothingFactor(sampleFeed) == 1e18, "failed to set smoothing factor");
+        require(
+            IMedianDeltaBreaker(medianDeltaBreaker.addr).getSmoothingFactor(sampleFeed) == 1e18,
+            "failed to set smoothing factor"
+        );
 
         console.log(unicode"  > 🟢 multisig can set smoothing factor on %s", medianDeltaBreaker.name);
     }
@@ -290,7 +303,10 @@ contract MGP14 is TrebScript, ProxyHelper {
         vm.prank(devMultisig);
         IValueDeltaBreaker(valueDeltaBreaker.addr).setReferenceValues(feeds, referenceValues);
 
-        require(IValueDeltaBreaker(valueDeltaBreaker.addr).referenceValues(feeds[0]) == referenceValues[0], "failed to set reference value");
+        require(
+            IValueDeltaBreaker(valueDeltaBreaker.addr).referenceValues(feeds[0]) == referenceValues[0],
+            "failed to set reference value"
+        );
 
         console.log(unicode"  > 🟢 multisig can set reference value on %s", valueDeltaBreaker.name);
     }
