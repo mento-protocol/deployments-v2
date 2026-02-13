@@ -8,6 +8,7 @@ components:
     script: DeploySortedOracles
     deps:
       - AddressSortedLinkedListWithMedian
+      - ProxyAdmin
   BreakerBox:
     script: DeployBreakerBox
     deps: 
