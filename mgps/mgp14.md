@@ -85,6 +85,44 @@ We will employ the same operational safety measures that we’ve been employing 
 
 ### Transaction Details
 
-TBD
+This proposal consists of **11 transactions**, which transfer the ownership of core Mento V2 contracts to the 4/7 Mento Labs Dev Multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`).
 
----
+**Step 1: Transfer Stable Token Ownership (6 transactions)**
+
+Transfer both the proxy admin and contract ownership for each stable token to the Dev Multisig. Proxy admin ownership is required to upgrade the token implementations to StableTokenV3, while contract ownership is required to configure the new minter/burner roles needed by Mento V3.
+
+For each of USDm, EURm, and GBPm:
+
+- Call `_transferOwnership(address)` on the token proxy to transfer proxy admin ownership
+- Call `transferOwnership(address)` on the token contract to transfer contract ownership
+
+| Token | Address                                    |
+| ----- | ------------------------------------------ |
+| USDm  | 0x765DE816845861e75A25fCA122bb6898B8B1282a |
+| EURm  | 0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73 |
+| GBPm  | 0xCCF663b1fF11028f0b19058d0f7B674004a40746 |
+
+**Step 2: Transfer BiPoolManager Ownership (1 transaction)**
+
+Transfer contract ownership of the BiPoolManager to the Dev Multisig. This is required in order to deprecate Mento V2 exchange pools as they are migrated to Mento V3 FPMM pools.
+
+- Call `transferOwnership(address)` on the BiPoolManager contract
+
+| Contract      | Address                                    |
+| ------------- | ------------------------------------------ |
+| BiPoolManager | 0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901 |
+
+**Step 3: Transfer Oracle Infrastructure Ownership (4 transactions)**
+
+Transfer contract ownership of SortedOracles and the circuit breaker contracts (BreakerBox, MedianDeltaBreaker, ValueDeltaBreaker) to the Dev Multisig. This allows operational flexibility to tune circuit breaker parameters during the initial phases of the Mento V3 deployment, should adjustments be needed.
+
+For each contract:
+
+- Call `transferOwnership(address)` on the contract
+
+| Contract           | Address                                    |
+| ------------------ | ------------------------------------------ |
+| SortedOracles      | 0xefB84935239dAcdecF7c5bA76d8dE40b077B7b33 |
+| BreakerBox         | 0x303ED1df62Fa067659B586EbEe8De0EcE824Ab39 |
+| MedianDeltaBreaker | 0x49349F92D2B17d491e42C8fdB02D19f072F9B5D9 |
+| ValueDeltaBreaker  | 0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68 |
