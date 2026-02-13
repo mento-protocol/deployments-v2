@@ -54,7 +54,7 @@ contract MGP14 is TrebScript, ProxyHelper {
     address internal timelockProxy;
     address internal devMultisig;
 
-    function setupAddresses() public {
+    function setUp() public {
         require(isMainnet() || isSepolia(), "only mainnet or sepolia are supported");
 
         if (isMainnet()) {
@@ -86,6 +86,28 @@ contract MGP14 is TrebScript, ProxyHelper {
             timelockProxy = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
             devMultisig = SEPOLIA_devMultisig;
         }
+    }
+
+    /// @custom:senders deployer, governor
+    function run() public virtual broadcast {
+        Senders.Sender storage govSender = sender("governor");
+
+        OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
+        ozGovSender.setTitle("MGP-14: Mento V3 Deployment Phase 1");
+        ozGovSender.setProposalDescription("./mgps/mgp14.md");
+
+        preChecks();
+
+        transferProxies(govSender);
+        transferSingletons(govSender);
+
+        checkOwnershipTransfers();
+        checkTokenContractsPermissions();
+        checkSortedOraclesPermissions();
+        checkBiPoolManagerPermissions();
+        checkBreakerBoxPermissions();
+        checkMedianDeltaBreakerPermissions();
+        checkValueDeltaBreakerPermissions();
     }
 
     function transferContractOwnership(Senders.Sender storage govSender, address addr) internal {
@@ -311,35 +333,7 @@ contract MGP14 is TrebScript, ProxyHelper {
         console.log(unicode"  > 🟢 multisig can set reference value on %s", valueDeltaBreaker.name);
     }
 
-    /// =========== Proposal submission ===========
-
-    function proposal() public {
-        Senders.Sender storage govSender = sender("governor");
-
-        OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-14: Mento V3 Deployment Phase 1");
-        ozGovSender.setProposalDescription("./mgps/mgp14.md");
-
-        preChecks();
-        transferProxies(govSender);
-        transferSingletons(govSender);
-
-        checkOwnershipTransfers();
-        checkTokenContractsPermissions();
-        checkSortedOraclesPermissions();
-        checkBiPoolManagerPermissions();
-        checkBreakerBoxPermissions();
-        checkMedianDeltaBreakerPermissions();
-        checkValueDeltaBreakerPermissions();
-    }
-
-    /// @custom:senders deployer, governor
-    function run() public virtual broadcast {
-        setupAddresses();
-        proposal();
-    }
-
-    /// =========== Helper functions ===========
+    /// =========== Misc Helper functions ===========
 
     function isTokenContract(string memory name) internal pure returns (bool) {
         return equalStrings(name, "USDm") || equalStrings(name, "EURm") || equalStrings(name, "GBPm");
