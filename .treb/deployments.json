@@ -1,31 +1,4 @@
 {
-  "celo/42220/SafeProxy:DevMultisig": {
-    "id": "celo/42220/SafeProxy:DevMultisig",
-    "namespace": "celo",
-    "chainId": 42220,
-    "contractName": "SafeProxy",
-    "label": "DevMultisig",
-    "address": "0x58099b74f4acd642da77b4b7966b4138ec5ba458",
-    "type": "SINGLETON",
-    "transactionId": "tx-0x0c08c471d9552f48b5a559a1aee0caee3e19e6efe58ecf71bb59ef9347e903c1",
-    "deploymentStrategy": {
-      "method": "CREATE2"
-    },
-    "proxyInfo": null,
-    "artifact": {
-      "path": "",
-      "compilerVersion": "",
-      "bytecodeHash": "",
-      "scriptPath": "",
-      "gitCommit": ""
-    },
-    "verification": {
-      "status": "UNVERIFIED"
-    },
-    "tags": [],
-    "createdAt": "2026-02-12T19:48:59.277705+01:00",
-    "updatedAt": "2026-02-12T19:48:59.277708+01:00"
-  },
   "monad-testnet-v2-rc0/10143/AddressSortedLinkedListWithMedian": {
     "id": "monad-testnet-v2-rc0/10143/AddressSortedLinkedListWithMedian",
     "namespace": "monad-testnet-v2-rc0",

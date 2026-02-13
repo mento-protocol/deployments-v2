@@ -784,30 +784,6 @@
     "environment": "monad-testnet-v2-rc0",
     "createdAt": "2025-09-08T14:03:49.916794+02:00"
   },
-  "tx-0x0c08c471d9552f48b5a559a1aee0caee3e19e6efe58ecf71bb59ef9347e903c1": {
-    "id": "tx-0x0c08c471d9552f48b5a559a1aee0caee3e19e6efe58ecf71bb59ef9347e903c1",
-    "chainId": 42220,
-    "hash": "0x0c08c471d9552f48b5a559a1aee0caee3e19e6efe58ecf71bb59ef9347e903c1",
-    "status": "EXECUTED",
-    "blockNumber": 59009128,
-    "sender": "0xb1074d0f9e54763e073c7fdb25b622b4326327cb",
-    "nonce": 0,
-    "deployments": [
-      "celo/42220/SafeProxy:DevMultisig"
-    ],
-    "operations": [
-      {
-        "type": "DEPLOY",
-        "target": "0x58099b74f4acd642da77b4b7966b4138ec5ba458",
-        "method": "CREATE2",
-        "result": {
-          "address": "0x58099b74f4acd642da77b4b7966b4138ec5ba458"
-        }
-      }
-    ],
-    "environment": "celo",
-    "createdAt": "2026-02-12T19:48:59.310058+01:00"
-  },
   "tx-0x0c107872f9bdb750ebd4e8e5869365ac7a1cf2fab1e204e7b4720962262091f0": {
     "id": "tx-0x0c107872f9bdb750ebd4e8e5869365ac7a1cf2fab1e204e7b4720962262091f0",
     "chainId": 11142220,
