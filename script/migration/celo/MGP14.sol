@@ -25,7 +25,10 @@ contract MGP14 is TrebScript, ProxyHelper {
     address constant MAINNET_EURm = 0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73;
     address constant MAINNET_GBPm = 0xCCF663b1fF11028f0b19058d0f7B674004a40746;
     address constant MAINNET_biPoolManagerProxy = 0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901;
+    address constant MAINNET_sortedOraclesProxy = 0xefB84935239dAcdecF7c5bA76d8dE40b077B7b33;
     address constant MAINNET_breakerBox = 0x303ED1df62Fa067659B586EbEe8De0EcE824Ab39;
+    address constant MAINNET_medianDeltaBreaker = 0x49349F92D2B17d491e42C8fdB02D19f072F9B5D9;
+    address constant MAINNET_valueDeltaBreaker = 0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68;
     address constant MAINNET_timelockProxy = 0x890DB8A597940165901372Dd7DB61C9f246e2147;
     address constant MAINNET_devMultisig = 0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458;
 
@@ -52,7 +55,10 @@ contract MGP14 is TrebScript, ProxyHelper {
             tokens.push(Contract(MAINNET_GBPm, "GBPm"));
 
             v2Contracts.push(Contract(MAINNET_biPoolManagerProxy, "BiPoolManager"));
+            v2Contracts.push(Contract(MAINNET_sortedOraclesProxy, "SortedOracles"));
             v2Contracts.push(Contract(MAINNET_breakerBox, "BreakerBox"));
+            v2Contracts.push(Contract(MAINNET_medianDeltaBreaker, "MedianDeltaBreaker"));
+            v2Contracts.push(Contract(MAINNET_valueDeltaBreaker, "ValueDeltaBreaker"));
 
             timelockProxy = MAINNET_timelockProxy;
             devMultisig = MAINNET_devMultisig;
@@ -62,7 +68,10 @@ contract MGP14 is TrebScript, ProxyHelper {
             tokens.push(Contract(lookupProxyOrFail("cGBP", ProxyType.CELO), "GBPm"));
 
             v2Contracts.push(Contract(lookupProxyOrFail("BiPoolManager", ProxyType.CELO), "BiPoolManager"));
+            v2Contracts.push(Contract(lookupProxyOrFail("SortedOracles", ProxyType.CELO), "SortedOracles"));
             v2Contracts.push(Contract(lookupOrFail("BreakerBox:v2.6.5"), "BreakerBox"));
+            v2Contracts.push(Contract(lookupOrFail("MedianDeltaBreaker:v2.6.5"), "MedianDeltaBreaker"));
+            v2Contracts.push(Contract(lookupOrFail("ValueDeltaBreaker:v2.6.5"), "ValueDeltaBreaker"));
 
             timelockProxy = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
             devMultisig = SEPOLIA_devMultisig;
