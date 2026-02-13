@@ -9,7 +9,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IOwnable} from "lib/mento-core/contracts/interfaces/IOwnable.sol";
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20Metadata.sol";
-import {ProxyHelper, ProxyType} from "../../helpers/ProxyHelper.sol";
+import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
 import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
 
 contract MGP14 is TrebScript, ProxyHelper {
