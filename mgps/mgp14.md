@@ -85,7 +85,7 @@ We will employ the same operational safety measures that we’ve been employing 
 
 ### Transaction Details
 
-This proposal consists of **11 transactions**, which transfer the ownership of core Mento V2 contracts to the 4/7 Mento Labs Dev Multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`).
+This proposal consists of **11 transactions**, which transfer ownership of core Mento V2 contracts to the 4/7 Mento Labs Dev Multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`).
 
 **Step 1: Transfer Stable Token Ownership (6 transactions)**
 
