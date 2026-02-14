@@ -11,7 +11,7 @@ Mento Labs is excited to begin deploying Mento V3 on Celo and Monad 🎉. In ord
 
 1. Temporarily transfer the `owner` role to a 4/7 multisig for the following contracts:
    - BiPoolManager
-   - Circuit Breakers
+   - SortedOracles and Circuit Breakers contracts
    - USDm
    - EURm
    - GBPm
@@ -70,7 +70,7 @@ Given the operational complexity and timing of these steps, we’re requesting t
 **Risk Assessment**
 
 - Temporary centralization of ownership on a few core contracts to the Mento Labs Dev multisig.
-- Limited scope: BiPoolManager, BreakerBox, USDm, EURm, GBPm.
+- Limited scope: BiPoolManager, Sorted Oracles, Circuit Breaker contracts, USDm, EURm, GBPm.
 - Duration: ~3 weeks in total, most critical ones will be returned sooner (USDm, EURm, GBPm).
 
 **Safety Measures**
