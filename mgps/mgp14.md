@@ -1,10 +1,3 @@
-# MGP-14: Mento V3 Deployment Phase 1
-
-Author: Bogdan Dumitru
-Created on: February 12, 2026 3:10 PM
-Last update: February 13, 2026 4:11 PM
-State: Draft
-
 ## TL;DR
 
 Mento Labs is excited to begin deploying Mento V3 on Celo and Monad 🎉. In order to support the outlined flows, we ask the following of governance:
