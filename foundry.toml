@@ -51,3 +51,14 @@ type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
 
+[profile.testnet-v2-rc5.treb.senders.governor]
+type = "oz_governor"
+governor = "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4"
+timelock = "0x74c44Be99937815173A3C56274331e0A05611e0D"
+proposer = "deployer"
+
+[profile.celo.treb.senders.governor]
+type = "oz_governor"
+governor = "0x47036d78bB3169b4F5560dD77BF93f4412A59852"
+timelock = "0x890DB8A597940165901372Dd7DB61C9f246e2147"
+proposer = "deployer"
