@@ -5,18 +5,32 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
+import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
+import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
+import {FactoryRegistry} from "mento-core/swap/FactoryRegistry.sol";
+import {FPMMFactory} from "mento-core/swap/FPMMFactory.sol";
+import {VirtualPoolFactory} from "mento-core/swap/virtual/VirtualPoolFactory.sol";
+import {Router} from "mento-core/swap/router/Router.sol";
+import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
-contract DeployV3PreStage is TrebScript, ProxyHelper {
+contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
     using GnosisSafe for GnosisSafe.Sender;
+
+    address multisig;
+
+    address sortedOracles;
+    address sortedOraclesImpl;
+    address breakerBox;
 
     address fpmmImpl;
     address oneToOneFpmmImpl;
@@ -33,9 +47,148 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
     string label = "v3.0.0";
 
-    /// @custom:senders deployer
+    function setUp() public {
+        multisig = sender("multisig").account;
+
+        sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
+        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles");
+        breakerBox = lookupWithCodeOrFail("BreakerBox");
+    }
+
+    function postChecks() internal view {
+        IOracleAdapter oracleAdapterContract = IOracleAdapter(oracleAdapter);
+        IFPMMFactory fpmmFactoryContract = IFPMMFactory(fpmmFactory);
+        IRouter routerContract = IRouter(router);
+        // Can't use interface because it doesn't have .fallbackPoolFactory getter
+        FactoryRegistry factoryRegistryContract = FactoryRegistry(
+            factoryRegistry
+        );
+
+        // Proxy Implementation Checks
+        // Verifies that proxies point to their implementations
+        verifyProxyImpl("OracleAdapter", oracleAdapter, oracleAdapterImpl);
+        verifyProxyImpl("FPMMFactory", fpmmFactory, fpmmFactoryImpl);
+        verifyProxyImpl(
+            "FactoryRegistry",
+            factoryRegistry,
+            factoryRegistryImpl
+        );
+
+        // Proxy Admin Checks
+        // Verifies that ProxyAdmin contract is set as admin for each proxy
+        verifyProxyAdmin("FPMMFactory", fpmmFactory, multisig);
+        verifyProxyAdmin("OracleAdapter", oracleAdapter, multisig);
+        verifyProxyAdmin("FactoryRegistry", factoryRegistry, multisig);
+
+        // Ownership Checks
+        // Verifies that contract owners are set to multisig.
+        verifyOwnership("ProxyAdmin", proxyAdmin, multisig);
+        verifyOwnership("OracleAdapter", oracleAdapter, multisig);
+        verifyOwnership("FPMMFactory", fpmmFactory, multisig);
+        verifyOwnership("FactoryRegistry", factoryRegistry, multisig);
+        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, multisig);
+
+        // Implementation Initializer Protection
+        // Verifies that implementation contracts cannot be initialized directly (security check).
+        verifyInitDisabled("FPMMImpl", fpmmImpl);
+        verifyInitDisabled("OneToOneFPMMImpl", oneToOneFpmmImpl);
+        verifyInitDisabled("FPMMFactoryImpl", fpmmFactoryImpl);
+        verifyInitDisabled("OracleAdapterImpl", oracleAdapterImpl);
+        verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
+
+        // OracleAdapter Initialization
+        // Verifies that OracleAdapter is initialized with correct addresses.
+        require(
+            address(oracleAdapterContract.sortedOracles()) == sortedOracles,
+            "SortedOracles initialized with mismatched address"
+        );
+        require(
+            address(oracleAdapterContract.breakerBox()) == breakerBox,
+            "BreakerBox initialized with mismatched address"
+        );
+        require(
+            address(oracleAdapterContract.marketHoursBreaker()) ==
+                marketHoursBreaker,
+            "MarketHoursBreaker initialized with mismatched address"
+        );
+
+        // FPMMFactory Initialization
+        // Verifies that FPMMFactory is initialized with the correct addresses.
+        require(
+            address(fpmmFactoryContract.oracleAdapter()) == oracleAdapter,
+            "OracleAdapter initialized with mismatched address"
+        );
+        require(
+            address(fpmmFactoryContract.proxyAdmin()) == proxyAdmin,
+            "ProxyAdmin initialized with mismatched address"
+        );
+
+        // FPMMFactory Parameters
+        // Verifies that FPMMFactory default params are set correctly.
+        IFPMM.FPMMParams memory defaultParams = fpmmFactoryContract
+            .defaultParams();
+
+        require(defaultParams.lpFee == 30, "lpFee param mismatched");
+        require(defaultParams.protocolFee == 0, "protocolFee param mismatched");
+        require(
+            defaultParams.protocolFeeRecipient == multisig,
+            "protocolFeeRecipient param mismatched"
+        );
+        require(
+            defaultParams.rebalanceIncentive == 50,
+            "rebalanceIncentive param mismatched"
+        );
+        require(
+            defaultParams.rebalanceThresholdAbove == 500,
+            "rebalanceThresholdAbove param mismatched"
+        );
+        require(
+            defaultParams.rebalanceThresholdBelow == 500,
+            "rebalanceThresholdBelow param mismatched"
+        );
+
+        // FPMMFactory Registrations
+        // Verifies that_FPMM implementations are registered.
+        require(
+            fpmmFactoryContract.isRegisteredImplementation(oneToOneFpmmImpl),
+            "oneToOneFpmmImpl is not registered"
+        );
+        require(
+            fpmmFactoryContract.isRegisteredImplementation(fpmmImpl),
+            "defaultFpmmImpl is not registered"
+        );
+
+        // FactoryRegistry Initialization
+        // Verifies that FactoryRegistry is initialized with correct addresses.
+        require(
+            factoryRegistryContract.fallbackPoolFactory() == fpmmFactory,
+            "Fallback pool factory is not FPMMFactory"
+        );
+
+        // FactoryRegistry Approvals
+        // Verifies that factories are approved in FactoryRegistry.
+        require(
+            factoryRegistryContract.isPoolFactoryApproved(fpmmFactory),
+            "FPMMFactory is not approved in FactoryRegistry"
+        );
+
+        // Router Configuration
+        // Verifies that the Router is configured correctly.
+        require(
+            routerContract.factoryRegistry() == factoryRegistry,
+            "Router.factoryRegistry does not equal to FactoryRegistry proxy address"
+        );
+        require(
+            routerContract.defaultFactory() == fpmmFactory,
+            "Router.defaultFactory does not equal to FPMMFactory proxy address"
+        );
+    }
+
+    /// @custom:senders deployer,multisig
     function run() public broadcast {
-        Senders.Sender storage deployer = sender("deployer");
+        setUp();
+
+        Senders.Sender storage deployer = sender("multisig");
 
         proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
             abi.encode(deployer.account)
@@ -78,7 +231,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
 
         oracleAdapter = deployProxy(
             deployer,
-            label,
+            "OracleAdapter",
             oracleAdapterImpl,
             abi.encodeWithSelector(
                 IOracleAdapter.initialize.selector,
@@ -86,7 +239,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
                 breakerBox,
                 marketHoursBreaker,
                 address(0),
-                proxyAdmin
+                multisig
             )
         );
 
@@ -148,5 +301,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper {
         router = deployer.create3("Router").setLabel(label).deploy(
             abi.encode(address(0), factoryRegistry, fpmmFactory)
         );
+        postChecks();
     }
 }
