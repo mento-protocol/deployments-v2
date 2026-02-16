@@ -9,7 +9,7 @@ import {IMentoV3Config} from "./IMentoV3Config.sol";
 import "./MentoConfig_vbase.sol";
 import "./MentoConfig_celo_sepolia.sol";
 import "./MentoConfig_monad_testnet.sol";
-import "./MentoConfig_local.sol";
+import "./MentoConfig_anvil.sol";
 
 library Config {
     address private constant VM_ADDRESS =
@@ -17,7 +17,8 @@ library Config {
     Vm private constant vm = Vm(VM_ADDRESS);
 
     // Cache the config contract to avoid multiple deployments
-    address private constant CACHE_SLOT = address(uint160(uint256(keccak256("mento.config.cache"))));
+    address private constant CACHE_SLOT =
+        address(uint160(uint256(keccak256("mento.config.cache"))));
 
     /**
      * @notice Gets the Mento configuration contract as a IMentoConfig

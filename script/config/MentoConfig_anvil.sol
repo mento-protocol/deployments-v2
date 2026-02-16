@@ -6,7 +6,8 @@ import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
-contract MentoConfig_monad_fork is MentoConfig {
+/// @dev Here Anvil is a Monad mainnet fork
+contract MentoConfig_anvil is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
