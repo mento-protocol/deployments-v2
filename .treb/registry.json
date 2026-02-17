@@ -72,14 +72,6 @@
     }
   },
   "11142220": {
-    "new-test-namespace": {
-      "Proxy:SortedOracles:v2": "0xfaa7ca2b056e60f6733ae75aa0709140a6eafd20",
-      "SortedOracles:v2": "0x0514884378460d86528658543bc8093d8178d7b1"
-    },
-    "sepolia-v3-rc0": {
-      "Proxy:USDC": "0x01c5c0122039549ad1493b8220cabedd739bc44e",
-      "USDC": "0x18b2bf98579267d4b108c5d82f816710a17efbb6"
-    },
     "testnet-v2-rc0": {
       "AddressSortedLinkedListWithMedian": "0x6CE08805311839d4eb716E3219591330E445e3Bf",
       "BiPoolManager:v2.6.5": "0x298BD7f89f3eB1c220F941f88807A530a285eb0C",
@@ -499,27 +491,6 @@
       "TransparentUpgradeableProxy:MentoGovernor": "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4",
       "TransparentUpgradeableProxy:TimelockController": "0x74c44Be99937815173A3C56274331e0A05611e0D",
       "ValueDeltaBreaker:v2.6.5": "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534"
-    },
-    "testnet-v3-rc0": {
-      "BreakerBox": "0x578bd46003b9d3fd4c3c3f47c98b329562a6a1de",
-      "FPMM:v3.0.0": "0x0059085049CfC7DDaBF13b3Cd69ce283dC63AC8D",
-      "FPMMFactory:v3.0.0": "0x7De9F73E5Ce8F2D7EEdA3A8dB61B85d06997c497",
-      "FactoryRegistry:v3.0.0": "0x5bE0166467db2498D69B36cD553B62cfC1EfF59D",
-      "MarketHoursBreaker:v3.0.0": "0x8D605Be15496F1E44d5a5006e76F4e2F17401659",
-      "OneToOneFPMM:v3.0.0": "0x735de890B2833bD77F7dEC1051338E973a95ec03",
-      "OracleAdapter:v3.0.0": "0xF23ec5F2c4D39D820e586A67f639fF0d0939A4Fd",
-      "Proxy:FPMMFactory": "0x2Bd8ec1358d1E42547eFa1d6Ae101f3Adb4B8967",
-      "Proxy:FactoryRegistry": "0xfE62af98e89C3bA7963551B4EC0e8e0605E093CD",
-      "Proxy:OracleAdapter": "0xB36c9735C5ff72e5beFC059D2bEF3C0B155f5c4D",
-      "Proxy:SortedOracles": "0xfaa7ca2b056e60f6733ae75aa0709140a6eafd20",
-      "Router:v3.0.0": "0xEF5F8429fC461d168bDc6fc58817856CD4947080",
-      "SortedOracles": "0x0514884378460d86528658543bc8093d8178d7b1",
-      "VirtualPoolFactory:v3.0.0": "0x50d87Ab207BAAE01F31cD179E02973eEe8F30078"
-    },
-    "testnet-v3-rc0a": {
-      "BreakerBox": "0x578bd46003b9d3fd4c3c3f47c98b329562a6a1de",
-      "Proxy:SortedOracles": "0xfaa7ca2b056e60f6733ae75aa0709140a6eafd20",
-      "SortedOracles": "0x0514884378460d86528658543bc8093d8178d7b1"
     }
   },
   "42220": {
