@@ -51,8 +51,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         multisig = sender("multisig").account;
 
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
-        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles");
-        breakerBox = lookupWithCodeOrFail("BreakerBox");
+        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
+        breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
     }
 
     function postChecks() internal view {
@@ -208,9 +208,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             .setLabel(label)
             .deploy(abi.encode(true));
 
-        address sortedOracles = lookupProxyOrFail("SortedOracles");
-
-        address breakerBox = lookup(string.concat("BreakerBox:", label));
         require(
             breakerBox != address(0),
             string.concat(
