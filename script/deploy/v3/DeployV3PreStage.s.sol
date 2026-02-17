@@ -248,6 +248,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             lpFee: 30,
             protocolFee: 0,
             protocolFeeRecipient: deployer.account,
+            feeSetter: address(0),
             rebalanceIncentive: 50,
             rebalanceThresholdAbove: 500,
             rebalanceThresholdBelow: 500
