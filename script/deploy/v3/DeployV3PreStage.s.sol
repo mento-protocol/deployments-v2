@@ -53,6 +53,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
         sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
         breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
+        proxyAdmin = lookupWithCodeOrFail("ProxyAdmin:");
     }
 
     function postChecks() internal view {
@@ -189,10 +190,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         setUp();
 
         Senders.Sender storage deployer = sender("multisig");
-
-        proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
-            abi.encode(deployer.account)
-        );
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
             abi.encode(true)
