@@ -17,3 +17,5 @@ import {FPMMFactory} from "mento-core/swap/FPMMFactory.sol";
 import {OneToOneFPMM} from "mento-core/swap/OneToOneFPMM.sol";
 import {FactoryRegistry} from "mento-core/swap/FactoryRegistry.sol";
 import {Router} from "mento-core/swap/router/Router.sol";
+import {ReserveV2} from "mento-core/swap/ReserveV2.sol";
+import {StableTokenV3} from "mento-core/tokens/StableTokenV3.sol";

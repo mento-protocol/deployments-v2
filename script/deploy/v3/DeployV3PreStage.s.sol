@@ -19,6 +19,7 @@ import {VirtualPoolFactory} from "mento-core/swap/virtual/VirtualPoolFactory.sol
 import {Router} from "mento-core/swap/router/Router.sol";
 import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
+import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 
 contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
@@ -44,6 +45,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address factoryRegistryImpl;
     address factoryRegistry;
     address router;
+    address reserveV2Impl;
+    address reserveV2;
+    address stableTokenV3Impl;
 
     string label = "v3.0.0";
 
@@ -53,7 +57,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
         sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
         breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
-        proxyAdmin = lookupWithCodeOrFail("ProxyAdmin:");
+        proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
     }
 
     function postChecks() internal view {
@@ -295,6 +299,33 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         router = deployer.create3("Router").setLabel(label).deploy(
             abi.encode(address(0), factoryRegistry, fpmmFactory)
         );
+
+        reserveV2Impl = deployer.create3("ReserveV2").setLabel(label).deploy(
+            abi.encode(true)
+        );
+
+        // TODO: Load from config
+        address[] memory empty = new address[](0);
+        reserveV2 = deployProxy(
+            deployer,
+            "ReserveV2",
+            reserveV2Impl,
+            abi.encodeWithSelector(
+                IReserveV2.initialize.selector,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                deployer.account
+            )
+        );
+
+        stableTokenV3Impl = deployer
+            .create3("StableTokenV3")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
         postChecks();
     }
 }
