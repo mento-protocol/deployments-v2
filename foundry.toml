@@ -51,6 +51,10 @@ private_key = "${DEPLOYER_PRIVATE_KEY}"
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
+[profile.testnet-v3-rc0.treb.senders.multisig]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "deployer"
 
 [profile.testnet-v2-rc5.treb.senders.governor]
 type = "oz_governor"

@@ -5,6 +5,7 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
+import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 
 enum ProxyType {
     CELO, // Celo Legacy Proxy
@@ -31,6 +32,7 @@ contract ProxyHelper is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
+    using Strings for address;
 
     ProxyType immutable defaultProxyType;
 
@@ -57,7 +59,7 @@ contract ProxyHelper is TrebScript {
                 revert InvalidProxyType(vm.envString("proxyType"));
             }
         } else {
-            defaultProxyType = ProxyType.CELO;
+            defaultProxyType = ProxyType.OZTUP;
         }
     }
 
@@ -223,7 +225,6 @@ contract ProxyHelper is TrebScript {
                 return owner;
             }
         } catch {
-            // if this is not CELO proxy _getOwner() return 0 address and we take it by adminSlot from OZTUP
             return
                 address(
                     uint160(
@@ -240,12 +241,19 @@ contract ProxyHelper is TrebScript {
 
     function verifyProxyAdmin(
         string memory identifier,
-        address proxy,
-        address expectedAdmin
+        address proxy
     ) internal view {
+        address proxyAdmin = lookup("ProxyAdmin");
+        address currentProxyAdmin = getProxyAdmin(proxy);
         require(
-            getProxyAdmin(proxy) == expectedAdmin,
-            string.concat(identifier, " proxy admin mismatch")
+            currentProxyAdmin == proxyAdmin,
+            string.concat(
+                identifier,
+                " proxy admin mismatch\n",
+                currentProxyAdmin.toHexString(),
+                " != ",
+                proxyAdmin.toHexString()
+            )
         );
     }
 

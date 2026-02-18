@@ -19,6 +19,7 @@ import {VirtualPoolFactory} from "mento-core/swap/virtual/VirtualPoolFactory.sol
 import {Router} from "mento-core/swap/router/Router.sol";
 import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
+import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 
 contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
@@ -44,6 +45,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address factoryRegistryImpl;
     address factoryRegistry;
     address router;
+    address reserveV2Impl;
+    address reserveV2;
+    address stableTokenV3Impl;
 
     string label = "v3.0.0";
 
@@ -51,8 +55,149 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         multisig = sender("multisig").account;
 
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
-        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles");
-        breakerBox = lookupWithCodeOrFail("BreakerBox");
+        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
+        breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
+        proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
+    }
+
+    /// @custom:senders deployer,multisig
+    function run() public broadcast {
+        setUp();
+
+        Senders.Sender storage deployer = sender("multisig");
+
+        fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
+            abi.encode(true)
+        );
+
+        oneToOneFpmmImpl = deployer
+            .create3("OneToOneFPMM")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
+        fpmmFactoryImpl = deployer
+            .create3("FPMMFactory")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
+        require(
+            breakerBox != address(0),
+            string.concat(
+                "Registry: Lookup failed for BreakerBox in namespace ",
+                vm.envOr("NAMESPACE", string("default"))
+            )
+        );
+
+        marketHoursBreaker = deployer
+            .create3("MarketHoursBreaker")
+            .setLabel(label)
+            .deploy();
+
+        oracleAdapterImpl = deployer
+            .create3("OracleAdapter")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
+        oracleAdapter = deployProxy(
+            deployer,
+            "OracleAdapter",
+            oracleAdapterImpl,
+            abi.encodeWithSelector(
+                IOracleAdapter.initialize.selector,
+                sortedOracles,
+                breakerBox,
+                marketHoursBreaker,
+                address(0),
+                multisig
+            )
+        );
+
+        // TODO: Determine params
+        IFPMM.FPMMParams memory params = IFPMM.FPMMParams({
+            lpFee: 30,
+            protocolFee: 0,
+            protocolFeeRecipient: deployer.account,
+            rebalanceIncentive: 50,
+            rebalanceThresholdAbove: 500,
+            rebalanceThresholdBelow: 500
+        });
+
+        fpmmFactory = deployProxy(
+            deployer,
+            "FPMMFactory",
+            fpmmFactoryImpl,
+            abi.encodeWithSelector(
+                IFPMMFactory.initialize.selector,
+                oracleAdapter,
+                proxyAdmin,
+                deployer.account,
+                fpmmImpl,
+                params
+            )
+        );
+
+        IFPMMFactory fpmmFactoryHarness = IFPMMFactory(
+            deployer.harness(fpmmFactory)
+        );
+        fpmmFactoryHarness.registerFPMMImplementation(oneToOneFpmmImpl);
+
+        factoryRegistryImpl = deployer
+            .create3("FactoryRegistry")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
+        factoryRegistry = deployProxy(
+            deployer,
+            "FactoryRegistry",
+            factoryRegistryImpl,
+            abi.encodeWithSelector(
+                IFactoryRegistry.initialize.selector,
+                fpmmFactory,
+                deployer.account
+            )
+        );
+
+        virtualPoolFactory = deployer
+            .create3("VirtualPoolFactory")
+            .setLabel(label)
+            .deploy(abi.encode(deployer.account));
+
+        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
+            deployer.harness(factoryRegistry)
+        );
+        factoryRegistryHarness.approve(virtualPoolFactory);
+
+        router = deployer.create3("Router").setLabel(label).deploy(
+            abi.encode(address(0), factoryRegistry, fpmmFactory)
+        );
+
+        reserveV2Impl = deployer.create3("ReserveV2").setLabel(label).deploy(
+            abi.encode(true)
+        );
+
+        // TODO: Load from config
+        address[] memory empty = new address[](0);
+        reserveV2 = deployProxy(
+            deployer,
+            "ReserveV2",
+            reserveV2Impl,
+            abi.encodeWithSelector(
+                IReserveV2.initialize.selector,
+                empty,
+                empty,
+                empty,
+                empty,
+                empty,
+                deployer.account
+            )
+        );
+
+        stableTokenV3Impl = deployer
+            .create3("StableTokenV3")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
+        postChecks();
     }
 
     function postChecks() internal view {
@@ -76,9 +221,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
 
         // Proxy Admin Checks
         // Verifies that ProxyAdmin contract is set as admin for each proxy
-        verifyProxyAdmin("FPMMFactory", fpmmFactory, multisig);
-        verifyProxyAdmin("OracleAdapter", oracleAdapter, multisig);
-        verifyProxyAdmin("FactoryRegistry", factoryRegistry, multisig);
+        verifyProxyAdmin("FPMMFactory", fpmmFactory);
+        verifyProxyAdmin("OracleAdapter", oracleAdapter);
+        verifyProxyAdmin("FactoryRegistry", factoryRegistry);
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
@@ -182,126 +327,5 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             routerContract.defaultFactory() == fpmmFactory,
             "Router.defaultFactory does not equal to FPMMFactory proxy address"
         );
-    }
-
-    /// @custom:senders deployer,multisig
-    function run() public broadcast {
-        setUp();
-
-        Senders.Sender storage deployer = sender("multisig");
-
-        proxyAdmin = deployer.create3("ProxyAdmin").setLabel(label).deploy(
-            abi.encode(deployer.account)
-        );
-
-        fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
-            abi.encode(true)
-        );
-
-        oneToOneFpmmImpl = deployer
-            .create3("OneToOneFPMM")
-            .setLabel(label)
-            .deploy(abi.encode(true));
-
-        fpmmFactoryImpl = deployer
-            .create3("FPMMFactory")
-            .setLabel(label)
-            .deploy(abi.encode(true));
-
-        address sortedOracles = lookupProxyOrFail("SortedOracles");
-
-        address breakerBox = lookup(string.concat("BreakerBox:", label));
-        require(
-            breakerBox != address(0),
-            string.concat(
-                "Registry: Lookup failed for BreakerBox in namespace ",
-                vm.envOr("NAMESPACE", string("default"))
-            )
-        );
-
-        marketHoursBreaker = deployer
-            .create3("MarketHoursBreaker")
-            .setLabel(label)
-            .deploy();
-
-        oracleAdapterImpl = deployer
-            .create3("OracleAdapter")
-            .setLabel(label)
-            .deploy(abi.encode(true));
-
-        oracleAdapter = deployProxy(
-            deployer,
-            "OracleAdapter",
-            oracleAdapterImpl,
-            abi.encodeWithSelector(
-                IOracleAdapter.initialize.selector,
-                sortedOracles,
-                breakerBox,
-                marketHoursBreaker,
-                address(0),
-                multisig
-            )
-        );
-
-        // TODO: Determine params
-        IFPMM.FPMMParams memory params = IFPMM.FPMMParams({
-            lpFee: 30,
-            protocolFee: 0,
-            protocolFeeRecipient: deployer.account,
-            feeSetter: address(0),
-            rebalanceIncentive: 50,
-            rebalanceThresholdAbove: 500,
-            rebalanceThresholdBelow: 500
-        });
-
-        fpmmFactory = deployProxy(
-            deployer,
-            "FPMMFactory",
-            fpmmFactoryImpl,
-            abi.encodeWithSelector(
-                IFPMMFactory.initialize.selector,
-                oracleAdapter,
-                proxyAdmin,
-                deployer.account,
-                fpmmImpl,
-                params
-            )
-        );
-
-        IFPMMFactory fpmmFactoryHarness = IFPMMFactory(
-            deployer.harness(fpmmFactory)
-        );
-        fpmmFactoryHarness.registerFPMMImplementation(oneToOneFpmmImpl);
-
-        factoryRegistryImpl = deployer
-            .create3("FactoryRegistry")
-            .setLabel(label)
-            .deploy(abi.encode(true));
-
-        factoryRegistry = deployProxy(
-            deployer,
-            "FactoryRegistry",
-            factoryRegistryImpl,
-            abi.encodeWithSelector(
-                IFactoryRegistry.initialize.selector,
-                fpmmFactory,
-                deployer.account
-            )
-        );
-
-        virtualPoolFactory = deployer
-            .create3("VirtualPoolFactory")
-            .setLabel(label)
-            .deploy(abi.encode(deployer.account));
-
-        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
-            deployer.harness(factoryRegistry)
-        );
-        factoryRegistryHarness.approve(virtualPoolFactory);
-
-        router = deployer.create3("Router").setLabel(label).deploy(
-            abi.encode(address(0), factoryRegistry, fpmmFactory)
-        );
-        postChecks();
     }
 }

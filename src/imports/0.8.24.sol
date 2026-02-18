@@ -19,3 +19,5 @@ import {FactoryRegistry} from "mento-core/swap/FactoryRegistry.sol";
 import {Router} from "mento-core/swap/router/Router.sol";
 
 import {StableTokenSpoke} from "mento-core/tokens/StableTokenSpoke.sol";
+import {ReserveV2} from "mento-core/swap/ReserveV2.sol";
+import {StableTokenV3} from "mento-core/tokens/StableTokenV3.sol";

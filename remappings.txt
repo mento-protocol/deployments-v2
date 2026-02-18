@@ -1,3 +1,4 @@
 src/=src/
 openzeppelin-contracts/=lib/mento-core/lib/openzeppelin-contracts-next/
 mento-core/=lib/mento-core/contracts/
+safe-smart-account/=lib/treb-sol/lib/safe-utils/lib/safe-smart-account/contracts/
