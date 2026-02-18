@@ -15,7 +15,7 @@ enum ProxyType {
 string constant CELO_LOOKUP_PREFIX = "Proxy:";
 string constant OZTUP_LOOKUP_PREFIX = "TransparentUpgradeableProxy:";
 string constant CELO_ARTIFACT = "src/Proxy.sol:Proxy";
-string constant OZTUP_ARTIFACT = "TransparentUpgradeableProxy";
+string constant OZTUP_ARTIFACT = "openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
 
 interface ILegacyProxy {
     function _setImplementation(address implementation) external;
