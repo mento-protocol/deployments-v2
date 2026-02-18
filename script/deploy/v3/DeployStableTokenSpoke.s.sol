@@ -16,50 +16,46 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    // address multisig;
-
-    address stableTokenSpokeImpl;
-    address stableTokenSpoke;
-
-    string label = "v3.0.0";
+    string label = "SpokeTestGBP";
+    string tokenName = "StableTokenSpokeTestGBP";
+    string tokenSymbol = "sSPOKETESTGBP";
 
     function setUp() public {
-        // multisig = sender("multisig").account;
     }
 
     /// @custom:senders deployer
     function run() public broadcast {
         setUp();
 
-        // Senders.Sender storage deployer = sender("multisig");
         Senders.Sender storage deployer = sender("deployer");
-        address accnt = deployer.account;
-        console.log("Deployer account:", accnt);
+        address deployerAccount = deployer.account;
 
-        // Deploy implementation with initializers disabled
-        stableTokenSpokeImpl = deployer
-            .create3("StableTokenSpoke")
-            .setLabel(label)
-            .deploy(abi.encode(true));
+        address stableTokenSpokeImpl = lookup("StableTokenSpoke:StableTokenSpokeImpl");
+        if (stableTokenSpokeImpl == address(0)) {
+            console.log("StableTokenSpokeImpl not deployed, deploying...");
+            stableTokenSpokeImpl = deployer
+                .create3("StableTokenSpoke")
+                .setLabel("StableTokenSpokeImpl")
+                .deploy(abi.encode(true));
+        }
 
         // Deploy proxy with initialization
-        // TODO: Set token name, symbol, minters, and burners as needed
         address[] memory initialBalanceAddresses = new address[](1);
-        initialBalanceAddresses[0] = accnt;
+        initialBalanceAddresses[0] = deployerAccount;
         uint256[] memory initialBalanceValues = new uint256[](1);
         initialBalanceValues[0] = 1_000_000e18;
         address[] memory minters = new address[](1);
-        minters[0] = accnt;
+        minters[0] = deployerAccount;
         address[] memory burners = new address[](0);
 
-        stableTokenSpoke = deployProxy(
+        address stableTokenSpoke = deployProxy(
             deployer,
-            "StableTokenSpoke",
+            label,
             stableTokenSpokeImpl,
             abi.encodeWithSelector(
                 IStableTokenSpoke.initialize.selector,
-                "Stable Token Spoke Test",
-                "sSPOKETEST",
+                tokenName,
+                tokenSymbol,
                 initialBalanceAddresses,
                 initialBalanceValues,
                 minters,
@@ -68,31 +64,19 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         );
 
         // IStableTokenSpoke(deployer.harness(stableTokenSpoke)).setMinter(accnt, true);
-        require(StableTokenSpoke(stableTokenSpoke).isMinter(accnt), "Deployer is not a minter");
-        require(StableTokenSpoke(stableTokenSpoke).balanceOf(accnt) == 1_000_000e18, "Deployer does not have the correct balance");
+        require(StableTokenSpoke(stableTokenSpoke).isMinter(deployerAccount), "Deployer is not a minter");
+        require(StableTokenSpoke(stableTokenSpoke).balanceOf(deployerAccount) == 1_000_000e18, "Deployer does not have the correct balance");
+
+        string memory name = StableTokenSpoke(stableTokenSpoke).name();
+        string memory symbol = StableTokenSpoke(stableTokenSpoke).symbol();
+        address owner = StableTokenSpoke(stableTokenSpoke).owner();
+        require(owner == deployerAccount, "Deployer is not the owner");
 
 
-
-        // postChecks();
+        console.log("\n");
+        console.log("%s (%s)", name, symbol);
+        console.log("proxy address at:", address(stableTokenSpoke));
+        console.log("impl address at:", address(stableTokenSpokeImpl));
+        console.log("owner: ", owner);
     }
-
-
-    function postChecks() internal view {
-        // Proxy Implementation Check
-        // verifyProxyImpl(
-        //     "StableTokenSpoke",
-        //     stableTokenSpoke,
-        //     stableTokenSpokeImpl
-        // );
-
-        // // Proxy Admin Check
-        // verifyProxyAdmin("StableTokenSpoke", stableTokenSpoke, multisig);
-
-        // // Ownership Check
-        // verifyOwnership("StableTokenSpoke", stableTokenSpoke, multisig);
-
-        // // Implementation Initializer Protection
-        // verifyInitDisabled("StableTokenSpokeImpl", stableTokenSpokeImpl);
-    }
-
 }
