@@ -15,7 +15,8 @@ enum ProxyType {
 string constant CELO_LOOKUP_PREFIX = "Proxy:";
 string constant OZTUP_LOOKUP_PREFIX = "TransparentUpgradeableProxy:";
 string constant CELO_ARTIFACT = "src/Proxy.sol:Proxy";
-string constant OZTUP_ARTIFACT = "openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
+string constant OZTUP_ARTIFACT = "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
+
 
 interface ILegacyProxy {
     function _setImplementation(address implementation) external;
@@ -215,6 +216,17 @@ contract ProxyHelper is TrebScript {
         );
     }
 
+    function deployOztupProxyV5(
+        Senders.Sender storage deployer,
+        string memory label,
+        address implementation,
+        bytes memory initData
+    ) internal returns (address proxy) {
+        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
+            abi.encode(implementation, deployer.account, initData)
+        );
+    }
+
     // Get proxy admin from CELO and OZTUP proxies dynamically
     function getProxyAdmin(
         address proxy
@@ -237,6 +249,20 @@ contract ProxyHelper is TrebScript {
                     )
                 );
         }
+    }
+
+    function getOZTUPProxyAdmin(
+        address proxy
+    ) internal view returns (address proxyAdmin) {
+        bytes32 adminSlot = 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
+        return address(uint160(uint256(vm.load(proxy, adminSlot))));
+    }
+
+    function getOZTUPProxyImplementation(
+        address proxy
+    ) internal view returns (address implementation) {
+        bytes32 implSlot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+        return address(uint160(uint256(vm.load(proxy, implSlot))));
     }
 
     function verifyProxyAdmin(
