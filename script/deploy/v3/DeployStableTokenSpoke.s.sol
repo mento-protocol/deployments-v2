@@ -77,7 +77,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
                 burners
             )
         );
-        IProxyAdmin(deployer.harness(getOZTUPProxyAdmin(stableTokenSpokeProxy))).transferOwnership(MIGRATION_MULTISIG);
+        IProxyAdmin(deployer.harness(getProxyAdmin(stableTokenSpokeProxy))).transferOwnership(MIGRATION_MULTISIG);
 
         // ====== Deployment checks ======
         console.log("\n sanity checks");
@@ -88,7 +88,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         console.log(" > symbol: ", symbol);
 
 
-        address proxyAdmin = getOZTUPProxyAdmin(stableTokenSpokeProxy);
+        address proxyAdmin = getProxyAdmin(stableTokenSpokeProxy);
         address proxyAdminOwner = IOwnable(proxyAdmin).owner();
         require(IOwnable(proxyAdmin).owner() == MIGRATION_MULTISIG, "migration multisig should own the proxy admin");
         console.log(" > proxy admin: %s (owner: %s)", address(proxyAdmin), proxyAdminOwner);
@@ -130,7 +130,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
     }
 
     function checkMultisigCanUpgradeProxy(address stableTokenSpokeProxy) internal {
-        address proxyAdmin = getOZTUPProxyAdmin(stableTokenSpokeProxy);
+        address proxyAdmin = getProxyAdmin(stableTokenSpokeProxy);
 
         address newImpl = address(new StableTokenSpoke(true));
 

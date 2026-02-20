@@ -227,35 +227,20 @@ contract ProxyHelper is TrebScript {
         );
     }
 
-    // Get proxy admin from CELO and OZTUP proxies dynamically
     function getProxyAdmin(
         address proxy
     ) internal view returns (address proxyAdmin) {
-        // if this is CELO proxy _getOwner() return proxy admin
-        try ICeloProxy(proxy)._getOwner() returns (address owner) {
-            if (owner != address(0)) {
-                return owner;
-            }
-        } catch {
-            return
-                address(
-                    uint160(
-                        uint256(
-                            vm.load(
-                                proxy,
-                                0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
-                            )
+        return
+            address(
+                uint160(
+                    uint256(
+                        vm.load(
+                            proxy,
+                            0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
                         )
                     )
-                );
-        }
-    }
-
-    function getOZTUPProxyAdmin(
-        address proxy
-    ) internal view returns (address proxyAdmin) {
-        bytes32 adminSlot = 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103;
-        return address(uint160(uint256(vm.load(proxy, adminSlot))));
+                )
+            );
     }
 
     function getOZTUPProxyImplementation(

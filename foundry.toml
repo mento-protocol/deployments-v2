@@ -30,12 +30,16 @@ monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://ap
 monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chain=143"}
 # celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
-[profile.monad-mainnet.treb.senders.deployer]
+[profile.monad-mainnet-rc0.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
 
 [profile.default.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.default.treb.senders.proposer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
@@ -48,18 +52,14 @@ type = "safe"
 safe = "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F"
 signer = "proposer"
 
-[profile.virtual.treb.senders.proposer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
 [profile.throwaway.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
-[profile.testnet-v3-rc0.treb.senders.multisig]
+[profile."testnet-v3-rc0".treb.senders.deployer]
 type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
-signer = "deployer"
+signer = "proposer"
 
 [profile.testnet-v2-rc5.treb.senders.governor]
 type = "oz_governor"

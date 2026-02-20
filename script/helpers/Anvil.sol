@@ -43,7 +43,24 @@ library Anvil {
         bytes32 slot,
         bytes32 value
     ) internal {
-        vm.store(target, slot, value);
+        (bool success, ) = address(vm).call(
+            abi.encodeWithSignature(
+                "rpc(string,string)",
+                "anvil_setStorageAt",
+                string(
+                    abi.encodePacked(
+                        '["',
+                        vm.toString(target),
+                        '","',
+                        vm.toString(slot),
+                        '","',
+                        vm.toString(value),
+                        '"]'
+                    )
+                )
+            )
+        );
+        require(success);
     }
 
     function getStorageAt(

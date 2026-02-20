@@ -1,8 +1,4 @@
 group: Mento V3 PreStage
 components:
-  LocalFork:
-    script: SetupLocalFork
   DeployV3PreStage:
     script: DeployV3PreStage
-    deps:
-      - LocalFork
