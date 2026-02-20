@@ -52,7 +52,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     string label = "v3.0.0";
 
     function setUp() public {
-        multisig = sender("multisig").account;
+        multisig = sender("deployer").account;
 
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
         sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
@@ -60,11 +60,11 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
     }
 
-    /// @custom:senders deployer,multisig
+    /// @custom:senders deployer
     function run() public broadcast {
         setUp();
 
-        Senders.Sender storage deployer = sender("multisig");
+        Senders.Sender storage deployer = sender("deployer");
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
             abi.encode(true)

@@ -15,7 +15,7 @@ enum ProxyType {
 string constant CELO_LOOKUP_PREFIX = "Proxy:";
 string constant OZTUP_LOOKUP_PREFIX = "TransparentUpgradeableProxy:";
 string constant CELO_ARTIFACT = "src/Proxy.sol:Proxy";
-string constant OZTUP_ARTIFACT = "openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
+string constant OZTUP_ARTIFACT = "lib/mento-core/lib/openzeppelin-contracts-next/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
 
 interface ILegacyProxy {
     function _setImplementation(address implementation) external;
@@ -215,28 +215,21 @@ contract ProxyHelper is TrebScript {
         );
     }
 
-    // Get proxy admin from CELO and OZTUP proxies dynamically
+    // Get proxy admin from OZTUP proxies dynamically
     function getProxyAdmin(
         address proxy
     ) internal view returns (address proxyAdmin) {
-        // if this is CELO proxy _getOwner() return proxy admin
-        try ICeloProxy(proxy)._getOwner() returns (address owner) {
-            if (owner != address(0)) {
-                return owner;
-            }
-        } catch {
-            return
-                address(
-                    uint160(
-                        uint256(
-                            vm.load(
-                                proxy,
-                                0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
-                            )
+        return
+            address(
+                uint160(
+                    uint256(
+                        vm.load(
+                            proxy,
+                            0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
                         )
                     )
-                );
-        }
+                )
+            );
     }
 
     function verifyProxyAdmin(
