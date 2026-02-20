@@ -49,7 +49,6 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
     /// @custom:senders deployer
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
-        address deployerAccount = deployer.account;
 
         address stableTokenSpokeImpl = lookup("StableTokenSpoke:v3.0.0");
         if (stableTokenSpokeImpl == address(0)) {
