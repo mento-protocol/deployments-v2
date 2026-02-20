@@ -163,6 +163,21 @@
     "environment": "testnet-v2-rc5",
     "createdAt": "2025-09-11T17:57:53.483266+02:00"
   },
+  "tx-0x023519cd78d56b04b16e769aa400d31b99d084bda0046c8b986e7d19f4857b3b": {
+    "id": "tx-0x023519cd78d56b04b16e769aa400d31b99d084bda0046c8b986e7d19f4857b3b",
+    "chainId": 143,
+    "hash": "0x023519cd78d56b04b16e769aa400d31b99d084bda0046c8b986e7d19f4857b3b",
+    "status": "EXECUTED",
+    "blockNumber": 56654924,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [
+      "monad-mainnet/143/StableTokenSpoke:v3.0.0"
+    ],
+    "operations": [],
+    "environment": "monad-mainnet",
+    "createdAt": "2026-02-20T17:32:53.297549+01:00"
+  },
   "tx-0x026cd148360a14b82e46cd3d1b822640fbae83b8c27d2a684c96134ea9fca9be": {
     "id": "tx-0x026cd148360a14b82e46cd3d1b822640fbae83b8c27d2a684c96134ea9fca9be",
     "chainId": 11142220,
@@ -1938,6 +1953,19 @@
     "operations": [],
     "environment": "testnet-v2-rc1",
     "createdAt": "2025-09-04T12:10:05.928869+02:00"
+  },
+  "tx-0x198921a9d3b67af55c01de79c7e20d85ef9aa115f10e6089fd2bbb0721471054": {
+    "id": "tx-0x198921a9d3b67af55c01de79c7e20d85ef9aa115f10e6089fd2bbb0721471054",
+    "chainId": 143,
+    "hash": "0x198921a9d3b67af55c01de79c7e20d85ef9aa115f10e6089fd2bbb0721471054",
+    "status": "EXECUTED",
+    "blockNumber": 56654928,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [],
+    "operations": [],
+    "environment": "monad-mainnet",
+    "createdAt": "2026-02-20T17:32:53.297549+01:00"
   },
   "tx-0x1993460d6b372559a8d8fd38e7a7e97c66f1e640e69666f340c740d41f8e4b6d": {
     "id": "tx-0x1993460d6b372559a8d8fd38e7a7e97c66f1e640e69666f340c740d41f8e4b6d",
@@ -12790,6 +12818,21 @@
     "environment": "testnet-v2-rc2",
     "createdAt": "2025-09-04T16:04:34.414614+02:00"
   },
+  "tx-0xa26ed60ca9c9fe12886b9a45ed998f652c8b303c76134716d339224769ccaf30": {
+    "id": "tx-0xa26ed60ca9c9fe12886b9a45ed998f652c8b303c76134716d339224769ccaf30",
+    "chainId": 143,
+    "hash": "0xa26ed60ca9c9fe12886b9a45ed998f652c8b303c76134716d339224769ccaf30",
+    "status": "EXECUTED",
+    "blockNumber": 56654926,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [
+      "monad-mainnet/143/TransparentUpgradeableProxy:GBPm"
+    ],
+    "operations": [],
+    "environment": "monad-mainnet",
+    "createdAt": "2026-02-20T17:32:53.297549+01:00"
+  },
   "tx-0xa26f448126166e13ca03bdc6989e00f89214c00c0b4a8a340c1b45bc7399544c": {
     "id": "tx-0xa26f448126166e13ca03bdc6989e00f89214c00c0b4a8a340c1b45bc7399544c",
     "chainId": 11142220,
@@ -15496,6 +15539,21 @@
     "operations": [],
     "environment": "testnet-v2-rc4",
     "createdAt": "2025-09-11T17:13:17.075322+02:00"
+  },
+  "tx-0xc5583d541be15b126221e1675aa6446b2f33289333d6219eb35a83ddc8a73a49": {
+    "id": "tx-0xc5583d541be15b126221e1675aa6446b2f33289333d6219eb35a83ddc8a73a49",
+    "chainId": 143,
+    "hash": "0xc5583d541be15b126221e1675aa6446b2f33289333d6219eb35a83ddc8a73a49",
+    "status": "EXECUTED",
+    "blockNumber": 56654941,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [
+      "monad-mainnet/143/TransparentUpgradeableProxy:USDm"
+    ],
+    "operations": [],
+    "environment": "monad-mainnet",
+    "createdAt": "2026-02-20T17:32:59.354256+01:00"
   },
   "tx-0xc58536f095486d383939db0079004264638701f373372c22fb09c0b722c4e28b": {
     "id": "tx-0xc58536f095486d383939db0079004264638701f373372c22fb09c0b722c4e28b",
@@ -19408,6 +19466,19 @@
     "operations": [],
     "environment": "testnet-v2-rc1",
     "createdAt": "2025-09-04T12:06:47.369301+02:00"
+  },
+  "tx-0xf4fef45909099e4b4ed0b6448a6c183fa65d251161ef6db264e14ea446805d8b": {
+    "id": "tx-0xf4fef45909099e4b4ed0b6448a6c183fa65d251161ef6db264e14ea446805d8b",
+    "chainId": 143,
+    "hash": "0xf4fef45909099e4b4ed0b6448a6c183fa65d251161ef6db264e14ea446805d8b",
+    "status": "EXECUTED",
+    "blockNumber": 56654943,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [],
+    "operations": [],
+    "environment": "monad-mainnet",
+    "createdAt": "2026-02-20T17:32:59.354256+01:00"
   },
   "tx-0xf51b6c64724c0bf09acb2a89f407dc55a6da2faf8069b2f421691f75a37bcfce": {
     "id": "tx-0xf51b6c64724c0bf09acb2a89f407dc55a6da2faf8069b2f421691f75a37bcfce",

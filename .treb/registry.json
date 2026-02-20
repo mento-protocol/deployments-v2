@@ -493,6 +493,13 @@
       "ValueDeltaBreaker:v2.6.5": "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534"
     }
   },
+  "143": {
+    "monad-mainnet": {
+      "StableTokenSpoke:v3.0.0": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
+      "TransparentUpgradeableProxy:GBPm": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
+      "TransparentUpgradeableProxy:USDm": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88"
+    }
+  },
   "42220": {
     "virtual": {
       "AddressSortedLinkedListWithMedian": "0x498FB531985aD936f1A98813F92625084a67d02F",
