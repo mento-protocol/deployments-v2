@@ -15,7 +15,8 @@ enum ProxyType {
 string constant CELO_LOOKUP_PREFIX = "Proxy:";
 string constant OZTUP_LOOKUP_PREFIX = "TransparentUpgradeableProxy:";
 string constant CELO_ARTIFACT = "src/Proxy.sol:Proxy";
-string constant OZTUP_ARTIFACT = "lib/mento-core/lib/openzeppelin-contracts-next/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
+string constant OZTUP_ARTIFACT = "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
+
 
 interface ILegacyProxy {
     function _setImplementation(address implementation) external;
@@ -208,14 +209,11 @@ contract ProxyHelper is TrebScript {
         address implementation,
         bytes memory initData
     ) internal returns (address proxy) {
-        address proxyAdmin = lookup("ProxyAdmin");
-        require(proxyAdmin != address(0), "ProxyAdmin not deployed");
-        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
-            abi.encode(implementation, proxyAdmin, initData)
+       proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
+            abi.encode(implementation, deployer.account, initData)
         );
     }
 
-    // Get proxy admin from OZTUP proxies dynamically
     function getProxyAdmin(
         address proxy
     ) internal view returns (address proxyAdmin) {
@@ -230,6 +228,13 @@ contract ProxyHelper is TrebScript {
                     )
                 )
             );
+    }
+
+    function getOZTUPProxyImplementation(
+        address proxy
+    ) internal view returns (address implementation) {
+        bytes32 implSlot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+        return address(uint160(uint256(vm.load(proxy, implSlot))));
     }
 
     function verifyProxyAdmin(
