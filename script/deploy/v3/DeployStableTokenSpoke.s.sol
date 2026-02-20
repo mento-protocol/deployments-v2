@@ -108,15 +108,13 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
     }
 
     function checkMultisigCanSetRoles(address stableTokenSpokeProxy) internal {
-        address owner = IOwnable(stableTokenSpokeProxy).owner();
-
         address newMinter = address(1337);
         address newBurner = address(1338);
 
         require(!IStableTokenSpoke(stableTokenSpokeProxy).isMinter(newMinter), "minter already set");
         require(!IStableTokenSpoke(stableTokenSpokeProxy).isBurner(newBurner), "burner already set");
 
-        vm.startPrank(owner);
+        vm.startPrank(MIGRATION_MULTISIG);
         IStableTokenSpoke(stableTokenSpokeProxy).setMinter(newMinter, true);
         IStableTokenSpoke(stableTokenSpokeProxy).setBurner(newBurner, true);
         vm.stopPrank();
@@ -124,7 +122,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         require(IStableTokenSpoke(stableTokenSpokeProxy).isMinter(newMinter), "minter not set");
         require(IStableTokenSpoke(stableTokenSpokeProxy).isBurner(newBurner), "burner not set");
 
-        console.log(unicode" > owner can set minter and burner ✅");
+        console.log(unicode" > multisig can set minter and burner ✅");
 
     }
 
@@ -142,6 +140,6 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
 
         require(getOZTUPProxyImplementation(stableTokenSpokeProxy) == newImpl, "expected new implementation");
 
-        console.log(unicode" > proxy implementation can be upgraded ✅");
+        console.log(unicode" > multisig can upgrade proxy implementation ✅");
     }
 }
