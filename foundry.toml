@@ -30,7 +30,7 @@ monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://ap
 monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chain=143"}
 # celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
-[profile.monad-mainnet-rc0.treb.senders.deployer]
+[profile.monad-mainnet.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
