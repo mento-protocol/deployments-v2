@@ -24,6 +24,15 @@ jobs:
         run: |
           forge --version
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install mento-core dependencies
+        run: npm install
+        working-directory: lib/mento-core
+
       # - name: Run Forge fmt
       #   run: |
       #     forge fmt --check

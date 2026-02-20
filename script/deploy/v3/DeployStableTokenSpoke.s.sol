@@ -87,7 +87,6 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         console.log(" > name:", name);
         console.log(" > symbol: ", symbol);
 
-
         address proxyAdmin = getProxyAdmin(stableTokenSpokeProxy);
         address proxyAdminOwner = IOwnable(proxyAdmin).owner();
         require(IOwnable(proxyAdmin).owner() == MIGRATION_MULTISIG, "migration multisig should own the proxy admin");
@@ -104,11 +103,11 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         require(IERC20(stableTokenSpokeProxy).totalSupply() == 0, "Total supply should be 0");
 
         console.log("\n permissions checks");
-        checkOwnerCanSetRoles(stableTokenSpokeProxy);
+        checkMultisigCanSetRoles(stableTokenSpokeProxy);
         checkMultisigCanUpgradeProxy(stableTokenSpokeProxy);
     }
 
-    function checkOwnerCanSetRoles(address stableTokenSpokeProxy) internal {
+    function checkMultisigCanSetRoles(address stableTokenSpokeProxy) internal {
         address owner = IOwnable(stableTokenSpokeProxy).owner();
 
         address newMinter = address(1337);
