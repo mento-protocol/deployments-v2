@@ -209,20 +209,7 @@ contract ProxyHelper is TrebScript {
         address implementation,
         bytes memory initData
     ) internal returns (address proxy) {
-        address proxyAdmin = lookup("ProxyAdmin");
-        require(proxyAdmin != address(0), "ProxyAdmin not deployed");
-        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
-            abi.encode(implementation, proxyAdmin, initData)
-        );
-    }
-
-    function deployOztupProxyV5(
-        Senders.Sender storage deployer,
-        string memory label,
-        address implementation,
-        bytes memory initData
-    ) internal returns (address proxy) {
-        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
+       proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
             abi.encode(implementation, deployer.account, initData)
         );
     }

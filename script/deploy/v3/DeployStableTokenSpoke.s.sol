@@ -62,7 +62,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         address[] memory burners = new address[](0);
 
         address initialOwner = MIGRATION_MULTISIG;
-        address stableTokenSpokeProxy = deployOztupProxyV5(
+        address stableTokenSpokeProxy = deployOztupProxy(
             deployer,
             label,
             stableTokenSpokeImpl,
