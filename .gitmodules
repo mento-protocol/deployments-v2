@@ -19,4 +19,3 @@
 [submodule "lib/bold"]
 	path = lib/bold
 	url = https://github.com/mento-protocol/bold
-	branch = feat/mento-v3
