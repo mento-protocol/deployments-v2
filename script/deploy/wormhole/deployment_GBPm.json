@@ -1,0 +1,51 @@
+{
+  "network": "Mainnet",
+  "chains": {
+    "Celo": {
+      "version": "2.0.0",
+      "mode": "burning",
+      "paused": false,
+      "owner": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+      "manager": "0xa0b5ec26aCEd83E8b3Fa5eA087D8fB0bF17e5232",
+      "token": "0x88F9189b714fAb7599268a5F297bA9E33d0E03c3",
+      "transceivers": {
+        "threshold": 1,
+        "wormhole": {
+          "address": "0xbA200ec87F33002858bCc413E1051D473f6E5e51",
+          "pauser": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7"
+        }
+      },
+      "limits": {
+        "outbound": "184467440737.095516150000000000",
+        "inbound": {
+          "Monad": "184467440737.095516150000000000"
+        }
+      },
+      "pauser": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+      "managerVariant": "standard"
+    },
+    "Monad": {
+      "version": "2.0.0",
+      "mode": "burning",
+      "paused": false,
+      "owner": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+      "manager": "0xDdA229F02662843Bf5D0891Ea4396CaEb093A437",
+      "token": "0x4Ae2B0C38057Cd65048A107f1d0ADFa26d9acDf7",
+      "transceivers": {
+        "threshold": 1,
+        "wormhole": {
+          "address": "0xbF9040727Af34749EACf74db11e668dfDe655f3E",
+          "pauser": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7"
+        }
+      },
+      "limits": {
+        "outbound": "184467440737.095516150000000000",
+        "inbound": {
+          "Celo": "184467440737.095516150000000000"
+        }
+      },
+      "pauser": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+      "managerVariant": "standard"
+    }
+  }
+}
