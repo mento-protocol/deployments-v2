@@ -5,10 +5,10 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 
 contract AddressbookHelper is TrebScript {
     string private json;
-    string private namespace;
+    string private network;
 
     constructor() {
-        namespace = vm.envOr("NAMESPACE", string("default"));
+        network = vm.envString("NETWORK");
         try vm.readFile(".treb/addressbook.json") returns (string memory _json) {
             json = _json;
         } catch {
@@ -17,11 +17,11 @@ contract AddressbookHelper is TrebScript {
     }
 
     function lookupAddressbook(string memory _identifier) internal view returns (address) {
-        string memory jsonPath = string.concat(".", namespace, "[\"", _identifier, "\"]");
+        string memory jsonPath = string.concat(".", network, "[\"", _identifier, "\"]");
         try vm.parseJsonAddress(json, jsonPath) returns (address result) {
             return result;
         } catch {
-            revert(string.concat("AddressbookHelper: '", _identifier, "' not found in namespace '", namespace, "'"));
+            revert(string.concat("AddressbookHelper: '", _identifier, "' not found in network '", network, "'"));
         }
     }
 }
