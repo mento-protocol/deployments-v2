@@ -30,6 +30,9 @@
     "MigrationMultisig": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
   },
   "monad-mainnet": {
+    "StableTokenSpokeUSD": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
+    "StableTokenSpokeGBP": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
+    "StableTokenSpokeImplementation": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
     "MigrationMultisig": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
   }
 }
