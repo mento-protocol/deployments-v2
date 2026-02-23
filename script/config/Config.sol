@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import {console} from "forge-std/console.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {IMentoConfig} from "./IMentoConfig.sol";
-import {IMentoV3Config} from "./IMentoV3Config.sol";
 
 import "./MentoConfig_vbase.sol";
 import "./MentoConfig_celo_sepolia.sol";
@@ -27,14 +26,6 @@ library Config {
      */
     function get() internal returns (IMentoConfig) {
         return IMentoConfig(_get("MentoConfig"));
-    }
-
-    /**
-     * @notice Gets the Mento configuration contract as a IMentoV3Config
-     * @return The deployed config contract instance
-     */
-    function getV3() internal returns (IMentoV3Config) {
-        return IMentoV3Config(_get("MentoV3Config"));
     }
 
     /**
