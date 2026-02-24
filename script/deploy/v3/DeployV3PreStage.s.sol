@@ -49,7 +49,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address reserveV2;
     address stableTokenV3Impl;
 
-    string label = "v3.0.0";
+    string constant label = "v3.0.0";
+    address constant devMultisig = 0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458;
 
     function setUp() public {
         multisig = sender("deployer").account;
@@ -80,14 +81,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             .setLabel(label)
             .deploy(abi.encode(true));
 
-        require(
-            breakerBox != address(0),
-            string.concat(
-                "Registry: Lookup failed for BreakerBox in namespace ",
-                vm.envOr("NAMESPACE", string("default"))
-            )
-        );
-
         marketHoursBreaker = deployer
             .create3("MarketHoursBreaker")
             .setLabel(label)
@@ -116,8 +109,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         IFPMM.FPMMParams memory params = IFPMM.FPMMParams({
             lpFee: 30,
             protocolFee: 0,
-            protocolFeeRecipient: deployer.account,
-            feeSetter: deployer.account,
+            protocolFeeRecipient: deployer.account, // TODO: governance?
+            feeSetter: devMultisig,
             rebalanceIncentive: 50,
             rebalanceThresholdAbove: 500,
             rebalanceThresholdBelow: 500
@@ -131,7 +124,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                deployer.account,
+                devMultisig,
                 fpmmImpl,
                 params
             )
@@ -154,14 +147,14 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             abi.encodeWithSelector(
                 IFactoryRegistry.initialize.selector,
                 fpmmFactory,
-                deployer.account
+                devMultisig
             )
         );
 
         virtualPoolFactory = deployer
             .create3("VirtualPoolFactory")
             .setLabel(label)
-            .deploy(abi.encode(deployer.account));
+            .deploy(abi.encode(devMultisig));
 
         IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
             deployer.harness(factoryRegistry)
@@ -189,7 +182,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
                 empty,
                 empty,
                 empty,
-                deployer.account
+                devMultisig
             )
         );
 
