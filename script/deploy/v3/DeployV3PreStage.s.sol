@@ -22,13 +22,7 @@ import {Router} from "mento-core/swap/router/Router.sol";
 import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
-
-// Declaring this here until this PR is merged:
-// https://github.com/mento-protocol/mento-core/pull/704
-// import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
-interface IReserveLiquidityStrategy {
-    function initialize(address _initialOwner, address _reserve) external;
-}
+import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 
 contract DeployV3PreStage is
     TrebScript,
