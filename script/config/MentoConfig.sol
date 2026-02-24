@@ -12,6 +12,7 @@ import {AggregatorV3Interface} from "lib/mento-core/lib/foundry-chainlink-toolki
 
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 
 abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     using Deployer for Senders.Sender;
@@ -43,6 +44,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     mapping(string symbol => bool) internal _isStableToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
     bytes32[] _breakerIds;
+
+    IFPMM.FPMMParams internal _defaultFPMMParams;
+    /// @dev pairKey is for example "USDC/USDm" and it will be duplicated as "USDm/USDC"
+    mapping(string pairKey => IFPMM.FPMMParams) internal _fpmmParams;
 
     uint256 public baseFork;
     uint256 public mockAggregatorSourceFork;
@@ -174,6 +179,24 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             string.concat("Token not registered for: ", currency)
         );
         return getAddress(symbol);
+    }
+
+    /// @dev Get default FPMM Params
+    function getDefaultFPMMParams() public returns (IFPMM.FPMMParams memory) {
+        return _defaultFPMMParams;
+    }
+
+    /// @dev Get FPMM Params for given pair
+    function getFPMMParams(
+        address token0,
+        address token1
+    ) public returns (IFPMM.FPMMParams memory) {
+        string memory pairKey = string.concat(
+            IERC20Metadata(token0).symbol(),
+            "/",
+            IERC20Metadata(token1).symbol()
+        );
+        return _fpmmParams[pairKey];
     }
 
     // ========== Helper Functions ==========
@@ -534,6 +557,54 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                 tradingLimits: tradingLimits
             })
         );
+    }
+
+    function _setDefaultFPMMParams(
+        uint256 lpFee,
+        uint256 protocolFee,
+        address protocolFeeRecipient,
+        address feeSetter,
+        uint256 rebalanceIncentive,
+        uint256 rebalanceThresholdAbove,
+        uint256 rebalanceThresholdBelow
+    ) internal {
+        _defaultFPMMParams = IFPMM.FPMMParams(
+            lpFee,
+            protocolFee,
+            protocolFeeRecipient,
+            feeSetter,
+            rebalanceIncentive,
+            rebalanceThresholdAbove,
+            rebalanceThresholdBelow
+        );
+    }
+
+    function _addFPMMParams(
+        address token0,
+        address token1,
+        uint256 lpFee,
+        uint256 protocolFee,
+        address protocolFeeRecipient,
+        address feeSetter,
+        uint256 rebalanceIncentive,
+        uint256 rebalanceThresholdAbove,
+        uint256 rebalanceThresholdBelow
+    ) internal {
+        string memory symbol0 = IERC20Metadata(token0).symbol();
+        string memory symbol1 = IERC20Metadata(token1).symbol();
+        IFPMM.FPMMParams memory params = IFPMM.FPMMParams(
+            lpFee,
+            protocolFee,
+            protocolFeeRecipient,
+            feeSetter,
+            rebalanceIncentive,
+            rebalanceThresholdAbove,
+            rebalanceThresholdBelow
+        );
+        string memory poolKey01 = string.concat(symbol0, "/", symbol1);
+        string memory poolKey10 = string.concat(symbol1, "/", symbol0);
+        _fpmmParams[poolKey01] = params;
+        _fpmmParams[poolKey10] = params;
     }
 
     function _resolveExchangeAsset(

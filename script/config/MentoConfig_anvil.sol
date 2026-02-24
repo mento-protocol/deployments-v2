@@ -5,9 +5,10 @@ import {console} from "forge-std/console.sol";
 import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
+import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 
 /// @dev Here Anvil is a Monad mainnet fork
-contract MentoConfig_anvil is MentoConfig {
+contract MentoConfig_anvil is MentoConfig, AddressbookHelper {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
@@ -15,6 +16,15 @@ contract MentoConfig_anvil is MentoConfig {
         _initTokens();
         _initOracles();
         _initGovernance();
+        _setDefaultFPMMParams(
+            30,
+            0,
+            lookupAddressbook("MigrationMultisig"),
+            lookupAddressbook("MigrationMultisig"),
+            50,
+            500,
+            500
+        );
     }
 
     /// ===================================================================

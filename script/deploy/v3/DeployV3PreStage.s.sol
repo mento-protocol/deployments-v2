@@ -8,6 +8,7 @@ import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
+import {Config, IMentoConfig} from "script/config/Config.sol";
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
@@ -21,6 +22,13 @@ import {Router} from "mento-core/swap/router/Router.sol";
 import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
+
+// Declaring this here until this PR is merged:
+// https://github.com/mento-protocol/mento-core/pull/704
+// import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
+interface IReserveLiquidityStrategy {
+    function initialize(address _initialOwner, address _reserve) external;
+}
 
 contract DeployV3PreStage is
     TrebScript,
@@ -54,18 +62,20 @@ contract DeployV3PreStage is
     address reserveV2Impl;
     address reserveV2;
     address stableTokenV3Impl;
-    address migrationMultisig;
+    address reserveLiquidityStrategyImpl;
+    address reserveLiquidityStrategy;
+    IMentoConfig config;
 
     string constant label = "v3.0.0";
 
     function setUp() public {
-        multisig = sender("deployer").account;
+        multisig = lookupAddressbook("MigrationMultisig");
 
         sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
         sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
         breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
         proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
-        migrationMultisig = lookupAddressbook("MigrationMultisig");
+        config = Config.get();
     }
 
     /// @custom:senders deployer
@@ -112,17 +122,6 @@ contract DeployV3PreStage is
             )
         );
 
-        // TODO: Determine params
-        IFPMM.FPMMParams memory params = IFPMM.FPMMParams({
-            lpFee: 30,
-            protocolFee: 0,
-            protocolFeeRecipient: deployer.account, // TODO: governance?
-            feeSetter: migrationMultisig,
-            rebalanceIncentive: 50,
-            rebalanceThresholdAbove: 500,
-            rebalanceThresholdBelow: 500
-        });
-
         fpmmFactory = deployProxy(
             deployer,
             "FPMMFactory",
@@ -131,9 +130,9 @@ contract DeployV3PreStage is
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                migrationMultisig,
+                multisig,
                 fpmmImpl,
-                params
+                config.getDefaultFPMMParams()
             )
         );
 
@@ -154,14 +153,14 @@ contract DeployV3PreStage is
             abi.encodeWithSelector(
                 IFactoryRegistry.initialize.selector,
                 fpmmFactory,
-                migrationMultisig
+                multisig
             )
         );
 
         virtualPoolFactory = deployer
             .create3("VirtualPoolFactory")
             .setLabel(label)
-            .deploy(abi.encode(migrationMultisig));
+            .deploy(abi.encode(multisig));
 
         IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
             deployer.harness(factoryRegistry)
@@ -176,7 +175,6 @@ contract DeployV3PreStage is
             abi.encode(true)
         );
 
-        // TODO: Load from config
         address[] memory empty = new address[](0);
         reserveV2 = deployProxy(
             deployer,
@@ -189,7 +187,7 @@ contract DeployV3PreStage is
                 empty,
                 empty,
                 empty,
-                migrationMultisig
+                multisig
             )
         );
 
@@ -197,6 +195,22 @@ contract DeployV3PreStage is
             .create3("StableTokenV3")
             .setLabel(label)
             .deploy(abi.encode(true));
+
+        reserveLiquidityStrategyImpl = deployer
+            .create3("ReserveLiquidityStrategy")
+            .setLabel(label)
+            .deploy(abi.encode(true));
+
+        reserveLiquidityStrategy = deployProxy(
+            deployer,
+            "ReserveLiquidityStrategy",
+            reserveLiquidityStrategyImpl,
+            abi.encodeWithSelector(
+                IReserveLiquidityStrategy.initialize.selector,
+                multisig,
+                reserveV2
+            )
+        );
 
         postChecks();
     }
@@ -219,20 +233,33 @@ contract DeployV3PreStage is
             factoryRegistry,
             factoryRegistryImpl
         );
+        verifyProxyImpl("reserveV2", reserveV2, reserveV2Impl);
+        verifyProxyImpl(
+            "ReserveLiquidityStrategy",
+            reserveLiquidityStrategy,
+            reserveLiquidityStrategyImpl
+        );
 
         // Proxy Admin Checks
         // Verifies that ProxyAdmin contract is set as admin for each proxy
         verifyProxyAdmin("FPMMFactory", fpmmFactory);
         verifyProxyAdmin("OracleAdapter", oracleAdapter);
         verifyProxyAdmin("FactoryRegistry", factoryRegistry);
+        verifyProxyAdmin("ReserveV2", reserveV2);
+        verifyProxyAdmin("ReserveLiquidityStrategy", reserveLiquidityStrategy);
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
-        verifyOwnership("ProxyAdmin", proxyAdmin, multisig);
         verifyOwnership("OracleAdapter", oracleAdapter, multisig);
         verifyOwnership("FPMMFactory", fpmmFactory, multisig);
         verifyOwnership("FactoryRegistry", factoryRegistry, multisig);
         verifyOwnership("VirtualPoolFactory", virtualPoolFactory, multisig);
+        verifyOwnership("ReserveV2", reserveV2, multisig);
+        verifyOwnership(
+            "ReserveLiquidityStrategy",
+            reserveLiquidityStrategy,
+            multisig
+        );
 
         // Implementation Initializer Protection
         // Verifies that implementation contracts cannot be initialized directly (security check).
@@ -241,6 +268,12 @@ contract DeployV3PreStage is
         verifyInitDisabled("FPMMFactoryImpl", fpmmFactoryImpl);
         verifyInitDisabled("OracleAdapterImpl", oracleAdapterImpl);
         verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
+        verifyInitDisabled("ReserveV2Impl", reserveV2Impl);
+        verifyInitDisabled("StableTokenV3Impl", stableTokenV3Impl);
+        verifyInitDisabled(
+            "ReserveLiquidityStrategy",
+            reserveLiquidityStrategyImpl
+        );
 
         // OracleAdapter Initialization
         // Verifies that OracleAdapter is initialized with correct addresses.
@@ -327,6 +360,12 @@ contract DeployV3PreStage is
         require(
             routerContract.defaultFactory() == fpmmFactory,
             "Router.defaultFactory does not equal to FPMMFactory proxy address"
+        );
+
+        // ReserveLiquidityStrategy's Reserve is ReserveV2
+        require(
+            reserveLiquidityStrategy.reserve() == reserveV2,
+            "ReserveLiquidityStrategy.reserve does not equal to Reserve proxy address"
         );
     }
 }
