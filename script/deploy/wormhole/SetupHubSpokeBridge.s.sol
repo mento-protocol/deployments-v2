@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {console2 as console} from "forge-std/Script.sol";
+import {console2 as console} from "forge-std/console2.sol";
+import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {WormholeSetupBase, INTTManager, ITransceiver} from "./WormholeSetupBase.s.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 
@@ -15,38 +16,39 @@ import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 ///           2. Run on each chain separately:
 ///
 ///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
-///             forge script SetupHubSpokeBridge --rpc-url <celo-rpc>  --broadcast
+///             treb run SetupHubSpokeBridge --network celo
 ///
 ///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
-///             forge script SetupHubSpokeBridge --rpc-url <monad-rpc> --broadcast
+///             treb run SetupHubSpokeBridge --network monad
 contract SetupHubSpokeBridge is WormholeSetupBase {
+    using Senders for Senders.Sender;
+
     function setUp() public {
         _loadConfig();
     }
 
-    function run() public {
-        vm.startBroadcast();
+    /// @custom:senders deployer
+    function run() public broadcast {
+        Senders.Sender storage deployer = sender("deployer");
 
         if (isCelo()) {
             console.log("=== SetupHubSpokeBridge: Celo (Hub) chain %d ===\n", CELO_CHAIN_ID);
-            _setupCelo();
+            _setupCelo(deployer);
             _verifyCelo();
         } else if (isMonad()) {
             console.log("=== SetupHubSpokeBridge: Monad (Spoke) chain %d ===\n", MONAD_CHAIN_ID);
-            _setupMonad();
+            _setupMonad(deployer);
             _verifyMonad();
         } else {
             revert("Unsupported chain");
         }
-
-        vm.stopBroadcast();
     }
 
     // ── Setup ────────────────────────────────────────────────────────────
 
-    function _setupCelo() internal {
+    function _setupCelo(Senders.Sender storage deployer) internal {
         console.log("> Setting NTT Manager peer...");
-        INTTManager(celoNttManager).setPeer(
+        INTTManager(deployer.harness(celoNttManager)).setPeer(
             MONAD_WORMHOLE_CHAIN_ID,
             _toBytes32(monadNttManager),
             TOKEN_DECIMALS,
@@ -54,20 +56,20 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         );
 
         console.log("> Setting Transceiver wormhole peer...");
-        ITransceiver(celoTransceiver).setWormholePeer(
+        ITransceiver(deployer.harness(celoTransceiver)).setWormholePeer(
             MONAD_WORMHOLE_CHAIN_ID,
             _toBytes32(monadTransceiver)
         );
 
         console.log("> Setting outbound limit...");
-        INTTManager(celoNttManager).setOutboundLimit(celoOutboundLimit);
+        INTTManager(deployer.harness(celoNttManager)).setOutboundLimit(celoOutboundLimit);
 
         console.log(unicode"> Celo (Hub) setup complete 👀\n");
     }
 
-    function _setupMonad() internal {
+    function _setupMonad(Senders.Sender storage deployer) internal {
         console.log("> Setting NTT Manager peer...");
-        INTTManager(monadNttManager).setPeer(
+        INTTManager(deployer.harness(monadNttManager)).setPeer(
             CELO_WORMHOLE_CHAIN_ID,
             _toBytes32(celoNttManager),
             TOKEN_DECIMALS,
@@ -75,17 +77,17 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         );
 
         console.log("> Setting Transceiver wormhole peer...");
-        ITransceiver(monadTransceiver).setWormholePeer(
+        ITransceiver(deployer.harness(monadTransceiver)).setWormholePeer(
             CELO_WORMHOLE_CHAIN_ID,
             _toBytes32(celoTransceiver)
         );
 
         console.log("> Setting outbound limit...");
-        INTTManager(monadNttManager).setOutboundLimit(monadOutboundLimit);
+        INTTManager(deployer.harness(monadNttManager)).setOutboundLimit(monadOutboundLimit);
 
         console.log("> Granting NTT Manager burn/mint permissions on spoke token...");
-        IStableTokenSpoke(monadSpokeToken).setBurner(monadNttManager, true);
-        IStableTokenSpoke(monadSpokeToken).setMinter(monadNttManager, true);
+        IStableTokenSpoke(deployer.harness(monadSpokeToken)).setBurner(monadNttManager, true);
+        IStableTokenSpoke(deployer.harness(monadSpokeToken)).setMinter(monadNttManager, true);
 
         console.log(unicode"> Monad (Spoke) setup complete 👀\n");
     }
