@@ -18,6 +18,7 @@ interface ILiquityConfig {
         address rateFeedID;
         address watchdog;
         address owner;
+        address yieldSplitAddress;
         // ── FXPriceFeed ──────────────────────────────────────────────────
         bool invertRateFeed;
         uint256 l2SequencerGracePeriod;
@@ -45,6 +46,18 @@ interface ILiquityConfig {
         uint256 spYieldSplit;
         uint256 minBoldInSP;
         uint256 minBoldAfterRebalance;
+        // ── NFT Metadata assets ─────────────────────────────────────────
+        /// @dev Base directory for asset files, relative to project root
+        ///      e.g. "lib/bold/contracts/utils/assets/"
+        string metadataAssetsBasePath;
+        /// @dev Filename for the debt token logo (stored under "BOLD" key)
+        string debtTokenLogoFile;
+        /// @dev Filename for the collateral token logo
+        string collateralTokenLogoFile;
+        /// @dev Must match IERC20Metadata(collateralToken).symbol()
+        string collateralTokenSymbol;
+        /// @dev Filename for the font file (stored under "geist" key)
+        string fontFile;
     }
 
     function get() external view returns (LiquityInstanceConfig memory);

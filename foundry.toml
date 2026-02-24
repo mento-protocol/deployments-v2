@@ -8,7 +8,8 @@ fs_permissions = [
     { access = "read-write", path = "cache"},
     { access = "read", path = ".treb/registry.json"},
     { access = "read", path = "script/networks" },
-    { access = "read", path = "./mgps/"}
+    { access = "read", path = "./mgps/"},
+    { access = "read", path = "script/assets/"}
 ]
 
 [lint]

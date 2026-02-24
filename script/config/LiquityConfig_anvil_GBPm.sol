@@ -27,6 +27,7 @@ contract LiquityConfig_anvil_GBPm is ILiquityConfig {
                 rateFeedID: 0x00000000000000000000000000000000075BCd15,
                 watchdog: 0x00000000000000000000000000000002DfDC1c3E,
                 owner: 0x000000000000000000000000000000000001E240,
+                yieldSplitAddress: 0x000000000000000000000000000000000001e241,
                 // ── FXPriceFeed ────────────────────────────────────────
                 invertRateFeed: false,
                 l2SequencerGracePeriod: 1200,
@@ -53,7 +54,13 @@ contract LiquityConfig_anvil_GBPm is ILiquityConfig {
                 // ── SystemParams: stability pool ───────────────────────
                 spYieldSplit: 750000000000000000,
                 minBoldInSP: 1000000000000000000,
-                minBoldAfterRebalance: 1000000000000000000000
+                minBoldAfterRebalance: 1000000000000000000000,
+                // ── NFT Metadata assets ───────────────────────────────
+                metadataAssetsBasePath: "script/assets/anvil-GBPm/",
+                debtTokenLogoFile: "gbpm_logo.txt",
+                collateralTokenLogoFile: "usdm_logo.txt",
+                collateralTokenSymbol: "USDm",
+                fontFile: "geist.txt"
             });
     }
 }

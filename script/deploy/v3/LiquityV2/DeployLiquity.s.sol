@@ -33,15 +33,18 @@ import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
 import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {ISystemParams} from "bold/src/Interfaces/ISystemParams.sol";
 import {ICollateralRegistry} from "bold/src/Interfaces/ICollateralRegistry.sol";
-import {IMetadataNFT} from "bold/src/NFTMetadata/MetadataNFT.sol";
+import {IMetadataNFT, MetadataNFT} from "bold/src/NFTMetadata/MetadataNFT.sol";
+import {FixedAssetReader} from "bold/src/NFTMetadata/utils/FixedAssets.sol";
 import {IPriceFeed} from "bold/src/Interfaces/IPriceFeed.sol";
 import {IInterestRouter} from "bold/src/Interfaces/IInterestRouter.sol";
 
+import "forge-std/console2.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
+import {SSTORE2DataPointer} from "script/helpers/SSTORE2DataPointer.sol";
 import {ILiquityConfig} from "script/config/ILiquityConfig.sol";
 import {LiquityConfigLib} from "script/config/LiquityConfig.sol";
 
@@ -187,6 +190,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         );
 
         _deployFXPriceFeed(precomputedAddresses.borrowerOperations);
+        _deployMetadata();
 
         IAddressesRegistry(
             deployer.harness(deployedContracts.addressesRegistry)
@@ -299,6 +303,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
 
         _transferProxyAdminOwnerships();
         _verify();
+        _previewNFT();
     }
 
     function _buildAddressVars()
@@ -313,7 +318,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 ),
                 troveManager: ITroveManager(precomputedAddresses.troveManager),
                 troveNFT: ITroveNFT(precomputedAddresses.troveNFT),
-                metadataNFT: IMetadataNFT(address(0)),
+                metadataNFT: IMetadataNFT(deployedContracts.metadataNFT),
                 stabilityPool: IStabilityPool(
                     precomputedAddresses.stabilityPoolProxy
                 ),
@@ -325,7 +330,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                     precomputedAddresses.collSurplusPool
                 ),
                 sortedTroves: ISortedTroves(precomputedAddresses.sortedTroves),
-                interestRouter: IInterestRouter(address(0)),
+                interestRouter: IInterestRouter(cfg.yieldSplitAddress),
                 hintHelpers: IHintHelpers(deployedContracts.hintHelpers),
                 multiTroveGetter: IMultiTroveGetter(
                     deployedContracts.multiTroveGetter
@@ -488,7 +493,10 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             address(ar.troveNFT()) == deployedContracts.troveNFT,
             "AR: troveNFT"
         );
-        require(address(ar.metadataNFT()) == address(0), "AR: metadataNFT");
+        require(
+            address(ar.metadataNFT()) == deployedContracts.metadataNFT,
+            "AR: metadataNFT"
+        );
         require(
             address(ar.stabilityPool()) == deployedContracts.stabilityPoolProxy,
             "AR: stabilityPool"
@@ -518,7 +526,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             "AR: sortedTroves"
         );
         require(
-            address(ar.interestRouter()) == address(0),
+            address(ar.interestRouter()) == cfg.yieldSplitAddress,
             "AR: interestRouter"
         );
         require(
@@ -557,6 +565,40 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         require(
             cr.liquidityStrategy() == cdpLiquidityStrategy,
             "CR: liquidityStrategy"
+        );
+
+        // ── MetadataNFT wiring ──────────────────────────────────────────
+        MetadataNFT nft = MetadataNFT(deployedContracts.metadataNFT);
+        FixedAssetReader assetReader = nft.assetReader();
+        require(
+            address(assetReader) != address(0),
+            "NFT: assetReader not set"
+        );
+        require(
+            assetReader.pointer() != address(0),
+            "NFT: SSTORE2 pointer not set"
+        );
+        require(
+            bytes(
+                assetReader.readAsset(bytes4(keccak256("BOLD")))
+            ).length > 0,
+            "NFT: debt token logo asset empty"
+        );
+        require(
+            bytes(
+                assetReader.readAsset(
+                    bytes4(
+                        keccak256(bytes(cfg.collateralTokenSymbol))
+                    )
+                )
+            ).length > 0,
+            "NFT: collateral logo asset empty"
+        );
+        require(
+            bytes(
+                assetReader.readAsset(bytes4(keccak256("geist")))
+            ).length > 0,
+            "NFT: font asset empty"
         );
 
         // ── FXPriceFeed proxy parameters ─────────────────────────────────
@@ -656,6 +698,95 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 .owner() == cfg.owner,
             "ProxyAdmin: systemParams"
         );
+    }
+
+    function _previewNFT() internal view {
+        IMetadataNFT.TroveData memory troveData;
+        troveData._tokenId = 1;
+        troveData._owner = address(0xBEEF);
+        troveData._collToken = collateralToken;
+        troveData._boldToken = debtToken;
+        troveData._collAmount = 10e18;
+        troveData._debtAmount = 5000e18;
+        troveData._interestRate = 5e16; // 5%
+        troveData._status = ITroveManager.Status.active;
+
+        string memory dataURI = MetadataNFT(deployedContracts.metadataNFT).uri(troveData);
+        console2.log("NFT Preview URI:");
+        console2.log(dataURI);
+    }
+
+    function _deployMetadata() internal {
+        string memory basePath = string.concat(
+            vm.projectRoot(),
+            "/",
+            cfg.metadataAssetsBasePath
+        );
+
+        // Load asset files
+        bytes memory debtTokenLogo = bytes(
+            vm.readFile(string.concat(basePath, cfg.debtTokenLogoFile))
+        );
+        bytes memory collateralLogo = bytes(
+            vm.readFile(
+                string.concat(basePath, cfg.collateralTokenLogoFile)
+            )
+        );
+        bytes memory font = bytes(
+            vm.readFile(string.concat(basePath, cfg.fontFile))
+        );
+
+        // Calculate byte offsets
+        uint128 debtLogoEnd = uint128(debtTokenLogo.length);
+        uint128 collLogoEnd = debtLogoEnd +
+            uint128(collateralLogo.length);
+        uint128 fontEnd = collLogoEnd + uint128(font.length);
+
+        // Concatenate all data
+        bytes memory allData = bytes.concat(
+            debtTokenLogo,
+            collateralLogo,
+            font
+        );
+
+        // Deploy SSTORE2DataPointer which calls SSTORE2.write in its constructor
+        address dataPointerContract = deployer
+            .create3("SSTORE2DataPointer.sol:SSTORE2DataPointer")
+            .setLabel(cfg.instanceSalt)
+            .deploy(abi.encode(allData));
+        address pointer = SSTORE2DataPointer(dataPointerContract)
+            .pointer();
+
+        // Deploy FixedAssetReader via create3
+        bytes4[] memory sigs = new bytes4[](3);
+        sigs[0] = bytes4(keccak256("BOLD"));
+        sigs[1] = bytes4(
+            keccak256(bytes(cfg.collateralTokenSymbol))
+        );
+        sigs[2] = bytes4(keccak256("geist"));
+
+        FixedAssetReader.Asset[] memory metadataAssets = new FixedAssetReader
+            .Asset[](3);
+        metadataAssets[0] = FixedAssetReader.Asset(0, debtLogoEnd);
+        metadataAssets[1] = FixedAssetReader.Asset(
+            debtLogoEnd,
+            collLogoEnd
+        );
+        metadataAssets[2] = FixedAssetReader.Asset(
+            collLogoEnd,
+            fontEnd
+        );
+
+        address fixedAssetReader = deployer
+            .create3("FixedAssets.sol:FixedAssetReader")
+            .setLabel(cfg.instanceSalt)
+            .deploy(abi.encode(pointer, sigs, metadataAssets));
+
+        // Deploy MetadataNFT via create3
+        deployedContracts.metadataNFT = deployer
+            .create3("MetadataNFT.sol:MetadataNFT")
+            .setLabel(cfg.instanceSalt)
+            .deploy(abi.encode(FixedAssetReader(fixedAssetReader)));
     }
 
     function _predict(

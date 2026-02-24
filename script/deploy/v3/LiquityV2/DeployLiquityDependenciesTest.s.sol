@@ -40,7 +40,7 @@ contract DeployLiquityDependenciesTest is TrebScript, ProxyHelper {
             .setLabel("GBPm")
             .deploy(abi.encode(false));
 
-        IStableTokenV3(debtToken).initialize(
+        IStableTokenV3(deployer.harness(debtToken)).initialize(
             "GBPm",
             "GBPm",
             owner,
@@ -56,7 +56,7 @@ contract DeployLiquityDependenciesTest is TrebScript, ProxyHelper {
             .setLabel("USDm")
             .deploy(abi.encode(false));
 
-        IStableTokenV3(collateralToken).initialize(
+        IStableTokenV3(deployer.harness(collateralToken)).initialize(
             "USDm",
             "USDm",
             owner,
