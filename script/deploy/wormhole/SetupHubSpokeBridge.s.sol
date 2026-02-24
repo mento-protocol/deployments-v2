@@ -59,6 +59,9 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
             _toBytes32(monadTransceiver)
         );
 
+        console.log("> Setting outbound limit...");
+        INTTManager(celoNttManager).setOutboundLimit(celoOutboundLimit);
+
         console.log(unicode"> Celo (Hub) setup complete 👀\n");
     }
 
@@ -77,6 +80,9 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
             _toBytes32(celoTransceiver)
         );
 
+        console.log("> Setting outbound limit...");
+        INTTManager(monadNttManager).setOutboundLimit(monadOutboundLimit);
+
         console.log("> Granting NTT Manager burn/mint permissions on spoke token...");
         IStableTokenSpoke(monadSpokeToken).setBurner(monadNttManager, true);
         IStableTokenSpoke(monadSpokeToken).setMinter(monadNttManager, true);
@@ -90,6 +96,7 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         console.log("== Verifying Celo (Hub) ==");
         _verifyNttManagerPeer(celoNttManager, MONAD_WORMHOLE_CHAIN_ID, monadNttManager);
         _verifyTransceiverPeer(celoTransceiver, MONAD_WORMHOLE_CHAIN_ID, monadTransceiver);
+        _verifyOutboundLimit(celoNttManager, celoOutboundLimit);
         console.log(unicode"== Celo (Hub) verification passed 🎉 ==\n");
     }
 
@@ -97,6 +104,7 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         console.log("== Verifying Monad (Spoke) ==");
         _verifyNttManagerPeer(monadNttManager, CELO_WORMHOLE_CHAIN_ID, celoNttManager);
         _verifyTransceiverPeer(monadTransceiver, CELO_WORMHOLE_CHAIN_ID, celoTransceiver);
+        _verifyOutboundLimit(monadNttManager, monadOutboundLimit);
         _verifyBurnMintPermissions(monadSpokeToken, monadNttManager);
         console.log(unicode"== Monad (Spoke) verification passed 🎉 ==\n");
     }

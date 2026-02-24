@@ -62,11 +62,13 @@ abstract contract WormholeSetupBase is Script {
     address public celoNttManager;
     address public celoTransceiver;
     uint256 public celoInboundLimit;
+    uint256 public celoOutboundLimit;
     address public celoV3Token;
 
     address public monadNttManager;
     address public monadTransceiver;
     uint256 public monadInboundLimit;
+    uint256 public monadOutboundLimit;
     address public monadSpokeToken;
 
     // ── Config loading ───────────────────────────────────────────────────
@@ -79,21 +81,25 @@ abstract contract WormholeSetupBase is Script {
         celoTransceiver = vm.parseJsonAddress(json, ".chains.Celo.transceivers.wormhole.address");
         celoV3Token = vm.parseJsonAddress(json, ".chains.Celo.token");
         celoInboundLimit = vm.parseUint(vm.parseJsonString(json, ".chains.Celo.limits.inbound.Monad"));
+        celoOutboundLimit = vm.parseUint(vm.parseJsonString(json, ".chains.Celo.limits.outbound"));
 
         monadNttManager = vm.parseJsonAddress(json, ".chains.Monad.manager");
         monadTransceiver = vm.parseJsonAddress(json, ".chains.Monad.transceivers.wormhole.address");
         monadSpokeToken = vm.parseJsonAddress(json, ".chains.Monad.token");
         monadInboundLimit = vm.parseUint(vm.parseJsonString(json, ".chains.Monad.limits.inbound.Celo"));
+        monadOutboundLimit = vm.parseUint(vm.parseJsonString(json, ".chains.Monad.limits.outbound"));
 
         require(celoNttManager != address(0), "Celo manager not found in deployment file");
         require(celoTransceiver != address(0), "Celo transceiver not found in deployment file");
         require(celoV3Token != address(0), "Celo token not found in deployment file");
         require(celoInboundLimit > 0, "Celo inbound limit not found in deployment file");
+        require(celoOutboundLimit > 0, "Celo outbound limit not found in deployment file");
 
         require(monadNttManager != address(0), "Monad manager not found in deployment file");
         require(monadTransceiver != address(0), "Monad transceiver not found in deployment file");
         require(monadSpokeToken != address(0), "Monad token not found in deployment file");
         require(monadInboundLimit > 0, "Monad inbound limit not found in deployment file");
+        require(monadOutboundLimit > 0, "Monad outbound limit not found in deployment file");
 
         console.log("Loaded config from %s", path);
         console.log("  Celo:  manager=%s transceiver=%s token=%s", celoNttManager, celoTransceiver, celoV3Token);
@@ -158,5 +164,12 @@ abstract contract WormholeSetupBase is Script {
             "Transceiver peer address mismatch"
         );
         console.log("  -> Wormhole peer set to %s", expectedPeerTransceiver);
+    }
+
+    function _verifyOutboundLimit(address manager, uint256 expectedLimit) internal view {
+        console.log("  Verifying outbound limit on %s", manager);
+        RateLimitParams memory params = INTTManager(manager).getOutboundLimitParams();
+        require(_unmask(params.limit) == expectedLimit, "Outbound limit mismatch");
+        console.log("  -> Outbound limit set to %d", expectedLimit / 1e18);
     }
 }
