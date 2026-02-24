@@ -17,10 +17,12 @@ import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 ///           2. Run on each chain separately:
 ///
 ///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
-///             treb run SetupHubSpokeBridge --network celo
+///           RATE_LIMIT_DURATION=86400 \
+///             treb run SetupHubSpokeBridge --network celo --debug
 ///
 ///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
-///             treb run SetupHubSpokeBridge --network monad
+///           RATE_LIMIT_DURATION=86400 \
+///             treb run SetupHubSpokeBridge --network monad --debug
 contract SetupHubSpokeBridge is WormholeSetupBase {
     using Senders for Senders.Sender;
 
@@ -73,7 +75,7 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         IPausable(deployer.harness(celoNttManager)).transferPauserCapability(migrationMultisig);
         IPausable(deployer.harness(celoTransceiver)).transferPauserCapability(migrationMultisig);
 
-        console.log(unicode"> Celo (Hub) setup complete 👀\n");
+        console.log(unicode"> Celo setup complete 👀\n");
     }
 
     function _setupMonad(Senders.Sender storage deployer) internal {
@@ -106,7 +108,7 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         IPausable(deployer.harness(monadNttManager)).transferPauserCapability(migrationMultisig);
         IPausable(deployer.harness(monadTransceiver)).transferPauserCapability(migrationMultisig);
 
-        console.log(unicode"> Monad (Spoke) setup complete 👀\n");
+        console.log(unicode"> Monad setup complete 👀\n");
     }
 
     // ── Verification ─────────────────────────────────────────────────────
@@ -116,24 +118,26 @@ contract SetupHubSpokeBridge is WormholeSetupBase {
         _verifyNttManagerPeer(celoNttManager, MONAD_WORMHOLE_CHAIN_ID, monadNttManager);
         _verifyTransceiverPeer(celoTransceiver, MONAD_WORMHOLE_CHAIN_ID, monadTransceiver);
         _verifyOutboundLimit(celoNttManager, celoOutboundLimit);
+        _verifyRateLimitDuration(celoNttManager);
         _verifyOwnership(celoNttManager, celoTransceiver, migrationMultisig);
-        console.log(unicode"== Celo (Hub) verification passed 🎉 ==\n");
+        console.log(unicode"== Celo verification passed 🎉 ==\n");
     }
 
     function _verifyMonad() internal view {
-        console.log("== Verifying Monad (Spoke) ==");
+        console.log("== Verifying Monad ==");
         _verifyNttManagerPeer(monadNttManager, CELO_WORMHOLE_CHAIN_ID, celoNttManager);
         _verifyTransceiverPeer(monadTransceiver, CELO_WORMHOLE_CHAIN_ID, celoTransceiver);
         _verifyOutboundLimit(monadNttManager, monadOutboundLimit);
+        _verifyRateLimitDuration(monadNttManager);
         _verifyBurnMintPermissions(monadSpokeToken, monadNttManager);
         _verifyOwnership(monadNttManager, monadTransceiver, migrationMultisig);
-        console.log(unicode"== Monad (Spoke) verification passed 🎉 ==\n");
+        console.log(unicode"== Monad verification passed 🎉 ==\n");
     }
 
     function _verifyBurnMintPermissions(address token, address manager) internal view {
-        console.log("  Verifying burn/mint permissions on token %s", token);
+        console.log("Verifying burn/mint permissions on token %s", token);
         require(IStableTokenSpoke(token).isMinter(manager), "NTT Manager is not a minter");
         require(IStableTokenSpoke(token).isBurner(manager), "NTT Manager is not a burner");
-        console.log("  -> NTT Manager %s has minter and burner roles", manager);
+        console.log(" > NTT Manager %s has minter and burner roles\n", manager);
     }
 }

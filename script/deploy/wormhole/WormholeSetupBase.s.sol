@@ -25,6 +25,7 @@ interface INTTManager {
     function setOutboundLimit(uint256 limit) external;
     function getOutboundLimitParams() external view returns (RateLimitParams memory);
     function getInboundLimitParams(uint16 chainId_) external view returns (RateLimitParams memory);
+    function rateLimitDuration() external view returns (uint64);
 }
 
 interface ITransceiver {
@@ -76,6 +77,7 @@ abstract contract WormholeSetupBase is AddressbookHelper {
     address public monadSpokeToken;
 
     address public migrationMultisig;
+    uint64 public expectedRateLimitDuration;
 
     // ── Config loading ───────────────────────────────────────────────────
 
@@ -109,6 +111,10 @@ abstract contract WormholeSetupBase is AddressbookHelper {
 
         migrationMultisig = lookupAddressbook("MigrationMultisig");
         require(migrationMultisig != address(0), "MigrationMultisig not found in addressbook");
+
+        // This needs to be set during the contracts deployment which happens
+        // outside of treb, so we can verify that it matches the expected value.
+        expectedRateLimitDuration = uint64(vm.envOr("RATE_LIMIT_DURATION", uint256(86400)));
 
         console.log("Loaded config from %s", path);
         console.log("  Celo:  manager=%s transceiver=%s token=%s", celoNttManager, celoTransceiver, celoV3Token);
@@ -152,14 +158,14 @@ abstract contract WormholeSetupBase is AddressbookHelper {
         uint16 peerWormholeChainId,
         address expectedPeerManager
     ) internal view {
-        console.log("  Verifying NTT Manager peer on %s", manager);
+        console.log("Verifying NTT Manager peer on %s", manager);
         NttManagerPeer memory peer = INTTManager(manager).getPeer(peerWormholeChainId);
         require(
             peer.peerAddress == _toBytes32(expectedPeerManager),
             "NTT Manager peer address mismatch"
         );
         require(peer.tokenDecimals == TOKEN_DECIMALS, "NTT Manager peer decimals mismatch");
-        console.log("  -> Peer set to %s with %d decimals", expectedPeerManager, TOKEN_DECIMALS);
+        console.log(" > Peer set to %s with %d decimals\n", expectedPeerManager, TOKEN_DECIMALS);
     }
 
     function _verifyTransceiverPeer(
@@ -167,36 +173,43 @@ abstract contract WormholeSetupBase is AddressbookHelper {
         uint16 peerWormholeChainId,
         address expectedPeerTransceiver
     ) internal view {
-        console.log("  Verifying Transceiver peer on %s", transceiver);
+        console.log("Verifying Transceiver peer on %s", transceiver);
         require(
             ITransceiver(transceiver).getWormholePeer(peerWormholeChainId) == _toBytes32(expectedPeerTransceiver),
             "Transceiver peer address mismatch"
         );
-        console.log("  -> Wormhole peer set to %s", expectedPeerTransceiver);
+        console.log(" > Wormhole peer set to %s\n", expectedPeerTransceiver);
     }
 
     function _verifyOutboundLimit(address manager, uint256 expectedLimit) internal view {
-        console.log("  Verifying outbound limit on %s", manager);
+        console.log("Verifying outbound limit on %s", manager);
         RateLimitParams memory params = INTTManager(manager).getOutboundLimitParams();
         require(_unmask(params.limit) == expectedLimit, "Outbound limit mismatch");
-        console.log("  -> Outbound limit set to %d", expectedLimit / 1e18);
+        console.log(" > Outbound limit set to %d\n", expectedLimit / 1e18);
+    }
+
+    function _verifyRateLimitDuration(address manager) internal view {
+        console.log("Verifying rate limit duration on %s", manager);
+        uint64 duration = INTTManager(manager).rateLimitDuration();
+        require(duration == expectedRateLimitDuration, "Rate limit duration mismatch");
+        console.log(" > Rate limit duration is %d seconds\n", duration);
     }
 
     function _verifyOwnership(address manager, address transceiver, address expectedOwner) internal view {
-        console.log("  Verifying ownership of NTT Manager %s", manager);
+        console.log("Verifying ownership of NTT Manager %s", manager);
         require(IOwnable(manager).owner() == expectedOwner, "NTT Manager owner mismatch");
-        console.log("  -> Owner is %s", expectedOwner);
+        console.log(" > Owner is %s\n", expectedOwner);
 
-        console.log("  Verifying ownership of Transceiver %s", transceiver);
+        console.log("Verifying ownership of Transceiver %s", transceiver);
         require(IOwnable(transceiver).owner() == expectedOwner, "Transceiver owner mismatch");
-        console.log("  -> Owner is %s", expectedOwner);
+        console.log(" > Owner is %s\n", expectedOwner);
 
-        console.log("  Verifying pauser of NTT Manager %s", manager);
+        console.log("Verifying pauser of NTT Manager %s", manager);
         require(IPausable(manager).pauser() == expectedOwner, "NTT Manager pauser mismatch");
-        console.log("  -> Pauser is %s", expectedOwner);
+        console.log(" > Pauser is %s\n", expectedOwner);
 
-        console.log("  Verifying pauser of Transceiver %s", transceiver);
+        console.log("Verifying pauser of Transceiver %s", transceiver);
         require(IPausable(transceiver).pauser() == expectedOwner, "Transceiver pauser mismatch");
-        console.log("  -> Pauser is %s", expectedOwner);
+        console.log(" > Pauser is %s\n", expectedOwner);
     }
 }

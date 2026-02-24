@@ -18,10 +18,12 @@ import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 ///           2. Run on each chain separately:
 ///
 ///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/GBPm.json \
-///             treb run SetupBurnMintBridge --network celo
+///           RATE_LIMIT_DURATION=86400 \
+///             treb run SetupBurnMintBridge --network celo --debug
 ///
 ///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/GBPm.json \
-///             treb run SetupBurnMintBridge --network monad
+///           RATE_LIMIT_DURATION=86400 \
+///             treb run SetupBurnMintBridge --network monad --debug
 contract SetupBurnMintBridge is WormholeSetupBase {
     using Senders for Senders.Sender;
 
@@ -121,6 +123,7 @@ contract SetupBurnMintBridge is WormholeSetupBase {
         _verifyNttManagerPeer(celoNttManager, MONAD_WORMHOLE_CHAIN_ID, monadNttManager);
         _verifyTransceiverPeer(celoTransceiver, MONAD_WORMHOLE_CHAIN_ID, monadTransceiver);
         _verifyOutboundLimit(celoNttManager, celoOutboundLimit);
+        _verifyRateLimitDuration(celoNttManager);
         _verifyBurnMintPermissions(celoV3Token, celoNttManager);
         _verifyOwnership(celoNttManager, celoTransceiver, migrationMultisig);
         console.log(unicode"== Celo verification passed 🎉 ==\n");
@@ -131,15 +134,16 @@ contract SetupBurnMintBridge is WormholeSetupBase {
         _verifyNttManagerPeer(monadNttManager, CELO_WORMHOLE_CHAIN_ID, celoNttManager);
         _verifyTransceiverPeer(monadTransceiver, CELO_WORMHOLE_CHAIN_ID, celoTransceiver);
         _verifyOutboundLimit(monadNttManager, monadOutboundLimit);
+        _verifyRateLimitDuration(monadNttManager);
         _verifyBurnMintPermissions(monadSpokeToken, monadNttManager);
         _verifyOwnership(monadNttManager, monadTransceiver, migrationMultisig);
         console.log(unicode"== Monad verification passed 🎉 ==\n");
     }
 
     function _verifyBurnMintPermissions(address token, address manager) internal view {
-        console.log("  Verifying burn/mint permissions on token %s", token);
+        console.log("Verifying burn/mint permissions on token %s", token);
         require(IStableTokenSpoke(token).isMinter(manager), "NTT Manager is not a minter");
         require(IStableTokenSpoke(token).isBurner(manager), "NTT Manager is not a burner");
-        console.log("  -> NTT Manager %s has minter and burner roles", manager);
+        console.log(" > NTT Manager %s has minter and burner roles\n", manager);
     }
 }
