@@ -3,8 +3,9 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {WormholeSetupBase, INTTManager, ITransceiver} from "./WormholeSetupBase.s.sol";
+import {WormholeSetupBase, INTTManager, ITransceiver, IPausable} from "./WormholeSetupBase.s.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
 /// @title SetupBurnMintBridge
 /// @notice Configures a burn-and-mint NTT bridge between Celo and Monad.
@@ -69,6 +70,14 @@ contract SetupBurnMintBridge is WormholeSetupBase {
         IStableTokenSpoke(deployer.harness(celoV3Token)).setBurner(celoNttManager, true);
         IStableTokenSpoke(deployer.harness(celoV3Token)).setMinter(celoNttManager, true);
 
+        // NTT Manager.transferOwnership also transfers ownership of all registered transceivers
+        console.log("> Transferring NTT ownership to MigrationMultisig...");
+        IOwnable(deployer.harness(celoNttManager)).transferOwnership(migrationMultisig);
+
+        console.log("> Transferring pauser capability to MigrationMultisig...");
+        IPausable(deployer.harness(celoNttManager)).transferPauserCapability(migrationMultisig);
+        IPausable(deployer.harness(celoTransceiver)).transferPauserCapability(migrationMultisig);
+
         console.log(unicode"> Celo setup complete 👀\n");
     }
 
@@ -94,6 +103,14 @@ contract SetupBurnMintBridge is WormholeSetupBase {
         IStableTokenSpoke(deployer.harness(monadSpokeToken)).setBurner(monadNttManager, true);
         IStableTokenSpoke(deployer.harness(monadSpokeToken)).setMinter(monadNttManager, true);
 
+        // NTT Manager.transferOwnership also transfers ownership of all registered transceivers
+        console.log("> Transferring NTT ownership to MigrationMultisig...");
+        IOwnable(deployer.harness(monadNttManager)).transferOwnership(migrationMultisig);
+
+        console.log("> Transferring pauser capability to MigrationMultisig...");
+        IPausable(deployer.harness(monadNttManager)).transferPauserCapability(migrationMultisig);
+        IPausable(deployer.harness(monadTransceiver)).transferPauserCapability(migrationMultisig);
+
         console.log(unicode"> Monad setup complete 👀\n");
     }
 
@@ -105,6 +122,7 @@ contract SetupBurnMintBridge is WormholeSetupBase {
         _verifyTransceiverPeer(celoTransceiver, MONAD_WORMHOLE_CHAIN_ID, monadTransceiver);
         _verifyOutboundLimit(celoNttManager, celoOutboundLimit);
         _verifyBurnMintPermissions(celoV3Token, celoNttManager);
+        _verifyOwnership(celoNttManager, celoTransceiver, migrationMultisig);
         console.log(unicode"== Celo verification passed 🎉 ==\n");
     }
 
@@ -114,6 +132,7 @@ contract SetupBurnMintBridge is WormholeSetupBase {
         _verifyTransceiverPeer(monadTransceiver, CELO_WORMHOLE_CHAIN_ID, celoTransceiver);
         _verifyOutboundLimit(monadNttManager, monadOutboundLimit);
         _verifyBurnMintPermissions(monadSpokeToken, monadNttManager);
+        _verifyOwnership(monadNttManager, monadTransceiver, migrationMultisig);
         console.log(unicode"== Monad verification passed 🎉 ==\n");
     }
 

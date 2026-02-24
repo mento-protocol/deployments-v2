@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
+import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {console2 as console} from "forge-std/console2.sol";
 
 /// @dev NTT Manager peer info returned by getPeer()
@@ -24,14 +25,16 @@ interface INTTManager {
     function setOutboundLimit(uint256 limit) external;
     function getOutboundLimitParams() external view returns (RateLimitParams memory);
     function getInboundLimitParams(uint16 chainId_) external view returns (RateLimitParams memory);
-    function owner() external view returns (address);
-    function transferOwnership(address newOwner) external;
 }
 
 interface ITransceiver {
     function setWormholePeer(uint16 chainId, bytes32 peerContract) external payable;
     function getWormholePeer(uint16 chainId) external view returns (bytes32);
-    function owner() external view returns (address);
+}
+
+interface IPausable {
+    function pauser() external view returns (address);
+    function transferPauserCapability(address newPauser) external;
 }
 
 
@@ -46,7 +49,7 @@ interface ITransceiver {
 ///
 ///         The JSON is the standard output of the Wormhole NTT CLI and must
 ///         contain "Celo" and "Monad" entries under ".chains".
-abstract contract WormholeSetupBase is TrebScript {
+abstract contract WormholeSetupBase is AddressbookHelper {
     // ── Chain constants ──────────────────────────────────────────────────
     // Celo
     uint256 public constant CELO_CHAIN_ID = 42220;
@@ -71,6 +74,8 @@ abstract contract WormholeSetupBase is TrebScript {
     uint256 public monadInboundLimit;
     uint256 public monadOutboundLimit;
     address public monadSpokeToken;
+
+    address public migrationMultisig;
 
     // ── Config loading ───────────────────────────────────────────────────
 
@@ -101,6 +106,9 @@ abstract contract WormholeSetupBase is TrebScript {
         require(monadSpokeToken != address(0), "Monad token not found in deployment file");
         require(monadInboundLimit > 0, "Monad inbound limit not found in deployment file");
         require(monadOutboundLimit > 0, "Monad outbound limit not found in deployment file");
+
+        migrationMultisig = lookupAddressbook("MigrationMultisig");
+        require(migrationMultisig != address(0), "MigrationMultisig not found in addressbook");
 
         console.log("Loaded config from %s", path);
         console.log("  Celo:  manager=%s transceiver=%s token=%s", celoNttManager, celoTransceiver, celoV3Token);
@@ -172,5 +180,23 @@ abstract contract WormholeSetupBase is TrebScript {
         RateLimitParams memory params = INTTManager(manager).getOutboundLimitParams();
         require(_unmask(params.limit) == expectedLimit, "Outbound limit mismatch");
         console.log("  -> Outbound limit set to %d", expectedLimit / 1e18);
+    }
+
+    function _verifyOwnership(address manager, address transceiver, address expectedOwner) internal view {
+        console.log("  Verifying ownership of NTT Manager %s", manager);
+        require(IOwnable(manager).owner() == expectedOwner, "NTT Manager owner mismatch");
+        console.log("  -> Owner is %s", expectedOwner);
+
+        console.log("  Verifying ownership of Transceiver %s", transceiver);
+        require(IOwnable(transceiver).owner() == expectedOwner, "Transceiver owner mismatch");
+        console.log("  -> Owner is %s", expectedOwner);
+
+        console.log("  Verifying pauser of NTT Manager %s", manager);
+        require(IPausable(manager).pauser() == expectedOwner, "NTT Manager pauser mismatch");
+        console.log("  -> Pauser is %s", expectedOwner);
+
+        console.log("  Verifying pauser of Transceiver %s", transceiver);
+        require(IPausable(transceiver).pauser() == expectedOwner, "Transceiver pauser mismatch");
+        console.log("  -> Pauser is %s", expectedOwner);
     }
 }
