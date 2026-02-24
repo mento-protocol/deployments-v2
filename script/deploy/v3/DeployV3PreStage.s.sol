@@ -5,6 +5,7 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
+import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
@@ -21,7 +22,12 @@ import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 
-contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
+contract DeployV3PreStage is
+    TrebScript,
+    AddressbookHelper,
+    ProxyHelper,
+    PostChecksHelper
+{
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -48,8 +54,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address reserveV2Impl;
     address reserveV2;
     address stableTokenV3Impl;
+    address migrationMultisig;
 
-    string label = "v3.0.0";
+    string constant label = "v3.0.0";
 
     function setUp() public {
         multisig = sender("deployer").account;
@@ -58,6 +65,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
         breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
         proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
+        migrationMultisig = lookupAddressbook("MigrationMultisig");
     }
 
     /// @custom:senders deployer
@@ -79,14 +87,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             .create3("FPMMFactory")
             .setLabel(label)
             .deploy(abi.encode(true));
-
-        require(
-            breakerBox != address(0),
-            string.concat(
-                "Registry: Lookup failed for BreakerBox in namespace ",
-                vm.envOr("NAMESPACE", string("default"))
-            )
-        );
 
         marketHoursBreaker = deployer
             .create3("MarketHoursBreaker")
@@ -116,8 +116,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         IFPMM.FPMMParams memory params = IFPMM.FPMMParams({
             lpFee: 30,
             protocolFee: 0,
-            protocolFeeRecipient: deployer.account,
-            feeSetter: deployer.account,
+            protocolFeeRecipient: deployer.account, // TODO: governance?
+            feeSetter: migrationMultisig,
             rebalanceIncentive: 50,
             rebalanceThresholdAbove: 500,
             rebalanceThresholdBelow: 500
@@ -131,7 +131,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                deployer.account,
+                migrationMultisig,
                 fpmmImpl,
                 params
             )
@@ -154,14 +154,14 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             abi.encodeWithSelector(
                 IFactoryRegistry.initialize.selector,
                 fpmmFactory,
-                deployer.account
+                migrationMultisig
             )
         );
 
         virtualPoolFactory = deployer
             .create3("VirtualPoolFactory")
             .setLabel(label)
-            .deploy(abi.encode(deployer.account));
+            .deploy(abi.encode(migrationMultisig));
 
         IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
             deployer.harness(factoryRegistry)
@@ -189,7 +189,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
                 empty,
                 empty,
                 empty,
-                deployer.account
+                migrationMultisig
             )
         );
 
