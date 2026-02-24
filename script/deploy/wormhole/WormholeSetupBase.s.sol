@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
 
-import {Script, console2 as console} from "forge-std/Script.sol";
+import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
+import {console2 as console} from "forge-std/console2.sol";
 
 /// @dev NTT Manager peer info returned by getPeer()
 struct NttManagerPeer {
@@ -45,7 +46,7 @@ interface ITransceiver {
 ///
 ///         The JSON is the standard output of the Wormhole NTT CLI and must
 ///         contain "Celo" and "Monad" entries under ".chains".
-abstract contract WormholeSetupBase is Script {
+abstract contract WormholeSetupBase is TrebScript {
     // ── Chain constants ──────────────────────────────────────────────────
     // Celo
     uint256 public constant CELO_CHAIN_ID = 42220;
