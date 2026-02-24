@@ -9,14 +9,17 @@ import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 /// @notice Configures a burn-and-mint NTT bridge between Celo and Monad.
 ///         Both chains use burning mode. The NTT Manager on each chain needs
 ///         minter and burner permissions on the token contract.
+///         All config is read from a Wormhole NTT deployment JSON file.
 ///
-///         Required env vars (see WormholeSetupBase):
-///           CELO_NTT_MANAGER, CELO_TRANSCEIVER, CELO_INBOUND_LIMIT, CELO_V3_TOKEN
-///           MONAD_NTT_MANAGER, MONAD_TRANSCEIVER, MONAD_INBOUND_LIMIT, MONAD_SPOKE_TOKEN
+///         Usage:
+///           1. Drop the Wormhole NTT deployment JSON into script/deploy/wormhole/configs/
+///           2. Run on each chain separately:
 ///
-///         Run on each chain separately:
-///           forge script SetupBurnMintBridge --rpc-url <celo-rpc>   --broadcast
-///           forge script SetupBurnMintBridge --rpc-url <monad-rpc>  --broadcast
+///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/GBPm.json \
+///             forge script SetupBurnMintBridge --rpc-url <celo-rpc>  --broadcast
+///
+///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/GBPm.json \
+///             forge script SetupBurnMintBridge --rpc-url <monad-rpc> --broadcast
 contract SetupBurnMintBridge is WormholeSetupBase {
     function setUp() public {
         _loadConfig();

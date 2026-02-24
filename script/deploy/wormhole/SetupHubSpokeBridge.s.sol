@@ -7,15 +7,18 @@ import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 
 /// @title SetupHubSpokeBridge
 /// @notice Configures a hub-and-spoke (locking) NTT bridge between Celo (hub) and Monad (spoke).
-///         Contract addresses and limits are read from environment variables.
+///         Celo locks tokens, Monad burns/mints. All config is read from a Wormhole NTT
+///         deployment JSON file.
 ///
-///         Required env vars (see WormholeSetupBase):
-///           CELO_NTT_MANAGER, CELO_TRANSCEIVER, CELO_INBOUND_LIMIT
-///           MONAD_NTT_MANAGER, MONAD_TRANSCEIVER, MONAD_INBOUND_LIMIT
+///         Usage:
+///           1. Drop the Wormhole NTT deployment JSON into script/deploy/wormhole/configs/
+///           2. Run on each chain separately:
 ///
-///         Run on each chain separately:
-///           forge script SetupHubSpokeBridge --rpc-url <celo-rpc>   --broadcast
-///           forge script SetupHubSpokeBridge --rpc-url <monad-rpc>  --broadcast
+///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
+///             forge script SetupHubSpokeBridge --rpc-url <celo-rpc>  --broadcast
+///
+///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
+///             forge script SetupHubSpokeBridge --rpc-url <monad-rpc> --broadcast
 contract SetupHubSpokeBridge is WormholeSetupBase {
     function setUp() public {
         _loadConfig();

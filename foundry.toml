@@ -9,7 +9,7 @@ fs_permissions = [
     { access = "read", path = ".treb/addressbook.json"},
     { access = "read", path = "script/networks" },
     { access = "read", path = "./mgps/"},
-    { access = "read", path = "script/deploy/wormhole/deployments"}
+    { access = "read", path = "script/deploy/wormhole/configs"}
 ]
 
 [lint]
