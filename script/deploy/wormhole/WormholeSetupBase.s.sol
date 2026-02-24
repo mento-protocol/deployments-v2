@@ -36,12 +36,15 @@ interface ITransceiver {
 
 /// @title WormholeSetupBase
 /// @notice Shared base for Wormhole NTT bridge setup scripts.
-///         Provides chain constants, shared config loaded from env, helpers,
-///         and verification utilities.
+///         Provides chain constants, shared config loaded from a Wormhole NTT
+///         deployment JSON, helpers, and verification utilities.
 ///
-///         Common env vars (loaded by _loadConfig):
-///           CELO_NTT_MANAGER, CELO_TRANSCEIVER, CELO_INBOUND_LIMIT, CELO_V3_TOKEN
-///           MONAD_NTT_MANAGER, MONAD_TRANSCEIVER, MONAD_INBOUND_LIMIT, MONAD_SPOKE_TOKEN
+///         Required env var:
+///           WORMHOLE_DEPLOYMENT_FILE - path to a Wormhole NTT deployment JSON
+///                             (e.g. "script/deploy/wormhole/configs/USDm.json")
+///
+///         The JSON is the standard output of the Wormhole NTT CLI and must
+///         contain "Celo" and "Monad" entries under ".chains".
 abstract contract WormholeSetupBase is Script {
     // ── Chain constants ──────────────────────────────────────────────────
     // Celo
@@ -55,7 +58,7 @@ abstract contract WormholeSetupBase is Script {
     // Token decimals (same on both chains)
     uint8 public constant TOKEN_DECIMALS = 18;
 
-    // ── Shared config (populated by _loadConfig from env) ────────────────
+    // ── Shared config (populated by _loadConfig from deployment JSON) ────
     address public celoNttManager;
     address public celoTransceiver;
     uint256 public celoInboundLimit;
@@ -69,25 +72,32 @@ abstract contract WormholeSetupBase is Script {
     // ── Config loading ───────────────────────────────────────────────────
 
     function _loadConfig() internal {
-        celoNttManager = vm.envAddress("CELO_NTT_MANAGER");
-        celoTransceiver = vm.envAddress("CELO_TRANSCEIVER");
-        celoInboundLimit = vm.envUint("CELO_INBOUND_LIMIT");
-        celoV3Token = vm.envAddress("CELO_V3_TOKEN");
+        string memory path = vm.envString("WORMHOLE_DEPLOYMENT_FILE");
+        string memory json = vm.readFile(path);
 
-        monadNttManager = vm.envAddress("MONAD_NTT_MANAGER");
-        monadTransceiver = vm.envAddress("MONAD_TRANSCEIVER");
-        monadInboundLimit = vm.envUint("MONAD_INBOUND_LIMIT");
-        monadSpokeToken = vm.envAddress("MONAD_SPOKE_TOKEN");
+        celoNttManager = vm.parseJsonAddress(json, ".chains.Celo.manager");
+        celoTransceiver = vm.parseJsonAddress(json, ".chains.Celo.transceivers.wormhole.address");
+        celoV3Token = vm.parseJsonAddress(json, ".chains.Celo.token");
+        celoInboundLimit = vm.parseUint(vm.parseJsonString(json, ".chains.Celo.limits.inbound.Monad"));
 
-        require(celoNttManager != address(0), "CELO_NTT_MANAGER not set");
-        require(celoTransceiver != address(0), "CELO_TRANSCEIVER not set");
-        require(celoInboundLimit > 0, "CELO_INBOUND_LIMIT not set");
-        require(celoV3Token != address(0), "CELO_V3_TOKEN not set");
+        monadNttManager = vm.parseJsonAddress(json, ".chains.Monad.manager");
+        monadTransceiver = vm.parseJsonAddress(json, ".chains.Monad.transceivers.wormhole.address");
+        monadSpokeToken = vm.parseJsonAddress(json, ".chains.Monad.token");
+        monadInboundLimit = vm.parseUint(vm.parseJsonString(json, ".chains.Monad.limits.inbound.Celo"));
 
-        require(monadNttManager != address(0), "MONAD_NTT_MANAGER not set");
-        require(monadTransceiver != address(0), "MONAD_TRANSCEIVER not set");
-        require(monadInboundLimit > 0, "MONAD_INBOUND_LIMIT not set");
-        require(monadSpokeToken != address(0), "MONAD_SPOKE_TOKEN not set");
+        require(celoNttManager != address(0), "Celo manager not found in deployment file");
+        require(celoTransceiver != address(0), "Celo transceiver not found in deployment file");
+        require(celoV3Token != address(0), "Celo token not found in deployment file");
+        require(celoInboundLimit > 0, "Celo inbound limit not found in deployment file");
+
+        require(monadNttManager != address(0), "Monad manager not found in deployment file");
+        require(monadTransceiver != address(0), "Monad transceiver not found in deployment file");
+        require(monadSpokeToken != address(0), "Monad token not found in deployment file");
+        require(monadInboundLimit > 0, "Monad inbound limit not found in deployment file");
+
+        console.log("Loaded config from %s", path);
+        console.log("  Celo:  manager=%s transceiver=%s token=%s", celoNttManager, celoTransceiver, celoV3Token);
+        console.log("  Monad: manager=%s transceiver=%s token=%s\n", monadNttManager, monadTransceiver, monadSpokeToken);
     }
 
     // ── Helpers ──────────────────────────────────────────────────────────
