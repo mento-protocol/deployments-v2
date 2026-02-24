@@ -39,6 +39,7 @@ import {IPriceFeed} from "bold/src/Interfaces/IPriceFeed.sol";
 import {IInterestRouter} from "bold/src/Interfaces/IInterestRouter.sol";
 
 import "forge-std/console2.sol";
+import {Base64} from "Solady/utils/Base64.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -570,34 +571,25 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         // ── MetadataNFT wiring ──────────────────────────────────────────
         MetadataNFT nft = MetadataNFT(deployedContracts.metadataNFT);
         FixedAssetReader assetReader = nft.assetReader();
-        require(
-            address(assetReader) != address(0),
-            "NFT: assetReader not set"
-        );
+        require(address(assetReader) != address(0), "NFT: assetReader not set");
         require(
             assetReader.pointer() != address(0),
             "NFT: SSTORE2 pointer not set"
         );
         require(
-            bytes(
-                assetReader.readAsset(bytes4(keccak256("BOLD")))
-            ).length > 0,
+            bytes(assetReader.readAsset(bytes4(keccak256("BOLD")))).length > 0,
             "NFT: debt token logo asset empty"
         );
         require(
             bytes(
                 assetReader.readAsset(
-                    bytes4(
-                        keccak256(bytes(cfg.collateralTokenSymbol))
-                    )
+                    bytes4(keccak256(bytes(cfg.collateralTokenSymbol)))
                 )
             ).length > 0,
             "NFT: collateral logo asset empty"
         );
         require(
-            bytes(
-                assetReader.readAsset(bytes4(keccak256("geist")))
-            ).length > 0,
+            bytes(assetReader.readAsset(bytes4(keccak256("geist")))).length > 0,
             "NFT: font asset empty"
         );
 
@@ -700,22 +692,6 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         );
     }
 
-    function _previewNFT() internal view {
-        IMetadataNFT.TroveData memory troveData;
-        troveData._tokenId = 1;
-        troveData._owner = address(0xBEEF);
-        troveData._collToken = collateralToken;
-        troveData._boldToken = debtToken;
-        troveData._collAmount = 10e18;
-        troveData._debtAmount = 5000e18;
-        troveData._interestRate = 5e16; // 5%
-        troveData._status = ITroveManager.Status.active;
-
-        string memory dataURI = MetadataNFT(deployedContracts.metadataNFT).uri(troveData);
-        console2.log("NFT Preview URI:");
-        console2.log(dataURI);
-    }
-
     function _deployMetadata() internal {
         string memory basePath = string.concat(
             vm.projectRoot(),
@@ -728,9 +704,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             vm.readFile(string.concat(basePath, cfg.debtTokenLogoFile))
         );
         bytes memory collateralLogo = bytes(
-            vm.readFile(
-                string.concat(basePath, cfg.collateralTokenLogoFile)
-            )
+            vm.readFile(string.concat(basePath, cfg.collateralTokenLogoFile))
         );
         bytes memory font = bytes(
             vm.readFile(string.concat(basePath, cfg.fontFile))
@@ -738,8 +712,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
 
         // Calculate byte offsets
         uint128 debtLogoEnd = uint128(debtTokenLogo.length);
-        uint128 collLogoEnd = debtLogoEnd +
-            uint128(collateralLogo.length);
+        uint128 collLogoEnd = debtLogoEnd + uint128(collateralLogo.length);
         uint128 fontEnd = collLogoEnd + uint128(font.length);
 
         // Concatenate all data
@@ -754,28 +727,19 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             .create3("SSTORE2DataPointer.sol:SSTORE2DataPointer")
             .setLabel(cfg.instanceSalt)
             .deploy(abi.encode(allData));
-        address pointer = SSTORE2DataPointer(dataPointerContract)
-            .pointer();
+        address pointer = SSTORE2DataPointer(dataPointerContract).pointer();
 
         // Deploy FixedAssetReader via create3
         bytes4[] memory sigs = new bytes4[](3);
         sigs[0] = bytes4(keccak256("BOLD"));
-        sigs[1] = bytes4(
-            keccak256(bytes(cfg.collateralTokenSymbol))
-        );
+        sigs[1] = bytes4(keccak256(bytes(cfg.collateralTokenSymbol)));
         sigs[2] = bytes4(keccak256("geist"));
 
-        FixedAssetReader.Asset[] memory metadataAssets = new FixedAssetReader
-            .Asset[](3);
+        FixedAssetReader.Asset[]
+            memory metadataAssets = new FixedAssetReader.Asset[](3);
         metadataAssets[0] = FixedAssetReader.Asset(0, debtLogoEnd);
-        metadataAssets[1] = FixedAssetReader.Asset(
-            debtLogoEnd,
-            collLogoEnd
-        );
-        metadataAssets[2] = FixedAssetReader.Asset(
-            collLogoEnd,
-            fontEnd
-        );
+        metadataAssets[1] = FixedAssetReader.Asset(debtLogoEnd, collLogoEnd);
+        metadataAssets[2] = FixedAssetReader.Asset(collLogoEnd, fontEnd);
 
         address fixedAssetReader = deployer
             .create3("FixedAssets.sol:FixedAssetReader")
@@ -795,5 +759,38 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         string memory label
     ) internal returns (address) {
         return _deployer.create3(artifact).setLabel(label).predict();
+    }
+
+    function _previewNFT() internal view {
+        IMetadataNFT.TroveData memory troveData;
+        troveData._tokenId = 1;
+        troveData._owner = address(0xBEEF);
+        troveData._collToken = collateralToken;
+        troveData._boldToken = debtToken;
+        troveData._collAmount = 10e18;
+        troveData._debtAmount = 5000e18;
+        troveData._interestRate = 5e16; // 5%
+        troveData._status = ITroveManager.Status.active;
+
+        string memory dataURI = MetadataNFT(deployedContracts.metadataNFT).uri(
+            troveData
+        );
+
+        // Strip "data:application/json;base64," prefix (29 chars) and decode
+        bytes memory jsonBytes = Base64.decode(_substring(dataURI, 29));
+        console2.log("=== NFT Metadata (decoded JSON) ===");
+        console2.log(string(jsonBytes));
+    }
+
+    function _substring(
+        string memory str,
+        uint256 startIndex
+    ) internal pure returns (string memory) {
+        bytes memory strBytes = bytes(str);
+        bytes memory result = new bytes(strBytes.length - startIndex);
+        for (uint256 i = startIndex; i < strBytes.length; i++) {
+            result[i - startIndex] = strBytes[i];
+        }
+        return string(result);
     }
 }
