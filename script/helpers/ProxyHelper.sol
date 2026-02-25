@@ -17,7 +17,6 @@ string constant OZTUP_LOOKUP_PREFIX = "TransparentUpgradeableProxy:";
 string constant CELO_ARTIFACT = "src/Proxy.sol:Proxy";
 string constant OZTUP_ARTIFACT = "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
 
-
 interface ILegacyProxy {
     function _setImplementation(address implementation) external;
 
@@ -209,7 +208,7 @@ contract ProxyHelper is TrebScript {
         address implementation,
         bytes memory initData
     ) internal returns (address proxy) {
-       proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
+        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
             abi.encode(implementation, deployer.account, initData)
         );
     }

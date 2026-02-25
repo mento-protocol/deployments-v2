@@ -25,28 +25,17 @@ contract SetupLocalFork is Script {
     address constant SENTINEL_OWNERS = address(0x1);
 
     function run() public {
-        // 1. Set threshold to 1
         Anvil.setStorageAt(SAFE, bytes32(THRESHOLD_SLOT), bytes32(uint256(1)));
 
-        // 2. Clear existing owners by setting SENTINEL_OWNERS to point to itself
         bytes32 sentinelSlot = keccak256(
             abi.encode(SENTINEL_OWNERS, OWNERS_MAPPING_SLOT)
         );
         Anvil.setStorageAt(
             SAFE,
             sentinelSlot,
-            bytes32(uint256(uint160(SENTINEL_OWNERS)))
-        );
-
-        // 3. Add PROPOSER as the only owner
-        // SENTINEL_OWNERS -> PROPOSER
-        Anvil.setStorageAt(
-            SAFE,
-            sentinelSlot,
             bytes32(uint256(uint160(PROPOSER)))
         );
 
-        // PROPOSER -> SENTINEL_OWNERS (complete the linked list)
         bytes32 proposerSlot = keccak256(
             abi.encode(PROPOSER, OWNERS_MAPPING_SLOT)
         );
@@ -56,14 +45,12 @@ contract SetupLocalFork is Script {
             bytes32(uint256(uint160(SENTINEL_OWNERS)))
         );
 
-        // 4. Set owner count to 1
         Anvil.setStorageAt(
             SAFE,
             bytes32(OWNER_COUNT_SLOT),
             bytes32(uint256(1))
         );
 
-        // Query and log the changes
         ISafe safe = ISafe(SAFE);
         uint256 newThreshold = safe.getThreshold();
         address[] memory owners = safe.getOwners();
