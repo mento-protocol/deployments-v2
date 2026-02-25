@@ -7,17 +7,14 @@ import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkR
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 
-/// @dev Here Anvil is a Monad mainnet fork
-contract MentoConfig_anvil is MentoConfig {
+contract MentoConfig_monad_local_fork is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
     function _initialize() internal override {
         _initTokens();
         _initOracles();
-        _initGovernance();
-        _setDefaultFPMMParams(30, 0, 50, 500, 500);
-        _setRedemptionShortfallTolerance(10e12);
+        _initParams();
     }
 
     /// ===================================================================
@@ -93,6 +90,17 @@ contract MentoConfig_anvil is MentoConfig {
         });
     }
 
+    /// ===================================================================
+    /// PARAMS
+    /// ===================================================================
+    /// @notice Configure protocol parameters
+    /// @dev On testnets we can use _addMockAggregator to define chainlink
+    /// aggregators.
+    function _initParams() internal {
+        _setDefaultFPMMParams(30, 0, 50, 500, 500);
+        _setRedemptionShortfallTolerance(10e12);
+    }
+
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
     function _configureDefaultFxRateFeed(
@@ -114,23 +122,6 @@ contract MentoConfig_anvil is MentoConfig {
             description: rateFeed,
             aggregator0: source,
             invert0: false
-        });
-    }
-
-    /// ===================================================================
-    /// Governance
-    /// ===================================================================
-    /// @notice Configure the reserve and exchange pools in the system
-    function _initGovernance() internal {
-        _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
-
-        _governanceConfig = GovernanceConfig({
-            timelockDelay: 2 days,
-            votingDelay: 0,
-            votingPeriod: 120_960,
-            proposalThreshold: 10000e18,
-            quorum: 2,
-            watchdog: address(1)
         });
     }
 }

@@ -15,22 +15,22 @@ fs_permissions = [
 ignore = ["**/*"]
 
 [rpc_endpoints]
-# vbase = "${TENDERLY_VBASE_RPC_URL}"
-# vbase_root = "${TENDERLY_VBASE_ROOT_RPC_URL}"
-# vcelo = "${TENDERLY_VCELO_RPC_URL}"
-# vcelo_root = "${TENDERLY_VCELO_ROOT_RPC_URL}"
 celo = "${CELO_RPC_URL}"
 celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
 monad = "${MONAD_RPC_URL}"
 chain-143 = "${MONAD_RPC_URL}"
 anvil = "http://localhost:8545"
+monad_local_fork = "http://localhost:8545"
+celo_local_fork = "http://localhost:8545"
+monad_testnet_local_fork = "http://localhost:8545"
+celo_sepolia_local_fork = "http://localhost:8545"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
-monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
-monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
-chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+# monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
+# monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+# chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
 # celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
 [profile.monad-mainnet.treb.senders.deployer]
