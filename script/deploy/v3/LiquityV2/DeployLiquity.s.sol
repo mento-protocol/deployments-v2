@@ -48,8 +48,9 @@ import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {SSTORE2DataPointer} from "script/helpers/SSTORE2DataPointer.sol";
 import {ILiquityConfig} from "script/config/ILiquityConfig.sol";
 import {LiquityConfigLib} from "script/config/LiquityConfig.sol";
+import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 
-contract DeployLiquityV2 is TrebScript, ProxyHelper {
+contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -109,7 +110,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         debtToken = lookup(cfg.debtTokenLabel);
         collateralToken = lookup(cfg.collateralTokenLabel);
         cdpLiquidityStrategy = lookup(cfg.liquidityStrategyLabel);
-        gasToken = lookup(cfg.gasTokenLabel);
+        gasToken = lookupAddressbook(cfg.gasTokenLabel);
 
         deployAndConnectContracts();
     }
