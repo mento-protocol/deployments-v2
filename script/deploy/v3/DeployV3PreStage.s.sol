@@ -115,14 +115,11 @@ contract DeployV3PreStage is
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                deployer.account,
+                multisig,
                 fpmmImpl,
                 params
             )
         );
-
-        IOwnable fpmmFactoryOwnable = IOwnable(deployer.harness(fpmmFactory));
-        fpmmFactoryOwnable.transferOwnership(multisig);
 
         factoryRegistryImpl = deployer
             .create3("FactoryRegistry")
