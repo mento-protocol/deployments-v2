@@ -112,7 +112,7 @@ contract DeployV3PreStage is
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
         params.feeSetter = multisig;
-        params.protocolFeeRecipient = multisig; //TODO: governance?
+        params.protocolFeeRecipient = address(0);
 
         fpmmFactory = deployProxy(
             deployer,
