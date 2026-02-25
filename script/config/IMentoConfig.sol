@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {ITradingLimits} from "lib/mento-core/contracts/interfaces/ITradingLimits.sol";
 import {IBiPoolManager, IPricingModule, FixidityLib} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
+import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 
 enum BreakerType {
     Value,
@@ -96,7 +97,9 @@ interface IMentoConfig {
 
     function getRateFeeds() external view returns (RateFeed[] memory);
 
-    function getRateFeedDependencies(address) external view returns (address[] memory);
+    function getRateFeedDependencies(
+        address
+    ) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
 
@@ -127,6 +130,21 @@ interface IMentoConfig {
         returns (BreakerConfig[] memory configs);
 
     function getReserveConfig() external view returns (ReserveConfig memory);
+
+    function getDefaultFPMMParams()
+        external
+        view
+        returns (IFPMM.FPMMParams memory);
+
+    function getFPMMParams(
+        address token0,
+        address token1
+    ) external view returns (IFPMM.FPMMParams memory);
+
+    function getCDPRedemptionShortfallTolerance()
+        external
+        view
+        returns (uint256);
 
     function mockAggregatorReporter() external view returns (address);
 

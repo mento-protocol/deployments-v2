@@ -18,7 +18,6 @@ contract PostChecksHelper is TrebScript {
         );
     }
 
-    // TODO: Move this check to the test level and expect revert
     function verifyInitDisabled(
         string memory identifier,
         address impl
