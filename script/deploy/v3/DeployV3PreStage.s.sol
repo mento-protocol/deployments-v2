@@ -38,7 +38,6 @@ contract DeployV3PreStage is
     address breakerBox;
 
     address fpmmImpl;
-    address oneToOneFpmmImpl;
     address fpmmFactoryImpl;
     address fpmmFactory;
     address virtualPoolFactory;
@@ -74,11 +73,6 @@ contract DeployV3PreStage is
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
             abi.encode(true)
         );
-
-        oneToOneFpmmImpl = deployer
-            .create3("OneToOneFPMM")
-            .setLabel(label)
-            .deploy(abi.encode(true));
 
         fpmmFactoryImpl = deployer
             .create3("FPMMFactory")
@@ -127,11 +121,7 @@ contract DeployV3PreStage is
             )
         );
 
-        IFPMMFactory fpmmFactoryHarness = IFPMMFactory(
-            deployer.harness(fpmmFactory)
-        );
         IOwnable fpmmFactoryOwnable = IOwnable(deployer.harness(fpmmFactory));
-        fpmmFactoryHarness.registerFPMMImplementation(oneToOneFpmmImpl);
         fpmmFactoryOwnable.transferOwnership(multisig);
 
         factoryRegistryImpl = deployer
@@ -255,7 +245,6 @@ contract DeployV3PreStage is
         // Implementation Initializer Protection
         // Verifies that implementation contracts cannot be initialized directly (security check).
         verifyInitDisabled("FPMMImpl", fpmmImpl);
-        verifyInitDisabled("OneToOneFPMMImpl", oneToOneFpmmImpl);
         verifyInitDisabled("FPMMFactoryImpl", fpmmFactoryImpl);
         verifyInitDisabled("OracleAdapterImpl", oracleAdapterImpl);
         verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
@@ -331,10 +320,6 @@ contract DeployV3PreStage is
 
         // FPMMFactory Registrations
         // Verifies that FPMM implementations are registered.
-        require(
-            fpmmFactoryContract.isRegisteredImplementation(oneToOneFpmmImpl),
-            "oneToOneFpmmImpl is not registered"
-        );
         require(
             fpmmFactoryContract.isRegisteredImplementation(fpmmImpl),
             "defaultFpmmImpl is not registered"
