@@ -1,4 +1,141 @@
 {
+  "monad-mainnet/143/StableTokenSpoke:v3.0.0": {
+    "id": "monad-mainnet/143/StableTokenSpoke:v3.0.0",
+    "namespace": "monad-mainnet",
+    "chainId": 143,
+    "contractName": "StableTokenSpoke",
+    "label": "v3.0.0",
+    "address": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x023519cd78d56b04b16e769aa400d31b99d084bda0046c8b986e7d19f4857b3b",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700092283bc17e77012f33826",
+      "initCodeHash": "0x48b51ce81c76737acd2fc96bbd654fbbf37ee0af58fd563a6dc2129d25c79be4",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "monad-mainnet/StableTokenSpoke:v3.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/tokens/StableTokenSpoke.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x724e2776eafaf9281bc13eb65321fb1f9e9bfc29f0bdd5347e8d3e445d8ed94e",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "7a5fe76a60d89b8b85db279145a78a461fab6dc2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=143/address/0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=143/address/0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-02-20T17:32:53.297549+01:00",
+    "updatedAt": "2026-02-20T17:37:43.041147+01:00"
+  },
+  "monad-mainnet/143/TransparentUpgradeableProxy:GBPm": {
+    "id": "monad-mainnet/143/TransparentUpgradeableProxy:GBPm",
+    "namespace": "monad-mainnet",
+    "chainId": 143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "GBPm",
+    "address": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
+    "type": "PROXY",
+    "transactionId": "tx-0xa26ed60ca9c9fe12886b9a45ed998f652c8b303c76134716d339224769ccaf30",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700a14ad876bce6863230af4d",
+      "initCodeHash": "0x11c060770e200ad9e79d76e368c4d6b4e6eea5495461edee23a55ac06ba6bf1c",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000a8cacd5d58f98ee303fb54ef101aa4e277777e910000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000001e407b0020a00000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba4580000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001c000000000000000000000000000000000000000000000000000000000000000134d656e746f204272697469736820506f756e640000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044742506d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:GBPm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xb9bb287f9ca89d079ad09e2a84ce30490be758cde5865a0ffbc17cdc07ba4420",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "7a5fe76a60d89b8b85db279145a78a461fab6dc2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=143/address/0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=143/address/0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-02-20T17:32:53.297549+01:00",
+    "updatedAt": "2026-02-20T17:45:04.94387+01:00"
+  },
+  "monad-mainnet/143/TransparentUpgradeableProxy:USDm": {
+    "id": "monad-mainnet/143/TransparentUpgradeableProxy:USDm",
+    "namespace": "monad-mainnet",
+    "chainId": 143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "USDm",
+    "address": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
+    "type": "PROXY",
+    "transactionId": "tx-0xc5583d541be15b126221e1675aa6446b2f33289333d6219eb35a83ddc8a73a49",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700eb321d606c078657de926e",
+      "initCodeHash": "0x5de1331225700b9d069ad671240621ae797da0582d39ebfecba2ebb2c61ecdcf",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000a8cacd5d58f98ee303fb54ef101aa4e277777e910000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000001e407b0020a00000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba4580000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001c0000000000000000000000000000000000000000000000000000000000000000c4d656e746f20446f6c6c6172000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000045553446d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "monad-mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:USDm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xb9bb287f9ca89d079ad09e2a84ce30490be758cde5865a0ffbc17cdc07ba4420",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "7a5fe76a60d89b8b85db279145a78a461fab6dc2"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=143/address/0x866a7e4611C127DCe1a14C6841D2eA962A68dc88#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=143/address/0x866a7e4611C127DCe1a14C6841D2eA962A68dc88#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x866a7e4611C127DCe1a14C6841D2eA962A68dc88"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-02-20T17:32:59.354256+01:00",
+    "updatedAt": "2026-02-20T17:45:12.772384+01:00"
+  },
   "monad-testnet-v2-rc0/10143/AddressSortedLinkedListWithMedian": {
     "id": "monad-testnet-v2-rc0/10143/AddressSortedLinkedListWithMedian",
     "namespace": "monad-testnet-v2-rc0",

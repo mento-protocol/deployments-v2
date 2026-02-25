@@ -6,6 +6,7 @@ optimizer = true
 fs_permissions = [
     { access = "read-write", path = "cache"},
     { access = "read", path = ".treb/registry.json"},
+    { access = "read", path = ".treb/addressbook.json"},
     { access = "read", path = "script/networks" },
     { access = "read", path = "./mgps/"}
 ]
@@ -13,23 +14,34 @@ fs_permissions = [
 [lint]
 ignore = ["**/*"]
 
-[rpc_endpoints] 
-# vbase = "${TENDERLY_VBASE_RPC_URL}"
-# vbase_root = "${TENDERLY_VBASE_ROOT_RPC_URL}"
-# vcelo = "${TENDERLY_VCELO_RPC_URL}"
-# vcelo_root = "${TENDERLY_VCELO_ROOT_RPC_URL}"
+[rpc_endpoints]
 celo = "${CELO_RPC_URL}"
 celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
+monad = "${MONAD_RPC_URL}"
+chain-143 = "${MONAD_RPC_URL}"
 anvil = "http://localhost:8545"
+monad_local_fork = "http://localhost:8545"
+celo_local_fork = "http://localhost:8545"
+monad_testnet_local_fork = "http://localhost:8545"
+celo_sepolia_local_fork = "http://localhost:8545"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
-monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chain=10143"}
-celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
+# monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
+# monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+# chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+# celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
+[profile.monad-mainnet.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
 
 [profile.default.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.default.treb.senders.proposer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
@@ -42,14 +54,14 @@ type = "safe"
 safe = "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F"
 signer = "proposer"
 
-[profile.virtual.treb.senders.proposer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
 [profile.throwaway.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
+[profile."testnet-v3-rc0".treb.senders.deployer]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "proposer"
 
 [profile.testnet-v2-rc5.treb.senders.governor]
 type = "oz_governor"
