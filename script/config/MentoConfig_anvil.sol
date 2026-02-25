@@ -122,16 +122,15 @@ contract MentoConfig_anvil is MentoConfig {
     /// ===================================================================
     /// @notice Configure the reserve and exchange pools in the system
     function _initGovernance() internal {
-        // TODO: What params do we want here?
         _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
 
         _governanceConfig = GovernanceConfig({
             timelockDelay: 2 days,
             votingDelay: 0,
-            votingPeriod: 120_960, // XXX: Set based on blocktime
+            votingPeriod: 120_960,
             proposalThreshold: 10000e18,
             quorum: 2,
-            watchdog: address(1) // XXX: Configure
+            watchdog: address(1)
         });
     }
 }
