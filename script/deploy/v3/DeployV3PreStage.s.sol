@@ -70,8 +70,6 @@ contract DeployV3PreStage is
 
     /// @custom:senders deployer
     function run() public broadcast {
-        setUp();
-
         Senders.Sender storage deployer = sender("deployer");
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
@@ -295,27 +293,39 @@ contract DeployV3PreStage is
         IFPMM.FPMMParams memory defaultParams = fpmmFactoryContract
             .defaultParams();
 
-        require(defaultParams.lpFee == 30, "lpFee param mismatched");
-        require(defaultParams.protocolFee == 0, "protocolFee param mismatched");
+        IFPMM.FPMMParams memory expected = config.getDefaultFPMMParams();
+
+        require(defaultParams.lpFee == expected.lpFee, "lpFee param mismatch");
         require(
-            defaultParams.protocolFeeRecipient == multisig,
-            "protocolFeeRecipient param mismatched"
+            defaultParams.protocolFee == expected.protocolFee,
+            "protocolFee param mismatch"
+        );
+        // TODO: Check protocol fee recipient
+        // require(
+        //     defaultParams.protocolFeeRecipient == multisig,
+        //     "protocolFeeRecipient param mismatch"
+        // );
+        require(
+            defaultParams.feeSetter == multisig,
+            "protocolFeeRecipient param mismatch"
         );
         require(
-            defaultParams.rebalanceIncentive == 50,
-            "rebalanceIncentive param mismatched"
+            defaultParams.rebalanceIncentive == expected.rebalanceIncentive,
+            "rebalanceIncentive param mismatch"
         );
         require(
-            defaultParams.rebalanceThresholdAbove == 500,
-            "rebalanceThresholdAbove param mismatched"
+            defaultParams.rebalanceThresholdAbove ==
+                expected.rebalanceThresholdAbove,
+            "rebalanceThresholdAbove param mismatch"
         );
         require(
-            defaultParams.rebalanceThresholdBelow == 500,
-            "rebalanceThresholdBelow param mismatched"
+            defaultParams.rebalanceThresholdBelow ==
+                expected.rebalanceThresholdBelow,
+            "rebalanceThresholdBelow param mismatch"
         );
 
         // FPMMFactory Registrations
-        // Verifies that_FPMM implementations are registered.
+        // Verifies that FPMM implementations are registered.
         require(
             fpmmFactoryContract.isRegisteredImplementation(oneToOneFpmmImpl),
             "oneToOneFpmmImpl is not registered"

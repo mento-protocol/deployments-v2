@@ -37,8 +37,6 @@ contract DeployCDPLiquidityStrategy is
 
     /// @custom:senders deployer
     function run() public broadcast {
-        setUp();
-
         Senders.Sender storage deployer = sender("deployer");
 
         cdpLiquidityStrategyImpl = deployer

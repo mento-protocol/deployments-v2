@@ -131,12 +131,15 @@ interface IMentoConfig {
 
     function getReserveConfig() external view returns (ReserveConfig memory);
 
-    function getDefaultFPMMParams() external returns (IFPMM.FPMMParams memory);
+    function getDefaultFPMMParams()
+        external
+        view
+        returns (IFPMM.FPMMParams memory);
 
     function getFPMMParams(
         address token0,
         address token1
-    ) external returns (IFPMM.FPMMParams memory);
+    ) external view returns (IFPMM.FPMMParams memory);
 
     function getCDPRedemptionShortfallTolerance()
         external
