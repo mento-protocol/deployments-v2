@@ -319,7 +319,7 @@ contract DeployV3PreStage is
         );
 
         // FPMMFactory Registrations
-        // Verifies that FPMM implementations are registered.
+        // Verifies that the FPMM implementation is registered.
         require(
             fpmmFactoryContract.isRegisteredImplementation(fpmmImpl),
             "defaultFpmmImpl is not registered"
