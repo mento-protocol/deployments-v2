@@ -8,7 +8,7 @@ import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 
 /// @dev Here Anvil is a Monad mainnet fork
-contract MentoConfig_anvil is MentoConfig, AddressbookHelper {
+contract MentoConfig_anvil is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
@@ -16,15 +16,8 @@ contract MentoConfig_anvil is MentoConfig, AddressbookHelper {
         _initTokens();
         _initOracles();
         _initGovernance();
-        _setDefaultFPMMParams(
-            30,
-            0,
-            lookupAddressbook("MigrationMultisig"),
-            lookupAddressbook("MigrationMultisig"),
-            50,
-            500,
-            500
-        );
+        _setDefaultFPMMParams(30, 0, 50, 500, 500);
+        _setRedemptionShortfallTolerance(10e12);
     }
 
     /// ===================================================================

@@ -48,6 +48,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     IFPMM.FPMMParams internal _defaultFPMMParams;
     /// @dev pairKey is for example "USDC/USDm" and it will be duplicated as "USDm/USDC"
     mapping(string pairKey => IFPMM.FPMMParams) internal _fpmmParams;
+    uint256 internal _redemptionShortfallTolerance;
 
     uint256 public baseFork;
     uint256 public mockAggregatorSourceFork;
@@ -182,7 +183,11 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     /// @dev Get default FPMM Params
-    function getDefaultFPMMParams() public returns (IFPMM.FPMMParams memory) {
+    function getDefaultFPMMParams()
+        public
+        view
+        returns (IFPMM.FPMMParams memory)
+    {
         return _defaultFPMMParams;
     }
 
@@ -190,13 +195,21 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     function getFPMMParams(
         address token0,
         address token1
-    ) public returns (IFPMM.FPMMParams memory) {
+    ) public view returns (IFPMM.FPMMParams memory) {
         string memory pairKey = string.concat(
             IERC20Metadata(token0).symbol(),
             "/",
             IERC20Metadata(token1).symbol()
         );
         return _fpmmParams[pairKey];
+    }
+
+    function getCDPRedemptionShortfallTolerance()
+        public
+        view
+        returns (uint256)
+    {
+        return _redemptionShortfallTolerance;
     }
 
     // ========== Helper Functions ==========
@@ -559,11 +572,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
+    /// @dev we don't set the protocol fee recipient or the fee setter because
+    ///      it will most likely need to be deployment-specific rather than
+    ///      network-specific
     function _setDefaultFPMMParams(
         uint256 lpFee,
         uint256 protocolFee,
-        address protocolFeeRecipient,
-        address feeSetter,
         uint256 rebalanceIncentive,
         uint256 rebalanceThresholdAbove,
         uint256 rebalanceThresholdBelow
@@ -571,8 +585,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _defaultFPMMParams = IFPMM.FPMMParams(
             lpFee,
             protocolFee,
-            protocolFeeRecipient,
-            feeSetter,
+            address(0),
+            address(0),
             rebalanceIncentive,
             rebalanceThresholdAbove,
             rebalanceThresholdBelow
@@ -605,6 +619,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory poolKey10 = string.concat(symbol1, "/", symbol0);
         _fpmmParams[poolKey01] = params;
         _fpmmParams[poolKey10] = params;
+    }
+
+    function _setRedemptionShortfallTolerance(uint256 tolerance) internal {
+        _redemptionShortfallTolerance = tolerance;
     }
 
     function _resolveExchangeAsset(

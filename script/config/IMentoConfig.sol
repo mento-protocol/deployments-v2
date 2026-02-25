@@ -138,6 +138,11 @@ interface IMentoConfig {
         address token1
     ) external returns (IFPMM.FPMMParams memory);
 
+    function getCDPRedemptionShortfallTolerance()
+        external
+        view
+        returns (uint256);
+
     function mockAggregatorReporter() external view returns (address);
 
     function mockAggregatorSourceFork() external view returns (uint256);

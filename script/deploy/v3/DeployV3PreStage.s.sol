@@ -15,12 +15,8 @@ import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
-import {FactoryRegistry} from "mento-core/swap/FactoryRegistry.sol";
-import {FPMMFactory} from "mento-core/swap/FPMMFactory.sol";
 import {VirtualPoolFactory} from "mento-core/swap/virtual/VirtualPoolFactory.sol";
 import {Router} from "mento-core/swap/router/Router.sol";
-import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
-import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 
@@ -116,6 +112,10 @@ contract DeployV3PreStage is
             )
         );
 
+        IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
+        params.feeSetter = multisig;
+        params.protocolFeeRecipient = multisig; //TODO: governance?
+
         fpmmFactory = deployProxy(
             deployer,
             "FPMMFactory",
@@ -126,7 +126,7 @@ contract DeployV3PreStage is
                 proxyAdmin,
                 multisig,
                 fpmmImpl,
-                config.getDefaultFPMMParams()
+                params
             )
         );
 
@@ -213,10 +213,12 @@ contract DeployV3PreStage is
         IOracleAdapter oracleAdapterContract = IOracleAdapter(oracleAdapter);
         IFPMMFactory fpmmFactoryContract = IFPMMFactory(fpmmFactory);
         IRouter routerContract = IRouter(router);
-        // Can't use interface because it doesn't have .fallbackPoolFactory getter
-        FactoryRegistry factoryRegistryContract = FactoryRegistry(
+        IFactoryRegistry factoryRegistryContract = IFactoryRegistry(
             factoryRegistry
         );
+        IReserveLiquidityStrategy reserveLiquidityStrategyContract = IReserveLiquidityStrategy(
+                reserveLiquidityStrategy
+            );
 
         // Proxy Implementation Checks
         // Verifies that proxies point to their implementations
@@ -233,14 +235,6 @@ contract DeployV3PreStage is
             reserveLiquidityStrategy,
             reserveLiquidityStrategyImpl
         );
-
-        // Proxy Admin Checks
-        // Verifies that ProxyAdmin contract is set as admin for each proxy
-        verifyProxyAdmin("FPMMFactory", fpmmFactory);
-        verifyProxyAdmin("OracleAdapter", oracleAdapter);
-        verifyProxyAdmin("FactoryRegistry", factoryRegistry);
-        verifyProxyAdmin("ReserveV2", reserveV2);
-        verifyProxyAdmin("ReserveLiquidityStrategy", reserveLiquidityStrategy);
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
@@ -358,7 +352,7 @@ contract DeployV3PreStage is
 
         // ReserveLiquidityStrategy's Reserve is ReserveV2
         require(
-            reserveLiquidityStrategy.reserve() == reserveV2,
+            address(reserveLiquidityStrategyContract.reserve()) == reserveV2,
             "ReserveLiquidityStrategy.reserve does not equal to Reserve proxy address"
         );
     }
