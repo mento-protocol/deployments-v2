@@ -43,6 +43,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     mapping(string symbol => address) internal _collateral;
     mapping(string symbol => bool) internal _isStableToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
+    mapping(string => address) _deployedContract;
     bytes32[] _breakerIds;
 
     IFPMM.FPMMParams internal _defaultFPMMParams;
@@ -269,6 +270,17 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                 vm.toString(asset1)
             )
         );
+    }
+
+    function getDeployedContract(
+        string memory name
+    ) public view returns (address contractAddress) {
+        contractAddress = _deployedContract[name];
+        if (contractAddress == address(0)) {
+            revert(
+                string.concat("Could not find deployed contract named ", name)
+            );
+        }
     }
 
     // ========== Internal Helper Functions ==========
@@ -619,6 +631,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory poolKey10 = string.concat(symbol1, "/", symbol0);
         _fpmmParams[poolKey01] = params;
         _fpmmParams[poolKey10] = params;
+    }
+
+    function _addDeployedContract(
+        string memory name,
+        address contractAddress
+    ) internal {
+        _deployedContract[name] = contractAddress;
     }
 
     function _setRedemptionShortfallTolerance(uint256 tolerance) internal {

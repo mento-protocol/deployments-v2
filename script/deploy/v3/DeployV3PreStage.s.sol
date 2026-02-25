@@ -9,6 +9,7 @@ import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
@@ -34,7 +35,6 @@ contract DeployV3PreStage is
     address multisig;
 
     address sortedOracles;
-    address sortedOraclesImpl;
     address breakerBox;
 
     address fpmmImpl;
@@ -59,13 +59,12 @@ contract DeployV3PreStage is
     string constant label = "v3.0.0";
 
     function setUp() public {
+        config = Config.get();
         multisig = lookupAddressbook("MigrationMultisig");
 
-        sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
-        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
-        breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
-        proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
-        config = Config.get();
+        sortedOracles = config.getDeployedContract("SortedOracles");
+        breakerBox = config.getDeployedContract("BreakerBox");
+        proxyAdmin = config.getDeployedContract("ProxyAdmin");
     }
 
     /// @custom:senders deployer
@@ -112,7 +111,7 @@ contract DeployV3PreStage is
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
         params.feeSetter = multisig;
-        params.protocolFeeRecipient = address(0);
+        params.protocolFeeRecipient = multisig;
 
         fpmmFactory = deployProxy(
             deployer,
@@ -122,7 +121,7 @@ contract DeployV3PreStage is
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                multisig,
+                deployer.account,
                 fpmmImpl,
                 params
             )
@@ -131,7 +130,9 @@ contract DeployV3PreStage is
         IFPMMFactory fpmmFactoryHarness = IFPMMFactory(
             deployer.harness(fpmmFactory)
         );
+        IOwnable fpmmFactoryOwnable = IOwnable(deployer.harness(fpmmFactory));
         fpmmFactoryHarness.registerFPMMImplementation(oneToOneFpmmImpl);
+        fpmmFactoryOwnable.transferOwnership(multisig);
 
         factoryRegistryImpl = deployer
             .create3("FactoryRegistry")
@@ -145,7 +146,7 @@ contract DeployV3PreStage is
             abi.encodeWithSelector(
                 IFactoryRegistry.initialize.selector,
                 fpmmFactory,
-                multisig
+                deployer.account
             )
         );
 
@@ -157,7 +158,11 @@ contract DeployV3PreStage is
         IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
             deployer.harness(factoryRegistry)
         );
+        IOwnable factoryRegistryOwnable = IOwnable(
+            deployer.harness(factoryRegistry)
+        );
         factoryRegistryHarness.approve(virtualPoolFactory);
+        factoryRegistryOwnable.transferOwnership(multisig);
 
         router = deployer.create3("Router").setLabel(label).deploy(
             abi.encode(address(0), factoryRegistry, fpmmFactory)
