@@ -580,8 +580,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
         address _asset0 = _resolveExchangeAsset(asset0);
         address _asset1 = _resolveExchangeAsset(asset1);
-        console.log(asset0, _asset0);
-        console.log(asset1, _asset1);
         address _pricingModule = lookup(pricingModule);
         if (
             _asset0 == address(0) ||
