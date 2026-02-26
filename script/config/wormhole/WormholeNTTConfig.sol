@@ -19,8 +19,12 @@ struct NTTChainConfig {
 /// @notice Parses a per-token Wormhole NTT deployment JSON into typed structs.
 ///
 ///         The JSON follows the Wormhole NTT CLI output format, augmented with
-///         extension fields (chainId, wormholeChainId). Token metadata (name,
-///         decimals, ownerLabel) lives in WormholeConfig, not in the JSON.
+///         extension fields (chainId, wormholeChainId). Token metadata is
+///         hardcoded here (all Mento stablecoins are 18 decimals, owned by
+///         MigrationMultisig).
+///
+///         The network (mainnet/testnet) is auto-detected from the chain ID.
+///         JSON path: script/config/wormhole/{network}/{tokenName}.json
 ///
 ///         JSON structure:
 ///           {
@@ -54,25 +58,20 @@ library WormholeNTTConfig {
         NTTChainConfig[] chains;
     }
 
-    /// @notice Load and parse a deployment JSON file.
-    /// @param jsonPath Path to the deployment JSON file.
-    /// @param _tokenName Token name (from WormholeConfig, not JSON).
-    /// @param _tokenDecimals Token decimals (from WormholeConfig, not JSON).
-    /// @param _ownerLabel Addressbook key for the owner (from WormholeConfig, not JSON).
+    /// @notice Load and parse a deployment JSON for the given token.
+    ///         Auto-detects mainnet/testnet from the chain ID.
+    /// @param tokenName The token name (e.g. "USDm"), used to derive the JSON path.
     /// @return config The parsed top-level config.
     /// @return inboundLimits Flattened inbound limits: inboundLimits[i * N + j]
     ///         is the inbound limit on chain i from chain j. Entries where i == j are 0.
-    function load(
-        string memory jsonPath,
-        string memory _tokenName,
-        uint8 _tokenDecimals,
-        string memory _ownerLabel
-    ) internal view returns (ParsedConfig memory config, uint256[] memory inboundLimits) {
+    function load(string memory tokenName) internal view returns (ParsedConfig memory config, uint256[] memory inboundLimits) {
+        string memory network = _networkForChainId(block.chainid);
+        string memory jsonPath = string.concat("script/config/wormhole/", network, "/", tokenName, ".json");
         string memory json = vm.readFile(jsonPath);
 
-        config.tokenName = _tokenName;
-        config.tokenDecimals = _tokenDecimals;
-        config.ownerLabel = _ownerLabel;
+        config.tokenName = tokenName;
+        config.tokenDecimals = 18;
+        config.ownerLabel = "MigrationMultisig";
 
         // Enumerate chains
         config.chainNames = vm.parseJsonKeys(json, ".chains");
@@ -114,5 +113,12 @@ library WormholeNTTConfig {
             require(c.transceiver != address(0), string.concat(c.name, ": transceiver is zero address"));
             require(c.token != address(0), string.concat(c.name, ": token is zero address"));
         }
+    }
+
+    /// @dev Map chain ID to network directory name. Reverts for unknown chains.
+    function _networkForChainId(uint256 cid) private pure returns (string memory) {
+        if (cid == 42220) return "mainnet"; // Celo
+        if (cid == 143) return "mainnet"; // Monad
+        revert("WormholeNTTConfig: unknown chain ID, add it to _networkForChainId()");
     }
 }

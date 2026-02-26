@@ -16,42 +16,24 @@ Each bridge consists of two contracts per chain:
 ## Architecture
 
 ```
-Solidity config                  Per-token JSON (from CLI)        Generic setup script
-┌─────────────────────────┐     ┌──────────────────────────┐    ┌───────────────────────┐
-│  WormholeConfig_mainnet │──┐  │  config/wormhole/USDm.json│───│  SetupNTTBridge.s.sol  │
-│  _registerToken("USDm") │  │  │  config/wormhole/GBPm.json│   │  (runs on any chain)   │
-│  _registerToken("GBPm") │  └─▶│  (deployed addresses,     │   └───────────────────────┘
-└─────────────────────────┘     │   modes, rate limits)     │
- Token metadata:                └──────────────────────────┘
- name, decimals, ownerLabel      Chain topology from Wormhole NTT CLI
+Per-token JSON (from CLI)                        Generic setup script
+┌─────────────────────────────────────────┐     ┌───────────────────────┐
+│  config/wormhole/mainnet/USDm.json      │─────│  SetupNTTBridge.s.sol  │
+│  config/wormhole/mainnet/GBPm.json      │     │  (runs on any chain)   │
+└─────────────────────────────────────────┘     └───────────────────────┘
+ Chain topology from Wormhole NTT CLI             Auto-detects network
+ (deployed addresses, modes, rate limits)         from chain ID
 ```
 
-**Token metadata** (name, decimals, owner) lives in `WormholeConfig` contracts (Solidity).
-**Chain topology** (deployed addresses, modes, rate limits) lives in JSON files — compatible with the Wormhole NTT CLI output format.
+**Chain topology** (deployed addresses, modes, rate limits) lives in JSON files organized by network — compatible with the Wormhole NTT CLI output format.
 
-The setup script loads the config contract via `WORMHOLE_CONFIG` env var, calls `config.get("USDm")` which reads the JSON and combines it with registered metadata, then configures the current chain idempotently.
+**Token metadata** (decimals, owner) and the **chain ID → network mapping** are in `WormholeNTTConfig.sol`.
 
-## WormholeConfig (Solidity)
-
-Token metadata is registered in per-network config contracts:
-
-```solidity
-// script/config/wormhole/WormholeConfig_mainnet.sol
-contract WormholeConfig_mainnet is WormholeConfig {
-    constructor() {
-        _registerToken("USDm", 18, "MigrationMultisig");
-        _registerToken("GBPm", 18, "MigrationMultisig");
-    }
-}
-```
-
-- `name` — token name, also used to derive the JSON path: `script/config/wormhole/{name}.json`
-- `decimals` — token decimals (18 for all Mento stablecoins)
-- `ownerLabel` — addressbook key for the final owner (e.g., `"MigrationMultisig"`)
+The setup script calls `WormholeNTTConfig.load("USDm")` which auto-detects `mainnet` or `testnet` from the chain ID, reads the corresponding JSON, and returns the full parsed config.
 
 ## JSON Config Structure
 
-JSON files live in `script/config/wormhole/<Token>.json` and follow the Wormhole NTT CLI output format with extension fields (`chainId`, `wormholeChainId`):
+JSON files live in `script/config/wormhole/{network}/<Token>.json` and follow the Wormhole NTT CLI output format with extension fields (`chainId`, `wormholeChainId`):
 
 ```json
 {
@@ -91,6 +73,10 @@ Field reference:
 - **`mode`**: `"locking"` (hub) or `"burning"` (spoke) — from CLI
 - **`chainId`**, **`wormholeChainId`**: *(extension)* EVM and Wormhole chain IDs
 
+## Adding a New Chain
+
+When adding a new chain, update `_networkForChainId()` in `WormholeNTTConfig.sol` with its chain ID → network mapping.
+
 ## Token Modes
 
 | Token | Celo | Monad | Notes |
@@ -108,42 +94,32 @@ Key deployment parameters:
 - `rateLimitDuration`: Must match `RATE_LIMIT_DURATION` env var (default: 86400 = 24 hours)
 - Mode: `burning` or `locking` per chain
 
-### Step 2: Register the token in WormholeConfig
+### Step 2: Create the deployment JSON
 
-Add a `_registerToken` call in the appropriate config contract (e.g., `WormholeConfig_mainnet.sol`):
-
-```solidity
-_registerToken("NewToken", 18, "MigrationMultisig");
-```
-
-### Step 3: Create the deployment JSON
-
-Create `script/config/wormhole/<Token>.json`:
+Create `script/config/wormhole/{network}/<Token>.json`:
 1. Copy an existing JSON as a template (e.g., `USDm.json`)
 2. Fill in the deployed NTT Manager and Transceiver addresses from CLI output
 3. Set the token addresses, chain IDs, wormhole chain IDs
 4. Set `mode` per chain (`"locking"` for hub, `"burning"` for spoke)
 5. Configure rate limits (as wei strings)
 
-### Step 4: Run the setup script on each chain
+### Step 3: Run the setup script on each chain
 
 ```bash
-# On Celo
-WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
-  treb run SetupNTTBridge --network celo --debug
+# On Celo (mainnet auto-detected from chain ID)
+TOKEN=USDm treb run SetupNTTBridge --network celo --debug
 
 # On Monad
-WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
-  treb run SetupNTTBridge --network monad --debug
+TOKEN=USDm treb run SetupNTTBridge --network monad --debug
 ```
 
 The script will:
 1. Register all peer NTT Managers and Transceivers
 2. Set outbound and inbound rate limits
 3. Grant minter/burner permissions (if burning mode)
-4. Transfer ownership and pauser capability to the configured owner (e.g., MigrationMultisig)
+4. Transfer ownership and pauser capability to the configured owner (MigrationMultisig)
 
-### Step 5: Verify
+### Step 4: Verify
 
 The script automatically verifies all configuration after setup. Check the console output for any verification failures.
 
@@ -154,56 +130,21 @@ When adding a new chain (e.g., Polygon) to all existing tokens:
 ### For each token config:
 
 1. **Deploy NTT contracts** on the new chain via the Wormhole NTT CLI
-2. **Update the JSON config**:
+2. **Add the chain ID** to `_networkForChainId()` in `WormholeNTTConfig.sol`
+3. **Update the JSON config**:
    - Add a new chain entry under `.chains`
    - Add an inbound limit entry for the new chain in each existing chain's `.limits.inbound`
    - Set the new chain's `.limits.inbound` with entries for all existing chains
 
-Example: Adding Polygon to a 2-chain (Celo, Monad) config:
-```json
-{
-  "chains": {
-    "Celo": {
-      "limits": {
-        "outbound": "100000000000000000000000",
-        "inbound": { "Monad": "100000000000000000000000", "Polygon": "50000000000000000000000" }
-      }
-    },
-    "Monad": {
-      "limits": {
-        "outbound": "100000000000000000000000",
-        "inbound": { "Celo": "100000000000000000000000", "Polygon": "50000000000000000000000" }
-      }
-    },
-    "Polygon": {
-      "chainId": 137,
-      "wormholeChainId": 5,
-      "mode": "burning",
-      "manager": "0x...",
-      "token": "0x...",
-      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
-      "limits": {
-        "outbound": "50000000000000000000000",
-        "inbound": { "Celo": "50000000000000000000000", "Monad": "50000000000000000000000" }
-      }
-    }
-  }
-}
+4. **Run the script on the new chain** (full setup):
+```bash
+TOKEN=<Token> treb run SetupNTTBridge --network polygon --debug
 ```
 
-3. **Run the script on the new chain** (full setup):
+5. **Re-run the script on each existing chain** (only adds the new peer):
 ```bash
-WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
-  treb run SetupNTTBridge --network polygon --debug
-```
-
-4. **Re-run the script on each existing chain** (only adds the new peer):
-```bash
-WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
-  treb run SetupNTTBridge --network celo --debug
-
-WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
-  treb run SetupNTTBridge --network monad --debug
+TOKEN=<Token> treb run SetupNTTBridge --network celo --debug
+TOKEN=<Token> treb run SetupNTTBridge --network monad --debug
 ```
 
 The script is idempotent — on existing chains it will skip already-configured peers and only add the new one.
@@ -225,6 +166,9 @@ The script will detect that peers are already configured and only update limits 
 
 ### "Current chain not found in NTT config"
 The script's `--network` flag doesn't match any `chainId` in the JSON config. Check that the RPC URL points to the correct chain.
+
+### "unknown chain ID, add it to _networkForChainId()"
+The chain ID is not mapped to a network. Add it to `_networkForChainId()` in `WormholeNTTConfig.sol`.
 
 ### "Transceiver peer address mismatch" after adding a spoke
 `setWormholePeer` is irreversible. If set to the wrong address, you need to deploy a new Transceiver.

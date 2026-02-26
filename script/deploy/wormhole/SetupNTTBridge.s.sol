@@ -5,12 +5,8 @@ import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {WormholeNTTConfig, NTTChainConfig} from "script/config/wormhole/WormholeNTTConfig.sol";
-import {WormholeConfig} from "script/config/wormhole/WormholeConfig.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
-
-// Ensure Foundry compiles config artifacts (required for vm.deployCode)
-import "script/config/wormhole/WormholeConfig_mainnet.sol";
 
 // ── Wormhole NTT on-chain interfaces ────────────────────────────────────────
 
@@ -60,11 +56,10 @@ interface IPausable {
 ///
 ///         Usage (run once per token per chain):
 ///
-///           WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=USDm \
-///             treb run SetupNTTBridge --network monad --debug
+///           TOKEN=USDm treb run SetupNTTBridge --network monad --debug
+///           TOKEN=GBPm treb run SetupNTTBridge --network celo --debug
 ///
-///           WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=GBPm \
-///             treb run SetupNTTBridge --network celo --debug
+///         Mainnet/testnet is auto-detected from chain ID.
 ///
 ///         Adding a spoke: add the chain entry to the JSON, then run
 ///         on the new chain (full setup) and re-run on each existing chain
@@ -84,11 +79,8 @@ contract SetupNTTBridge is AddressbookHelper {
     uint256 internal myIndex;
 
     function setUp() public {
-        // Load config contract and get token config
-        string memory configContract = vm.envString("WORMHOLE_CONFIG");
-        string memory token = vm.envString("WORMHOLE_TOKEN");
-        WormholeConfig wormholeConfig = WormholeConfig(vm.deployCode(configContract));
-        (WormholeNTTConfig.ParsedConfig memory cfg, uint256[] memory _inboundLimits) = wormholeConfig.get(token);
+        string memory token = vm.envString("TOKEN");
+        (WormholeNTTConfig.ParsedConfig memory cfg, uint256[] memory _inboundLimits) = WormholeNTTConfig.load(token);
 
         // Copy scalar fields
         tokenName = cfg.tokenName;
@@ -325,14 +317,10 @@ contract SetupNTTBridge is AddressbookHelper {
     // ── Pure helpers ────────────────────────────────────────────────────
 
     function _findMyChain() internal view returns (uint256) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
         for (uint256 i = 0; i < chains.length; i++) {
-            if (chains[i].chainId == cid) return i;
+            if (chains[i].chainId == block.chainid) return i;
         }
-        revert(string.concat("Current chain (", vm.toString(cid), ") not found in NTT config"));
+        revert(string.concat("Current chain (", vm.toString(block.chainid), ") not found in NTT config"));
     }
 
     function _toBytes32(address addr) internal pure returns (bytes32) {
