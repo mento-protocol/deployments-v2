@@ -65,7 +65,7 @@ library WormholeNTTConfig {
     /// @return inboundLimits Flattened inbound limits: inboundLimits[i * N + j]
     ///         is the inbound limit on chain i from chain j. Entries where i == j are 0.
     function load(string memory tokenName) internal view returns (ParsedConfig memory config, uint256[] memory inboundLimits) {
-        string memory network = _networkForChainId(block.chainid);
+        string memory network = wormholeNetworkForChainId(block.chainid);
         string memory jsonPath = string.concat("script/config/wormhole/", network, "/", tokenName, ".json");
         string memory json = vm.readFile(jsonPath);
 
@@ -116,9 +116,14 @@ library WormholeNTTConfig {
     }
 
     /// @dev Map chain ID to network directory name. Reverts for unknown chains.
-    function _networkForChainId(uint256 cid) private pure returns (string memory) {
+    function wormholeNetworkForChainId(uint256 cid) internal pure returns (string memory) {
+        // Mainnet
         if (cid == 42220) return "mainnet"; // Celo
         if (cid == 143) return "mainnet"; // Monad
-        revert("WormholeNTTConfig: unknown chain ID, add it to _networkForChainId()");
+        // Testnet
+        if (cid == 11155111) return "testnet"; // Ethereum Sepolia
+        if (cid == 44787) return "testnet"; // Celo Alfajores (Sepolia)
+        if (cid == 10143) return "testnet"; // Monad Testnet
+        revert("WormholeNTTConfig: unknown chain ID, add it to wormholeNetworkForChainId()");
     }
 }
