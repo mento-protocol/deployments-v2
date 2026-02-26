@@ -80,9 +80,9 @@ contract DeployV3PreStage is
             .deploy(abi.encode(true));
 
         marketHoursBreaker = deployer
-            .create3("MarketHoursBreaker")
+            .create3("MarketHoursBreakerToggleable")
             .setLabel(label)
-            .deploy();
+            .deploy(abi.encode(multisig));
 
         oracleAdapterImpl = deployer
             .create3("OracleAdapter")
