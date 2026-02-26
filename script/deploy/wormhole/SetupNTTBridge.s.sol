@@ -56,10 +56,10 @@ interface IPausable {
 ///
 ///         Usage (run once per token per chain):
 ///
-///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
+///           WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/USDm.json \
 ///             treb run SetupNTTBridge --network monad --debug
 ///
-///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/GBPm.json \
+///           WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/GBPm.json \
 ///             treb run SetupNTTBridge --network celo --debug
 ///
 ///         Adding a spoke: add the chain entry to the JSON, then run

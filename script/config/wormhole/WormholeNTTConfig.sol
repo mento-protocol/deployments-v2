@@ -24,7 +24,7 @@ struct NTTChainConfig {
 ///
 ///         Required env var:
 ///           WORMHOLE_DEPLOYMENT_FILE — path to the deployment JSON
-///             (e.g. "script/deploy/wormhole/configs/USDm.json")
+///             (e.g. "script/config/wormhole/USDm.json")
 ///
 ///         JSON structure:
 ///           {
