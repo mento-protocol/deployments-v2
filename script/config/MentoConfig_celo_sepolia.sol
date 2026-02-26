@@ -433,72 +433,86 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _addFxExchange({
             currency: "EUR",
             spread: 0.0050 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(0.86 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(0.86 * 1e3),
+            createVirtual: false
         });
         _addFxExchange({
             currency: "AUD",
             spread: 0.0015 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(1.54 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(1.54 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "CAD",
             spread: 0.0015 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(1.38 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(1.38 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "GBP",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(0.75 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(0.75 * 1e3),
+            createVirtual: false
         });
         _addFxExchange({
             currency: "ZAR",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(17.72 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(17.72 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "CHF",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(0.80 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(0.80 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "JPY",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(149 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(149 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "COP",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(4015 * 1e3)
+            tradingLimits: _tier2FxTradingLimits(4015 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "BRL",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(5.45 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(5.45 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "PHP",
             spread: 0.0030 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(57.40 * 1e3)
+            tradingLimits: _tier2FxTradingLimits(57.40 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "GHS",
             spread: 0.0100 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(11.92 * 1e3)
+            tradingLimits: _tier2FxTradingLimits(11.92 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "NGN",
             spread: 0.0100 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(1531.98 * 1e3)
+            tradingLimits: _tier2FxTradingLimits(1531.98 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "KES",
             spread: 0.0100 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(129.21 * 1e3)
+            tradingLimits: _tier1FxTradingLimits(129.21 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
             currency: "XOF",
             spread: 0.0200 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(560.46 * 1e3)
+            tradingLimits: _tier2FxTradingLimits(560.46 * 1e3),
+            createVirtual: true
         });
     }
 
@@ -507,7 +521,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     function _addFxExchange(
         string memory currency,
         uint256 spread,
-        ExchangeTrandingLimitsConfig memory tradingLimits
+        ExchangeTrandingLimitsConfig memory tradingLimits,
+        bool createVirtual
     ) internal {
         _addExchange({
             asset0: _symbolForCurrency["USD"],
@@ -518,7 +533,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
             tradingLimits: tradingLimits,
-            createVirtual: false
+            createVirtual: createVirtual
         });
     }
 
