@@ -673,7 +673,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     ) internal {
         address _fpmmImpl = lookup("FPMM:v3.0.0");
         address _oracleAdapter = lookup("OracleAdapter:v3.0.0");
-        address _proxyAdmin = lookup("ProxyAdmin:v3.0.0");
+        address _proxyAdmin = lookup("ProxyAdmin");
         address token0Address = _lookupTokenAddress(token0);
         address token1Address = _lookupTokenAddress(token1);
 
@@ -730,7 +730,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         require(!isStableToken || !isCollateral, "Token is both stable and collateral");
 
         if (isStableToken) {
-            return lookupProxyOrFail(string.concat("Proxy:", symbol));
+            return lookupProxyOrFail(symbol);
         } else {
             return _collateral[symbol];
         }
