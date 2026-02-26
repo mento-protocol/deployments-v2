@@ -5,7 +5,6 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
@@ -14,7 +13,6 @@ import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 
 contract ConfigureV3PreStage is
     TrebScript,
-    AddressbookHelper,
     ProxyHelper,
     PostChecksHelper
 {

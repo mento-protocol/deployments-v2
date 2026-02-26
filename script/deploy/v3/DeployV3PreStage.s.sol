@@ -5,7 +5,6 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
@@ -23,7 +22,6 @@ import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidity
 
 contract DeployV3PreStage is
     TrebScript,
-    AddressbookHelper,
     ProxyHelper,
     PostChecksHelper
 {
@@ -59,16 +57,16 @@ contract DeployV3PreStage is
 
     function setUp() public {
         config = Config.get();
-        multisig = lookupAddressbook("MigrationMultisig");
 
-        sortedOracles = config.getDeployedContract("SortedOracles");
-        breakerBox = config.getDeployedContract("BreakerBox");
-        proxyAdmin = config.getDeployedContract("ProxyAdmin");
+        sortedOracles = lookupProxyOrFail("SortedOracles");
+        breakerBox = lookupOrFail("BreakerBox:v2.6.5");
+        proxyAdmin = lookupOrFail("ProxyAdmin");
     }
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationMultisig
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        multisig = sender("migrationMultisig").account;
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
             abi.encode(true)
