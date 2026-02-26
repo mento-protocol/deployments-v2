@@ -71,6 +71,29 @@ contract ProxyHelper is TrebScript {
 
     function lookupProxy(
         string memory contractName,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        proxy = lookupProxy(contractName, defaultProxyType, namespace);
+    }
+
+    function lookupProxy(
+        string memory contractName,
+        ProxyType _proxyType,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        string memory identifier;
+        if (_proxyType == ProxyType.CELO) {
+            identifier = string.concat(CELO_LOOKUP_PREFIX, contractName);
+        } else if (_proxyType == ProxyType.OZTUP) {
+            identifier = string.concat(OZTUP_LOOKUP_PREFIX, contractName);
+        } else {
+            revert UnsupportedProxyType(_proxyType);
+        }
+        proxy = lookup(identifier, namespace);
+    }
+
+    function lookupProxy(
+        string memory contractName,
         ProxyType _proxyType
     ) internal view returns (address proxy) {
         string memory identifier;
@@ -85,9 +108,32 @@ contract ProxyHelper is TrebScript {
     }
 
     function lookupProxyOrFail(
+        string memory contractName,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        proxy = lookupProxyOrFail(contractName, defaultProxyType, namespace);
+    }
+
+    function lookupProxyOrFail(
         string memory contractName
     ) internal view returns (address proxy) {
         proxy = lookupProxyOrFail(contractName, defaultProxyType);
+    }
+
+    function lookupProxyOrFail(
+        string memory contractName,
+        ProxyType _proxyType,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        string memory identifier;
+        if (_proxyType == ProxyType.CELO) {
+            identifier = string.concat(CELO_LOOKUP_PREFIX, contractName);
+        } else if (_proxyType == ProxyType.OZTUP) {
+            identifier = string.concat(OZTUP_LOOKUP_PREFIX, contractName);
+        } else {
+            revert UnsupportedProxyType(_proxyType);
+        }
+        proxy = lookupOrFail(identifier, namespace);
     }
 
     function lookupProxyOrFail(
@@ -109,6 +155,14 @@ contract ProxyHelper is TrebScript {
         string memory identifier
     ) internal view returns (address addy) {
         addy = lookup(identifier);
+        require(addy != address(0), string.concat(identifier, " not deployed"));
+    }
+
+    function lookupOrFail(
+        string memory identifier,
+        string memory namespace
+    ) internal view returns (address addy) {
+        addy = lookup(identifier, namespace);
         require(addy != address(0), string.concat(identifier, " not deployed"));
     }
 

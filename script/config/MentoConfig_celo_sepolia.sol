@@ -578,15 +578,15 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     function _initDeployedContracts() internal {
         _addDeployedContract(
             "SortedOracles",
-            0xfaa7Ca2B056E60F6733aE75AA0709140a6eAfD20
+            lookup("Proxy:SortedOracles", "testnet-v2-rc5")
         );
         _addDeployedContract(
             "BreakerBox",
-            0x578bD46003B9D3fd4c3C3f47c98B329562a6a1dE
+            lookup("BreakerBox:v2.6.5", "testnet-v2-rc5")
         );
         _addDeployedContract(
             "ProxyAdmin",
-            0x01bd47aa7B13a75c24E3dA760f8A503c435BB4Df
+            lookup("ProxyAdmin", "testnet-v2-rc5")
         );
     }
 }
