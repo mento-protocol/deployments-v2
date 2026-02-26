@@ -116,7 +116,8 @@ contract MentoConfig_vbase is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
         _addExchange({
             asset0: "USDfx",
@@ -137,7 +138,8 @@ contract MentoConfig_vbase is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
         _addExchange({
             asset0: "USDfx",
@@ -158,7 +160,8 @@ contract MentoConfig_vbase is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
         _addExchange({
             asset0: "USDfx",
@@ -179,7 +182,8 @@ contract MentoConfig_vbase is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
         _addExchange({
             asset0: "USDfx",
@@ -200,7 +204,8 @@ contract MentoConfig_vbase is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
     }
 }

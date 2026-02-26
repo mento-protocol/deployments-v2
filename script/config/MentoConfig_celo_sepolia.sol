@@ -331,7 +331,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -352,7 +353,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -373,7 +375,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -394,7 +397,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -422,7 +426,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     limitGlobal: 0,
                     flags: 1 | 2
                 })
-            })
+            }),
+            createVirtual: false
         });
 
         _addFxExchange({
@@ -512,7 +517,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             rateFeed: string.concat(currency, "USD"),
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
-            tradingLimits: tradingLimits
+            tradingLimits: tradingLimits,
+            createVirtual: false
         });
     }
 

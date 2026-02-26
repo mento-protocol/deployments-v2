@@ -537,7 +537,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory rateFeed,
         uint256 resetFrequency,
         uint256 stablePoolResetSize,
-        ExchangeTrandingLimitsConfig memory tradingLimits
+        ExchangeTrandingLimitsConfig memory tradingLimits,
+        bool createVirtual
     ) internal {
         require(
             _isStableToken[asset0],
@@ -574,6 +575,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             );
             return;
         }
+        IBiPoolManager.PoolConfig memory poolConfig = IBiPoolManager.PoolConfig({
+            spread: FixidityLib.wrap(spread),
+            referenceRateFeedID: getRateFeedIdFromString(rateFeed),
+            referenceRateResetFrequency: resetFrequency,
+            minimumReports: 1,
+            stablePoolResetSize: stablePoolResetSize
+        });
         _exchanges.push(
             ExchangeConfig({
                 pool: IBiPoolManager.PoolExchange({
@@ -583,15 +591,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                     bucket0: 0,
                     bucket1: 0,
                     lastBucketUpdate: 0,
-                    config: IBiPoolManager.PoolConfig({
-                        spread: FixidityLib.wrap(spread),
-                        referenceRateFeedID: getRateFeedIdFromString(rateFeed),
-                        referenceRateResetFrequency: resetFrequency,
-                        minimumReports: 1,
-                        stablePoolResetSize: stablePoolResetSize
-                    })
+                    config: poolConfig
                 }),
-                tradingLimits: tradingLimits
+                tradingLimits: tradingLimits,
+                createVirtual: createVirtual
             })
         );
     }
