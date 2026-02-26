@@ -79,10 +79,11 @@ contract DeployV3PreStage is
             .setLabel(label)
             .deploy(abi.encode(true));
 
+        // TODO: Replace MarketHoursBreakerToggleable with MarketHoursBreaker once testing is done
         marketHoursBreaker = deployer
             .create3("MarketHoursBreakerToggleable")
             .setLabel(label)
-            .deploy(abi.encode(multisig));
+            .deploy(abi.encode(deployer.account));
 
         oracleAdapterImpl = deployer
             .create3("OracleAdapter")
