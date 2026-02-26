@@ -33,6 +33,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     string[] internal _mockCollateralAssets;
     RateFeed[] internal _rateFeeds;
     address[] internal _collateralAssets;
+    address[] internal _fxRateFeedIds;
     address[] internal _chainlinkRelayerRateFeedIds;
     MockAggregatorConfig[] internal _mockAggregatorConfigs;
 
@@ -161,6 +162,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getRateFeeds() external view returns (RateFeed[] memory) {
         return _rateFeeds;
+    }
+
+    function getFxRateFeedIds() external view returns (address[] memory) {
+        return _fxRateFeedIds;
     }
 
     function getRateFeedIds()

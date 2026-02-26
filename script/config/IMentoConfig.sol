@@ -95,6 +95,8 @@ interface IMentoConfig {
 
     function getRateFeedIds() external view returns (address[] memory);
 
+    function getFxRateFeedIds() external view returns (address[] memory);
+
     function getRateFeeds() external view returns (RateFeed[] memory);
 
     function getRateFeedDependencies(

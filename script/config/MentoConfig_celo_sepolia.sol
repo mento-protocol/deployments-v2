@@ -260,6 +260,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     ) internal {
         string memory rateFeed = string.concat(currency, "USD");
         _addRateFeed(rateFeed);
+        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
