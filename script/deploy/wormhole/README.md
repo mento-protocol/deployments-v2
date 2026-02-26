@@ -16,26 +16,45 @@ Each bridge consists of two contracts per chain:
 ## Architecture
 
 ```
-Per-token deployment JSON              Generic setup script
-┌──────────────────────────────┐      ┌──────────────────────┐
-│  config/wormhole/USDm.json   │─read─│  SetupNTTBridge.s.sol │
-│  config/wormhole/GBPm.json   │      │  (runs on any chain)  │
-└──────────────────────────────┘      └──────────────────────┘
+Solidity config                  Per-token JSON (from CLI)        Generic setup script
+┌─────────────────────────┐     ┌──────────────────────────┐    ┌───────────────────────┐
+│  WormholeConfig_mainnet │──┐  │  config/wormhole/USDm.json│───│  SetupNTTBridge.s.sol  │
+│  _registerToken("USDm") │  │  │  config/wormhole/GBPm.json│   │  (runs on any chain)   │
+│  _registerToken("GBPm") │  └─▶│  (deployed addresses,     │   └───────────────────────┘
+└─────────────────────────┘     │   modes, rate limits)     │
+ Token metadata:                └──────────────────────────┘
+ name, decimals, ownerLabel      Chain topology from Wormhole NTT CLI
 ```
 
-Each JSON file describes the **full bridge topology** for one token — all chains, their deployed addresses, modes, and rate limits. The setup script reads the JSON, finds the current chain, and configures it idempotently.
+**Token metadata** (name, decimals, owner) lives in `WormholeConfig` contracts (Solidity).
+**Chain topology** (deployed addresses, modes, rate limits) lives in JSON files — compatible with the Wormhole NTT CLI output format.
 
-The JSON extends the Wormhole NTT CLI output format with additional fields (`chainId`, `wormholeChainId`, `tokenName`, `tokenDecimals`, `ownerLabel`) needed by the setup script.
+The setup script loads the config contract via `WORMHOLE_CONFIG` env var, calls `config.get("USDm")` which reads the JSON and combines it with registered metadata, then configures the current chain idempotently.
+
+## WormholeConfig (Solidity)
+
+Token metadata is registered in per-network config contracts:
+
+```solidity
+// script/config/wormhole/WormholeConfig_mainnet.sol
+contract WormholeConfig_mainnet is WormholeConfig {
+    constructor() {
+        _registerToken("USDm", 18, "MigrationMultisig");
+        _registerToken("GBPm", 18, "MigrationMultisig");
+    }
+}
+```
+
+- `name` — token name, also used to derive the JSON path: `script/config/wormhole/{name}.json`
+- `decimals` — token decimals (18 for all Mento stablecoins)
+- `ownerLabel` — addressbook key for the final owner (e.g., `"MigrationMultisig"`)
 
 ## JSON Config Structure
 
-Configs live in `script/config/wormhole/<Token>.json`:
+JSON files live in `script/config/wormhole/<Token>.json` and follow the Wormhole NTT CLI output format with extension fields (`chainId`, `wormholeChainId`):
 
 ```json
 {
-  "tokenName": "USDm",
-  "tokenDecimals": 18,
-  "ownerLabel": "MigrationMultisig",
   "network": "Mainnet",
   "chains": {
     "Celo": {
@@ -66,14 +85,11 @@ Configs live in `script/config/wormhole/<Token>.json`:
 }
 ```
 
-The JSON is the standard Wormhole NTT CLI output, augmented with fields marked *(extension)*:
-
+Field reference:
 - **`manager`**, **`transceivers.wormhole.address`**, **`token`**, **`mode`**, **`limits`**: From CLI output
 - **`limits`**: Wei strings (e.g., `"100000000000000000000000"` = 100,000 tokens with 18 decimals)
 - **`mode`**: `"locking"` (hub) or `"burning"` (spoke) — from CLI
 - **`chainId`**, **`wormholeChainId`**: *(extension)* EVM and Wormhole chain IDs
-- **`tokenName`**, **`tokenDecimals`**, **`ownerLabel`**: *(extension)* Top-level metadata
-- **`ownerLabel`**: Addressbook key for the final owner (e.g., `"MigrationMultisig"`)
 
 ## Token Modes
 
@@ -92,24 +108,32 @@ Key deployment parameters:
 - `rateLimitDuration`: Must match `RATE_LIMIT_DURATION` env var (default: 86400 = 24 hours)
 - Mode: `burning` or `locking` per chain
 
-### Step 2: Create the deployment JSON
+### Step 2: Register the token in WormholeConfig
+
+Add a `_registerToken` call in the appropriate config contract (e.g., `WormholeConfig_mainnet.sol`):
+
+```solidity
+_registerToken("NewToken", 18, "MigrationMultisig");
+```
+
+### Step 3: Create the deployment JSON
 
 Create `script/config/wormhole/<Token>.json`:
 1. Copy an existing JSON as a template (e.g., `USDm.json`)
 2. Fill in the deployed NTT Manager and Transceiver addresses from CLI output
 3. Set the token addresses, chain IDs, wormhole chain IDs
 4. Set `mode` per chain (`"locking"` for hub, `"burning"` for spoke)
-5. Configure rate limits
+5. Configure rate limits (as wei strings)
 
-### Step 3: Run the setup script on each chain
+### Step 4: Run the setup script on each chain
 
 ```bash
 # On Celo
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
+WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
   treb run SetupNTTBridge --network celo --debug
 
 # On Monad
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
+WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
   treb run SetupNTTBridge --network monad --debug
 ```
 
@@ -119,7 +143,7 @@ The script will:
 3. Grant minter/burner permissions (if burning mode)
 4. Transfer ownership and pauser capability to the configured owner (e.g., MigrationMultisig)
 
-### Step 4: Verify
+### Step 5: Verify
 
 The script automatically verifies all configuration after setup. Check the console output for any verification failures.
 
@@ -169,16 +193,16 @@ Example: Adding Polygon to a 2-chain (Celo, Monad) config:
 
 3. **Run the script on the new chain** (full setup):
 ```bash
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
+WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
   treb run SetupNTTBridge --network polygon --debug
 ```
 
 4. **Re-run the script on each existing chain** (only adds the new peer):
 ```bash
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
+WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
   treb run SetupNTTBridge --network celo --debug
 
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
+WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=<Token> \
   treb run SetupNTTBridge --network monad --debug
 ```
 

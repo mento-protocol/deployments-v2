@@ -5,8 +5,12 @@ import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {WormholeNTTConfig, NTTChainConfig} from "script/config/wormhole/WormholeNTTConfig.sol";
+import {WormholeConfig} from "script/config/wormhole/WormholeConfig.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
+
+// Ensure Foundry compiles config artifacts (required for vm.deployCode)
+import "script/config/wormhole/WormholeConfig_mainnet.sol";
 
 // ── Wormhole NTT on-chain interfaces ────────────────────────────────────────
 
@@ -56,10 +60,10 @@ interface IPausable {
 ///
 ///         Usage (run once per token per chain):
 ///
-///           WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/USDm.json \
+///           WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=USDm \
 ///             treb run SetupNTTBridge --network monad --debug
 ///
-///           WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/GBPm.json \
+///           WORMHOLE_CONFIG=WormholeConfig_mainnet WORMHOLE_TOKEN=GBPm \
 ///             treb run SetupNTTBridge --network celo --debug
 ///
 ///         Adding a spoke: add the chain entry to the JSON, then run
@@ -80,7 +84,11 @@ contract SetupNTTBridge is AddressbookHelper {
     uint256 internal myIndex;
 
     function setUp() public {
-        (WormholeNTTConfig.ParsedConfig memory cfg, uint256[] memory _inboundLimits) = WormholeNTTConfig.load();
+        // Load config contract and get token config
+        string memory configContract = vm.envString("WORMHOLE_CONFIG");
+        string memory token = vm.envString("WORMHOLE_TOKEN");
+        WormholeConfig wormholeConfig = WormholeConfig(vm.deployCode(configContract));
+        (WormholeNTTConfig.ParsedConfig memory cfg, uint256[] memory _inboundLimits) = wormholeConfig.get(token);
 
         // Copy scalar fields
         tokenName = cfg.tokenName;

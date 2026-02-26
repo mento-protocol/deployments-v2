@@ -1,7 +1,4 @@
 {
-  "tokenName": "USDm",
-  "tokenDecimals": 18,
-  "ownerLabel": "MigrationMultisig",
   "network": "Mainnet",
   "chains": {
     "Celo": {

@@ -18,20 +18,13 @@ struct NTTChainConfig {
 /// @title WormholeNTTConfig
 /// @notice Parses a per-token Wormhole NTT deployment JSON into typed structs.
 ///
-///         The JSON is the standard output of the Wormhole NTT CLI, augmented
-///         with fields needed by the setup script: chainId, wormholeChainId,
-///         tokenName, tokenDecimals, ownerLabel.
+///         The JSON follows the Wormhole NTT CLI output format, augmented with
+///         extension fields (chainId, wormholeChainId). Token metadata (name,
+///         decimals, ownerLabel) lives in WormholeConfig, not in the JSON.
 ///
-///         Required env var:
-///           WORMHOLE_DEPLOYMENT_FILE — path to the deployment JSON
-///             (e.g. "script/config/wormhole/USDm.json")
-///
-///         JSON structure (CLI fields + our extensions):
+///         JSON structure:
 ///           {
-///             "tokenName": "USDm",              // extension
-///             "tokenDecimals": 18,              // extension
-///             "ownerLabel": "MigrationMultisig", // extension
-///             "network": "Mainnet",             // CLI field (ignored)
+///             "network": "Mainnet",
 ///             "chains": {
 ///               "<ChainName>": {
 ///                 "chainId": 42220,              // extension
@@ -61,17 +54,25 @@ library WormholeNTTConfig {
         NTTChainConfig[] chains;
     }
 
-    /// @notice Load and parse the deployment JSON from WORMHOLE_DEPLOYMENT_FILE.
+    /// @notice Load and parse a deployment JSON file.
+    /// @param jsonPath Path to the deployment JSON file.
+    /// @param _tokenName Token name (from WormholeConfig, not JSON).
+    /// @param _tokenDecimals Token decimals (from WormholeConfig, not JSON).
+    /// @param _ownerLabel Addressbook key for the owner (from WormholeConfig, not JSON).
     /// @return config The parsed top-level config.
     /// @return inboundLimits Flattened inbound limits: inboundLimits[i * N + j]
     ///         is the inbound limit on chain i from chain j. Entries where i == j are 0.
-    function load() internal view returns (ParsedConfig memory config, uint256[] memory inboundLimits) {
-        string memory path = vm.envString("WORMHOLE_DEPLOYMENT_FILE");
-        string memory json = vm.readFile(path);
+    function load(
+        string memory jsonPath,
+        string memory _tokenName,
+        uint8 _tokenDecimals,
+        string memory _ownerLabel
+    ) internal view returns (ParsedConfig memory config, uint256[] memory inboundLimits) {
+        string memory json = vm.readFile(jsonPath);
 
-        config.tokenName = vm.parseJsonString(json, ".tokenName");
-        config.tokenDecimals = uint8(vm.parseJsonUint(json, ".tokenDecimals"));
-        config.ownerLabel = vm.parseJsonString(json, ".ownerLabel");
+        config.tokenName = _tokenName;
+        config.tokenDecimals = _tokenDecimals;
+        config.ownerLabel = _ownerLabel;
 
         // Enumerate chains
         config.chainNames = vm.parseJsonKeys(json, ".chains");
