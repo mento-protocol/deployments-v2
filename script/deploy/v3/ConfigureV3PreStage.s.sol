@@ -41,12 +41,12 @@ contract ConfigureV3PreStage is
         fxFeedIds = config.getFxRateFeedIds();
     }
 
-    /// @custom:senders migrationMultisig
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        Senders.Sender storage multisig = sender("migrationMultisig");
+        Senders.Sender storage owner = sender("migrationOwner");
 
         // --- BreakerBox: add & enable MarketHoursBreaker on FX feeds ---
-        IBreakerBox bbWrite = IBreakerBox(multisig.harness(breakerBox));
+        IBreakerBox bbWrite = IBreakerBox(owner.harness(breakerBox));
         IBreakerBox bbRead = IBreakerBox(breakerBox);
 
         if (!bbRead.isBreaker(marketHoursBreaker)) {
@@ -61,7 +61,7 @@ contract ConfigureV3PreStage is
 
         // --- ReserveV2: register addresses ---
         address reserveSafe = lookup("ReserveSafe");
-        IReserveV2 rvWrite = IReserveV2(multisig.harness(reserveV2));
+        IReserveV2 rvWrite = IReserveV2(owner.harness(reserveV2));
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
         if (!rvRead.isOtherReserveAddress(reserveSafe)) {
@@ -78,7 +78,7 @@ contract ConfigureV3PreStage is
     }
 
     function postChecks() internal view {
-        address multisigAccount = sender("migrationMultisig").account;
+        address ownerAccount = sender("migrationOwner").account;
         IBreakerBox bbRead = IBreakerBox(breakerBox);
         IReserveV2 rvRead = IReserveV2(reserveV2);
 

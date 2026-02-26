@@ -16,7 +16,8 @@ ignore = ["**/*"]
 
 [rpc_endpoints]
 celo = "${CELO_RPC_URL}"
-celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
+# celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
+celo_sepolia = "http://localhost:8545"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
 monad = "${MONAD_RPC_URL}"
 chain-143 = "${MONAD_RPC_URL}"
@@ -72,7 +73,15 @@ type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "proposer"
 
-[profile.testnet-v2-rc5.treb.senders.migrationMultisig]
+[profile.testnet-v2-rc5.treb.senders.migrationOwner]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.testnet-v2-rc5.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.mainnet.treb.senders.migrationOwner]
 type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "proposer"
