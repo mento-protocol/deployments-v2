@@ -33,11 +33,20 @@ celo_sepolia_local_fork = "http://localhost:8545"
 # chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
 # celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
-[profile.monad-mainnet.treb.senders.deployer]
+[profile.mainnet.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
+[profile.mainnet.treb.senders.migrationMultisig]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "proposer"
+
 [profile.default.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.default.treb.senders.migrationMultisig]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
@@ -59,6 +68,19 @@ type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
 [profile."testnet-v3-rc0".treb.senders.deployer]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "proposer"
+
+[profile.testnet-v2-rc5.treb.senders.migrationOwner]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.testnet-v2-rc5.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.mainnet.treb.senders.migrationOwner]
 type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "proposer"

@@ -120,6 +120,8 @@ interface IMentoConfig {
 
     function getRateFeedIds() external view returns (address[] memory);
 
+    function getFxRateFeedIds() external view returns (address[] memory);
+
     function getRateFeeds() external view returns (RateFeed[] memory);
 
     function getRateFeedDependencies(
@@ -137,7 +139,6 @@ interface IMentoConfig {
 
     function getMockAggregatorConfigs()
         external
-        view
         returns (MockAggregatorConfig[] memory);
 
     function getOracleConfig() external view returns (OracleConfig memory);

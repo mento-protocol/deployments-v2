@@ -33,6 +33,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     string[] internal _mockCollateralAssets;
     RateFeed[] internal _rateFeeds;
     address[] internal _collateralAssets;
+    address[] internal _fxRateFeedIds;
     address[] internal _chainlinkRelayerRateFeedIds;
     MockAggregatorConfig[] internal _mockAggregatorConfigs;
 
@@ -114,10 +115,26 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getMockAggregatorConfigs()
         external
-        view
         returns (MockAggregatorConfig[] memory)
     {
-        return _mockAggregatorConfigs;
+        MockAggregatorConfig[] memory configs = new MockAggregatorConfig[](
+            _mockAggregatorConfigs.length
+        );
+
+        vm.selectFork(mockAggregatorSourceFork);
+        for (uint i = 0; i < _mockAggregatorConfigs.length; i++) {
+            MockAggregatorConfig memory config = _mockAggregatorConfigs[i];
+            AggregatorV3Interface agg = AggregatorV3Interface(config.source);
+
+            uint8 decimals = agg.decimals();
+            (, int256 initialReport, , , ) = agg.latestRoundData();
+
+            config.initialReport = initialReport;
+            config.decimals = decimals;
+            configs[i] = config;
+        }
+        vm.selectFork(baseFork);
+        return configs;
     }
 
     function getChainlinkRelayerConfigs()
@@ -147,6 +164,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getRateFeeds() external view returns (RateFeed[] memory) {
         return _rateFeeds;
+    }
+
+    function getFxRateFeedIds() external view returns (address[] memory) {
+        return _fxRateFeedIds;
     }
 
     function getRateFeedIds()
@@ -460,23 +481,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory description,
         address source
     ) internal {
-        uint8 decimals;
-        int256 initialReport;
-        vm.selectFork(mockAggregatorSourceFork);
-        AggregatorV3Interface agg = AggregatorV3Interface(source);
-
-        decimals = agg.decimals();
-        (, initialReport, , , ) = agg.latestRoundData();
-
         _mockAggregatorConfigs.push(
             MockAggregatorConfig({
                 description: description,
-                decimals: decimals,
-                initialReport: initialReport,
+                decimals: 0,
+                initialReport: 0,
                 source: source
             })
         );
-        vm.selectFork(baseFork);
     }
 
     function _addBreaker(

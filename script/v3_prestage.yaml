@@ -2,3 +2,7 @@ group: Mento V3 PreStage
 components:
   DeployV3PreStage:
     script: DeployV3PreStage
+  ConfigureV3PreStage:
+    script: ConfigureV3PreStage
+    deps:
+      - DeployV3PreStage

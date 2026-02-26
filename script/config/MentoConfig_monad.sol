@@ -111,6 +111,7 @@ contract MentoConfig_monad is MentoConfig {
         address source
     ) internal {
         _addRateFeed(rateFeed);
+        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
