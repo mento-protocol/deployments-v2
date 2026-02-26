@@ -1,0 +1,54 @@
+group: Mento V3 Virtual Pools
+components:
+  USDmAUDm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/AUDm"
+  USDmCADm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/CADm"
+  USDmZARm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/ZARm"
+  USDmCHFm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/CHFm"
+  USDmPHPm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/PHPm"
+  USDmJPYm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/JPYm"
+  USDmCOPm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/COPm"
+  USDmBRLm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/BRLm"
+  USDmEURm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/EURm"
+  USDmGHSm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/GHSm"
+  USDmNGNm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/NGNm"
+  USDmKESm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/KESm"
+  USDmXOFm:
+    script: DeployVirtualPool
+    env:
+      EXCHANGE_NAME: "USDm/XOFm"
