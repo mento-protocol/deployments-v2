@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {ILiquityConfig} from "./ILiquityConfig.sol";
+import {ILiquityConfig} from "../ILiquityConfig.sol";
 
 /**
  * @notice Liquity GBPm/USDm instance config for Anvil (local Monad mainnet fork).
@@ -56,7 +56,7 @@ contract LiquityConfig_anvil_GBPm is ILiquityConfig {
                 minBoldInSP: 1000000000000000000,
                 minBoldAfterRebalance: 1000000000000000000000,
                 // ── NFT Metadata assets ───────────────────────────────
-                metadataAssetsBasePath: "script/assets/anvil-GBPm/",
+                metadataAssetsBasePath: "script/config/liquity/assets/anvil-GBPm/",
                 debtTokenLogoFile: "gbpm_logo.txt",
                 collateralTokenLogoFile: "usdm_logo.txt",
                 collateralTokenSymbol: "USDm",

@@ -31,7 +31,7 @@ contract DeployLiquityDependenciesTest is TrebScript, ProxyHelper {
         _deployDependenciesLocalFork();
     }
 
-    function _deployDependenciesLocalFork() public {
+    function _deployDependenciesLocalFork() internal {
         address[] memory emptyAddressArray = new address[](0);
         uint256[] memory emptyUintArray = new uint256[](0);
 

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {ILiquityConfig} from "./ILiquityConfig.sol";
+import {ILiquityConfig} from "../ILiquityConfig.sol";
 
 /**
  * @notice Liquity GBPm/USDm instance config for Celo.
@@ -49,7 +49,7 @@ contract LiquityConfig_celo_GBPm is ILiquityConfig {
                 // ── SystemParams: redemption ───────────────────────────
                 redemptionFeeFloor: 1e18 * 0.005, // 0.5%
                 initialBaseRate: 1e18, // 100%
-                redemptionMinuteDecayFactor: 1e18 * 9885140204, // 60 minutes half-life time
+                redemptionMinuteDecayFactor: 1e18 * 0.9885140204, // 60 minutes half-life time
                 redemptionBeta: 1,
                 // ── SystemParams: stability pool ───────────────────────
                 spYieldSplit: 1e18 * 0.75, // 75%

@@ -7,7 +7,8 @@ import {ILiquityConfig} from "./ILiquityConfig.sol";
 // ── Concrete configs ─────────────────────────────────────────────────────────
 // Imported here so Foundry compiles their artifacts, enabling vm.deployCode()
 // to find them by contract name at script run time.
-import "./LiquityConfig_anvil_GBPm.sol";
+import "./liquity/LiquityConfig_anvil_GBPm.sol";
+import "./liquity/LiquityConfig_celo_GBPm.sol";
 
 /**
  * @notice Loader library used by deployment scripts.

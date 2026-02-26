@@ -17,7 +17,6 @@ import {DefaultPool} from "bold/src/DefaultPool.sol";
 import {GasPool} from "bold/src/GasPool.sol";
 import {HintHelpers} from "bold/src/HintHelpers.sol";
 import {MultiTroveGetter} from "bold/src/MultiTroveGetter.sol";
-import {StabilityPool} from "bold/src/StabilityPool.sol";
 import {SortedTroves} from "bold/src/SortedTroves.sol";
 import {CollateralRegistry} from "bold/src/CollateralRegistry.sol";
 import {ICollSurplusPool} from "bold/src/Interfaces/ICollSurplusPool.sol";
@@ -110,7 +109,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         debtToken = lookup(cfg.debtTokenLabel);
         collateralToken = lookup(cfg.collateralTokenLabel);
         cdpLiquidityStrategy = lookup(cfg.liquidityStrategyLabel);
-        gasToken = lookupAddressbook(cfg.gasTokenLabel);
+        gasToken = lookup(cfg.gasTokenLabel);
 
         deployAndConnectContracts();
     }
