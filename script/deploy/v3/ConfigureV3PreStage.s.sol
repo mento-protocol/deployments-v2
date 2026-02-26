@@ -105,12 +105,12 @@ contract ConfigureV3PreStage is
 
         // ReserveV2: registrations
         require(
-            rvRead.isOtherReserveAddress(reserveV1),
-            "ReserveV1 not registered as other reserve address"
+            rvRead.isOtherReserveAddress(reserveSafe),
+            "ReserveSafe not registered as other reserve address"
         );
         require(
-            rvRead.isReserveManagerSpender(reserveV1),
-            "ReserveV1 not registered as reserve manager spender"
+            rvRead.isReserveManagerSpender(reserveSafe),
+            "ReserveSafe not registered as reserve manager spender"
         );
         require(
             rvRead.isLiquidityStrategySpender(reserveLiquidityStrategy),
