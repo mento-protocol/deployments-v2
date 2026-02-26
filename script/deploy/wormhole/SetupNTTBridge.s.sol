@@ -4,8 +4,6 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
-import {INTTConfig} from "script/config/INTTConfig.sol";
-import {NTTConfigLib} from "script/config/NTTConfigLib.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
@@ -44,43 +42,68 @@ interface IPausable {
     function transferPauserCapability(address newPauser) external;
 }
 
+// ── Config structs ──────────────────────────────────────────────────────────
+
+struct ChainConfig {
+    string name;
+    uint256 chainId;
+    uint16 wormholeChainId;
+    address nttManager;
+    address transceiver;
+    address token;
+    bool isBurning;
+    uint256 outboundLimit;
+}
+
 // ── Script ──────────────────────────────────────────────────────────────────
 
 /// @title SetupNTTBridge
 /// @notice Generic, idempotent NTT bridge setup script. Reads a per-token
-///         topology config and configures the current chain's NTT Manager
+///         deployment JSON and configures the current chain's NTT Manager
 ///         and Transceiver with all its peers.
 ///
 ///         Works for both hub-spoke (locking) and burn-mint topologies —
-///         the config's `isBurning` flag determines whether to grant
+///         the JSON's `isBurning` flag determines whether to grant
 ///         minter/burner permissions.
+///
+///         The JSON extends the Wormhole NTT CLI output format with
+///         additional fields: chainId, wormholeChainId, isBurning,
+///         tokenName, tokenDecimals, ownerLabel.
 ///
 ///         Usage (run once per token per chain):
 ///
-///           NTT_CONFIG_CONTRACT=NTTConfig_USDm \
+///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/USDm.json \
 ///             treb run SetupNTTBridge --network monad --debug
 ///
-///           NTT_CONFIG_CONTRACT=NTTConfig_GBPm \
+///           WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/GBPm.json \
 ///             treb run SetupNTTBridge --network celo --debug
 ///
-///         Adding a spoke: add the chain entry to the config, then run
+///         Adding a spoke: add the chain entry to the JSON, then run
 ///         on the new chain (full setup) and re-run on each existing chain
 ///         (only the new peer gets added; existing config is skipped).
 contract SetupNTTBridge is AddressbookHelper {
     using Senders for Senders.Sender;
 
-    INTTConfig.NTTTokenConfig internal config;
-    uint256 internal myIndex;
+    // ── Parsed config ───────────────────────────────────────────────────
+    string internal json;
+    string internal tokenName;
+    uint8 internal tokenDecimals;
+    uint64 internal rateLimitDuration;
     address internal owner;
 
-    function setUp() public {
-        config = NTTConfigLib.get();
-        myIndex = _findMyChain();
-        owner = lookupAddressbook(config.ownerLabel);
-        require(owner != address(0), string.concat(config.ownerLabel, " not found in addressbook"));
+    string[] internal chainNames;
+    ChainConfig[] internal chains;
+    uint256 internal myIndex;
 
-        INTTConfig.ChainConfig memory me = config.chains[myIndex];
-        console.log("=== SetupNTTBridge: %s on %s (chain %d) ===\n", config.tokenName, me.name, me.chainId);
+    // Inbound limits: inboundLimits[myIndex][peerIndex] = limit from peer
+    mapping(uint256 => mapping(uint256 => uint256)) internal inboundLimits;
+
+    function setUp() public {
+        _loadConfig();
+        myIndex = _findMyChain();
+
+        ChainConfig memory me = chains[myIndex];
+        console.log("=== SetupNTTBridge: %s on %s (chain %d) ===\n", tokenName, me.name, me.chainId);
         console.log("  NTT Manager:  %s", me.nttManager);
         console.log("  Transceiver:  %s", me.transceiver);
         console.log("  Token:        %s", me.token);
@@ -91,13 +114,12 @@ contract SetupNTTBridge is AddressbookHelper {
     /// @custom:senders deployer
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
-        INTTConfig.ChainConfig memory me = config.chains[myIndex];
+        ChainConfig memory me = chains[myIndex];
 
         // 1. Configure peers
-        for (uint256 i = 0; i < config.chains.length; i++) {
+        for (uint256 i = 0; i < chains.length; i++) {
             if (i == myIndex) continue;
-            INTTConfig.ChainConfig memory peer = config.chains[i];
-            _setupPeer(deployer, me, peer, config.chains[myIndex].inboundLimits[i]);
+            _setupPeer(deployer, me, chains[i], inboundLimits[myIndex][i]);
         }
 
         // 2. Set outbound limit
@@ -111,18 +133,68 @@ contract SetupNTTBridge is AddressbookHelper {
         // 4. Transfer ownership and pauser to the configured owner
         _setupOwnership(deployer, me);
 
-        console.log(unicode"=== %s setup on %s complete ===\n", config.tokenName, me.name);
+        console.log(unicode"=== %s setup on %s complete ===\n", tokenName, me.name);
 
         // 5. Verify everything
         _verifyAll(me);
     }
 
-    // ── Setup helpers (idempotent) ──────────────────────────────────────────
+    // ── Config loading ──────────────────────────────────────────────────
+
+    function _loadConfig() internal {
+        string memory path = vm.envString("WORMHOLE_DEPLOYMENT_FILE");
+        json = vm.readFile(path);
+
+        tokenName = vm.parseJsonString(json, ".tokenName");
+        tokenDecimals = uint8(vm.parseJsonUint(json, ".tokenDecimals"));
+        rateLimitDuration = uint64(vm.envOr("RATE_LIMIT_DURATION", uint256(86400)));
+
+        string memory ownerLabel = vm.parseJsonString(json, ".ownerLabel");
+        owner = lookupAddressbook(ownerLabel);
+        require(owner != address(0), string.concat(ownerLabel, " not found in addressbook"));
+
+        // Enumerate chains dynamically
+        chainNames = vm.parseJsonKeys(json, ".chains");
+        for (uint256 i = 0; i < chainNames.length; i++) {
+            string memory c = chainNames[i];
+            string memory base = string.concat(".chains.", c);
+
+            chains.push(ChainConfig({
+                name: c,
+                chainId: vm.parseJsonUint(json, string.concat(base, ".chainId")),
+                wormholeChainId: uint16(vm.parseJsonUint(json, string.concat(base, ".wormholeChainId"))),
+                nttManager: vm.parseJsonAddress(json, string.concat(base, ".manager")),
+                transceiver: vm.parseJsonAddress(json, string.concat(base, ".transceivers.wormhole.address")),
+                token: vm.parseJsonAddress(json, string.concat(base, ".token")),
+                isBurning: vm.parseJsonBool(json, string.concat(base, ".isBurning")),
+                outboundLimit: vm.parseUint(vm.parseJsonString(json, string.concat(base, ".limits.outbound")))
+            }));
+
+            // Parse inbound limits from each peer for this chain
+            for (uint256 j = 0; j < chainNames.length; j++) {
+                if (j == i) continue;
+                string memory inboundPath = string.concat(base, ".limits.inbound.", chainNames[j]);
+                inboundLimits[i][j] = vm.parseUint(vm.parseJsonString(json, inboundPath));
+            }
+        }
+
+        // Validate
+        for (uint256 i = 0; i < chains.length; i++) {
+            ChainConfig memory c = chains[i];
+            require(c.nttManager != address(0), string.concat(c.name, ": manager is zero address"));
+            require(c.transceiver != address(0), string.concat(c.name, ": transceiver is zero address"));
+            require(c.token != address(0), string.concat(c.name, ": token is zero address"));
+        }
+
+        console.log("Loaded config for %s from %s (%d chains)", tokenName, path, chains.length);
+    }
+
+    // ── Setup helpers (idempotent) ──────────────────────────────────────
 
     function _setupPeer(
         Senders.Sender storage deployer,
-        INTTConfig.ChainConfig memory me,
-        INTTConfig.ChainConfig memory peer,
+        ChainConfig memory me,
+        ChainConfig memory peer,
         uint256 inboundLimit
     ) internal {
         // NTT Manager peer
@@ -133,7 +205,7 @@ contract SetupNTTBridge is AddressbookHelper {
             INTTManager(deployer.harness(me.nttManager)).setPeer(
                 peer.wormholeChainId,
                 expectedPeerManager,
-                config.tokenDecimals,
+                tokenDecimals,
                 inboundLimit
             );
         } else {
@@ -161,7 +233,7 @@ contract SetupNTTBridge is AddressbookHelper {
 
     function _setupOutboundLimit(
         Senders.Sender storage deployer,
-        INTTConfig.ChainConfig memory me
+        ChainConfig memory me
     ) internal {
         uint256 currentOutbound = _untrim(INTTManager(me.nttManager).getOutboundLimitParams().limit);
         if (currentOutbound != me.outboundLimit) {
@@ -174,7 +246,7 @@ contract SetupNTTBridge is AddressbookHelper {
 
     function _setupBurnMintPermissions(
         Senders.Sender storage deployer,
-        INTTConfig.ChainConfig memory me
+        ChainConfig memory me
     ) internal {
         if (!IStableTokenSpoke(me.token).isBurner(me.nttManager)) {
             console.log("> Granting NTT Manager burner permission...");
@@ -193,7 +265,7 @@ contract SetupNTTBridge is AddressbookHelper {
 
     function _setupOwnership(
         Senders.Sender storage deployer,
-        INTTConfig.ChainConfig memory me
+        ChainConfig memory me
     ) internal {
         // NTT Manager ownership (cascades to all registered transceivers)
         if (IOwnable(me.nttManager).owner() != owner) {
@@ -219,68 +291,47 @@ contract SetupNTTBridge is AddressbookHelper {
         }
     }
 
-    // ── Verification ────────────────────────────────────────────────────────
+    // ── Verification ────────────────────────────────────────────────────
 
-    function _verifyAll(INTTConfig.ChainConfig memory me) internal view {
-        console.log("== Verifying %s on %s ==", config.tokenName, me.name);
+    function _verifyAll(ChainConfig memory me) internal view {
+        console.log("== Verifying %s on %s ==", tokenName, me.name);
 
-        // Peers
-        for (uint256 i = 0; i < config.chains.length; i++) {
+        for (uint256 i = 0; i < chains.length; i++) {
             if (i == myIndex) continue;
-            INTTConfig.ChainConfig memory peer = config.chains[i];
+            ChainConfig memory peer = chains[i];
             _verifyNttManagerPeer(me.nttManager, peer.wormholeChainId, peer.nttManager);
             _verifyTransceiverPeer(me.transceiver, peer.wormholeChainId, peer.transceiver);
-            _verifyInboundLimit(me.nttManager, peer.wormholeChainId, peer.name, me.inboundLimits[i]);
+            _verifyInboundLimit(me.nttManager, peer.wormholeChainId, peer.name, inboundLimits[myIndex][i]);
         }
 
-        // Outbound limit
         _verifyOutboundLimit(me.nttManager, me.outboundLimit);
-
-        // Rate limit duration
         _verifyRateLimitDuration(me.nttManager);
 
-        // Burn/mint permissions
         if (me.isBurning) {
             _verifyBurnMintPermissions(me.token, me.nttManager);
         }
 
-        // Ownership
         _verifyOwnership(me.nttManager, me.transceiver, owner);
 
-        console.log(unicode"== %s on %s verification passed ==\n", config.tokenName, me.name);
+        console.log(unicode"== %s on %s verification passed ==\n", tokenName, me.name);
     }
 
-    // ── Verification helpers ────────────────────────────────────────────────
-
-    function _verifyNttManagerPeer(
-        address manager,
-        uint16 peerWormholeChainId,
-        address expectedPeerManager
-    ) internal view {
+    function _verifyNttManagerPeer(address manager, uint16 peerWormholeChainId, address expectedPeerManager) internal view {
         NttManagerPeer memory peer = INTTManager(manager).getPeer(peerWormholeChainId);
         require(peer.peerAddress == _toBytes32(expectedPeerManager), "NTT Manager peer address mismatch");
-        require(peer.tokenDecimals == config.tokenDecimals, "NTT Manager peer decimals mismatch");
+        require(peer.tokenDecimals == tokenDecimals, "NTT Manager peer decimals mismatch");
         console.log(" > NTT Manager peer for wormhole chain %d set correctly", peerWormholeChainId);
     }
 
-    function _verifyTransceiverPeer(
-        address transceiver,
-        uint16 peerWormholeChainId,
-        address expectedPeerTransceiver
-    ) internal view {
+    function _verifyTransceiverPeer(address transceiver, uint16 peerWormholeChainId, address expectedPeer) internal view {
         require(
-            ITransceiver(transceiver).getWormholePeer(peerWormholeChainId) == _toBytes32(expectedPeerTransceiver),
+            ITransceiver(transceiver).getWormholePeer(peerWormholeChainId) == _toBytes32(expectedPeer),
             "Transceiver peer address mismatch"
         );
         console.log(" > Transceiver peer for wormhole chain %d set correctly", peerWormholeChainId);
     }
 
-    function _verifyInboundLimit(
-        address manager,
-        uint16 peerWormholeChainId,
-        string memory peerName,
-        uint256 expectedLimit
-    ) internal view {
+    function _verifyInboundLimit(address manager, uint16 peerWormholeChainId, string memory peerName, uint256 expectedLimit) internal view {
         RateLimitParams memory params = INTTManager(manager).getInboundLimitParams(peerWormholeChainId);
         require(_untrim(params.limit) == expectedLimit, string.concat("Inbound limit mismatch for ", peerName));
         console.log(" > Inbound limit from %s: %d", peerName, expectedLimit / 1e18);
@@ -294,7 +345,7 @@ contract SetupNTTBridge is AddressbookHelper {
 
     function _verifyRateLimitDuration(address manager) internal view {
         uint64 duration = INTTManager(manager).rateLimitDuration();
-        require(duration == config.rateLimitDuration, "Rate limit duration mismatch");
+        require(duration == rateLimitDuration, "Rate limit duration mismatch");
         console.log(" > Rate limit duration: %d seconds", duration);
     }
 
@@ -312,15 +363,15 @@ contract SetupNTTBridge is AddressbookHelper {
         console.log(" > Ownership and pauser set to %s", expectedOwner);
     }
 
-    // ── Pure helpers ────────────────────────────────────────────────────────
+    // ── Pure helpers ────────────────────────────────────────────────────
 
     function _findMyChain() internal view returns (uint256) {
         uint256 cid;
         assembly {
             cid := chainid()
         }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].chainId == cid) return i;
+        for (uint256 i = 0; i < chains.length; i++) {
+            if (chains[i].chainId == cid) return i;
         }
         revert(string.concat("Current chain (", vm.toString(cid), ") not found in NTT config"));
     }
@@ -329,13 +380,12 @@ contract SetupNTTBridge is AddressbookHelper {
         return bytes32(uint256(uint160(addr)));
     }
 
-    /// @dev Decode a TrimmedAmount (uint72) back to a full 18-decimal value.
+    /// @dev Decode a TrimmedAmount (uint72) back to a full-precision value.
     ///      TrimmedAmount packs: (amount << 8) | trimmedDecimals
     ///      See: https://github.com/wormhole-foundation/native-token-transfers/blob/main/evm/src/libraries/TrimmedAmount.sol
     function _untrim(uint72 packed) internal view returns (uint256) {
         uint8 decimals = uint8(packed & 0xFF);
         uint64 amount = uint64(packed >> 8);
-        uint8 tokenDecimals = config.tokenDecimals;
         if (decimals == tokenDecimals) return uint256(amount);
         if (decimals < tokenDecimals) return uint256(amount) * 10 ** (tokenDecimals - decimals);
         return uint256(amount) / 10 ** (decimals - tokenDecimals);
