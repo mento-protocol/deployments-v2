@@ -79,11 +79,7 @@ contract DeployV3PreStage is
             .setLabel(label)
             .deploy(abi.encode(true));
 
-        // TODO: Replace MarketHoursBreakerToggleable with MarketHoursBreaker once testing is done
-        marketHoursBreaker = deployer
-            .create3("MarketHoursBreakerToggleable")
-            .setLabel(label)
-            .deploy(abi.encode(deployer.account));
+        marketHoursBreaker = _deployMarketHoursBreaker(deployer);
 
         oracleAdapterImpl = deployer
             .create3("OracleAdapter")
@@ -352,5 +348,19 @@ contract DeployV3PreStage is
             address(reserveLiquidityStrategyContract.reserve()) == reserveV2,
             "ReserveLiquidityStrategy.reserve does not equal to Reserve proxy address"
         );
+    }
+
+    function _deployMarketHoursBreaker(Senders.Sender storage deployer) internal returns (address) {
+        bool toggleable = vm.envOr("MARKET_HOURS_BREAKER_TOGGLEABLE", false);
+        if (toggleable) {
+            return deployer
+                .create3("MarketHoursBreakerToggleable")
+                .setLabel(label)
+                .deploy(abi.encode(deployer.account));
+        }
+        return deployer
+            .create3("MarketHoursBreaker")
+            .setLabel(label)
+            .deploy();
     }
 }
