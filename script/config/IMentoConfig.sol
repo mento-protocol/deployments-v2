@@ -91,6 +91,31 @@ interface IMentoConfig {
         uint256 reportExpirySeconds;
     }
 
+    struct ReserveLiquidityStrategyPoolConfig {
+        address reserveLiquidityStrategy;
+        address debtToken;
+        uint32 cooldown;
+        address protocolFeeRecipient;
+        uint64 liquiditySourceIncentiveExpansion;
+        uint64 protocolIncentiveExpansion;
+        uint64 liquiditySourceIncentiveContraction;
+        uint64 protocolIncentiveContraction;
+    }
+
+    struct FPMMConfig {
+        address fpmmImplementation;
+        address oracleAdapter;
+        address proxyAdmin;
+        address owner;
+        address token0;
+        address token1;
+        address referenceRateFeedID;
+        bool invertRateFeed;
+        IFPMM.FPMMParams params;
+        bool useReserveLiquidityStrategy;
+        ReserveLiquidityStrategyPoolConfig rlsConfig;
+    }
+
     function getTokenConfigs() external view returns (TokenConfig[] memory);
 
     function getRateFeedIds() external view returns (address[] memory);
@@ -130,6 +155,8 @@ interface IMentoConfig {
         returns (BreakerConfig[] memory configs);
 
     function getReserveConfig() external view returns (ReserveConfig memory);
+
+    function getFPMMConfigs() external view returns (FPMMConfig[] memory);
 
     function getDefaultFPMMParams()
         external

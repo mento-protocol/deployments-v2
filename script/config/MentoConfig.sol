@@ -46,6 +46,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     mapping(string => address) _deployedContract;
     bytes32[] _breakerIds;
 
+    FPMMConfig[] internal _fpmmConfigs;
+
     IFPMM.FPMMParams internal _defaultFPMMParams;
     /// @dev pairKey is for example "USDC/USDm" and it will be duplicated as "USDm/USDC"
     mapping(string pairKey => IFPMM.FPMMParams) internal _fpmmParams;
@@ -181,6 +183,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             string.concat("Token not registered for: ", currency)
         );
         return getAddress(symbol);
+    }
+
+    function getFPMMConfigs()
+        external
+        view
+        returns (FPMMConfig[] memory)
+    {
+        return _fpmmConfigs;
     }
 
     /// @dev Get default FPMM Params
@@ -605,34 +615,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    function _addFPMMParams(
-        address token0,
-        address token1,
-        uint256 lpFee,
-        uint256 protocolFee,
-        address protocolFeeRecipient,
-        address feeSetter,
-        uint256 rebalanceIncentive,
-        uint256 rebalanceThresholdAbove,
-        uint256 rebalanceThresholdBelow
-    ) internal {
-        string memory symbol0 = IERC20Metadata(token0).symbol();
-        string memory symbol1 = IERC20Metadata(token1).symbol();
-        IFPMM.FPMMParams memory params = IFPMM.FPMMParams(
-            lpFee,
-            protocolFee,
-            protocolFeeRecipient,
-            feeSetter,
-            rebalanceIncentive,
-            rebalanceThresholdAbove,
-            rebalanceThresholdBelow
-        );
-        string memory poolKey01 = string.concat(symbol0, "/", symbol1);
-        string memory poolKey10 = string.concat(symbol1, "/", symbol0);
-        _fpmmParams[poolKey01] = params;
-        _fpmmParams[poolKey10] = params;
-    }
-
     function _addDeployedContract(
         string memory name,
         address contractAddress
@@ -642,6 +624,127 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function _setRedemptionShortfallTolerance(uint256 tolerance) internal {
         _redemptionShortfallTolerance = tolerance;
+    }
+
+    struct RLSParams {
+        string reserveLiquidityStrategy;
+        string debtToken;
+        uint32 cooldown;
+        address protocolFeeRecipient;
+        uint64 liquiditySourceIncentiveExpansion;
+        uint64 protocolIncentiveExpansion;
+        uint64 liquiditySourceIncentiveContraction;
+        uint64 protocolIncentiveContraction;
+    }
+
+    function _addFPMM(
+        string memory fpmmImpl,
+        string memory oracleAdapter,
+        string memory proxyAdmin,
+        string memory owner,
+        string memory token0,
+        string memory token1,
+        string memory rateFeed,
+        bool invertRateFeed,
+        IFPMM.FPMMParams memory params
+    ) internal {
+        _addFPMM(
+            fpmmImpl,
+            oracleAdapter,
+            proxyAdmin,
+            owner,
+            token0,
+            token1,
+            rateFeed,
+            invertRateFeed,
+            params,
+            RLSParams("", "", 0, address(0), 0, 0, 0, 0)
+        );
+    }
+
+    function _addFPMM(
+        string memory fpmmImpl,
+        string memory oracleAdapter,
+        string memory proxyAdmin,
+        string memory owner,
+        string memory token0,
+        string memory token1,
+        string memory rateFeed,
+        bool invertRateFeed,
+        IFPMM.FPMMParams memory params,
+        RLSParams memory rlsParams
+    ) internal {
+        address _fpmmImpl = lookup(fpmmImpl);
+        address _oracleAdapter = lookup(oracleAdapter);
+        address _proxyAdmin = lookup(proxyAdmin);
+        address _owner = lookup(owner);
+        address _token0 = _resolveExchangeAsset(token0);
+        address _token1 = _resolveExchangeAsset(token1);
+
+        if (
+            _fpmmImpl == address(0) ||
+            _oracleAdapter == address(0) ||
+            _proxyAdmin == address(0) ||
+            _owner == address(0) ||
+            _token0 == address(0) ||
+            _token1 == address(0)
+        ) {
+            console.log(
+                string.concat(
+                    "MentoConfig: Skipping FPMM ",
+                    token0,
+                    "/",
+                    token1,
+                    ": Could not resolve addresses"
+                )
+            );
+            return;
+        }
+
+        _fpmmConfigs.push();
+        FPMMConfig storage c = _fpmmConfigs[_fpmmConfigs.length - 1];
+        c.fpmmImplementation = _fpmmImpl;
+        c.oracleAdapter = _oracleAdapter;
+        c.proxyAdmin = _proxyAdmin;
+        c.owner = _owner;
+        c.token0 = _token0;
+        c.token1 = _token1;
+        c.referenceRateFeedID = getRateFeedIdFromString(rateFeed);
+        c.invertRateFeed = invertRateFeed;
+        c.params = params;
+
+        if (bytes(rlsParams.reserveLiquidityStrategy).length > 0) {
+            _resolveRLSConfig(c, rlsParams);
+        }
+    }
+
+    function _resolveRLSConfig(
+        FPMMConfig storage c,
+        RLSParams memory rlsParams
+    ) internal {
+        address _rls = lookup(rlsParams.reserveLiquidityStrategy);
+        address _debtToken = _resolveExchangeAsset(rlsParams.debtToken);
+
+        require(
+            _rls != address(0),
+            "Could not resolve ReserveLiquidityStrategy"
+        );
+        require(_debtToken != address(0), "Could not resolve debtToken");
+
+        c.useReserveLiquidityStrategy = true;
+        c.rlsConfig = ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: _rls,
+            debtToken: _debtToken,
+            cooldown: rlsParams.cooldown,
+            protocolFeeRecipient: rlsParams.protocolFeeRecipient,
+            liquiditySourceIncentiveExpansion: rlsParams
+                .liquiditySourceIncentiveExpansion,
+            protocolIncentiveExpansion: rlsParams.protocolIncentiveExpansion,
+            liquiditySourceIncentiveContraction: rlsParams
+                .liquiditySourceIncentiveContraction,
+            protocolIncentiveContraction: rlsParams
+                .protocolIncentiveContraction
+        });
     }
 
     function _resolveExchangeAsset(
