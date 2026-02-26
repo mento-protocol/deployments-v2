@@ -19,15 +19,20 @@ abstract contract WormholeConfig {
         bool registered;
     }
 
+    string private _network;
     mapping(bytes32 => TokenRegistration) private _tokens;
+
+    constructor(string memory network) {
+        _network = network;
+    }
 
     function _registerToken(string memory name, uint8 decimals, string memory ownerLabel) internal {
         _tokens[keccak256(bytes(name))] = TokenRegistration(decimals, ownerLabel, true);
     }
 
     /// @notice Get the full parsed config for a registered token.
-    ///         Reads the JSON at script/config/wormhole/{tokenName}.json and
-    ///         combines it with the registered metadata.
+    ///         Reads the JSON at script/config/wormhole/{network}/{tokenName}.json
+    ///         and combines it with the registered metadata.
     function get(string memory tokenName)
         public
         view
@@ -37,7 +42,7 @@ abstract contract WormholeConfig {
         TokenRegistration memory reg = _tokens[key];
         require(reg.registered, string.concat("WormholeConfig: token not registered: ", tokenName));
 
-        string memory jsonPath = string.concat("script/config/wormhole/", tokenName, ".json");
+        string memory jsonPath = string.concat("script/config/wormhole/", _network, "/", tokenName, ".json");
         return WormholeNTTConfig.load(jsonPath, tokenName, reg.decimals, reg.ownerLabel);
     }
 }
