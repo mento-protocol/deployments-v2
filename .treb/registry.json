@@ -484,6 +484,7 @@
       "Reserve:v2.6.5": "0xC09D3009De5849E6673c3150c10F0eDD9eb86158",
       "SortedOracles:v2.6.5": "0x0514884378460D86528658543bc8093D8178D7b1",
       "StableTokenV2:v2.6.5": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
+      "StableTokenV3:v3.0.0": "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
       "TimelockController:v2.6.5": "0x32346936c5bAf3c7B53Ea3fe40B405EFD3A3e656",
       "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0xd96f786f5a294fb7cbb0847307293b7A871B9d5a",
       "TransparentUpgradeableProxy:Emission": "0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69",
