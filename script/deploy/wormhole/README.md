@@ -16,11 +16,11 @@ Each bridge consists of two contracts per chain:
 ## Architecture
 
 ```
-Per-token deployment JSON          Generic setup script
-┌──────────────────────┐          ┌──────────────────────┐
-│  configs/USDm.json   │──read──>│  SetupNTTBridge.s.sol │
-│  configs/GBPm.json   │          │  (runs on any chain)  │
-└──────────────────────┘          └──────────────────────┘
+Per-token deployment JSON              Generic setup script
+┌──────────────────────────────┐      ┌──────────────────────┐
+│  config/wormhole/USDm.json   │─read─│  SetupNTTBridge.s.sol │
+│  config/wormhole/GBPm.json   │      │  (runs on any chain)  │
+└──────────────────────────────┘      └──────────────────────┘
 ```
 
 Each JSON file describes the **full bridge topology** for one token — all chains, their deployed addresses, modes, and rate limits. The setup script reads the JSON, finds the current chain, and configures it idempotently.
@@ -29,7 +29,7 @@ The JSON extends the Wormhole NTT CLI output format with additional fields (`cha
 
 ## JSON Config Structure
 
-Configs live in `script/deploy/wormhole/configs/<Token>.json`:
+Configs live in `script/config/wormhole/<Token>.json`:
 
 ```json
 {
@@ -92,7 +92,7 @@ Key deployment parameters:
 
 ### Step 2: Create the deployment JSON
 
-Create `script/deploy/wormhole/configs/<Token>.json`:
+Create `script/config/wormhole/<Token>.json`:
 1. Copy an existing JSON as a template (e.g., `USDm.json`)
 2. Fill in the deployed NTT Manager and Transceiver addresses from CLI output
 3. Set the token addresses, chain IDs, wormhole chain IDs
@@ -103,11 +103,11 @@ Create `script/deploy/wormhole/configs/<Token>.json`:
 
 ```bash
 # On Celo
-WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/<Token>.json \
+WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
   treb run SetupNTTBridge --network celo --debug
 
 # On Monad
-WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/<Token>.json \
+WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
   treb run SetupNTTBridge --network monad --debug
 ```
 
@@ -167,16 +167,16 @@ Example: Adding Polygon to a 2-chain (Celo, Monad) config:
 
 3. **Run the script on the new chain** (full setup):
 ```bash
-WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/<Token>.json \
+WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
   treb run SetupNTTBridge --network polygon --debug
 ```
 
 4. **Re-run the script on each existing chain** (only adds the new peer):
 ```bash
-WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/<Token>.json \
+WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
   treb run SetupNTTBridge --network celo --debug
 
-WORMHOLE_DEPLOYMENT_FILE=script/deploy/wormhole/configs/<Token>.json \
+WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
   treb run SetupNTTBridge --network monad --debug
 ```
 
