@@ -72,6 +72,11 @@ type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "proposer"
 
+[profile.testnet-v2-rc5.treb.senders.migrationMultisig]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "proposer"
+
 [profile.testnet-v2-rc5.treb.senders.governor]
 type = "oz_governor"
 governor = "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4"
