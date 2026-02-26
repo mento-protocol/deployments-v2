@@ -2,42 +2,57 @@
   "tokenName": "USDm",
   "tokenDecimals": 18,
   "ownerLabel": "MigrationMultisig",
+  "network": "Mainnet",
   "chains": {
     "Celo": {
       "chainId": 42220,
       "wormholeChainId": 14,
+      "version": "2.0.0",
+      "mode": "burning",
+      "paused": false,
+      "owner": "0x0000000000000000000000000000000000000000",
       "manager": "0x0000000000000000000000000000000000000000",
+      "token": "0x765DE816845861e75A25fCA122bb6898B8B1282a",
       "transceivers": {
+        "threshold": 1,
         "wormhole": {
-          "address": "0x0000000000000000000000000000000000000000"
+          "address": "0x0000000000000000000000000000000000000000",
+          "pauser": "0x0000000000000000000000000000000000000000"
         }
       },
-      "token": "0x765DE816845861e75A25fCA122bb6898B8B1282a",
-      "isBurning": true,
       "limits": {
+        "outbound": "100000000000000000000000",
         "inbound": {
           "Monad": "100000000000000000000000"
-        },
-        "outbound": "100000000000000000000000"
-      }
+        }
+      },
+      "pauser": "0x0000000000000000000000000000000000000000",
+      "managerVariant": "standard"
     },
     "Monad": {
       "chainId": 143,
       "wormholeChainId": 48,
+      "version": "2.0.0",
+      "mode": "burning",
+      "paused": false,
+      "owner": "0x0000000000000000000000000000000000000000",
       "manager": "0x0000000000000000000000000000000000000000",
+      "token": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
       "transceivers": {
+        "threshold": 1,
         "wormhole": {
-          "address": "0x0000000000000000000000000000000000000000"
+          "address": "0x0000000000000000000000000000000000000000",
+          "pauser": "0x0000000000000000000000000000000000000000"
         }
       },
-      "token": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
-      "isBurning": true,
       "limits": {
+        "outbound": "100000000000000000000000",
         "inbound": {
           "Celo": "100000000000000000000000"
-        },
-        "outbound": "100000000000000000000000"
-      }
+        }
+      },
+      "pauser": "0x0000000000000000000000000000000000000000",
+      "managerVariant": "standard"
     }
   }
 }

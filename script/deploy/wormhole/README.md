@@ -25,7 +25,7 @@ Per-token deployment JSON              Generic setup script
 
 Each JSON file describes the **full bridge topology** for one token — all chains, their deployed addresses, modes, and rate limits. The setup script reads the JSON, finds the current chain, and configures it idempotently.
 
-The JSON extends the Wormhole NTT CLI output format with additional fields (`chainId`, `wormholeChainId`, `isBurning`, `tokenName`, `tokenDecimals`, `ownerLabel`) needed by the setup script.
+The JSON extends the Wormhole NTT CLI output format with additional fields (`chainId`, `wormholeChainId`, `tokenName`, `tokenDecimals`, `ownerLabel`) needed by the setup script.
 
 ## JSON Config Structure
 
@@ -36,41 +36,43 @@ Configs live in `script/config/wormhole/<Token>.json`:
   "tokenName": "USDm",
   "tokenDecimals": 18,
   "ownerLabel": "MigrationMultisig",
+  "network": "Mainnet",
   "chains": {
     "Celo": {
       "chainId": 42220,
       "wormholeChainId": 14,
+      "mode": "burning",
       "manager": "0x...",
-      "transceivers": { "wormhole": { "address": "0x..." } },
       "token": "0x...",
-      "isBurning": true,
+      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
       "limits": {
-        "inbound": { "Monad": "100000000000000000000000" },
-        "outbound": "100000000000000000000000"
+        "outbound": "100000000000000000000000",
+        "inbound": { "Monad": "100000000000000000000000" }
       }
     },
     "Monad": {
       "chainId": 143,
       "wormholeChainId": 48,
+      "mode": "burning",
       "manager": "0x...",
-      "transceivers": { "wormhole": { "address": "0x..." } },
       "token": "0x...",
-      "isBurning": true,
+      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
       "limits": {
-        "inbound": { "Celo": "100000000000000000000000" },
-        "outbound": "100000000000000000000000"
+        "outbound": "100000000000000000000000",
+        "inbound": { "Celo": "100000000000000000000000" }
       }
     }
   }
 }
 ```
 
-Key fields:
-- **`manager`**, **`transceivers.wormhole.address`**: Deployed by the Wormhole NTT CLI
-- **`token`**: The token address on this chain (from addressbook or known)
-- **`isBurning`**: `false` = locking (hub), `true` = burning (spoke)
-- **`limits.inbound.<PeerName>`**: Inbound rate limit from that peer chain (full 18-decimal precision)
-- **`limits.outbound`**: Outbound rate limit (full 18-decimal precision)
+The JSON is the standard Wormhole NTT CLI output, augmented with fields marked *(extension)*:
+
+- **`manager`**, **`transceivers.wormhole.address`**, **`token`**, **`mode`**, **`limits`**: From CLI output
+- **`limits`**: Wei strings (e.g., `"100000000000000000000000"` = 100,000 tokens with 18 decimals)
+- **`mode`**: `"locking"` (hub) or `"burning"` (spoke) — from CLI
+- **`chainId`**, **`wormholeChainId`**: *(extension)* EVM and Wormhole chain IDs
+- **`tokenName`**, **`tokenDecimals`**, **`ownerLabel`**: *(extension)* Top-level metadata
 - **`ownerLabel`**: Addressbook key for the final owner (e.g., `"MigrationMultisig"`)
 
 ## Token Modes
@@ -96,7 +98,7 @@ Create `script/config/wormhole/<Token>.json`:
 1. Copy an existing JSON as a template (e.g., `USDm.json`)
 2. Fill in the deployed NTT Manager and Transceiver addresses from CLI output
 3. Set the token addresses, chain IDs, wormhole chain IDs
-4. Set `isBurning` per chain (`false` for hub/locking, `true` for spoke/burning)
+4. Set `mode` per chain (`"locking"` for hub, `"burning"` for spoke)
 5. Configure rate limits
 
 ### Step 3: Run the setup script on each chain
@@ -139,26 +141,26 @@ Example: Adding Polygon to a 2-chain (Celo, Monad) config:
   "chains": {
     "Celo": {
       "limits": {
-        "inbound": { "Monad": "100000...", "Polygon": "50000..." },
-        "outbound": "100000..."
+        "outbound": "100000000000000000000000",
+        "inbound": { "Monad": "100000000000000000000000", "Polygon": "50000000000000000000000" }
       }
     },
     "Monad": {
       "limits": {
-        "inbound": { "Celo": "100000...", "Polygon": "50000..." },
-        "outbound": "100000..."
+        "outbound": "100000000000000000000000",
+        "inbound": { "Celo": "100000000000000000000000", "Polygon": "50000000000000000000000" }
       }
     },
     "Polygon": {
       "chainId": 137,
       "wormholeChainId": 5,
+      "mode": "burning",
       "manager": "0x...",
-      "transceivers": { "wormhole": { "address": "0x..." } },
       "token": "0x...",
-      "isBurning": true,
+      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
       "limits": {
-        "inbound": { "Celo": "50000...", "Monad": "50000..." },
-        "outbound": "50000..."
+        "outbound": "50000000000000000000000",
+        "inbound": { "Celo": "50000000000000000000000", "Monad": "50000000000000000000000" }
       }
     }
   }
@@ -204,7 +206,7 @@ The script's `--network` flag doesn't match any `chainId` in the JSON config. Ch
 `setWormholePeer` is irreversible. If set to the wrong address, you need to deploy a new Transceiver.
 
 ### Rate limit verification fails
-Rate limits are stored as [TrimmedAmounts](https://github.com/wormhole-foundation/native-token-transfers/blob/main/evm/src/libraries/TrimmedAmount.sol) (8 decimal precision for 18-decimal tokens). The `_untrim` helper decodes these back to full precision. Ensure your config limits are specified in full 18-decimal precision (e.g., `"100000000000000000000000"` = 100,000 tokens).
+Rate limits are stored on-chain as [TrimmedAmounts](https://github.com/wormhole-foundation/native-token-transfers/blob/main/evm/src/libraries/TrimmedAmount.sol) (8 decimal precision for 18-decimal tokens). The `_untrim` helper decodes these back to full precision. Limits in the JSON are wei strings (e.g., `"100000000000000000000000"` = 100,000 tokens with 18 decimals).
 
 ### Ownership already transferred
 If the NTT Manager or Transceiver ownership has already been transferred to a multisig, the deployer cannot make further changes. Subsequent configuration changes must go through the multisig.
