@@ -66,7 +66,20 @@ contract ProxyHelper is TrebScript {
     function lookupProxy(
         string memory contractName
     ) internal view returns (address proxy) {
-        proxy = lookupProxy(contractName, defaultProxyType);
+        address celo = lookup(
+            string.concat(CELO_LOOKUP_PREFIX, contractName)
+        );
+        address oztup = lookup(
+            string.concat(OZTUP_LOOKUP_PREFIX, contractName)
+        );
+        require(
+            celo == address(0) || oztup == address(0),
+            string.concat(
+                contractName,
+                " found as both Celo and OZTUP proxy, be explicit"
+            )
+        );
+        proxy = celo != address(0) ? celo : oztup;
     }
 
     function lookupProxy(
@@ -117,7 +130,11 @@ contract ProxyHelper is TrebScript {
     function lookupProxyOrFail(
         string memory contractName
     ) internal view returns (address proxy) {
-        proxy = lookupProxyOrFail(contractName, defaultProxyType);
+        proxy = lookupProxy(contractName);
+        require(
+            proxy != address(0),
+            string.concat(contractName, " proxy not deployed")
+        );
     }
 
     function lookupProxyOrFail(
