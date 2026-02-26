@@ -28,7 +28,7 @@ contract ConfigureV3PreStage is
     address marketHoursBreaker;
     address reserveV2;
     address reserveLiquidityStrategy;
-    address reserveV1;
+    address reserveSafe;
     address[] fxFeedIds;
 
     function setUp() public {
@@ -37,8 +37,8 @@ contract ConfigureV3PreStage is
         marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
-        reserveV1 = lookup("Reserve");
         fxFeedIds = config.getFxRateFeedIds();
+        reserveSafe = lookup("ReserveSafe");
     }
 
     /// @custom:senders deployer, migrationOwner
@@ -60,7 +60,6 @@ contract ConfigureV3PreStage is
         }
 
         // --- ReserveV2: register addresses ---
-        address reserveSafe = lookup("ReserveSafe");
         IReserveV2 rvWrite = IReserveV2(owner.harness(reserveV2));
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
