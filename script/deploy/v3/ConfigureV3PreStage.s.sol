@@ -33,7 +33,7 @@ contract ConfigureV3PreStage is
 
     function setUp() public {
         config = Config.get();
-        breakerBox = config.getDeployedContract("BreakerBox");
+        breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
@@ -41,12 +41,12 @@ contract ConfigureV3PreStage is
         fxFeedIds = config.getFxRateFeedIds();
     }
 
-    /// @custom:senders deployer
+    /// @custom:senders migrationMultisig
     function run() public broadcast {
-        Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage multisig = sender("migrationMultisig");
 
         // --- BreakerBox: add & enable MarketHoursBreaker on FX feeds ---
-        IBreakerBox bbWrite = IBreakerBox(deployer.harness(breakerBox));
+        IBreakerBox bbWrite = IBreakerBox(multisig.harness(breakerBox));
         IBreakerBox bbRead = IBreakerBox(breakerBox);
 
         if (!bbRead.isBreaker(marketHoursBreaker)) {
@@ -60,7 +60,7 @@ contract ConfigureV3PreStage is
         }
 
         // --- ReserveV2: register addresses ---
-        IReserveV2 rvWrite = IReserveV2(deployer.harness(reserveV2));
+        IReserveV2 rvWrite = IReserveV2(multisig.harness(reserveV2));
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
         if (!rvRead.isOtherReserveAddress(reserveV1)) {

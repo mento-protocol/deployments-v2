@@ -37,7 +37,16 @@ celo_sepolia_local_fork = "http://localhost:8545"
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
+[profile.monad-mainnet.treb.senders.migrationMultisig]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "proposer"
+
 [profile.default.treb.senders.deployer]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[profile.default.treb.senders.migrationMultisig]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
