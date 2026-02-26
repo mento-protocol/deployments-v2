@@ -1,0 +1,43 @@
+{
+  "tokenName": "USDm",
+  "tokenDecimals": 18,
+  "ownerLabel": "MigrationMultisig",
+  "chains": {
+    "Celo": {
+      "chainId": 42220,
+      "wormholeChainId": 14,
+      "manager": "0x0000000000000000000000000000000000000000",
+      "transceivers": {
+        "wormhole": {
+          "address": "0x0000000000000000000000000000000000000000"
+        }
+      },
+      "token": "0x765DE816845861e75A25fCA122bb6898B8B1282a",
+      "isBurning": true,
+      "limits": {
+        "inbound": {
+          "Monad": "100000000000000000000000"
+        },
+        "outbound": "100000000000000000000000"
+      }
+    },
+    "Monad": {
+      "chainId": 143,
+      "wormholeChainId": 48,
+      "manager": "0x0000000000000000000000000000000000000000",
+      "transceivers": {
+        "wormhole": {
+          "address": "0x0000000000000000000000000000000000000000"
+        }
+      },
+      "token": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
+      "isBurning": true,
+      "limits": {
+        "inbound": {
+          "Celo": "100000000000000000000000"
+        },
+        "outbound": "100000000000000000000000"
+      }
+    }
+  }
+}
