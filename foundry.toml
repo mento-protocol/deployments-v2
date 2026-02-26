@@ -33,11 +33,11 @@ celo_sepolia_local_fork = "http://localhost:8545"
 # chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
 # celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
 
-[profile.monad-mainnet.treb.senders.deployer]
+[profile.mainnet.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
-[profile.monad-mainnet.treb.senders.migrationMultisig]
+[profile.mainnet.treb.senders.migrationMultisig]
 type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "proposer"
