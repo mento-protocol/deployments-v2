@@ -9,8 +9,6 @@ contract CDPMigrationConfig_GBPm is ICDPMigrationConfig {
             // ── Registry lookup keys ─────────────────────────────────────────
             addressesRegistryLabel: "", // TODO: e.g. "AddressesRegistry_GBPm"
             fpmmLabel: "", // TODO: e.g. "FPMM_GBPm_USDC"
-            reserveLiquidityStrategyLabel: "", // TODO: e.g. "ReserveLiquidityStrategy"
-            cdpLiquidityStrategyLabel: "", // TODO: e.g. "CDPLiquidityStrategy"
             // ── ReserveTroveFactory ──────────────────────────────────────────
             reserveTroveManagerAddress: address(0), // TODO: address that will own the trove NFT ReserveMultisig?
             collateralizationRatio: 1.7e18, // TODO: 170% — adjust as needed

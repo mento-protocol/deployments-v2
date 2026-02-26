@@ -18,6 +18,9 @@ import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidity
 import {ReserveTroveFactory} from "src/ReserveTroveFactory.sol";
 import {ITroveManager} from "lib/bold/contracts/src/Interfaces/ITroveManager.sol";
 import {LatestTroveData} from "lib/bold/contracts/src/Types/LatestTroveData.sol";
+import {IBiPoolManager} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
+import {IExchangeProvider} from "lib/mento-core/contracts/interfaces/IExchangeProvider.sol";
+
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper {
@@ -43,12 +46,13 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
 
         // 1. Setup — look up core addresses
         registry = IAddressesRegistry(lookupOrFail(cfg.addressesRegistryLabel));
-        fpmm = lookupOrFail(cfg.fpmmLabel);
+        fpmm = lookupProxyOrFail(cfg.fpmmLabel);
         debtToken = address(registry.boldToken());
         collateralToken = address(registry.collToken());
-        reserveLiquidityStrategy = lookupOrFail(cfg.reserveLiquidityStrategyLabel);
-        cdpLiquidityStrategy = lookupOrFail(cfg.cdpLiquidityStrategyLabel);
+        reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
+        cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
 
+        _destroyV2Exchange();
         _updateDebtTokenRoles();
         _switchLiquidityStrategy();
         _deployReserveTroveFactory();
@@ -58,9 +62,31 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
         _postChecks();
     }
 
+    function _destroyV2Exchange() internal {
+        address biPoolManagerAddy = lookupProxyOrFail("BiPoolManager");
+        IBiPoolManager biPoolManagerRead = IBiPoolManager(biPoolManagerAddy);
+        IBiPoolManager biPoolManager = IBiPoolManager(deployer.harness(biPoolManagerAddy));
+
+        IExchangeProvider.Exchange[] memory exchanges = biPoolManagerRead.getExchanges();
+
+        for (uint256 i = 0; i < exchanges.length; i++) {
+            IExchangeProvider.Exchange memory exchange = exchanges[i];
+            bool matchesTokens = (exchange.assets[0] == debtToken && exchange.assets[1] == collateralToken) ||
+                (exchange.assets[0] == collateralToken && exchange.assets[1] == debtToken);
+
+            if (matchesTokens) {
+                biPoolManager.destroyExchange(exchange.exchangeId, i);
+                return;
+            }
+        }
+
+        revert("No matching V2 exchange found on BiPoolManager");
+    }
+
     function _updateDebtTokenRoles() internal {
-        // Remove reserve strategy minter on debt token
+        // Remove reserve strategy minter and burner on debt token
         IStableTokenV3(deployer.harness(debtToken)).setMinter(reserveLiquidityStrategy, false);
+        IStableTokenV3(deployer.harness(debtToken)).setBurner(reserveLiquidityStrategy, false);
 
         // Grant Liquity contracts permissions on debt token
         IStableTokenV3(deployer.harness(debtToken)).setMinter(address(registry.borrowerOperations()), true);
@@ -139,6 +165,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _postChecks() internal view {
+        _checkV2ExchangeDestroyed();
         _checkDebtTokenRoles();
         _checkLiquidityStrategy();
         _checkCDPLiquidityStrategyConfig();
@@ -147,11 +174,26 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
         _checkFactoryCleanup();
     }
 
+    function _checkV2ExchangeDestroyed() internal view {
+        address biPoolManagerAddy = lookupOrFail("BiPoolManager");
+        IBiPoolManager biPoolManagerRead = IBiPoolManager(biPoolManagerAddy);
+
+        IExchangeProvider.Exchange[] memory exchanges = biPoolManagerRead.getExchanges();
+
+        for (uint256 i = 0; i < exchanges.length; i++) {
+            IExchangeProvider.Exchange memory exchange = exchanges[i];
+            bool matchesTokens = (exchange.assets[0] == debtToken && exchange.assets[1] == collateralToken) ||
+                (exchange.assets[0] == collateralToken && exchange.assets[1] == debtToken);
+            require(!matchesTokens, "V2 exchange still exists on BiPoolManager");
+        }
+    }
+
     function _checkDebtTokenRoles() internal view {
         IStableTokenV3 debt = IStableTokenV3(debtToken);
 
-        // Reserve strategy should no longer be a minter
+        // Reserve strategy should no longer be a minter or burner
         require(!debt.isMinter(reserveLiquidityStrategy), "Reserve strategy still a minter on debt token");
+        require(!debt.isBurner(reserveLiquidityStrategy), "Reserve strategy still a burner on debt token");
 
         // Liquity contracts should have minter permissions
         require(debt.isMinter(address(registry.borrowerOperations())), "BorrowerOperations not a minter on debt token");

@@ -6,8 +6,6 @@ interface ICDPMigrationConfig {
         // ── Registry lookup keys ─────────────────────────────────────────
         string addressesRegistryLabel;
         string fpmmLabel;
-        string reserveLiquidityStrategyLabel;
-        string cdpLiquidityStrategyLabel;
         // ── ReserveTroveFactory ──────────────────────────────────────────
         address reserveTroveManagerAddress;
         uint256 collateralizationRatio; // 18 decimals, e.g. 1.5e18 = 150%

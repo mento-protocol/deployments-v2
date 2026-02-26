@@ -59,10 +59,9 @@ contract ReserveTroveFactory is Ownable {
      * @param _reserveTroveManager The address that will own the trove NFT
      * @param _initialOwner The address that will be set as the Ownable owner
      */
-    constructor(address _reserveTroveManager, address _initialOwner) {
+    constructor(address _reserveTroveManager, address _initialOwner) Ownable(_initialOwner) {
         require(_reserveTroveManager != address(0), "Invalid reserve trove manager");
         reserveTroveManager = _reserveTroveManager;
-        _transferOwnership(_initialOwner);
     }
 
     receive() external payable {}
