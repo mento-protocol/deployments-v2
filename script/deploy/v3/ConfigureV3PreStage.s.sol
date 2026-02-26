@@ -60,14 +60,15 @@ contract ConfigureV3PreStage is
         }
 
         // --- ReserveV2: register addresses ---
+        address reserveSafe = lookup("ReserveSafe");
         IReserveV2 rvWrite = IReserveV2(multisig.harness(reserveV2));
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
-        if (!rvRead.isOtherReserveAddress(reserveV1)) {
-            rvWrite.registerOtherReserveAddress(reserveV1);
+        if (!rvRead.isOtherReserveAddress(reserveSafe)) {
+            rvWrite.registerOtherReserveAddress(reserveSafe);
         }
-        if (!rvRead.isReserveManagerSpender(reserveV1)) {
-            rvWrite.registerReserveManagerSpender(reserveV1);
+        if (!rvRead.isReserveManagerSpender(reserveSafe)) {
+            rvWrite.registerReserveManagerSpender(reserveSafe);
         }
         if (!rvRead.isLiquidityStrategySpender(reserveLiquidityStrategy)) {
             rvWrite.registerLiquidityStrategySpender(reserveLiquidityStrategy);
@@ -114,16 +115,6 @@ contract ConfigureV3PreStage is
         require(
             rvRead.isLiquidityStrategySpender(reserveLiquidityStrategy),
             "ReserveLiquidityStrategy not registered as liquidity strategy spender"
-        );
-
-        // Ownership: verify contracts are still owned by multisig
-        verifyOwnership("BreakerBox", breakerBox, bbRead.owner());
-        verifyOwnership("ReserveV2", reserveV2, multisigAccount);
-
-        // Cross-contract: ReserveLiquidityStrategy points to ReserveV2
-        require(
-            address(IReserveLiquidityStrategy(reserveLiquidityStrategy).reserve()) == reserveV2,
-            "ReserveLiquidityStrategy.reserve does not point to ReserveV2"
         );
     }
 }

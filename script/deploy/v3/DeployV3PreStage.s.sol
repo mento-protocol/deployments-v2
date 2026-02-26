@@ -30,7 +30,9 @@ contract DeployV3PreStage is
     using Senders for Senders.Sender;
     using GnosisSafe for GnosisSafe.Sender;
 
-    address multisig;
+    address owner;
+    address feeSetter;
+    address protocolFeeRecipient;
 
     address sortedOracles;
     address breakerBox;
@@ -61,12 +63,14 @@ contract DeployV3PreStage is
         sortedOracles = lookupProxyOrFail("SortedOracles");
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         proxyAdmin = lookupOrFail("ProxyAdmin");
+        feeSetter = lookupOrFail("FeeSetter");
+        protocolFeeRecipient = lookupOrFail("ProtocolFeeRecipient");
     }
 
-    /// @custom:senders deployer, migrationMultisig
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
-        multisig = sender("migrationMultisig").account;
+        owner = sender("migrationOwner").account;
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
             abi.encode(true)
@@ -97,13 +101,13 @@ contract DeployV3PreStage is
                 breakerBox,
                 marketHoursBreaker,
                 address(0),
-                multisig
+                owner
             )
         );
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
-        params.feeSetter = multisig;
-        params.protocolFeeRecipient = multisig;
+        params.feeSetter = feeSetter;
+        params.protocolFeeRecipient = protocolFeeRecipient;
 
         fpmmFactory = deployProxy(
             deployer,
@@ -113,7 +117,7 @@ contract DeployV3PreStage is
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                multisig,
+                owner,
                 fpmmImpl,
                 params
             )
@@ -138,7 +142,7 @@ contract DeployV3PreStage is
         virtualPoolFactory = deployer
             .create3("VirtualPoolFactory")
             .setLabel(label)
-            .deploy(abi.encode(multisig));
+            .deploy(abi.encode(owner));
 
         IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
             deployer.harness(factoryRegistry)
@@ -147,7 +151,7 @@ contract DeployV3PreStage is
             deployer.harness(factoryRegistry)
         );
         factoryRegistryHarness.approve(virtualPoolFactory);
-        factoryRegistryOwnable.transferOwnership(multisig);
+        factoryRegistryOwnable.transferOwnership(owner);
 
         router = deployer.create3("Router").setLabel(label).deploy(
             abi.encode(address(0), factoryRegistry, fpmmFactory)
@@ -169,7 +173,7 @@ contract DeployV3PreStage is
                 empty,
                 empty,
                 empty,
-                multisig
+                owner
             )
         );
 
@@ -189,7 +193,7 @@ contract DeployV3PreStage is
             reserveLiquidityStrategyImpl,
             abi.encodeWithSelector(
                 IReserveLiquidityStrategy.initialize.selector,
-                multisig,
+                owner,
                 reserveV2
             )
         );
@@ -226,15 +230,15 @@ contract DeployV3PreStage is
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
-        verifyOwnership("OracleAdapter", oracleAdapter, multisig);
-        verifyOwnership("FPMMFactory", fpmmFactory, multisig);
-        verifyOwnership("FactoryRegistry", factoryRegistry, multisig);
-        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, multisig);
-        verifyOwnership("ReserveV2", reserveV2, multisig);
+        verifyOwnership("OracleAdapter", oracleAdapter, owner);
+        verifyOwnership("FPMMFactory", fpmmFactory, owner);
+        verifyOwnership("FactoryRegistry", factoryRegistry, owner);
+        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, owner);
+        verifyOwnership("ReserveV2", reserveV2, owner);
         verifyOwnership(
             "ReserveLiquidityStrategy",
             reserveLiquidityStrategy,
-            multisig
+            owner
         );
 
         // Implementation Initializer Protection
@@ -289,14 +293,13 @@ contract DeployV3PreStage is
             defaultParams.protocolFee == expected.protocolFee,
             "protocolFee param mismatch"
         );
-        // TODO: Check protocol fee recipient
-        // require(
-        //     defaultParams.protocolFeeRecipient == multisig,
-        //     "protocolFeeRecipient param mismatch"
-        // );
         require(
-            defaultParams.feeSetter == multisig,
+            defaultParams.protocolFeeRecipient == protocolFeeRecipient,
             "protocolFeeRecipient param mismatch"
+        );
+        require(
+            defaultParams.feeSetter == feeSetter,
+            "feeSetter param mismatch"
         );
         require(
             defaultParams.rebalanceIncentive == expected.rebalanceIncentive,
