@@ -234,6 +234,28 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _redemptionShortfallTolerance;
     }
 
+    function getExchangeConfig(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) public view returns (ExchangeConfig memory config, bool found) {
+        for (uint i = 0; i < _exchanges.length; i++) {
+            ExchangeConfig storage ex = _exchanges[i];
+            bool assetsMatch = (ex.pool.asset0 == asset0 &&
+                ex.pool.asset1 == asset1) ||
+                (ex.pool.asset0 == asset1 && ex.pool.asset1 == asset0);
+            if (
+                assetsMatch &&
+                address(ex.pool.pricingModule) == pricingModule
+            ) {
+                return (
+                    abi.decode(abi.encode(ex), (ExchangeConfig)),
+                    true
+                );
+            }
+        }
+    }
+
     // ========== Helper Functions ==========
 
     function emptyTradingLimits()
@@ -558,6 +580,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
         address _asset0 = _resolveExchangeAsset(asset0);
         address _asset1 = _resolveExchangeAsset(asset1);
+        console.log(asset0, _asset0);
+        console.log(asset1, _asset1);
         address _pricingModule = lookup(pricingModule);
         if (
             _asset0 == address(0) ||
@@ -665,6 +689,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         if (_collateral[symbol] != address(0)) {
             return _collateral[symbol];
         } else {
+            address proxy = lookupProxy(symbol);
+            if (proxy != address(0)) {
+                return proxy;
+            }
             return predictProxy(sender("deployer"), symbol);
         }
     }

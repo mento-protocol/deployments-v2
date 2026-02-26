@@ -29,34 +29,39 @@ contract DeployVirtualPools is TrebScript, ProxyHelper {
         exchangeProvider = lookupProxyOrFail("BiPoolManager");
     }
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage owner = sender("migrationOwner");
 
         IVirtualPoolFactory factory = IVirtualPoolFactory(
-            deployer.harness(virtualPoolFactory)
+            owner.harness(virtualPoolFactory)
         );
 
-        IMentoConfig.ExchangeConfig[] memory exchanges = config.getExchanges();
+        bytes32[] memory exchangeIds = IBiPoolManager(exchangeProvider)
+            .getExchangeIds();
         uint256 deployed;
 
-        for (uint256 i = 0; i < exchanges.length; i++) {
-            if (!exchanges[i].createVirtual) {
-                continue;
-            }
+        for (uint256 i = 0; i < exchangeIds.length; i++) {
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(
+                exchangeProvider
+            ).getPoolExchange(exchangeIds[i]);
 
-            IBiPoolManager.PoolExchange memory pool = exchanges[i].pool;
-            bytes32 exchangeId = config.getExchangeId(
-                pool.asset0,
-                pool.asset1,
-                address(pool.pricingModule)
-            );
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config
+                .getExchangeConfig(
+                    pool.asset0,
+                    pool.asset1,
+                    address(pool.pricingModule)
+                );
 
             string memory name = string.concat(
                 IERC20Metadata(pool.asset0).symbol(),
                 "/",
                 IERC20Metadata(pool.asset1).symbol()
             );
+
+            if (!found || !exchangeConfig.createVirtual) {
+                continue;
+            }
 
             // Skip if virtual pool already exists for this pair
             address existing = IRPoolFactory(virtualPoolFactory).getPool(
@@ -78,7 +83,7 @@ contract DeployVirtualPools is TrebScript, ProxyHelper {
             console.log(string.concat(" > Deploying virtual pool for ", name));
             address virtualPool = factory.deployVirtualPool(
                 exchangeProvider,
-                exchangeId
+                exchangeIds[i]
             );
             console.log(
                 string.concat(
@@ -96,10 +101,7 @@ contract DeployVirtualPools is TrebScript, ProxyHelper {
             );
             require(
                 token0 == lowAsset && token1 == highAsset,
-                string.concat(
-                    "Token mismatch for ",
-                    name
-                )
+                string.concat("Token mismatch for ", name)
             );
         }
 
