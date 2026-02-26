@@ -10,6 +10,8 @@ import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 import {Config, IMentoConfig} from "script/config/Config.sol";
 import {IBreakerBox} from "mento-core/interfaces/IBreakerBox.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
+import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
 contract ConfigureV3PreStage is
     TrebScript,
@@ -75,19 +77,32 @@ contract ConfigureV3PreStage is
     }
 
     function postChecks() internal view {
+        address multisigAccount = sender("migrationMultisig").account;
         IBreakerBox bbRead = IBreakerBox(breakerBox);
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
+        // Config sanity
+        require(fxFeedIds.length > 0, "No FX rate feed IDs configured");
+
+        // BreakerBox: breaker registered with correct trading mode
         require(
             bbRead.isBreaker(marketHoursBreaker),
             "MarketHoursBreaker not added to BreakerBox"
         );
+        require(
+            bbRead.breakerTradingMode(marketHoursBreaker) == 3,
+            "MarketHoursBreaker trading mode is not 3 (halted)"
+        );
+
+        // BreakerBox: breaker enabled on all FX feeds
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
             require(
                 bbRead.isBreakerEnabled(marketHoursBreaker, fxFeedIds[i]),
                 "MarketHoursBreaker not enabled for FX feed"
             );
         }
+
+        // ReserveV2: registrations
         require(
             rvRead.isOtherReserveAddress(reserveV1),
             "ReserveV1 not registered as other reserve address"
@@ -99,6 +114,16 @@ contract ConfigureV3PreStage is
         require(
             rvRead.isLiquidityStrategySpender(reserveLiquidityStrategy),
             "ReserveLiquidityStrategy not registered as liquidity strategy spender"
+        );
+
+        // Ownership: verify contracts are still owned by multisig
+        verifyOwnership("BreakerBox", breakerBox, bbRead.owner());
+        verifyOwnership("ReserveV2", reserveV2, multisigAccount);
+
+        // Cross-contract: ReserveLiquidityStrategy points to ReserveV2
+        require(
+            address(IReserveLiquidityStrategy(reserveLiquidityStrategy).reserve()) == reserveV2,
+            "ReserveLiquidityStrategy.reserve does not point to ReserveV2"
         );
     }
 }
