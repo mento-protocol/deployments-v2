@@ -68,22 +68,41 @@ interface IPausable {
 contract SetupNTTBridge is AddressbookHelper {
     using Senders for Senders.Sender;
 
-    // ── Loaded config ───────────────────────────────────────────────────
-    WormholeNTTConfig.ParsedConfig internal config;
+    // ── Loaded config (decomposed for storage compatibility) ──────────
+    string internal tokenName;
+    uint8 internal tokenDecimals;
+    string internal ownerLabel;
+    string[] internal chainNames;
+    NTTChainConfig[] internal chains;
     uint256[] internal inboundLimits;
     uint64 internal rateLimitDuration;
     address internal owner;
     uint256 internal myIndex;
 
     function setUp() public {
-        (config, inboundLimits) = WormholeNTTConfig.load();
+        (WormholeNTTConfig.ParsedConfig memory cfg, uint256[] memory _inboundLimits) = WormholeNTTConfig.load();
+
+        // Copy scalar fields
+        tokenName = cfg.tokenName;
+        tokenDecimals = cfg.tokenDecimals;
+        ownerLabel = cfg.ownerLabel;
+
+        // Copy arrays element-by-element (Solidity cannot bulk-copy memory struct arrays to storage)
+        for (uint256 i = 0; i < cfg.chains.length; i++) {
+            chainNames.push(cfg.chainNames[i]);
+            chains.push(cfg.chains[i]);
+        }
+        for (uint256 i = 0; i < _inboundLimits.length; i++) {
+            inboundLimits.push(_inboundLimits[i]);
+        }
+
         rateLimitDuration = uint64(vm.envOr("RATE_LIMIT_DURATION", uint256(86400)));
-        owner = lookupAddressbook(config.ownerLabel);
-        require(owner != address(0), string.concat(config.ownerLabel, " not found in addressbook"));
+        owner = lookupAddressbook(ownerLabel);
+        require(owner != address(0), string.concat(ownerLabel, " not found in addressbook"));
         myIndex = _findMyChain();
 
-        NTTChainConfig memory me = config.chains[myIndex];
-        console.log("=== SetupNTTBridge: %s on %s (chain %d) ===\n", config.tokenName, me.name, me.chainId);
+        NTTChainConfig memory me = chains[myIndex];
+        console.log("=== SetupNTTBridge: %s on %s (chain %d) ===\n", tokenName, me.name, me.chainId);
         console.log("  NTT Manager:  %s", me.nttManager);
         console.log("  Transceiver:  %s", me.transceiver);
         console.log("  Token:        %s", me.token);
@@ -94,13 +113,13 @@ contract SetupNTTBridge is AddressbookHelper {
     /// @custom:senders deployer
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
-        NTTChainConfig memory me = config.chains[myIndex];
-        uint256 n = config.chains.length;
+        NTTChainConfig memory me = chains[myIndex];
+        uint256 n = chains.length;
 
         // 1. Configure peers
         for (uint256 i = 0; i < n; i++) {
             if (i == myIndex) continue;
-            _setupPeer(deployer, me, config.chains[i], inboundLimits[myIndex * n + i]);
+            _setupPeer(deployer, me, chains[i], inboundLimits[myIndex * n + i]);
         }
 
         // 2. Set outbound limit
@@ -114,7 +133,7 @@ contract SetupNTTBridge is AddressbookHelper {
         // 4. Transfer ownership and pauser to the configured owner
         _setupOwnership(deployer, me);
 
-        console.log(unicode"=== %s setup on %s complete ===\n", config.tokenName, me.name);
+        console.log(unicode"=== %s setup on %s complete ===\n", tokenName, me.name);
 
         // 5. Verify everything
         _verifyAll(me);
@@ -136,7 +155,7 @@ contract SetupNTTBridge is AddressbookHelper {
             INTTManager(deployer.harness(me.nttManager)).setPeer(
                 peer.wormholeChainId,
                 expectedPeerManager,
-                config.tokenDecimals,
+                tokenDecimals,
                 inboundLimit
             );
         } else {
@@ -225,12 +244,12 @@ contract SetupNTTBridge is AddressbookHelper {
     // ── Verification ────────────────────────────────────────────────────
 
     function _verifyAll(NTTChainConfig memory me) internal view {
-        console.log("== Verifying %s on %s ==", config.tokenName, me.name);
-        uint256 n = config.chains.length;
+        console.log("== Verifying %s on %s ==", tokenName, me.name);
+        uint256 n = chains.length;
 
         for (uint256 i = 0; i < n; i++) {
             if (i == myIndex) continue;
-            NTTChainConfig memory peer = config.chains[i];
+            NTTChainConfig memory peer = chains[i];
             _verifyNttManagerPeer(me.nttManager, peer.wormholeChainId, peer.nttManager);
             _verifyTransceiverPeer(me.transceiver, peer.wormholeChainId, peer.transceiver);
             _verifyInboundLimit(me.nttManager, peer.wormholeChainId, peer.name, inboundLimits[myIndex * n + i]);
@@ -245,19 +264,19 @@ contract SetupNTTBridge is AddressbookHelper {
 
         _verifyOwnership(me.nttManager, me.transceiver, owner);
 
-        console.log(unicode"== %s on %s verification passed ==\n", config.tokenName, me.name);
+        console.log(unicode"== %s on %s verification passed ==\n", tokenName, me.name);
     }
 
     function _verifyNttManagerPeer(address manager, uint16 peerWormholeChainId, address expectedPeerManager) internal view {
         NttManagerPeer memory peer = INTTManager(manager).getPeer(peerWormholeChainId);
         require(peer.peerAddress == _toBytes32(expectedPeerManager), "NTT Manager peer address mismatch");
-        require(peer.tokenDecimals == config.tokenDecimals, "NTT Manager peer decimals mismatch");
+        require(peer.tokenDecimals == tokenDecimals, "NTT Manager peer decimals mismatch");
         console.log(" > NTT Manager peer for wormhole chain %d set correctly", peerWormholeChainId);
     }
 
-    function _verifyTransceiverPeer(address transceiver, uint16 peerWormholeChainId, address expectedPeer) internal view {
+    function _verifyTransceiverPeer(address transceiver_, uint16 peerWormholeChainId, address expectedPeer) internal view {
         require(
-            ITransceiver(transceiver).getWormholePeer(peerWormholeChainId) == _toBytes32(expectedPeer),
+            ITransceiver(transceiver_).getWormholePeer(peerWormholeChainId) == _toBytes32(expectedPeer),
             "Transceiver peer address mismatch"
         );
         console.log(" > Transceiver peer for wormhole chain %d set correctly", peerWormholeChainId);
@@ -287,11 +306,11 @@ contract SetupNTTBridge is AddressbookHelper {
         console.log(" > NTT Manager has minter and burner roles");
     }
 
-    function _verifyOwnership(address manager, address transceiver, address expectedOwner) internal view {
+    function _verifyOwnership(address manager, address transceiver_, address expectedOwner) internal view {
         require(IOwnable(manager).owner() == expectedOwner, "NTT Manager owner mismatch");
-        require(IOwnable(transceiver).owner() == expectedOwner, "Transceiver owner mismatch");
+        require(IOwnable(transceiver_).owner() == expectedOwner, "Transceiver owner mismatch");
         require(IPausable(manager).pauser() == expectedOwner, "NTT Manager pauser mismatch");
-        require(IPausable(transceiver).pauser() == expectedOwner, "Transceiver pauser mismatch");
+        require(IPausable(transceiver_).pauser() == expectedOwner, "Transceiver pauser mismatch");
         console.log(" > Ownership and pauser set to %s", expectedOwner);
     }
 
@@ -302,8 +321,8 @@ contract SetupNTTBridge is AddressbookHelper {
         assembly {
             cid := chainid()
         }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].chainId == cid) return i;
+        for (uint256 i = 0; i < chains.length; i++) {
+            if (chains[i].chainId == cid) return i;
         }
         revert(string.concat("Current chain (", vm.toString(cid), ") not found in NTT config"));
     }
@@ -318,7 +337,7 @@ contract SetupNTTBridge is AddressbookHelper {
     function _untrim(uint72 packed) internal view returns (uint256) {
         uint8 decimals = uint8(packed & 0xFF);
         uint64 amount = uint64(packed >> 8);
-        uint8 td = config.tokenDecimals;
+        uint8 td = tokenDecimals;
         if (decimals == td) return uint256(amount);
         if (decimals < td) return uint256(amount) * 10 ** (td - decimals);
         return uint256(amount) / 10 ** (decimals - td);
