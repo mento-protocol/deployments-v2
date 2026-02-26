@@ -38,7 +38,7 @@ contract ConfigureV3PreStage is
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
         fxFeedIds = config.getFxRateFeedIds();
-        reserveSafe = lookup("ReserveSafe");
+        reserveSafe = lookupOrFail("ReserveSafe");
     }
 
     /// @custom:senders deployer, migrationOwner
