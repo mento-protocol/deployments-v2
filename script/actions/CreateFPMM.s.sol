@@ -47,6 +47,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         IMentoConfig.FPMMConfig memory c
     ) internal {
         address existingPool = factoryView.getPool(c.token0, c.token1);
+        address owner = deployer.account;
 
         if (existingPool != address(0)) revert("FPMM already exists");
 
@@ -54,7 +55,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
             c.fpmmImplementation,
             c.oracleAdapter,
             c.proxyAdmin,
-            c.owner,
+            owner,
             c.token0,
             c.token1,
             c.referenceRateFeedID,
@@ -66,6 +67,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         console.log("  proxy:", proxy);
         console.log("  token0:", c.token0);
         console.log("  token1:", c.token1);
+        console.log("  referenceRateFeedID:", c.referenceRateFeedID);
+        console.log("  invertRateFeed:", c.invertRateFeed);
+
 
         _mintInitialLiquidity(deployer, proxy, c);
 

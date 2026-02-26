@@ -6,6 +6,8 @@ import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints} from "lib/mento-std/src/Array.sol";
 
+import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
+
 contract MentoConfig_celo_sepolia is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
@@ -46,6 +48,16 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _addCollateral("USDC", 0x01C5C0122039549AD1493B8220cABEdD739BC44E);
         _addCollateral("USDT", 0xd077A400968890Eacc75cdc901F0356c943e4fDb);
         _addCollateral("CELO", 0x471EcE3750Da237f93B8E339c536989b8978a438);
+
+        _addFPMM("cUSD", "cGBP", getRateFeedIdFromString("GBPUSD") , IFPMM.FPMMParams({
+            lpFee: 10,
+            protocolFee: 5,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 6,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        }));
     }
 
     /// ===================================================================

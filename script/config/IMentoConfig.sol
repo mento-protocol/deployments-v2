@@ -106,7 +106,6 @@ interface IMentoConfig {
         address fpmmImplementation;
         address oracleAdapter;
         address proxyAdmin;
-        address owner;
         address token0;
         address token1;
         address referenceRateFeedID;

@@ -650,88 +650,52 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addFPMM(
-        string memory fpmmImpl,
-        string memory oracleAdapter,
-        string memory proxyAdmin,
-        string memory owner,
         string memory token0,
         string memory token1,
-        string memory rateFeed,
-        bool invertRateFeed,
+        address rateFeed,
         IFPMM.FPMMParams memory params
     ) internal {
         _addFPMM(
-            fpmmImpl,
-            oracleAdapter,
-            proxyAdmin,
-            owner,
             token0,
             token1,
             rateFeed,
-            invertRateFeed,
             params,
             RLSParams("", "", 0, address(0), 0, 0, 0, 0)
         );
     }
 
     function _addFPMM(
-        string memory fpmmImpl,
-        string memory oracleAdapter,
-        string memory proxyAdmin,
-        string memory owner,
         string memory token0,
         string memory token1,
-        string memory rateFeed,
-        bool invertRateFeed,
+        address rateFeed,
         IFPMM.FPMMParams memory params,
         RLSParams memory rlsParams
     ) internal {
-        address _fpmmImpl = lookup(fpmmImpl);
-        address _oracleAdapter = lookup(oracleAdapter);
-        address _proxyAdmin = lookup(proxyAdmin);
-        address _owner = lookup(owner);
-        address _token0 = _resolveExchangeAsset(token0);
-        address _token1 = _resolveExchangeAsset(token1);
+        address _fpmmImpl = lookup("FPMM:v3.0.0");
+        address _oracleAdapter = lookup("OracleAdapter:v3.0.0");
+        address _proxyAdmin = lookup("ProxyAdmin:v3.0.0");
+        address token0Address = _lookupTokenAddress(token0);
+        address token1Address = _lookupTokenAddress(token1);
 
-        if (
-            _fpmmImpl == address(0) ||
-            _oracleAdapter == address(0) ||
-            _proxyAdmin == address(0) ||
-            _owner == address(0) ||
-            _token0 == address(0) ||
-            _token1 == address(0)
-        ) {
-            console.log(
-                string.concat(
-                    "MentoConfig: Skipping FPMM ",
-                    token0,
-                    "/",
-                    token1,
-                    ": Could not resolve addresses"
-                )
-            );
-            return;
-        }
-
-        _fpmmConfigs.push();
-        FPMMConfig storage c = _fpmmConfigs[_fpmmConfigs.length - 1];
+        FPMMConfig memory c;
         c.fpmmImplementation = _fpmmImpl;
         c.oracleAdapter = _oracleAdapter;
         c.proxyAdmin = _proxyAdmin;
-        c.owner = _owner;
-        c.token0 = _token0;
-        c.token1 = _token1;
-        c.referenceRateFeedID = getRateFeedIdFromString(rateFeed);
-        c.invertRateFeed = invertRateFeed;
+        c.token0 = token0Address;
+        c.token1 = token1Address;
+        c.referenceRateFeedID = rateFeed;
+        c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
         c.params = params;
 
         if (bytes(rlsParams.reserveLiquidityStrategy).length > 0) {
             _resolveRLSConfig(c, rlsParams);
         }
+
+        _fpmmConfigs.push(c);
     }
 
     function _resolveRLSConfig(
-        FPMMConfig storage c,
+        FPMMConfig memory c,
         RLSParams memory rlsParams
     ) internal {
         address _rls = lookup(rlsParams.reserveLiquidityStrategy);
@@ -757,6 +721,46 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             protocolIncentiveContraction: rlsParams
                 .protocolIncentiveContraction
         });
+    }
+
+    function _lookupTokenAddress(string memory symbol) internal returns (address) {
+        bool isStableToken = _isStableToken[symbol];
+        bool isCollateral = isCollateralAsset(symbol);
+
+        require(!isStableToken || !isCollateral, "Token is both stable and collateral");
+
+        if (isStableToken) {
+            return lookupProxyOrFail(string.concat("Proxy:", symbol));
+        } else {
+            return _collateral[symbol];
+        }
+    }
+
+    function _shouldInvertRateFeed(address token0, address token1) private returns (bool) {
+        (token0, token1) = token0 < token1 ? (token0, token1) : (token1, token0);
+
+        string memory token0Symbol = IERC20Metadata(token0).symbol();
+        string memory token1Symbol = IERC20Metadata(token1).symbol();
+
+        bool isFxPool = !isCollateralAsset(token0Symbol) && !isCollateralAsset(token1Symbol);
+
+        if (isFxPool) {
+            bool isToken0USDm = areStringsEqual(IERC20Metadata(token0).symbol(), "USDm");
+
+            return isToken0USDm ? false : true;
+        } else {
+            bool isToken0Collateral = isCollateralAsset(token0Symbol);
+
+            return isToken0Collateral ? false : true;
+        }
+    }
+
+    function isCollateralAsset(string memory symbol) internal returns (bool) {
+        return _collateral[symbol] != address(0);
+    }
+
+    function areStringsEqual(string memory a, string memory b) internal returns (bool) {
+        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
 
     function _resolveExchangeAsset(
