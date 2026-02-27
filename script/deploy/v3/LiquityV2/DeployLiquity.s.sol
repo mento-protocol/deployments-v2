@@ -100,10 +100,11 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
     // - StabilityPool
     // - SystemParams
 
+    /// @custom:env {string} token
     /// @custom:senders deployer
     function run() public broadcast {
         deployer = sender("deployer");
-        cfg = LiquityConfigLib.get();
+        cfg = LiquityConfigLib.get(vm.envString("token"));
 
         oracleAdapter = lookup(cfg.oracleAdapterLabel);
         debtToken = lookup(cfg.debtTokenLabel);

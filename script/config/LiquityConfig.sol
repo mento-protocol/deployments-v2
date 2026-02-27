@@ -7,13 +7,15 @@ import {ILiquityConfig} from "./ILiquityConfig.sol";
 // ── Concrete configs ─────────────────────────────────────────────────────────
 // Imported here so Foundry compiles their artifacts, enabling vm.deployCode()
 // to find them by contract name at script run time.
-import "./liquity/LiquityConfig_anvil_GBPm.sol";
+import "./liquity/LiquityConfig_celo_sepolia_GBPm.sol";
 import "./liquity/LiquityConfig_celo_GBPm.sol";
+import "./liquity/LiquityConfig_anvil_GBPm.sol";
 
 /**
  * @notice Loader library used by deployment scripts.
- * @dev Set LIQUITY_CONFIG_CONTRACT env var to the concrete config contract name,
- *      e.g. LIQUITY_CONFIG_CONTRACT=LiquityConfig_anvil_GBPm
+ * @dev Resolves the concrete config contract from the NETWORK env var and the
+ *      token parameter, e.g. LiquityConfigLib.get("GBPm") on network "anvil"
+ *      will deploy LiquityConfig_anvil_GBPm.
  *      vm.deployCode() instantiates the config locally in Foundry's simulation
  *      VM without broadcasting it as an on-chain transaction.
  */
@@ -22,11 +24,16 @@ library LiquityConfigLib {
         address(uint160(uint256(keccak256("hevm cheat code"))));
     Vm private constant vm = Vm(VM_ADDRESS);
 
-    function get()
-        internal
-        returns (ILiquityConfig.LiquityInstanceConfig memory)
-    {
-        string memory name = vm.envString("LIQUITY_CONFIG_CONTRACT");
+    function get(
+        string memory token
+    ) internal returns (ILiquityConfig.LiquityInstanceConfig memory) {
+        string memory network = vm.envString("NETWORK");
+        string memory name = string.concat(
+            "LiquityConfig_",
+            network,
+            "_",
+            token
+        );
         address config = vm.deployCode(name);
         require(
             config != address(0),
