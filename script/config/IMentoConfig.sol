@@ -173,10 +173,6 @@ interface IMentoConfig {
         view
         returns (uint256);
 
-    function getDeployedContract(
-        string memory name
-    ) external view returns (address);
-
     function mockAggregatorReporter() external view returns (address);
 
     function mockAggregatorSourceFork() external view returns (uint256);

@@ -17,7 +17,6 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _initOracles();
         _initSwap();
         _initGovernance();
-        _initDeployedContracts();
     }
 
     /// ===================================================================
@@ -610,11 +609,5 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             quorum: 2,
             watchdog: 0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81 // Mento Deployer
         });
-    }
-
-    function _initDeployedContracts() internal {
-        _addDeployedContract("SortedOracles", lookup("Proxy:SortedOracles", "testnet-v2-rc5"));
-        _addDeployedContract("BreakerBox", lookup("BreakerBox:v2.6.5", "testnet-v2-rc5"));
-        _addDeployedContract("ProxyAdmin", lookup("ProxyAdmin", "testnet-v2-rc5"));
     }
 }
