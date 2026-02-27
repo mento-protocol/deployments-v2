@@ -683,7 +683,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
     
 
-    function _lookupTokenAddress(string memory symbol) internal returns (address) {
+    function _lookupTokenAddress(string memory symbol) internal view returns (address) {
         bool isStable = _isStableToken[symbol];
         bool isCollateral = isCollateralAsset(symbol);
 
@@ -724,7 +724,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _isAddressStableToken[token];
     }
 
-    function areStringsEqual(string memory a, string memory b) internal returns (bool) {
+    function areStringsEqual(string memory a, string memory b) internal pure returns (bool) {
         return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
 
