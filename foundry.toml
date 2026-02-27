@@ -36,10 +36,12 @@ celo_sepolia_local_fork = "http://localhost:8545"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
-# monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
-# monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
-# chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
-# celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
+monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
+monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+celo = { key = "${ETHERSCAN_API_KEY}", chain = 42220, url = "https://api.etherscan.io/v2/api?chainid=42220" }
+# chain-11142220 = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
+# celo_sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
 
 [profile.mainnet.treb.senders.deployer]
 type = "private_key"
