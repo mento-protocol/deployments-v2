@@ -21,22 +21,21 @@ contract DeployCDPLiquidityStrategy is
     using Senders for Senders.Sender;
     using GnosisSafe for GnosisSafe.Sender;
 
+    address multisig;
     address cdpLiquidityStrategyImpl;
     address cdpLiquidityStrategy;
     IMentoConfig config;
-    Senders.Sender deployer;
-    Senders.Sender owner;
 
     string constant label = "v3.0.0";
 
     function setUp() public {
+        multisig = lookup("MigrationMultisig");
         config = Config.get();
     }
 
-    /// @custom:senders deployer, migrationOwner
+    /// @custom:senders deployer
     function run() public broadcast {
-        deployer = sender("deployer");
-        owner = sender("migrationOwner");
+        Senders.Sender storage deployer = sender("deployer");
 
         cdpLiquidityStrategyImpl = deployer
             .create3("CDPLiquidityStrategy")
@@ -51,7 +50,7 @@ contract DeployCDPLiquidityStrategy is
             cdpLiquidityStrategyImpl,
             abi.encodeWithSelector(
                 ICDPLiquidityStrategy.initialize.selector,
-                owner.account
+                multisig
             )
         );
         postChecks();
@@ -63,6 +62,6 @@ contract DeployCDPLiquidityStrategy is
             cdpLiquidityStrategy,
             cdpLiquidityStrategyImpl
         );
-        verifyOwnership("CDPLiquidityStrategy", cdpLiquidityStrategy, owner.account);
+        verifyOwnership("CDPLiquidityStrategy", cdpLiquidityStrategy, multisig);
     }
 }
