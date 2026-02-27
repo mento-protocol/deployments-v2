@@ -177,7 +177,7 @@
         "forge build compiles without errors"
       ],
       "priority": 9,
-      "passes": false,
+      "passes": true,
       "notes": "The NTT proxy upgrade pattern uses the Implementation.sol base contract which provides upgrade(). Check the submodule's UpgradeWormholeTransceiver.s.sol for the exact upgrade flow."
     },
     {
@@ -195,7 +195,7 @@
         "forge build compiles without errors"
       ],
       "priority": 10,
-      "passes": false,
+      "passes": true,
       "notes": "The NTT contracts use Ownable pattern (transferOwnership). Check whether NttManager and WormholeTransceiver also have a pauser role that needs to be transferred separately."
     },
     {
@@ -211,7 +211,7 @@
         "forge build compiles without errors"
       ],
       "priority": 11,
-      "passes": false,
+      "passes": true,
       "notes": "NttManager inherits PausableOwnable. Check exact function signatures for pause/unpause. The pauser might be a separate role from owner."
     },
     {
@@ -229,7 +229,7 @@
         "forge build compiles without errors"
       ],
       "priority": 12,
-      "passes": false,
+      "passes": true,
       "notes": "This is cleanup after the new system is in place. Verify no other files import WormholeNTTConfig or reference the JSON files before deleting."
     }
   ]

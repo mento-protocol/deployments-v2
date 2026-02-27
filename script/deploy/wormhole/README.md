@@ -1,13 +1,13 @@
-# Wormhole NTT Bridge Setup
+# Wormhole NTT Bridge — Treb-Native Approach
 
-This document explains how the Wormhole Native Token Transfer (NTT) bridge is configured for Mento stablecoins using the `SetupNTTBridge` script.
+This document explains how the Wormhole Native Token Transfer (NTT) bridge is deployed and managed for Mento stablecoins using treb-native Solidity scripts.
 
 ## Overview
 
 Wormhole NTT enables cross-chain token transfers using two modes:
 
+- **Burning**: Tokens are burned on the source chain and minted on the destination. Used when both chains can mint/burn (e.g., USDm on all chains, GBPm on spoke chains).
 - **Locking (hub)**: Tokens are locked on the source chain and minted on the destination. Used when the source chain holds the canonical supply (e.g., GBPm on Celo).
-- **Burning (spoke)**: Tokens are burned on the source chain and minted on the destination. Used for chains that mint/burn via the NTT Manager (e.g., all chains for USDm, or spoke chains for GBPm).
 
 Each bridge consists of two contracts per chain:
 - **NTT Manager** — handles peer registration, rate limits, and token locking/burning
@@ -16,197 +16,140 @@ Each bridge consists of two contracts per chain:
 ## Architecture
 
 ```
-Per-token deployment JSON              Generic setup script
-┌──────────────────────────────┐      ┌──────────────────────┐
-│  config/wormhole/USDm.json   │─read─│  SetupNTTBridge.s.sol │
-│  config/wormhole/GBPm.json   │      │  (runs on any chain)  │
-└──────────────────────────────┘      └──────────────────────┘
+Solidity config library          Treb-native scripts
+┌──────────────────────────┐    ┌────────────────────────────────┐
+│  config/wormhole/        │    │  deploy/wormhole/              │
+│    NTTConfig.sol         │───▶│    DeployNTT.s.sol             │
+│    (topology, limits,    │    │    ConfigureNTT.s.sol          │
+│     modes per token)     │    │    NttDeployHelper.sol         │
+└──────────────────────────┘    └────────────────────────────────┘
+                                ┌────────────────────────────────┐
+                                │  actions/wormhole/             │
+                                │    UpdateRateLimits.s.sol      │
+                                │    AddSpoke.s.sol              │
+                                │    UpgradeNttManager.s.sol     │
+                                │    UpgradeWormholeTransceiver… │
+                                │    TransferOwnership.s.sol     │
+                                │    PauseNTT.s.sol              │
+                                └────────────────────────────────┘
 ```
 
-Each JSON file describes the **full bridge topology** for one token — all chains, their deployed addresses, modes, and rate limits. The setup script reads the JSON, finds the current chain, and configures it idempotently.
+All configuration is defined in `NTTConfig.sol` as typed Solidity structs — no JSON files, no runtime file I/O. Config is compile-time checked and reviewable in PRs.
 
-The JSON extends the Wormhole NTT CLI output format with additional fields (`chainId`, `wormholeChainId`, `tokenName`, `tokenDecimals`, `ownerLabel`) needed by the setup script.
+## Configuration
 
-## JSON Config Structure
+Token topology is defined in `script/config/wormhole/NTTConfig.sol`:
 
-Configs live in `script/config/wormhole/<Token>.json`:
+- `getUSDmConfig()` — returns the full bridge topology for USDm
+- `getGBPmConfig()` — returns the full bridge topology for GBPm
 
-```json
-{
-  "tokenName": "USDm",
-  "tokenDecimals": 18,
-  "ownerLabel": "MigrationMultisig",
-  "network": "Mainnet",
-  "chains": {
-    "Celo": {
-      "chainId": 42220,
-      "wormholeChainId": 14,
-      "mode": "burning",
-      "manager": "0x...",
-      "token": "0x...",
-      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
-      "limits": {
-        "outbound": "100000000000000000000000",
-        "inbound": { "Monad": "100000000000000000000000" }
-      }
-    },
-    "Monad": {
-      "chainId": 143,
-      "wormholeChainId": 48,
-      "mode": "burning",
-      "manager": "0x...",
-      "token": "0x...",
-      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
-      "limits": {
-        "outbound": "100000000000000000000000",
-        "inbound": { "Celo": "100000000000000000000000" }
-      }
-    }
-  }
-}
-```
+Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labels, burn/lock modes, and rate limits. Token and owner addresses are **not hardcoded** — they are addressbook labels resolved at runtime via `lookupAddressbook()`.
 
-The JSON is the standard Wormhole NTT CLI output, augmented with fields marked *(extension)*:
-
-- **`manager`**, **`transceivers.wormhole.address`**, **`token`**, **`mode`**, **`limits`**: From CLI output
-- **`limits`**: Wei strings (e.g., `"100000000000000000000000"` = 100,000 tokens with 18 decimals)
-- **`mode`**: `"locking"` (hub) or `"burning"` (spoke) — from CLI
-- **`chainId`**, **`wormholeChainId`**: *(extension)* EVM and Wormhole chain IDs
-- **`tokenName`**, **`tokenDecimals`**, **`ownerLabel`**: *(extension)* Top-level metadata
-- **`ownerLabel`**: Addressbook key for the final owner (e.g., `"MigrationMultisig"`)
-
-## Token Modes
+### Token Modes
 
 | Token | Celo | Monad | Notes |
 |-------|------|-------|-------|
 | USDm  | Burning | Burning | Native stablecoin, can be minted on all chains |
 | GBPm  | Locking (hub) | Burning (spoke) | Canonical supply on Celo, spokes burn/mint |
 
-## One-Time Setup (New Token)
+## Deployment (New Token)
 
-### Step 1: Deploy NTT contracts via Wormhole NTT CLI
-
-Deploy the NTT Manager and Wormhole Transceiver on each chain using the [Wormhole NTT CLI](https://wormhole.com/docs/build/contract-integrations/native-token-transfers/deployment/deploy-to-evm/). This is done outside of treb.
-
-Key deployment parameters:
-- `rateLimitDuration`: Must match `RATE_LIMIT_DURATION` env var (default: 86400 = 24 hours)
-- Mode: `burning` or `locking` per chain
-
-### Step 2: Create the deployment JSON
-
-Create `script/config/wormhole/<Token>.json`:
-1. Copy an existing JSON as a template (e.g., `USDm.json`)
-2. Fill in the deployed NTT Manager and Transceiver addresses from CLI output
-3. Set the token addresses, chain IDs, wormhole chain IDs
-4. Set `mode` per chain (`"locking"` for hub, `"burning"` for spoke)
-5. Configure rate limits
-
-### Step 3: Run the setup script on each chain
+### Step 1: Deploy NTT contracts
 
 ```bash
-# On Celo
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
-  treb run SetupNTTBridge --network celo --debug
-
-# On Monad
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
-  treb run SetupNTTBridge --network monad --debug
+NTT_TOKEN=USDm treb run DeployNTT --network celo --debug
+NTT_TOKEN=USDm treb run DeployNTT --network monad --debug
 ```
 
-The script will:
-1. Register all peer NTT Managers and Transceivers
-2. Set outbound and inbound rate limits
-3. Grant minter/burner permissions (if burning mode)
-4. Transfer ownership and pauser capability to the configured owner (e.g., MigrationMultisig)
+`DeployNTT` deploys an `NttDeployHelper` via CREATE3 that bootstraps both NttManager and WormholeTransceiver ERC1967 proxies in its constructor. This workaround is needed because NTT contracts validate `msg.sender == deployer` during `initialize()`, and CREATE3 uses intermediate contracts that break this check.
 
-### Step 4: Verify
+### Step 2: Configure the bridge
 
-The script automatically verifies all configuration after setup. Check the console output for any verification failures.
-
-## Adding a New Spoke (New Chain for Existing Tokens)
-
-When adding a new chain (e.g., Polygon) to all existing tokens:
-
-### For each token config:
-
-1. **Deploy NTT contracts** on the new chain via the Wormhole NTT CLI
-2. **Update the JSON config**:
-   - Add a new chain entry under `.chains`
-   - Add an inbound limit entry for the new chain in each existing chain's `.limits.inbound`
-   - Set the new chain's `.limits.inbound` with entries for all existing chains
-
-Example: Adding Polygon to a 2-chain (Celo, Monad) config:
-```json
-{
-  "chains": {
-    "Celo": {
-      "limits": {
-        "outbound": "100000000000000000000000",
-        "inbound": { "Monad": "100000000000000000000000", "Polygon": "50000000000000000000000" }
-      }
-    },
-    "Monad": {
-      "limits": {
-        "outbound": "100000000000000000000000",
-        "inbound": { "Celo": "100000000000000000000000", "Polygon": "50000000000000000000000" }
-      }
-    },
-    "Polygon": {
-      "chainId": 137,
-      "wormholeChainId": 5,
-      "mode": "burning",
-      "manager": "0x...",
-      "token": "0x...",
-      "transceivers": { "threshold": 1, "wormhole": { "address": "0x..." } },
-      "limits": {
-        "outbound": "50000000000000000000000",
-        "inbound": { "Celo": "50000000000000000000000", "Monad": "50000000000000000000000" }
-      }
-    }
-  }
-}
-```
-
-3. **Run the script on the new chain** (full setup):
 ```bash
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
-  treb run SetupNTTBridge --network polygon --debug
+NTT_TOKEN=USDm treb run ConfigureNTT --network celo --debug
+NTT_TOKEN=USDm treb run ConfigureNTT --network monad --debug
 ```
 
-4. **Re-run the script on each existing chain** (only adds the new peer):
+`ConfigureNTT` performs all post-deployment setup:
+1. Registers peer NTT Managers and Transceivers (cross-chain)
+2. Sets outbound and inbound rate limits
+3. Grants minter/burner permissions (if burning mode)
+4. Transfers ownership and pauser capability to the configured owner
+
+All operations are **idempotent** — re-running the script is safe and only updates values that differ from on-chain state.
+
+> **Important**: `setWormholePeer` on the Transceiver is irreversible. Once set for a given Wormhole chain ID, it cannot be changed.
+
+## Governance Actions
+
+All action scripts live in `script/actions/wormhole/` and use the `NTT_TOKEN` env var to select the token config.
+
+### Update Rate Limits
+
 ```bash
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
-  treb run SetupNTTBridge --network celo --debug
-
-WORMHOLE_DEPLOYMENT_FILE=script/config/wormhole/<Token>.json \
-  treb run SetupNTTBridge --network monad --debug
+NTT_TOKEN=USDm treb run UpdateRateLimits --network celo --debug
 ```
 
-The script is idempotent — on existing chains it will skip already-configured peers and only add the new one.
+Reads limits from `NTTConfig` and updates on-chain values if they differ. Idempotent.
 
-> **Important**: `setWormholePeer` on the Transceiver is irreversible. Once set for a given wormhole chain ID, it cannot be changed. Double-check transceiver addresses before running.
+### Add a New Spoke Chain
 
-## Updating Rate Limits
+```bash
+# Phase 1: Deploy + configure on the new spoke
+NTT_TOKEN=USDm treb run AddSpoke --network <new-chain> --debug
+```
 
-To update rate limits for an existing bridge:
+Phase 1 deploys NTT contracts on the new spoke and configures peers pointing to all existing chains.
 
-1. Update the limits in the JSON config
-2. Re-run the script on the affected chain(s)
+**Phase 2** (separate step): Each existing chain needs a governance action to add the new spoke as a peer. This can be done via `ConfigureNTT` re-run or a governance proposal.
 
-The script will detect that peers are already configured and only update limits if they differ from the on-chain values.
+### Upgrade Contracts
 
-> **Note**: Ownership must not have been transferred yet, or the deployer must be the current owner. If ownership has been transferred to a multisig, rate limit updates must go through the multisig.
+```bash
+# Upgrade NttManager implementation
+NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeNttManager --network celo --debug
+
+# Upgrade WormholeTransceiver implementation
+NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeWormholeTransceiver --network celo --debug
+```
+
+Deploys a new implementation via CREATE3 with a versioned label, then calls `upgrade()` on the proxy. New implementations must use identical constructor args (immutables) — `_checkImmutables()` validates this during upgrade.
+
+### Transfer Ownership
+
+```bash
+NTT_TOKEN=USDm NEW_OWNER_LABEL=NewMultisig treb run TransferOwnership --network celo --debug
+```
+
+Transfers NttManager ownership (cascades to transceivers) and pauser capability (must be transferred separately on each contract).
+
+### Pause/Unpause Bridge
+
+```bash
+# Pause
+NTT_TOKEN=USDm PAUSE=true treb run PauseNTT --network celo --debug
+
+# Unpause (requires owner, not just pauser)
+NTT_TOKEN=USDm PAUSE=false treb run PauseNTT --network celo --debug
+```
+
+## Adding a New Token
+
+1. Add `get<Token>Config()` to `NTTConfig.sol` with the full bridge topology
+2. Ensure token and owner labels exist in `.treb/addressbook.json`
+3. Run `DeployNTT` on each chain
+4. Run `ConfigureNTT` on each chain
 
 ## Troubleshooting
 
 ### "Current chain not found in NTT config"
-The script's `--network` flag doesn't match any `chainId` in the JSON config. Check that the RPC URL points to the correct chain.
+The script's `--network` flag doesn't match any `evmChainId` in the token's config. Check that the RPC URL points to the correct chain.
 
 ### "Transceiver peer address mismatch" after adding a spoke
 `setWormholePeer` is irreversible. If set to the wrong address, you need to deploy a new Transceiver.
 
 ### Rate limit verification fails
-Rate limits are stored on-chain as [TrimmedAmounts](https://github.com/wormhole-foundation/native-token-transfers/blob/main/evm/src/libraries/TrimmedAmount.sol) (8 decimal precision for 18-decimal tokens). The `_untrim` helper decodes these back to full precision. Limits in the JSON are wei strings (e.g., `"100000000000000000000000"` = 100,000 tokens with 18 decimals).
+Rate limits are stored on-chain as TrimmedAmounts (8 decimal precision for 18-decimal tokens). The scripts handle this conversion automatically.
 
 ### Ownership already transferred
-If the NTT Manager or Transceiver ownership has already been transferred to a multisig, the deployer cannot make further changes. Subsequent configuration changes must go through the multisig.
+If NTT contract ownership has been transferred to a multisig, further changes must go through governance action scripts with the appropriate sender profile.

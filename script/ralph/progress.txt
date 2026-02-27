@@ -16,6 +16,8 @@ Started: Fri Feb 27 07:23:07 PM CET 2026
 - NttDeployHelper CREATE nonces: nttManagerProxy = nonce 2, transceiverProxy = nonce 4. Use `vm.computeCreateAddress(helper, nonce)` for remote addresses.
 - Stack-too-deep in run(): use storage vars populated in setUp() (see SetupNTTBridge / ConfigureNTT pattern)
 - WormholeTransceiver.initialize() publishes a Wormhole message requiring `msg.value >= messageFee`. On chains with fee=0 (like Celo), msg.value=0 works.
+- `console2.log` supports max 4 total args (format string + 3 values). Split into multiple calls if more args needed.
+- NTT proxy upgrades: deploy new impl with SAME constructor args (immutables), call `proxy.upgrade(newImpl)` as owner. `_checkImmutables()` validates consistency.
 ---
 
 ## 2026-02-27 - US-001
@@ -154,4 +156,69 @@ Started: Fri Feb 27 07:23:07 PM CET 2026
   - The _deploy() function returns proxy addresses directly since they're needed immediately in the same run() for configuration (unlike DeployNTT where they're read in a separate ConfigureNTT script)
   - Two-phase spoke addition: Phase 1 (deployer on new spoke) can be automated, Phase 2 (governance on existing chains) requires separate governance proposals
   - The IStableTokenSpoke, IOwnable imports come from mento-core (not from the NTT submodule)
+---
+
+## 2026-02-27 - US-009
+- Created `script/actions/wormhole/UpgradeNttManager.s.sol` — governance action to upgrade NttManager implementation
+- Created `script/actions/wormhole/UpgradeWormholeTransceiver.s.sol` — governance action to upgrade WormholeTransceiver implementation
+- Both scripts use `@custom:senders owner` (governance sender) for the upgrade flow
+- Both read `NTT_TOKEN` and `NTT_VERSION` env vars to select config and versioned CREATE3 label
+- Upgrade flow: deploy new implementation via CREATE3 with versioned label (e.g., `NttManagerImpl:USDm:v2`), then call `upgrade()` on the proxy via owner harness
+- The `upgrade()` function (from Implementation.sol) handles: `_upgradeTo()` → `migrate()` (reinitializer) → `_checkImmutables()`
+- New implementations MUST use identical constructor args (immutables) as the original — `_checkImmutables()` validates this during upgrade
+- Files changed: `script/actions/wormhole/UpgradeNttManager.s.sol` (new), `script/actions/wormhole/UpgradeWormholeTransceiver.s.sol` (new)
+- **Learnings for future iterations:**
+  - `console2.log` supports max 4 total args (format string + 3 values) — split logs if more args needed
+  - NTT upgrade via Implementation.sol: `_upgrade()` calls `migrate()` as reinitializer (not `initialize()`), so the deployer immutable check doesn't apply during upgrades
+  - `_checkImmutables()` validates immutable config values (token, mode, chainId, etc.) match between old and new implementations — immutables are in bytecode, not storage
+  - The `upgrade()` function on both ManagerBase and Transceiver is `onlyOwner` — must be called by the contract owner (e.g., MigrationMultisig)
+  - CREATE3 versioned labels: use `tokenName:version` pattern (e.g., `USDm:v2`) as the label for the create3 deployment
+---
+
+## 2026-02-27 - US-010
+- Created `script/actions/wormhole/TransferOwnership.s.sol` — governance action to transfer NTT contract ownership and pauser capability
+- Uses `@custom:senders owner` (governance sender) for the ownership transfer
+- Reads `NTT_TOKEN` and `NEW_OWNER_LABEL` env vars
+- Resolves new owner via `lookupAddressbook(newOwnerLabel)`
+- Transfers NttManager ownership (cascades to all registered transceivers)
+- Transfers NttManager pauser capability separately (does NOT cascade)
+- Transfers WormholeTransceiver pauser capability separately
+- All operations are idempotent: checks current owner/pauser before writing
+- Files changed: `script/actions/wormhole/TransferOwnership.s.sol` (new)
+- **Learnings for future iterations:**
+  - NttManager.transferOwnership() cascades to registered transceivers — only one call needed for ownership
+  - Pauser capability does NOT cascade — must be transferred on each contract individually (NttManager + WormholeTransceiver)
+  - The TransferOwnership pattern is simpler than ConfigureNTT's _setupOwnership since it doesn't need to resolve the owner from NTTConfig — it takes a NEW_OWNER_LABEL env var instead
+  - Existing IPausable interface pattern (pauser(), transferPauserCapability()) is reused across ConfigureNTT and TransferOwnership
+---
+
+## 2026-02-27 - US-011
+- Created `script/actions/wormhole/PauseNTT.s.sol` — governance action to pause/unpause the NTT bridge
+- Uses `@custom:senders owner` because `unpause()` requires owner (pauser can only pause)
+- Reads `NTT_TOKEN` and `PAUSE` (true/false) env vars
+- Resolves NttManager via treb registry lookup of NttDeployHelper, then reading nttManagerProxy() immutable
+- Idempotent: checks `isPaused()` before calling `pause()` or `unpause()`
+- Files changed: `script/actions/wormhole/PauseNTT.s.sol` (new)
+- **Learnings for future iterations:**
+  - `pause()` is `onlyOwnerOrPauser` — either owner or pauser can call it
+  - `unpause()` is `onlyOwner` — only the owner can unpause, NOT the pauser
+  - `isPaused()` returns bool for current pause state
+  - PausableOwnable inherits PausableUpgradeable + OwnableUpgradeable, defined in `lib/mento-stabletoken-ntt/evm/src/libraries/`
+  - The pause/unpause functions are defined in ManagerBase (inherited by NttManager), not directly on NttManager
+---
+
+## 2026-02-27 - US-012
+- Removed old JSON config approach and updated documentation
+- Deleted `script/config/wormhole/USDm.json` (old per-token JSON config)
+- Deleted `script/config/wormhole/GBPm.json` (old per-token JSON config)
+- Deleted `script/config/wormhole/WormholeNTTConfig.sol` (JSON parser library using vm.readFile)
+- Deleted `script/deploy/wormhole/SetupNTTBridge.s.sol` (old monolithic setup script)
+- Removed `{ access = "read", path = "script/config/wormhole"}` from foundry.toml fs_permissions (no longer needed — NTTConfig.sol is a Solidity library, not a JSON file read via vm.readFile)
+- Rewrote `script/deploy/wormhole/README.md` to document the new treb-native approach (DeployNTT, ConfigureNTT, NTTConfig library, and all action scripts)
+- Verified no remaining imports or references to deleted files (only a harmless NatSpec comment in NTTConfig.sol mentioning the old approach)
+- Files changed: `foundry.toml`, `script/config/wormhole/USDm.json` (deleted), `script/config/wormhole/GBPm.json` (deleted), `script/config/wormhole/WormholeNTTConfig.sol` (deleted), `script/deploy/wormhole/SetupNTTBridge.s.sol` (deleted), `script/deploy/wormhole/README.md` (rewritten)
+- **Learnings for future iterations:**
+  - The fs_permissions in foundry.toml are only needed for `vm.readFile()` / `vm.writeFile()` calls — Solidity libraries imported at compile time don't need fs_permissions
+  - Always verify references across the codebase (including .md files and non-Solidity files) before deleting — `tasks/prd-treb-native-wormhole-ntt.md` also referenced the old files but is a task tracker, not source code
+  - The old approach required external CLI deployment + manual JSON editing; the new approach is fully self-contained in Solidity with compile-time type checking
 ---
