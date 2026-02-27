@@ -691,14 +691,6 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         );
     }
 
-    function _base64encode(string memory filePath) internal returns (bytes memory) {
-        string[] memory cmd = new string[](3);
-        cmd[0] = "bash";
-        cmd[1] = "-c";
-        cmd[2] = string.concat("base64 ", filePath, " | tr -d '\\n'");
-        return vm.ffi(cmd);
-    }
-
     function _deployMetadata() internal {
         string memory basePath = string.concat(
             vm.projectRoot(),
@@ -706,12 +698,12 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             cfg.metadataAssetsBasePath
         );
 
-        // Load asset files (base64-encode SVGs at deploy time)
-        bytes memory debtTokenLogo = _base64encode(
-            string.concat(basePath, cfg.debtTokenLogoFile)
+        // Load pre-encoded base64 asset files (run encode-assets.sh after updating SVGs)
+        bytes memory debtTokenLogo = bytes(
+            vm.readFile(string.concat(basePath, cfg.debtTokenLogoFile, ".b64"))
         );
-        bytes memory collateralLogo = _base64encode(
-            string.concat(basePath, cfg.collateralTokenLogoFile)
+        bytes memory collateralLogo = bytes(
+            vm.readFile(string.concat(basePath, cfg.collateralTokenLogoFile, ".b64"))
         );
         bytes memory font = bytes(
             vm.readFile(string.concat(basePath, cfg.fontFile))
