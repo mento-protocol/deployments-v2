@@ -34,7 +34,7 @@ contract ConfigureV3PreStage is
     function setUp() public {
         config = Config.get();
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
-        marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        marketHoursBreaker = _lookupMarketHoursBreaker();
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
         fxFeedIds = config.getFxRateFeedIds();
@@ -74,6 +74,14 @@ contract ConfigureV3PreStage is
         }
 
         postChecks();
+    }
+
+    function _lookupMarketHoursBreaker() internal view returns (address) {
+        bool toggleable = vm.envOr("MARKET_HOURS_BREAKER_TOGGLEABLE", false);
+        if (toggleable) {
+            return lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+        }
+        return lookupOrFail("MarketHoursBreaker:v3.0.0");
     }
 
     function postChecks() internal view {
