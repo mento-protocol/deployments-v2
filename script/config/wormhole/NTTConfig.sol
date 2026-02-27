@@ -42,4 +42,66 @@ library NTTConfig {
 
     // ── Rate limit constants ────────────────────────────────────────────
     uint256 internal constant DEFAULT_RATE_LIMIT = 100_000e18;
+
+    // ── Token config getters ─────────────────────────────────────────────
+
+    /// @notice Returns the full NTT bridge topology for USDm.
+    ///         USDm is burn-mint on BOTH Celo and Monad.
+    function getUSDmConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "USDm";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "MigrationMultisig";
+
+        config.chains = new NTTChainConfig[](2);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "StableTokenV2USD",
+            isBurning: true,
+            outboundLimit: DEFAULT_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "StableTokenSpokeUSD",
+            isBurning: true,
+            outboundLimit: DEFAULT_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: DEFAULT_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: DEFAULT_RATE_LIMIT});
+    }
+
+    /// @notice Returns the full NTT bridge topology for GBPm.
+    ///         GBPm is locking on Celo (hub) and burning on Monad (spoke).
+    function getGBPmConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "GBPm";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "MigrationMultisig";
+
+        config.chains = new NTTChainConfig[](2);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "StableTokenV2GBP",
+            isBurning: false,
+            outboundLimit: DEFAULT_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "StableTokenSpokeGBP",
+            isBurning: true,
+            outboundLimit: DEFAULT_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: DEFAULT_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: DEFAULT_RATE_LIMIT});
+    }
 }
