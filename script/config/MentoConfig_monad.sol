@@ -6,15 +6,15 @@ import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
-/// @dev Here Anvil is a Monad mainnet fork
-contract MentoConfig_anvil is MentoConfig {
+contract MentoConfig_monad is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
-    function _initialize() internal override {
+    function _initialize() internal virtual override {
         _initTokens();
         _initOracles();
-        _initGovernance();
+        _initParams();
+        _initDeployedContracts();
     }
 
     /// ===================================================================
@@ -24,9 +24,9 @@ contract MentoConfig_anvil is MentoConfig {
     /// @dev On testnets we can use the _addMockCollateral to make it deploy mock
     /// collateral tokens.
     function _initTokens() internal {
-        _addStableToken("USD", "USD.m", "Mento Dollar");
-        _addStableToken("EUR", "EUR.m", "Mento Euro");
-        _addStableToken("GBP", "GBP.m", "Mento British Pound");
+        _addStableToken("USD", "USDm", "Mento Dollar");
+        _addStableToken("EUR", "EURm", "Mento Euro");
+        _addStableToken("GBP", "GBPm", "Mento British Pound");
 
         _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603);
         _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a);
@@ -39,7 +39,6 @@ contract MentoConfig_anvil is MentoConfig {
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
     function _initOracles() internal {
-        // TODO: What params do we want to use here?
         _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
         valueBreakerId = _addBreaker({
             breakerType: BreakerType.Value,
@@ -57,7 +56,7 @@ contract MentoConfig_anvil is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "USDC/USD",
             cooldown: 1,
-            threshold: 0.001 * 1e24,
+            threshold: 0.0015 * 1e24,
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
@@ -73,7 +72,7 @@ contract MentoConfig_anvil is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "AUSD/USD",
             cooldown: 1,
-            threshold: 0.001 * 1e24,
+            threshold: 0.0015 * 1e24,
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
@@ -85,19 +84,34 @@ contract MentoConfig_anvil is MentoConfig {
         });
 
         _configureDefaultFxRateFeed({
-            currency: "GBP",
+            rateFeed: "GBP/USD",
             source: 0x1ffC8B75a16FFfbd7879F042B580F7607Dcf5C30
         });
+        _configureDefaultFxRateFeed({
+            rateFeed: "EUR/USD",
+            source: 0x00D7E359c8CE46168eFDD4D65b708fFb16c4b99a
+        });
+    }
+
+    /// ===================================================================
+    /// PARAMS
+    /// ===================================================================
+    /// @notice Configure protocol parameters
+    /// @dev On testnets we can use _addMockAggregator to define chainlink
+    /// aggregators.
+    function _initParams() internal {
+        _setDefaultFPMMParams(30, 5, 50, 500, 500);
+        _setRedemptionShortfallTolerance(10e12);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
     function _configureDefaultFxRateFeed(
-        string memory currency,
+        string memory rateFeed,
         address source
     ) internal {
-        string memory rateFeed = string.concat(currency, "/USD");
         _addRateFeed(rateFeed);
+        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
@@ -114,21 +128,9 @@ contract MentoConfig_anvil is MentoConfig {
         });
     }
 
-    /// ===================================================================
-    /// Governance
-    /// ===================================================================
-    /// @notice Configure the reserve and exchange pools in the system
-    function _initGovernance() internal {
-        // TODO: What params do we want here?
-        _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
-
-        _governanceConfig = GovernanceConfig({
-            timelockDelay: 2 days,
-            votingDelay: 0,
-            votingPeriod: 120_960, // XXX: Set based on blocktime
-            proposalThreshold: 10000e18,
-            quorum: 2,
-            watchdog: address(1) // XXX: Configure
-        });
+    function _initDeployedContracts() internal {
+        _addDeployedContract("SortedOracles", lookupProxy("SortedOracles"));
+        _addDeployedContract("BreakerBox", lookup("BreakerBox:v2.6.5"));
+        _addDeployedContract("ProxyAdmin", lookup("ProxyAdmin"));
     }
 }

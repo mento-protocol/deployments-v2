@@ -16,3 +16,6 @@
 [submodule "lib/mento-router"]
 	path = lib/mento-router
 	url = https://github.com/mento-protocol/mento-router
+[submodule "lib/bold"]
+	path = lib/bold
+	url = https://github.com/mento-protocol/bold

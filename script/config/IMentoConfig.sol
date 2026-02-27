@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {ITradingLimits} from "lib/mento-core/contracts/interfaces/ITradingLimits.sol";
 import {IBiPoolManager, IPricingModule, FixidityLib} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
+import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 
 enum BreakerType {
     Value,
@@ -37,6 +38,7 @@ interface IMentoConfig {
     struct ExchangeConfig {
         IBiPoolManager.PoolExchange pool;
         ExchangeTrandingLimitsConfig tradingLimits;
+        bool createVirtual;
     }
 
     struct ExchangeTrandingLimitsConfig {
@@ -94,9 +96,13 @@ interface IMentoConfig {
 
     function getRateFeedIds() external view returns (address[] memory);
 
+    function getFxRateFeedIds() external view returns (address[] memory);
+
     function getRateFeeds() external view returns (RateFeed[] memory);
 
-    function getRateFeedDependencies(address) external view returns (address[] memory);
+    function getRateFeedDependencies(
+        address
+    ) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
 
@@ -109,7 +115,6 @@ interface IMentoConfig {
 
     function getMockAggregatorConfigs()
         external
-        view
         returns (MockAggregatorConfig[] memory);
 
     function getOracleConfig() external view returns (OracleConfig memory);
@@ -127,6 +132,25 @@ interface IMentoConfig {
         returns (BreakerConfig[] memory configs);
 
     function getReserveConfig() external view returns (ReserveConfig memory);
+
+    function getDefaultFPMMParams()
+        external
+        view
+        returns (IFPMM.FPMMParams memory);
+
+    function getFPMMParams(
+        address token0,
+        address token1
+    ) external view returns (IFPMM.FPMMParams memory);
+
+    function getCDPRedemptionShortfallTolerance()
+        external
+        view
+        returns (uint256);
+
+    function getDeployedContract(
+        string memory name
+    ) external view returns (address);
 
     function mockAggregatorReporter() external view returns (address);
 
@@ -152,6 +176,12 @@ interface IMentoConfig {
         address asset0,
         address asset1
     ) external view returns (bytes32);
+
+    function getExchangeConfig(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) external view returns (ExchangeConfig memory config, bool found);
 
     function getAddress(string memory asset) external returns (address);
 }

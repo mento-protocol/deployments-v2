@@ -1,4 +1,6 @@
 src/=src/
+lib/mento-core/lib/bold/:openzeppelin-contracts/=lib/mento-core/lib/bold/contracts/lib/openzeppelin-contracts/
+lib/bold/:openzeppelin-contracts/=lib/bold/contracts/lib/openzeppelin-contracts/
 openzeppelin-contracts/=lib/mento-core/lib/openzeppelin-contracts-next/
 safe-smart-account/=lib/treb-sol/lib/safe-utils/lib/safe-smart-account/contracts/
 mento-core/=lib/mento-core/contracts/

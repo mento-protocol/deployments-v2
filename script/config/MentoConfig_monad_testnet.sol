@@ -15,6 +15,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
         _initOracles();
         _initSwap();
         _initGovernance();
+        _initDeployedContracts();
     }
 
     /// ===================================================================
@@ -199,6 +200,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
     ) internal {
         string memory rateFeed = string.concat(currency, "/USD");
         _addRateFeed(rateFeed);
+        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
@@ -251,7 +253,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -272,7 +275,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addFxExchange({
@@ -367,7 +371,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
             rateFeed: string.concat(currency, "/USD"),
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
-            tradingLimits: tradingLimits
+            tradingLimits: tradingLimits,
+            createVirtual: false
         });
     }
 
@@ -430,5 +435,11 @@ contract MentoConfig_monad_testnet is MentoConfig {
             quorum: 2,
             watchdog: address(1) // XXX: Configure
         });
+    }
+
+    function _initDeployedContracts() internal {
+        _addDeployedContract("SortedOracles", lookupProxy("SortedOracles"));
+        _addDeployedContract("BreakerBox", lookup("BreakerBox:v2.6.5"));
+        _addDeployedContract("ProxyAdmin", lookup("ProxyAdmin"));
     }
 }

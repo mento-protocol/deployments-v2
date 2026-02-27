@@ -17,7 +17,6 @@ string constant OZTUP_LOOKUP_PREFIX = "TransparentUpgradeableProxy:";
 string constant CELO_ARTIFACT = "src/Proxy.sol:Proxy";
 string constant OZTUP_ARTIFACT = "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy";
 
-
 interface ILegacyProxy {
     function _setImplementation(address implementation) external;
 
@@ -67,7 +66,43 @@ contract ProxyHelper is TrebScript {
     function lookupProxy(
         string memory contractName
     ) internal view returns (address proxy) {
-        proxy = lookupProxy(contractName, defaultProxyType);
+        address celo = lookup(
+            string.concat(CELO_LOOKUP_PREFIX, contractName)
+        );
+        address oztup = lookup(
+            string.concat(OZTUP_LOOKUP_PREFIX, contractName)
+        );
+        require(
+            celo == address(0) || oztup == address(0),
+            string.concat(
+                contractName,
+                " found as both Celo and OZTUP proxy, be explicit"
+            )
+        );
+        proxy = celo != address(0) ? celo : oztup;
+    }
+
+    function lookupProxy(
+        string memory contractName,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        proxy = lookupProxy(contractName, defaultProxyType, namespace);
+    }
+
+    function lookupProxy(
+        string memory contractName,
+        ProxyType _proxyType,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        string memory identifier;
+        if (_proxyType == ProxyType.CELO) {
+            identifier = string.concat(CELO_LOOKUP_PREFIX, contractName);
+        } else if (_proxyType == ProxyType.OZTUP) {
+            identifier = string.concat(OZTUP_LOOKUP_PREFIX, contractName);
+        } else {
+            revert UnsupportedProxyType(_proxyType);
+        }
+        proxy = lookup(identifier, namespace);
     }
 
     function lookupProxy(
@@ -86,9 +121,36 @@ contract ProxyHelper is TrebScript {
     }
 
     function lookupProxyOrFail(
+        string memory contractName,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        proxy = lookupProxyOrFail(contractName, defaultProxyType, namespace);
+    }
+
+    function lookupProxyOrFail(
         string memory contractName
     ) internal view returns (address proxy) {
-        proxy = lookupProxyOrFail(contractName, defaultProxyType);
+        proxy = lookupProxy(contractName);
+        require(
+            proxy != address(0),
+            string.concat(contractName, " proxy not deployed")
+        );
+    }
+
+    function lookupProxyOrFail(
+        string memory contractName,
+        ProxyType _proxyType,
+        string memory namespace
+    ) internal view returns (address proxy) {
+        string memory identifier;
+        if (_proxyType == ProxyType.CELO) {
+            identifier = string.concat(CELO_LOOKUP_PREFIX, contractName);
+        } else if (_proxyType == ProxyType.OZTUP) {
+            identifier = string.concat(OZTUP_LOOKUP_PREFIX, contractName);
+        } else {
+            revert UnsupportedProxyType(_proxyType);
+        }
+        proxy = lookupOrFail(identifier, namespace);
     }
 
     function lookupProxyOrFail(
@@ -110,6 +172,14 @@ contract ProxyHelper is TrebScript {
         string memory identifier
     ) internal view returns (address addy) {
         addy = lookup(identifier);
+        require(addy != address(0), string.concat(identifier, " not deployed"));
+    }
+
+    function lookupOrFail(
+        string memory identifier,
+        string memory namespace
+    ) internal view returns (address addy) {
+        addy = lookup(identifier, namespace);
         require(addy != address(0), string.concat(identifier, " not deployed"));
     }
 
@@ -209,7 +279,7 @@ contract ProxyHelper is TrebScript {
         address implementation,
         bytes memory initData
     ) internal returns (address proxy) {
-       proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
+        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label).deploy(
             abi.encode(implementation, deployer.account, initData)
         );
     }
