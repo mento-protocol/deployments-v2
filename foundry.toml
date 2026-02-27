@@ -3,6 +3,7 @@ src = "src"
 out = "out"
 libs = ["lib"]
 optimizer = true
+ffi = true
 additional_compiler_profiles = [
     { name = "no-opt", optimizer_runs = 0 },
 ]
@@ -11,11 +12,11 @@ compilation_restrictions = [
 ]
 fs_permissions = [
     { access = "read-write", path = "cache"},
+    { access = "read-write", path = "out/"},
     { access = "read", path = ".treb/registry.json"},
     { access = "read", path = ".treb/addressbook.json"},
-    { access = "read", path = "script/networks" },
-    { access = "read", path = "./mgps/"},
-    { access = "read", path = "script/config/"}
+    { access = "read", path = "script/config/"},
+    { access = "read", path = "mgps/"}
 ]
 
 [lint]

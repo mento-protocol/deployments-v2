@@ -5,7 +5,6 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
@@ -14,7 +13,6 @@ import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy
 
 contract DeployCDPLiquidityStrategy is
     TrebScript,
-    AddressbookHelper,
     ProxyHelper,
     PostChecksHelper
 {
@@ -31,7 +29,7 @@ contract DeployCDPLiquidityStrategy is
     string constant label = "v3.0.0";
 
     function setUp() public {
-        multisig = lookupAddressbook("MigrationMultisig");
+        multisig = lookup("MigrationMultisig");
         config = Config.get();
     }
 

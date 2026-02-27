@@ -16,7 +16,8 @@ contract LiquityConfig_anvil_GBPm is ILiquityConfig {
     {
         return
             ILiquityConfig.LiquityInstanceConfig({
-                instanceSalt: "v3.0.0-liquity-GBPm",
+                proxyLabel: "GBPm",
+                singletonLabel: "v3.0.0-GBPm",
                 // ── Registry lookup keys ────────────────────────────────
                 debtTokenLabel: "StableTokenV3:GBPm",
                 collateralTokenLabel: "StableTokenV3:USDm",
@@ -56,9 +57,9 @@ contract LiquityConfig_anvil_GBPm is ILiquityConfig {
                 minBoldInSP: 1000000000000000000,
                 minBoldAfterRebalance: 1000000000000000000000,
                 // ── NFT Metadata assets ───────────────────────────────
-                metadataAssetsBasePath: "script/config/liquity/assets/anvil-GBPm/",
-                debtTokenLogoFile: "gbpm_logo.txt",
-                collateralTokenLogoFile: "usdm_logo.txt",
+                metadataAssetsBasePath: "script/config/liquity/assets/",
+                debtTokenLogoFile: "GBPm.svg",
+                collateralTokenLogoFile: "USDm.svg",
                 collateralTokenSymbol: "USDm",
                 fontFile: "geist.txt"
             });

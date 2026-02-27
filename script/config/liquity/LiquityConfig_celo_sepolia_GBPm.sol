@@ -15,13 +15,14 @@ contract LiquityConfig_celo_sepolia_GBPm is ILiquityConfig {
     {
         return
             ILiquityConfig.LiquityInstanceConfig({
-                instanceSalt: "v3.0.0-liquity-GBPm",
+                proxyLabel: "GBPm",
+                singletonLabel: "v3.0.0-GBPm",
                 // ── Registry lookup keys ────────────────────────────────
                 // TODO: change to labels used in prestage Celo script
-                debtTokenLabel: "StableTokenV3:GBPm",
-                collateralTokenLabel: "StableTokenV3:USDm",
+                debtTokenLabel: "cGBP",
+                collateralTokenLabel: "cUSD",
                 liquidityStrategyLabel: "CDPLiquidityStrategy",
-                gasTokenLabel: "StableTokenV3:USDm",
+                gasTokenLabel: "cUSD",
                 oracleAdapterLabel: "OracleAdapter",
                 // ── Addresses ──────────────────────────────────────────
                 rateFeedID: 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88, // GBP/USD
@@ -56,11 +57,11 @@ contract LiquityConfig_celo_sepolia_GBPm is ILiquityConfig {
                 minBoldInSP: 1e18, // 1 GBPm
                 minBoldAfterRebalance: 5_000e18, // 5_000 GBPm
                 // ── NFT Metadata assets ───────────────────────────────
-                metadataAssetsBasePath: "script/assets/anvil-GBPm/", // TODO: change to celo
-                debtTokenLogoFile: "gbpm_logo.txt", // TODO: change to celo
-                collateralTokenLogoFile: "usdm_logo.txt", // TODO: change to celo
+                metadataAssetsBasePath: "script/config/liquity/assets/",
+                debtTokenLogoFile: "GBPm.svg",
+                collateralTokenLogoFile: "USDm.svg",
                 collateralTokenSymbol: "USDm",
-                fontFile: "geist.txt" // TODO: change to celo
+                fontFile: "geist.txt"
             });
     }
 }

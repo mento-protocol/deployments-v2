@@ -17,3 +17,4 @@ docs/
 .claude/
 .treb/config.local.json
 node_modules
+.treb/priv/

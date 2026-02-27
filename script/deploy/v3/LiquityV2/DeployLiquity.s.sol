@@ -47,9 +47,7 @@ import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {SSTORE2DataPointer} from "script/helpers/SSTORE2DataPointer.sol";
 import {ILiquityConfig} from "script/config/ILiquityConfig.sol";
 import {LiquityConfigLib} from "script/config/LiquityConfig.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
-
-contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
+contract DeployLiquityV2 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -106,11 +104,11 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         deployer = sender("deployer");
         cfg = LiquityConfigLib.get(vm.envString("token"));
 
-        oracleAdapter = lookup(cfg.oracleAdapterLabel);
-        debtToken = lookup(cfg.debtTokenLabel);
-        collateralToken = lookup(cfg.collateralTokenLabel);
-        cdpLiquidityStrategy = lookup(cfg.liquidityStrategyLabel);
-        gasToken = lookup(cfg.gasTokenLabel);
+        oracleAdapter = lookupProxyOrFail(cfg.oracleAdapterLabel);
+        debtToken = lookupProxyOrFail(cfg.debtTokenLabel);
+        collateralToken = lookupProxyOrFail(cfg.collateralTokenLabel);
+        cdpLiquidityStrategy = lookupProxyOrFail(cfg.liquidityStrategyLabel);
+        gasToken = lookupProxyOrFail(cfg.gasTokenLabel);
 
         deployAndConnectContracts();
     }
@@ -120,21 +118,21 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.addressesRegistry = deployer
             .create3("AddressesRegistry.sol:AddressesRegistry")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployer.account));
 
         // Pre-compute all addresses before any contract that depends on them
         precomputedAddresses.troveManager = _predict(
             "TroveManager.sol:TroveManager",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
 
         _deployCollateralRegistry();
 
         deployedContracts.hintHelpers = deployer
             .create3("HintHelpers.sol:HintHelpers")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     ICollateralRegistry(deployedContracts.collateralRegistry),
@@ -144,7 +142,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.multiTroveGetter = deployer
             .create3("MultiTroveGetter.sol:MultiTroveGetter")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     ICollateralRegistry(deployedContracts.collateralRegistry)
@@ -154,41 +152,41 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         precomputedAddresses.borrowerOperations = _predict(
             "BorrowerOperations.sol:BorrowerOperations",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
         precomputedAddresses.troveNFT = _predict(
             "TroveNFT.sol:TroveNFT",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
         precomputedAddresses.stabilityPoolProxy = predictProxy(
             deployer,
-            string.concat("StabilityPoolProxy:", cfg.instanceSalt)
+            string.concat("StabilityPool:", cfg.proxyLabel)
         );
         precomputedAddresses.activePool = _predict(
             "ActivePool.sol:ActivePool",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
         precomputedAddresses.defaultPool = _predict(
             "DefaultPool.sol:DefaultPool",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
         precomputedAddresses.gasPool = _predict(
             "GasPool.sol:GasPool",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
         precomputedAddresses.collSurplusPool = _predict(
             "CollSurplusPool.sol:CollSurplusPool",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
         precomputedAddresses.sortedTroves = _predict(
             "SortedTroves.sol:SortedTroves",
             deployer,
-            cfg.instanceSalt
+            cfg.singletonLabel
         );
 
         _deployFXPriceFeed(precomputedAddresses.borrowerOperations);
@@ -200,7 +198,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.borrowerOperations = deployer
             .create3("BorrowerOperations.sol:BorrowerOperations")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     IAddressesRegistry(deployedContracts.addressesRegistry),
@@ -210,7 +208,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.troveManager = deployer
             .create3("TroveManager.sol:TroveManager")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     IAddressesRegistry(deployedContracts.addressesRegistry),
@@ -220,7 +218,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.troveNFT = deployer
             .create3("TroveNFT.sol:TroveNFT")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     IAddressesRegistry(deployedContracts.addressesRegistry)
@@ -230,7 +228,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         upgradeableContractsImplementations
             .stabilityPoolImplementation = deployer
             .create3("StabilityPool.sol:StabilityPool")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     true,
@@ -240,7 +238,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.stabilityPoolProxy = deployOztupProxy(
             deployer,
-            string.concat("StabilityPoolProxy:", cfg.instanceSalt),
+            string.concat("StabilityPool:", cfg.proxyLabel),
             upgradeableContractsImplementations.stabilityPoolImplementation,
             abi.encodeWithSelector(
                 StabilityPool.initialize.selector,
@@ -250,7 +248,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.activePool = deployer
             .create3("ActivePool.sol:ActivePool")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     deployedContracts.addressesRegistry,
@@ -260,22 +258,22 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.defaultPool = deployer
             .create3("DefaultPool.sol:DefaultPool")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
         deployedContracts.gasPool = deployer
             .create3("GasPool.sol:GasPool")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
         deployedContracts.collSurplusPool = deployer
             .create3("CollSurplusPool.sol:CollSurplusPool")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
         deployedContracts.sortedTroves = deployer
             .create3("SortedTroves.sol:SortedTroves")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
         assert(
@@ -403,7 +401,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         upgradeableContractsImplementations
             .systemParamsImplementation = deployer
             .create3("SystemParams.sol:SystemParams")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     true, // disableInitializers for implementation
@@ -419,7 +417,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.systemParamsProxy = deployOztupProxy(
             deployer,
-            string.concat("SystemParamsProxy:", cfg.instanceSalt),
+            string.concat("SystemParamsProxy:", cfg.proxyLabel),
             upgradeableContractsImplementations.systemParamsImplementation,
             ""
         );
@@ -428,12 +426,12 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
     function _deployFXPriceFeed(address borrowerOperationsAddress) internal {
         upgradeableContractsImplementations.fxPriceFeedImplementation = deployer
             .create3("FXPriceFeed.sol:FXPriceFeed")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(true));
 
         deployedContracts.priceFeedProxy = deployOztupProxy(
             deployer,
-            string.concat("FXPriceFeedProxy:", cfg.instanceSalt),
+            string.concat("FXPriceFeedProxy:", cfg.proxyLabel),
             upgradeableContractsImplementations.fxPriceFeedImplementation,
             abi.encodeWithSelector(
                 FXPriceFeed.initialize.selector,
@@ -457,7 +455,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         deployedContracts.collateralRegistry = deployer
             .create3("CollateralRegistry.sol:CollateralRegistry")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     IBoldToken(address(debtToken)),
@@ -693,6 +691,14 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         );
     }
 
+    function _base64encode(string memory filePath) internal returns (bytes memory) {
+        string[] memory cmd = new string[](3);
+        cmd[0] = "bash";
+        cmd[1] = "-c";
+        cmd[2] = string.concat("base64 ", filePath, " | tr -d '\\n'");
+        return vm.ffi(cmd);
+    }
+
     function _deployMetadata() internal {
         string memory basePath = string.concat(
             vm.projectRoot(),
@@ -700,12 +706,12 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
             cfg.metadataAssetsBasePath
         );
 
-        // Load asset files
-        bytes memory debtTokenLogo = bytes(
-            vm.readFile(string.concat(basePath, cfg.debtTokenLogoFile))
+        // Load asset files (base64-encode SVGs at deploy time)
+        bytes memory debtTokenLogo = _base64encode(
+            string.concat(basePath, cfg.debtTokenLogoFile)
         );
-        bytes memory collateralLogo = bytes(
-            vm.readFile(string.concat(basePath, cfg.collateralTokenLogoFile))
+        bytes memory collateralLogo = _base64encode(
+            string.concat(basePath, cfg.collateralTokenLogoFile)
         );
         bytes memory font = bytes(
             vm.readFile(string.concat(basePath, cfg.fontFile))
@@ -726,7 +732,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         // Deploy SSTORE2DataPointer which calls SSTORE2.write in its constructor
         address dataPointerContract = deployer
             .create3("SSTORE2DataPointer.sol:SSTORE2DataPointer")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(allData));
         address pointer = SSTORE2DataPointer(dataPointerContract).pointer();
 
@@ -744,13 +750,13 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         address fixedAssetReader = deployer
             .create3("FixedAssets.sol:FixedAssetReader")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(pointer, sigs, metadataAssets));
 
         // Deploy MetadataNFT via create3
         deployedContracts.metadataNFT = deployer
             .create3("MetadataNFT.sol:MetadataNFT")
-            .setLabel(cfg.instanceSalt)
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(FixedAssetReader(fixedAssetReader)));
     }
 
@@ -762,7 +768,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
         return _deployer.create3(artifact).setLabel(label).predict();
     }
 
-    function _previewNFT() internal view {
+    function _previewNFT() internal {
         IMetadataNFT.TroveData memory troveData;
         troveData._tokenId = 1;
         troveData._owner = address(0xBEEF);
@@ -779,8 +785,16 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper, AddressbookHelper {
 
         // Strip "data:application/json;base64," prefix (29 chars) and decode
         bytes memory jsonBytes = Base64.decode(_substring(dataURI, 29));
-        console2.log("=== NFT Metadata (decoded JSON) ===");
-        console2.log(string(jsonBytes));
+        string memory json = string(jsonBytes);
+
+        // Extract SVG image from metadata and write to out/
+        string memory imageDataURI = abi.decode(vm.parseJson(json, ".image"), (string));
+        // Strip "data:image/svg+xml;base64," prefix (26 chars) and decode
+        bytes memory svgBytes = Base64.decode(_substring(imageDataURI, 26));
+
+        string memory svgPath = string.concat("out/nft-preview-", cfg.proxyLabel, ".svg");
+        vm.writeFile(svgPath, string(svgBytes));
+        console2.log("=== NFT preview SVG written to: %s ===", svgPath);
     }
 
     function _substring(

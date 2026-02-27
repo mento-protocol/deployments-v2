@@ -4,10 +4,10 @@ pragma solidity ^0.8.0;
 interface ILiquityConfig {
     struct LiquityInstanceConfig {
         // ── Instance identity ────────────────────────────────────────────
-        /// @dev Unique salt used for all instance-specific CREATE3 deployments
-        ///      (BorrowerOperations, TroveManager, StabilityPool proxy, etc.)
-        ///      e.g. "v3.0.0-liquity-GBPm-USDm"
-        string instanceSalt;
+        /// @dev Label used for proxy deployments, e.g. "GBPm"
+        string proxyLabel;
+        /// @dev Label used for singleton CREATE3 deployments, e.g. "v3.0.0-GBPm"
+        string singletonLabel;
         // ── Registry lookup keys ─────────────────────────────────────────
         string debtTokenLabel; // e.g. "StableTokenV3:GBPm"
         string collateralTokenLabel; // e.g. "StableTokenV3:USDm"
