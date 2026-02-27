@@ -38,6 +38,7 @@ interface IMentoConfig {
     struct ExchangeConfig {
         IBiPoolManager.PoolExchange pool;
         ExchangeTrandingLimitsConfig tradingLimits;
+        bool createVirtual;
     }
 
     struct ExchangeTrandingLimitsConfig {
@@ -200,6 +201,12 @@ interface IMentoConfig {
         address asset0,
         address asset1
     ) external view returns (bytes32);
+
+    function getExchangeConfig(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) external view returns (ExchangeConfig memory config, bool found);
 
     function getAddress(string memory asset) external returns (address);
 }

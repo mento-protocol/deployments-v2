@@ -359,7 +359,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -380,7 +381,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -401,7 +403,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -422,7 +425,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -450,7 +454,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                     limitGlobal: 0,
                     flags: 1 | 2
                 })
-            })
+            }),
+            createVirtual: false
         });
 
         _addFxExchange({currency: "EUR", spread: 0.005 * 1e24, tradingLimits: _tier1FxTradingLimits(0.86 * 1e3)});
@@ -471,9 +476,12 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
     /// @notice Helper to configure an FX exchange (USD/XXX)
     /// these exchanges have simmilar settings.
-    function _addFxExchange(string memory currency, uint256 spread, ExchangeTrandingLimitsConfig memory tradingLimits)
-        internal
-    {
+    function _addFxExchange(
+        string memory currency,
+        uint256 spread,
+        ExchangeTrandingLimitsConfig memory tradingLimits,
+        bool createVirtual
+    ) internal {
         _addExchange({
             asset0: _symbolForCurrency["USD"],
             asset1: _symbolForCurrency[currency],
@@ -482,7 +490,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             rateFeed: string.concat(currency, "USD"),
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
-            tradingLimits: tradingLimits
+            tradingLimits: tradingLimits,
+            createVirtual: createVirtual
         });
     }
 

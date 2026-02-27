@@ -244,6 +244,28 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _redemptionShortfallTolerance;
     }
 
+    function getExchangeConfig(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) public view returns (ExchangeConfig memory config, bool found) {
+        for (uint i = 0; i < _exchanges.length; i++) {
+            ExchangeConfig storage ex = _exchanges[i];
+            bool assetsMatch = (ex.pool.asset0 == asset0 &&
+                ex.pool.asset1 == asset1) ||
+                (ex.pool.asset0 == asset1 && ex.pool.asset1 == asset0);
+            if (
+                assetsMatch &&
+                address(ex.pool.pricingModule) == pricingModule
+            ) {
+                return (
+                    abi.decode(abi.encode(ex), (ExchangeConfig)),
+                    true
+                );
+            }
+        }
+    }
+
     // ========== Helper Functions ==========
 
     function emptyTradingLimits()
@@ -553,7 +575,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory rateFeed,
         uint256 resetFrequency,
         uint256 stablePoolResetSize,
-        ExchangeTrandingLimitsConfig memory tradingLimits
+        ExchangeTrandingLimitsConfig memory tradingLimits,
+        bool createVirtual
     ) internal {
         require(
             _isStableToken[asset0],
@@ -590,6 +613,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             );
             return;
         }
+        IBiPoolManager.PoolConfig memory poolConfig = IBiPoolManager.PoolConfig({
+            spread: FixidityLib.wrap(spread),
+            referenceRateFeedID: getRateFeedIdFromString(rateFeed),
+            referenceRateResetFrequency: resetFrequency,
+            minimumReports: 1,
+            stablePoolResetSize: stablePoolResetSize
+        });
         _exchanges.push(
             ExchangeConfig({
                 pool: IBiPoolManager.PoolExchange({
@@ -599,15 +629,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                     bucket0: 0,
                     bucket1: 0,
                     lastBucketUpdate: 0,
-                    config: IBiPoolManager.PoolConfig({
-                        spread: FixidityLib.wrap(spread),
-                        referenceRateFeedID: getRateFeedIdFromString(rateFeed),
-                        referenceRateResetFrequency: resetFrequency,
-                        minimumReports: 1,
-                        stablePoolResetSize: stablePoolResetSize
-                    })
+                    config: poolConfig
                 }),
-                tradingLimits: tradingLimits
+                tradingLimits: tradingLimits,
+                createVirtual: createVirtual
             })
         );
     }
@@ -718,6 +743,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         if (_collateral[symbol] != address(0)) {
             return _collateral[symbol];
         } else {
+            address proxy = lookupProxy(symbol);
+            if (proxy != address(0)) {
+                return proxy;
+            }
             return predictProxy(sender("deployer"), symbol);
         }
     }

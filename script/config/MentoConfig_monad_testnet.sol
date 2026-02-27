@@ -253,7 +253,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addExchange({
@@ -274,7 +275,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
                     flags: 1 | 2
                 }),
                 asset1: emptyTradingLimits()
-            })
+            }),
+            createVirtual: false
         });
 
         _addFxExchange({
@@ -369,7 +371,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
             rateFeed: string.concat(currency, "/USD"),
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
-            tradingLimits: tradingLimits
+            tradingLimits: tradingLimits,
+            createVirtual: false
         });
     }
 
