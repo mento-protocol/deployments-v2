@@ -445,13 +445,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > swapIn (token0):", swapAmountIn);
         console.log("  > swapOut (token1):", amountOut);
         console.log("  > token1 received:", balanceAfter - balanceBefore);
-
-        // // Now try to trigger a rebalance through the configured RLS
-        // console.log("  ===== Rebalance Verification =====");
-        // console.log("  > useReserveLiquidityStrategy:", c.useReserveLiquidityStrategy);
-        // if (c.useReserveLiquidityStrategy) {
-        //     _verifyRebalance(fpmmProxy, c);
-        // }
     }
 
     function _mintTokenForSwap(address token, address to, uint256 amount) internal {
