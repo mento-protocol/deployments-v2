@@ -54,14 +54,19 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         IFPMMFactory factoryView,
         IMentoConfig.FPMMConfig memory c
     ) internal {
-        address fpmmProxy = factoryView.getPool(c.token0, c.token1);
-        address owner = deployer.account;
+        address fpmmProxy = factory.getPool(c.token0, c.token1);
 
-        if(fpmmProxy == address(0)){
-            fpmmProxy = _createFPMM(deployer, owner, factory, factoryView, c);
-        } else {
-            console.log("  > FPMM pool already exists");
+        if(fpmmProxy != address(0)){
+            string memory token0Symbol = IERC20Metadata(c.token0).symbol();
+            string memory token1Symbol = IERC20Metadata(c.token1).symbol();
+            console.log("  > fpmm already exists for (%s, %s), fpmm", token0Symbol, token1Symbol);
+
+            return;
+
         }
+
+        address owner = deployer.account;
+        fpmmProxy = _createFPMM(deployer, owner, factory, factoryView, c);
 
         if (c.useReserveLiquidityStrategy) {
             _setupReserveLiquidityStrategy(
