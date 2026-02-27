@@ -18559,6 +18559,38 @@
     "createdAt": "2026-02-27T11:04:01.355601+01:00",
     "updatedAt": "2026-02-27T11:04:01.367842+01:00"
   },
+  "testnet-v2-rc5/11142220/MarketHoursBreakerToggleable:v3.0.0": {
+    "id": "testnet-v2-rc5/11142220/MarketHoursBreakerToggleable:v3.0.0",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "MarketHoursBreakerToggleable",
+    "label": "v3.0.0",
+    "address": "0x4c67f682195d1627Ed76eD69311930c7fB069684",
+    "type": "SINGLETON",
+    "transactionId": "tx-0xb691ed7c6256820e531dab95370f276ea6f442112e71ff28fb8115bab3d28778",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700897d52204d41cb68c16f7d",
+      "initCodeHash": "0xaf2eb24a0c450aa2e296ed69ecac4085e9b89e4c7eb54f25de887b6fea85a84a",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "testnet-v2-rc5/MarketHoursBreakerToggleable:v3.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MarketHoursBreakerToggleable.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x8d387e936e59e8d2846b354bfe3383d368090bc6415b6b34f1d41fde4e9a3ecd",
+      "scriptPath": "script/actions/SwitchMarketHoursBreaker.s.sol",
+      "gitCommit": "306aa0e8b1c5389c80230621d3543d4df0e5b614"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-02-27T23:16:00.143154+01:00",
+    "updatedAt": "2026-02-27T23:16:00.167723+01:00"
+  },
   "testnet-v2-rc5/11142220/MedianDeltaBreaker:v2.6.5": {
     "id": "testnet-v2-rc5/11142220/MedianDeltaBreaker:v2.6.5",
     "namespace": "testnet-v2-rc5",
