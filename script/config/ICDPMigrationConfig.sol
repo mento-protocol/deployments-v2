@@ -3,9 +3,6 @@ pragma solidity ^0.8.0;
 
 interface ICDPMigrationConfig {
     struct CDPMigrationInstanceConfig {
-        // ── Registry lookup keys ─────────────────────────────────────────
-        string addressesRegistryLabel;
-        string fpmmLabel;
         // ── ReserveTroveFactory ──────────────────────────────────────────
         address reserveTroveManagerAddress;
         uint256 collateralizationRatio; // 18 decimals, e.g. 1.5e18 = 150%

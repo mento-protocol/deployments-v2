@@ -19,6 +19,7 @@ import {ITroveManager} from "lib/bold/contracts/src/Interfaces/ITroveManager.sol
 import {LatestTroveData} from "lib/bold/contracts/src/Types/LatestTroveData.sol";
 import {IBiPoolManager} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
 import {IExchangeProvider} from "lib/mento-core/contracts/interfaces/IExchangeProvider.sol";
+import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 
 import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
@@ -38,14 +39,18 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     address cdpLiquidityStrategy;
     uint256 troveId;
 
+    /// @custom:env {string} token
     /// @custom:senders deployer
     function run() public broadcast {
         cfg = CDPMigrationConfigLib.get();
         deployer = sender("deployer");
 
+        registry = IAddressesRegistry(lookupOrFail(string.concat("AddressesRegistry:v3.0.0-", vm.envString("token"))));
         // 1. Setup — look up core addresses
-        registry = IAddressesRegistry(lookupOrFail(cfg.addressesRegistryLabel));
-        fpmm = lookupProxyOrFail(cfg.fpmmLabel);
+        address fpmmFactoryAddy = lookupProxyOrFail("FPMMFactory");
+        fpmm = IFPMMFactory(fpmmFactoryAddy).getPool(address(registry.boldToken()), address(registry.collToken()));
+        require(fpmm != address(0), "FPMM not found");
+
         debtToken = address(registry.boldToken());
         collateralToken = address(registry.collToken());
         cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
@@ -170,7 +175,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _checkV2ExchangeDestroyed() internal view {
-        address biPoolManagerAddy = lookupOrFail("BiPoolManager");
+        address biPoolManagerAddy = lookupOrFail("Proxy:BiPoolManager");
         IBiPoolManager biPoolManagerRead = IBiPoolManager(biPoolManagerAddy);
 
         IExchangeProvider.Exchange[] memory exchanges = biPoolManagerRead.getExchanges();
