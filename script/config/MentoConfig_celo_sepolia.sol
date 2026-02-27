@@ -63,7 +63,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdBelow: 3333
             }),
             ReserveLiquidityStrategyPoolConfig( // TODO: add RLS params not in romans config yet
-                lookup("ReserveLiquidityStrategy"),
+                lookupProxyOrFail("ReserveLiquidityStrategy"),
                 _lookupTokenAddress("cGBP"),
                 300,
                 lookupOrFail("ProtocolFeeRecipient"),
@@ -88,7 +88,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdBelow: 3333
             }), 
             ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookup("ReserveLiquidityStrategy"),
+                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
                 debtToken: _lookupTokenAddress("cUSD"),
                 cooldown: 300,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
@@ -113,7 +113,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdBelow: 3333
             }),
             ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookup("ReserveLiquidityStrategy"),
+                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
                 debtToken: _lookupTokenAddress("cUSD"),
                 cooldown: 300,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
@@ -138,7 +138,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdBelow: 3333
             }),
             ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookup("ReserveLiquidityStrategy"),
+                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
                 debtToken: _lookupTokenAddress("cUSD"),
                 cooldown: 300,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),

@@ -111,7 +111,6 @@ interface IMentoConfig {
         address referenceRateFeedID;
         bool invertRateFeed;
         IFPMM.FPMMParams params;
-        bool useReserveLiquidityStrategy;
         ReserveLiquidityStrategyPoolConfig rlsConfig;
     }
 

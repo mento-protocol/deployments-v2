@@ -334,7 +334,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addMockCollateral(string memory symbol) internal {
-        address addy = _predict("MockERC20", symbol);
+        address addy;
+        address lookupMock = lookup(string.concat("MockERC20:", symbol));
+        if (lookupMock != address(0)) {
+            addy = lookupMock;
+        } else {
+            addy = _predict("MockERC20", symbol);
+        }
         _collateralAssets.push(addy);
         _mockCollateralAssets.push(symbol);
         _collateral[symbol] = addy;
@@ -642,22 +648,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory token0,
         string memory token1,
         address rateFeed,
-        IFPMM.FPMMParams memory params
-    ) internal {
-        ReserveLiquidityStrategyPoolConfig memory rlsParams;
-        _addFPMM(
-            token0,
-            token1,
-            rateFeed,
-            params,
-            rlsParams
-        );
-    }
-
-    function _addFPMM(
-        string memory token0,
-        string memory token1,
-        address rateFeed,
         IFPMM.FPMMParams memory params,
         ReserveLiquidityStrategyPoolConfig memory rlsParams
     ) internal {
@@ -676,10 +666,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         c.referenceRateFeedID = rateFeed;
         c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
         c.params = params;
-
-        if (rlsParams.reserveLiquidityStrategy != address(0)) {
-            c.useReserveLiquidityStrategy = true;
-        }
+        c.rlsConfig = rlsParams;
 
         _fpmmConfigs.push(c);
     }

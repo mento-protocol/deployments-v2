@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console2 as console} from "forge-std/console2.sol";
+import {StdCheats} from "forge-std/StdCheats.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -28,7 +29,7 @@ interface ISortedOracles {
     function getTokenReportExpirySeconds(address token) external view returns (uint256);
 }
 
-contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
+contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -54,7 +55,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         IFPMMFactory factoryView,
         IMentoConfig.FPMMConfig memory c
     ) internal {
-        address fpmmProxy = factory.getPool(c.token0, c.token1);
+        address fpmmProxy = factoryView.getPool(c.token0, c.token1);
 
         if(fpmmProxy != address(0)){
             string memory token0Symbol = IERC20Metadata(c.token0).symbol();
@@ -68,7 +69,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         address owner = deployer.account;
         fpmmProxy = _createFPMM(deployer, owner, factory, factoryView, c);
 
-        if (c.useReserveLiquidityStrategy) {
+        bool hasReserveLiqStrategy = c.rlsConfig.reserveLiquidityStrategy != address(0);
+        if (hasReserveLiqStrategy) {
             _setupReserveLiquidityStrategy(
                 deployer,
                 fpmmProxy,
@@ -104,9 +106,12 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         IFPMM fpmm = IFPMM(proxy);
 
+        string memory token0Symbol = IERC20Metadata(fpmm.token0()).symbol();
+        string memory token1Symbol = IERC20Metadata(fpmm.token1()).symbol();
+
         console.log("\n===== Created FPMM pool =====");
-        console.log("  > token0:", fpmm.token0());
-        console.log("  > token1:", fpmm.token1());
+        console.log("  > token0: %s (%s)", token0Symbol, fpmm.token0());
+        console.log("  > token1: %s (%s)", token1Symbol, fpmm.token1());
         console.log("  > referenceRateFeedID:", fpmm.referenceRateFeedID());
         console.log("  > invertRateFeed:", fpmm.invertRateFeed());
 
@@ -132,11 +137,12 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         // 1. Register assets and RLS spender on ReserveV2 if not yet registered
         IReserveV2 reserveV2 = IReserveLiquidityStrategy(rlsAddy).reserve();
+        console.log ("  Registering assets and RLS spender on ReserveV2");
         _registerReserveAssets(deployer, reserveV2, rls.debtToken, collateralToken, rlsAddy);
 
         // 2. Set RLS as liquidity strategy on the FPMM
         IFPMM(deployer.harness(fpmmProxy)).setLiquidityStrategy(rlsAddy, true);
-        console.log("  Set liquidity strategy on FPMM:", rlsAddy);
+        console.log("  > Set liquidity strategy on FPMM:", rlsAddy);
 
         // 3. Configure the FPMM as a pool on the RLS
         IReserveLiquidityStrategy(deployer.harness(rlsAddy)).addPool(
@@ -153,18 +159,19 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
                 protocolIncentiveContraction: rls.protocolIncentiveContraction
             })
         );
-        console.log("  Added pool to ReserveLiquidityStrategy");
+        console.log("  > Added pool to ReserveLiquidityStrategy");
 
         // 4. Grant minting and burning rights to the strategy on the debt token
         IStableTokenV3 debtToken = IStableTokenV3(rls.debtToken);
         if (!debtToken.isMinter(rlsAddy)) {
             IStableTokenV3(deployer.harness(rls.debtToken)).setMinter(rlsAddy, true);
-            console.log("  Granted minter to strategy on:", rls.debtToken);
+            console.log("  > Granted minter to strategy on:", tokenSymbol(rls.debtToken));
         }
         if (!debtToken.isBurner(rlsAddy)) {
             IStableTokenV3(deployer.harness(rls.debtToken)).setBurner(rlsAddy, true);
-            console.log("  Granted burner to strategy on:", rls.debtToken);
+            console.log("  > Granted burner to strategy on:", tokenSymbol(rls.debtToken));
         }
+        console.log("\n");
         _verifyReserveLiquidityStrategy(
             fpmmProxy,
             token0,
@@ -184,17 +191,17 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         if (!reserveV2.isStableAsset(debtToken)) {
             IReserveV2(deployer.harness(reserveAddy)).registerStableAsset(debtToken);
-            console.log("  Registered stable asset on ReserveV2:", debtToken);
+            console.log("  > Registered stable asset on ReserveV2:", tokenSymbol(debtToken));
         }
 
         if (!reserveV2.isCollateralAsset(collateralToken)) {
             IReserveV2(deployer.harness(reserveAddy)).registerCollateralAsset(collateralToken);
-            console.log("  Registered collateral asset on ReserveV2:", collateralToken);
+            console.log("  > Registered collateral asset on ReserveV2:", tokenSymbol(collateralToken));
         }
 
         if (!reserveV2.isLiquidityStrategySpender(rlsAddy)) {
             IReserveV2(deployer.harness(reserveAddy)).registerLiquidityStrategySpender(rlsAddy);
-            console.log("  Registered RLS as spender on ReserveV2:", rlsAddy);
+            console.log("  > Registered RLS as spender on ReserveV2:", rlsAddy);
         }
     }
 
@@ -437,14 +444,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
     }
 
     function _mintTokenForSwap(address token, address to, uint256 amount) internal {
-        // Try minting as a StableTokenV3 (set this contract as minter, mint, then revoke)
-        address owner = IOwnable(token).owner();
-        vm.prank(owner);
-        IStableTokenV3(token).setMinter(to, true);
-        vm.prank(to);
-        IStableTokenV3(token).mint(to, amount);
-        vm.prank(owner);
-        IStableTokenV3(token).setMinter(to, false);
+        deal(token, to, amount);
     }
 
     function _provideLargerLiquidity(
@@ -488,10 +488,17 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         console.log("  > liquidity:", liquidity);
     }
 
+    function tokenSymbol(address token) internal view returns (string memory) {
+        return IERC20Metadata(token).symbol();
+    }
+
     function _increaseExpiryRate(address rateFeed) internal {
         Senders.Sender storage deployer = sender("deployer");
         address oraclesProxy = lookupProxyOrFail("SortedOracles");
 
-        ISortedOracles(deployer.harness(oraclesProxy)).setTokenReportExpiry(rateFeed, 1 days);
+        uint256 currentExpiry = ISortedOracles(oraclesProxy).getTokenReportExpirySeconds(rateFeed);
+        if (currentExpiry < 1 days) {
+            ISortedOracles(deployer.harness(oraclesProxy)).setTokenReportExpiry(rateFeed, 1 days);
+        }
     }
 }
