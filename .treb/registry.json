@@ -438,6 +438,7 @@
       "FactoryRegistry:v3.0.0": "0xca73ea6193341D676Ae9f5771d797EEE8d83BAD6",
       "Locking:v2.6.5": "0xC955e54F7f6a302d926720890ddE96705104db38",
       "MarketHoursBreaker:v3.0.0": "0x99C968Bf5972C11442654b989B7eAD0237cA654B",
+      "MarketHoursBreakerToggleable:v3.0.0": "0x4c67f682195d1627Ed76eD69311930c7fB069684",
       "MedianDeltaBreaker:v2.6.5": "0xd29B4e743F7B84D63fBF9149B6D983DF2eF5C952",
       "MentoGovernor:v2.6.5": "0x910A940a53C12982ae2277392C5Cfa03aa8c602b",
       "MentoRouter:v1.0.0": "0x8e4Fb12D86D5DF911086a9153e79CA27e0c96156",
