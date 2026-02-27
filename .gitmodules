@@ -16,3 +16,6 @@
 [submodule "lib/mento-router"]
 	path = lib/mento-router
 	url = https://github.com/mento-protocol/mento-router
+[submodule "lib/mento-stabletoken-ntt"]
+	path = lib/mento-stabletoken-ntt
+	url = https://github.com/mento-protocol/mento-stabletoken-ntt
