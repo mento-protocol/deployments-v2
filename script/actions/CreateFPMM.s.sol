@@ -68,6 +68,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         address owner = deployer.account;
         fpmmProxy = _createFPMM(deployer, owner, factory, factoryView, c);
+        _verifySwap(fpmmProxy, c);
+
 
         bool hasReserveLiqStrategy = c.rlsConfig.reserveLiquidityStrategy != address(0);
         if (hasReserveLiqStrategy) {
@@ -81,8 +83,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         } else {
             console.log("  > Not setting up ReserveLiquidityStrategy for FPMM");
         }
-
-        _verifySwap(fpmmProxy, c);
     }
 
     function _createFPMM(
@@ -178,6 +178,10 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             token1,
             rls
         );
+
+        // Now try to trigger a rebalance through the configured RLS
+        console.log("  ===== Rebalance Verification =====");
+        _verifyRebalance(fpmmProxy, rls);
     }
 
     function _registerReserveAssets(
@@ -441,10 +445,71 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > swapIn (token0):", swapAmountIn);
         console.log("  > swapOut (token1):", amountOut);
         console.log("  > token1 received:", balanceAfter - balanceBefore);
+
+        // // Now try to trigger a rebalance through the configured RLS
+        // console.log("  ===== Rebalance Verification =====");
+        // console.log("  > useReserveLiquidityStrategy:", c.useReserveLiquidityStrategy);
+        // if (c.useReserveLiquidityStrategy) {
+        //     _verifyRebalance(fpmmProxy, c);
+        // }
     }
 
     function _mintTokenForSwap(address token, address to, uint256 amount) internal {
         deal(token, to, amount);
+    }
+
+    function _verifyRebalance(
+        address fpmmProxy,
+        IMentoConfig.ReserveLiquidityStrategyPoolConfig memory rls
+    ) internal {
+
+        IFPMM fpmm = IFPMM(fpmmProxy);
+
+        // 1. Do a large one-sided swap to push the pool out of balance
+        _doLargeSwap(fpmmProxy, fpmm);
+
+        // 2. Log rebalancing state before rebalance
+        uint256 priceDifference;
+        {
+            (uint256 oPN, uint256 oPD, uint256 rPN, uint256 rPD, bool above, , uint256 pd) = fpmm.getRebalancingState();
+            priceDifference = pd;
+            console.log("  > oraclePrice:", oPN, "/", oPD);
+            console.log("  > reservePrice:", rPN, "/", rPD);
+            console.log("  > reservePriceAboveOracle:", above);
+            console.log("  > priceDifference (bps):", pd);
+        }
+
+        // 3. Trigger rebalance through the ReserveLiquidityStrategy
+        {
+            (uint256 r0Before, uint256 r1Before, ) = fpmm.getReserves();
+            ILiquidityStrategy(rls.reserveLiquidityStrategy).rebalance(fpmmProxy);
+            (uint256 r0After, uint256 r1After, ) = fpmm.getReserves();
+            console.log("  > reserve0 before:", r0Before, "-> after:", r0After);
+            console.log("  > reserve1 before:", r1Before, "-> after:", r1After);
+        }
+
+        // 4. Verify price difference improved
+        (, , , , , , uint256 newPriceDifference) = fpmm.getRebalancingState();
+        console.log("  > newPriceDifference (bps):", newPriceDifference);
+        require(newPriceDifference < priceDifference, "Verify: rebalance did not improve price difference");
+    }
+
+    function _doLargeSwap(address fpmmProxy, IFPMM fpmm) internal {
+        address sorted0 = fpmm.token0();
+        uint256 largeSwapAmount = 5_000 * (10 ** IERC20Metadata(sorted0).decimals());
+
+        _mintTokenForSwap(sorted0, address(1337), largeSwapAmount);
+        uint256 amountOut = fpmm.getAmountOut(largeSwapAmount, sorted0);
+
+        vm.prank(address(1337));
+        IERC20(sorted0).transfer(fpmmProxy, largeSwapAmount);
+        vm.prank(address(1337));
+        fpmm.swap(0, amountOut, address(1337), "");
+
+        console.log("\n  ===== Rebalance Verification =====");
+        console.log("  > large swap to imbalance pool (token0 -> token1):");
+        console.log("    > swapIn:", largeSwapAmount);
+        console.log("    > swapOut:", amountOut);
     }
 
     function _provideLargerLiquidity(

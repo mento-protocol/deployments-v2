@@ -49,6 +49,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _addCollateral("USDT", 0xd077A400968890Eacc75cdc901F0356c943e4fDb);
         _addCollateral("CELO", 0x471EcE3750Da237f93B8E339c536989b8978a438);
 
+        ReserveLiquidityStrategyPoolConfig memory emptyRls;
+
         _addFPMM(
             "cUSD",
             "cGBP",
@@ -62,16 +64,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig( // TODO: add RLS params not in romans config yet
-                lookupProxyOrFail("ReserveLiquidityStrategy"),
-                _lookupTokenAddress("cGBP"),
-                300,
-                lookupOrFail("ProtocolFeeRecipient"),
-                0,
-                0,
-                0,
-                0
-            )
+            emptyRls
         );
 
         _addFPMM(
