@@ -54,12 +54,38 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         IFPMMFactory factoryView,
         IMentoConfig.FPMMConfig memory c
     ) internal {
-        address existingPool = factoryView.getPool(c.token0, c.token1);
+        address fpmmProxy = factoryView.getPool(c.token0, c.token1);
         address owner = deployer.account;
 
-        if (existingPool != address(0)) revert("FPMM already exists");
+        if(fpmmProxy == address(0)){
+            fpmmProxy = _createFPMM(deployer, owner, factory, factoryView, c);
+        } else {
+            console.log("  > FPMM pool already exists");
+        }
 
-        address proxy = factory.deployFPMM(
+        if (c.useReserveLiquidityStrategy) {
+            _setupReserveLiquidityStrategy(
+                deployer,
+                fpmmProxy,
+                c.token0,
+                c.token1,
+                c.rlsConfig
+            );
+        } else {
+            console.log("  > Not setting up ReserveLiquidityStrategy for FPMM");
+        }
+
+        _verifySwap(fpmmProxy, c);
+    }
+
+    function _createFPMM(
+        Senders.Sender storage deployer,
+        address owner,
+        IFPMMFactory factory,
+        IFPMMFactory factoryView,
+        IMentoConfig.FPMMConfig memory c
+    ) internal returns (address) {
+         address proxy = factory.deployFPMM(
             c.fpmmImplementation,
             c.oracleAdapter,
             c.proxyAdmin,
@@ -78,40 +104,15 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
         console.log("  > token1:", fpmm.token1());
         console.log("  > referenceRateFeedID:", fpmm.referenceRateFeedID());
         console.log("  > invertRateFeed:", fpmm.invertRateFeed());
-        // console.log("  proxy:", proxy);
-        // console.log("  token0:", c.token0);
-        // console.log("  token1:", c.token1);
-        // console.log("  referenceRateFeedID:", c.referenceRateFeedID);
-        // console.log("  invertRateFeed:", c.invertRateFeed);
 
         // make expiry rate longer for testing purposes
         _increaseExpiryRate(fpmm.referenceRateFeedID());
 
         _mintInitialLiquidity(deployer, proxy, c);
-
-        if (c.useReserveLiquidityStrategy) {
-            _setupReserveLiquidityStrategy(
-                deployer,
-                proxy,
-                c.token0,
-                c.token1,
-                c.rlsConfig
-            );
-        }
-
         _verifyFPMM(factoryView, proxy, c);
         _verifyInitialLiquidity(proxy, deployer.account);
 
-        if (c.useReserveLiquidityStrategy) {
-            _verifyReserveLiquidityStrategy(
-                proxy,
-                c.token0,
-                c.token1,
-                c.rlsConfig
-            );
-        }
-
-        _verifySwap(proxy, c);
+        return proxy;
     }
 
     function _setupReserveLiquidityStrategy(
@@ -159,6 +160,12 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
             IStableTokenV3(deployer.harness(rls.debtToken)).setBurner(rlsAddy, true);
             console.log("  Granted burner to strategy on:", rls.debtToken);
         }
+        _verifyReserveLiquidityStrategy(
+            fpmmProxy,
+            token0,
+            token1,
+            rls
+        );
     }
 
     function _registerReserveAssets(

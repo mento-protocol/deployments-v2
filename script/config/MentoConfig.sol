@@ -638,29 +638,19 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _redemptionShortfallTolerance = tolerance;
     }
 
-    struct RLSParams {
-        string reserveLiquidityStrategy;
-        string debtToken;
-        uint32 cooldown;
-        address protocolFeeRecipient;
-        uint64 liquiditySourceIncentiveExpansion;
-        uint64 protocolIncentiveExpansion;
-        uint64 liquiditySourceIncentiveContraction;
-        uint64 protocolIncentiveContraction;
-    }
-
     function _addFPMM(
         string memory token0,
         string memory token1,
         address rateFeed,
         IFPMM.FPMMParams memory params
     ) internal {
+        ReserveLiquidityStrategyPoolConfig memory rlsParams;
         _addFPMM(
             token0,
             token1,
             rateFeed,
             params,
-            RLSParams("", "", 0, address(0), 0, 0, 0, 0)
+            rlsParams
         );
     }
 
@@ -669,7 +659,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory token1,
         address rateFeed,
         IFPMM.FPMMParams memory params,
-        RLSParams memory rlsParams
+        ReserveLiquidityStrategyPoolConfig memory rlsParams
     ) internal {
         address _fpmmImpl = lookup("FPMM:v3.0.0");
         address _oracleAdapter = lookupProxyOrFail("OracleAdapter");
@@ -687,41 +677,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
         c.params = params;
 
-        if (bytes(rlsParams.reserveLiquidityStrategy).length > 0) {
-            _resolveRLSConfig(c, rlsParams);
+        if (rlsParams.reserveLiquidityStrategy != address(0)) {
+            c.useReserveLiquidityStrategy = true;
         }
 
         _fpmmConfigs.push(c);
     }
-
-    function _resolveRLSConfig(
-        FPMMConfig memory c,
-        RLSParams memory rlsParams
-    ) internal {
-        address _rls = lookup(rlsParams.reserveLiquidityStrategy);
-        address _debtToken = _resolveExchangeAsset(rlsParams.debtToken);
-
-        require(
-            _rls != address(0),
-            "Could not resolve ReserveLiquidityStrategy"
-        );
-        require(_debtToken != address(0), "Could not resolve debtToken");
-
-        c.useReserveLiquidityStrategy = true;
-        c.rlsConfig = ReserveLiquidityStrategyPoolConfig({
-            reserveLiquidityStrategy: _rls,
-            debtToken: _debtToken,
-            cooldown: rlsParams.cooldown,
-            protocolFeeRecipient: rlsParams.protocolFeeRecipient,
-            liquiditySourceIncentiveExpansion: rlsParams
-                .liquiditySourceIncentiveExpansion,
-            protocolIncentiveExpansion: rlsParams.protocolIncentiveExpansion,
-            liquiditySourceIncentiveContraction: rlsParams
-                .liquiditySourceIncentiveContraction,
-            protocolIncentiveContraction: rlsParams
-                .protocolIncentiveContraction
-        });
-    }
+    
 
     function _lookupTokenAddress(string memory symbol) internal returns (address) {
         bool isStableToken = _isStableToken[symbol];
