@@ -15,8 +15,6 @@ import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
-import {VirtualPoolFactory} from "mento-core/swap/virtual/VirtualPoolFactory.sol";
-import {Router} from "mento-core/swap/router/Router.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 
