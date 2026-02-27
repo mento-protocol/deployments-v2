@@ -20,6 +20,9 @@ import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {ConfigHelper} from "../helpers/ConfigHelper.sol";
 
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
+
+
 interface ISortedOracles {
     function setTokenReportExpiry(address token, uint256 expirySeconds) external;
     function getTokenReportExpirySeconds(address token) external view returns (uint256);
@@ -40,23 +43,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         IMentoConfig.FPMMConfig[] memory fpmmConfigs = config.getFPMMConfigs();
 
-        _setExpiryRate();
-
         for (uint256 i = 0; i < fpmmConfigs.length; i++) {
             _deployFPMM(deployer, factory, factoryView, fpmmConfigs[i]);
         }
-    }
-
-    function _setExpiryRate() internal {
-        Senders.Sender storage deployer = sender("deployer");
-        address oraclesProxy = lookupProxyOrFail("SortedOracles");
-        address rateFeed = 0xAe5eEe6815b8529847955d19522858806Bca8217;
-
-        require(ISortedOracles(oraclesProxy).getTokenReportExpirySeconds(rateFeed) == 300, "Expiry rate is not 300");
-
-        ISortedOracles(deployer.harness(oraclesProxy)).setTokenReportExpiry(rateFeed, 1 days);
-
-        require(ISortedOracles(oraclesProxy).getTokenReportExpirySeconds(rateFeed) == 1 days, "Expiry rate is not 1 days");
     }
 
     function _deployFPMM(
@@ -82,13 +71,21 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
             c.params
         );
 
-        console.log("Created FPMM pool:");
-        console.log("  proxy:", proxy);
-        console.log("  token0:", c.token0);
-        console.log("  token1:", c.token1);
-        console.log("  referenceRateFeedID:", c.referenceRateFeedID);
-        console.log("  invertRateFeed:", c.invertRateFeed);
+        IFPMM fpmm = IFPMM(proxy);
 
+        console.log("\n===== Created FPMM pool =====");
+        console.log("  > token0:", fpmm.token0());
+        console.log("  > token1:", fpmm.token1());
+        console.log("  > referenceRateFeedID:", fpmm.referenceRateFeedID());
+        console.log("  > invertRateFeed:", fpmm.invertRateFeed());
+        // console.log("  proxy:", proxy);
+        // console.log("  token0:", c.token0);
+        // console.log("  token1:", c.token1);
+        // console.log("  referenceRateFeedID:", c.referenceRateFeedID);
+        // console.log("  invertRateFeed:", c.invertRateFeed);
+
+        // make expiry rate longer for testing purposes
+        _increaseExpiryRate(fpmm.referenceRateFeedID());
 
         _mintInitialLiquidity(deployer, proxy, c);
 
@@ -113,6 +110,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
                 c.rlsConfig
             );
         }
+
+        _verifySwap(proxy, c);
     }
 
     function _setupReserveLiquidityStrategy(
@@ -198,9 +197,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         // Get the oracle rate (token0/token1 after invertRateFeed)
         IOracleAdapter oracle = fpmm.oracleAdapter();
-        console.log("adapter", address(oracle));
-        console.log("referenceRateFeedID:", c.referenceRateFeedID);
-        console.log("adapter market hours breaker", address(oracle.marketHoursBreaker()));
         (uint256 rateNumerator, uint256 rateDenominator) = oracle
             .getFXRateIfValid(c.referenceRateFeedID);
         if (c.invertRateFeed) {
@@ -233,10 +229,11 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
             deployer.account
         );
 
-        console.log("  Minted initial liquidity:", liquidity);
-        console.log("    amount0:", amount0);
-        console.log("    amount1:", amount1);
-        console.log("    liquidity:", liquidity);
+        console.log("  > minted initial liquidity");
+        console.log("  > amount0:", amount0);
+        console.log("  > amount1:", amount1);
+        console.log("  > liquidity:", liquidity);
+        console.log("\n");
     }
 
     // ========== Verification ==========
@@ -387,5 +384,102 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
             lpToken.balanceOf(deployer) > 0,
             "Verify: deployer received no LP tokens"
         );
+    }
+
+
+    // ======= Test helpers =======
+
+    function _verifySwap(
+        address fpmmProxy,
+        IMentoConfig.FPMMConfig memory c
+    ) internal {
+        IFPMM fpmm = IFPMM(fpmmProxy);
+        address sorted0 = fpmm.token0();
+        address sorted1 = fpmm.token1();
+
+        // Provide larger liquidity so we can swap meaningfully
+        _provideLargerLiquidity(fpmmProxy, c);
+
+        // Swap 100 units of token0 -> token1
+        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
+        uint256 swapAmountIn = 100 * decimals0;
+
+        // Mint token0 to this contract for the swap
+        _mintTokenForSwap(sorted0, address(1337), swapAmountIn);
+
+        uint256 amountOut = fpmm.getAmountOut(swapAmountIn, sorted0);
+        require(amountOut > 0, "Verify: swap amountOut is zero");
+
+        // Transfer token0 to the FPMM and execute swap
+        vm.prank(address(1337));
+        IERC20(sorted0).transfer(fpmmProxy, swapAmountIn);
+        uint256 balanceBefore = IERC20(sorted1).balanceOf(address(1337));
+        vm.prank(address(1337));
+        fpmm.swap(0, amountOut, address(1337), "");
+        uint256 balanceAfter = IERC20(sorted1).balanceOf(address(1337));
+
+        console.log("  ===== Swap Verification =====");
+        console.log("  > swapIn (token0):", swapAmountIn);
+        console.log("  > swapOut (token1):", amountOut);
+        console.log("  > token1 received:", balanceAfter - balanceBefore);
+    }
+
+    function _mintTokenForSwap(address token, address to, uint256 amount) internal {
+        // Try minting as a StableTokenV3 (set this contract as minter, mint, then revoke)
+        address owner = IOwnable(token).owner();
+        vm.prank(owner);
+        IStableTokenV3(token).setMinter(to, true);
+        vm.prank(to);
+        IStableTokenV3(token).mint(to, amount);
+        vm.prank(owner);
+        IStableTokenV3(token).setMinter(to, false);
+    }
+
+    function _provideLargerLiquidity(
+        address fpmmProxy,
+        IMentoConfig.FPMMConfig memory c
+    ) internal {
+        IFPMM fpmm = IFPMM(fpmmProxy);
+        address sorted0 = fpmm.token0();
+        address sorted1 = fpmm.token1();
+
+        IOracleAdapter oracle = fpmm.oracleAdapter();
+        (uint256 rateNumerator, uint256 rateDenominator) = oracle
+            .getFXRateIfValid(c.referenceRateFeedID);
+        if (c.invertRateFeed) {
+            (rateNumerator, rateDenominator) = (rateDenominator, rateNumerator);
+        }
+
+        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
+        uint256 decimals1 = 10 ** IERC20Metadata(sorted1).decimals();
+
+        // Provide 10_000 units of token1 worth of liquidity
+        uint256 amount1 = 10_000 * decimals1;
+        uint256 amount0 = (amount1 * rateDenominator * decimals0) /
+            (rateNumerator * decimals1);
+
+        // Mint tokens for liquidity
+        _mintTokenForSwap(sorted0, address(1337), amount0);
+        _mintTokenForSwap(sorted1, address(1337), amount1);
+
+        // Transfer and mint LP
+        vm.prank(address(1337));
+        IERC20(sorted0).transfer(fpmmProxy, amount0);
+        vm.prank(address(1337));
+        IERC20(sorted1).transfer(fpmmProxy, amount1);
+        vm.prank(address(1337));
+        uint256 liquidity = fpmm.mint(address(1337));
+
+        console.log("  ===== Provided Larger Liquidity =====");
+        console.log("  > amount0:", amount0);
+        console.log("  > amount1:", amount1);
+        console.log("  > liquidity:", liquidity);
+    }
+
+    function _increaseExpiryRate(address rateFeed) internal {
+        Senders.Sender storage deployer = sender("deployer");
+        address oraclesProxy = lookupProxyOrFail("SortedOracles");
+
+        ISortedOracles(deployer.harness(oraclesProxy)).setTokenReportExpiry(rateFeed, 1 days);
     }
 }

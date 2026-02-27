@@ -737,26 +737,15 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _shouldInvertRateFeed(address token0, address token1) private returns (bool) {
-        console.log("\n==== invertRateFeed ====");
-        console.log("before sorting token0 %s, token1 %s", token0, token1);
         (token0, token1) = token0 < token1 ? (token0, token1) : (token1, token0);
-
-        console.log("after sorting token0 %s, token1 %s", token0, token1);
 
         string memory token0Symbol = IERC20Metadata(token0).symbol();
         string memory token1Symbol = IERC20Metadata(token1).symbol();
 
-        console.log("token0Symbol:", token0Symbol);
-        console.log("token1Symbol:", token1Symbol);
-
         bool isFxPool = !isCollateralAsset(token0Symbol) && !isCollateralAsset(token1Symbol);
-
-        console.log("isFxPool:", isFxPool);
 
         if (isFxPool) {
             bool isToken0USDm = areStringsEqual(IERC20Metadata(token0).symbol(), "USDm");
-            console.log("token0 symbol", IERC20Metadata(token0).symbol());
-            console.log("isToken0USDm:", isToken0USDm);
 
             return isToken0USDm ? false : true;
         } else {
