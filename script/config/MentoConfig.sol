@@ -43,6 +43,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         internal _chainlinkRelayers;
     mapping(string symbol => address) internal _collateral;
     mapping(string symbol => bool) internal _isStableToken;
+    mapping(address token => bool) internal _isAddressStableToken;
+    mapping(address token => bool) internal _isAddressCollateralToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
     mapping(string => address) _deployedContract;
     bytes32[] _breakerIds;
@@ -344,6 +346,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory name
     ) internal {
         _isStableToken[symbol] = true;
+        _isAddressStableToken[_lookupTokenAddress(symbol)] = true;
         _symbolForCurrency[currency] = symbol;
         _tokens.push(
             TokenConfig({symbol: symbol, name: name, currency: currency})
@@ -351,6 +354,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addCollateral(string memory symbol, address addy) internal {
+        _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _collateral[symbol] = addy;
     }
@@ -363,6 +367,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         } else {
             addy = _predict("MockERC20", symbol);
         }
+        _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _mockCollateralAssets.push(symbol);
         _collateral[symbol] = addy;
@@ -698,12 +703,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     
 
     function _lookupTokenAddress(string memory symbol) internal returns (address) {
-        bool isStableToken = _isStableToken[symbol];
+        bool isStable = _isStableToken[symbol];
         bool isCollateral = isCollateralAsset(symbol);
 
-        require(!isStableToken || !isCollateral, "Token is both stable and collateral");
+        require(!isStable || !isCollateral, "Token is both stable and collateral");
 
-        if (isStableToken) {
+        if (isStable) {
             return lookupProxyOrFail(symbol);
         } else {
             return _collateral[symbol];
@@ -713,17 +718,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     function _shouldInvertRateFeed(address token0, address token1) private returns (bool) {
         (token0, token1) = token0 < token1 ? (token0, token1) : (token1, token0);
 
-        string memory token0Symbol = IERC20Metadata(token0).symbol();
-        string memory token1Symbol = IERC20Metadata(token1).symbol();
-
-        bool isFxPool = !isCollateralAsset(token0Symbol) && !isCollateralAsset(token1Symbol);
+        bool isFxPool = isStableToken(token0) && isStableToken(token1);
 
         if (isFxPool) {
             bool isToken0USDm = areStringsEqual(IERC20Metadata(token0).symbol(), "USDm");
 
             return isToken0USDm ? false : true;
         } else {
-            bool isToken0Collateral = isCollateralAsset(token0Symbol);
+            bool isToken0Collateral = isCollateralAsset(token0);
 
             return isToken0Collateral ? false : true;
         }
@@ -731,6 +733,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function isCollateralAsset(string memory symbol) internal returns (bool) {
         return _collateral[symbol] != address(0);
+    }
+
+    function isCollateralAsset(address token) internal returns (bool) {
+        return _isAddressCollateralToken[token];
+    }
+
+    function isStableToken(address token) internal returns (bool) {
+        return _isAddressStableToken[token];
     }
 
     function areStringsEqual(string memory a, string memory b) internal returns (bool) {
