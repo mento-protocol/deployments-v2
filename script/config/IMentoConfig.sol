@@ -38,6 +38,7 @@ interface IMentoConfig {
     struct ExchangeConfig {
         IBiPoolManager.PoolExchange pool;
         ExchangeTrandingLimitsConfig tradingLimits;
+        bool createVirtual;
     }
 
     struct ExchangeTrandingLimitsConfig {
@@ -95,6 +96,8 @@ interface IMentoConfig {
 
     function getRateFeedIds() external view returns (address[] memory);
 
+    function getFxRateFeedIds() external view returns (address[] memory);
+
     function getRateFeeds() external view returns (RateFeed[] memory);
 
     function getRateFeedDependencies(
@@ -112,7 +115,6 @@ interface IMentoConfig {
 
     function getMockAggregatorConfigs()
         external
-        view
         returns (MockAggregatorConfig[] memory);
 
     function getOracleConfig() external view returns (OracleConfig memory);
@@ -146,6 +148,10 @@ interface IMentoConfig {
         view
         returns (uint256);
 
+    function getDeployedContract(
+        string memory name
+    ) external view returns (address);
+
     function mockAggregatorReporter() external view returns (address);
 
     function mockAggregatorSourceFork() external view returns (uint256);
@@ -170,6 +176,12 @@ interface IMentoConfig {
         address asset0,
         address asset1
     ) external view returns (bytes32);
+
+    function getExchangeConfig(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) external view returns (ExchangeConfig memory config, bool found);
 
     function getAddress(string memory asset) external returns (address);
 }

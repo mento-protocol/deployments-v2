@@ -5,24 +5,21 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
-import {VirtualPoolFactory} from "mento-core/swap/virtual/VirtualPoolFactory.sol";
-import {Router} from "mento-core/swap/router/Router.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 
 contract DeployV3PreStage is
     TrebScript,
-    AddressbookHelper,
     ProxyHelper,
     PostChecksHelper
 {
@@ -31,14 +28,14 @@ contract DeployV3PreStage is
     using Senders for Senders.Sender;
     using GnosisSafe for GnosisSafe.Sender;
 
-    address multisig;
+    address owner;
+    address feeSetter;
+    address protocolFeeRecipient;
 
     address sortedOracles;
-    address sortedOraclesImpl;
     address breakerBox;
 
     address fpmmImpl;
-    address oneToOneFpmmImpl;
     address fpmmFactoryImpl;
     address fpmmFactory;
     address virtualPoolFactory;
@@ -59,27 +56,23 @@ contract DeployV3PreStage is
     string constant label = "v3.0.0";
 
     function setUp() public {
-        multisig = lookupAddressbook("MigrationMultisig");
-
-        sortedOracles = lookupProxyWithCodeOrFail("SortedOracles");
-        sortedOraclesImpl = lookupWithCodeOrFail("SortedOracles:v2.6.5");
-        breakerBox = lookupWithCodeOrFail("BreakerBox:v2.6.5");
-        proxyAdmin = lookupWithCodeOrFail("ProxyAdmin");
         config = Config.get();
+
+        sortedOracles = lookupProxyOrFail("SortedOracles");
+        breakerBox = lookupOrFail("BreakerBox:v2.6.5");
+        proxyAdmin = lookupOrFail("ProxyAdmin");
+        feeSetter = lookupOrFail("FeeSetter");
+        protocolFeeRecipient = lookupOrFail("ProtocolFeeRecipient");
     }
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        owner = sender("migrationOwner").account;
 
         fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
             abi.encode(true)
         );
-
-        oneToOneFpmmImpl = deployer
-            .create3("OneToOneFPMM")
-            .setLabel(label)
-            .deploy(abi.encode(true));
 
         fpmmFactoryImpl = deployer
             .create3("FPMMFactory")
@@ -106,13 +99,13 @@ contract DeployV3PreStage is
                 breakerBox,
                 marketHoursBreaker,
                 address(0),
-                multisig
+                owner
             )
         );
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
-        params.feeSetter = multisig;
-        params.protocolFeeRecipient = address(0);
+        params.feeSetter = feeSetter;
+        params.protocolFeeRecipient = protocolFeeRecipient;
 
         fpmmFactory = deployProxy(
             deployer,
@@ -122,16 +115,11 @@ contract DeployV3PreStage is
                 IFPMMFactory.initialize.selector,
                 oracleAdapter,
                 proxyAdmin,
-                multisig,
+                owner,
                 fpmmImpl,
                 params
             )
         );
-
-        IFPMMFactory fpmmFactoryHarness = IFPMMFactory(
-            deployer.harness(fpmmFactory)
-        );
-        fpmmFactoryHarness.registerFPMMImplementation(oneToOneFpmmImpl);
 
         factoryRegistryImpl = deployer
             .create3("FactoryRegistry")
@@ -145,19 +133,23 @@ contract DeployV3PreStage is
             abi.encodeWithSelector(
                 IFactoryRegistry.initialize.selector,
                 fpmmFactory,
-                multisig
+                deployer.account
             )
         );
 
         virtualPoolFactory = deployer
             .create3("VirtualPoolFactory")
             .setLabel(label)
-            .deploy(abi.encode(multisig));
+            .deploy(abi.encode(owner));
 
         IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
             deployer.harness(factoryRegistry)
         );
+        IOwnable factoryRegistryOwnable = IOwnable(
+            deployer.harness(factoryRegistry)
+        );
         factoryRegistryHarness.approve(virtualPoolFactory);
+        factoryRegistryOwnable.transferOwnership(owner);
 
         router = deployer.create3("Router").setLabel(label).deploy(
             abi.encode(address(0), factoryRegistry, fpmmFactory)
@@ -179,7 +171,7 @@ contract DeployV3PreStage is
                 empty,
                 empty,
                 empty,
-                multisig
+                owner
             )
         );
 
@@ -199,7 +191,7 @@ contract DeployV3PreStage is
             reserveLiquidityStrategyImpl,
             abi.encodeWithSelector(
                 IReserveLiquidityStrategy.initialize.selector,
-                multisig,
+                owner,
                 reserveV2
             )
         );
@@ -236,21 +228,20 @@ contract DeployV3PreStage is
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
-        verifyOwnership("OracleAdapter", oracleAdapter, multisig);
-        verifyOwnership("FPMMFactory", fpmmFactory, multisig);
-        verifyOwnership("FactoryRegistry", factoryRegistry, multisig);
-        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, multisig);
-        verifyOwnership("ReserveV2", reserveV2, multisig);
+        verifyOwnership("OracleAdapter", oracleAdapter, owner);
+        verifyOwnership("FPMMFactory", fpmmFactory, owner);
+        verifyOwnership("FactoryRegistry", factoryRegistry, owner);
+        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, owner);
+        verifyOwnership("ReserveV2", reserveV2, owner);
         verifyOwnership(
             "ReserveLiquidityStrategy",
             reserveLiquidityStrategy,
-            multisig
+            owner
         );
 
         // Implementation Initializer Protection
         // Verifies that implementation contracts cannot be initialized directly (security check).
         verifyInitDisabled("FPMMImpl", fpmmImpl);
-        verifyInitDisabled("OneToOneFPMMImpl", oneToOneFpmmImpl);
         verifyInitDisabled("FPMMFactoryImpl", fpmmFactoryImpl);
         verifyInitDisabled("OracleAdapterImpl", oracleAdapterImpl);
         verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
@@ -300,14 +291,13 @@ contract DeployV3PreStage is
             defaultParams.protocolFee == expected.protocolFee,
             "protocolFee param mismatch"
         );
-        // TODO: Check protocol fee recipient
-        // require(
-        //     defaultParams.protocolFeeRecipient == multisig,
-        //     "protocolFeeRecipient param mismatch"
-        // );
         require(
-            defaultParams.feeSetter == multisig,
+            defaultParams.protocolFeeRecipient == protocolFeeRecipient,
             "protocolFeeRecipient param mismatch"
+        );
+        require(
+            defaultParams.feeSetter == feeSetter,
+            "feeSetter param mismatch"
         );
         require(
             defaultParams.rebalanceIncentive == expected.rebalanceIncentive,
@@ -325,11 +315,7 @@ contract DeployV3PreStage is
         );
 
         // FPMMFactory Registrations
-        // Verifies that FPMM implementations are registered.
-        require(
-            fpmmFactoryContract.isRegisteredImplementation(oneToOneFpmmImpl),
-            "oneToOneFpmmImpl is not registered"
-        );
+        // Verifies that the FPMM implementation is registered.
         require(
             fpmmFactoryContract.isRegisteredImplementation(fpmmImpl),
             "defaultFpmmImpl is not registered"

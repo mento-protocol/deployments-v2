@@ -33,6 +33,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     string[] internal _mockCollateralAssets;
     RateFeed[] internal _rateFeeds;
     address[] internal _collateralAssets;
+    address[] internal _fxRateFeedIds;
     address[] internal _chainlinkRelayerRateFeedIds;
     MockAggregatorConfig[] internal _mockAggregatorConfigs;
 
@@ -43,6 +44,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     mapping(string symbol => address) internal _collateral;
     mapping(string symbol => bool) internal _isStableToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
+    mapping(string => address) _deployedContract;
     bytes32[] _breakerIds;
 
     IFPMM.FPMMParams internal _defaultFPMMParams;
@@ -111,10 +113,26 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getMockAggregatorConfigs()
         external
-        view
         returns (MockAggregatorConfig[] memory)
     {
-        return _mockAggregatorConfigs;
+        MockAggregatorConfig[] memory configs = new MockAggregatorConfig[](
+            _mockAggregatorConfigs.length
+        );
+
+        vm.selectFork(mockAggregatorSourceFork);
+        for (uint i = 0; i < _mockAggregatorConfigs.length; i++) {
+            MockAggregatorConfig memory config = _mockAggregatorConfigs[i];
+            AggregatorV3Interface agg = AggregatorV3Interface(config.source);
+
+            uint8 decimals = agg.decimals();
+            (, int256 initialReport, , , ) = agg.latestRoundData();
+
+            config.initialReport = initialReport;
+            config.decimals = decimals;
+            configs[i] = config;
+        }
+        vm.selectFork(baseFork);
+        return configs;
     }
 
     function getChainlinkRelayerConfigs()
@@ -144,6 +162,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getRateFeeds() external view returns (RateFeed[] memory) {
         return _rateFeeds;
+    }
+
+    function getFxRateFeedIds() external view returns (address[] memory) {
+        return _fxRateFeedIds;
     }
 
     function getRateFeedIds()
@@ -212,6 +234,28 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _redemptionShortfallTolerance;
     }
 
+    function getExchangeConfig(
+        address asset0,
+        address asset1,
+        address pricingModule
+    ) public view returns (ExchangeConfig memory config, bool found) {
+        for (uint i = 0; i < _exchanges.length; i++) {
+            ExchangeConfig storage ex = _exchanges[i];
+            bool assetsMatch = (ex.pool.asset0 == asset0 &&
+                ex.pool.asset1 == asset1) ||
+                (ex.pool.asset0 == asset1 && ex.pool.asset1 == asset0);
+            if (
+                assetsMatch &&
+                address(ex.pool.pricingModule) == pricingModule
+            ) {
+                return (
+                    abi.decode(abi.encode(ex), (ExchangeConfig)),
+                    true
+                );
+            }
+        }
+    }
+
     // ========== Helper Functions ==========
 
     function emptyTradingLimits()
@@ -269,6 +313,17 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                 vm.toString(asset1)
             )
         );
+    }
+
+    function getDeployedContract(
+        string memory name
+    ) public view returns (address contractAddress) {
+        contractAddress = _deployedContract[name];
+        if (contractAddress == address(0)) {
+            revert(
+                string.concat("Could not find deployed contract named ", name)
+            );
+        }
     }
 
     // ========== Internal Helper Functions ==========
@@ -438,23 +493,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory description,
         address source
     ) internal {
-        uint8 decimals;
-        int256 initialReport;
-        vm.selectFork(mockAggregatorSourceFork);
-        AggregatorV3Interface agg = AggregatorV3Interface(source);
-
-        decimals = agg.decimals();
-        (, initialReport, , , ) = agg.latestRoundData();
-
         _mockAggregatorConfigs.push(
             MockAggregatorConfig({
                 description: description,
-                decimals: decimals,
-                initialReport: initialReport,
+                decimals: 0,
+                initialReport: 0,
                 source: source
             })
         );
-        vm.selectFork(baseFork);
     }
 
     function _addBreaker(
@@ -513,7 +559,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory rateFeed,
         uint256 resetFrequency,
         uint256 stablePoolResetSize,
-        ExchangeTrandingLimitsConfig memory tradingLimits
+        ExchangeTrandingLimitsConfig memory tradingLimits,
+        bool createVirtual
     ) internal {
         require(
             _isStableToken[asset0],
@@ -550,6 +597,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             );
             return;
         }
+        IBiPoolManager.PoolConfig memory poolConfig = IBiPoolManager.PoolConfig({
+            spread: FixidityLib.wrap(spread),
+            referenceRateFeedID: getRateFeedIdFromString(rateFeed),
+            referenceRateResetFrequency: resetFrequency,
+            minimumReports: 1,
+            stablePoolResetSize: stablePoolResetSize
+        });
         _exchanges.push(
             ExchangeConfig({
                 pool: IBiPoolManager.PoolExchange({
@@ -559,15 +613,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                     bucket0: 0,
                     bucket1: 0,
                     lastBucketUpdate: 0,
-                    config: IBiPoolManager.PoolConfig({
-                        spread: FixidityLib.wrap(spread),
-                        referenceRateFeedID: getRateFeedIdFromString(rateFeed),
-                        referenceRateResetFrequency: resetFrequency,
-                        minimumReports: 1,
-                        stablePoolResetSize: stablePoolResetSize
-                    })
+                    config: poolConfig
                 }),
-                tradingLimits: tradingLimits
+                tradingLimits: tradingLimits,
+                createVirtual: createVirtual
             })
         );
     }
@@ -621,6 +670,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _fpmmParams[poolKey10] = params;
     }
 
+    function _addDeployedContract(
+        string memory name,
+        address contractAddress
+    ) internal {
+        _deployedContract[name] = contractAddress;
+    }
+
     function _setRedemptionShortfallTolerance(uint256 tolerance) internal {
         _redemptionShortfallTolerance = tolerance;
     }
@@ -631,6 +687,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         if (_collateral[symbol] != address(0)) {
             return _collateral[symbol];
         } else {
+            address proxy = lookupProxy(symbol);
+            if (proxy != address(0)) {
+                return proxy;
+            }
             return predictProxy(sender("deployer"), symbol);
         }
     }

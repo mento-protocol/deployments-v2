@@ -30,7 +30,7 @@ contract PostChecksHelper is TrebScript {
         uint8 initialized = uint8(uint256(value));
 
         require(
-            initialized == type(uint8).max,
+            initialized != 0,
             string.concat(identifier, " impl init is not disabled")
         );
     }

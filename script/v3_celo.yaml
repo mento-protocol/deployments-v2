@@ -1,3 +1,4 @@
+
 group: Mento V3 PreStage
 components:
   DeployV3PreStage:
@@ -6,3 +7,8 @@ components:
     script: ConfigureV3PreStage
     deps:
       - DeployV3PreStage
+  DeployVirtualPools:
+    script: DeployVirtualPools
+    deps:
+      - ConfigureV3PreStage
+
