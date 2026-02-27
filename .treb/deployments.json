@@ -18585,11 +18585,23 @@
       "gitCommit": "306aa0e8b1c5389c80230621d3543d4df0e5b614"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "verifiers": {
+        "blockscout": {
+          "status": "verified"
+        },
+        "etherscan": {
+          "status": "verified"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x4c67f682195d1627Ed76eD69311930c7fB069684"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-02-27T23:16:00.143154+01:00",
-    "updatedAt": "2026-02-27T23:16:00.167723+01:00"
+    "updatedAt": "2026-02-27T23:17:30.056079+01:00"
   },
   "testnet-v2-rc5/11142220/MedianDeltaBreaker:v2.6.5": {
     "id": "testnet-v2-rc5/11142220/MedianDeltaBreaker:v2.6.5",
