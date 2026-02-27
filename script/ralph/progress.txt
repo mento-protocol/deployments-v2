@@ -1,0 +1,157 @@
+# Ralph Progress Log
+Started: Fri Feb 27 07:23:07 PM CET 2026
+---
+
+## Codebase Patterns
+- Addressbook entries follow format: `"Label": "0xAddress"` per network in `.treb/addressbook.json`
+- `forge build` exits 1 due to pre-existing `src/Proxy.sol` import error (missing `node_modules/@celo/contracts`) - not related to project code. Use `forge build --skip src/Proxy.sol` for clean builds.
+- Remappings go in `remappings.txt` (not `foundry.toml`), Foundry auto-discovers additional remappings from nested `lib/` dirs
+- npm install required in `lib/mento-core` for Celo contract imports to resolve
+- Working directory is `/home/sol/projects/mento-deployments-v2/.claude/worktrees/feat-wormhole-config-driven`
+- NTT contracts have immutable `deployer` check: `msg.sender` during `initialize()` must match `msg.sender` during implementation constructor. CREATE3 breaks this because it uses intermediate contracts. Use NttDeployHelper pattern to work around it.
+- Treb's Deployer only supports CREATE2/CREATE3 (no plain CREATE). `sender.execute()` rejects `to=address(0)`.
+- Treb uses `vm.prank(sender.account)` for simulation, not `vm.startBroadcast()`. All state changes must go through harness/create3/execute.
+- For NTT lookup after deployment: `lookup("NttDeployHelper:USDm")` → read `nttManagerProxy()` and `transceiverProxy()` immutables
+- Cross-chain registry lookup: `lookup("NttDeployHelper:USDm", namespace, "143")` where namespace = `vm.envOr("NAMESPACE", string("default"))`
+- NttDeployHelper CREATE nonces: nttManagerProxy = nonce 2, transceiverProxy = nonce 4. Use `vm.computeCreateAddress(helper, nonce)` for remote addresses.
+- Stack-too-deep in run(): use storage vars populated in setUp() (see SetupNTTBridge / ConfigureNTT pattern)
+- WormholeTransceiver.initialize() publishes a Wormhole message requiring `msg.value >= messageFee`. On chains with fee=0 (like Celo), msg.value=0 works.
+---
+
+## 2026-02-27 - US-001
+- Added WormholeCoreBridge entries to `.treb/addressbook.json` for celo and monad networks
+- Celo: `0xa321448d90d4e5b0A732867c18eA198e75CAC48E` (verified against Wormhole docs)
+- Monad: `0x194B123c5E96B9b2E49763619985790Dc241CAC0` (verified against Wormhole docs)
+- Files changed: `.treb/addressbook.json`
+- **Learnings for future iterations:**
+  - Wormhole contract addresses are documented at https://wormhole.com/docs/products/reference/contract-addresses/
+  - The `monad_local_fork` network entry exists but was not updated (only celo and monad per acceptance criteria)
+  - Pre-existing build issue: `forge compile` exits 1 due to lint error in `lib/bold` dependency, not related to project code
+  - When running `cd` to submodule dirs (e.g. `lib/mento-core`), always return to project root afterward
+---
+
+## 2026-02-27 - US-002
+- Added remappings to `remappings.txt` for mento-stabletoken-ntt submodule
+- `mento-stabletoken-ntt/=lib/mento-stabletoken-ntt/evm/` - maps import prefix to submodule's EVM directory
+- `wormhole-solidity-sdk/=lib/mento-stabletoken-ntt/evm/lib/wormhole-solidity-sdk/src/` - maps Wormhole SDK imports
+- Foundry auto-discovers `solidity-bytes-utils/` remapping from nested lib
+- Root project's OpenZeppelin v4.8.3 is compatible with submodule's v4.8.1 - no conflicts
+- Files changed: `remappings.txt`
+- **Learnings for future iterations:**
+  - Submodule EVM code lives at `lib/mento-stabletoken-ntt/evm/` (not the root of the submodule)
+  - Import paths: `mento-stabletoken-ntt/src/NttManager/NttManager.sol`, `mento-stabletoken-ntt/src/Transceiver/WormholeTransceiver/WormholeTransceiver.sol`
+  - The submodule's OZ (v4.8.1) is close enough to root's OZ (v4.8.3) that sharing works
+  - Foundry auto-resolves remappings for nested lib dependencies (e.g. solidity-bytes-utils)
+  - The pre-existing build error is `src/Proxy.sol` importing from `node_modules/@celo/contracts` which doesn't exist (not the `lib/bold` lint issue previously documented)
+---
+
+## 2026-02-27 - US-003
+- Created `script/config/wormhole/NTTConfig.sol` with typed Solidity structs for NTT bridge config
+- Defines `NTTChainConfig` struct: chainName, evmChainId, wormholeChainId, tokenLabel, isBurning, outboundLimit
+- Defines `NTTInboundLimit` struct: fromChainName, limit
+- Defines `NTTTokenConfig` struct: tokenName, tokenDecimals, ownerLabel, chains[], inboundLimits[]
+- `NTTConfig` library with chain ID constants (CELO_EVM=42220, CELO_WH=14, MONAD_EVM=143, MONAD_WH=48) and DEFAULT_RATE_LIMIT=100_000e18
+- Files changed: `script/config/wormhole/NTTConfig.sol` (new)
+- **Learnings for future iterations:**
+  - Structs are defined outside the library (file-level) so they can be imported independently
+  - tokenLabel and ownerLabel are strings (addressbook labels), NOT addresses — resolved at runtime
+  - The NTTInboundLimit uses only fromChainName (sufficient for 2-chain topology; if >2 chains added, may need toChainName)
+  - Pre-existing build error (`src/Proxy.sol`) continues — only error in the build, not related to our code
+---
+
+## 2026-02-27 - US-004
+- Added `getUSDmConfig()` and `getGBPmConfig()` functions to `NTTConfig` library
+- USDm: tokenDecimals=18, ownerLabel='MigrationMultisig', burn-mint on both Celo and Monad
+  - Celo: tokenLabel='StableTokenV2USD', isBurning=true, outboundLimit=100_000e18
+  - Monad: tokenLabel='StableTokenSpokeUSD', isBurning=true, outboundLimit=100_000e18
+  - Inbound limits: 100_000e18 both directions
+- GBPm: tokenDecimals=18, ownerLabel='MigrationMultisig', locking on Celo, burning on Monad
+  - Celo: tokenLabel='StableTokenV2GBP', isBurning=false, outboundLimit=100_000e18
+  - Monad: tokenLabel='StableTokenSpokeGBP', isBurning=true, outboundLimit=100_000e18
+  - Inbound limits: 100_000e18 both directions
+- Files changed: `script/config/wormhole/NTTConfig.sol`
+- **Learnings for future iterations:**
+  - Solidity `internal pure` functions in libraries can return structs with dynamic arrays — allocate with `new Type[](n)` in memory
+  - Addressbook labels verified: Celo uses `StableTokenV2*` prefix, Monad uses `StableTokenSpoke*` prefix
+  - Inbound limits array has 2 entries (one per direction) — index 0 is inbound from remote chain to "first" chain, index 1 is inbound from "first" chain to remote
+---
+
+## 2026-02-27 - US-005
+- Created `script/deploy/wormhole/DeployNTT.s.sol` (treb script) and `script/deploy/wormhole/NttDeployHelper.sol` (helper)
+- DeployNTT: inherits AddressbookHelper, reads NTT_TOKEN env var, loads config from NTTConfig, resolves addresses via addressbook
+- NttDeployHelper: deployed via CREATE3, bootstraps NttManager + WormholeTransceiver ERC1967 proxies in constructor
+  - Deploys NttManager implementation + ERC1967Proxy, calls initialize()
+  - Deploys WormholeTransceiver implementation + ERC1967Proxy, calls initialize()
+  - Registers transceiver, sets threshold to 1, transfers ownership/pauser to deployer EOA
+- Uses NttDeployHelper pattern because NTT contracts have immutable `deployer` check in initialize()
+  - CREATE3 uses intermediate contracts, breaking msg.sender consistency
+  - By deploying everything in one constructor, msg.sender is consistent (= helper address)
+- Standard NttManager variant: rate limiting enabled, 24h duration
+- WormholeTransceiver consistency level: 200 (instant finality)
+- Files changed: `script/deploy/wormhole/DeployNTT.s.sol` (new), `script/deploy/wormhole/NttDeployHelper.sol` (new)
+- **Learnings for future iterations:**
+  - NTT contracts check `msg.sender == deployer` immutable during initialize() — cannot use CREATE3 directly for implementation deployment
+  - Treb's Deployer library ONLY supports CREATE2/CREATE3 (no plain CREATE). sender.execute() rejects to=address(0)
+  - Treb uses `vm.prank(sender.account)` for simulation, not vm.startBroadcast()
+  - The NttDeployHelper approach: deploy a helper via CREATE3 that does everything in its constructor, preserving msg.sender consistency
+  - After deployment, proxy addresses are readable from NttDeployHelper immutables: `nttManagerProxy()`, `transceiverProxy()`
+  - Lookup pattern: `lookup("NttDeployHelper:USDm")` → read proxy addresses from the helper
+  - NttManager.transferOwnership() cascades to all registered transceivers' ownership
+  - Pauser capability does NOT cascade — must be transferred separately on each contract
+  - WormholeTransceiver.initialize() publishes a Wormhole init message with msg.value — requires messageFee=0 or explicit ETH forwarding
+  - ERC1967Proxy from root OZ (v4.8.3) is compatible: constructor(address _logic, bytes _data)
+---
+
+## 2026-02-27 - US-006
+- Created `script/deploy/wormhole/ConfigureNTT.s.sol` (treb script for NTT bridge configuration)
+- Inherits AddressbookHelper, annotated with `@custom:senders deployer`
+- Reads NTT_TOKEN env var to select token config (USDm or GBPm)
+- Resolves local NttManager and WormholeTransceiver via treb registry lookup of NttDeployHelper, then reading proxy addresses from immutables
+- Resolves remote NttManager and WormholeTransceiver via cross-chain registry lookup (`lookup(id, namespace, chainId)`) + CREATE nonce derivation (`vm.computeCreateAddress(helper, nonce)`)
+- Idempotent peer setup: checks existing peer before calling setPeer(), checks inbound limit before calling setInboundLimit()
+- Idempotent outbound limit: compares current on-chain value (via _untrim TrimmedAmount) before calling setOutboundLimit()
+- Idempotent burn/mint permissions: checks isBurner/isMinter before granting
+- Idempotent ownership: checks current owner/pauser before transferring
+- Transfers pauser capability separately on each contract (does NOT cascade like ownership)
+- Uses setUp() with storage variables to avoid stack-too-deep (mirrors SetupNTTBridge pattern)
+- Files changed: `script/deploy/wormhole/ConfigureNTT.s.sol` (new)
+- **Learnings for future iterations:**
+  - Stack-too-deep is common with many local vars in run() — use storage vars populated in setUp() (see SetupNTTBridge pattern)
+  - Cross-chain registry lookup: `lookup("NttDeployHelper:USDm", namespace, "143")` where namespace = `vm.envOr("NAMESPACE", string("default"))`
+  - NttDeployHelper CREATE nonces: nttManagerProxy = nonce 2, transceiverProxy = nonce 4 (impl contracts at nonces 1 and 3)
+  - `vm.computeCreateAddress(deployer, nonce)` computes deterministic CREATE addresses from deployer + nonce
+  - TrimmedAmount (uint72) packing: (amount << 8) | decimals — use _untrim() to convert back to full precision
+  - `forge build --skip src/Proxy.sol` avoids the pre-existing broken import; `forge build` without skip exits 1 but our files compile fine
+---
+
+## 2026-02-27 - US-007
+- Created `script/actions/wormhole/UpdateRateLimits.s.sol` (governance action script)
+- Inherits AddressbookHelper, annotated with `@custom:senders owner`
+- Reads NTT_TOKEN env var to select token config (USDm or GBPm)
+- Resolves NttManager via treb registry lookup of NttDeployHelper, then reading nttManagerProxy() immutable
+- Reads updated rate limits from NTTConfig (outbound from current chain config, inbound from peer chain config)
+- Idempotent outbound limit: decodes TrimmedAmount via _untrim(), compares before calling setOutboundLimit()
+- Idempotent inbound limits: iterates peer chains, decodes and compares before calling setInboundLimit()
+- Uses setUp() + storage variables pattern to avoid stack-too-deep (consistent with ConfigureNTT)
+- Files changed: `script/actions/wormhole/UpdateRateLimits.s.sol` (new)
+- **Learnings for future iterations:**
+  - Governance action scripts use `sender("owner")` with `@custom:senders owner` annotation — the treb profile maps this to the actual execution mechanism (multisig, governor, etc.)
+  - The `script/actions/wormhole/` directory is new — created for NTT-specific governance actions
+  - Pattern for rate limit scripts: reuse _loadConfig, _findMyChain, _findInboundLimit, _untrim helpers from ConfigureNTT
+  - Existing action scripts in script/actions/ all use `deployer` sender; MGP14 migration uses `governor` for OZ Governor proposals
+  - INTTManager interface can be scoped to just the functions needed (no need to duplicate full interface from ConfigureNTT)
+---
+
+## 2026-02-27 - US-008
+- Created `script/actions/wormhole/AddSpoke.s.sol` — combines DeployNTT + ConfigureNTT into a single convenience script for adding a new spoke chain
+- Uses deployer sender, annotated with `@custom:senders deployer`
+- Phase 1 (this script): Deploys NttManager + WormholeTransceiver via NttDeployHelper, configures peers pointing to all existing chains, sets rate limits, grants burn/mint permissions if burning mode, transfers ownership
+- Phase 2 (documented in script output): Each existing chain needs a separate governance action to add the new spoke as a peer
+- Follows same patterns as ConfigureNTT: setUp() with storage vars to avoid stack-too-deep, idempotent operations, cross-chain registry lookup for remote peers
+- Files changed: `script/actions/wormhole/AddSpoke.s.sol` (new), `script/ralph/prd.json`
+- **Learnings for future iterations:**
+  - AddSpoke is essentially DeployNTT + ConfigureNTT combined — reuses the NttDeployHelper pattern for deployment and the same peer/limit/permission/ownership setup logic
+  - The _deploy() function returns proxy addresses directly since they're needed immediately in the same run() for configuration (unlike DeployNTT where they're read in a separate ConfigureNTT script)
+  - Two-phase spoke addition: Phase 1 (deployer on new spoke) can be automated, Phase 2 (governance on existing chains) requires separate governance proposals
+  - The IStableTokenSpoke, IOwnable imports come from mento-core (not from the NTT submodule)
+---
