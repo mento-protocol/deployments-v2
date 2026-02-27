@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -20,6 +20,11 @@ import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {ConfigHelper} from "../helpers/ConfigHelper.sol";
 
+interface ISortedOracles {
+    function setTokenReportExpiry(address token, uint256 expirySeconds) external;
+    function getTokenReportExpirySeconds(address token) external view returns (uint256);
+}
+
 contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -35,9 +40,23 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         IMentoConfig.FPMMConfig[] memory fpmmConfigs = config.getFPMMConfigs();
 
+        _setExpiryRate();
+
         for (uint256 i = 0; i < fpmmConfigs.length; i++) {
             _deployFPMM(deployer, factory, factoryView, fpmmConfigs[i]);
         }
+    }
+
+    function _setExpiryRate() internal {
+        Senders.Sender storage deployer = sender("deployer");
+        address oraclesProxy = lookupProxyOrFail("SortedOracles");
+        address rateFeed = 0xAe5eEe6815b8529847955d19522858806Bca8217;
+
+        require(ISortedOracles(oraclesProxy).getTokenReportExpirySeconds(rateFeed) == 300, "Expiry rate is not 300");
+
+        ISortedOracles(deployer.harness(oraclesProxy)).setTokenReportExpiry(rateFeed, 1 days);
+
+        require(ISortedOracles(oraclesProxy).getTokenReportExpirySeconds(rateFeed) == 1 days, "Expiry rate is not 1 days");
     }
 
     function _deployFPMM(
@@ -179,6 +198,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper {
 
         // Get the oracle rate (token0/token1 after invertRateFeed)
         IOracleAdapter oracle = fpmm.oracleAdapter();
+        console.log("adapter", address(oracle));
+        console.log("referenceRateFeedID:", c.referenceRateFeedID);
+        console.log("adapter market hours breaker", address(oracle.marketHoursBreaker()));
         (uint256 rateNumerator, uint256 rateDenominator) = oracle
             .getFXRateIfValid(c.referenceRateFeedID);
         if (c.invertRateFeed) {
