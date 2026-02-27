@@ -14,13 +14,13 @@ import {FXPriceFeed} from "bold/src/PriceFeeds/FXPriceFeed.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
-import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 import {ReserveTroveFactory} from "src/ReserveTroveFactory.sol";
 import {ITroveManager} from "lib/bold/contracts/src/Interfaces/ITroveManager.sol";
 import {LatestTroveData} from "lib/bold/contracts/src/Types/LatestTroveData.sol";
 import {IBiPoolManager} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
 import {IExchangeProvider} from "lib/mento-core/contracts/interfaces/IExchangeProvider.sol";
 
+import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper {
@@ -35,7 +35,6 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     address debtToken;
     address collateralToken;
     address factory;
-    address reserveLiquidityStrategy;
     address cdpLiquidityStrategy;
     uint256 troveId;
 
@@ -49,12 +48,11 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
         fpmm = lookupProxyOrFail(cfg.fpmmLabel);
         debtToken = address(registry.boldToken());
         collateralToken = address(registry.collToken());
-        reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
         cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
 
         _destroyV2Exchange();
         _updateDebtTokenRoles();
-        _switchLiquidityStrategy();
+        _enableCDPLiquidityStrategy();
         _deployReserveTroveFactory();
         _setRateFeedID();
         _createReserveTrove();
@@ -63,7 +61,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _destroyV2Exchange() internal {
-        address biPoolManagerAddy = lookupProxyOrFail("BiPoolManager");
+        address biPoolManagerAddy = lookupOrFail("Proxy:BiPoolManager");
         IBiPoolManager biPoolManagerRead = IBiPoolManager(biPoolManagerAddy);
         IBiPoolManager biPoolManager = IBiPoolManager(deployer.harness(biPoolManagerAddy));
 
@@ -84,9 +82,10 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _updateDebtTokenRoles() internal {
-        // Remove reserve strategy minter and burner on debt token
-        IStableTokenV3(deployer.harness(debtToken)).setMinter(reserveLiquidityStrategy, false);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(reserveLiquidityStrategy, false);
+        // Remove broker permissions on debt token
+        address broker = lookupOrFail("Proxy:Broker");
+        IStableTokenV3(deployer.harness(debtToken)).setMinter(broker, false);
+        IStableTokenV3(deployer.harness(debtToken)).setBurner(broker, false);
 
         // Grant Liquity contracts permissions on debt token
         IStableTokenV3(deployer.harness(debtToken)).setMinter(address(registry.borrowerOperations()), true);
@@ -100,11 +99,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
         IStableTokenV3(deployer.harness(debtToken)).setOperator(address(registry.stabilityPool()), true);
     }
 
-    function _switchLiquidityStrategy() internal {
-        // Remove reserve strategy pool config and disable on FPMM
-        IReserveLiquidityStrategy(deployer.harness(reserveLiquidityStrategy)).removePool(fpmm);
-        IFPMM(deployer.harness(fpmm)).setLiquidityStrategy(reserveLiquidityStrategy, false);
-
+    function _enableCDPLiquidityStrategy() internal {
         // Enable CDP strategy on FPMM and add pool config
         IFPMM(deployer.harness(fpmm)).setLiquidityStrategy(cdpLiquidityStrategy, true);
 
@@ -191,9 +186,10 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     function _checkDebtTokenRoles() internal view {
         IStableTokenV3 debt = IStableTokenV3(debtToken);
 
-        // Reserve strategy should no longer be a minter or burner
-        require(!debt.isMinter(reserveLiquidityStrategy), "Reserve strategy still a minter on debt token");
-        require(!debt.isBurner(reserveLiquidityStrategy), "Reserve strategy still a burner on debt token");
+        // Broker should have minter and burner permissions
+        address broker = lookupOrFail("Proxy:Broker");
+        require(debt.isMinter(broker), "Broker not a minter on debt token");
+        require(debt.isBurner(broker), "Broker not a burner on debt token");
 
         // Liquity contracts should have minter permissions
         require(debt.isMinter(address(registry.borrowerOperations())), "BorrowerOperations not a minter on debt token");
@@ -210,13 +206,6 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _checkLiquidityStrategy() internal view {
-        // Reserve strategy should be disabled on FPMM and have no pool registered
-        require(!IFPMM(fpmm).liquidityStrategy(reserveLiquidityStrategy), "Reserve strategy still enabled on FPMM");
-        require(
-            !ILiquidityStrategy(reserveLiquidityStrategy).isPoolRegistered(fpmm),
-            "FPMM still registered on reserve strategy"
-        );
-
         // CDP strategy should be enabled on FPMM and have pool registered
         require(IFPMM(fpmm).liquidityStrategy(cdpLiquidityStrategy), "CDP strategy not enabled on FPMM");
         require(
@@ -226,6 +215,37 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _checkCDPLiquidityStrategyConfig() internal view {
+        // Check pool config
+        (
+            bool isToken0Debt,
+            ,  // lastRebalance
+            uint32 rebalanceCooldown,
+            address protocolFeeRecipient,
+            uint64 liquiditySourceIncentiveExpansion,
+            uint64 protocolIncentiveExpansion,
+            uint64 liquiditySourceIncentiveContraction,
+            uint64 protocolIncentiveContraction
+        ) = LiquidityStrategy(cdpLiquidityStrategy).poolConfigs(fpmm);
+
+        bool expectedIsToken0Debt = (IFPMM(fpmm).token0() == address(registry.boldToken()));
+        require(isToken0Debt == expectedIsToken0Debt, "PoolConfig isToken0Debt mismatch");
+        require(rebalanceCooldown == cfg.cooldown, "PoolConfig cooldown mismatch");
+        require(protocolFeeRecipient == cfg.protocolFeeRecipient, "PoolConfig protocolFeeRecipient mismatch");
+        require(
+            liquiditySourceIncentiveExpansion == cfg.liquiditySourceIncentiveExpansion,
+            "PoolConfig liquiditySourceIncentiveExpansion mismatch"
+        );
+        require(protocolIncentiveExpansion == cfg.protocolIncentiveExpansion, "PoolConfig protocolIncentiveExpansion mismatch");
+        require(
+            liquiditySourceIncentiveContraction == cfg.liquiditySourceIncentiveContraction,
+            "PoolConfig liquiditySourceIncentiveContraction mismatch"
+        );
+        require(
+            protocolIncentiveContraction == cfg.protocolIncentiveContraction,
+            "PoolConfig protocolIncentiveContraction mismatch"
+        );
+
+        // Check CDP-specific config
         ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
             ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(fpmm);
 
@@ -276,10 +296,6 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     }
 
     function _checkFactoryCleanup() internal view {
-        // Factory should be deployed
-        require(factory != address(0), "ReserveTroveFactory not deployed");
-        require(factory.code.length > 0, "ReserveTroveFactory has no code");
-
         // Temporary permissions should be removed
         require(!IStableTokenV3(collateralToken).isMinter(factory), "Factory still a minter on collateral token");
         require(!IStableTokenV3(debtToken).isBurner(factory), "Factory still a burner on debt token");
