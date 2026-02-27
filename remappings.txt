@@ -3,3 +3,5 @@ lib/mento-core/lib/bold/:openzeppelin-contracts/=lib/mento-core/lib/bold/contrac
 openzeppelin-contracts/=lib/mento-core/lib/openzeppelin-contracts-next/
 safe-smart-account/=lib/treb-sol/lib/safe-utils/lib/safe-smart-account/contracts/
 mento-core/=lib/mento-core/contracts/
+mento-stabletoken-ntt/=lib/mento-stabletoken-ntt/evm/
+wormhole-solidity-sdk/=lib/mento-stabletoken-ntt/evm/lib/wormhole-solidity-sdk/src/
