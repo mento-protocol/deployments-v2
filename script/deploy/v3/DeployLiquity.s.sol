@@ -90,6 +90,9 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     address owner; // Owner Proxy needs to be deployed first
     address yieldSplitAddress; // Yield Split Address needs to be deployed first
 
+    // TODO: testing purposes, we don't want to test the actual rate feed at the beginning
+    address nonFunctionalRateFeed = 0x0000000000000000000000000000000000000539;
+
     ILiquityConfig.LiquityInstanceConfig cfg;
 
     LiquityContractAddresses deployedContracts;
@@ -112,7 +115,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         debtToken = lookupProxyOrFail(cfg.debtTokenLabel);
         collateralToken = lookupProxyOrFail("cUSD");
         cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
-        gasToken = lookupProxyOrFail("CELO");
+        gasToken = lookupOrFail("CELO");
 
         watchdog = lookupOrFail("Watchdog");
         owner = sender("migrationOwner").account;
@@ -444,7 +447,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             abi.encodeWithSelector(
                 FXPriceFeed.initialize.selector,
                 oracleAdapter,
-                cfg.rateFeedID,
+                nonFunctionalRateFeed,
                 cfg.invertRateFeed,
                 cfg.l2SequencerGracePeriod,
                 borrowerOperationsAddress,
@@ -605,7 +608,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             address(pf.oracleAdapter()) == oracleAdapter,
             "PF: oracleAdapter"
         );
-        require(pf.rateFeedID() == cfg.rateFeedID, "PF: rateFeedID");
+        require(pf.rateFeedID() == nonFunctionalRateFeed, "PF: rateFeedID");
         require(
             pf.invertRateFeed() == cfg.invertRateFeed,
             "PF: invertRateFeed"
@@ -703,7 +706,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         string[] memory cmd = new string[](3);
         cmd[0] = "bash";
         cmd[1] = "-c";
-        cmd[2] = string.concat("base64 ", filePath, " | tr -d '\\n'");
+        cmd[2] = string.concat("base64 -i", filePath, " | tr -d '\\n'");
         return vm.ffi(cmd);
     }
 
