@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8;
 
+import {console} from "forge-std/console.sol";
 import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -24,7 +25,9 @@ import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
-contract MigrateStableToCDP is TrebScript, ProxyHelper {
+import { CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
+
+contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -142,7 +145,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
 
     function _deployReserveTroveFactory() internal {
         factory = lookup("ReserveTroveFactory");
-    if (factory == address(0)) {
+        if (factory == address(0)) {
             factory = deployer.create3("ReserveTroveFactory").deploy(
                 abi.encode(reserveTroveManager, owner)
             );
@@ -199,8 +202,8 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
 
         // Broker should have minter and burner permissions
         address broker = lookupOrFail("Proxy:Broker");
-        require(debt.isMinter(broker), "Broker not a minter on debt token");
-        require(debt.isBurner(broker), "Broker not a burner on debt token");
+        require(!debt.isMinter(broker), "Broker not a minter on debt token");
+        require(!debt.isBurner(broker), "Broker not a burner on debt token");
 
         // Liquity contracts should have minter permissions
         require(debt.isMinter(address(registry.borrowerOperations())), "BorrowerOperations not a minter on debt token");
@@ -293,6 +296,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
 
         // Trove debt should be at least the debt token total supply (includes upfront fee)
         uint256 totalSupply = IStableTokenV3(debtToken).totalSupply();
+        console.log("debt token total supply", totalSupply);
         LatestTroveData memory troveData = troveManager.getLatestTroveData(troveId);
         require(troveData.entireDebt >= totalSupply, "Reserve trove debt less than total supply");
         require(troveData.entireColl > 0, "Reserve trove has no collateral");
