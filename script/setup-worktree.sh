@@ -1,42 +1,35 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Setup a Claude Code worktree with forge + pnpm dependencies installed.
-# Usage: ./script/setup-worktree.sh <branch-name> [base-branch]
-#   branch-name: the branch to create (e.g. feat/configure-v3-prestage)
-#   base-branch:  the branch to base off of (default: main)
+# Post-creation setup for a worktree: install dependencies and copy config.
+# Run this from inside an already-created worktree directory.
+# Usage: ./script/setup-worktree.sh
 
-BRANCH="${1:?Usage: $0 <branch-name> [base-branch]}"
-BASE="${2:-main}"
+WORKTREE_DIR="$(git rev-parse --show-toplevel)"
+# The main repo root is the commondir for worktrees
+REPO_ROOT="$(git rev-parse --git-common-dir)"
+REPO_ROOT="$(cd "${REPO_ROOT}" && cd .. && pwd)"
 
-# Derive a short worktree dir name from the branch (strip prefixes like feat/)
-WORKTREE_NAME="${BRANCH##*/}"
-
-REPO_ROOT="$(git rev-parse --show-toplevel)"
-WORKTREE_DIR="${REPO_ROOT}/.claude/worktrees/${WORKTREE_NAME}"
-
-if [ -d "$WORKTREE_DIR" ]; then
-  echo "Worktree already exists at ${WORKTREE_DIR}"
-  echo "To remove it: git worktree remove ${WORKTREE_DIR}"
-  exit 1
-fi
-
-echo "Creating worktree '${WORKTREE_NAME}' off '${BASE}' at ${WORKTREE_DIR}..."
-git worktree add "$WORKTREE_DIR" -b "$BRANCH" "$BASE"
+echo "Setting up worktree at: ${WORKTREE_DIR}"
+echo "Main repo root: ${REPO_ROOT}"
 
 echo "Copying .env from repo root..."
 cp "${REPO_ROOT}/.env" "${WORKTREE_DIR}/.env" 2>/dev/null \
   || echo "  No .env found in repo root, skipping"
 
 echo "Installing forge dependencies..."
-(cd "$WORKTREE_DIR" && forge install)
+forge install
 
 echo "Installing pnpm dependencies..."
-(cd "$WORKTREE_DIR" && pnpm install)
+pnpm install
 
-echo "Installing mento-core node_modules..."
-(cd "$WORKTREE_DIR/lib/mento-core" && npm install)
+if [ -d "lib/mento-core" ]; then
+  echo "Installing mento-core node_modules..."
+  (cd lib/mento-core && npm install)
+
+  echo "Cleaning up mento-core..."
+  (cd lib/mento-core && git checkout yarn.lock && rm -f package-lock.json)
+fi
 
 echo ""
-echo "Worktree ready at: ${WORKTREE_DIR}"
-echo "  cd ${WORKTREE_DIR}"
+echo "Worktree setup complete!"
