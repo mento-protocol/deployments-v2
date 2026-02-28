@@ -24,8 +24,7 @@ ignore = ["**/*"]
 
 [rpc_endpoints]
 celo = "${CELO_RPC_URL}"
-#celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
-celo_sepolia = "http://localhost:8545"
+celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
 monad = "${MONAD_RPC_URL}"
 chain-143 = "${MONAD_RPC_URL}"

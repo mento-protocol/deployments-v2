@@ -683,11 +683,25 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
     
 
+    function _defaultRlsConfig(string memory debtToken) internal view returns (ReserveLiquidityStrategyPoolConfig memory) {
+        return ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress(debtToken),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+    }
+
     function _lookupTokenAddress(string memory symbol) internal view returns (address) {
         bool isStable = _isStableToken[symbol];
         bool isCollateral = isCollateralAsset(symbol);
 
         require(!isStable || !isCollateral, "Token is both stable and collateral");
+        require(isStable || isCollateral, string.concat("Token not found: ", symbol));
 
         if (isStable) {
             return lookupProxyOrFail(symbol);
@@ -696,7 +710,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         }
     }
 
-    function _shouldInvertRateFeed(address token0, address token1) private returns (bool) {
+    function _shouldInvertRateFeed(address token0, address token1) private view returns (bool) {
         (token0, token1) = token0 < token1 ? (token0, token1) : (token1, token0);
 
         bool isFxPool = isStableToken(token0) && isStableToken(token1);

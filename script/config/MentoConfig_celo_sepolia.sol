@@ -66,6 +66,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             emptyRls
         );
 
+        ReserveLiquidityStrategyPoolConfig memory defaultRls = _defaultRlsConfig("cUSD");
+
         _addFPMM(
             "cUSD",
             "axlUSDC",
@@ -78,17 +80,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceIncentive: 1,
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
-            }), 
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            }),
+            defaultRls
         );
 
         _addFPMM(
@@ -104,16 +97,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            defaultRls
         );
 
         _addFPMM(
@@ -129,16 +113,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            defaultRls
         );
     }
 
