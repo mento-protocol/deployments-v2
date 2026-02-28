@@ -1,0 +1,14 @@
+group: Upgrade StableTokenV3
+components:
+  UpgradeStableTokenV3_cUSD:
+    script: UpgradeStableTokenV3
+    env:
+      TOKEN_SYMBOL: cUSD
+  UpgradeStableTokenV3_cEUR:
+    script: UpgradeStableTokenV3
+    env:
+      TOKEN_SYMBOL: cEUR
+  UpgradeStableTokenV3_cGBP:
+    script: UpgradeStableTokenV3
+    env:
+      TOKEN_SYMBOL: cGBP

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -43,9 +43,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         internal _chainlinkRelayers;
     mapping(string symbol => address) internal _collateral;
     mapping(string symbol => bool) internal _isStableToken;
+    mapping(address token => bool) internal _isAddressStableToken;
+    mapping(address token => bool) internal _isAddressCollateralToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
-    mapping(string => address) _deployedContract;
     bytes32[] _breakerIds;
+
+    FPMMConfig[] internal _fpmmConfigs;
 
     IFPMM.FPMMParams internal _defaultFPMMParams;
     /// @dev pairKey is for example "USDC/USDm" and it will be duplicated as "USDm/USDC"
@@ -204,6 +207,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return getAddress(symbol);
     }
 
+    function getFPMMConfigs()
+        external
+        view
+        returns (FPMMConfig[] memory)
+    {
+        return _fpmmConfigs;
+    }
+
     /// @dev Get default FPMM Params
     function getDefaultFPMMParams()
         public
@@ -315,17 +326,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    function getDeployedContract(
-        string memory name
-    ) public view returns (address contractAddress) {
-        contractAddress = _deployedContract[name];
-        if (contractAddress == address(0)) {
-            revert(
-                string.concat("Could not find deployed contract named ", name)
-            );
-        }
-    }
-
     // ========== Internal Helper Functions ==========
 
     function _addStableToken(
@@ -334,6 +334,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory name
     ) internal {
         _isStableToken[symbol] = true;
+        _isAddressStableToken[_lookupTokenAddress(symbol)] = true;
         _symbolForCurrency[currency] = symbol;
         _tokens.push(
             TokenConfig({symbol: symbol, name: name, currency: currency})
@@ -341,12 +342,20 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addCollateral(string memory symbol, address addy) internal {
+        _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _collateral[symbol] = addy;
     }
 
     function _addMockCollateral(string memory symbol) internal {
-        address addy = _predict("MockERC20", symbol);
+        address addy;
+        address lookupMock = lookup(string.concat("MockERC20:", symbol));
+        if (lookupMock != address(0)) {
+            addy = lookupMock;
+        } else {
+            addy = _predict("MockERC20", symbol);
+        }
+        _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _mockCollateralAssets.push(symbol);
         _collateral[symbol] = addy;
@@ -642,43 +651,82 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    function _addFPMMParams(
-        address token0,
-        address token1,
-        uint256 lpFee,
-        uint256 protocolFee,
-        address protocolFeeRecipient,
-        address feeSetter,
-        uint256 rebalanceIncentive,
-        uint256 rebalanceThresholdAbove,
-        uint256 rebalanceThresholdBelow
-    ) internal {
-        string memory symbol0 = IERC20Metadata(token0).symbol();
-        string memory symbol1 = IERC20Metadata(token1).symbol();
-        IFPMM.FPMMParams memory params = IFPMM.FPMMParams(
-            lpFee,
-            protocolFee,
-            protocolFeeRecipient,
-            feeSetter,
-            rebalanceIncentive,
-            rebalanceThresholdAbove,
-            rebalanceThresholdBelow
-        );
-        string memory poolKey01 = string.concat(symbol0, "/", symbol1);
-        string memory poolKey10 = string.concat(symbol1, "/", symbol0);
-        _fpmmParams[poolKey01] = params;
-        _fpmmParams[poolKey10] = params;
-    }
-
-    function _addDeployedContract(
-        string memory name,
-        address contractAddress
-    ) internal {
-        _deployedContract[name] = contractAddress;
-    }
-
     function _setRedemptionShortfallTolerance(uint256 tolerance) internal {
         _redemptionShortfallTolerance = tolerance;
+    }
+
+    function _addFPMM(
+        string memory token0,
+        string memory token1,
+        address rateFeed,
+        IFPMM.FPMMParams memory params,
+        ReserveLiquidityStrategyPoolConfig memory rlsParams
+    ) internal {
+        address _fpmmImpl = lookup("FPMM:v3.0.0");
+        address _oracleAdapter = lookupProxyOrFail("OracleAdapter");
+        address _proxyAdmin = lookup("ProxyAdmin");
+        address token0Address = _lookupTokenAddress(token0);
+        address token1Address = _lookupTokenAddress(token1);
+
+        FPMMConfig memory c;
+        c.fpmmImplementation = _fpmmImpl;
+        c.oracleAdapter = _oracleAdapter;
+        c.proxyAdmin = _proxyAdmin;
+        c.token0 = token0Address;
+        c.token1 = token1Address;
+        c.referenceRateFeedID = rateFeed;
+        c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
+        c.params = params;
+        c.rlsConfig = rlsParams;
+
+        _fpmmConfigs.push(c);
+    }
+    
+
+    function _lookupTokenAddress(string memory symbol) internal view returns (address) {
+        bool isStable = _isStableToken[symbol];
+        bool isCollateral = isCollateralAsset(symbol);
+
+        require(!isStable || !isCollateral, "Token is both stable and collateral");
+        require(isStable || isCollateral, string.concat("Token not found: ", symbol));
+
+        if (isStable) {
+            return lookupProxyOrFail(symbol);
+        } else {
+            return _collateral[symbol];
+        }
+    }
+
+    function _shouldInvertRateFeed(address token0, address token1) private view returns (bool) {
+        (token0, token1) = token0 < token1 ? (token0, token1) : (token1, token0);
+
+        bool isFxPool = isStableToken(token0) && isStableToken(token1);
+
+        if (isFxPool) {
+            bool isToken0USDm = areStringsEqual(IERC20Metadata(token0).symbol(), "USDm");
+
+            return isToken0USDm ? false : true;
+        } else {
+            bool isToken0Collateral = isCollateralAsset(token0);
+
+            return isToken0Collateral ? false : true;
+        }
+    }
+
+    function isCollateralAsset(string memory symbol) internal view returns (bool) {
+        return _collateral[symbol] != address(0);
+    }
+
+    function isCollateralAsset(address token) internal view returns (bool) {
+        return _isAddressCollateralToken[token];
+    }
+
+    function isStableToken(address token) internal view returns (bool) {
+        return _isAddressStableToken[token];
+    }
+
+    function areStringsEqual(string memory a, string memory b) internal pure returns (bool) {
+        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
 
     function _resolveExchangeAsset(

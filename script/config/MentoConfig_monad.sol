@@ -14,7 +14,6 @@ contract MentoConfig_monad is MentoConfig {
         _initTokens();
         _initOracles();
         _initParams();
-        _initDeployedContracts();
     }
 
     /// ===================================================================
@@ -126,11 +125,5 @@ contract MentoConfig_monad is MentoConfig {
             aggregator0: source,
             invert0: false
         });
-    }
-
-    function _initDeployedContracts() internal {
-        _addDeployedContract("SortedOracles", lookupProxy("SortedOracles"));
-        _addDeployedContract("BreakerBox", lookup("BreakerBox:v2.6.5"));
-        _addDeployedContract("ProxyAdmin", lookup("ProxyAdmin"));
     }
 }
