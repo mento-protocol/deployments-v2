@@ -9,7 +9,6 @@ import {ILiquityConfig} from "./ILiquityConfig.sol";
 // to find them by contract name at script run time.
 import "./liquity/LiquityConfig_celo_sepolia_GBPm.sol";
 import "./liquity/LiquityConfig_celo_GBPm.sol";
-import "./liquity/LiquityConfig_anvil_GBPm.sol";
 
 /**
  * @notice Loader library used by deployment scripts.

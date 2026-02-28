@@ -86,6 +86,11 @@ signer = "proposer"
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
+[profile.default.treb.senders.migrationOwner]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+
 [profile.testnet-v2-rc5.treb.senders.deployer]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"

@@ -9,16 +9,9 @@ interface ILiquityConfig {
         /// @dev Label used for singleton CREATE3 deployments, e.g. "v3.0.0-GBPm"
         string singletonLabel;
         // ── Registry lookup keys ─────────────────────────────────────────
-        string debtTokenLabel; // e.g. "StableTokenV3:GBPm"
-        string collateralTokenLabel; // e.g. "StableTokenV3:USDm"
-        string liquidityStrategyLabel; // e.g. "CDPLiquidityStrategy"
-        string gasTokenLabel; // e.g. "StableTokenV3:USDm"
-        string oracleAdapterLabel; // e.g. "OracleAdapter"
+        string debtTokenLabel; // e.g. "cGBP"
         // ── Addresses ────────────────────────────────────────────────────
         address rateFeedID;
-        address watchdog;
-        address owner;
-        address yieldSplitAddress;
         // ── FXPriceFeed ──────────────────────────────────────────────────
         bool invertRateFeed;
         uint256 l2SequencerGracePeriod;

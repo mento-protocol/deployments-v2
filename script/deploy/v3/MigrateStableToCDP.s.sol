@@ -32,18 +32,22 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
     Senders.Sender deployer;
     ICDPMigrationConfig.CDPMigrationInstanceConfig cfg;
     IAddressesRegistry registry;
+    address owner;
     address fpmm;
     address debtToken;
     address collateralToken;
     address factory;
     address cdpLiquidityStrategy;
+    address protocolFeeRecipient;
+    address reserveTroveManager;
     uint256 troveId;
 
     /// @custom:env {string} token
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        cfg = CDPMigrationConfigLib.get();
+        cfg = CDPMigrationConfigLib.get(vm.envString("token"));
         deployer = sender("deployer");
+        owner = sender("migrationOwner").account;
 
         registry = IAddressesRegistry(lookupOrFail(string.concat("AddressesRegistry:v3.0.0-", vm.envString("token"))));
         // 1. Setup — look up core addresses
@@ -54,6 +58,8 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
         debtToken = address(registry.boldToken());
         collateralToken = address(registry.collToken());
         cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
+        protocolFeeRecipient = lookupOrFail("ProtocolFeeRecipient");
+        reserveTroveManager = lookupOrFail("ReserveSafe");
 
         _destroyV2Exchange();
         _updateDebtTokenRoles();
@@ -112,7 +118,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
             pool: fpmm,
             debtToken: debtToken,
             cooldown: cfg.cooldown,
-            protocolFeeRecipient: cfg.protocolFeeRecipient,
+            protocolFeeRecipient: protocolFeeRecipient,
             liquiditySourceIncentiveExpansion: cfg.liquiditySourceIncentiveExpansion,
             protocolIncentiveExpansion: cfg.protocolIncentiveExpansion,
             liquiditySourceIncentiveContraction: cfg.liquiditySourceIncentiveContraction,
@@ -136,9 +142,9 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
 
     function _deployReserveTroveFactory() internal {
         factory = lookup("ReserveTroveFactory");
-        if (factory == address(0)) {
+    if (factory == address(0)) {
             factory = deployer.create3("ReserveTroveFactory").deploy(
-                abi.encode(cfg.reserveTroveManagerAddress, deployer.account)
+                abi.encode(reserveTroveManager, owner)
             );
         }
     }
@@ -225,7 +231,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
             bool isToken0Debt,
             ,  // lastRebalance
             uint32 rebalanceCooldown,
-            address protocolFeeRecipient,
+            address actualProtocolFeeRecipient,
             uint64 liquiditySourceIncentiveExpansion,
             uint64 protocolIncentiveExpansion,
             uint64 liquiditySourceIncentiveContraction,
@@ -235,7 +241,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
         bool expectedIsToken0Debt = (IFPMM(fpmm).token0() == address(registry.boldToken()));
         require(isToken0Debt == expectedIsToken0Debt, "PoolConfig isToken0Debt mismatch");
         require(rebalanceCooldown == cfg.cooldown, "PoolConfig cooldown mismatch");
-        require(protocolFeeRecipient == cfg.protocolFeeRecipient, "PoolConfig protocolFeeRecipient mismatch");
+        require(actualProtocolFeeRecipient == protocolFeeRecipient, "PoolConfig protocolFeeRecipient mismatch");
         require(
             liquiditySourceIncentiveExpansion == cfg.liquiditySourceIncentiveExpansion,
             "PoolConfig liquiditySourceIncentiveExpansion mismatch"
@@ -281,7 +287,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper {
 
         // Trove NFT should be owned by the reserve trove manager
         require(
-            troveManager.troveNFT().ownerOf(troveId) == cfg.reserveTroveManagerAddress,
+            troveManager.troveNFT().ownerOf(troveId) == reserveTroveManager,
             "Reserve trove NFT not owned by reserveTroveManager"
         );
 

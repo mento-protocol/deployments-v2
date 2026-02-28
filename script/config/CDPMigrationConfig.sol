@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import {Vm} from "forge-std/Vm.sol";
 import {ICDPMigrationConfig} from "./ICDPMigrationConfig.sol";
+import {CDPMigrationConfig_GBPm} from "./CDPMigrationConfig_GBPm.sol";
 
 /**
  * @notice Loader library for CDP migration configs.
@@ -16,11 +17,11 @@ library CDPMigrationConfigLib {
         address(uint160(uint256(keccak256("hevm cheat code"))));
     Vm private constant vm = Vm(VM_ADDRESS);
 
-    function get()
+    function get(string memory token)
         internal
         returns (ICDPMigrationConfig.CDPMigrationInstanceConfig memory)
     {
-        string memory name = vm.envString("CDP_MIGRATION_CONFIG_CONTRACT");
+        string memory name = string.concat("CDPMigrationConfig_", token);
         address config = vm.deployCode(name);
         require(
             config != address(0),

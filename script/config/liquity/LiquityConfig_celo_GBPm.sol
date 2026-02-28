@@ -19,16 +19,9 @@ contract LiquityConfig_celo_GBPm is ILiquityConfig {
                 singletonLabel: "v3.0.0-GBPm",
                 // ── Registry lookup keys ────────────────────────────────
                 // TODO: change to labels used in prestage Celo script
-                debtTokenLabel: "StableTokenV3:GBPm",
-                collateralTokenLabel: "StableTokenV3:USDm",
-                liquidityStrategyLabel: "CDPLiquidityStrategy",
-                gasTokenLabel: "StableTokenV3:USDm",
-                oracleAdapterLabel: "OracleAdapter",
+                debtTokenLabel: "cGBP",
                 // ── Addresses ──────────────────────────────────────────
                 rateFeedID: 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88, // GBP/USD
-                watchdog: 0x287810F677516f10993ff63a520aAD5509F35796, // TODO: change to FXPriceFeed Watchdog Celo
-                owner: 0x287810F677516f10993ff63a520aAD5509F35796, // TODO: change to Owner Celo
-                yieldSplitAddress: 0x287810F677516f10993ff63a520aAD5509F35796, // TODO: change to Yield Split Address Celo
                 // ── FXPriceFeed ────────────────────────────────────────
                 invertRateFeed: true, // SortedOracles: GBP/USD is inverted as (USD/GBP)
                 l2SequencerGracePeriod: 1200, // 20 minutes

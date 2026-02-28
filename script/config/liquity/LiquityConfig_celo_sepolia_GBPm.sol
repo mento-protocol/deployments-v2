@@ -20,15 +20,8 @@ contract LiquityConfig_celo_sepolia_GBPm is ILiquityConfig {
                 // ── Registry lookup keys ────────────────────────────────
                 // TODO: change to labels used in prestage Celo script
                 debtTokenLabel: "cGBP",
-                collateralTokenLabel: "cUSD",
-                liquidityStrategyLabel: "CDPLiquidityStrategy",
-                gasTokenLabel: "cUSD",
-                oracleAdapterLabel: "OracleAdapter",
                 // ── Addresses ──────────────────────────────────────────
-                rateFeedID: 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88, // GBP/USD
-                watchdog: 0x287810F677516f10993ff63a520aAD5509F35796, // TODO: change to FXPriceFeed Watchdog Celo
-                owner: 0x287810F677516f10993ff63a520aAD5509F35796, // TODO: change to Owner Celo
-                yieldSplitAddress: 0x287810F677516f10993ff63a520aAD5509F35796, // TODO: change to Yield Split Address Celo
+                rateFeedID: 0xAe5eEe6815b8529847955d19522858806Bca8217, // GBP/USD
                 // ── FXPriceFeed ────────────────────────────────────────
                 invertRateFeed: true, // SortedOracles: GBP/USD is inverted as (USD/GBP)
                 l2SequencerGracePeriod: 1200, // 20 minutes

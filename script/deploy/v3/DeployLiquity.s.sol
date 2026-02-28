@@ -86,6 +86,10 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     address oracleAdapter; // OracleAdapter Proxy needs to be deployed first
     address cdpLiquidityStrategy; // resolved from cfg.liquidityStrategyLabel
 
+    address watchdog; // Watchdog Proxy needs to be deployed first
+    address owner; // Owner Proxy needs to be deployed first
+    address yieldSplitAddress; // Yield Split Address needs to be deployed first
+
     ILiquityConfig.LiquityInstanceConfig cfg;
 
     LiquityContractAddresses deployedContracts;
@@ -99,16 +103,20 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     // - SystemParams
 
     /// @custom:env {string} token
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         deployer = sender("deployer");
         cfg = LiquityConfigLib.get(vm.envString("token"));
 
-        oracleAdapter = lookupProxyOrFail(cfg.oracleAdapterLabel);
+        oracleAdapter = lookupProxyOrFail("OracleAdapter");
         debtToken = lookupProxyOrFail(cfg.debtTokenLabel);
-        collateralToken = lookupProxyOrFail(cfg.collateralTokenLabel);
-        cdpLiquidityStrategy = lookupProxyOrFail(cfg.liquidityStrategyLabel);
-        gasToken = lookupProxyOrFail(cfg.gasTokenLabel);
+        collateralToken = lookupProxyOrFail("cUSD");
+        cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
+        gasToken = lookupProxyOrFail("CELO");
+
+        watchdog = lookupOrFail("Watchdog");
+        owner = sender("migrationOwner").account;
+        yieldSplitAddress = lookupOrFail("YieldSplitAddress");
 
         deployAndConnectContracts();
     }
@@ -330,7 +338,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                     precomputedAddresses.collSurplusPool
                 ),
                 sortedTroves: ISortedTroves(precomputedAddresses.sortedTroves),
-                interestRouter: IInterestRouter(cfg.yieldSplitAddress),
+                interestRouter: IInterestRouter(yieldSplitAddress),
                 hintHelpers: IHintHelpers(deployedContracts.hintHelpers),
                 multiTroveGetter: IMultiTroveGetter(
                     deployedContracts.multiTroveGetter
@@ -348,15 +356,15 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     function _transferProxyAdminOwnerships() internal {
         Ownable(
             deployer.harness(getProxyAdmin(deployedContracts.priceFeedProxy))
-        ).transferOwnership(cfg.owner);
+        ).transferOwnership(owner);
         Ownable(
             deployer.harness(
                 getProxyAdmin(deployedContracts.stabilityPoolProxy)
             )
-        ).transferOwnership(cfg.owner);
+        ).transferOwnership(owner);
         Ownable(
             deployer.harness(getProxyAdmin(deployedContracts.systemParamsProxy))
-        ).transferOwnership(cfg.owner);
+        ).transferOwnership(owner);
     }
 
     function _deploySystemParams() internal {
@@ -440,8 +448,8 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 cfg.invertRateFeed,
                 cfg.l2SequencerGracePeriod,
                 borrowerOperationsAddress,
-                cfg.watchdog,
-                cfg.owner
+                watchdog,
+                owner
             )
         );
     }
@@ -526,7 +534,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             "AR: sortedTroves"
         );
         require(
-            address(ar.interestRouter()) == cfg.yieldSplitAddress,
+            address(ar.interestRouter()) == yieldSplitAddress,
             "AR: interestRouter"
         );
         require(
@@ -606,14 +614,14 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             pf.l2SequencerGracePeriod() == cfg.l2SequencerGracePeriod,
             "PF: l2SequencerGracePeriod"
         );
-        require(pf.watchdogAddress() == cfg.watchdog, "PF: watchdog");
+        require(pf.watchdogAddress() == watchdog, "PF: watchdog");
         require(
             address(pf.borrowerOperations()) ==
                 deployedContracts.borrowerOperations,
             "PF: borrowerOperations"
         );
         require(
-            Ownable(deployedContracts.priceFeedProxy).owner() == cfg.owner,
+            Ownable(deployedContracts.priceFeedProxy).owner() == owner,
             "PF: owner"
         );
 
@@ -673,20 +681,20 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             "SP: minBoldAfterRebalance"
         );
 
-        // ── Proxy upgradeability: ProxyAdmin owner == cfg.owner ─────────
+        // ── Proxy upgradeability: ProxyAdmin owner == owner ─────────
         require(
             Ownable(getProxyAdmin(deployedContracts.priceFeedProxy)).owner() ==
-                cfg.owner,
+                owner,
             "ProxyAdmin: priceFeed"
         );
         require(
             Ownable(getProxyAdmin(deployedContracts.stabilityPoolProxy))
-                .owner() == cfg.owner,
+                .owner() == owner,
             "ProxyAdmin: stabilityPool"
         );
         require(
             Ownable(getProxyAdmin(deployedContracts.systemParamsProxy))
-                .owner() == cfg.owner,
+                .owner() == owner,
             "ProxyAdmin: systemParams"
         );
     }
