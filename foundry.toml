@@ -82,7 +82,7 @@ type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "proposer"
 
-[profile.testnet-v2-rc5.treb.senders.migrationOwner]
+[profile.default.treb.senders.migrationOwner]
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
