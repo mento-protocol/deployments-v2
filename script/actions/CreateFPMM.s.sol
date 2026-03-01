@@ -440,8 +440,17 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         address fpmmProxy,
         IMentoConfig.ReserveLiquidityStrategyPoolConfig memory rls
     ) internal {
-
         IFPMM fpmm = IFPMM(fpmmProxy);
+
+        address sorted0 = fpmm.token0();
+        address sorted1 = fpmm.token1();
+
+        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
+        uint256 decimals1 = 10 ** IERC20Metadata(sorted1).decimals();
+        address reserve = lookupProxyOrFail("ReserveV2");
+
+        deal(sorted0, reserve, 100000 * decimals0);
+        deal(sorted1, reserve, 100000 * decimals1);
 
         // 1. Do a large one-sided swap to push the pool out of balance
         _doLargeSwap(fpmmProxy, fpmm);

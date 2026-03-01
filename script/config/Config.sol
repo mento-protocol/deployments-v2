@@ -6,6 +6,7 @@ import {Vm} from "forge-std/Vm.sol";
 import {IMentoConfig} from "./IMentoConfig.sol";
 
 import "./MentoConfig_vbase.sol";
+import "./MentoConfig_celo.sol";
 import "./MentoConfig_celo_sepolia.sol";
 import "./MentoConfig_monad_testnet.sol";
 import "./MentoConfig_monad_local_fork.sol";
@@ -75,7 +76,13 @@ library Config {
             );
             return configContract;
         } catch {
-            return address(0);
+            revert(
+                string.concat(
+                    "Config: failed to deploy '",
+                    artifactName,
+                    "'. Check that the contract exists and NETWORK is set correctly."
+                )
+            );
         }
     }
 

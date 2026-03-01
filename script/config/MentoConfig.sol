@@ -663,7 +663,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         ReserveLiquidityStrategyPoolConfig memory rlsParams
     ) internal {
         address _fpmmImpl = lookup("FPMM:v3.0.0");
-        address _oracleAdapter = lookupProxyOrFail("OracleAdapter");
+        address _oracleAdapter = lookupProxy("OracleAdapter");
         address _proxyAdmin = lookup("ProxyAdmin");
         address token0Address = _lookupTokenAddress(token0);
         address token1Address = _lookupTokenAddress(token1);

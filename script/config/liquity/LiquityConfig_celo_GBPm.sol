@@ -19,7 +19,8 @@ contract LiquityConfig_celo_GBPm is ILiquityConfig {
                 singletonLabel: "v3.0.0-GBPm",
                 // ── Registry lookup keys ────────────────────────────────
                 // TODO: change to labels used in prestage Celo script
-                debtTokenLabel: "cGBP",
+                debtTokenLabel: "GBPm",
+                collateralTokenLabel: "USDm",
                 // ── Addresses ──────────────────────────────────────────
                 rateFeedID: 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88, // GBP/USD
                 // ── FXPriceFeed ────────────────────────────────────────

@@ -20,6 +20,7 @@ contract LiquityConfig_celo_sepolia_GBPm is ILiquityConfig {
                 // ── Registry lookup keys ────────────────────────────────
                 // TODO: change to labels used in prestage Celo script
                 debtTokenLabel: "cGBP",
+                collateralTokenLabel: "cUSD",
                 // ── Addresses ──────────────────────────────────────────
                 rateFeedID: 0xAe5eEe6815b8529847955d19522858806Bca8217, // GBP/USD
                 // ── FXPriceFeed ────────────────────────────────────────
