@@ -1,0 +1,51 @@
+# treb.toml — Treb configuration
+#
+# Accounts define signing entities (wallets, hardware wallets, multisigs).
+# Namespaces map roles to accounts for different environments.
+#
+# Migrated from foundry.toml [profile.*.treb.*] sections.
+
+[accounts.dev-pk]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
+[accounts.reporter-pk]
+type = "private_key"
+private_key = "${REPORTER_PRIVATE_KEY}"
+
+[accounts.dev-safe]
+type = "safe"
+safe = "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F"
+signer = "dev-pk"
+
+[accounts.mento-gov-celo]
+type = "oz_governor"
+governor = "0x47036d78bB3169b4F5560dD77BF93f4412A59852"
+timelock = "0x890DB8A597940165901372Dd7DB61C9f246e2147"
+proposer = "dev-pk"
+
+[accounts.mento-gov-celo-sepolia]
+type = "oz_governor"
+governor = "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4"
+timelock = "0x74c44Be99937815173A3C56274331e0A05611e0D"
+proposer = "dev-pk"
+
+[accounts.migration-safe]
+type = "safe"
+safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
+signer = "dev-pk"
+
+[namespace.mainnet.senders]
+deployer = "dev-safe"
+governor = "mento-gov-celo"
+
+[namespace.testnet-v2-rc5.senders]
+deployer = "dev-pk"
+governor = "mento-gov-celo-sepolia"
+migrationOwner = "dev-pk"
+
+[namespace.throwaway.senders]
+deployer = "dev-pk"
+
+[namespace.virtual.senders]
+deployer = "dev-safe"
