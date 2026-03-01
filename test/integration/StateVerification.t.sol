@@ -369,4 +369,34 @@ contract StateVerification is V3IntegrationBase {
             "Router.defaultFactory() should be FPMMFactory proxy"
         );
     }
+
+    // ========== ReserveV2 Configuration Tests (US-006) ==========
+
+    function test_reserveV2_reserveSafe_isOtherReserveAddress() public view {
+        assertTrue(
+            IReserveV2(reserveV2).isOtherReserveAddress(reserveSafe),
+            "ReserveSafe not registered as other reserve address on ReserveV2"
+        );
+    }
+
+    function test_reserveV2_reserveSafe_isReserveManagerSpender() public view {
+        assertTrue(
+            IReserveV2(reserveV2).isReserveManagerSpender(reserveSafe),
+            "ReserveSafe not registered as reserve manager spender on ReserveV2"
+        );
+    }
+
+    function test_reserveV2_reserveLiquidityStrategy_isLiquidityStrategySpender() public view {
+        assertTrue(
+            IReserveV2(reserveV2).isLiquidityStrategySpender(reserveLiquidityStrategy),
+            "ReserveLiquidityStrategy not registered as liquidity strategy spender on ReserveV2"
+        );
+    }
+
+    function test_reserveV2_registerStableAsset_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IReserveV2(reserveV2).registerStableAsset(address(1));
+    }
 }
