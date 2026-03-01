@@ -17,4 +17,7 @@ docs/
 .claude/
 .treb/config.local.json
 node_modules
+artifacts-hh/
+cache-hh/
+dist/
 .treb/priv/
