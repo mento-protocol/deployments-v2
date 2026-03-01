@@ -1,0 +1,39 @@
+## Codebase Patterns
+- Registry lookups: use `lookupOrFail("ContractName:version")` for direct contracts, `lookupProxyOrFail("ContractName")` for proxied contracts
+- Proxy types: CELO proxies have prefix `Proxy:`, OZTUP proxies have prefix `TransparentUpgradeableProxy:`
+- Config loading: `Config.get()` returns `IMentoConfig`, needs `NETWORK` env var (or `MENTO_CONFIG_CONTRACT`)
+- Address lookups: Registry reads both `.treb/registry.json` (uses namespace + chainId) and `.treb/addressbook.json` (uses chainId only)
+- Owner pattern: migration owner is the `MigrationMultisig` entry in the addressbook
+- TrebScript/ProxyHelper cannot be inherited in tests due to SENDER_CONFIGS env var dependency; use Registry directly instead
+- Key V3 identifiers: FPMMFactory (proxy), OracleAdapter (proxy), FactoryRegistry (proxy), VirtualPoolFactory:v3.0.0, Router:v3.0.0, ReserveV2 (proxy), ReserveLiquidityStrategy (proxy), CDPLiquidityStrategy (proxy), BreakerBox:v2.6.5, SortedOracles (proxy), ProxyAdmin, MarketHoursBreaker:v3.0.0, Broker (proxy), ReserveSafe (addressbook)
+- Proxy implementation slot (EIP-1967): 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc
+- Proxy admin slot (EIP-1967): 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
+- fs_permissions in foundry.toml already allow reading .treb/registry.json and .treb/addressbook.json
+- Implementation addresses in registry use "ContractName:v3.0.0" pattern (e.g. `lookupOrFail("OracleAdapter:v3.0.0")`)
+- IFPMMFactory.deployedFPMMAddresses() returns all deployed FPMM pool proxy addresses
+- To test init disabled: call initialize() on impl address with vm.expectRevert() — OZ Initializable blocks re-init
+
+---
+
+## 2026-03-01 - US-001
+- What was implemented: Created `test/integration/V3IntegrationBase.t.sol` — an abstract base contract for V3 integration tests
+- Files changed: test/integration/V3IntegrationBase.t.sol (new)
+- **Learnings for future iterations:**
+  - ProxyHelper inherits TrebScript which requires SENDER_CONFIGS env var; cannot be directly inherited in tests. Instead, use Registry directly and reimplement lookup helpers.
+  - Registry (from treb-sol) can be instantiated with `new Registry(namespace, registryFile, addressbookFile)` — it reads JSON at construction and uses `block.chainid` for lookups
+  - Config.get() uses `vm.deployCode` to deploy a config contract artifact; needs NETWORK env var
+  - Fork must be created BEFORE instantiating Registry so block.chainid is correct
+  - The build has pre-existing import issues with bold/openzeppelin but they don't affect compilation (warnings only)
+  - `deal()` from forge-std can be used as `_mintToken` helper
+---
+
+## 2026-03-01 - US-002
+- What was implemented: Created `test/integration/StateVerification.t.sol` with tests for proxy→implementation mappings, init protection, and ProxyAdmin on FPMM pool proxies
+- Files changed: test/integration/StateVerification.t.sol (new)
+- **Learnings for future iterations:**
+  - Implementation addresses are registered with version labels: `lookupOrFail("ContractName:v3.0.0")` works for all V3 contracts (OracleAdapter, FPMMFactory, FactoryRegistry, ReserveV2, ReserveLiquidityStrategy, CDPLiquidityStrategy)
+  - `IFPMMFactory(fpmmFactory).deployedFPMMAddresses()` returns all deployed FPMM pool proxy addresses for iteration
+  - `getProxyAdmin(pool)` reads EIP-1967 admin slot — all FPMM pool proxies should have ProxyAdmin set by FPMMFactory
+  - To verify init is disabled on impl: simply call `initialize()` with dummy args and `vm.expectRevert()` — OZ Initializable pattern prevents re-init
+  - The V3IntegrationBase helpers `getProxyImplementation()` and `getProxyAdmin()` work for both Celo and OZ transparent proxies
+---
