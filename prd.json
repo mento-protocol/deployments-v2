@@ -160,7 +160,7 @@
         "forge build succeeds"
       ],
       "priority": 10,
-      "passes": false,
+      "passes": true,
       "notes": "Use ITroveManager from bold/contracts for trove queries. Use registry.troveManager() to get the TroveManager address."
     },
     {
@@ -176,7 +176,7 @@
         "forge build succeeds"
       ],
       "priority": 11,
-      "passes": false,
+      "passes": true,
       "notes": "Use deal() to mint tokens to a test address. Pattern: deal tokens → transfer to FPMM → fpmm.swap(). Use vm.prank for the test user."
     },
     {

@@ -34,6 +34,8 @@
 - Bold/Liquity imports: `bold/src/Interfaces/IStabilityPool.sol`, `bold/src/Interfaces/ITroveManager.sol`, etc. (remapping: `bold/` → `lib/bold/contracts/`)
 - CDPMigrationConfigLib does NOT exist in codebase — derive CDP info from on-chain CDPLiquidityStrategy state instead
 - IFPMM inherits IRPool: `token0()`, `token1()`, `tokens()` available on IFPMM cast
+- FPMM swap pattern: deal tokens → transfer to pool → `fpmm.swap(amount0Out, amount1Out, to, "")` — pool checks balance deltas for input
+- `IRPool.getAmountOut(amountIn, tokenIn)` for swap preview; `getReserves()` for reserve state
 
 ---
 
@@ -141,4 +143,36 @@
   - `IFPMM.liquidityStrategy(address)` returns bool — checks if a strategy is registered on the pool
   - `ICDPLiquidityStrategy.isPoolRegistered(address)` checks if a pool is registered on the strategy (bidirectional check)
   - V2 exchange destruction: iterate BiPoolManager exchanges and verify none match CDP pool token pair
+  - TroveManager priceFeed storage: `priceFeed` is `internal` in LiquityBase — read via `vm.load(troveManager, bytes32(uint256(2)))` (slot 2)
+  - FXPriceFeed `rateFeedID()` is a public state var — define `IFXPriceFeed` minimal interface to call it
+  - Reserve trove identification: iterate `getTroveIdsCount()` + `getTroveFromTroveIdsArray(i)`, check `troveNFT.ownerOf(troveId) == reserveSafe`
+  - `ITroveNFT` inherits ERC721 — use `ownerOf(troveId)` for NFT ownership check
+  - `ITroveManager.getLatestTroveData(troveId)` returns `LatestTroveData` with `entireDebt`, `entireColl`, `annualInterestRate`, etc.
+  - ReserveTroveFactory is NOT in the registry or codebase — test is conditional on registry lookup
+---
+
+## 2026-03-01 - US-010
+- What was implemented: Added reserve trove and cleanup verification tests to `test/integration/CDPMigrationVerification.t.sol` — FXPriceFeed rateFeedID validation, reserve trove status/interest rate/NFT ownership/debt coverage/collateral checks, and ReserveTroveFactory cleanup verification
+- Files changed: test/integration/CDPMigrationVerification.t.sol (modified)
+- **Learnings for future iterations:**
+  - `priceFeed` is stored as `internal` in LiquityBase, so it cannot be accessed via interface call — use `vm.load(troveManager, bytes32(uint256(2)))` to read storage slot 2
+  - FXPriceFeed has `rateFeedID()` as a public state variable — define a minimal `IFXPriceFeed` interface to access it
+  - Reserve trove is identified by iterating all troves in TroveManager and finding the one where `troveNFT.ownerOf(troveId) == reserveSafe`
+  - `ITroveManager.getTroveIdsCount()` and `getTroveFromTroveIdsArray(i)` allow enumeration of all troves
+  - `ITroveNFT` inherits from IERC721Metadata — standard `ownerOf()` works for NFT ownership checks
+  - `ITroveManager.getLatestTroveData(troveId)` returns `LatestTroveData` struct with `entireDebt`, `entireColl`, `annualInterestRate`, etc.
+  - ReserveTroveFactory does not exist in the registry or codebase — handle conditionally via `registry.lookup()` returning address(0)
+  - `LatestTroveData` import path: `bold/src/Types/LatestTroveData.sol`
+---
+
+## 2026-03-01 - US-011
+- What was implemented: Created `test/integration/FPMMSwap.t.sol` with tests for direct FPMM pool swaps: token0→token1 swap, token1→token0 swap, getAmountOut preview accuracy, and reserve update verification
+- Files changed: test/integration/FPMMSwap.t.sol (new)
+- **Learnings for future iterations:**
+  - FPMM swap pattern: deal tokens to user → transfer to pool → call `fpmm.swap(amount0Out, amount1Out, to, "")` — the pool checks balance deltas to determine input amounts
+  - `IRPool.getAmountOut(amountIn, tokenIn)` returns the expected output after fees — use this for preview, then pass the result as `amount0Out`/`amount1Out` to `swap()`
+  - For token0→token1 swap: set `amount0Out=0, amount1Out=expectedOut`; for token1→token0: set `amount0Out=expectedOut, amount1Out=0`
+  - `IRPool.getReserves()` returns `(reserve0, reserve1, blockTimestampLast)` — verify reserve changes match input/output amounts
+  - `makeAddr("name")` creates deterministic test addresses; `deal(token, to, amount)` mints tokens to any address
+  - Tests use the first deployed pool from `IFPMMFactory.deployedFPMMAddresses()` — sufficient for validating swap mechanics
 ---
