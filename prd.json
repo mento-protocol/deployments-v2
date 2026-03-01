@@ -222,7 +222,7 @@
         "forge build succeeds"
       ],
       "priority": 14,
-      "passes": false,
+      "passes": true,
       "notes": "Similar pattern to US-013 but using CDPLiquidityStrategy. The CDP strategy interacts with StabilityPool and CollateralRegistry."
     },
     {
@@ -238,7 +238,7 @@
         "forge build succeeds"
       ],
       "priority": 15,
-      "passes": false,
+      "passes": true,
       "notes": "Use IStableTokenV3 interface. Use vm.prank to impersonate each authorized contract. deal() tokens for burn tests."
     },
     {

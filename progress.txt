@@ -44,6 +44,8 @@
 - Rebalancing state: `IFPMM.getRebalancingState()` returns 7 values including `priceDifference` and `rebalanceThreshold`
 - Rebalancing errors: `LS_COOLDOWN_ACTIVE` (too soon), `LS_POOL_NOT_REBALANCEABLE` (within threshold)
 - `ILiquidityStrategy.getPools()` returns all registered pools for a strategy (both Reserve and CDP)
+- StableTokenV3 operator role: `sendToPool(sender, pool, amount)` and `returnFromPool(pool, receiver, amount)` do direct `_transfer` (no allowance needed) — used by StabilityPool
+- StableTokenV3 minting: `mint(to, value)` is `onlyMinter`; burning: `burn(value)` / `burn(account, value)` is `onlyBurner`
 
 ---
 
@@ -208,4 +210,26 @@
   - Pool config readable via `IPoolConfigReader(strategy).poolConfigs(pool)` auto-generated getter — returns `(isToken0Debt, lastRebalance, rebalanceCooldown, protocolFeeRecipient, incentives...)`
   - To imbalance a pool for testing: swap ~10% of reserve0 via the standard deal→transfer→swap pattern
   - Use `vm.warp(block.timestamp + cooldown + 1)` to advance past cooldown for sequential rebalance tests
+---
+
+## 2026-03-01 - US-014
+- What was implemented: Created `test/integration/RebalanceCDP.t.sol` with tests for CDPLiquidityStrategy rebalancing: large swap to imbalance CDP-backed pool then verify rebalance reduces price difference, cooldown enforcement (LS_COOLDOWN_ACTIVE revert), and threshold check (LS_POOL_NOT_REBALANCEABLE revert when pool is within threshold)
+- Files changed: test/integration/RebalanceCDP.t.sol (new)
+- **Learnings for future iterations:**
+  - CDPLiquidityStrategy rebalancing uses the exact same `ILiquidityStrategy.rebalance(pool)` interface as ReserveLiquidityStrategy — the only difference is which strategy contract address is used
+  - CDP pools are retrieved via `ICDPLiquidityStrategy(cdpLiquidityStrategy).getPools()` — same pattern as `ILiquidityStrategy(reserveLiquidityStrategy).getPools()`
+  - Pool config (cooldown, incentives, etc.) is read the same way via `IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool)` auto-generated getter
+  - Same error selectors apply: `ILiquidityStrategy.LS_COOLDOWN_ACTIVE` and `ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE`
+  - The imbalance-then-rebalance test pattern is reusable across both strategy types
+---
+
+## 2026-03-01 - US-015
+- What was implemented: Created `test/integration/StableTokenRoles.t.sol` with tests for stable token minting and burning roles on CDP-migrated tokens: BorrowerOperations can mint, random address cannot mint, authorized burners (CollateralRegistry, BorrowerOperations, TroveManager, StabilityPool) can burn, Broker cannot mint/burn, StabilityPool as operator can sendToPool/returnFromPool (direct transfer without approval)
+- Files changed: test/integration/StableTokenRoles.t.sol (new)
+- **Learnings for future iterations:**
+  - StabilityPool operator role uses `sendToPool()` and `returnFromPool()` for direct `_transfer` calls — NOT standard `transferFrom` with allowance
+  - `IStableTokenV3.mint(address to, uint256 value)` is `onlyMinter`, `burn(uint256)` and `burn(address, uint256)` are `onlyBurner`
+  - `sendToPool(sender, poolAddress, amount)` and `returnFromPool(poolAddress, receiver, amount)` are `onlyOperator` — they bypass ERC20 allowance checks
+  - `deal(token, address, amount)` works for dealing debt tokens to authorized contracts for burn tests
+  - The `_getDebtToken` and `_getLiquityContracts` helper pattern from CDPMigrationVerification.t.sol is reusable across CDP-related test files
 ---
