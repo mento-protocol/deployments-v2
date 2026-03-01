@@ -191,7 +191,7 @@
         "forge build succeeds"
       ],
       "priority": 12,
-      "passes": false,
+      "passes": true,
       "notes": "Check the IRouter interface for the exact swap function signature. The Router looks up pools via FactoryRegistry → FPMMFactory."
     },
     {
@@ -207,7 +207,7 @@
         "forge build succeeds"
       ],
       "priority": 13,
-      "passes": false,
+      "passes": true,
       "notes": "Pattern from CreateFPMM._verifyRebalance: large swap → log rebalancing state → rebalance() → verify newPriceDifference < oldPriceDifference. Use vm.warp to test cooldown."
     },
     {

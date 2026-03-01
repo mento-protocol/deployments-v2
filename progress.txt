@@ -36,6 +36,14 @@
 - IFPMM inherits IRPool: `token0()`, `token1()`, `tokens()` available on IFPMM cast
 - FPMM swap pattern: deal tokens → transfer to pool → `fpmm.swap(amount0Out, amount1Out, to, "")` — pool checks balance deltas for input
 - `IRPool.getAmountOut(amountIn, tokenIn)` for swap preview; `getReserves()` for reserve state
+- Router swap: `IRouter.swapExactTokensForTokens(amountIn, amountOutMin, Route[], to, deadline)` — requires ERC20 approve to Router first
+- Router Route struct: `{from, to, factory}` — factory is the pool factory (e.g. FPMMFactory)
+- Router preview: `IRouter.getAmountsOut(amountIn, Route[])` returns `uint256[]` — index 0 is amountIn, index 1 is amountOut for single-hop
+- Router pool resolution: `IRouter.poolFor(tokenA, tokenB, factory)` returns the pool address
+- Rebalancing: `ILiquidityStrategy(strategy).rebalance(pool)` — callable by anyone, checks cooldown + threshold
+- Rebalancing state: `IFPMM.getRebalancingState()` returns 7 values including `priceDifference` and `rebalanceThreshold`
+- Rebalancing errors: `LS_COOLDOWN_ACTIVE` (too soon), `LS_POOL_NOT_REBALANCEABLE` (within threshold)
+- `ILiquidityStrategy.getPools()` returns all registered pools for a strategy (both Reserve and CDP)
 
 ---
 
@@ -175,4 +183,29 @@
   - `IRPool.getReserves()` returns `(reserve0, reserve1, blockTimestampLast)` — verify reserve changes match input/output amounts
   - `makeAddr("name")` creates deterministic test addresses; `deal(token, to, amount)` mints tokens to any address
   - Tests use the first deployed pool from `IFPMMFactory.deployedFPMMAddresses()` — sufficient for validating swap mechanics
+---
+
+## 2026-03-01 - US-012
+- What was implemented: Created `test/integration/RouterSwap.t.sol` with tests for Router swap flow: token0→token1 swap, token1→token0 swap, and pool resolution via FactoryRegistry verification
+- Files changed: test/integration/RouterSwap.t.sol (new)
+- **Learnings for future iterations:**
+  - Router swap uses `swapExactTokensForTokens(amountIn, amountOutMin, Route[], to, deadline)` — unlike direct FPMM swaps, Router pulls tokens via `transferFrom`, so caller must `approve(router, amount)` first
+  - `IRouter.Route` struct: `{from, to, factory}` — use `fpmmFactory` as factory for FPMM pool routing
+  - `IRouter.getAmountsOut(amountIn, routes)` returns `uint256[]` with length = routes.length + 1 — index 0 is input, last index is final output
+  - `IRouter.poolFor(tokenA, tokenB, factory)` resolves pool address for a given token pair and factory — useful for verifying routing
+  - Router.factoryRegistry() and Router.defaultFactory() are view functions for verifying infrastructure wiring
+---
+
+## 2026-03-01 - US-013
+- What was implemented: Created `test/integration/RebalanceReserve.t.sol` with tests for ReserveLiquidityStrategy rebalancing: large swap to imbalance pool then verify rebalance reduces price difference, cooldown enforcement (LS_COOLDOWN_ACTIVE revert), and threshold check (LS_POOL_NOT_REBALANCEABLE revert when pool is within threshold)
+- Files changed: test/integration/RebalanceReserve.t.sol (new)
+- **Learnings for future iterations:**
+  - `ILiquidityStrategy(reserveLiquidityStrategy).getPools()` returns all pools registered with ReserveLiquidityStrategy — use first pool for rebalancing tests
+  - `ILiquidityStrategy.rebalance(pool)` is the main entry point — callable by anyone, but subject to cooldown and threshold checks
+  - `IFPMM.getRebalancingState()` returns 7 values: `(oraclePriceNumerator, oraclePriceDenominator, reservePriceNumerator, reservePriceDenominator, reservePriceAboveOraclePrice, rebalanceThreshold, priceDifference)` — use `priceDifference` before/after to verify rebalance effectiveness
+  - Cooldown error: `ILiquidityStrategy.LS_COOLDOWN_ACTIVE.selector` — reverts if `block.timestamp < lastRebalance + rebalanceCooldown`
+  - Threshold error: `ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector` — reverts if `priceDifference <= rebalanceThreshold`
+  - Pool config readable via `IPoolConfigReader(strategy).poolConfigs(pool)` auto-generated getter — returns `(isToken0Debt, lastRebalance, rebalanceCooldown, protocolFeeRecipient, incentives...)`
+  - To imbalance a pool for testing: swap ~10% of reserve0 via the standard deal→transfer→swap pattern
+  - Use `vm.warp(block.timestamp + cooldown + 1)` to advance past cooldown for sequential rebalance tests
 ---
