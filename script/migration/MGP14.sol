@@ -365,7 +365,7 @@ contract MGP14 is TrebScript, ProxyHelper {
                 return contracts[i];
             }
         }
-        require(false, "unknown contract name");
+        revert("unknown contract name");
     }
 
     function equalStrings(string memory a, string memory b) internal pure returns (bool) {
