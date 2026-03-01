@@ -46,6 +46,10 @@
 - `ILiquidityStrategy.getPools()` returns all registered pools for a strategy (both Reserve and CDP)
 - StableTokenV3 operator role: `sendToPool(sender, pool, amount)` and `returnFromPool(pool, receiver, amount)` do direct `_transfer` (no allowance needed) — used by StabilityPool
 - StableTokenV3 minting: `mint(to, value)` is `onlyMinter`; burning: `burn(value)` / `burn(account, value)` is `onlyBurner`
+- MarketHoursBreaker: `isFXMarketOpen(timestamp)` is pure, `shouldTrigger(rateFeedID)` reverts when closed; `IOracleAdapter.getFXRateIfValid()` reverts with `FXMarketClosed` selector
+- Registry namespace for Celo Sepolia: `testnet-v2-rc5` (not `default`) — set `NAMESPACE` env var accordingly
+- PriceFeed address: read from TroveManager storage slot 2 (LiquityBase inheritance: activePool=0, defaultPool=1, priceFeed=2) — `IPriceFeed.fetchPrice()` is state-changing (non-view)
+- Trove health check: `ITroveManager.getCurrentICR(troveId, price)` vs `IBorrowerOperations.MCR()` — ICR must be >= MCR
 
 ---
 
@@ -232,4 +236,44 @@
   - `sendToPool(sender, poolAddress, amount)` and `returnFromPool(poolAddress, receiver, amount)` are `onlyOperator` — they bypass ERC20 allowance checks
   - `deal(token, address, amount)` works for dealing debt tokens to authorized contracts for burn tests
   - The `_getDebtToken` and `_getLiquityContracts` helper pattern from CDPMigrationVerification.t.sol is reusable across CDP-related test files
+---
+
+## 2026-03-01 - US-016
+- What was implemented: Created `test/integration/OracleBreaker.t.sol` with tests for MarketHoursBreaker behavior and OracleAdapter rate validity: getFXRateIfValid returns non-zero during market hours, isFXMarketOpen returns true/false for open/closed timestamps, getFXRateIfValid reverts with FXMarketClosed outside market hours, MarketHoursBreaker.isFXMarketOpen and shouldTrigger direct tests, BreakerBox trading mode verification during market hours, and MarketHoursBreaker enablement on all FX feeds
+- Files changed: test/integration/OracleBreaker.t.sol (new)
+- **Learnings for future iterations:**
+  - `IOracleAdapter.isFXMarketOpen()` uses `block.timestamp` internally — use `vm.warp()` to test different times
+  - `IOracleAdapter.getFXRateIfValid()` reverts with `IOracleAdapter.FXMarketClosed.selector` when FX market is closed
+  - `IMarketHoursBreaker.isFXMarketOpen(uint256 timestamp)` is a `pure` function — can test with arbitrary timestamps without vm.warp
+  - `IMarketHoursBreaker.shouldTrigger(address rateFeedID)` reverts with `"MarketHoursBreaker: FX market is closed"` when market is closed, returns `false` when open
+  - `IBreakerBox.getRateFeedTradingMode(rateFeedID)` returns the current combined trading mode — should be 0 (bidirectional) during market hours
+  - MARKET_HOURS_BREAKER_TOGGLEABLE env var mentioned in PRD does not exist in codebase — MarketHoursBreaker is always active
+  - Good test timestamps: Wednesday 2024-08-14 12:00 UTC (market open, unix 1723636800), Saturday 2024-08-10 12:00 UTC (market closed, unix 1723291200)
+  - MarketHoursBreaker weekend hours: Friday 21:00 UTC through Sunday 23:00 UTC
+  - Registry namespace must match deployment (e.g. `testnet-v2-rc5` for Celo Sepolia) — `default` namespace won't find V3 contracts
+---
+
+## 2026-03-01 - US-017
+- What was implemented: Created `test/integration/LiquidityProvision.t.sol` with tests for FPMM liquidity provision and removal: providing liquidity (transfer tokens + mint LP), removing liquidity (transfer LP + burn), and verifying LP token balance reflects proportional pool share
+- Files changed: test/integration/LiquidityProvision.t.sol (new)
+- **Learnings for future iterations:**
+  - FPMM mint pattern: transfer token0 + token1 to pool → call `fpmm.mint(recipient)` — returns `uint256 liquidity` (LP tokens minted)
+  - FPMM burn pattern: transfer LP tokens to pool → call `fpmm.burn(recipient)` — returns `(uint256 amount0, uint256 amount1)` (tokens withdrawn)
+  - LP tokens minted = `min((amount0 * totalSupply) / reserve0, (amount1 * totalSupply) / reserve1)` for subsequent mints (first mint uses `sqrt(amount0 * amount1) - MINIMUM_LIQUIDITY`)
+  - Burn amounts are proportional: `amount0 = (liquidity * balance0) / totalSupply`
+  - For proportional deposit tests, use ~1% of existing reserves (`r0 / 100`, `r1 / 100`) to avoid large pool state changes
+  - `IERC20(address(fpmm)).totalSupply()` for LP total supply — FPMM is an ERC20
+---
+
+## 2026-03-01 - US-018
+- What was implemented: Created `test/integration/ReserveTrove.t.sol` with tests for reserve trove operations and interest accrual: trove is active, has non-zero collateral and debt, collateralization ratio above MCR, and interest accrual over 30 days
+- Files changed: test/integration/ReserveTrove.t.sol (new)
+- **Learnings for future iterations:**
+  - `ITroveManager.getCurrentICR(troveId, price)` is a view function that computes the Individual Collateral Ratio given a price — useful for checking trove health
+  - `IBorrowerOperations.MCR()` returns the minimum collateral ratio — compare ICR against this to verify trove is healthy
+  - `IPriceFeed(priceFeedAddr).fetchPrice()` is NOT a view function (state-changing) — test functions using it must be non-view
+  - PriceFeed address is stored at storage slot 2 of TroveManager (via LiquityBase inheritance: activePool=0, defaultPool=1, priceFeed=2)
+  - Interest accrual test pattern: record `entireDebt` → `vm.warp(block.timestamp + 30 days)` → re-read `entireDebt` → assert increased
+  - `LatestTroveData.entireDebt` includes accrued interest, so it increases over time even without explicit state changes
+  - Helper pattern: `_getTroveManagerAndBorrowerOps(pool)` returns both addresses by chaining through CDPConfig.stabilityPool → troveManager → borrowerOperations
 ---

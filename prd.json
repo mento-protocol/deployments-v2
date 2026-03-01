@@ -253,7 +253,7 @@
         "forge build succeeds"
       ],
       "priority": 16,
-      "passes": false,
+      "passes": true,
       "notes": "FX market hours are Mon-Fri. Use vm.warp to move to a weekend timestamp to test breaker triggering. Check MARKET_HOURS_BREAKER_TOGGLEABLE env var."
     },
     {
@@ -268,7 +268,7 @@
         "forge build succeeds"
       ],
       "priority": 17,
-      "passes": false,
+      "passes": true,
       "notes": "Pattern from CreateFPMM._mintInitialLiquidity: transfer token0 + token1 to FPMM → fpmm.mint(recipient). For burn: transfer LP to FPMM → fpmm.burn(recipient)."
     },
     {
@@ -283,7 +283,7 @@
         "forge build succeeds"
       ],
       "priority": 18,
-      "passes": false,
+      "passes": true,
       "notes": "Use ITroveManager.getLatestTroveData(troveId) for trove state. The trove ID can be found via the ReserveTroveFactory or by iterating troveManager."
     },
     {
