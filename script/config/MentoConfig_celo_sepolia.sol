@@ -67,8 +67,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
         _addFPMM(
-            "cUSD",
             "cGBP",
+            "cUSD",
             getRateFeedIdFromString("GBPUSD"),
             IFPMM.FPMMParams({
                 lpFee: 20,
@@ -80,22 +80,20 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdBelow: 3333
             }),
             FPMMTradingLimitsConfig({
-                // USDm limits
-                token0Limit0: 100_000 * 1e18,
-                token0Limit1: 500_000 * 1e18,
                 // GBPm limits
-                token1Limit0: 77_000 * 1e18,
-                token1Limit1: 385_000 * 1e18
+                token0Limit0: 77_000 * 1e18,
+                token0Limit1: 385_000 * 1e18,
+                // USDm limits
+                token1Limit0: 100_000 * 1e18,
+                token1Limit1: 500_000 * 1e18
             }),
             emptyRls
         );
 
-        // Trading limits for USD collateral pools (USDC, USDT, axlUSDC)
+        // Trading limits for USD collateral pools (USDC, USDT, axlUSDC) same limit for both tokens independent of the ordering
         FPMMTradingLimitsConfig memory usdCollateralPoolsLimits = FPMMTradingLimitsConfig({
-            // USDm limits
             token0Limit0: 500_000 * 1e18,
             token0Limit1: 1_000_000 * 1e18,
-            // USD collateral token limits
             token1Limit0: 500_000 * 1e18,
             token1Limit1: 1_000_000 * 1e18
         });
@@ -113,8 +111,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addFPMM(
-            "cUSD",
             "axlUSDC",
+            "cUSD",
             getRateFeedIdFromString("USDCUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -130,8 +128,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         );
 
         _addFPMM(
-            "cUSD",
             "USDC",
+            "cUSD",
             getRateFeedIdFromString("USDCUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -147,8 +145,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         );
 
         _addFPMM(
-            "cUSD",
             "USDT",
+            "cUSD",
             getRateFeedIdFromString("USDTUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
