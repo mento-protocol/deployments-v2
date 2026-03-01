@@ -5,6 +5,7 @@ import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 /**
  * @title FPMMSwap
@@ -34,7 +35,7 @@ contract FPMMSwap is V3IntegrationBase {
     // ========== Swap token0 → token1 ==========
 
     function test_swap_token0ForToken1() public {
-        uint256 amountIn = 1e18;
+        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
 
         // Preview the expected output
         uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
@@ -64,7 +65,7 @@ contract FPMMSwap is V3IntegrationBase {
     // ========== Swap token1 → token0 ==========
 
     function test_swap_token1ForToken0() public {
-        uint256 amountIn = 1e18;
+        uint256 amountIn = 10 ** IERC20Metadata(t1).decimals();
 
         // Preview the expected output
         uint256 expectedOut = fpmm.getAmountOut(amountIn, t1);
@@ -94,7 +95,7 @@ contract FPMMSwap is V3IntegrationBase {
     // ========== getAmountOut preview matches actual output ==========
 
     function test_getAmountOut_matchesActualSwap() public {
-        uint256 amountIn = 1e18;
+        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
 
         // Preview
         uint256 previewOut = fpmm.getAmountOut(amountIn, t0);
@@ -116,7 +117,7 @@ contract FPMMSwap is V3IntegrationBase {
     // ========== Swap updates reserves correctly ==========
 
     function test_swap_updatesReserves() public {
-        uint256 amountIn = 1e18;
+        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
         uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
 
         // Record reserves before

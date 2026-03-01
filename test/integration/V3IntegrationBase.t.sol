@@ -5,6 +5,28 @@ import {Test, console} from "forge-std/Test.sol";
 import {Registry} from "lib/treb-sol/src/internal/Registry.sol";
 import {Config, IMentoConfig} from "script/config/Config.sol";
 import {ICeloProxy} from "mento-core/interfaces/ICeloProxy.sol";
+import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
+import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
+import {IStabilityPool} from "bold/src/Interfaces/IStabilityPool.sol";
+import {ITroveManager} from "bold/src/Interfaces/ITroveManager.sol";
+import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
+import {IBorrowerOperations} from "bold/src/Interfaces/IBorrowerOperations.sol";
+import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
+import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
+/// @dev Read the auto-generated poolConfigs getter from LiquidityStrategy
+interface IPoolConfigReader {
+    function poolConfigs(address pool) external view returns (
+        bool isToken0Debt,
+        uint32 lastRebalance,
+        uint32 rebalanceCooldown,
+        address protocolFeeRecipient,
+        uint64 liquiditySourceIncentiveExpansion,
+        uint64 protocolIncentiveExpansion,
+        uint64 liquiditySourceIncentiveContraction,
+        uint64 protocolIncentiveContraction
+    );
+}
 
 /**
  * @title V3IntegrationBase
@@ -122,5 +144,58 @@ abstract contract V3IntegrationBase is Test {
 
     function _getOwner() internal view returns (address) {
         return lookupOrFail("MigrationMultisig");
+    }
+
+    // ========== Shared CDP Helpers ==========
+
+    /// @dev Returns the debt token for a CDP pool based on the isToken0Debt flag
+    function _getDebtToken(address pool) internal view returns (address) {
+        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool);
+        return isToken0Debt ? IFPMM(pool).token0() : IFPMM(pool).token1();
+    }
+
+    /// @dev Derives Liquity contract addresses from the CDPConfig via contract chaining
+    ///      Returns (borrowerOperations, activePool, troveManager, stabilityPool)
+    function _getLiquityContracts(address pool)
+        internal
+        view
+        returns (address borrowerOps, address activePoolAddr, address troveManagerAddr, address stabilityPoolAddr)
+    {
+        ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
+            ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(pool);
+
+        stabilityPoolAddr = cdpConfig.stabilityPool;
+
+        // StabilityPool → TroveManager → BorrowerOperations → ActivePool
+        ITroveManager tm = IStabilityPool(stabilityPoolAddr).troveManager();
+        troveManagerAddr = address(tm);
+
+        IBorrowerOperations bo = tm.borrowerOperations();
+        borrowerOps = address(bo);
+
+        IActivePool ap = bo.activePool();
+        activePoolAddr = address(ap);
+    }
+
+    /// @dev Finds the reserve trove ID by iterating all troves and finding the one owned by ReserveSafe
+    function _findReserveTrove(address troveManagerAddr) internal view returns (uint256) {
+        ITroveManager tm = ITroveManager(troveManagerAddr);
+        ITroveNFT troveNFT = tm.troveNFT();
+        uint256 troveCount = tm.getTroveIdsCount();
+
+        for (uint256 i = 0; i < troveCount; i++) {
+            uint256 troveId = tm.getTroveFromTroveIdsArray(i);
+            if (troveNFT.ownerOf(troveId) == reserveSafe) {
+                return troveId;
+            }
+        }
+
+        revert("Reserve trove not found");
+    }
+
+    /// @dev Read priceFeed from TroveManager storage.
+    /// LiquityBase (non-upgradeable) layout: slot0=activePool, slot1=defaultPool, slot2=priceFeed
+    function _getPriceFeed(address troveManagerAddr) internal view returns (address) {
+        return address(uint160(uint256(vm.load(troveManagerAddr, bytes32(uint256(2))))));
     }
 }

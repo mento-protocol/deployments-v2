@@ -6,6 +6,7 @@ import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 /**
  * @title RouterSwap
@@ -36,7 +37,7 @@ contract RouterSwap is V3IntegrationBase {
     // ========== Router.swap() routes token0 → token1 through correct pool ==========
 
     function test_routerSwap_token0ForToken1() public {
-        uint256 amountIn = 1e18;
+        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
 
         // Build the route: token0 → token1 via the default factory (FPMMFactory)
         IRouter.Route[] memory routes = new IRouter.Route[](1);
@@ -81,7 +82,7 @@ contract RouterSwap is V3IntegrationBase {
     // ========== Router.swap() routes token1 → token0 ==========
 
     function test_routerSwap_token1ForToken0() public {
-        uint256 amountIn = 1e18;
+        uint256 amountIn = 10 ** IERC20Metadata(t1).decimals();
 
         IRouter.Route[] memory routes = new IRouter.Route[](1);
         routes[0] = IRouter.Route({from: t1, to: t0, factory: fpmmFactory});

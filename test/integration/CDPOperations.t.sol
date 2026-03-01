@@ -232,21 +232,6 @@ contract CDPOperations is V3IntegrationBase {
         c.debtToken = _getDebtToken(pool);
     }
 
-    /// @dev Returns the debt token for a CDP pool based on the isToken0Debt flag
-    function _getDebtToken(address pool) internal view returns (address) {
-        (bool success, bytes memory data) = cdpLiquidityStrategy.staticcall(
-            abi.encodeWithSignature("poolConfigs(address)", pool)
-        );
-        require(success, "Failed to read poolConfigs");
-        bool isToken0Debt = abi.decode(data, (bool));
-        return isToken0Debt ? IFPMM(pool).token0() : IFPMM(pool).token1();
-    }
-
-    /// @dev Read the priceFeed address from TroveManager storage slot 2
-    function _getPriceFeed(address troveManagerAddr) internal view returns (address) {
-        return address(uint160(uint256(vm.load(troveManagerAddr, bytes32(uint256(2))))));
-    }
-
     /// @dev Calculate collateral amount for a given debt, price, target CR, and token decimals
     function _calculateCollateral(
         uint256 debtAmount,

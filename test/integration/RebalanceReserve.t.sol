@@ -1,26 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
+import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-
-/// @dev Minimal interface to read the auto-generated poolConfigs getter from LiquidityStrategy
-interface IPoolConfigReader {
-    function poolConfigs(address pool) external view returns (
-        bool isToken0Debt,
-        uint32 lastRebalance,
-        uint32 rebalanceCooldown,
-        address protocolFeeRecipient,
-        uint64 liquiditySourceIncentiveExpansion,
-        uint64 protocolIncentiveExpansion,
-        uint64 liquiditySourceIncentiveContraction,
-        uint64 protocolIncentiveContraction
-    );
-}
 
 /**
  * @title RebalanceReserve

@@ -3,10 +3,7 @@ pragma solidity ^0.8.0;
 
 import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
-import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
-import {IStabilityPool} from "bold/src/Interfaces/IStabilityPool.sol";
 import {ITroveManager} from "bold/src/Interfaces/ITroveManager.sol";
-import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {IBorrowerOperations} from "bold/src/Interfaces/IBorrowerOperations.sol";
 import {IPriceFeed} from "bold/src/Interfaces/IPriceFeed.sol";
 import {LatestTroveData} from "bold/src/Types/LatestTroveData.sol";
@@ -29,7 +26,7 @@ contract ReserveTrove is V3IntegrationBase {
     /// @notice Verify reserve trove is active for each CDP pool
     function test_reserveTrove_isActive() public view {
         for (uint256 i = 0; i < cdpPools.length; i++) {
-            (address troveManagerAddr,) = _getTroveManagerAndBorrowerOps(cdpPools[i]);
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             uint256 troveId = _findReserveTrove(troveManagerAddr);
 
             ITroveManager.Status status = ITroveManager(troveManagerAddr).getTroveStatus(troveId);
@@ -44,7 +41,7 @@ contract ReserveTrove is V3IntegrationBase {
     /// @notice Verify reserve trove has non-zero collateral
     function test_reserveTrove_hasNonZeroCollateral() public view {
         for (uint256 i = 0; i < cdpPools.length; i++) {
-            (address troveManagerAddr,) = _getTroveManagerAndBorrowerOps(cdpPools[i]);
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             uint256 troveId = _findReserveTrove(troveManagerAddr);
 
             LatestTroveData memory data = ITroveManager(troveManagerAddr).getLatestTroveData(troveId);
@@ -59,7 +56,7 @@ contract ReserveTrove is V3IntegrationBase {
     /// @notice Verify reserve trove has non-zero debt
     function test_reserveTrove_hasNonZeroDebt() public view {
         for (uint256 i = 0; i < cdpPools.length; i++) {
-            (address troveManagerAddr,) = _getTroveManagerAndBorrowerOps(cdpPools[i]);
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             uint256 troveId = _findReserveTrove(troveManagerAddr);
 
             LatestTroveData memory data = ITroveManager(troveManagerAddr).getLatestTroveData(troveId);
@@ -76,12 +73,10 @@ contract ReserveTrove is V3IntegrationBase {
     /// @notice Verify reserve trove collateralization ratio is above the minimum (MCR)
     function test_reserveTrove_collateralizationAboveMCR() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
-            (address troveManagerAddr, address borrowerOpsAddr) = _getTroveManagerAndBorrowerOps(cdpPools[i]);
+            (address borrowerOpsAddr,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             uint256 troveId = _findReserveTrove(troveManagerAddr);
 
-            // Get price from the priceFeed (stored at slot 2 in TroveManager via LiquityBase)
-            address priceFeedAddr = address(uint160(uint256(vm.load(troveManagerAddr, bytes32(uint256(2))))));
-            uint256 price = IPriceFeed(priceFeedAddr).fetchPrice();
+            uint256 price = IPriceFeed(_getPriceFeed(troveManagerAddr)).fetchPrice();
 
             uint256 icr = ITroveManager(troveManagerAddr).getCurrentICR(troveId, price);
             uint256 mcr = IBorrowerOperations(borrowerOpsAddr).MCR();
@@ -102,7 +97,7 @@ contract ReserveTrove is V3IntegrationBase {
     /// @notice Verify interest accrues on the reserve trove over 30 days
     function test_reserveTrove_interestAccrual() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
-            (address troveManagerAddr,) = _getTroveManagerAndBorrowerOps(cdpPools[i]);
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             uint256 troveId = _findReserveTrove(troveManagerAddr);
 
             // Record debt before time warp
@@ -127,35 +122,4 @@ contract ReserveTrove is V3IntegrationBase {
         }
     }
 
-    // ========== Internal Helpers ==========
-
-    /// @dev Returns (troveManager, borrowerOperations) for a CDP pool by chaining through StabilityPool
-    function _getTroveManagerAndBorrowerOps(address pool)
-        internal
-        view
-        returns (address troveManagerAddr, address borrowerOpsAddr)
-    {
-        ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
-            ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(pool);
-
-        ITroveManager tm = IStabilityPool(cdpConfig.stabilityPool).troveManager();
-        troveManagerAddr = address(tm);
-        borrowerOpsAddr = address(tm.borrowerOperations());
-    }
-
-    /// @dev Finds the reserve trove ID by iterating all troves and finding the one owned by ReserveSafe
-    function _findReserveTrove(address troveManagerAddr) internal view returns (uint256) {
-        ITroveManager tm = ITroveManager(troveManagerAddr);
-        ITroveNFT troveNFT = tm.troveNFT();
-        uint256 troveCount = tm.getTroveIdsCount();
-
-        for (uint256 i = 0; i < troveCount; i++) {
-            uint256 troveId = tm.getTroveFromTroveIdsArray(i);
-            if (troveNFT.ownerOf(troveId) == reserveSafe) {
-                return troveId;
-            }
-        }
-
-        revert("Reserve trove not found: no trove owned by ReserveSafe");
-    }
 }

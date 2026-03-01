@@ -4,26 +4,6 @@ pragma solidity ^0.8.0;
 import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
-import {IStabilityPool} from "bold/src/Interfaces/IStabilityPool.sol";
-import {ITroveManager} from "bold/src/Interfaces/ITroveManager.sol";
-import {IBorrowerOperations} from "bold/src/Interfaces/IBorrowerOperations.sol";
-import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
-import {ICollateralRegistry} from "bold/src/Interfaces/ICollateralRegistry.sol";
-import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
-
-/// @dev Minimal interface to read the auto-generated poolConfigs getter from LiquidityStrategy
-interface IPoolConfigReader {
-    function poolConfigs(address pool) external view returns (
-        bool isToken0Debt,
-        uint32 lastRebalance,
-        uint32 rebalanceCooldown,
-        address protocolFeeRecipient,
-        uint64 liquiditySourceIncentiveExpansion,
-        uint64 protocolIncentiveExpansion,
-        uint64 liquiditySourceIncentiveContraction,
-        uint64 protocolIncentiveContraction
-    );
-}
 
 /**
  * @title StableTokenRoles
@@ -225,34 +205,4 @@ contract StableTokenRoles is V3IntegrationBase {
         }
     }
 
-    // ========== Internal Helpers ==========
-
-    /// @dev Returns the debt token for a CDP pool based on the isToken0Debt flag
-    function _getDebtToken(address pool) internal view returns (address) {
-        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool);
-        return isToken0Debt ? IFPMM(pool).token0() : IFPMM(pool).token1();
-    }
-
-    /// @dev Derives Liquity contract addresses from the CDPConfig
-    ///      Returns (borrowerOperations, activePool, troveManager, stabilityPool)
-    function _getLiquityContracts(address pool)
-        internal
-        view
-        returns (address borrowerOps, address activePoolAddr, address troveManagerAddr, address stabilityPoolAddr)
-    {
-        ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
-            ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(pool);
-
-        stabilityPoolAddr = cdpConfig.stabilityPool;
-
-        // StabilityPool → TroveManager → BorrowerOperations → ActivePool
-        ITroveManager tm = IStabilityPool(stabilityPoolAddr).troveManager();
-        troveManagerAddr = address(tm);
-
-        IBorrowerOperations bo = tm.borrowerOperations();
-        borrowerOps = address(bo);
-
-        IActivePool ap = bo.activePool();
-        activePoolAddr = address(ap);
-    }
 }
