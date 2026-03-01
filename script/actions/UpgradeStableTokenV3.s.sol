@@ -14,10 +14,12 @@ contract UpgradeStableTokenV3 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Senders for Senders.Sender;
 
-    /// @custom:senders deployer
+    Senders.Sender owner;
+
+    /// @custom:senders deployer, migrationOwner
     /// @custom:env {string} TOKEN_SYMBOL - Symbol of the token to upgrade (e.g. "cUSD")
     function run() public virtual broadcast {
-        Senders.Sender storage deployer = sender("deployer");
+        owner = sender("migrationOwner");
 
         string memory tokenSymbol = vm.envString("TOKEN_SYMBOL");
 
@@ -44,7 +46,7 @@ contract UpgradeStableTokenV3 is TrebScript, ProxyHelper {
         );
 
         // Upgrade proxy to V3 implementation with initializeV3
-        ILegacyProxy proxy = ILegacyProxy(deployer.harness(tokenProxy));
+        ILegacyProxy proxy = ILegacyProxy(owner.harness(tokenProxy));
         proxy._setAndInitializeImplementation(v3Impl, initData);
 
         // Post-checks

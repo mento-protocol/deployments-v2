@@ -32,8 +32,8 @@
     "FeeSetter": "<todo>",
     "ProtocolFeeRecipient": "<todo>",
     "CELO": "0x471ece3750da237f93b8e339c536989b8978a438",
-    "Watchdog:": "<todo>",
-    "YieldSplitAddress:": "<todo>"
+    "Watchdog": "<todo>",
+    "YieldSplitAddress": "<todo>"
   },
   "143": {
     "StableTokenSpokeUSD": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
@@ -46,8 +46,8 @@
     "ReserveSafe": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
     "FeeSetter": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
     "ProtocolFeeRecipient": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
-    "Watchdog:": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "Watchdog": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
     "CELO": "0x471ece3750da237f93b8e339c536989b8978a438",
-    "YieldSplitAddress:": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7"
+    "YieldSplitAddress": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7"
   }
 }

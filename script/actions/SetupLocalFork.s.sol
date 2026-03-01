@@ -2,68 +2,57 @@
 pragma solidity ^0.8.0;
 
 import {Script, console} from "forge-std/Script.sol";
+import {ForkHelper, ISafeOwnerManager} from "lib/treb-sol/src/ForkHelper.sol";
 import {Anvil} from "../helpers/Anvil.sol";
+import {CeloTransferPrecompile} from "../helpers/CeloTransferPrecompile.sol";
+import {MockCELO} from "../helpers/MockCELO.sol";
 
 address constant SAFE = 0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458;
 address constant PROPOSER = 0x91606e52a843845669f1f25BbD5E95cb055a9707;
+address constant DEPLOYER = 0x2738F38Fde510743e0c589415E0598C4ceE6eAa7;
+address constant CELO = 0x471EcE3750Da237f93B8E339c536989b8978a438;
+address constant TRANSFER_PRECOMPILE = address(0xff - 2);
 
-interface ISafe {
-    function getThreshold() external view returns (uint256);
-
-    function getOwners() external view returns (address[] memory);
-
-    function isOwner(address owner) external view returns (bool);
-}
-
-contract SetupLocalFork is Script {
-    // Safe storage slot positions
-    uint256 constant OWNERS_MAPPING_SLOT = 2;
-    uint256 constant OWNER_COUNT_SLOT = 3;
-    uint256 constant THRESHOLD_SLOT = 4;
-
-    // Safe constants
-    address constant SENTINEL_OWNERS = address(0x1);
+contract SetupLocalFork is ForkHelper, Script {
+    uint256 private constant BALANCES_SLOT = 0;
+    uint256 private constant TOTAL_SUPPLY_SLOT = 2;
+    uint256 private constant MINT_AMOUNT = 10_000_000 ether;
 
     function run() public {
-        Anvil.setStorageAt(SAFE, bytes32(THRESHOLD_SLOT), bytes32(uint256(1)));
+        // 1. Convert Safe to single-owner for fork testing
+        // convertSafeToSingleOwner(SAFE, PROPOSER);
 
-        bytes32 sentinelSlot = keccak256(
-            abi.encode(SENTINEL_OWNERS, OWNERS_MAPPING_SLOT)
-        );
-        Anvil.setStorageAt(
-            SAFE,
-            sentinelSlot,
-            bytes32(uint256(uint160(PROPOSER)))
-        );
+        // 2. Etch no-op transfer precompile (safety net)
+        // CeloTransferPrecompile precompileHandler = new CeloTransferPrecompile();
+        // Anvil.setCodeRpc(TRANSFER_PRECOMPILE, address(precompileHandler).code);
 
-        bytes32 proposerSlot = keccak256(
-            abi.encode(PROPOSER, OWNERS_MAPPING_SLOT)
-        );
-        Anvil.setStorageAt(
-            SAFE,
-            proposerSlot,
-            bytes32(uint256(uint160(SENTINEL_OWNERS)))
-        );
+        // 3. Replace GoldToken with standard ERC20 at CELO address
+        MockCELO mock = new MockCELO();
+        Anvil.setCodeRpc(CELO, address(mock).code);
 
-        Anvil.setStorageAt(
-            SAFE,
-            bytes32(OWNER_COUNT_SLOT),
-            bytes32(uint256(1))
-        );
+        // 4. Mint CELO to deployer via direct storage writes
+        _mintCELO(PROPOSER, MINT_AMOUNT);
+        _mintCELO(DEPLOYER, MINT_AMOUNT);
 
-        ISafe safe = ISafe(SAFE);
-        uint256 newThreshold = safe.getThreshold();
-        address[] memory owners = safe.getOwners();
-        bool proposerIsOwner = safe.isOwner(PROPOSER);
+        // -- Verify --
+        // console.log("Safe configuration updated:");
+        // console.log("  address:", SAFE);
+        // console.log("  threshold:", ISafeOwnerManager(SAFE).getThreshold());
+        // console.log("  PROPOSER is owner:", ISafeOwnerManager(SAFE).isOwner(PROPOSER));
 
-        console.log("Safe configuration updated:");
-        console.log("- Safe address:", SAFE);
-        console.log("- New threshold:", newThreshold);
-        console.log("- Total owners:", owners.length);
-        if (owners.length > 0) {
-            console.log("- Owner[0]:", owners[0]);
-        }
-        console.log("- Is PROPOSER an owner:", proposerIsOwner);
-        console.log("- PROPOSER address:", PROPOSER);
+        console.log("CELO (MockERC20) etched at:", CELO);
+        console.log("  PROPOSER balance:", MockCELO(CELO).balanceOf(PROPOSER));
+        console.log("  DEPLOYER balance:", MockCELO(CELO).balanceOf(DEPLOYER));
+
+        // console.log("Transfer precompile etched at:", TRANSFER_PRECOMPILE);
+    }
+
+    /// @dev Write directly to MockCELO storage on Anvil.
+    ///      balances mapping at slot 0: key slot = keccak256(abi.encode(account, 0))
+    ///      totalSupply at slot 2.
+    function _mintCELO(address to, uint256 amount) internal {
+        bytes32 balanceSlot = keccak256(abi.encode(to, BALANCES_SLOT));
+        Anvil.setStorageAt(CELO, balanceSlot, bytes32(amount));
+        Anvil.setStorageAt(CELO, bytes32(TOTAL_SUPPLY_SLOT), bytes32(amount));
     }
 }
