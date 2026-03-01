@@ -14,6 +14,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
     function _initialize() internal override {
         _initTokens();
+        _initFPMMs();
+        _initCDPLSParams();
         _initOracles();
         _initSwap();
         _initGovernance();
@@ -47,16 +49,30 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _addCollateral("USDC", 0x01C5C0122039549AD1493B8220cABEdD739BC44E);
         _addCollateral("USDT", 0xd077A400968890Eacc75cdc901F0356c943e4fDb);
         _addCollateral("CELO", 0x471EcE3750Da237f93B8E339c536989b8978a438);
+    }
+
+    /// ===================================================================
+    /// FPMMs
+    /// ===================================================================
+    function _initFPMMs() internal {
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
 
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
-
         _addFPMM(
             "cUSD",
             "cGBP",
             getRateFeedIdFromString("GBPUSD"),
             IFPMM.FPMMParams({
-                lpFee: 10,
-                protocolFee: 5,
+                lpFee: 20,
+                protocolFee: 10,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
                 rebalanceIncentive: 6,
@@ -140,6 +156,13 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 protocolIncentiveContraction: 0
             })
         );
+    }
+
+    /// ===================================================================
+    /// CDP LIQUIDITY STRATEGY PARAMS
+    /// ===================================================================
+    function _initCDPLSParams() internal {
+        _redemptionShortfallTolerance = 1e6;
     }
 
     /// ===================================================================
