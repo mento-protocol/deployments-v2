@@ -14,6 +14,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
     function _initialize() internal override {
         _initTokens();
+        _initFPMMs();
+        _initCDPLSParams();
         _initOracles();
         _initSwap();
         _initGovernance();
@@ -47,28 +49,70 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _addCollateral("USDC", 0x01C5C0122039549AD1493B8220cABEdD739BC44E);
         _addCollateral("USDT", 0xd077A400968890Eacc75cdc901F0356c943e4fDb);
         _addCollateral("CELO", 0x471EcE3750Da237f93B8E339c536989b8978a438);
+    }
+
+    /// ===================================================================
+    /// FPMMs
+    /// ===================================================================
+    function _initFPMMs() internal {
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
 
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
-
         _addFPMM(
-            "cUSD",
             "cGBP",
+            "cUSD",
             getRateFeedIdFromString("GBPUSD"),
             IFPMM.FPMMParams({
-                lpFee: 10,
-                protocolFee: 5,
+                lpFee: 20,
+                protocolFee: 10,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
                 rebalanceIncentive: 6,
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
+            FPMMTradingLimitsConfig({
+                // GBPm limits
+                token0Limit0: 77_000 * 1e18,
+                token0Limit1: 385_000 * 1e18,
+                // USDm limits
+                token1Limit0: 100_000 * 1e18,
+                token1Limit1: 500_000 * 1e18
+            }),
             emptyRls
         );
 
+        // Trading limits for USD collateral pools (USDC, USDT, axlUSDC) same limit for both tokens independent of the ordering
+        FPMMTradingLimitsConfig memory usdCollateralPoolsLimits = FPMMTradingLimitsConfig({
+            token0Limit0: 500_000 * 1e18,
+            token0Limit1: 1_000_000 * 1e18,
+            token1Limit0: 500_000 * 1e18,
+            token1Limit1: 1_000_000 * 1e18
+        });
+
+        // Reserve liquidity strategy params for USD collateral pools (USDC, USDT, axlUSDC)
+        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("cUSD"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+
         _addFPMM(
-            "cUSD",
             "axlUSDC",
+            "cUSD",
             getRateFeedIdFromString("USDCUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -79,21 +123,13 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
 
         _addFPMM(
-            "cUSD",
             "USDC",
+            "cUSD",
             getRateFeedIdFromString("USDCUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -104,21 +140,13 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
 
         _addFPMM(
-            "cUSD",
             "USDT",
+            "cUSD",
             getRateFeedIdFromString("USDTUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -129,17 +157,16 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
+    }
+
+    /// ===================================================================
+    /// CDP LIQUIDITY STRATEGY PARAMS
+    /// ===================================================================
+    function _initCDPLSParams() internal {
+        _redemptionShortfallTolerance = 1e6;
     }
 
     /// ===================================================================

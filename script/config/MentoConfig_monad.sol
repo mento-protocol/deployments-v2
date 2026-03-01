@@ -5,6 +5,7 @@ import {console} from "forge-std/console.sol";
 import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
+import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
 
 contract MentoConfig_monad is MentoConfig {
     bytes32 internal valueBreakerId;
@@ -12,8 +13,8 @@ contract MentoConfig_monad is MentoConfig {
 
     function _initialize() internal virtual override {
         _initTokens();
+        _initFPMMs();
         _initOracles();
-        _initParams();
     }
 
     /// ===================================================================
@@ -29,6 +30,22 @@ contract MentoConfig_monad is MentoConfig {
 
         _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603);
         _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a);
+    }
+
+    /// ===================================================================
+    /// FPMMs
+    /// ===================================================================
+    function _initFPMMs() internal {
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
+        // TODO: Add FPMM configs
     }
 
     /// ===================================================================
@@ -90,17 +107,6 @@ contract MentoConfig_monad is MentoConfig {
             rateFeed: "EUR/USD",
             source: 0x00D7E359c8CE46168eFDD4D65b708fFb16c4b99a
         });
-    }
-
-    /// ===================================================================
-    /// PARAMS
-    /// ===================================================================
-    /// @notice Configure protocol parameters
-    /// @dev On testnets we can use _addMockAggregator to define chainlink
-    /// aggregators.
-    function _initParams() internal {
-        _setDefaultFPMMParams(30, 5, 50, 500, 500);
-        _setRedemptionShortfallTolerance(10e12);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have

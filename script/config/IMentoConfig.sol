@@ -103,6 +103,13 @@ interface IMentoConfig {
         uint64 protocolIncentiveContraction;
     }
 
+    struct FPMMTradingLimitsConfig {
+        uint256 token0Limit0;
+        uint256 token0Limit1;
+        uint256 token1Limit0;
+        uint256 token1Limit1;
+    }
+
     struct FPMMConfig {
         address fpmmImplementation;
         address oracleAdapter;
@@ -112,6 +119,7 @@ interface IMentoConfig {
         address referenceRateFeedID;
         bool invertRateFeed;
         IFPMM.FPMMParams params;
+        FPMMTradingLimitsConfig tradingLimits;
         ReserveLiquidityStrategyPoolConfig rlsConfig;
     }
 
