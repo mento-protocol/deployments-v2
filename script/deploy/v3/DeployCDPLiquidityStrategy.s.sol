@@ -38,6 +38,8 @@ contract DeployCDPLiquidityStrategy is
         deployer = sender("deployer");
         owner = sender("migrationOwner");
 
+        require(config.getCDPRedemptionShortfallTolerance() > 0, "redemption shortfall tolerance not set");
+
         cdpLiquidityStrategyImpl = deployer
             .create3("CDPLiquidityStrategy")
             .setLabel(label)

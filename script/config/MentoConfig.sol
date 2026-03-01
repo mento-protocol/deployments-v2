@@ -630,36 +630,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    /// @dev we don't set the protocol fee recipient or the fee setter because
-    ///      it will most likely need to be deployment-specific rather than
-    ///      network-specific
-    function _setDefaultFPMMParams(
-        uint256 lpFee,
-        uint256 protocolFee,
-        uint256 rebalanceIncentive,
-        uint256 rebalanceThresholdAbove,
-        uint256 rebalanceThresholdBelow
-    ) internal {
-        _defaultFPMMParams = IFPMM.FPMMParams(
-            lpFee,
-            protocolFee,
-            address(0),
-            address(0),
-            rebalanceIncentive,
-            rebalanceThresholdAbove,
-            rebalanceThresholdBelow
-        );
-    }
-
-    function _setRedemptionShortfallTolerance(uint256 tolerance) internal {
-        _redemptionShortfallTolerance = tolerance;
-    }
-
     function _addFPMM(
         string memory token0,
         string memory token1,
         address rateFeed,
         IFPMM.FPMMParams memory params,
+        FPMMTradingLimitsConfig memory tradingLimits,
         ReserveLiquidityStrategyPoolConfig memory rlsParams
     ) internal {
         address _fpmmImpl = lookup("FPMM:v3.0.0");
@@ -677,6 +653,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         c.referenceRateFeedID = rateFeed;
         c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
         c.params = params;
+        c.tradingLimits = tradingLimits;
         c.rlsConfig = rlsParams;
 
         _fpmmConfigs.push(c);
