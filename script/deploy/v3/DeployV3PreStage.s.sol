@@ -101,6 +101,11 @@ contract DeployV3PreStage is
         );
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
+        require(params.lpFee > 0 || params.protocolFee > 0, "fees not set for default FPMM params");
+        require(params.protocolFeeRecipient != address(0), "protocolFeeRecipient not set for default FPMM params");
+        require(params.rebalanceIncentive > 0, "rebalanceIncentive not set for default FPMM params");
+        require(params.rebalanceThresholdAbove > 0, "rebalanceThresholdAbove not set for default FPMM params");
+        require(params.rebalanceThresholdBelow > 0, "rebalanceThresholdBelow not set for default FPMM params");
         params.feeSetter = feeSetter;
         params.protocolFeeRecipient = protocolFeeRecipient;
 
