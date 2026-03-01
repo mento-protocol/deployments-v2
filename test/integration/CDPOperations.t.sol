@@ -129,6 +129,94 @@ contract CDPOperations is V3IntegrationBase {
         assertEq(balanceAfter - balanceBefore, withdrawAmount, "Withdrawn amount should match requested");
     }
 
+    // ========== Liquidation ==========
+
+    /// @notice Test liquidating an undercollateralized trove — open trove, drop price, liquidate, verify status
+    function test_liquidation_undercollateralizedTrove() public {
+        require(cdpPools.length > 0, "No CDP pools");
+        PoolContracts memory c = _getPoolContracts(cdpPools[0]);
+
+        // Open victim trove at low CR (just above MCR)
+        address victim = makeAddr("liquidationVictim");
+        (uint256 victimTroveId,,) = _openTroveAtCR(victim, c, 115);
+
+        // Fund stability pool for liquidation absorption
+        _openTroveAndDepositToSP(makeAddr("liquidationDepositor"), c);
+
+        // Drop price to make victim undercollateralized
+        uint256 droppedPrice = _mockLowerPrice(c, 75);
+
+        // Verify trove is undercollateralized
+        uint256 icr = ITroveManager(c.troveManager).getCurrentICR(victimTroveId, droppedPrice);
+        assertLt(icr, IBorrowerOperations(c.borrowerOps).MCR(), "Trove should be undercollateralized");
+
+        // Liquidate
+        _liquidateTrove(c, victimTroveId);
+
+        // Verify trove status changed to closedByLiquidation
+        ITroveManager.Status status = ITroveManager(c.troveManager).getTroveStatus(victimTroveId);
+        assertEq(
+            uint256(status),
+            uint256(ITroveManager.Status.closedByLiquidation),
+            "Trove should be closed by liquidation"
+        );
+
+        vm.clearMockedCalls();
+    }
+
+    // ========== Interest Accrual ==========
+
+    /// @notice Test interest accrual: open trove, warp 30 days, verify debt increased
+    function test_interestAccrual() public {
+        require(cdpPools.length > 0, "No CDP pools");
+        PoolContracts memory c = _getPoolContracts(cdpPools[0]);
+
+        address user = makeAddr("interestUser");
+        (uint256 troveId,,) = _openTroveForUser(user, c);
+
+        uint256 debtBefore = ITroveManager(c.troveManager).getLatestTroveData(troveId).entireDebt;
+
+        // Warp 30 days forward
+        vm.warp(block.timestamp + 30 days);
+
+        uint256 debtAfter = ITroveManager(c.troveManager).getLatestTroveData(troveId).entireDebt;
+        assertGt(debtAfter, debtBefore, "Debt should increase after 30 days due to interest accrual");
+    }
+
+    // ========== StabilityPool Collateral Gains ==========
+
+    /// @notice Test that StabilityPool depositors receive collateral gains after a liquidation
+    function test_stabilityPool_collateralGainsAfterLiquidation() public {
+        require(cdpPools.length > 0, "No CDP pools");
+        PoolContracts memory c = _getPoolContracts(cdpPools[0]);
+
+        // Open victim trove at low CR
+        address victim = makeAddr("gainVictim");
+        (uint256 victimTroveId,,) = _openTroveAtCR(victim, c, 115);
+
+        // Open depositor trove and deposit into SP
+        address depositor = makeAddr("gainDepositor");
+        _openTroveAndDepositToSP(depositor, c);
+
+        uint256 gainBefore = IStabilityPool(c.stabilityPool).getDepositorCollGain(depositor);
+
+        // Drop price and liquidate
+        _mockLowerPrice(c, 75);
+        _liquidateTrove(c, victimTroveId);
+        vm.clearMockedCalls();
+
+        // Verify collateral gain increased
+        uint256 gainAfter = IStabilityPool(c.stabilityPool).getDepositorCollGain(depositor);
+        assertGt(gainAfter, gainBefore, "SP depositor should have collateral gains after liquidation");
+
+        // Claim gains and verify balance increased
+        uint256 collBefore = IERC20(c.collToken).balanceOf(depositor);
+        vm.prank(depositor);
+        IStabilityPool(c.stabilityPool).claimAllCollGains();
+        uint256 collAfter = IERC20(c.collToken).balanceOf(depositor);
+        assertGt(collAfter, collBefore, "Depositor should receive collateral after claiming gains");
+    }
+
     // ========== Internal Helpers ==========
 
     /// @dev Get key contract addresses for a CDP pool
@@ -221,5 +309,63 @@ contract CDPOperations is V3IntegrationBase {
             user, 0, p.collAmount, p.debtAmount, 0, 0,
             p.interestRate, p.debtAmount, address(0), address(0), address(0)
         );
+    }
+
+    /// @dev Opens a trove at a specific CR multiplier percent over MCR (e.g., 115 = MCR * 1.15)
+    function _openTroveAtCR(address user, PoolContracts memory c, uint256 crMultiplierPct)
+        internal
+        returns (uint256 troveId, uint256 debtAmount, uint256 collAmount)
+    {
+        OpenTroveParams memory p = _buildTroveParamsAtCR(c, crMultiplierPct);
+        debtAmount = p.debtAmount;
+        collAmount = p.collAmount;
+
+        deal(c.collToken, user, p.collAmount + p.ethGasComp);
+
+        vm.startPrank(user);
+        IERC20(c.collToken).approve(c.borrowerOps, p.collAmount + p.ethGasComp);
+        troveId = _callOpenTrove(c.borrowerOps, user, p);
+        vm.stopPrank();
+    }
+
+    /// @dev Build trove parameters with custom CR multiplier percent over MCR
+    function _buildTroveParamsAtCR(PoolContracts memory c, uint256 crMultiplierPct)
+        internal
+        returns (OpenTroveParams memory p)
+    {
+        ISystemParams sysParams = IStabilityPool(c.stabilityPool).systemParams();
+        uint256 price = IPriceFeed(_getPriceFeed(c.troveManager)).fetchPrice();
+        uint256 mcr = IBorrowerOperations(c.borrowerOps).MCR();
+        uint8 decimals = IERC20Metadata(c.collToken).decimals();
+
+        p.debtAmount = sysParams.MIN_DEBT() + 100e18;
+        p.collAmount = _calculateCollateral(p.debtAmount, price, mcr * crMultiplierPct / 100, decimals);
+        p.interestRate = sysParams.MIN_ANNUAL_INTEREST_RATE() + 1e16;
+        p.ethGasComp = sysParams.ETH_GAS_COMPENSATION();
+    }
+
+    /// @dev Open a trove for user and deposit all debt tokens into StabilityPool
+    function _openTroveAndDepositToSP(address user, PoolContracts memory c) internal returns (uint256 depositAmount) {
+        (, uint256 debtAmount,) = _openTroveForUser(user, c);
+        depositAmount = debtAmount;
+        vm.startPrank(user);
+        IERC20(c.debtToken).approve(c.stabilityPool, debtAmount);
+        IStabilityPool(c.stabilityPool).provideToSP(debtAmount, false);
+        vm.stopPrank();
+    }
+
+    /// @dev Mock the price feed to return price at a percentage of current (e.g., 75 = 75% of current)
+    function _mockLowerPrice(PoolContracts memory c, uint256 pricePct) internal returns (uint256 droppedPrice) {
+        address priceFeedAddr = _getPriceFeed(c.troveManager);
+        uint256 currentPrice = IPriceFeed(priceFeedAddr).fetchPrice();
+        droppedPrice = currentPrice * pricePct / 100;
+        vm.mockCall(priceFeedAddr, abi.encodeWithSelector(IPriceFeed.fetchPrice.selector), abi.encode(droppedPrice));
+    }
+
+    /// @dev Liquidate a single trove via batchLiquidateTroves
+    function _liquidateTrove(PoolContracts memory c, uint256 troveId) internal {
+        uint256[] memory troveIds = new uint256[](1);
+        troveIds[0] = troveId;
+        ITroveManager(c.troveManager).batchLiquidateTroves(troveIds);
     }
 }

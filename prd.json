@@ -312,7 +312,7 @@
         "forge build succeeds"
       ],
       "priority": 20,
-      "passes": false,
+      "passes": true,
       "notes": "For liquidation tests: open a trove at minimum CR, then use a mock aggregator or vm.store to lower the collateral price below liquidation threshold, then call troveManager.liquidate(). Check IStabilityPool for collateral gain claims."
     }
   ]

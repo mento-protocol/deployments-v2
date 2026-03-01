@@ -54,6 +54,8 @@
 - StabilityPool public vars not in interface: define `IStabilityPoolReader` with `collToken()` to access them
 - `ISystemParams` via `IStabilityPool.systemParams()`: `MIN_DEBT()`, `MIN_ANNUAL_INTEREST_RATE()`, `ETH_GAS_COMPENSATION()`, `MCR()` (also on IBorrowerOperations)
 - openTrove has 11 params — causes stack-too-deep; use struct to hold params and split into helper functions
+- Liquidation testing: `vm.mockCall` on priceFeed to lower price, then `ITroveManager.batchLiquidateTroves([troveId])`, then `vm.clearMockedCalls()`
+- SP collateral gains: `IStabilityPool.getDepositorCollGain(user)` after liquidation, `claimAllCollGains()` to claim
 
 ---
 
@@ -295,4 +297,19 @@
   - `ISystemParams` accessible via `IStabilityPool.systemParams()` — use `MIN_DEBT()`, `MIN_ANNUAL_INTEREST_RATE()`, `ETH_GAS_COMPENSATION()`, `MCR()`
   - `maxUpfrontFee` should be set generously (e.g., equal to debtAmount) to ensure trove opening succeeds
   - Interest rate must be between `MIN_ANNUAL_INTEREST_RATE()` and `MAX_ANNUAL_INTEREST_RATE` (250%) — use min + 1%
+---
+
+## 2026-03-01 - US-020
+- What was implemented: Added liquidation, interest accrual, and StabilityPool collateral gains tests to `test/integration/CDPOperations.t.sol`
+- Files changed: test/integration/CDPOperations.t.sol (modified)
+- **Learnings for future iterations:**
+  - `ITroveManager.batchLiquidateTroves(uint256[] calldata)` is the public liquidation entry point — takes array of trove IDs, checks each ICR < MCR at current price
+  - `vm.mockCall(priceFeedAddr, abi.encodeWithSelector(IPriceFeed.fetchPrice.selector), abi.encode(newPrice))` to manipulate price for liquidation tests — mocks all subsequent fetchPrice() calls
+  - `vm.clearMockedCalls()` after liquidation to restore normal price feed behavior
+  - `ITroveManager.Status.closedByLiquidation` (enum value 3) — verify trove status after successful liquidation
+  - `IStabilityPool.getDepositorCollGain(depositor)` returns accumulated collateral gains from liquidations absorbed by SP
+  - `IStabilityPool.claimAllCollGains()` transfers accumulated collateral gains to the depositor
+  - To test liquidations: open victim trove at low CR (MCR * 115/100), fund SP with another trove's debt, mock price to 75% of original, call batchLiquidateTroves
+  - `_openTroveAtCR(user, contracts, crMultiplierPct)` helper allows opening troves at specific CR — useful for liquidation targets (115 = MCR * 1.15)
+  - Interest accrual test: `getLatestTroveData(troveId).entireDebt` increases after `vm.warp(30 days)` — no explicit state change needed, it's computed on read
 ---
