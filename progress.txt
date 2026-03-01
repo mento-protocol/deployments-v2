@@ -50,6 +50,10 @@
 - Registry namespace for Celo Sepolia: `testnet-v2-rc5` (not `default`) — set `NAMESPACE` env var accordingly
 - PriceFeed address: read from TroveManager storage slot 2 (LiquityBase inheritance: activePool=0, defaultPool=1, priceFeed=2) — `IPriceFeed.fetchPrice()` is state-changing (non-view)
 - Trove health check: `ITroveManager.getCurrentICR(troveId, price)` vs `IBorrowerOperations.MCR()` — ICR must be >= MCR
+- Mento Bold deployment: collToken == gasToken (both are USDM) — approve BorrowerOperations for `collAmount + ETH_GAS_COMPENSATION()` on single token
+- StabilityPool public vars not in interface: define `IStabilityPoolReader` with `collToken()` to access them
+- `ISystemParams` via `IStabilityPool.systemParams()`: `MIN_DEBT()`, `MIN_ANNUAL_INTEREST_RATE()`, `ETH_GAS_COMPENSATION()`, `MCR()` (also on IBorrowerOperations)
+- openTrove has 11 params — causes stack-too-deep; use struct to hold params and split into helper functions
 
 ---
 
@@ -276,4 +280,19 @@
   - Interest accrual test pattern: record `entireDebt` → `vm.warp(block.timestamp + 30 days)` → re-read `entireDebt` → assert increased
   - `LatestTroveData.entireDebt` includes accrued interest, so it increases over time even without explicit state changes
   - Helper pattern: `_getTroveManagerAndBorrowerOps(pool)` returns both addresses by chaining through CDPConfig.stabilityPool → troveManager → borrowerOperations
+---
+
+## 2026-03-01 - US-019
+- What was implemented: Created `test/integration/CDPOperations.t.sol` with tests for CDP operations: opening a new trove (deal collateral, approve BorrowerOperations, call openTrove, verify trove active + debt tokens received), depositing debt tokens into StabilityPool (provideToSP, verify deposit registered), and withdrawing from StabilityPool (withdrawFromSP, verify tokens returned)
+- Files changed: test/integration/CDPOperations.t.sol (new)
+- **Learnings for future iterations:**
+  - In the Mento Bold deployment, collToken and gasToken are the same token (USDM) — approve BorrowerOperations for `collAmount + ETH_GAS_COMPENSATION()` on a single token
+  - `IBorrowerOperations.openTrove(owner, ownerIndex, collAmount, boldAmount, upperHint, lowerHint, annualInterestRate, maxUpfrontFee, addManager, removeManager, receiver)` — 11 params, causes stack-too-deep easily; use struct to pass params
+  - `IStabilityPool.provideToSP(amount, doClaim)` deposits Bold into SP; `withdrawFromSP(amount, doClaim)` withdraws
+  - `IStabilityPool.getCompoundedBoldDeposit(depositor)` returns the compounded deposit (decreases after liquidations)
+  - `StabilityPool.collToken` is a `public` variable but NOT in the IStabilityPool interface — define `IStabilityPoolReader` minimal interface to access it
+  - Collateral calculation pattern: `(debtAmount * targetCR) / price`, adjusted for token decimals; add 1% buffer for rounding
+  - `ISystemParams` accessible via `IStabilityPool.systemParams()` — use `MIN_DEBT()`, `MIN_ANNUAL_INTEREST_RATE()`, `ETH_GAS_COMPENSATION()`, `MCR()`
+  - `maxUpfrontFee` should be set generously (e.g., equal to debtAmount) to ensure trove opening succeeds
+  - Interest rate must be between `MIN_ANNUAL_INTEREST_RATE()` and `MAX_ANNUAL_INTEREST_RATE` (250%) — use min + 1%
 ---
