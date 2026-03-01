@@ -90,9 +90,6 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     address owner; // Owner Proxy needs to be deployed first
     address yieldSplitAddress; // Yield Split Address needs to be deployed first
 
-    // TODO: testing purposes, we don't want to test the actual rate feed at the beginning
-    address nonFunctionalRateFeed = 0x0000000000000000000000000000000000000539;
-
     ILiquityConfig.LiquityInstanceConfig cfg;
 
     LiquityContractAddresses deployedContracts;
@@ -447,7 +444,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             abi.encodeWithSelector(
                 FXPriceFeed.initialize.selector,
                 oracleAdapter,
-                nonFunctionalRateFeed,
+                cfg.rateFeedID,
                 cfg.invertRateFeed,
                 cfg.l2SequencerGracePeriod,
                 borrowerOperationsAddress,
@@ -608,7 +605,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             address(pf.oracleAdapter()) == oracleAdapter,
             "PF: oracleAdapter"
         );
-        require(pf.rateFeedID() == nonFunctionalRateFeed, "PF: rateFeedID");
+        require(pf.rateFeedID() == cfg.rateFeedID, "PF: rateFeedID");
         require(
             pf.invertRateFeed() == cfg.invertRateFeed,
             "PF: invertRateFeed"
