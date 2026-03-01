@@ -9,6 +9,7 @@ import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
 /**
  * @title StateVerification
@@ -119,5 +120,101 @@ contract StateVerification is V3IntegrationBase {
                 string.concat("ProxyAdmin mismatch on FPMM pool at index ", vm.toString(i))
             );
         }
+    }
+
+    // ========== Ownership Tests ==========
+
+    function test_oracleAdapter_owner() public view {
+        assertEq(IOwnable(oracleAdapter).owner(), _getOwner(), "OracleAdapter owner mismatch");
+    }
+
+    function test_fpmmFactory_owner() public view {
+        assertEq(IOwnable(fpmmFactory).owner(), _getOwner(), "FPMMFactory owner mismatch");
+    }
+
+    function test_factoryRegistry_owner() public view {
+        assertEq(IOwnable(factoryRegistry).owner(), _getOwner(), "FactoryRegistry owner mismatch");
+    }
+
+    function test_virtualPoolFactory_owner() public view {
+        assertEq(IOwnable(virtualPoolFactory).owner(), _getOwner(), "VirtualPoolFactory owner mismatch");
+    }
+
+    function test_reserveV2_owner() public view {
+        assertEq(IOwnable(reserveV2).owner(), _getOwner(), "ReserveV2 owner mismatch");
+    }
+
+    function test_reserveLiquidityStrategy_owner() public view {
+        assertEq(IOwnable(reserveLiquidityStrategy).owner(), _getOwner(), "ReserveLiquidityStrategy owner mismatch");
+    }
+
+    function test_cdpLiquidityStrategy_owner() public view {
+        assertEq(IOwnable(cdpLiquidityStrategy).owner(), _getOwner(), "CDPLiquidityStrategy owner mismatch");
+    }
+
+    // ========== Non-Owner Access Denial Tests ==========
+
+    function test_oracleAdapter_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(oracleAdapter).transferOwnership(randomUser);
+    }
+
+    function test_fpmmFactory_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(fpmmFactory).transferOwnership(randomUser);
+    }
+
+    function test_factoryRegistry_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(factoryRegistry).transferOwnership(randomUser);
+    }
+
+    function test_virtualPoolFactory_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(virtualPoolFactory).transferOwnership(randomUser);
+    }
+
+    function test_reserveV2_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(reserveV2).transferOwnership(randomUser);
+    }
+
+    function test_reserveLiquidityStrategy_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(reserveLiquidityStrategy).transferOwnership(randomUser);
+    }
+
+    function test_cdpLiquidityStrategy_transferOwnership_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(cdpLiquidityStrategy).transferOwnership(randomUser);
+    }
+
+    // ========== FPMMFactory Access Control ==========
+
+    function test_fpmmFactory_deployFPMM_reverts_nonOwner() public {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IFPMMFactory(fpmmFactory).deployFPMM(
+            fpmmFactoryImpl, // arbitrary implementation address
+            address(1),      // token0
+            address(2),      // token1
+            address(3),      // referenceRateFeedID
+            false            // invertRateFeed
+        );
     }
 }
