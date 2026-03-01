@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import {ICDPMigrationConfig} from "./ICDPMigrationConfig.sol";
 
-contract CDPMigrationConfig_GBPm is ICDPMigrationConfig {
+contract CDPMigrationConfig_celo_GBPm is ICDPMigrationConfig {
     function get() external pure returns (CDPMigrationInstanceConfig memory) {
         return CDPMigrationInstanceConfig({
             // ── ReserveTroveFactory ──────────────────────────────────────────
@@ -19,7 +19,8 @@ contract CDPMigrationConfig_GBPm is ICDPMigrationConfig {
             liquiditySourceIncentiveContraction: 0.005e18, // 0.5%
             protocolIncentiveContraction: 0, // 0%
             // ── FXPriceFeed ──────────────────────────────────────────────────
-            rateFeedID: 0xAe5eEe6815b8529847955d19522858806Bca8217 // rate feed ID for GBP/USD
+            // mainnet rate feed id for GBP/USD: address(uint160(uint256(keccak256("relayed:GBPUSD"))))
+            rateFeedID: 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88
         });
     }
 }

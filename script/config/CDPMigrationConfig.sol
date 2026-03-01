@@ -3,7 +3,8 @@ pragma solidity ^0.8.0;
 
 import {Vm} from "forge-std/Vm.sol";
 import {ICDPMigrationConfig} from "./ICDPMigrationConfig.sol";
-import {CDPMigrationConfig_GBPm} from "./CDPMigrationConfig_GBPm.sol";
+import {CDPMigrationConfig_celo_GBPm} from "./CDPMigrationConfig_celo_GBPm.sol";
+import {CDPMigrationConfig_celo_sepolia_GBPm} from "./CDPMigrationConfig_celo_sepolia_GBPm.sol";
 
 /**
  * @notice Loader library for CDP migration configs.
@@ -21,7 +22,13 @@ library CDPMigrationConfigLib {
         internal
         returns (ICDPMigrationConfig.CDPMigrationInstanceConfig memory)
     {
-        string memory name = string.concat("CDPMigrationConfig_", token);
+        string memory network = vm.envString("NETWORK");
+        string memory name = string.concat(
+            "CDPMigrationConfig_",
+            network,
+            "_",
+            token
+        );
         address config = vm.deployCode(name);
         require(
             config != address(0),
