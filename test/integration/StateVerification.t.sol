@@ -11,6 +11,7 @@ import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IBreakerBox} from "mento-core/interfaces/IBreakerBox.sol";
+import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
 
 /**
  * @title StateVerification
@@ -277,5 +278,95 @@ contract StateVerification is V3IntegrationBase {
             assertGt(numerator, 0, string.concat("Zero numerator for FX feed: ", vm.toString(fxFeedIds[i])));
             assertGt(denominator, 0, string.concat("Zero denominator for FX feed: ", vm.toString(fxFeedIds[i])));
         }
+    }
+
+    // ========== FPMMFactory State Tests (US-005) ==========
+
+    function test_fpmmFactory_oracleAdapter() public view {
+        assertEq(
+            IFPMMFactory(fpmmFactory).oracleAdapter(),
+            oracleAdapter,
+            "FPMMFactory.oracleAdapter() mismatch"
+        );
+    }
+
+    function test_fpmmFactory_proxyAdmin() public view {
+        assertEq(
+            IFPMMFactory(fpmmFactory).proxyAdmin(),
+            proxyAdmin,
+            "FPMMFactory.proxyAdmin() mismatch"
+        );
+    }
+
+    function test_fpmmFactory_defaultParams() public view {
+        IFPMM.FPMMParams memory expected = config.getDefaultFPMMParams();
+        IFPMM.FPMMParams memory actual = IFPMMFactory(fpmmFactory).defaultParams();
+
+        assertEq(actual.lpFee, expected.lpFee, "FPMMFactory defaultParams lpFee mismatch");
+        assertEq(actual.protocolFee, expected.protocolFee, "FPMMFactory defaultParams protocolFee mismatch");
+        assertEq(
+            actual.protocolFeeRecipient,
+            expected.protocolFeeRecipient,
+            "FPMMFactory defaultParams protocolFeeRecipient mismatch"
+        );
+        assertEq(actual.feeSetter, expected.feeSetter, "FPMMFactory defaultParams feeSetter mismatch");
+        assertEq(
+            actual.rebalanceIncentive,
+            expected.rebalanceIncentive,
+            "FPMMFactory defaultParams rebalanceIncentive mismatch"
+        );
+        assertEq(
+            actual.rebalanceThresholdAbove,
+            expected.rebalanceThresholdAbove,
+            "FPMMFactory defaultParams rebalanceThresholdAbove mismatch"
+        );
+        assertEq(
+            actual.rebalanceThresholdBelow,
+            expected.rebalanceThresholdBelow,
+            "FPMMFactory defaultParams rebalanceThresholdBelow mismatch"
+        );
+    }
+
+    function test_fpmmFactory_isRegisteredImplementation() public view {
+        address fpmmImpl = lookupOrFail("FPMM:v3.0.0");
+        assertTrue(
+            IFPMMFactory(fpmmFactory).isRegisteredImplementation(fpmmImpl),
+            "FPMM implementation not registered in FPMMFactory"
+        );
+    }
+
+    // ========== FactoryRegistry State Tests (US-005) ==========
+
+    function test_factoryRegistry_fallbackPoolFactory() public view {
+        assertEq(
+            IFactoryRegistry(factoryRegistry).fallbackPoolFactory(),
+            fpmmFactory,
+            "FactoryRegistry.fallbackPoolFactory() should be FPMMFactory proxy"
+        );
+    }
+
+    function test_factoryRegistry_isPoolFactoryApproved() public view {
+        assertTrue(
+            IFactoryRegistry(factoryRegistry).isPoolFactoryApproved(fpmmFactory),
+            "FPMMFactory not approved in FactoryRegistry"
+        );
+    }
+
+    // ========== Router State Tests (US-005) ==========
+
+    function test_router_factoryRegistry() public view {
+        assertEq(
+            IRouter(router).factoryRegistry(),
+            factoryRegistry,
+            "Router.factoryRegistry() should be FactoryRegistry proxy"
+        );
+    }
+
+    function test_router_defaultFactory() public view {
+        assertEq(
+            IRouter(router).defaultFactory(),
+            fpmmFactory,
+            "Router.defaultFactory() should be FPMMFactory proxy"
+        );
     }
 }
