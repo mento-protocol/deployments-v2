@@ -74,6 +74,25 @@ library Anvil {
         vm.etch(target, code);
     }
 
+    function setCodeRpc(address target, bytes memory code) internal {
+        (bool success, ) = address(vm).call(
+            abi.encodeWithSignature(
+                "rpc(string,string)",
+                "anvil_setCode",
+                string(
+                    abi.encodePacked(
+                        '["',
+                        vm.toString(target),
+                        '","',
+                        vm.toString(code),
+                        '"]'
+                    )
+                )
+            )
+        );
+        require(success, "anvil_setCode failed");
+    }
+
     function snapshot() internal returns (uint256) {
         return vm.snapshot();
     }

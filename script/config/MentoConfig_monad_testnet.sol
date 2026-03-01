@@ -15,7 +15,6 @@ contract MentoConfig_monad_testnet is MentoConfig {
         _initOracles();
         _initSwap();
         _initGovernance();
-        _initDeployedContracts();
     }
 
     /// ===================================================================
@@ -435,11 +434,5 @@ contract MentoConfig_monad_testnet is MentoConfig {
             quorum: 2,
             watchdog: address(1) // XXX: Configure
         });
-    }
-
-    function _initDeployedContracts() internal {
-        _addDeployedContract("SortedOracles", lookupProxy("SortedOracles"));
-        _addDeployedContract("BreakerBox", lookup("BreakerBox:v2.6.5"));
-        _addDeployedContract("ProxyAdmin", lookup("ProxyAdmin"));
     }
 }

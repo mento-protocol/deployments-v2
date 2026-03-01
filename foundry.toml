@@ -3,12 +3,20 @@ src = "src"
 out = "out"
 libs = ["lib"]
 optimizer = true
+ffi = true
+additional_compiler_profiles = [
+    { name = "no-opt", optimizer_runs = 0 },
+]
+compilation_restrictions = [
+    { paths = "lib/bold/contracts/src/TroveManager.sol", optimizer_runs = 0 },
+]
 fs_permissions = [
     { access = "read-write", path = "cache"},
+    { access = "read-write", path = "out/"},
     { access = "read", path = ".treb/registry.json"},
     { access = "read", path = ".treb/addressbook.json"},
-    { access = "read", path = "script/networks" },
-    { access = "read", path = "./mgps/"}
+    { access = "read", path = "script/config/"},
+    { access = "read", path = "mgps/"}
 ]
 
 [lint]
@@ -28,71 +36,9 @@ celo_sepolia_local_fork = "http://localhost:8545"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
-# monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
-# monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
-# chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
-# celo_sepolia = { key= "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chain=11142220" }
-
-[profile.mainnet.treb.senders.deployer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile.mainnet.treb.senders.migrationMultisig]
-type = "safe"
-safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
-signer = "proposer"
-
-[profile.default.treb.senders.deployer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile.default.treb.senders.migrationMultisig]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile.default.treb.senders.proposer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile.default.treb.senders.reporter]
-type = "private_key"
-private_key = "${REPORTER_PRIVATE_KEY}"
-
-[profile.virtual.treb.senders.deployer]
-type = "safe"
-safe = "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F"
-signer = "proposer"
-
-[profile.throwaway.treb.senders.deployer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile."testnet-v3-rc0".treb.senders.deployer]
-type = "safe"
-safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
-signer = "proposer"
-
-[profile.testnet-v2-rc5.treb.senders.migrationOwner]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile.testnet-v2-rc5.treb.senders.deployer]
-type = "private_key"
-private_key = "${DEPLOYER_PRIVATE_KEY}"
-
-[profile.mainnet.treb.senders.migrationOwner]
-type = "safe"
-safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
-signer = "proposer"
-
-[profile.testnet-v2-rc5.treb.senders.governor]
-type = "oz_governor"
-governor = "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4"
-timelock = "0x74c44Be99937815173A3C56274331e0A05611e0D"
-proposer = "deployer"
-
-[profile.celo.treb.senders.governor]
-type = "oz_governor"
-governor = "0x47036d78bB3169b4F5560dD77BF93f4412A59852"
-timelock = "0x890DB8A597940165901372Dd7DB61C9f246e2147"
-proposer = "deployer"
+monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
+monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+chain-143 = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
+celo = { key = "${ETHERSCAN_API_KEY}", chain = 42220, url = "https://api.etherscan.io/v2/api?chainid=42220" }
+# chain-11142220 = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
+# celo_sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
