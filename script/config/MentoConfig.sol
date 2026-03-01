@@ -644,6 +644,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         address token0Address = _lookupTokenAddress(token0);
         address token1Address = _lookupTokenAddress(token1);
 
+        require(token0Address < token1Address, "Token0 must be less than Token1");
+
         FPMMConfig memory c;
         c.fpmmImplementation = _fpmmImpl;
         c.oracleAdapter = _oracleAdapter;
@@ -675,17 +677,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _shouldInvertRateFeed(address token0, address token1) private view returns (bool) {
-        (token0, token1) = token0 < token1 ? (token0, token1) : (token1, token0);
-
         bool isFxPool = isStableToken(token0) && isStableToken(token1);
 
         if (isFxPool) {
             bool isToken0USDm = areStringsEqual(IERC20Metadata(token0).symbol(), "USDm");
-
-            return isToken0USDm ? false : true;
+            return isToken0USDm ? true : false;
         } else {
             bool isToken0Collateral = isCollateralAsset(token0);
-
             return isToken0Collateral ? false : true;
         }
     }
