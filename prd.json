@@ -125,7 +125,7 @@
         "forge build succeeds"
       ],
       "priority": 8,
-      "passes": false,
+      "passes": true,
       "notes": "Use config.getExchangeConfig() and BiPoolManager.getExchangeIds()/getPoolExchange() to enumerate exchanges, similar to DeployVirtualPools.s.sol."
     },
     {
@@ -143,7 +143,7 @@
         "forge build succeeds"
       ],
       "priority": 9,
-      "passes": false,
+      "passes": true,
       "notes": "Use CDPMigrationConfigLib.get(tokenSymbol) to load per-token CDP config. Use IAddressesRegistry for Liquity contract addresses."
     },
     {
