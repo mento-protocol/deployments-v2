@@ -10,10 +10,12 @@ import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidity
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
+import {IBreakerBox} from "mento-core/interfaces/IBreakerBox.sol";
 
 /**
  * @title StateVerification
- * @notice Verifies proxy implementations, init protection, and ProxyAdmin config for V3 contracts.
+ * @notice Verifies proxy implementations, init protection, ProxyAdmin config, ownership,
+ *         and oracle/breaker configuration for V3 contracts.
  */
 contract StateVerification is V3IntegrationBase {
     // Implementation addresses resolved in setUp
@@ -216,5 +218,64 @@ contract StateVerification is V3IntegrationBase {
             address(3),      // referenceRateFeedID
             false            // invertRateFeed
         );
+    }
+
+    // ========== OracleAdapter Configuration Tests (US-004) ==========
+
+    function test_oracleAdapter_sortedOracles() public view {
+        address actual = address(IOracleAdapter(oracleAdapter).sortedOracles());
+        assertEq(actual, sortedOracles, "OracleAdapter.sortedOracles() mismatch");
+    }
+
+    function test_oracleAdapter_breakerBox() public view {
+        address actual = address(IOracleAdapter(oracleAdapter).breakerBox());
+        assertEq(actual, breakerBox, "OracleAdapter.breakerBox() mismatch");
+    }
+
+    function test_oracleAdapter_marketHoursBreaker() public view {
+        address actual = address(IOracleAdapter(oracleAdapter).marketHoursBreaker());
+        assertEq(actual, marketHoursBreaker, "OracleAdapter.marketHoursBreaker() mismatch");
+    }
+
+    // ========== BreakerBox Configuration Tests (US-004) ==========
+
+    function test_breakerBox_isBreaker_marketHoursBreaker() public view {
+        assertTrue(
+            IBreakerBox(breakerBox).isBreaker(marketHoursBreaker),
+            "MarketHoursBreaker not registered as breaker in BreakerBox"
+        );
+    }
+
+    function test_breakerBox_marketHoursBreaker_tradingMode() public view {
+        uint8 tradingMode = IBreakerBox(breakerBox).breakerTradingMode(marketHoursBreaker);
+        assertEq(tradingMode, 3, "MarketHoursBreaker trading mode should be 3 (trading halted)");
+    }
+
+    function test_marketHoursBreaker_enabledOnAllFxFeeds() public view {
+        address[] memory fxFeedIds = config.getFxRateFeedIds();
+        assertGt(fxFeedIds.length, 0, "No FX rate feed IDs configured");
+
+        for (uint256 i = 0; i < fxFeedIds.length; i++) {
+            assertTrue(
+                IBreakerBox(breakerBox).isBreakerEnabled(marketHoursBreaker, fxFeedIds[i]),
+                string.concat(
+                    "MarketHoursBreaker not enabled on FX feed: ",
+                    vm.toString(fxFeedIds[i])
+                )
+            );
+        }
+    }
+
+    // ========== OracleAdapter FX Rate Validity Tests (US-004) ==========
+
+    function test_oracleAdapter_getFXRateIfValid_allFeeds() public view {
+        address[] memory fxFeedIds = config.getFxRateFeedIds();
+        assertGt(fxFeedIds.length, 0, "No FX rate feed IDs configured");
+
+        for (uint256 i = 0; i < fxFeedIds.length; i++) {
+            (uint256 numerator, uint256 denominator) = IOracleAdapter(oracleAdapter).getFXRateIfValid(fxFeedIds[i]);
+            assertGt(numerator, 0, string.concat("Zero numerator for FX feed: ", vm.toString(fxFeedIds[i])));
+            assertGt(denominator, 0, string.concat("Zero denominator for FX feed: ", vm.toString(fxFeedIds[i])));
+        }
     }
 }

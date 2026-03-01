@@ -46,7 +46,7 @@
         "forge build succeeds"
       ],
       "priority": 3,
-      "passes": false,
+      "passes": true,
       "notes": "The owner should be the migrationOwner address. Use vm.prank(randomAddress) to test access denial."
     },
     {
@@ -63,7 +63,7 @@
         "forge build succeeds"
       ],
       "priority": 4,
-      "passes": false,
+      "passes": true,
       "notes": "Use config.getFxRateFeedIds() to iterate all FX feeds dynamically."
     },
     {

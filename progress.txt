@@ -12,6 +12,9 @@
 - Implementation addresses in registry use "ContractName:v3.0.0" pattern (e.g. `lookupOrFail("OracleAdapter:v3.0.0")`)
 - IFPMMFactory.deployedFPMMAddresses() returns all deployed FPMM pool proxy addresses
 - To test init disabled: call initialize() on impl address with vm.expectRevert() — OZ Initializable blocks re-init
+- IOracleAdapter getters return typed interfaces (ISortedOracles, IBreakerBox, IMarketHoursBreaker) — cast with `address()` for address comparison
+- BreakerBox: `isBreaker()` checks registration, `breakerTradingMode()` returns mode, `isBreakerEnabled()` checks per-feed enablement
+- Config: `getFxRateFeedIds()` for FX feeds, `getRateFeedIds()` for all feeds
 
 ---
 
@@ -36,4 +39,26 @@
   - `getProxyAdmin(pool)` reads EIP-1967 admin slot — all FPMM pool proxies should have ProxyAdmin set by FPMMFactory
   - To verify init is disabled on impl: simply call `initialize()` with dummy args and `vm.expectRevert()` — OZ Initializable pattern prevents re-init
   - The V3IntegrationBase helpers `getProxyImplementation()` and `getProxyAdmin()` work for both Celo and OZ transparent proxies
+---
+
+## 2026-03-01 - US-003
+- What was implemented: Added ownership and access control tests to `test/integration/StateVerification.t.sol`
+- Files changed: test/integration/StateVerification.t.sol (modified)
+- **Learnings for future iterations:**
+  - `IOwnable` from `mento-core/interfaces/IOwnable.sol` provides `owner()`, `transferOwnership()`, and `renounceOwnership()`
+  - All V3 contracts (OracleAdapter, FPMMFactory, FactoryRegistry, VirtualPoolFactory, ReserveV2, ReserveLiquidityStrategy, CDPLiquidityStrategy) are owned by `_getOwner()` (MigrationMultisig from addressbook)
+  - `makeAddr("name")` from forge-std creates deterministic random addresses for access control tests
+  - `vm.prank(address)` + `vm.expectRevert()` is the standard pattern for testing non-owner access denial
+  - `FPMMFactory.deployFPMM()` is owner-only — non-owners are rejected
+---
+
+## 2026-03-01 - US-004
+- What was implemented: Added OracleAdapter and BreakerBox configuration tests to `test/integration/StateVerification.t.sol`
+- Files changed: test/integration/StateVerification.t.sol (modified)
+- **Learnings for future iterations:**
+  - `IOracleAdapter` returns typed interfaces: `sortedOracles()` returns `ISortedOracles`, `breakerBox()` returns `IBreakerBox`, `marketHoursBreaker()` returns `IMarketHoursBreaker` — cast to address for comparison
+  - `IBreakerBox.breakerTradingMode(address)` returns uint8 trading mode for a breaker; MarketHoursBreaker should be 3 (trading halted)
+  - `IBreakerBox.isBreakerEnabled(address breaker, address rateFeedID)` checks per-feed breaker enablement
+  - `config.getFxRateFeedIds()` returns all FX rate feed IDs — use to iterate and verify breaker enablement and rate validity
+  - `IOracleAdapter.getFXRateIfValid(address)` returns (numerator, denominator) — both should be non-zero for valid feeds
 ---
