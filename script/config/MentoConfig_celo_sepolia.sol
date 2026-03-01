@@ -79,8 +79,38 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
+            FPMMTradingLimitsConfig({
+                // USDm limits
+                token0Limit0: 100_000 * 1e18,
+                token0Limit1: 500_000 * 1e18,
+                // GBPm limits
+                token1Limit0: 77_000 * 1e18,
+                token1Limit1: 385_000 * 1e18
+            }),
             emptyRls
         );
+
+        // Trading limits for USD collateral pools (USDC, USDT, axlUSDC)
+        FPMMTradingLimitsConfig memory usdCollateralPoolsLimits = FPMMTradingLimitsConfig({
+            // USDm limits
+            token0Limit0: 500_000 * 1e18,
+            token0Limit1: 1_000_000 * 1e18,
+            // USD collateral token limits
+            token1Limit0: 500_000 * 1e18,
+            token1Limit1: 1_000_000 * 1e18
+        });
+
+        // Reserve liquidity strategy params for USD collateral pools (USDC, USDT, axlUSDC)
+        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("cUSD"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
 
         _addFPMM(
             "cUSD",
@@ -95,16 +125,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
 
         _addFPMM(
@@ -120,16 +142,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
 
         _addFPMM(
@@ -145,16 +159,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("cUSD"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
     }
 

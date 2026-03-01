@@ -635,6 +635,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory token1,
         address rateFeed,
         IFPMM.FPMMParams memory params,
+        FPMMTradingLimitsConfig memory tradingLimits,
         ReserveLiquidityStrategyPoolConfig memory rlsParams
     ) internal {
         address _fpmmImpl = lookup("FPMM:v3.0.0");
@@ -652,6 +653,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         c.referenceRateFeedID = rateFeed;
         c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
         c.params = params;
+        c.tradingLimits = tradingLimits;
         c.rlsConfig = rlsParams;
 
         _fpmmConfigs.push(c);

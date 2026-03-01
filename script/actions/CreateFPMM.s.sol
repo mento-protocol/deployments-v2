@@ -63,8 +63,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         }
 
         fpmmProxy = _createFPMM(cfg);
+        _configureTradingLimits(fpmmProxy, cfg);
         _verifySwap(fpmmProxy, cfg);
-
 
         bool hasReserveLiqStrategy = cfg.rlsConfig.reserveLiquidityStrategy != address(0);
         if (hasReserveLiqStrategy) {
@@ -113,6 +113,47 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _verifyInitialLiquidity(proxy);
 
         return proxy;
+    }
+
+    function _configureTradingLimits(
+        address fpmmProxy,
+        IMentoConfig.FPMMConfig memory cfg
+    ) internal {
+        IMentoConfig.FPMMTradingLimitsConfig memory limits = cfg.tradingLimits;
+        IFPMM fpmm = IFPMM(fpmmProxy);
+        address sorted0 = fpmm.token0();
+        address sorted1 = fpmm.token1();
+
+        // Map config token0/token1 limits to sorted token0/token1
+        // cfg.token0 may not equal sorted0 if the factory sorted them
+        bool swapped = cfg.token0 != sorted0;
+        uint256 sorted0Limit0 = swapped ? limits.token1Limit0 : limits.token0Limit0;
+        uint256 sorted0Limit1 = swapped ? limits.token1Limit1 : limits.token0Limit1;
+        uint256 sorted1Limit0 = swapped ? limits.token0Limit0 : limits.token1Limit0;
+        uint256 sorted1Limit1 = swapped ? limits.token0Limit1 : limits.token1Limit1;
+
+        bool hasToken0Limits = sorted0Limit0 > 0 || sorted0Limit1 > 0;
+        bool hasToken1Limits = sorted1Limit0 > 0 || sorted1Limit1 > 0;
+
+        if (hasToken0Limits) {
+            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(sorted0, sorted0Limit0, sorted0Limit1);
+            console.log("  > Configured trading limits for token0 (%s)", IERC20Metadata(sorted0).symbol());
+            console.log("    > limit0:", sorted0Limit0);
+            console.log("    > limit1:", sorted0Limit1);
+        }
+
+        if (hasToken1Limits) {
+            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(sorted1, sorted1Limit0, sorted1Limit1);
+            console.log("  > Configured trading limits for token1 (%s)", IERC20Metadata(sorted1).symbol());
+            console.log("    > limit0:", sorted1Limit0);
+            console.log("    > limit1:", sorted1Limit1);
+        }
+
+        if (!hasToken0Limits && !hasToken1Limits) {
+            console.log("  > No trading limits configured for this FPMM");
+        }
+
+        console.log("\n");
     }
 
     function _setupReserveLiquidityStrategy(
@@ -169,7 +210,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         );
 
         // Now try to trigger a rebalance through the configured RLS
-        console.log("  ===== Rebalance Verification =====");
         _verifyRebalance(fpmmProxy, rls);
     }
 
