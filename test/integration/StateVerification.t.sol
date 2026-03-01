@@ -12,6 +12,11 @@ import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IBreakerBox} from "mento-core/interfaces/IBreakerBox.sol";
 import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
+import {IVirtualPoolFactory} from "mento-core/interfaces/IVirtualPoolFactory.sol";
+import {IBiPoolManager} from "mento-core/interfaces/IBiPoolManager.sol";
+import {IRPool} from "mento-core/swap/router/interfaces/IRPool.sol";
+import {IRPoolFactory} from "mento-core/swap/router/interfaces/IRPoolFactory.sol";
+import {IMentoConfig} from "script/config/IMentoConfig.sol";
 
 /**
  * @title StateVerification
@@ -27,6 +32,9 @@ contract StateVerification is V3IntegrationBase {
     address internal reserveLiquidityStrategyImpl;
     address internal cdpLiquidityStrategyImpl;
 
+    // BiPoolManager (exchange provider) for virtual pool tests
+    address internal biPoolManager;
+
     function setUp() public override {
         super.setUp();
 
@@ -37,6 +45,9 @@ contract StateVerification is V3IntegrationBase {
         reserveV2Impl = lookupOrFail("ReserveV2:v3.0.0");
         reserveLiquidityStrategyImpl = lookupOrFail("ReserveLiquidityStrategy:v3.0.0");
         cdpLiquidityStrategyImpl = lookupOrFail("CDPLiquidityStrategy:v3.0.0");
+
+        // Resolve BiPoolManager for virtual pool tests
+        biPoolManager = lookupProxyOrFail("BiPoolManager");
     }
 
     // ========== Proxy → Implementation Mapping Tests ==========
@@ -398,5 +409,113 @@ contract StateVerification is V3IntegrationBase {
         vm.prank(randomUser);
         vm.expectRevert();
         IReserveV2(reserveV2).registerStableAsset(address(1));
+    }
+
+    // ========== VirtualPool Deployment Tests (US-008) ==========
+
+    /// @notice Verify virtual pools exist for all BiPoolManager exchanges marked createVirtual in config
+    function test_virtualPools_existForAllCreateVirtualExchanges() public view {
+        bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
+
+        uint256 virtualCount;
+        for (uint256 i = 0; i < exchangeIds.length; i++) {
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config.getExchangeConfig(
+                pool.asset0,
+                pool.asset1,
+                address(pool.pricingModule)
+            );
+
+            if (!found || !exchangeConfig.createVirtual) {
+                continue;
+            }
+
+            virtualCount++;
+
+            // Sort tokens for lookup
+            (address token0, address token1) = _sortTokens(pool.asset0, pool.asset1);
+
+            address virtualPool = IRPoolFactory(virtualPoolFactory).getPool(token0, token1);
+            assertNotEq(
+                virtualPool,
+                address(0),
+                string.concat(
+                    "VirtualPool not deployed for exchange at index ",
+                    vm.toString(i)
+                )
+            );
+        }
+
+        assertGt(virtualCount, 0, "No exchanges with createVirtual=true found in config");
+    }
+
+    /// @notice Verify virtual pool token0/token1 match the underlying exchange pair (sorted)
+    function test_virtualPools_tokensMatchExchangePair() public view {
+        bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
+
+        for (uint256 i = 0; i < exchangeIds.length; i++) {
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config.getExchangeConfig(
+                pool.asset0,
+                pool.asset1,
+                address(pool.pricingModule)
+            );
+
+            if (!found || !exchangeConfig.createVirtual) {
+                continue;
+            }
+
+            (address expectedToken0, address expectedToken1) = _sortTokens(pool.asset0, pool.asset1);
+
+            address virtualPool = IRPoolFactory(virtualPoolFactory).getPool(expectedToken0, expectedToken1);
+            require(virtualPool != address(0), "VirtualPool not found");
+
+            (address actualToken0, address actualToken1) = IRPool(virtualPool).tokens();
+            assertEq(
+                actualToken0,
+                expectedToken0,
+                string.concat("VirtualPool token0 mismatch for exchange at index ", vm.toString(i))
+            );
+            assertEq(
+                actualToken1,
+                expectedToken1,
+                string.concat("VirtualPool token1 mismatch for exchange at index ", vm.toString(i))
+            );
+        }
+    }
+
+    /// @notice Verify VirtualPoolFactory.isPool returns true for all deployed virtual pools
+    function test_virtualPools_isPool() public view {
+        bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
+
+        for (uint256 i = 0; i < exchangeIds.length; i++) {
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config.getExchangeConfig(
+                pool.asset0,
+                pool.asset1,
+                address(pool.pricingModule)
+            );
+
+            if (!found || !exchangeConfig.createVirtual) {
+                continue;
+            }
+
+            (address token0, address token1) = _sortTokens(pool.asset0, pool.asset1);
+            address virtualPool = IRPoolFactory(virtualPoolFactory).getPool(token0, token1);
+
+            assertTrue(
+                IRPoolFactory(virtualPoolFactory).isPool(virtualPool),
+                string.concat("VirtualPoolFactory.isPool() false for exchange at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== Internal Helpers ==========
+
+    function _sortTokens(address a, address b) internal pure returns (address, address) {
+        return (a > b) ? (b, a) : (a, b);
     }
 }
