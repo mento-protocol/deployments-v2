@@ -9,9 +9,17 @@ import {IBiPoolManager} from "mento-core/interfaces/IBiPoolManager.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IStabilityPool} from "bold/src/Interfaces/IStabilityPool.sol";
 import {ITroveManager} from "bold/src/Interfaces/ITroveManager.sol";
+import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {IBorrowerOperations} from "bold/src/Interfaces/IBorrowerOperations.sol";
 import {ICollateralRegistry} from "bold/src/Interfaces/ICollateralRegistry.sol";
 import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
+import {LatestTroveData} from "bold/src/Types/LatestTroveData.sol";
+import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+
+/// @dev Minimal interface to read FXPriceFeed public state variables
+interface IFXPriceFeed {
+    function rateFeedID() external view returns (address);
+}
 
 /// @dev Minimal interface to read the auto-generated poolConfigs getter from LiquidityStrategy
 interface IPoolConfigReader {
@@ -289,6 +297,154 @@ contract CDPMigrationVerification is V3IntegrationBase {
         }
     }
 
+    // ========== FXPriceFeed RateFeedID (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.rateFeedID matches the FPMM pool's referenceRateFeedID for each CDP pool
+    function test_cdpPools_fxPriceFeed_rateFeedIdMatchesPool() public view {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+
+            // Read priceFeed from TroveManager's storage (slot 2 in LiquityBase: activePool, defaultPool, priceFeed)
+            address priceFeedAddr = address(uint160(uint256(vm.load(troveManagerAddr, bytes32(uint256(2))))));
+            assertNotEq(
+                priceFeedAddr,
+                address(0),
+                string.concat("PriceFeed address is zero for CDP pool at index ", vm.toString(i))
+            );
+
+            address fxRateFeedID = IFXPriceFeed(priceFeedAddr).rateFeedID();
+            address poolRateFeedID = IFPMM(cdpPools[i]).referenceRateFeedID();
+
+            assertEq(
+                fxRateFeedID,
+                poolRateFeedID,
+                string.concat(
+                    "FXPriceFeed.rateFeedID does not match FPMM.referenceRateFeedID for CDP pool at index ",
+                    vm.toString(i)
+                )
+            );
+        }
+    }
+
+    // ========== Reserve Trove State (US-010) ==========
+
+    /// @notice Verify reserve trove is active for each CDP pool
+    function test_cdpPools_reserveTrove_isActive() public view {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            uint256 troveId = _findReserveTrove(troveManagerAddr);
+
+            ITroveManager.Status status = ITroveManager(troveManagerAddr).getTroveStatus(troveId);
+            assertEq(
+                uint256(status),
+                uint256(ITroveManager.Status.active),
+                string.concat("Reserve trove is not active for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    /// @notice Verify reserve trove has a non-zero interest rate
+    function test_cdpPools_reserveTrove_hasInterestRate() public view {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            uint256 troveId = _findReserveTrove(troveManagerAddr);
+
+            uint256 annualInterestRate = ITroveManager(troveManagerAddr).getTroveAnnualInterestRate(troveId);
+            assertGt(
+                annualInterestRate,
+                0,
+                string.concat("Reserve trove interest rate is zero for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    /// @notice Verify reserve trove NFT is owned by ReserveSafe
+    function test_cdpPools_reserveTrove_nftOwnedByReserveSafe() public view {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            ITroveNFT troveNFT = ITroveManager(troveManagerAddr).troveNFT();
+            uint256 troveId = _findReserveTrove(troveManagerAddr);
+
+            address nftOwner = troveNFT.ownerOf(troveId);
+            assertEq(
+                nftOwner,
+                reserveSafe,
+                string.concat("Reserve trove NFT not owned by ReserveSafe for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    /// @notice Verify reserve trove debt >= debt token total supply
+    function test_cdpPools_reserveTrove_debtCoversTokenSupply() public view {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            uint256 troveId = _findReserveTrove(troveManagerAddr);
+
+            LatestTroveData memory troveData = ITroveManager(troveManagerAddr).getLatestTroveData(troveId);
+            address debtToken = _getDebtToken(cdpPools[i]);
+            uint256 totalSupply = IERC20(debtToken).totalSupply();
+
+            assertGe(
+                troveData.entireDebt,
+                totalSupply,
+                string.concat(
+                    "Reserve trove debt < debt token totalSupply for CDP pool at index ",
+                    vm.toString(i)
+                )
+            );
+        }
+    }
+
+    /// @notice Verify reserve trove has non-zero collateral
+    function test_cdpPools_reserveTrove_hasCollateral() public view {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            uint256 troveId = _findReserveTrove(troveManagerAddr);
+
+            LatestTroveData memory troveData = ITroveManager(troveManagerAddr).getLatestTroveData(troveId);
+            assertGt(
+                troveData.entireColl,
+                0,
+                string.concat("Reserve trove has zero collateral for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== ReserveTroveFactory Cleanup (US-010) ==========
+
+    /// @notice Verify ReserveTroveFactory does NOT have minter/burner roles on debt tokens (cleanup verified)
+    function test_cdpPools_reserveTroveFactory_noMinterBurner() public view {
+        address reserveTroveFactory = registry.lookup("ReserveTroveFactory");
+        if (reserveTroveFactory == address(0)) {
+            // Also try versioned lookup
+            reserveTroveFactory = registry.lookup("ReserveTroveFactory:v3.0.0");
+        }
+
+        // If ReserveTroveFactory is not registered, the cleanup test is vacuously true
+        // (factory was either never deployed or already fully removed)
+        if (reserveTroveFactory == address(0)) {
+            return;
+        }
+
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            assertFalse(
+                IStableTokenV3(debtToken).isMinter(reserveTroveFactory),
+                string.concat(
+                    "ReserveTroveFactory is still minter on CDP debt token for pool at index ",
+                    vm.toString(i)
+                )
+            );
+            assertFalse(
+                IStableTokenV3(debtToken).isBurner(reserveTroveFactory),
+                string.concat(
+                    "ReserveTroveFactory is still burner on CDP debt token for pool at index ",
+                    vm.toString(i)
+                )
+            );
+        }
+    }
+
     // ========== Internal Helpers ==========
 
     /// @dev Returns the debt token for a CDP pool based on the isToken0Debt flag
@@ -318,5 +474,21 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
         IActivePool ap = bo.activePool();
         activePoolAddr = address(ap);
+    }
+
+    /// @dev Finds the reserve trove ID by iterating all troves and finding the one owned by ReserveSafe
+    function _findReserveTrove(address troveManagerAddr) internal view returns (uint256) {
+        ITroveManager tm = ITroveManager(troveManagerAddr);
+        ITroveNFT troveNFT = tm.troveNFT();
+        uint256 troveCount = tm.getTroveIdsCount();
+
+        for (uint256 i = 0; i < troveCount; i++) {
+            uint256 troveId = tm.getTroveFromTroveIdsArray(i);
+            if (troveNFT.ownerOf(troveId) == reserveSafe) {
+                return troveId;
+            }
+        }
+
+        revert("Reserve trove not found: no trove owned by ReserveSafe");
     }
 }
