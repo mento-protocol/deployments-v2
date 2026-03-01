@@ -81,7 +81,7 @@
         "forge build succeeds"
       ],
       "priority": 5,
-      "passes": false,
+      "passes": true,
       "notes": "Get expected default params from config.getDefaultFPMMParams(). Get fpmmImpl via lookupOrFail('FPMM:v3.0.0')."
     },
     {
@@ -95,7 +95,7 @@
         "forge build succeeds"
       ],
       "priority": 6,
-      "passes": false,
+      "passes": true,
       "notes": "Use IReserveV2 interface for isOtherReserveAddress, isReserveManagerSpender, isLiquidityStrategySpender checks."
     },
     {
@@ -111,7 +111,7 @@
         "forge build succeeds"
       ],
       "priority": 7,
-      "passes": false,
+      "passes": true,
       "notes": "Use FPMMFactory.getPool(token0, token1) to look up each pool address. Use IFPMM interface for state queries."
     },
     {

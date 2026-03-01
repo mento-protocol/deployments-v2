@@ -14,7 +14,15 @@
 - To test init disabled: call initialize() on impl address with vm.expectRevert() — OZ Initializable blocks re-init
 - IOracleAdapter getters return typed interfaces (ISortedOracles, IBreakerBox, IMarketHoursBreaker) — cast with `address()` for address comparison
 - BreakerBox: `isBreaker()` checks registration, `breakerTradingMode()` returns mode, `isBreakerEnabled()` checks per-feed enablement
-- Config: `getFxRateFeedIds()` for FX feeds, `getRateFeedIds()` for all feeds
+- Config: `getFxRateFeedIds()` for FX feeds, `getRateFeedIds()` for all feeds, `getDefaultFPMMParams()` for default FPMM params
+- FPMM implementation address: `lookupOrFail("FPMM:v3.0.0")` — use with `IFPMMFactory.isRegisteredImplementation()`
+- IRouter import path: `mento-core/swap/router/interfaces/IRouter.sol` — has `factoryRegistry()` and `defaultFactory()`
+- IReserveV2 view functions: `isOtherReserveAddress()`, `isReserveManagerSpender()`, `isLiquidityStrategySpender()`, `isStableAsset()`, `isCollateralAsset()`, plus getters returning arrays (e.g. `getStableAssets()`)
+- IReserveV2 mutative functions (owner-only): `registerStableAsset()`, `registerCollateralAsset()`, `registerOtherReserveAddress()`, `registerLiquidityStrategySpender()`, `registerReserveManagerSpender()` + corresponding unregister functions
+- Per-pool params from config: `config.getFPMMParams(token0, token1)` — no `getFPMMConfigs()` exists
+- FPMM totalSupply: use `IERC20(pool).totalSupply()` — not on IFPMM interface
+- IERC20 import: `openzeppelin-contracts/contracts/token/ERC20/IERC20.sol`
+- `IFPMMFactory.isPool()` and `getPool()` inherited from `IRPoolFactory`
 
 ---
 
@@ -61,4 +69,39 @@
   - `IBreakerBox.isBreakerEnabled(address breaker, address rateFeedID)` checks per-feed breaker enablement
   - `config.getFxRateFeedIds()` returns all FX rate feed IDs — use to iterate and verify breaker enablement and rate validity
   - `IOracleAdapter.getFXRateIfValid(address)` returns (numerator, denominator) — both should be non-zero for valid feeds
+---
+
+## 2026-03-01 - US-005
+- What was implemented: Added FPMMFactory, FactoryRegistry, and Router state verification tests to `test/integration/StateVerification.t.sol`
+- Files changed: test/integration/StateVerification.t.sol (modified)
+- **Learnings for future iterations:**
+  - `IFPMMFactory.defaultParams()` returns `IFPMM.FPMMParams memory` — compare each field individually against `config.getDefaultFPMMParams()`
+  - `IFPMMFactory.isRegisteredImplementation(address)` checks if an FPMM impl is registered; the impl address is `lookupOrFail("FPMM:v3.0.0")`
+  - `IFactoryRegistry.fallbackPoolFactory()` and `isPoolFactoryApproved()` verify factory registration
+  - `IRouter` lives at `mento-core/swap/router/interfaces/IRouter.sol` — has `factoryRegistry()` and `defaultFactory()` view functions
+  - Router.defaultFactory() should point to the FPMMFactory proxy
+---
+
+## 2026-03-01 - US-006
+- What was implemented: Added ReserveV2 configuration tests to `test/integration/StateVerification.t.sol`
+- Files changed: test/integration/StateVerification.t.sol (modified)
+- **Learnings for future iterations:**
+  - `IReserveV2` is already imported in StateVerification.t.sol from US-002 (init protection tests)
+  - ReserveSafe should be registered as both `isOtherReserveAddress` and `isReserveManagerSpender` on ReserveV2
+  - ReserveLiquidityStrategy should be registered as `isLiquidityStrategySpender` on ReserveV2
+  - `registerStableAsset()` is owner-only — non-owners are rejected
+  - All addresses needed (reserveSafe, reserveLiquidityStrategy, reserveV2) are already resolved in V3IntegrationBase
+---
+
+## 2026-03-01 - US-007
+- What was implemented: Created `test/integration/FPMMPoolState.t.sol` with comprehensive pool state verification tests
+- Files changed: test/integration/FPMMPoolState.t.sol (new)
+- **Learnings for future iterations:**
+  - `IFPMMFactory(fpmmFactory).deployedFPMMAddresses()` returns all deployed pool proxies — iterate this for pool-level tests
+  - `IFPMMFactory(fpmmFactory).isPool(address)` and `getPool(token0, token1)` are on `IRPoolFactory` parent interface
+  - `config.getFPMMParams(token0, token1)` returns per-pool expected params — there is no `getFPMMConfigs()` method
+  - FPMM pool tokens are sorted: `token0 < token1` by address
+  - FPMM does not expose `totalSupply()` via IFPMM — use `IERC20(pool).totalSupply()` from openzeppelin-contracts
+  - IERC20 import path: `openzeppelin-contracts/contracts/token/ERC20/IERC20.sol` (remapped to openzeppelin-contracts-next)
+  - Individual pool param getters: `lpFee()`, `protocolFee()`, `protocolFeeRecipient()`, `feeSetter()`, `rebalanceIncentive()`, `rebalanceThresholdAbove()`, `rebalanceThresholdBelow()`
 ---
