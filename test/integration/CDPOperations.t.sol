@@ -214,16 +214,6 @@ contract CDPOperations is V3IntegrationBase {
         c.debtToken = _getDebtToken(pool);
     }
 
-    /// @dev Resolves the Liquity AddressesRegistry for a CDP pool via its debt token symbol
-    function _getAddressesRegistry(address pool) internal view returns (IAddressesRegistry) {
-        address debtToken = _getDebtToken(pool);
-        string memory symbol = IERC20Metadata(debtToken).symbol();
-        string memory registryKey = string.concat("AddressesRegistry:v3.0.0-", symbol);
-        address addr = registry.lookup(registryKey);
-        require(addr != address(0), string.concat(registryKey, " not found in registry"));
-        return IAddressesRegistry(addr);
-    }
-
     /// @dev Calculate collateral amount for a given debt, price, target CR, and token decimals
     function _calculateCollateral(
         uint256 debtAmount,
