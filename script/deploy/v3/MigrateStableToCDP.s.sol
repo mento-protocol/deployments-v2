@@ -7,8 +7,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
-import {ICDPMigrationConfig} from "script/config/ICDPMigrationConfig.sol";
-import {CDPMigrationConfigLib} from "script/config/CDPMigrationConfig.sol";
+import {Config, IMentoConfig} from "script/config/Config.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IAddressesRegistry} from "lib/bold/contracts/src/Interfaces/IAddressesRegistry.sol";
 import {FXPriceFeed} from "bold/src/PriceFeeds/FXPriceFeed.sol";
@@ -26,6 +25,7 @@ import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/Li
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 import { CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
+import { MockCELO } from "../../helpers/MockCELO.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Deployer for Senders.Sender;
@@ -34,7 +34,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
 
     Senders.Sender deployer;
     Senders.Sender migrationOwner;
-    ICDPMigrationConfig.CDPMigrationInstanceConfig cfg;
+    IMentoConfig.CDPMigrationConfig cfg;
     IAddressesRegistry registry;
     address owner;
     address fpmm;
@@ -49,7 +49,10 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     /// @custom:env {string} token
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        cfg = CDPMigrationConfigLib.get(vm.envString("token"));
+        vm.etch(lookup("CELO"), type(MockCELO).runtimeCode);
+        vm.makePersistent(lookup("CELO"));
+
+        cfg = Config.get().getCDPMigrationConfig(vm.envString("token"));
         deployer = sender("deployer");
         migrationOwner = sender("migrationOwner");
         owner = migrationOwner.account;

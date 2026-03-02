@@ -14,7 +14,11 @@ import {ITroveManager} from "bold/src/Interfaces/ITroveManager.sol";
 import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {IBorrowerOperations} from "bold/src/Interfaces/IBorrowerOperations.sol";
 import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
+import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
+import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {ISortedOracles} from "mento-core/interfaces/ISortedOracles.sol";
+import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 
 import {console2 as console} from "forge-std/console2.sol";
 
@@ -101,6 +105,8 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
+
+        _refreshOracleRates();
     }
 
     // ========== Registry Lookup Helpers ==========
@@ -183,6 +189,74 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     function _getPriceFeed(address troveManagerAddr) internal view returns (address) {
         return address(uint160(uint256(vm.load(troveManagerAddr, bytes32(uint256(2))))));
     }
+
+    /// @dev Resolves the Liquity AddressesRegistry for a CDP pool via its debt token symbol
+    function _getAddressesRegistry(address pool) internal view returns (IAddressesRegistry) {
+        address debtToken = _getDebtToken(pool);
+        string memory symbol = IERC20Metadata(debtToken).symbol();
+        string memory registryKey = string.concat("AddressesRegistry:v3.0.0-", symbol);
+        address addr = registry.lookup(registryKey);
+        require(addr != address(0), string.concat(registryKey, " not found in registry"));
+        return IAddressesRegistry(addr);
+    }
+
+    // ========== Shared Rebalance Helpers ==========
+
+    /// @dev Does a large one-sided swap to imbalance an FPMM pool
+    function _imbalancePool(address pool, address trader, bool sellToken0) internal {
+        IFPMM fpmm = IFPMM(pool);
+        address tokenIn = sellToken0 ? fpmm.token0() : fpmm.token1();
+
+        (uint256 r0, uint256 r1,) = fpmm.getReserves();
+        uint256 reserveIn = sellToken0 ? r0 : r1;
+        uint256 amountIn = reserveIn / 10;
+        require(amountIn > 0, "Reserve too low for imbalance swap");
+
+        uint256 expectedOut = fpmm.getAmountOut(amountIn, tokenIn);
+        require(expectedOut > 0, "getAmountOut returned zero for imbalance swap");
+
+        deal(tokenIn, trader, amountIn);
+        vm.startPrank(trader);
+        IERC20(tokenIn).transfer(address(fpmm), amountIn);
+        if (sellToken0) {
+            fpmm.swap(0, expectedOut, trader, "");
+        } else {
+            fpmm.swap(expectedOut, 0, trader, "");
+        }
+        vm.stopPrank();
+    }
+
+    /// @dev Ensures the pool is imbalanced past its rebalancing threshold
+    function _ensureImbalanced(address pool, address trader, bool sellToken0) internal {
+        _imbalancePool(pool, trader, sellToken0);
+        (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
+        if (priceDiff <= uint256(threshold)) {
+            _imbalancePool(pool, trader, sellToken0);
+        }
+    }
+
+    // ========== Oracle Refresh Helpers ==========
+
+    /// @dev Re-reports current oracle rates for all deployed FPMM pools so that
+    ///      rates remain fresh after time jumps (vm.warp / skip).
+    function _refreshOracleRates() internal {
+        ISortedOracles so = ISortedOracles(sortedOracles);
+        IMentoConfig.RateFeed[] memory rateFeeds = config.getRateFeeds();
+
+        for (uint256 i = 0; i < rateFeeds.length; i++) {
+            address rateFeedID = rateFeeds[i].rateFeedId;
+            (uint256 rate, ) = so.medianRate(rateFeedID);
+            if (rate == 0) continue;
+
+            address[] memory oracles = so.getOracles(rateFeedID);
+            if (oracles.length == 0) continue;
+
+            vm.prank(oracles[0]);
+            so.report(rateFeedID, rate, address(0), address(0));
+        }
+    }
+
+    // ========== Internal ==========
 
     /// @dev Sets a dummy SENDER_CONFIGS env var so that MentoConfig (which inherits TrebScript)
     ///      can be instantiated in a test context. The config is never used for sending transactions.

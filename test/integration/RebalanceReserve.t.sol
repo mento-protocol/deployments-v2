@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
-import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title RebalanceReserve
@@ -37,40 +36,6 @@ contract RebalanceReserve is V3IntegrationBase {
         deal(collToken, reserveV2, amount);
     }
 
-    // ========== Helper: do a large one-sided swap to imbalance a pool ==========
-
-    function _imbalancePool(address pool, address trader, bool sellToken0) internal {
-        IFPMM fpmm = IFPMM(pool);
-        address tokenIn = sellToken0 ? fpmm.token0() : fpmm.token1();
-
-        (uint256 r0, uint256 r1,) = fpmm.getReserves();
-        uint256 reserveIn = sellToken0 ? r0 : r1;
-        uint256 amountIn = reserveIn / 10;
-        require(amountIn > 0, "Reserve too low for imbalance swap");
-
-        uint256 expectedOut = fpmm.getAmountOut(amountIn, tokenIn);
-        require(expectedOut > 0, "getAmountOut returned zero for imbalance swap");
-
-        deal(tokenIn, trader, amountIn);
-        vm.startPrank(trader);
-        IERC20(tokenIn).transfer(address(fpmm), amountIn);
-        if (sellToken0) {
-            fpmm.swap(0, expectedOut, trader, "");
-        } else {
-            fpmm.swap(expectedOut, 0, trader, "");
-        }
-        vm.stopPrank();
-    }
-
-    /// @dev Ensures the pool is imbalanced past its rebalancing threshold
-    function _ensureImbalanced(address pool, address trader, bool sellToken0) internal {
-        _imbalancePool(pool, trader, sellToken0);
-        (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
-        if (priceDiff <= uint256(threshold)) {
-            _imbalancePool(pool, trader, sellToken0);
-        }
-    }
-
     // ========== Test: rebalance reduces price difference (both directions) ==========
 
     function test_rebalance_reducesPriceDifference_sellToken0() public {
@@ -96,6 +61,7 @@ contract RebalanceReserve is V3IntegrationBase {
             (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
 
             strategy.rebalance(pool);
 
@@ -120,6 +86,7 @@ contract RebalanceReserve is V3IntegrationBase {
             _ensureImbalanced(pool, trader, true);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
 
             strategy.rebalance(pool);
 
@@ -140,11 +107,13 @@ contract RebalanceReserve is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
             if (priceDiff > uint256(threshold)) {
                 strategy.rebalance(pool);
                 vm.warp(block.timestamp + uint256(cooldown) + 1);
+                _refreshOracleRates();
             }
 
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);

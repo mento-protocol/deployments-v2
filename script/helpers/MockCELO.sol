@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 /// @dev Storage layout: slot 0 = _balances, slot 1 = _allowances, slot 2 = _totalSupply.
 ///      No constructor dependencies — safe to etch via anvil_setCode.
 contract MockCELO {
-    mapping(address => uint256) private _balances;
+    mapping(address => int256) private _balanceDeltas;
     mapping(address => mapping(address => uint256)) private _allowances;
     uint256 private _totalSupply;
 
@@ -16,8 +16,13 @@ contract MockCELO {
     function symbol() external pure returns (string memory) { return "CELO"; }
     function decimals() external pure returns (uint8) { return 18; }
     function totalSupply() external view returns (uint256) { return _totalSupply; }
-    function balanceOf(address account) external view returns (uint256) { return _balances[account]; }
-    function allowance(address owner, address spender) external view returns (uint256) { return _allowances[owner][spender]; }
+    function balanceOf(address account) external view returns (uint256) { 
+        assert(int256(account.balance) >= 0);
+        return uint256(int256(account.balance) + _balanceDeltas[account]);
+    }
+    function allowance(address owner, address spender) external view returns (uint256) { 
+        return _allowances[owner][spender]; 
+    }
 
     function approve(address spender, uint256 amount) external returns (bool) {
         _allowances[msg.sender][spender] = amount;
@@ -36,13 +41,15 @@ contract MockCELO {
 
     function mint(address to, uint256 amount) external {
         _totalSupply += amount;
-        unchecked { _balances[to] += amount; }
+        unchecked { _balanceDeltas[to] += int256(amount); }
         emit Transfer(address(0), to, amount);
     }
 
     function _transfer(address from, address to, uint256 amount) internal returns (bool) {
-        _balances[from] -= amount;
-        unchecked { _balances[to] += amount; }
+        unchecked { 
+            _balanceDeltas[from] -= int256(amount);
+            _balanceDeltas[to] += int256(amount);
+        }
         emit Transfer(from, to, amount);
         return true;
     }

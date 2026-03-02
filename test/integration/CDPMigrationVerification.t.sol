@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
+import {IMentoConfig} from "script/config/IMentoConfig.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
@@ -12,8 +13,6 @@ import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {LatestTroveData} from "bold/src/Types/LatestTroveData.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-import {ICDPMigrationConfig} from "script/config/ICDPMigrationConfig.sol";
-import {CDPMigrationConfigLib} from "script/config/CDPMigrationConfig.sol";
 import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
 
 /// @dev Minimal interface to read FXPriceFeed public state variables
@@ -24,7 +23,8 @@ interface IFXPriceFeed {
 /**
  * @title CDPMigrationVerification
  * @notice Verifies CDP migration state: roles, strategy config, V2 exchange cleanup,
- *         and Liquity contract role assignments on CDP-migrated tokens.
+ *         Liquity contract role assignments on CDP-migrated tokens, and stable token
+ *         minting/burning/operator operations.
  */
 contract CDPMigrationVerification is V3IntegrationBase {
     address[] internal cdpPools;
@@ -198,7 +198,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(cdpPools[i]);
 
             // Load expected values from CDP migration config and Liquity's AddressesRegistry
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
             IAddressesRegistry addressesRegistry = _getAddressesRegistry(cdpPools[i]);
 
             string memory idx = vm.toString(i);
@@ -243,7 +243,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             ) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(cdpPools[i]);
 
             // Load the expected config by resolving pool → debt token → symbol → CDPMigrationConfig
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
 
             string memory idx = vm.toString(i);
 
@@ -283,25 +283,12 @@ contract CDPMigrationVerification is V3IntegrationBase {
     /// @dev Loads the CDPMigrationConfig for a pool by deriving the token name from the debt token symbol
     function _getCDPMigrationConfig(address pool)
         internal
-        returns (ICDPMigrationConfig.CDPMigrationInstanceConfig memory)
+        view
+        returns (IMentoConfig.CDPMigrationConfig memory)
     {
         address debtToken = _getDebtToken(pool);
         string memory symbol = IERC20Metadata(debtToken).symbol();
-        string memory network = vm.envString("NETWORK");
-        string memory configName = string.concat("CDPMigrationConfig_", network, "_", symbol);
-        address configAddr = vm.deployCode(configName);
-        require(configAddr != address(0), string.concat("Failed to deploy ", configName));
-        return ICDPMigrationConfig(configAddr).get();
-    }
-
-    /// @dev Resolves the Liquity AddressesRegistry for a CDP pool via its debt token symbol
-    function _getAddressesRegistry(address pool) internal view returns (IAddressesRegistry) {
-        address debtToken = _getDebtToken(pool);
-        string memory symbol = IERC20Metadata(debtToken).symbol();
-        string memory registryKey = string.concat("AddressesRegistry:v3.0.0-", symbol);
-        address addr = registry.lookup(registryKey);
-        require(addr != address(0), string.concat(registryKey, " not found in registry"));
-        return IAddressesRegistry(addr);
+        return config.getCDPMigrationConfig(symbol);
     }
 
     // ========== FXPriceFeed RateFeedID (US-010) ==========
@@ -318,7 +305,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 string.concat("PriceFeed address is zero for CDP pool at index ", vm.toString(i))
             );
 
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
 
             address fxRateFeedID = IFXPriceFeed(priceFeedAddr).rateFeedID();
             address poolRateFeedID = IFPMM(cdpPools[i]).referenceRateFeedID();
@@ -368,7 +355,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             );
 
             // Interest rate matches config
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
             uint256 annualInterestRate = ITroveManager(troveManagerAddr).getTroveAnnualInterestRate(troveId);
             assertEq(
                 annualInterestRate,
@@ -413,4 +400,182 @@ contract CDPMigrationVerification is V3IntegrationBase {
         }
     }
 
+    // ========== Stable Token Mint/Burn Operations ==========
+
+    /// @notice BorrowerOperations should be able to mint CDP debt tokens
+    function test_cdpDebtToken_borrowerOps_canMint() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            (address borrowerOps,,,) = _getLiquityContracts(cdpPools[i]);
+            address recipient = makeAddr("mintRecipient");
+
+            uint256 mintAmount = 1e18;
+            uint256 balBefore = IStableTokenV3(debtToken).balanceOf(recipient);
+
+            vm.prank(borrowerOps);
+            IStableTokenV3(debtToken).mint(recipient, mintAmount);
+
+            uint256 balAfter = IStableTokenV3(debtToken).balanceOf(recipient);
+            assertEq(
+                balAfter - balBefore,
+                mintAmount,
+                string.concat("BorrowerOps mint failed for pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    /// @notice A random non-authorized address should NOT be able to mint
+    function test_cdpDebtToken_randomAddress_cannotMint() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            address randomUser = makeAddr("randomMinter");
+
+            vm.prank(randomUser);
+            vm.expectRevert();
+            IStableTokenV3(debtToken).mint(randomUser, 1e18);
+        }
+    }
+
+    /// @notice CollateralRegistry should be able to burn CDP debt tokens
+    function test_cdpDebtToken_collateralRegistry_canBurn() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
+                ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(cdpPools[i]);
+
+            uint256 burnAmount = 1e18;
+            deal(debtToken, cdpConfig.collateralRegistry, burnAmount);
+
+            vm.prank(cdpConfig.collateralRegistry);
+            IStableTokenV3(debtToken).burn(burnAmount);
+        }
+    }
+
+    /// @notice BorrowerOperations should be able to burn CDP debt tokens
+    function test_cdpDebtToken_borrowerOps_canBurn() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            (address borrowerOps,,,) = _getLiquityContracts(cdpPools[i]);
+
+            uint256 burnAmount = 1e18;
+            deal(debtToken, borrowerOps, burnAmount);
+
+            vm.prank(borrowerOps);
+            IStableTokenV3(debtToken).burn(burnAmount);
+        }
+    }
+
+    /// @notice TroveManager should be able to burn CDP debt tokens
+    function test_cdpDebtToken_troveManager_canBurn() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+
+            uint256 burnAmount = 1e18;
+            deal(debtToken, troveManagerAddr, burnAmount);
+
+            vm.prank(troveManagerAddr);
+            IStableTokenV3(debtToken).burn(burnAmount);
+        }
+    }
+
+    /// @notice StabilityPool should be able to burn CDP debt tokens
+    function test_cdpDebtToken_stabilityPool_canBurn() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            (,,, address stabilityPoolAddr) = _getLiquityContracts(cdpPools[i]);
+
+            uint256 burnAmount = 1e18;
+            deal(debtToken, stabilityPoolAddr, burnAmount);
+
+            vm.prank(stabilityPoolAddr);
+            IStableTokenV3(debtToken).burn(burnAmount);
+        }
+    }
+
+    // ========== Broker Cannot Mint/Burn ==========
+
+    /// @notice Broker should NOT be able to mint CDP debt tokens
+    function test_cdpDebtToken_broker_cannotMint() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+
+            vm.prank(broker);
+            vm.expectRevert();
+            IStableTokenV3(debtToken).mint(broker, 1e18);
+        }
+    }
+
+    /// @notice Broker should NOT be able to burn CDP debt tokens
+    function test_cdpDebtToken_broker_cannotBurn() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+
+            deal(debtToken, broker, 1e18);
+
+            vm.prank(broker);
+            vm.expectRevert();
+            IStableTokenV3(debtToken).burn(1e18);
+        }
+    }
+
+    // ========== StabilityPool Operator Transfers ==========
+
+    /// @notice StabilityPool as operator can call sendToPool (direct transfer without approval)
+    function test_cdpDebtToken_stabilityPool_canSendToPool() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            (,,, address stabilityPoolAddr) = _getLiquityContracts(cdpPools[i]);
+
+            address sender = makeAddr("tokenHolder");
+            uint256 amount = 1e18;
+            deal(debtToken, sender, amount);
+
+            uint256 senderBalBefore = IStableTokenV3(debtToken).balanceOf(sender);
+            uint256 poolBalBefore = IStableTokenV3(debtToken).balanceOf(stabilityPoolAddr);
+
+            vm.prank(stabilityPoolAddr);
+            IStableTokenV3(debtToken).sendToPool(sender, stabilityPoolAddr, amount);
+
+            assertEq(
+                IStableTokenV3(debtToken).balanceOf(sender),
+                senderBalBefore - amount,
+                string.concat("sendToPool: sender balance not decreased for pool at index ", vm.toString(i))
+            );
+            assertEq(
+                IStableTokenV3(debtToken).balanceOf(stabilityPoolAddr),
+                poolBalBefore + amount,
+                string.concat("sendToPool: pool balance not increased for pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    /// @notice StabilityPool as operator can call returnFromPool (direct transfer without approval)
+    function test_cdpDebtToken_stabilityPool_canReturnFromPool() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            address debtToken = _getDebtToken(cdpPools[i]);
+            (,,, address stabilityPoolAddr) = _getLiquityContracts(cdpPools[i]);
+
+            address receiver = makeAddr("tokenReceiver");
+            uint256 amount = 1e18;
+            deal(debtToken, stabilityPoolAddr, amount);
+
+            uint256 poolBalBefore = IStableTokenV3(debtToken).balanceOf(stabilityPoolAddr);
+            uint256 receiverBalBefore = IStableTokenV3(debtToken).balanceOf(receiver);
+
+            vm.prank(stabilityPoolAddr);
+            IStableTokenV3(debtToken).returnFromPool(stabilityPoolAddr, receiver, amount);
+
+            assertEq(
+                IStableTokenV3(debtToken).balanceOf(stabilityPoolAddr),
+                poolBalBefore - amount,
+                string.concat("returnFromPool: pool balance not decreased for pool at index ", vm.toString(i))
+            );
+            assertEq(
+                IStableTokenV3(debtToken).balanceOf(receiver),
+                receiverBalBefore + amount,
+                string.concat("returnFromPool: receiver balance not increased for pool at index ", vm.toString(i))
+            );
+        }
+    }
 }

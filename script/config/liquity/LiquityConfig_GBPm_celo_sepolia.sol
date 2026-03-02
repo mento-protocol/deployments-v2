@@ -6,7 +6,7 @@ import {ILiquityConfig} from "../ILiquityConfig.sol";
 /**
  * @notice Liquity GBPm/USDm instance config for Celo.
  */
-contract LiquityConfig_celo_GBPm is ILiquityConfig {
+contract LiquityConfig_GBPm_celo_sepolia is ILiquityConfig {
     function get()
         external
         pure
@@ -22,7 +22,7 @@ contract LiquityConfig_celo_GBPm is ILiquityConfig {
                 debtTokenLabel: "GBPm",
                 collateralTokenLabel: "USDm",
                 // ── Addresses ──────────────────────────────────────────
-                rateFeedID: 0xf590b62f9cfcc6409075b1ecAc8176fe25744B88, // GBP/USD
+                rateFeedID: 0xAe5eEe6815b8529847955d19522858806Bca8217, // GBP/USD
                 // ── FXPriceFeed ────────────────────────────────────────
                 invertRateFeed: true, // SortedOracles: GBP/USD is inverted as (USD/GBP)
                 l2SequencerGracePeriod: 1200, // 20 minutes

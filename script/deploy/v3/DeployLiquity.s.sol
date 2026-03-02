@@ -45,8 +45,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {SSTORE2DataPointer} from "script/helpers/SSTORE2DataPointer.sol";
-import {ILiquityConfig} from "script/config/ILiquityConfig.sol";
-import {LiquityConfigLib} from "script/config/LiquityConfig.sol";
+import {Config, ILiquityConfig} from "script/config/Config.sol";
 contract DeployLiquityV2 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -106,7 +105,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         deployer = sender("deployer");
-        cfg = LiquityConfigLib.get(vm.envString("token"));
+        cfg = Config.getLiquity(vm.envString("token")).get();
 
         oracleAdapter = lookupProxyOrFail("OracleAdapter");
         debtToken = lookupProxyOrFail(cfg.debtTokenLabel);
