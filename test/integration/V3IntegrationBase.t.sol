@@ -105,6 +105,8 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
+
+        _refreshOracleRates();
     }
 
     // ========== Registry Lookup Helpers ==========
@@ -239,10 +241,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     ///      rates remain fresh after time jumps (vm.warp / skip).
     function _refreshOracleRates() internal {
         ISortedOracles so = ISortedOracles(sortedOracles);
-        address[] memory pools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
+        IMentoConfig.RateFeed[] memory rateFeeds = config.getRateFeeds();
 
-        for (uint256 i = 0; i < pools.length; i++) {
-            address rateFeedID = IFPMM(pools[i]).referenceRateFeedID();
+        for (uint256 i = 0; i < rateFeeds.length; i++) {
+            address rateFeedID = rateFeeds[i].rateFeedId;
             (uint256 rate, ) = so.medianRate(rateFeedID);
             if (rate == 0) continue;
 
