@@ -14,9 +14,9 @@ contract CDPMigrationConfig_celo_GBPm is ICDPMigrationConfig {
             maxIterations: 500,
             // ── AddPoolParams ────────────────────────────────────────────────
             cooldown: 5 minutes, // rebalance cooldown
-            liquiditySourceIncentiveExpansion: 0.005e18, // 0.5%
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
             protocolIncentiveExpansion: 0, // 0%
-            liquiditySourceIncentiveContraction: 0.005e18, // 0.5%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
             protocolIncentiveContraction: 0, // 0%
             // ── FXPriceFeed ──────────────────────────────────────────────────
             // mainnet rate feed id for GBP/USD: address(uint160(uint256(keccak256("relayed:GBPUSD"))))

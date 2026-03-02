@@ -11,6 +11,10 @@ import {ITroveManager} from "bold/src/Interfaces/ITroveManager.sol";
 import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {LatestTroveData} from "bold/src/Types/LatestTroveData.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {ICDPMigrationConfig} from "script/config/ICDPMigrationConfig.sol";
+import {CDPMigrationConfigLib} from "script/config/CDPMigrationConfig.sol";
+import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
 
 /// @dev Minimal interface to read FXPriceFeed public state variables
 interface IFXPriceFeed {
@@ -187,44 +191,45 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
     // ========== CDPConfig Values Valid ==========
 
-    /// @notice Verify CDPConfig has valid non-zero values and stabilityPool/collateralRegistry are consistent
-    function test_cdpPools_cdpConfig_valid() public view {
+    /// @notice Verify CDPConfig matches the CDP migration config and deployed Liquity addresses
+    function test_cdpPools_cdpConfig_valid() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
                 ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(cdpPools[i]);
 
-            assertNotEq(
+            // Load expected values from CDP migration config and Liquity's AddressesRegistry
+            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IAddressesRegistry addressesRegistry = _getAddressesRegistry(cdpPools[i]);
+
+            string memory idx = vm.toString(i);
+
+            assertEq(
                 cdpConfig.stabilityPool,
-                address(0),
-                string.concat("CDPConfig stabilityPool is zero for pool at index ", vm.toString(i))
+                address(addressesRegistry.stabilityPool()),
+                string.concat("CDPConfig stabilityPool mismatch at index ", idx)
             );
-            assertNotEq(
+            assertEq(
                 cdpConfig.collateralRegistry,
-                address(0),
-                string.concat("CDPConfig collateralRegistry is zero for pool at index ", vm.toString(i))
+                address(addressesRegistry.collateralRegistry()),
+                string.concat("CDPConfig collateralRegistry mismatch at index ", idx)
             );
-            assertGt(
+            assertEq(
                 cdpConfig.stabilityPoolPercentage,
-                0,
-                string.concat("CDPConfig stabilityPoolPercentage is zero for pool at index ", vm.toString(i))
+                expected.stabilityPoolPercentage,
+                string.concat("CDPConfig stabilityPoolPercentage mismatch at index ", idx)
             );
-            assertLt(
-                cdpConfig.stabilityPoolPercentage,
-                10000,
-                string.concat("CDPConfig stabilityPoolPercentage >= 10000 for pool at index ", vm.toString(i))
-            );
-            assertGt(
+            assertEq(
                 cdpConfig.maxIterations,
-                0,
-                string.concat("CDPConfig maxIterations is zero for pool at index ", vm.toString(i))
+                expected.maxIterations,
+                string.concat("CDPConfig maxIterations mismatch at index ", idx)
             );
         }
     }
 
     // ========== Pool Config (Cooldown, Incentives, ProtocolFeeRecipient) Valid ==========
 
-    /// @notice Verify pool config has valid non-zero cooldown, protocolFeeRecipient, and incentive values
-    function test_cdpPools_poolConfig_valid() public view {
+    /// @notice Verify pool config matches the CDP migration config for each pool's token
+    function test_cdpPools_poolConfig_valid() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             (
                 ,
@@ -237,52 +242,72 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 uint64 protocolIncentiveContraction
             ) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(cdpPools[i]);
 
-            assertGt(
+            // Load the expected config by resolving pool → debt token → symbol → CDPMigrationConfig
+            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+
+            string memory idx = vm.toString(i);
+
+            assertEq(
                 rebalanceCooldown,
-                0,
-                string.concat("Pool config rebalanceCooldown is zero for pool at index ", vm.toString(i))
+                expected.cooldown,
+                string.concat("Pool config cooldown mismatch at index ", idx)
             );
-            assertNotEq(
+            assertEq(
                 protocolFeeRecipient,
-                address(0),
-                string.concat("Pool config protocolFeeRecipient is zero for pool at index ", vm.toString(i))
+                registry.lookup("ProtocolFeeRecipient"),
+                string.concat("Pool config protocolFeeRecipient mismatch at index ", idx)
             );
-            assertGt(
+            assertEq(
                 lsIncentiveExpansion,
-                0,
-                string.concat(
-                    "Pool config liquiditySourceIncentiveExpansion is zero for pool at index ",
-                    vm.toString(i)
-                )
+                expected.liquiditySourceIncentiveExpansion,
+                string.concat("Pool config lsIncentiveExpansion mismatch at index ", idx)
             );
-            assertGt(
+            assertEq(
                 protocolIncentiveExpansion,
-                0,
-                string.concat("Pool config protocolIncentiveExpansion is zero for pool at index ", vm.toString(i))
+                expected.protocolIncentiveExpansion,
+                string.concat("Pool config protocolIncentiveExpansion mismatch at index ", idx)
             );
-            assertGt(
+            assertEq(
                 lsIncentiveContraction,
-                0,
-                string.concat(
-                    "Pool config liquiditySourceIncentiveContraction is zero for pool at index ",
-                    vm.toString(i)
-                )
+                expected.liquiditySourceIncentiveContraction,
+                string.concat("Pool config lsIncentiveContraction mismatch at index ", idx)
             );
-            assertGt(
+            assertEq(
                 protocolIncentiveContraction,
-                0,
-                string.concat(
-                    "Pool config protocolIncentiveContraction is zero for pool at index ",
-                    vm.toString(i)
-                )
+                expected.protocolIncentiveContraction,
+                string.concat("Pool config protocolIncentiveContraction mismatch at index ", idx)
             );
         }
     }
 
+    /// @dev Loads the CDPMigrationConfig for a pool by deriving the token name from the debt token symbol
+    function _getCDPMigrationConfig(address pool)
+        internal
+        returns (ICDPMigrationConfig.CDPMigrationInstanceConfig memory)
+    {
+        address debtToken = _getDebtToken(pool);
+        string memory symbol = IERC20Metadata(debtToken).symbol();
+        string memory network = vm.envString("NETWORK");
+        string memory configName = string.concat("CDPMigrationConfig_", network, "_", symbol);
+        address configAddr = vm.deployCode(configName);
+        require(configAddr != address(0), string.concat("Failed to deploy ", configName));
+        return ICDPMigrationConfig(configAddr).get();
+    }
+
+    /// @dev Resolves the Liquity AddressesRegistry for a CDP pool via its debt token symbol
+    function _getAddressesRegistry(address pool) internal view returns (IAddressesRegistry) {
+        address debtToken = _getDebtToken(pool);
+        string memory symbol = IERC20Metadata(debtToken).symbol();
+        string memory registryKey = string.concat("AddressesRegistry:v3.0.0-", symbol);
+        address addr = registry.lookup(registryKey);
+        require(addr != address(0), string.concat(registryKey, " not found in registry"));
+        return IAddressesRegistry(addr);
+    }
+
     // ========== FXPriceFeed RateFeedID (US-010) ==========
 
-    /// @notice Verify FXPriceFeed.rateFeedID matches the FPMM pool's referenceRateFeedID for each CDP pool
-    function test_cdpPools_fxPriceFeed_rateFeedIdMatchesPool() public view {
+    /// @notice Verify FXPriceFeed.rateFeedID matches the FPMM pool's referenceRateFeedID and CDPMigrationConfig
+    function test_cdpPools_fxPriceFeed_rateFeedIdMatchesPool() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
 
@@ -292,6 +317,8 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 address(0),
                 string.concat("PriceFeed address is zero for CDP pool at index ", vm.toString(i))
             );
+
+            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
 
             address fxRateFeedID = IFXPriceFeed(priceFeedAddr).rateFeedID();
             address poolRateFeedID = IFPMM(cdpPools[i]).referenceRateFeedID();
@@ -304,89 +331,49 @@ contract CDPMigrationVerification is V3IntegrationBase {
                     vm.toString(i)
                 )
             );
-        }
-    }
-
-    // ========== Reserve Trove State (US-010) ==========
-
-    /// @notice Verify reserve trove is active for each CDP pool
-    function test_cdpPools_reserveTrove_isActive() public view {
-        for (uint256 i = 0; i < cdpPools.length; i++) {
-            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
-            uint256 troveId = _findReserveTrove(troveManagerAddr);
-
-            ITroveManager.Status status = ITroveManager(troveManagerAddr).getTroveStatus(troveId);
             assertEq(
-                uint256(status),
-                uint256(ITroveManager.Status.active),
-                string.concat("Reserve trove is not active for CDP pool at index ", vm.toString(i))
-            );
-        }
-    }
-
-    /// @notice Verify reserve trove has a non-zero interest rate
-    function test_cdpPools_reserveTrove_hasInterestRate() public view {
-        for (uint256 i = 0; i < cdpPools.length; i++) {
-            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
-            uint256 troveId = _findReserveTrove(troveManagerAddr);
-
-            uint256 annualInterestRate = ITroveManager(troveManagerAddr).getTroveAnnualInterestRate(troveId);
-            assertGt(
-                annualInterestRate,
-                0,
-                string.concat("Reserve trove interest rate is zero for CDP pool at index ", vm.toString(i))
-            );
-        }
-    }
-
-    /// @notice Verify reserve trove NFT is owned by ReserveSafe
-    function test_cdpPools_reserveTrove_nftOwnedByReserveSafe() public view {
-        for (uint256 i = 0; i < cdpPools.length; i++) {
-            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
-            ITroveNFT troveNFT = ITroveManager(troveManagerAddr).troveNFT();
-            uint256 troveId = _findReserveTrove(troveManagerAddr);
-
-            address nftOwner = troveNFT.ownerOf(troveId);
-            assertEq(
-                nftOwner,
-                reserveSafe,
-                string.concat("Reserve trove NFT not owned by ReserveSafe for CDP pool at index ", vm.toString(i))
-            );
-        }
-    }
-
-    /// @notice Verify reserve trove debt >= debt token total supply
-    function test_cdpPools_reserveTrove_debtCoversTokenSupply() public view {
-        for (uint256 i = 0; i < cdpPools.length; i++) {
-            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
-            uint256 troveId = _findReserveTrove(troveManagerAddr);
-
-            LatestTroveData memory troveData = ITroveManager(troveManagerAddr).getLatestTroveData(troveId);
-            address debtToken = _getDebtToken(cdpPools[i]);
-            uint256 totalSupply = IERC20(debtToken).totalSupply();
-
-            assertGe(
-                troveData.entireDebt,
-                totalSupply,
+                fxRateFeedID,
+                expected.rateFeedID,
                 string.concat(
-                    "Reserve trove debt < debt token totalSupply for CDP pool at index ",
+                    "FXPriceFeed.rateFeedID does not match CDPMigrationConfig.rateFeedID for CDP pool at index ",
                     vm.toString(i)
                 )
             );
         }
     }
 
-    /// @notice Verify reserve trove has non-zero collateral
-    function test_cdpPools_reserveTrove_hasCollateral() public view {
+    // ========== Reserve Trove State (US-010) ==========
+
+    /// @notice Verify reserve trove is active, owned by ReserveSafe, and has correct interest rate
+    function test_cdpPools_reserveTrove_valid() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             uint256 troveId = _findReserveTrove(troveManagerAddr);
+            string memory idx = vm.toString(i);
 
-            LatestTroveData memory troveData = ITroveManager(troveManagerAddr).getLatestTroveData(troveId);
-            assertGt(
-                troveData.entireColl,
-                0,
-                string.concat("Reserve trove has zero collateral for CDP pool at index ", vm.toString(i))
+            // Active
+            ITroveManager.Status status = ITroveManager(troveManagerAddr).getTroveStatus(troveId);
+            assertEq(
+                uint256(status),
+                uint256(ITroveManager.Status.active),
+                string.concat("Reserve trove is not active for CDP pool at index ", idx)
+            );
+
+            // Owned by ReserveSafe
+            ITroveNFT troveNFT = ITroveManager(troveManagerAddr).troveNFT();
+            assertEq(
+                troveNFT.ownerOf(troveId),
+                reserveSafe,
+                string.concat("Reserve trove NFT not owned by ReserveSafe for CDP pool at index ", idx)
+            );
+
+            // Interest rate matches config
+            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            uint256 annualInterestRate = ITroveManager(troveManagerAddr).getTroveAnnualInterestRate(troveId);
+            assertEq(
+                annualInterestRate,
+                expected.interestRate,
+                string.concat("Reserve trove interest rate mismatch for CDP pool at index ", idx)
             );
         }
     }

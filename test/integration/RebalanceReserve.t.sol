@@ -2,152 +2,153 @@
 pragma solidity ^0.8.0;
 
 import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
-import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
-import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title RebalanceReserve
- * @notice Tests ReserveLiquidityStrategy rebalancing on FPMM pools:
+ * @notice Tests ReserveLiquidityStrategy rebalancing on all RLS FPMM pools
+ *         in both directions (sell token0 and sell token1), verifying that
+ *         different liquidity sources are exercised:
  *         - Large swap to imbalance pool, then rebalance reduces price difference
- *         - Cooldown is respected (calling again immediately reverts)
+ *         - Double-rebalance in same tx is blocked (transient storage guard)
  *         - Pool already within threshold cannot be rebalanced
  */
 contract RebalanceReserve is V3IntegrationBase {
     ILiquidityStrategy internal strategy;
-    address internal pool;
-    IFPMM internal fpmm;
-    address internal t0;
-    address internal t1;
-    address internal trader;
-    uint32 internal cooldown;
+    address[] internal rlsPools;
 
     function setUp() public override {
         super.setUp();
         strategy = ILiquidityStrategy(reserveLiquidityStrategy);
-
-        // Get pools registered with ReserveLiquidityStrategy
-        address[] memory pools = strategy.getPools();
-        require(pools.length > 0, "No pools registered with ReserveLiquidityStrategy");
-
-        pool = pools[0];
-        fpmm = IFPMM(pool);
-        t0 = fpmm.token0();
-        t1 = fpmm.token1();
-        trader = makeAddr("rebalanceTrader");
-
-        // Read cooldown from pool config
-        (,, uint32 _cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
-        cooldown = _cooldown;
+        rlsPools = strategy.getPools();
+        require(rlsPools.length > 0, "No pools registered with ReserveLiquidityStrategy");
     }
 
-    // ========== Helper: do a large one-sided swap to imbalance the pool ==========
+    // ========== Helper: fund reserve with collateral for contraction ==========
 
-    function _imbalancePool() internal {
-        // Get current reserves to determine a large enough swap amount
+    /// @dev Deals collateral to the reserve so contraction rebalances have liquidity
+    function _fundReserveWithCollateral(address pool) internal {
+        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
+        address collToken = isToken0Debt ? IFPMM(pool).token1() : IFPMM(pool).token0();
+        (uint256 r0, uint256 r1,) = IFPMM(pool).getReserves();
+        uint256 amount = (isToken0Debt ? r1 : r0) * 10;
+        deal(collToken, reserveV2, amount);
+    }
+
+    // ========== Helper: do a large one-sided swap to imbalance a pool ==========
+
+    function _imbalancePool(address pool, address trader, bool sellToken0) internal {
+        IFPMM fpmm = IFPMM(pool);
+        address tokenIn = sellToken0 ? fpmm.token0() : fpmm.token1();
+
         (uint256 r0, uint256 r1,) = fpmm.getReserves();
+        uint256 reserveIn = sellToken0 ? r0 : r1;
+        uint256 amountIn = reserveIn / 10;
+        require(amountIn > 0, "Reserve too low for imbalance swap");
 
-        // Swap 10% of reserve0 worth of token0 → token1 to push price up
-        uint256 amountIn = r0 / 10;
-        require(amountIn > 0, "Reserve0 too low for imbalance swap");
-
-        uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
+        uint256 expectedOut = fpmm.getAmountOut(amountIn, tokenIn);
         require(expectedOut > 0, "getAmountOut returned zero for imbalance swap");
-        require(expectedOut < r1, "expectedOut exceeds reserve1");
 
-        deal(t0, trader, amountIn);
+        deal(tokenIn, trader, amountIn);
         vm.startPrank(trader);
-        IERC20(t0).transfer(address(fpmm), amountIn);
-        fpmm.swap(0, expectedOut, trader, "");
+        IERC20(tokenIn).transfer(address(fpmm), amountIn);
+        if (sellToken0) {
+            fpmm.swap(0, expectedOut, trader, "");
+        } else {
+            fpmm.swap(expectedOut, 0, trader, "");
+        }
         vm.stopPrank();
     }
 
-    // ========== Test: rebalance reduces price difference ==========
-
-    function test_rebalance_reducesPriceDifference() public {
-        // Imbalance the pool with a large swap
-        _imbalancePool();
-
-        // Record rebalancing state before
-        (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
-
-        // The pool should be out of balance enough to rebalance
-        // If not already rebalanceable, do additional swaps
-        (,,,,, uint16 threshold,) = fpmm.getRebalancingState();
-        if (priceDiffBefore <= uint256(threshold)) {
-            // Do another larger swap to push further
-            _imbalancePool();
-            (,,,,,, priceDiffBefore) = fpmm.getRebalancingState();
+    /// @dev Ensures the pool is imbalanced past its rebalancing threshold
+    function _ensureImbalanced(address pool, address trader, bool sellToken0) internal {
+        _imbalancePool(pool, trader, sellToken0);
+        (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
+        if (priceDiff <= uint256(threshold)) {
+            _imbalancePool(pool, trader, sellToken0);
         }
-
-        // Skip past any existing cooldown
-        vm.warp(block.timestamp + uint256(cooldown) + 1);
-
-        // Execute rebalance
-        strategy.rebalance(pool);
-
-        // Record rebalancing state after
-        (,,,,,, uint256 priceDiffAfter) = fpmm.getRebalancingState();
-
-        // Price difference should have decreased
-        assertLt(priceDiffAfter, priceDiffBefore, "Price difference should decrease after rebalance");
     }
 
-    // ========== Test: cooldown is respected ==========
+    // ========== Test: rebalance reduces price difference (both directions) ==========
 
-    function test_rebalance_respectsCooldown() public {
-        // Imbalance the pool
-        _imbalancePool();
+    function test_rebalance_reducesPriceDifference_sellToken0() public {
+        _test_rebalance_reducesPriceDifference(true);
+    }
 
-        // Skip past any existing cooldown
-        vm.warp(block.timestamp + uint256(cooldown) + 1);
+    function test_rebalance_reducesPriceDifference_sellToken1() public {
+        _test_rebalance_reducesPriceDifference(false);
+    }
 
-        // Check if pool is rebalanceable
-        (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
-        if (priceDiff <= uint256(threshold)) {
-            _imbalancePool();
+    function _test_rebalance_reducesPriceDifference(bool sellToken0) internal {
+        for (uint256 p = 0; p < rlsPools.length; p++) {
+            address pool = rlsPools[p];
+            IFPMM fpmm = IFPMM(pool);
+            string memory idx = vm.toString(p);
+            address trader = makeAddr(string.concat("rebalTrader_", idx));
+
+            (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
+
+            _fundReserveWithCollateral(pool);
+            _ensureImbalanced(pool, trader, sellToken0);
+
+            (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
+
+            vm.warp(block.timestamp + uint256(cooldown) + 1);
+
+            strategy.rebalance(pool);
+
+            (,,,,,, uint256 priceDiffAfter) = fpmm.getRebalancingState();
+            assertLt(priceDiffAfter, priceDiffBefore, string.concat("Price diff should decrease for pool ", idx));
         }
+    }
 
-        // First rebalance should succeed
-        strategy.rebalance(pool);
+    // ========== Test: cannot rebalance same pool twice in one tx ==========
 
-        // If cooldown is 0, this test is not applicable — skip
-        if (cooldown == 0) {
-            return;
+    /// @notice The strategy uses EIP-1153 transient storage to prevent the same pool
+    ///         from being rebalanced more than once per transaction.
+    function test_rebalance_cannotRebalanceTwiceInSameTx() public {
+        for (uint256 p = 0; p < rlsPools.length; p++) {
+            address pool = rlsPools[p];
+            string memory idx = vm.toString(p);
+            address trader = makeAddr(string.concat("cooldownTrader_", idx));
+
+            (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
+
+            _fundReserveWithCollateral(pool);
+            _ensureImbalanced(pool, trader, true);
+
+            vm.warp(block.timestamp + uint256(cooldown) + 1);
+
+            strategy.rebalance(pool);
+
+            _ensureImbalanced(pool, trader, true);
+
+            vm.expectRevert(abi.encodeWithSelector(ILiquidityStrategy.LS_CAN_ONLY_REBALANCE_ONCE.selector, pool));
+            strategy.rebalance(pool);
         }
-
-        // Imbalance again so pool needs rebalancing
-        _imbalancePool();
-        (,,,,, threshold, priceDiff) = fpmm.getRebalancingState();
-        if (priceDiff <= uint256(threshold)) {
-            _imbalancePool();
-        }
-
-        // Calling rebalance again immediately should revert with LS_COOLDOWN_ACTIVE
-        vm.expectRevert(ILiquidityStrategy.LS_COOLDOWN_ACTIVE.selector);
-        strategy.rebalance(pool);
     }
 
     // ========== Test: rebalance reverts when pool is within threshold ==========
 
     function test_rebalance_revertsWhenWithinThreshold() public {
-        // Skip past any existing cooldown
-        vm.warp(block.timestamp + uint256(cooldown) + 1);
+        for (uint256 p = 0; p < rlsPools.length; p++) {
+            address pool = rlsPools[p];
+            IFPMM fpmm = IFPMM(pool);
 
-        // Check current rebalancing state — the pool may already be within threshold
-        (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
+            (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
 
-        if (priceDiff > uint256(threshold)) {
-            // Pool is out of balance — rebalance it first to bring within threshold
-            strategy.rebalance(pool);
-            // Advance past cooldown
             vm.warp(block.timestamp + uint256(cooldown) + 1);
-        }
 
-        // Now pool should be within threshold — rebalance should revert
-        vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
-        strategy.rebalance(pool);
+            (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
+            if (priceDiff > uint256(threshold)) {
+                strategy.rebalance(pool);
+                vm.warp(block.timestamp + uint256(cooldown) + 1);
+            }
+
+            vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
+            strategy.rebalance(pool);
+        }
     }
 }

@@ -4,7 +4,9 @@ pragma solidity ^0.8.0;
 import {Test, console} from "forge-std/Test.sol";
 import {Registry} from "lib/treb-sol/src/internal/Registry.sol";
 import {Config, IMentoConfig} from "script/config/Config.sol";
-import {ICeloProxy} from "mento-core/interfaces/ICeloProxy.sol";
+import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
+import {SenderTypes} from "lib/treb-sol/src/internal/types.sol";
+import {ProxyViewHelper} from "script/helpers/ProxyViewHelper.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {IStabilityPool} from "bold/src/Interfaces/IStabilityPool.sol";
@@ -13,6 +15,8 @@ import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {IBorrowerOperations} from "bold/src/Interfaces/IBorrowerOperations.sol";
 import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+
+import {console2 as console} from "forge-std/console2.sol";
 
 /// @dev Read the auto-generated poolConfigs getter from LiquidityStrategy
 interface IPoolConfigReader {
@@ -42,7 +46,7 @@ interface IPoolConfigReader {
  *      - NETWORK (required): Network name for config resolution (e.g., "celo_sepolia")
  *      - NAMESPACE (optional): Treb registry namespace (default: "default")
  */
-abstract contract V3IntegrationBase is Test {
+abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     // ========== Registry & Config ==========
     Registry internal registry;
     IMentoConfig internal config;
@@ -73,8 +77,13 @@ abstract contract V3IntegrationBase is Test {
         string memory namespace = vm.envOr("NAMESPACE", string("default"));
         registry = new Registry(namespace, ".treb/registry.json", ".treb/addressbook.json");
 
-        // Load config
+        // Load config.
+        // MentoConfig inherits TrebScript which requires SENDER_CONFIGS env var.
+        // In test context we provide a minimal dummy config so the constructor succeeds,
+        // then re-select our fork since TrebScript's SenderCoordinator creates its own forks.
+        _setDummySenderConfigs();
         config = Config.get();
+        vm.selectFork(forkId);
 
         // Resolve key V3 addresses from registry
         fpmmFactory = lookupProxyOrFail("FPMMFactory");
@@ -88,7 +97,8 @@ abstract contract V3IntegrationBase is Test {
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         sortedOracles = lookupProxyOrFail("SortedOracles");
         proxyAdmin = lookupOrFail("ProxyAdmin");
-        marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        // marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
     }
@@ -109,31 +119,6 @@ abstract contract V3IntegrationBase is Test {
         );
         proxy = celo != address(0) ? celo : oztup;
         require(proxy != address(0), string.concat(contractName, " proxy not deployed"));
-    }
-
-    // ========== Proxy Helpers ==========
-
-    function getProxyImplementation(address proxy) internal view returns (address) {
-        try ICeloProxy(proxy)._getImplementation() returns (address impl) {
-            if (impl != address(0)) {
-                return impl;
-            }
-        } catch {}
-
-        // Fall back to EIP-1967 implementation slot (OZTUP)
-        bytes32 implSlot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
-        return address(uint160(uint256(vm.load(proxy, implSlot))));
-    }
-
-    function getProxyAdmin(address proxy) internal view returns (address) {
-        return
-            address(
-                uint160(
-                    uint256(
-                        vm.load(proxy, 0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103)
-                    )
-                )
-            );
     }
 
     // ========== Test Helpers ==========
@@ -197,5 +182,19 @@ abstract contract V3IntegrationBase is Test {
     /// LiquityBase (non-upgradeable) layout: slot0=activePool, slot1=defaultPool, slot2=priceFeed
     function _getPriceFeed(address troveManagerAddr) internal view returns (address) {
         return address(uint160(uint256(vm.load(troveManagerAddr, bytes32(uint256(2))))));
+    }
+
+    /// @dev Sets a dummy SENDER_CONFIGS env var so that MentoConfig (which inherits TrebScript)
+    ///      can be instantiated in a test context. The config is never used for sending transactions.
+    function _setDummySenderConfigs() internal {
+        Senders.SenderInitConfig[] memory configs = new Senders.SenderInitConfig[](1);
+        configs[0] = Senders.SenderInitConfig({
+            name: "deployer",
+            account: address(1),
+            senderType: SenderTypes.InMemory,
+            canBroadcast: false,
+            config: abi.encode(uint256(1))
+        });
+        vm.setEnv("SENDER_CONFIGS", vm.toString(abi.encode(configs)));
     }
 }

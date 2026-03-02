@@ -9,132 +9,125 @@ import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/exten
 
 /**
  * @title FPMMSwap
- * @notice Tests direct FPMM pool swaps in both directions, verifying balances,
- *         getAmountOut preview accuracy, and reserve updates.
+ * @notice Tests direct FPMM pool swaps in both directions across all deployed pools,
+ *         verifying balances, getAmountOut preview accuracy, and reserve updates.
  */
 contract FPMMSwap is V3IntegrationBase {
     address[] internal pools;
     address internal trader;
 
-    // Use the first deployed pool for swap tests
-    IFPMM internal fpmm;
-    address internal t0;
-    address internal t1;
-
     function setUp() public override {
         super.setUp();
         pools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
         require(pools.length > 0, "No FPMM pools deployed");
-
-        fpmm = IFPMM(pools[0]);
-        t0 = fpmm.token0();
-        t1 = fpmm.token1();
         trader = makeAddr("trader");
     }
 
     // ========== Swap token0 → token1 ==========
 
     function test_swap_token0ForToken1() public {
-        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
+        for (uint256 p = 0; p < pools.length; p++) {
+            IFPMM fpmm = IFPMM(pools[p]);
+            address t0 = fpmm.token0();
+            address t1 = fpmm.token1();
+            string memory idx = vm.toString(p);
 
-        // Preview the expected output
-        uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
-        assertGt(expectedOut, 0, "getAmountOut should return non-zero");
+            uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
+            uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
+            assertGt(expectedOut, 0, string.concat("getAmountOut should return non-zero for pool ", idx));
 
-        // Deal token0 to trader
-        deal(t0, trader, amountIn);
+            deal(t0, trader, amountIn);
+            uint256 traderT0Before = IERC20(t0).balanceOf(trader);
+            uint256 traderT1Before = IERC20(t1).balanceOf(trader);
 
-        // Record balances before
-        uint256 traderT0Before = IERC20(t0).balanceOf(trader);
-        uint256 traderT1Before = IERC20(t1).balanceOf(trader);
+            vm.startPrank(trader);
+            IERC20(t0).transfer(address(fpmm), amountIn);
+            fpmm.swap(0, expectedOut, trader, "");
+            vm.stopPrank();
 
-        // Transfer to pool and swap
-        vm.startPrank(trader);
-        IERC20(t0).transfer(address(fpmm), amountIn);
-        fpmm.swap(0, expectedOut, trader, "");
-        vm.stopPrank();
-
-        // Verify balances changed correctly
-        uint256 traderT0After = IERC20(t0).balanceOf(trader);
-        uint256 traderT1After = IERC20(t1).balanceOf(trader);
-
-        assertEq(traderT0After, traderT0Before - amountIn, "Trader token0 balance should decrease by amountIn");
-        assertEq(traderT1After, traderT1Before + expectedOut, "Trader token1 balance should increase by expectedOut");
+            assertEq(IERC20(t0).balanceOf(trader), traderT0Before - amountIn, string.concat("token0 balance mismatch for pool ", idx));
+            assertEq(IERC20(t1).balanceOf(trader), traderT1Before + expectedOut, string.concat("token1 balance mismatch for pool ", idx));
+        }
     }
 
     // ========== Swap token1 → token0 ==========
 
     function test_swap_token1ForToken0() public {
-        uint256 amountIn = 10 ** IERC20Metadata(t1).decimals();
+        for (uint256 p = 0; p < pools.length; p++) {
+            IFPMM fpmm = IFPMM(pools[p]);
+            address t0 = fpmm.token0();
+            address t1 = fpmm.token1();
+            string memory idx = vm.toString(p);
 
-        // Preview the expected output
-        uint256 expectedOut = fpmm.getAmountOut(amountIn, t1);
-        assertGt(expectedOut, 0, "getAmountOut should return non-zero");
+            uint256 amountIn = 10 ** IERC20Metadata(t1).decimals();
+            uint256 expectedOut = fpmm.getAmountOut(amountIn, t1);
+            assertGt(expectedOut, 0, string.concat("getAmountOut should return non-zero for pool ", idx));
 
-        // Deal token1 to trader
-        deal(t1, trader, amountIn);
+            deal(t1, trader, amountIn);
+            uint256 traderT0Before = IERC20(t0).balanceOf(trader);
+            uint256 traderT1Before = IERC20(t1).balanceOf(trader);
 
-        // Record balances before
-        uint256 traderT0Before = IERC20(t0).balanceOf(trader);
-        uint256 traderT1Before = IERC20(t1).balanceOf(trader);
+            vm.startPrank(trader);
+            IERC20(t1).transfer(address(fpmm), amountIn);
+            fpmm.swap(expectedOut, 0, trader, "");
+            vm.stopPrank();
 
-        // Transfer to pool and swap
-        vm.startPrank(trader);
-        IERC20(t1).transfer(address(fpmm), amountIn);
-        fpmm.swap(expectedOut, 0, trader, "");
-        vm.stopPrank();
-
-        // Verify balances changed correctly
-        uint256 traderT0After = IERC20(t0).balanceOf(trader);
-        uint256 traderT1After = IERC20(t1).balanceOf(trader);
-
-        assertEq(traderT1After, traderT1Before - amountIn, "Trader token1 balance should decrease by amountIn");
-        assertEq(traderT0After, traderT0Before + expectedOut, "Trader token0 balance should increase by expectedOut");
+            assertEq(IERC20(t1).balanceOf(trader), traderT1Before - amountIn, string.concat("token1 balance mismatch for pool ", idx));
+            assertEq(IERC20(t0).balanceOf(trader), traderT0Before + expectedOut, string.concat("token0 balance mismatch for pool ", idx));
+        }
     }
 
     // ========== getAmountOut preview matches actual output ==========
 
     function test_getAmountOut_matchesActualSwap() public {
-        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
+        for (uint256 p = 0; p < pools.length; p++) {
+            IFPMM fpmm = IFPMM(pools[p]);
+            address t0 = fpmm.token0();
+            address t1 = fpmm.token1();
+            string memory idx = vm.toString(p);
 
-        // Preview
-        uint256 previewOut = fpmm.getAmountOut(amountIn, t0);
-        assertGt(previewOut, 0, "Preview should return non-zero");
+            uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
+            uint256 previewOut = fpmm.getAmountOut(amountIn, t0);
+            assertGt(previewOut, 0, string.concat("Preview should return non-zero for pool ", idx));
 
-        // Deal and swap
-        deal(t0, trader, amountIn);
-        uint256 traderT1Before = IERC20(t1).balanceOf(trader);
+            deal(t0, trader, amountIn);
+            uint256 traderT1Before = IERC20(t1).balanceOf(trader);
 
-        vm.startPrank(trader);
-        IERC20(t0).transfer(address(fpmm), amountIn);
-        fpmm.swap(0, previewOut, trader, "");
-        vm.stopPrank();
+            vm.startPrank(trader);
+            IERC20(t0).transfer(address(fpmm), amountIn);
+            fpmm.swap(0, previewOut, trader, "");
+            vm.stopPrank();
 
-        uint256 actualOut = IERC20(t1).balanceOf(trader) - traderT1Before;
-        assertEq(actualOut, previewOut, "Actual swap output should match getAmountOut preview");
+            uint256 actualOut = IERC20(t1).balanceOf(trader) - traderT1Before;
+            assertEq(actualOut, previewOut, string.concat("Preview mismatch for pool ", idx));
+        }
     }
 
     // ========== Swap updates reserves correctly ==========
 
     function test_swap_updatesReserves() public {
-        uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
-        uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
+        for (uint256 p = 0; p < pools.length; p++) {
+            IFPMM fpmm = IFPMM(pools[p]);
+            address t0 = fpmm.token0();
+            string memory idx = vm.toString(p);
 
-        // Record reserves before
-        (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
+            uint256 amountIn = 10 ** IERC20Metadata(t0).decimals();
+            uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
 
-        // Deal and swap token0 → token1
-        deal(t0, trader, amountIn);
-        vm.startPrank(trader);
-        IERC20(t0).transfer(address(fpmm), amountIn);
-        fpmm.swap(0, expectedOut, trader, "");
-        vm.stopPrank();
+            (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
 
-        // Record reserves after
-        (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
+            deal(t0, trader, amountIn);
+            vm.startPrank(trader);
+            IERC20(t0).transfer(address(fpmm), amountIn);
+            fpmm.swap(0, expectedOut, trader, "");
+            vm.stopPrank();
 
-        // reserve0 should increase by amountIn, reserve1 should decrease by expectedOut
-        assertEq(r0After, r0Before + amountIn, "reserve0 should increase by amountIn");
-        assertEq(r1After, r1Before - expectedOut, "reserve1 should decrease by expectedOut");
+            uint256 protocolFeeAmount = (amountIn * fpmm.protocolFee()) / 10_000;
+
+            (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
+
+            assertEq(r0After, r0Before + amountIn - protocolFeeAmount, string.concat("reserve0 mismatch for pool ", idx));
+            assertEq(r1After, r1Before - expectedOut, string.concat("reserve1 mismatch for pool ", idx));
+        }
     }
 }

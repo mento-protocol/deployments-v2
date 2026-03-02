@@ -17,6 +17,8 @@ import {IBiPoolManager} from "mento-core/interfaces/IBiPoolManager.sol";
 import {IRPool} from "mento-core/swap/router/interfaces/IRPool.sol";
 import {IRPoolFactory} from "mento-core/swap/router/interfaces/IRPoolFactory.sol";
 import {IMentoConfig} from "script/config/IMentoConfig.sol";
+import {console2 as console} from "forge-std/console2.sol";
+
 
 /**
  * @title StateVerification
@@ -43,7 +45,7 @@ contract StateVerification is V3IntegrationBase {
         fpmmFactoryImpl = lookupOrFail("FPMMFactory:v3.0.0");
         factoryRegistryImpl = lookupOrFail("FactoryRegistry:v3.0.0");
         reserveV2Impl = lookupOrFail("ReserveV2:v3.0.0");
-        reserveLiquidityStrategyImpl = lookupOrFail("ReserveLiquidityStrategy:v3.0.0");
+        reserveLiquidityStrategyImpl = lookupOrFail("ReserveLiquidityStrategy:v3.0.1");
         cdpLiquidityStrategyImpl = lookupOrFail("CDPLiquidityStrategy:v3.0.0");
 
         // Resolve BiPoolManager for virtual pool tests
@@ -285,6 +287,11 @@ contract StateVerification is V3IntegrationBase {
         assertGt(fxFeedIds.length, 0, "No FX rate feed IDs configured");
 
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
+            if(!IOracleAdapter(oracleAdapter).isFXMarketOpen()) {
+                console.log("Market hours are closed, skipping feed: ", fxFeedIds[i]);
+                continue;
+            }
+            
             (uint256 numerator, uint256 denominator) = IOracleAdapter(oracleAdapter).getFXRateIfValid(fxFeedIds[i]);
             assertGt(numerator, 0, string.concat("Zero numerator for FX feed: ", vm.toString(fxFeedIds[i])));
             assertGt(denominator, 0, string.concat("Zero denominator for FX feed: ", vm.toString(fxFeedIds[i])));
