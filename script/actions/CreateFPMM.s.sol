@@ -21,11 +21,6 @@ import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {ConfigHelper} from "../helpers/ConfigHelper.sol";
 
-interface ISortedOracles {
-    function setTokenReportExpiry(address token, uint256 expirySeconds) external;
-    function getTokenReportExpirySeconds(address token) external view returns (uint256);
-}
-
 contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
     using Deployer for Senders.Sender;
     using Senders for Senders.Sender;
@@ -105,9 +100,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > referenceRateFeedID:", fpmm.referenceRateFeedID());
         console.log("  > invertRateFeed:", fpmm.invertRateFeed());
 
-        // make expiry rate longer for testing purposes
-        _increaseExpiryRate(fpmm.referenceRateFeedID());
-
         _mintInitialLiquidity(proxy, cfg);
         _verifyFPMM(proxy, cfg);
         _verifyInitialLiquidity(proxy);
@@ -120,7 +112,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IMentoConfig.FPMMConfig memory cfg
     ) internal {
         IMentoConfig.FPMMTradingLimitsConfig memory limits = cfg.tradingLimits;
-        IFPMM fpmm = IFPMM(fpmmProxy);
 
         bool hasToken0Limits = limits.token0Limit0 > 0 || limits.token0Limit1 > 0;
         bool hasToken1Limits = limits.token1Limit0 > 0 || limits.token1Limit1 > 0;
@@ -427,8 +418,6 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IMentoConfig.FPMMConfig memory c
     ) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
-        address token0 = c.token0;
-        address token1 = c.token1;
 
         // Provide larger liquidity so we can swap meaningfully
         _provideLargerLiquidity(fpmmProxy, c);
@@ -558,14 +547,5 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
     function tokenSymbol(address token) internal view returns (string memory) {
         return IERC20Metadata(token).symbol();
-    }
-
-    function _increaseExpiryRate(address rateFeed) internal {
-        address oraclesProxy = lookupProxyOrFail("SortedOracles");
-
-        uint256 currentExpiry = ISortedOracles(oraclesProxy).getTokenReportExpirySeconds(rateFeed);
-        if (currentExpiry < 1 days) {
-            ISortedOracles(owner.harness(oraclesProxy)).setTokenReportExpiry(rateFeed, 1 days);
-        }
     }
 }

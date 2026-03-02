@@ -97,50 +97,6 @@ contract RebalanceCDP is V3IntegrationBase {
         deal(p.collToken, cdpLiquidityStrategy, p.collAmount);
     }
 
-    /// @dev Resolves the Liquity AddressesRegistry for a CDP pool via its debt token symbol
-    function _getAddressesRegistry(address pool) internal view returns (IAddressesRegistry) {
-        address debtToken = _getDebtToken(pool);
-        string memory symbol = IERC20Metadata(debtToken).symbol();
-        string memory registryKey = string.concat("AddressesRegistry:v3.0.0-", symbol);
-        address addr = registry.lookup(registryKey);
-        require(addr != address(0), string.concat(registryKey, " not found in registry"));
-        return IAddressesRegistry(addr);
-    }
-
-    // ========== Helper: do a large one-sided swap to imbalance a pool ==========
-
-    function _imbalancePool(address pool, address trader, bool sellToken0) internal {
-        IFPMM fpmm = IFPMM(pool);
-        address tokenIn = sellToken0 ? fpmm.token0() : fpmm.token1();
-
-        (uint256 r0, uint256 r1,) = fpmm.getReserves();
-        uint256 reserveIn = sellToken0 ? r0 : r1;
-        uint256 amountIn = reserveIn / 10;
-        require(amountIn > 0, "Reserve too low for imbalance swap");
-
-        uint256 expectedOut = fpmm.getAmountOut(amountIn, tokenIn);
-        require(expectedOut > 0, "getAmountOut returned zero for imbalance swap");
-
-        deal(tokenIn, trader, amountIn);
-        vm.startPrank(trader);
-        IERC20(tokenIn).transfer(address(fpmm), amountIn);
-        if (sellToken0) {
-            fpmm.swap(0, expectedOut, trader, "");
-        } else {
-            fpmm.swap(expectedOut, 0, trader, "");
-        }
-        vm.stopPrank();
-    }
-
-    /// @dev Ensures the pool is imbalanced past its rebalancing threshold
-    function _ensureImbalanced(address pool, address trader, bool sellToken0) internal {
-        _imbalancePool(pool, trader, sellToken0);
-        (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
-        if (priceDiff <= uint256(threshold)) {
-            _imbalancePool(pool, trader, sellToken0);
-        }
-    }
-
     // ========== Test: rebalance reduces price difference (both directions) ==========
 
     function test_rebalance_reducesPriceDifference_sellToken0() public {

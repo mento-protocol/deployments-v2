@@ -91,14 +91,6 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             emptyRls
         );
 
-        // Trading limits for USD collateral pools (USDC, USDT, axlUSDC) same limit for both tokens independent of the ordering
-        FPMMTradingLimitsConfig memory usdCollateralPoolsLimits = FPMMTradingLimitsConfig({
-            token0Limit0: 500_000 * 1e18,
-            token0Limit1: 1_000_000 * 1e18,
-            token1Limit0: 500_000 * 1e18,
-            token1Limit1: 1_000_000 * 1e18
-        });
-
         // Reserve liquidity strategy params for USD collateral pools (USDC, USDT, axlUSDC)
         ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
             reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
@@ -111,6 +103,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
             protocolIncentiveContraction: 0
         });
 
+        // cUSD/axlUSDC: both 18 decimals (axlUSDC is a MockERC20)
         _addFPMM(
             "axlUSDC",
             "USDm",
@@ -124,10 +117,16 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            usdCollateralPoolsLimits,
+            FPMMTradingLimitsConfig({
+                token0Limit0: 500_000 * 1e18,
+                token0Limit1: 1_000_000 * 1e18,
+                token1Limit0: 500_000 * 1e18,
+                token1Limit1: 1_000_000 * 1e18
+            }),
             usdCollateralPoolsRls
         );
 
+        // cUSD/USDC: cUSD=18 decimals, USDC=6 decimals
         _addFPMM(
             "USDC",
             "USDm",
@@ -141,10 +140,16 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            usdCollateralPoolsLimits,
+            FPMMTradingLimitsConfig({
+                token0Limit0: 500_000 * 1e6,
+                token0Limit1: 1_000_000 * 1e6,
+                token1Limit0: 500_000 * 1e18,
+                token1Limit1: 1_000_000 * 1e18
+            }),
             usdCollateralPoolsRls
         );
 
+        // cUSD/USDT: cUSD=18 decimals, USDT=6 decimals
         _addFPMM(
             "USDT",
             "USDm",
@@ -158,7 +163,12 @@ contract MentoConfig_celo_sepolia is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            usdCollateralPoolsLimits,
+            FPMMTradingLimitsConfig({
+                token0Limit0: 500_000 * 1e6,
+                token0Limit1: 1_000_000 * 1e6,
+                token1Limit0: 500_000 * 1e18,
+                token1Limit1: 1_000_000 * 1e18
+            }),
             usdCollateralPoolsRls
         );
     }

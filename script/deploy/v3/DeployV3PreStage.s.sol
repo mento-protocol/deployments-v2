@@ -184,7 +184,7 @@ contract DeployV3PreStage is
 
         reserveLiquidityStrategyImpl = deployer
             .create3("ReserveLiquidityStrategy")
-            .setLabel(label)
+            .setLabel("v3.0.1") // Hardcoded for consistency with seploia when running this on mainnet
             .deploy(abi.encode(true));
 
         reserveLiquidityStrategy = deployProxy(
