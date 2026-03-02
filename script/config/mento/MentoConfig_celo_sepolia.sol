@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
+import {MentoConfig, ITradingLimits, BreakerType} from "../MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints} from "lib/mento-std/src/Array.sol";
 
@@ -16,6 +16,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         _initTokens();
         _initFPMMs();
         _initCDPLSParams();
+        _initCDPMigration();
         _initOracles();
         _initSwap();
         _initGovernance();
@@ -28,21 +29,21 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     /// @dev On testnets we can use the _addMockCollateral to make it deploy mock
     /// collateral tokens.
     function _initTokens() internal {
-        _addStableToken("USD", "cUSD", "Celo Dollar");
-        _addStableToken("EUR", "cEUR", "Celo Euro");
-        _addStableToken("BRL", "cREAL", "Celo Brazilian Real");
-        _addStableToken("XOF", "eXOF", "ECO CFA");
-        _addStableToken("KES", "cKES", "Celo Kenyan Shilling");
-        _addStableToken("PHP", "PUSO", "PUSO");
-        _addStableToken("COP", "cCOP", "Celo Colombian Peso");
-        _addStableToken("GHS", "cGHS", "Celo Ghanaian Cedi");
-        _addStableToken("GBP", "cGBP", "Celo British Pound");
-        _addStableToken("ZAR", "cZAR", "Celo South African Rand");
-        _addStableToken("CAD", "cCAD", "Celo Canadian Dollar");
-        _addStableToken("AUD", "cAUD", "Celo Australian Dollar");
-        _addStableToken("CHF", "cCHF", "Celo Swiss Franc");
-        _addStableToken("JPY", "cJPY", "Celo Japanese Yen");
-        _addStableToken("NGN", "cNGN", "Celo Nigerian Naira");
+        _addStableToken("USD", "USDm", "Celo Dollar");
+        _addStableToken("EUR", "EURm", "Celo Euro");
+        _addStableToken("BRL", "BRLm", "Celo Brazilian Real");
+        _addStableToken("XOF", "XOFm", "ECO CFA");
+        _addStableToken("KES", "KESm", "Celo Kenyan Shilling");
+        _addStableToken("PHP", "PHPm", "PUSO");
+        _addStableToken("COP", "COPm", "Celo Colombian Peso");
+        _addStableToken("GHS", "GHSm", "Celo Ghanaian Cedi");
+        _addStableToken("GBP", "GBPm", "Celo British Pound");
+        _addStableToken("ZAR", "ZARm", "Celo South African Rand");
+        _addStableToken("CAD", "CADm", "Celo Canadian Dollar");
+        _addStableToken("AUD", "AUDm", "Celo Australian Dollar");
+        _addStableToken("CHF", "CHFm", "Celo Swiss Franc");
+        _addStableToken("JPY", "JPYm", "Celo Japanese Yen");
+        _addStableToken("NGN", "NGNm", "Celo Nigerian Naira");
 
         _addMockCollateral("axlUSDC");
         _addMockCollateral("axlEUROC");
@@ -67,8 +68,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
         _addFPMM(
-            "cGBP",
-            "cUSD",
+            "GBPm",
+            "USDm",
             getRateFeedIdFromString("GBPUSD"),
             IFPMM.FPMMParams({
                 lpFee: 20,
@@ -101,7 +102,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         // Reserve liquidity strategy params for USD collateral pools (USDC, USDT, axlUSDC)
         ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
             reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
-            debtToken: _lookupTokenAddress("cUSD"),
+            debtToken: _lookupTokenAddress("USDm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
             liquiditySourceIncentiveExpansion: 0,
@@ -112,7 +113,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
         _addFPMM(
             "axlUSDC",
-            "cUSD",
+            "USDm",
             getRateFeedIdFromString("USDCUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -129,7 +130,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
         _addFPMM(
             "USDC",
-            "cUSD",
+            "USDm",
             getRateFeedIdFromString("USDCUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -146,7 +147,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
 
         _addFPMM(
             "USDT",
-            "cUSD",
+            "USDm",
             getRateFeedIdFromString("USDTUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -166,7 +167,27 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     /// CDP LIQUIDITY STRATEGY PARAMS
     /// ===================================================================
     function _initCDPLSParams() internal {
-        _redemptionShortfallTolerance = 1e6;
+        _redemptionShortfallTolerance = 1e12;
+    }
+
+    function _initCDPMigration() internal {
+        _cdpMigrationConfig["GBPm"] = CDPMigrationConfig({
+            // ── ReserveTroveFactory ──────────────────────────────────────────
+            collateralizationRatio: 1.7e18, // TODO: 170% — adjust as needed
+            interestRate: 0.002e18, // TODO: 0.2% annual current min — adjust as needed
+            // ── CDPConfig ────────────────────────────────────────────────────
+            stabilityPoolPercentage: 2000, // 20% in bps
+            maxIterations: 500,
+            // ── AddPoolParams ────────────────────────────────────────────────
+            cooldown: 5 minutes, // rebalance cooldown
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0, // 0%
+            // ── FXPriceFeed ──────────────────────────────────────────────────
+            rateFeedID: getRateFeedIdFromString("GBPUSD")
+        });
+
     }
 
     /// ===================================================================
@@ -361,7 +382,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addExchange({
-            asset0: "cUSD",
+            asset0: "USDm",
             asset1: "USDC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: 0,
@@ -383,7 +404,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addExchange({
-            asset0: "cUSD",
+            asset0: "USDm",
             asset1: "axlUSDC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: 0,
@@ -405,7 +426,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addExchange({
-            asset0: "cUSD",
+            asset0: "USDm",
             asset1: "USDT",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: 0,
@@ -427,7 +448,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addExchange({
-            asset0: "cUSD",
+            asset0: "USDm",
             asset1: "CELO",
             pricingModule: "ConstantProductPricingModule:v2.6.5",
             spread: 0.0025 * 1e24,
@@ -449,7 +470,7 @@ contract MentoConfig_celo_sepolia is MentoConfig {
         });
 
         _addExchange({
-            asset0: "cEUR",
+            asset0: "EURm",
             asset1: "axlEUROC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: 0.005 * 1e24,

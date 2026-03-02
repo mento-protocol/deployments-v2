@@ -58,6 +58,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     uint256 public baseFork;
     uint256 public mockAggregatorSourceFork;
 
+    mapping(string token => CDPMigrationConfig) _cdpMigrationConfig;
+
     // ========== Constructor ==========
 
     constructor() {
@@ -71,6 +73,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     function _initialize() internal virtual;
 
     // ========== View Functions ==========
+
+    function getCDPMigrationConfig(string calldata token) external view returns (CDPMigrationConfig memory config) {
+        return _cdpMigrationConfig[token];
+    }
 
     function getTokenConfigs() external view returns (TokenConfig[] memory) {
         return _tokens;

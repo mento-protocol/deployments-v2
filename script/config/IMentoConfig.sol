@@ -123,6 +123,25 @@ interface IMentoConfig {
         ReserveLiquidityStrategyPoolConfig rlsConfig;
     }
 
+    struct CDPMigrationConfig {
+        // ── ReserveTroveFactory ──────────────────────────────────────────
+        uint256 collateralizationRatio; // 18 decimals, e.g. 1.5e18 = 150%
+        uint256 interestRate; // 18 decimals, annual
+        // ── CDPConfig ────────────────────────────────────────────────────
+        uint16 stabilityPoolPercentage; // bps
+        uint16 maxIterations;
+        // ── AddPoolParams ────────────────────────────────────────────────
+        uint32 cooldown; // rebalance cooldown in seconds
+        uint64 liquiditySourceIncentiveExpansion;
+        uint64 protocolIncentiveExpansion;
+        uint64 liquiditySourceIncentiveContraction;
+        uint64 protocolIncentiveContraction;
+        // ── FXPriceFeed ──────────────────────────────────────────────────
+        address rateFeedID;
+    }
+
+    function getCDPMigrationConfig(string calldata token) external view returns (CDPMigrationConfig memory);
+
     function getTokenConfigs() external view returns (TokenConfig[] memory);
 
     function getRateFeedIds() external view returns (address[] memory);
