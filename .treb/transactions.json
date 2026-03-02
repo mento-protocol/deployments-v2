@@ -1840,6 +1840,19 @@
     "environment": "testnet-v2-rc4",
     "createdAt": "2025-09-11T17:13:17.075322+02:00"
   },
+  "tx-0x176fa96b0f3a43cdc211aad7199df00fb89d158b0b614d9205066148dde8a92f": {
+    "id": "tx-0x176fa96b0f3a43cdc211aad7199df00fb89d158b0b614d9205066148dde8a92f",
+    "chainId": 11142220,
+    "hash": "0x176fa96b0f3a43cdc211aad7199df00fb89d158b0b614d9205066148dde8a92f",
+    "status": "EXECUTED",
+    "blockNumber": 19107603,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [],
+    "operations": [],
+    "environment": "testnet-v2-rc5",
+    "createdAt": "2026-03-01T19:59:51.430468+01:00"
+  },
   "tx-0x17ab625dc14e7fd6e33517591beabf1deb540ef61ad255a272240823b4831027": {
     "id": "tx-0x17ab625dc14e7fd6e33517591beabf1deb540ef61ad255a272240823b4831027",
     "chainId": 11142220,
@@ -10533,6 +10546,21 @@
     "operations": [],
     "environment": "testnet-v2-rc2",
     "createdAt": "2025-09-04T16:06:47.106997+02:00"
+  },
+  "tx-0x807dd3ec1a1c2889395f3c78bb40eac4bdfd41a6ea65def4894c81d05c2fc664": {
+    "id": "tx-0x807dd3ec1a1c2889395f3c78bb40eac4bdfd41a6ea65def4894c81d05c2fc664",
+    "chainId": 11142220,
+    "hash": "0x807dd3ec1a1c2889395f3c78bb40eac4bdfd41a6ea65def4894c81d05c2fc664",
+    "status": "EXECUTED",
+    "blockNumber": 19107597,
+    "sender": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "nonce": 0,
+    "deployments": [
+      "testnet-v2-rc5/11142220/ReserveLiquidityStrategy:v3.0.1"
+    ],
+    "operations": [],
+    "environment": "testnet-v2-rc5",
+    "createdAt": "2026-03-01T19:59:51.430468+01:00"
   },
   "tx-0x808d1a62b99084cb14c02138362fd4643511d05d506aa389d1804334b0021dbe": {
     "id": "tx-0x808d1a62b99084cb14c02138362fd4643511d05d506aa389d1804334b0021dbe",

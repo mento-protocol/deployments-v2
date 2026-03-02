@@ -20890,6 +20890,38 @@
     "createdAt": "2026-02-27T11:04:01.355601+01:00",
     "updatedAt": "2026-02-27T11:04:01.367842+01:00"
   },
+  "testnet-v2-rc5/11142220/ReserveLiquidityStrategy:v3.0.1": {
+    "id": "testnet-v2-rc5/11142220/ReserveLiquidityStrategy:v3.0.1",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "ReserveLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0x625BD9cc583B5F9a88a38B0657ce816a3F02D367",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x807dd3ec1a1c2889395f3c78bb40eac4bdfd41a6ea65def4894c81d05c2fc664",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7003883c585b7f143e4d62994",
+      "initCodeHash": "0xeebb716f533439bff343daca6ec5516a1f1391d6799e08cdeb228d63741de9c0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/ReserveLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/ReserveLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x2cc59539f610799b661c559e236aa017cead3e771ea3e672946763cb008ad159",
+      "scriptPath": "script/deploy/v3/UpgradeRLSImpl.s.sol",
+      "gitCommit": "ca41a9623484eaa3b6b9c3fe23f527d03337eb16"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-01T19:59:51.430468+01:00",
+    "updatedAt": "2026-03-01T19:59:51.439266+01:00"
+  },
   "testnet-v2-rc5/11142220/ReserveV2:v3.0.0": {
     "id": "testnet-v2-rc5/11142220/ReserveV2:v3.0.0",
     "namespace": "testnet-v2-rc5",
@@ -21437,8 +21469,14 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0x77b2d6d2220Cb0EA20Ea9d9EB7A75Dd11343e412",
-      "history": []
+      "implementation": "0x625BD9cc583B5F9a88a38B0657ce816a3F02D367",
+      "history": [
+        {
+          "implementationId": "testnet-v2-rc5/11142220/ReserveLiquidityStrategy:v3.0.0",
+          "upgradedAt": "2026-03-01T19:59:51.430468+01:00",
+          "upgradeTxId": ""
+        }
+      ]
     },
     "artifact": {
       "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
@@ -21452,7 +21490,7 @@
     },
     "tags": null,
     "createdAt": "2026-02-27T11:04:01.355601+01:00",
-    "updatedAt": "2026-02-27T11:04:01.367842+01:00"
+    "updatedAt": "2026-03-01T19:59:51.439266+01:00"
   },
   "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:ReserveV2": {
     "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:ReserveV2",
