@@ -25,6 +25,7 @@ import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/Li
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 import { CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
+import { MockCELO } from "../../helpers/MockCELO.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Deployer for Senders.Sender;
@@ -47,6 +48,12 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     /// @custom:env {string} token
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
+        vm.etch(lookup("CELO"), type(MockCELO).runtimeCode);
+        vm.makePersistent(lookup("CELO"));
+
+        console.log("MockHash: ", uint256(keccak256(type(MockCELO).runtimeCode)));
+        console.log("CeloCodeHash: ", uint256(keccak256(lookup("CELO").code)));
+
         cfg = Config.get().getCDPMigrationConfig(vm.envString("token"));
         deployer = sender("deployer");
         owner = sender("migrationOwner").account;
@@ -158,6 +165,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
 
         // Fund factory with gas token for ETH_GAS_COMPENSATION
         uint256 gasCompensation = registry.stabilityPool().systemParams().ETH_GAS_COMPENSATION();
+        console.log("CeloCodeHash: ", uint256(keccak256(address(registry.gasToken()).code)));
         IERC20(deployer.harness(address(registry.gasToken()))).transfer(factory, gasCompensation);
 
         // Create reserve trove
