@@ -1,5 +1,6 @@
 import "dotenv/config";
 import "@nomicfoundation/hardhat-ethers";
+import "@nomicfoundation/hardhat-chai-matchers";
 
 import fs from "fs";
 import path from "path";
@@ -60,33 +61,27 @@ for (const [name, url] of Object.entries(rpcEndpoints)) {
 const trebPath = path.resolve(__dirname, "treb.toml");
 const treb = readToml(trebPath);
 
-const namespaces = treb.ns || {};
+const accounts = treb.accounts || {};
+const namespaces = treb.namespace || {};
 
 const localConfigPath = path.resolve(
   __dirname,
   ".treb/config.local.json"
 );
 
-const localConfig = fs.existsSync(localConfigPath)
+const { namespace, network } = fs.existsSync(localConfigPath)
   ? readJson(localConfigPath)
   : { namespace: "default", network: "hardhat" };
 
-const activeNamespace = localConfig.namespace || "default";
-const defaultNetwork = localConfig.network || "hardhat";
-
-function collectSenders(namespaceName: string) {
-  const defaultNs = namespaces["default"] || {};
-  const activeNs = namespaces[namespaceName] || {};
-
-  const mergedSenders = {
-    ...(defaultNs.senders || {}),
-    ...(activeNs.senders || {}),
-  };
-
-  return mergedSenders;
+// Resolve a sender name to its account config, following references
+function resolveAccount(name: string): any {
+  const account = accounts[name];
+  if (!account) return undefined;
+  return account;
 }
 
-const senders = collectSenders(activeNamespace);
+// Build resolved senders for the active namespace
+const nsSenders = namespaces[namespace]?.senders || {};
 
 interface PrivateKeySender {
   address: string;
@@ -101,24 +96,27 @@ type Sender = PrivateKeySender | ImpersonatedSender;
 
 const trebSenders: Record<string, Sender> = {};
 
-for (const [name, sender] of Object.entries<any>(senders)) {
-  if (sender.type === "private_key" && sender.private_key) {
-    const wallet = new Wallet(sender.private_key);
-    trebSenders[name] = {
+for (const [role, accountName] of Object.entries<any>(nsSenders)) {
+  const account = resolveAccount(accountName);
+  if (!account) continue;
+
+  if (account.type === "private_key" && account.private_key) {
+    const wallet = new Wallet(account.private_key);
+    trebSenders[role] = {
       address: wallet.address,
-      privateKey: sender.private_key,
+      privateKey: account.private_key,
     };
   }
 
-  if (sender.type === "safe" && sender.safe) {
-    trebSenders[name] = { address: sender.safe };
+  if (account.type === "safe" && account.safe) {
+    trebSenders[role] = { address: account.safe };
   }
 
-  if (sender.type === "oz_governor") {
-    if (sender.timelock) {
-      trebSenders[name] = { address: sender.timelock };
-    } else if (sender.governor) {
-      trebSenders[name] = { address: sender.governor };
+  if (account.type === "oz_governor") {
+    if (account.timelock) {
+      trebSenders[role] = { address: account.timelock };
+    } else if (account.governor) {
+      trebSenders[role] = { address: account.governor };
     }
   }
 }
@@ -132,6 +130,22 @@ for (const net of Object.values<any>(networks)) {
   );
 }
 
+// Load active treb fork if one exists and use it as the default network.
+const forkStatePath = path.resolve(__dirname, ".treb/priv/fork-state.json");
+let defaultNetwork = "hardhat";
+
+if (fs.existsSync(forkStatePath)) {
+  const forkState = readJson(forkStatePath);
+  for (const [name, fork] of Object.entries<any>(forkState.forks || {})) {
+    const forkNetworkName = `fork_${name}`;
+    networks[forkNetworkName] = {
+      url: fork.forkUrl,
+      chainId: fork.chainId,
+    };
+    defaultNetwork = forkNetworkName;
+  }
+}
+
 const config: HardhatUserConfig = {
   defaultNetwork,
   paths: {
@@ -141,9 +155,7 @@ const config: HardhatUserConfig = {
     cache: "./cache-hh",
   },
   networks: {
-    hardhat: {
-      chainId: 31337,
-    },
+    hardhat: {},
     ...networks,
   },
 };
@@ -151,8 +163,8 @@ const config: HardhatUserConfig = {
 export default config;
 
 export const trebRuntime = {
-  namespace: activeNamespace,
-  defaultNetwork,
+  namespace,
+  network,
   senders: trebSenders
 };
 

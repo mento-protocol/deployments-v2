@@ -63,6 +63,26 @@ function findEntry(
 }
 
 /**
+ * Look up a raw address from the treb registry by exact key.
+ */
+export async function getRegistryAddress(
+  key: string,
+  opts: { namespace?: string } = {}
+): Promise<string> {
+  const registry = loadRegistry();
+  const chainId = await getChainId();
+  const namespace = opts.namespace ?? trebRuntime.namespace;
+  const nsRegistry = getNamespaceRegistry(registry, chainId, namespace);
+  const address = nsRegistry[key];
+  if (!address) {
+    throw new Error(
+      `Key "${key}" not found in registry (chain=${chainId}, namespace="${namespace}")`
+    );
+  }
+  return address;
+}
+
+/**
  * Look up a deployed contract from the treb registry.
  *
  * For proxied contracts (where "Proxy:<name>" exists in the registry),
@@ -83,27 +103,48 @@ export async function getDeployedContract(
   const namespace = opts.namespace ?? trebRuntime.namespace;
   const nsRegistry = getNamespaceRegistry(registry, chainId, namespace);
 
-  const proxyKey = `Proxy:${name}`;
-  const proxyEntry = nsRegistry[proxyKey];
+  // Check for proxy entries matching patterns like:
+  //   "Proxy:<name>", "TransparentUpgradeableProxy:<name>",
+  //   "TransparentUpgradeableProxy:<name>:<suffix>"
+  const proxyPrefixes = ["Proxy", "TransparentUpgradeableProxy"];
+  let proxyAddress: string | undefined;
+  let proxyArtifactDefault: string | undefined;
+  for (const prefix of proxyPrefixes) {
+    // Try exact match first, then prefix match for suffixed entries
+    const exactKey = `${prefix}:${name}`;
+    if (nsRegistry[exactKey]) {
+      proxyAddress = nsRegistry[exactKey];
+      proxyArtifactDefault = prefix;
+      break;
+    }
+    // Look for entries like "TransparentUpgradeableProxy:FXPriceFeedProxy:GBPm"
+    const proxyPrefix = `${prefix}:${name}:`;
+    const match = Object.entries(nsRegistry).find(([k]) => k.startsWith(proxyPrefix));
+    if (match) {
+      proxyAddress = match[1];
+      proxyArtifactDefault = prefix;
+      break;
+    }
+  }
 
-  if (proxyEntry) {
+  if (proxyAddress) {
     // It's a proxied contract: use proxy address, combined ABI
     const implEntry = findEntry(nsRegistry, name);
     if (!implEntry) {
       throw new Error(
-        `Found ${proxyKey} but no implementation entry for "${name}" in registry`
+        `Found proxy for "${name}" but no implementation entry in registry`
       );
     }
 
     const implArtifactName = opts.implArtifact ?? name;
-    const proxyArtifactName = opts.proxyArtifact ?? "Proxy";
+    const proxyArtifactName = opts.proxyArtifact ?? proxyArtifactDefault!;
 
     const implAbi = getForgeArtifact(implArtifactName).abi;
     const proxyAbi = getForgeArtifact(proxyArtifactName).abi;
     const combinedAbi = mergeAbis(proxyAbi, implAbi);
 
     const [signer] = await hre.ethers.getSigners();
-    return new Contract(proxyEntry, combinedAbi, signer);
+    return new Contract(proxyAddress, combinedAbi, signer);
   }
 
   // Not proxied: direct lookup
