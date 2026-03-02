@@ -1,5 +1,17 @@
 group: Mento V3 Dependencies
 components:
+  USDm:
+    script: DeployStableTokenSpoke
+    env:
+      SPOKE_LABEL: "USDm"
+      SPOKE_TOKEN_NAME: "Mento Dollar"
+      SPOKE_TOKEN_SYMBOL: "USDm"
+  GBPm:
+    script: DeployStableTokenSpoke
+    env:
+      SPOKE_LABEL: "GBPm"
+      SPOKE_TOKEN_NAME: "Mento British Pound"
+      SPOKE_TOKEN_SYMBOL: "GBPm"
   ProxyAdmin:
     script: DeployProxyAdmin
   AddressSortedLinkedListWithMedian:
@@ -7,6 +19,8 @@ components:
   SortedOracles:
     script: DeploySortedOracles
     deps:
+      - USDm
+      - GBPm
       - AddressSortedLinkedListWithMedian
       - ProxyAdmin
   BreakerBox:
@@ -16,6 +30,9 @@ components:
       - SortedOracles
   MockChainlinkAggregators:
     script: DeployMockAggregators
+    deps:
+      - USDm
+      - GBPm
   ChainlinkRelayers:
     script: DeployChainlinkRelayers
     deps:

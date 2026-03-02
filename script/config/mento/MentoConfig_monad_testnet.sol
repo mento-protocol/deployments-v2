@@ -6,6 +6,8 @@ import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
+import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
+
 contract MentoConfig_monad_testnet is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
@@ -43,11 +45,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
     /// COLLATERAL
     /// ===================================================================
     function _initCollateral() internal {
-        _addCollateral("USDC", 0xf817257fed379853cDe0fa4F97AB987181B1E5Ea);
-        _addCollateral("USDT", 0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D);
-
+        _addCollateral("USDC", lookup("USDC"));
         _setCollateralSpendingLimit("USDC", 1e24);
-        _setCollateralSpendingLimit("USDT", 1e24);
     }
 
     /// ===================================================================

@@ -568,6 +568,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         });
     }
 
+
     function _getTokenDecimals(string memory symbol) internal view returns (uint8) {
         uint8 cached = _tokenDecimals[symbol];
         if (cached != 0) return cached;
