@@ -50,6 +50,43 @@ contract MentoConfig_celo is MentoConfig {
 
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
 
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
+
+        // Trading limits for GBPm/USDm pool
+        FPMMTradingLimitsConfig memory gbpPoolLimits = FPMMTradingLimitsConfig({
+            token0Limit0: 77_000 * 1e18,
+            token0Limit1: 385_000 * 1e18,
+            token1Limit0: 100_000 * 1e18,
+            token1Limit1: 500_000 * 1e18
+        });
+
+        // Trading limits for USD collateral pools (USDC, USDT, axlUSDC)
+        FPMMTradingLimitsConfig memory usdCollateralPoolsLimits = FPMMTradingLimitsConfig({
+            token0Limit0: 500_000 * 1e18,
+            token0Limit1: 1_000_000 * 1e18,
+            token1Limit0: 500_000 * 1e18,
+            token1Limit1: 1_000_000 * 1e18
+        });
+
+        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+
         _addFPMM(
             "USDm",
             "GBPm",
@@ -63,6 +100,7 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
+            gbpPoolLimits,
             emptyRls
         );
 
@@ -79,16 +117,8 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("USDm"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
 
         _addFPMM(
@@ -104,21 +134,13 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("USDm"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
 
         _addFPMM(
-            "USDm",
             "USDT",
+            "USDm",
             getRateFeedIdFromString("USDTUSD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
@@ -129,17 +151,11 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            ReserveLiquidityStrategyPoolConfig({
-                reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
-                debtToken: _lookupTokenAddress("USDm"),
-                cooldown: 300,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                liquiditySourceIncentiveExpansion: 0,
-                protocolIncentiveExpansion: 0,
-                liquiditySourceIncentiveContraction: 0,
-                protocolIncentiveContraction: 0
-            })
+            usdCollateralPoolsLimits,
+            usdCollateralPoolsRls
         );
+
+        _redemptionShortfallTolerance = 1e6;
     }
 
     /// ===================================================================
@@ -148,7 +164,9 @@ contract MentoConfig_celo is MentoConfig {
     /// @notice Configure oracle ratefeeds and circuit breaker
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
-    function _initOracles() internal {}
+    function _initOracles() internal {
+        _fxRateFeedIds.push(getRateFeedIdFromString("relayed:GBPUSD"));
+    }
 
     /// ===================================================================
     /// SWAP

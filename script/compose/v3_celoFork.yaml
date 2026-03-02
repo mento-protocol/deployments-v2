@@ -7,31 +7,26 @@ components:
     deps: [ 'SetupLocalFork']
     env:
       MARKET_HOURS_BREAKER_TOGGLEABLE: true
-  DeployV3PreStage2:
-    script: DeployV3PreStage2
-    deps: [ 'DeployV3PreStage' ]
-    env:
-      MARKET_HOURS_BREAKER_TOGGLEABLE: true
   ConfigureV3PreStage:
     script: ConfigureV3PreStage
-    deps: [ 'DeployV3PreStage2' ]
+    deps: [ 'DeployV3PreStage' ]
     env:
       MARKET_HOURS_BREAKER_TOGGLEABLE: true
   UpgradeStableTokenV3_USDm:
     script: UpgradeStableTokenV3
     deps: [ 'ConfigureV3PreStage' ]
     env:
-      TOKEN_SYMBOL=USDm
+      TOKEN_SYMBOL: USDm
   UpgradeStableTokenV3_GBPm:
     script: UpgradeStableTokenV3
     deps: [ 'ConfigureV3PreStage' ]
     env:
-      TOKEN_SYMBOL=GBPm
+      TOKEN_SYMBOL: GBPm
   UpgradeStableTokenV3_EURm:
     script: UpgradeStableTokenV3
     deps: [ 'ConfigureV3PreStage' ]
     env:
-      TOKEN_SYMBOL=EURm
+      TOKEN_SYMBOL: EURm
   CreateFPMM:
     script: CreateFPMM
     deps: [ 'UpgradeStableTokenV3_USDm', 'UpgradeStableTokenV3_GBPm', 'UpgradeStableTokenV3_EURm' ]
@@ -46,13 +41,8 @@ components:
     env:
       token: GBPm
     deps: ['DeployCDPLiquidityStrategy']
-  DeployLiquityV2_2:
-    script: DeployLiquityV2_2
-    env:
-      token: GBPm
-    deps: ['DeployLiquityV2']
   MigrateStableToCDP:
     script: MigrateStableToCDP
     env:
       token: GBPm
-    deps: ['DeployLiquityV2_2']
+    deps: ['DeployLiquityV2']

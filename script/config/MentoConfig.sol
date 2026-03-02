@@ -644,7 +644,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         address token0Address = _lookupTokenAddress(token0);
         address token1Address = _lookupTokenAddress(token1);
 
-        require(token0Address < token1Address, "Token0 must be less than Token1");
+        require(token0Address < token1Address, string.concat("FPMM: ", token0, "/", token1, " should be reversed"));
 
         FPMMConfig memory c;
         c.fpmmImplementation = _fpmmImpl;

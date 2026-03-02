@@ -28,27 +28,20 @@ contract SetupLocalFork_celo_sepolia is TrebScript, ForkHelper {
 
     address private constant SENTINEL_OWNERS = address(0x1);
 
-    /// @custom:senders signer, deployer, migrationOwner
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        Senders.Sender storage _signer = sender("signer");
         Senders.Sender storage _deployer = sender("deployer");
         Senders.Sender storage _migrationOwner = sender("migrationOwner");
-
-        // 1. Convert Safe senders to 1/1 with signer as the sole owner.
-        _ensureSafeIs1of1(_deployer, _signer.account, "deployer");
-        _ensureSafeIs1of1(_migrationOwner, _signer.account, "migrationOwner");
 
         // 2. Replace GoldToken with standard ERC20 at CELO address
         MockCELO mock = new MockCELO();
         Anvil.setCodeRpc(CELO, address(mock).code);
 
         // 3. Mint CELO to all sender accounts
-        _mintCELO(_signer.account, MINT_AMOUNT);
         _mintCELO(_deployer.account, MINT_AMOUNT);
         _mintCELO(_migrationOwner.account, MINT_AMOUNT);
 
         console.log("CELO (MockERC20) etched at:", CELO);
-        console.log("  signer balance:", MockCELO(CELO).balanceOf(_signer.account));
         console.log("  deployer balance:", MockCELO(CELO).balanceOf(_deployer.account));
         console.log("  migrationOwner balance:", MockCELO(CELO).balanceOf(_migrationOwner.account));
     }
