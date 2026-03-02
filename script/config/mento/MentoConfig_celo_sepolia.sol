@@ -183,8 +183,8 @@ contract MentoConfig_celo_sepolia is MentoConfig {
     function _initCDPMigration() internal {
         _cdpMigrationConfig["GBPm"] = CDPMigrationConfig({
             // ── ReserveTroveFactory ──────────────────────────────────────────
-            collateralizationRatio: 1.7e18, // TODO: 170% — adjust as needed
-            interestRate: 0.002e18, // TODO: 0.2% annual current min — adjust as needed
+            collateralizationRatio: 1.7e18, // 170%
+            interestRate: 0.03e18, // 3%
             // ── CDPConfig ────────────────────────────────────────────────────
             stabilityPoolPercentage: 2000, // 20% in bps
             maxIterations: 500,
