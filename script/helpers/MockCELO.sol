@@ -5,9 +5,11 @@ pragma solidity ^0.8.0;
 /// @dev Storage layout: slot 0 = _balances, slot 1 = _allowances, slot 2 = _totalSupply.
 ///      No constructor dependencies — safe to etch via anvil_setCode.
 contract MockCELO {
-    mapping(address => int256) private _balanceDeltas;
-    mapping(address => mapping(address => uint256)) private _allowances;
+    uint256 s1;
+    uint256 s2;
     uint256 private _totalSupply;
+    mapping(address => mapping(address => uint256)) private _allowances;
+    mapping(address => int256) private _balanceDeltas;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
