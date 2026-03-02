@@ -121,32 +121,22 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
     ) internal {
         IMentoConfig.FPMMTradingLimitsConfig memory limits = cfg.tradingLimits;
         IFPMM fpmm = IFPMM(fpmmProxy);
-        address sorted0 = fpmm.token0();
-        address sorted1 = fpmm.token1();
 
-        // Map config token0/token1 limits to sorted token0/token1
-        // cfg.token0 may not equal sorted0 if the factory sorted them
-        bool swapped = cfg.token0 != sorted0;
-        uint256 sorted0Limit0 = swapped ? limits.token1Limit0 : limits.token0Limit0;
-        uint256 sorted0Limit1 = swapped ? limits.token1Limit1 : limits.token0Limit1;
-        uint256 sorted1Limit0 = swapped ? limits.token0Limit0 : limits.token1Limit0;
-        uint256 sorted1Limit1 = swapped ? limits.token0Limit1 : limits.token1Limit1;
-
-        bool hasToken0Limits = sorted0Limit0 > 0 || sorted0Limit1 > 0;
-        bool hasToken1Limits = sorted1Limit0 > 0 || sorted1Limit1 > 0;
+        bool hasToken0Limits = limits.token0Limit0 > 0 || limits.token0Limit1 > 0;
+        bool hasToken1Limits = limits.token1Limit0 > 0 || limits.token1Limit1 > 0;
 
         if (hasToken0Limits) {
-            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(sorted0, sorted0Limit0, sorted0Limit1);
-            console.log("  > Configured trading limits for token0 (%s)", IERC20Metadata(sorted0).symbol());
-            console.log("    > limit0:", sorted0Limit0);
-            console.log("    > limit1:", sorted0Limit1);
+            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(cfg.token0, limits.token0Limit0, limits.token0Limit1);
+            console.log("  > Configured trading limits for token0 (%s)", IERC20Metadata(cfg.token0).symbol());
+            console.log("    > limit0:", limits.token0Limit0);
+            console.log("    > limit1:", limits.token0Limit1);
         }
 
         if (hasToken1Limits) {
-            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(sorted1, sorted1Limit0, sorted1Limit1);
-            console.log("  > Configured trading limits for token1 (%s)", IERC20Metadata(sorted1).symbol());
-            console.log("    > limit0:", sorted1Limit0);
-            console.log("    > limit1:", sorted1Limit1);
+            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(cfg.token1, limits.token1Limit0, limits.token1Limit1);
+            console.log("  > Configured trading limits for token1 (%s)", IERC20Metadata(cfg.token1).symbol());
+            console.log("    > limit0:", limits.token1Limit0);
+            console.log("    > limit1:", limits.token1Limit1);
         }
 
         if (!hasToken0Limits && !hasToken1Limits) {
@@ -242,8 +232,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IMentoConfig.FPMMConfig memory cfg
     ) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
-        address sorted0 = fpmm.token0();
-        address sorted1 = fpmm.token1();
+        address token0 = fpmm.token0();
+        address token1 = fpmm.token1();
 
         // Get the oracle rate (token0/token1 after invertRateFeed)
         IOracleAdapter oracle = fpmm.oracleAdapter();
@@ -253,8 +243,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             (rateNumerator, rateDenominator) = (rateDenominator, rateNumerator);
         }
 
-        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
-        uint256 decimals1 = 10 ** IERC20Metadata(sorted1).decimals();
+        uint256 decimals0 = 10 ** IERC20Metadata(token0).decimals();
+        uint256 decimals1 = 10 ** IERC20Metadata(token1).decimals();
 
         // 1 unit of token1 (collateral)
         uint256 amount1 = decimals1;
@@ -264,17 +254,17 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             (rateNumerator * decimals1);
 
         require(
-            IERC20(sorted0).balanceOf(owner.account) >= amount0,
+            IERC20(token0).balanceOf(owner.account) >= amount0,
             "owner has insufficient token0 balance for initial liquidity"
         );
         require(
-            IERC20(sorted1).balanceOf(owner.account) >= amount1,
+            IERC20(token1).balanceOf(owner.account) >= amount1,
             "owner has insufficient token1 balance for initial liquidity"
         );
 
         // Transfer tokens to the FPMM and mint
-        IERC20(owner.harness(sorted0)).transfer(fpmmProxy, amount0);
-        IERC20(owner.harness(sorted1)).transfer(fpmmProxy, amount1);
+        IERC20(owner.harness(token0)).transfer(fpmmProxy, amount0);
+        IERC20(owner.harness(token1)).transfer(fpmmProxy, amount1);
         uint256 liquidity = IFPMM(owner.harness(fpmmProxy)).mint(
             owner.account
         );
@@ -298,13 +288,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         );
 
         IFPMM fpmm = IFPMM(proxy);
-
-        (address sorted0, address sorted1) = factory.sortTokens(
-            cfg.token0,
-            cfg.token1
-        );
         require(
-            fpmm.token0() == sorted0 && fpmm.token1() == sorted1,
+            fpmm.token0() == cfg.token0 && fpmm.token1() == cfg.token1,
             "Verify: FPMM token addresses mismatch"
         );
 
@@ -442,29 +427,29 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IMentoConfig.FPMMConfig memory c
     ) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
-        address sorted0 = fpmm.token0();
-        address sorted1 = fpmm.token1();
+        address token0 = c.token0;
+        address token1 = c.token1;
 
         // Provide larger liquidity so we can swap meaningfully
         _provideLargerLiquidity(fpmmProxy, c);
 
         // Swap 100 units of token0 -> token1
-        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
+        uint256 decimals0 = 10 ** IERC20Metadata(c.token0).decimals();
         uint256 swapAmountIn = 100 * decimals0;
 
         // Mint token0 to this contract for the swap
-        _mintTokenForSwap(sorted0, SWAP_TEST_ACCOUNT, swapAmountIn);
+        _mintTokenForSwap(c.token0, SWAP_TEST_ACCOUNT, swapAmountIn);
 
-        uint256 amountOut = fpmm.getAmountOut(swapAmountIn, sorted0);
+        uint256 amountOut = fpmm.getAmountOut(swapAmountIn, c.token0);
         require(amountOut > 0, "Verify: swap amountOut is zero");
 
         // Transfer token0 to the FPMM and execute swap
         vm.prank(SWAP_TEST_ACCOUNT);
-        IERC20(sorted0).transfer(fpmmProxy, swapAmountIn);
-        uint256 balanceBefore = IERC20(sorted1).balanceOf(SWAP_TEST_ACCOUNT);
+        IERC20(c.token0).transfer(fpmmProxy, swapAmountIn);
+        uint256 balanceBefore = IERC20(c.token1).balanceOf(SWAP_TEST_ACCOUNT);
         vm.prank(SWAP_TEST_ACCOUNT);
         fpmm.swap(0, amountOut, SWAP_TEST_ACCOUNT, "");
-        uint256 balanceAfter = IERC20(sorted1).balanceOf(SWAP_TEST_ACCOUNT);
+        uint256 balanceAfter = IERC20(c.token1).balanceOf(SWAP_TEST_ACCOUNT);
 
         console.log("  ===== Swap Verification =====");
         console.log("  > swapIn (token0):", swapAmountIn);
@@ -513,14 +498,14 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
     }
 
     function _doLargeSwap(address fpmmProxy, IFPMM fpmm) internal {
-        address sorted0 = fpmm.token0();
-        uint256 largeSwapAmount = 5_000 * (10 ** IERC20Metadata(sorted0).decimals());
+        address token0 = fpmm.token0();
+        uint256 largeSwapAmount = 5_000 * (10 ** IERC20Metadata(token0).decimals());
 
-        _mintTokenForSwap(sorted0, SWAP_TEST_ACCOUNT, largeSwapAmount);
-        uint256 amountOut = fpmm.getAmountOut(largeSwapAmount, sorted0);
+        _mintTokenForSwap(token0, SWAP_TEST_ACCOUNT, largeSwapAmount);
+        uint256 amountOut = fpmm.getAmountOut(largeSwapAmount, token0);
 
         vm.prank(SWAP_TEST_ACCOUNT);
-        IERC20(sorted0).transfer(fpmmProxy, largeSwapAmount);
+        IERC20(token0).transfer(fpmmProxy, largeSwapAmount);
         vm.prank(SWAP_TEST_ACCOUNT);
         fpmm.swap(0, amountOut, SWAP_TEST_ACCOUNT, "");
 
@@ -535,8 +520,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IMentoConfig.FPMMConfig memory c
     ) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
-        address sorted0 = fpmm.token0();
-        address sorted1 = fpmm.token1();
+        address token0 = c.token0;
+        address token1 = c.token1;
 
         IOracleAdapter oracle = fpmm.oracleAdapter();
         (uint256 rateNumerator, uint256 rateDenominator) = oracle
@@ -545,8 +530,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             (rateNumerator, rateDenominator) = (rateDenominator, rateNumerator);
         }
 
-        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
-        uint256 decimals1 = 10 ** IERC20Metadata(sorted1).decimals();
+        uint256 decimals0 = 10 ** IERC20Metadata(token0).decimals();
+        uint256 decimals1 = 10 ** IERC20Metadata(token1).decimals();
 
         // Provide 10_000 units of token1 worth of liquidity
         uint256 amount1 = 10_000 * decimals1;
@@ -554,14 +539,14 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             (rateNumerator * decimals1);
 
         // Mint tokens for liquidity
-        _mintTokenForSwap(sorted0, SWAP_TEST_ACCOUNT, amount0);
-        _mintTokenForSwap(sorted1, SWAP_TEST_ACCOUNT, amount1);
+        _mintTokenForSwap(c.token0, SWAP_TEST_ACCOUNT, amount0);
+        _mintTokenForSwap(c.token1, SWAP_TEST_ACCOUNT, amount1);
 
         // Transfer and mint LP
         vm.prank(SWAP_TEST_ACCOUNT);
-        IERC20(sorted0).transfer(fpmmProxy, amount0);
+        IERC20(c.token0).transfer(fpmmProxy, amount0);
         vm.prank(SWAP_TEST_ACCOUNT);
-        IERC20(sorted1).transfer(fpmmProxy, amount1);
+        IERC20(c.token1).transfer(fpmmProxy, amount1);
         vm.prank(SWAP_TEST_ACCOUNT);
         uint256 liquidity = fpmm.mint(SWAP_TEST_ACCOUNT);
 
