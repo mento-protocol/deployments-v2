@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
+import {IMentoConfig} from "script/config/IMentoConfig.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
@@ -12,8 +13,6 @@ import {ITroveNFT} from "bold/src/Interfaces/ITroveNFT.sol";
 import {LatestTroveData} from "bold/src/Types/LatestTroveData.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
-import {ICDPMigrationConfig} from "script/config/ICDPMigrationConfig.sol";
-import {CDPMigrationConfigLib} from "script/config/CDPMigrationConfig.sol";
 import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
 
 /// @dev Minimal interface to read FXPriceFeed public state variables
@@ -199,7 +198,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(cdpPools[i]);
 
             // Load expected values from CDP migration config and Liquity's AddressesRegistry
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
             IAddressesRegistry addressesRegistry = _getAddressesRegistry(cdpPools[i]);
 
             string memory idx = vm.toString(i);
@@ -244,7 +243,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             ) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(cdpPools[i]);
 
             // Load the expected config by resolving pool → debt token → symbol → CDPMigrationConfig
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
 
             string memory idx = vm.toString(i);
 
@@ -284,15 +283,12 @@ contract CDPMigrationVerification is V3IntegrationBase {
     /// @dev Loads the CDPMigrationConfig for a pool by deriving the token name from the debt token symbol
     function _getCDPMigrationConfig(address pool)
         internal
-        returns (ICDPMigrationConfig.CDPMigrationInstanceConfig memory)
+        view
+        returns (IMentoConfig.CDPMigrationConfig memory)
     {
         address debtToken = _getDebtToken(pool);
         string memory symbol = IERC20Metadata(debtToken).symbol();
-        string memory network = vm.envString("NETWORK");
-        string memory configName = string.concat("CDPMigrationConfig_", network, "_", symbol);
-        address configAddr = vm.deployCode(configName);
-        require(configAddr != address(0), string.concat("Failed to deploy ", configName));
-        return ICDPMigrationConfig(configAddr).get();
+        return config.getCDPMigrationConfig(symbol);
     }
 
     // ========== FXPriceFeed RateFeedID (US-010) ==========
@@ -309,7 +305,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 string.concat("PriceFeed address is zero for CDP pool at index ", vm.toString(i))
             );
 
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
 
             address fxRateFeedID = IFXPriceFeed(priceFeedAddr).rateFeedID();
             address poolRateFeedID = IFPMM(cdpPools[i]).referenceRateFeedID();
@@ -359,7 +355,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             );
 
             // Interest rate matches config
-            ICDPMigrationConfig.CDPMigrationInstanceConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
+            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
             uint256 annualInterestRate = ITroveManager(troveManagerAddr).getTroveAnnualInterestRate(troveId);
             assertEq(
                 annualInterestRate,

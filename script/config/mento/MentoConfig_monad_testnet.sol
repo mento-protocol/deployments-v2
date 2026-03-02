@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
+import {MentoConfig, ITradingLimits, BreakerType} from "../MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 

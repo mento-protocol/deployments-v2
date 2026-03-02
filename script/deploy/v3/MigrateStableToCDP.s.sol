@@ -7,8 +7,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
-import {ICDPMigrationConfig} from "script/config/ICDPMigrationConfig.sol";
-import {CDPMigrationConfigLib} from "script/config/CDPMigrationConfig.sol";
+import {Config, IMentoConfig} from "script/config/Config.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IAddressesRegistry} from "lib/bold/contracts/src/Interfaces/IAddressesRegistry.sol";
 import {FXPriceFeed} from "bold/src/PriceFeeds/FXPriceFeed.sol";
@@ -33,7 +32,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Senders for Senders.Sender;
 
     Senders.Sender deployer;
-    ICDPMigrationConfig.CDPMigrationInstanceConfig cfg;
+    IMentoConfig.CDPMigrationConfig cfg;
     IAddressesRegistry registry;
     address owner;
     address fpmm;
@@ -48,7 +47,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     /// @custom:env {string} token
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        cfg = CDPMigrationConfigLib.get(vm.envString("token"));
+        cfg = Config.get().getCDPMigrationConfig(vm.envString("token"));
         deployer = sender("deployer");
         owner = sender("migrationOwner").account;
 

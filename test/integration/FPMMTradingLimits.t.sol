@@ -216,6 +216,7 @@ contract FPMMTradingLimits is V3IntegrationBase {
 
             // Warp past L0 window
             vm.warp(block.timestamp + TIMESTEP0 + 1);
+            _refreshOracleRates();
 
             // Second swap: same amount should succeed after window reset
             uint256 secondAmount = firstAmount;

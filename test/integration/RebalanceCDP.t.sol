@@ -122,6 +122,7 @@ contract RebalanceCDP is V3IntegrationBase {
             (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
 
             strategy.rebalance(pool);
 
@@ -146,6 +147,7 @@ contract RebalanceCDP is V3IntegrationBase {
             _ensureImbalanced(pool, trader, true);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
 
             strategy.rebalance(pool);
 
@@ -168,11 +170,13 @@ contract RebalanceCDP is V3IntegrationBase {
             _seedStabilityPool(pool);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
             if (priceDiff > uint256(threshold)) {
                 strategy.rebalance(pool);
                 vm.warp(block.timestamp + uint256(cooldown) + 1);
+                _refreshOracleRates();
             }
 
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);

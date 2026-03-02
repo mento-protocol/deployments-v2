@@ -4,21 +4,18 @@ pragma solidity ^0.8.0;
 import {console} from "forge-std/console.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {IMentoConfig} from "./IMentoConfig.sol";
+import {ILiquityConfig} from "./ILiquityConfig.sol";
 
-import "./MentoConfig_vbase.sol";
-import "./MentoConfig_celo_sepolia.sol";
-import "./MentoConfig_monad_testnet.sol";
-import "./MentoConfig_monad_local_fork.sol";
-import "./MentoConfig_celo_sepolia_local_fork.sol";
+import "./mento/MentoConfig_celo_sepolia.sol";
+import "./mento/MentoConfig_monad_testnet.sol";
+import "./mento/MentoConfig_monad_local_fork.sol";
+import "./liquity/LiquityConfig_GBPm_celo.sol";
+import "./liquity/LiquityConfig_GBPm_celo_sepolia.sol";
 
 library Config {
     address private constant VM_ADDRESS =
         address(uint160(uint256(keccak256("hevm cheat code"))));
     Vm private constant vm = Vm(VM_ADDRESS);
-
-    // Cache the config contract to avoid multiple deployments
-    address private constant CACHE_SLOT =
-        address(uint160(uint256(keccak256("mento.config.cache"))));
 
     /**
      * @notice Gets the Mento configuration contract as a IMentoConfig
@@ -29,14 +26,25 @@ library Config {
         return IMentoConfig(_get("MentoConfig"));
     }
 
+    function getLiquity(string memory token) internal returns (ILiquityConfig) {
+        return ILiquityConfig(_get(string.concat("LiquityConfig_", token)));
+    }
+
     /**
      * @notice Gets the Mento configuration contract
      * @dev Checks MENTO_CONFIG_CONTRACT env var for the artifact name to deploy
      * @return The deployed config contract instance
      */
     function _get(string memory baseName) internal returns (address) {
+        // Get the config contract artifact name from environment
+        string memory artifactName = string.concat(
+            baseName,
+            "_",
+            vm.envString("NETWORK")
+        );
+
         // Check if we already have a cached config
-        bytes32 slot = keccak256(abi.encode(CACHE_SLOT));
+        bytes32 slot = keccak256(abi.encode(artifactName));
         address cachedConfig;
         assembly {
             cachedConfig := sload(slot)
@@ -44,19 +52,6 @@ library Config {
 
         if (cachedConfig != address(0)) {
             return cachedConfig;
-        }
-
-        // Get the config contract artifact name from environment
-        string memory artifactName;
-        try vm.envString("MENTO_CONFIG_CONTRACT") returns (string memory name) {
-            artifactName = name;
-        } catch {
-            // Default to a base config if not specified
-            artifactName = string.concat(
-                baseName,
-                "_",
-                vm.envString("NETWORK")
-            );
         }
 
         try vm.deployCode(artifactName) returns (address configContract) {
@@ -80,11 +75,16 @@ library Config {
     }
 
     /**
-     * @notice Clears the cached config contract
+     * @notice Clears the cached config contract for a given artifact base name
      * @dev Useful for testing when you want to redeploy the config
      */
-    function clearCache() internal {
-        bytes32 slot = keccak256(abi.encode(CACHE_SLOT));
+    function clearCache(string memory baseName) internal {
+        string memory artifactName = string.concat(
+            baseName,
+            "_",
+            vm.envString("NETWORK")
+        );
+        bytes32 slot = keccak256(abi.encode(artifactName));
         assembly {
             sstore(slot, 0)
         }

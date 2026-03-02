@@ -17,6 +17,8 @@ import {IActivePool} from "bold/src/Interfaces/IActivePool.sol";
 import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {ISortedOracles} from "mento-core/interfaces/ISortedOracles.sol";
+import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 
 import {console2 as console} from "forge-std/console2.sol";
 
@@ -228,6 +230,27 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
         if (priceDiff <= uint256(threshold)) {
             _imbalancePool(pool, trader, sellToken0);
+        }
+    }
+
+    // ========== Oracle Refresh Helpers ==========
+
+    /// @dev Re-reports current oracle rates for all deployed FPMM pools so that
+    ///      rates remain fresh after time jumps (vm.warp / skip).
+    function _refreshOracleRates() internal {
+        ISortedOracles so = ISortedOracles(sortedOracles);
+        address[] memory pools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
+
+        for (uint256 i = 0; i < pools.length; i++) {
+            address rateFeedID = IFPMM(pools[i]).referenceRateFeedID();
+            (uint256 rate, ) = so.medianRate(rateFeedID);
+            if (rate == 0) continue;
+
+            address[] memory oracles = so.getOracles(rateFeedID);
+            if (oracles.length == 0) continue;
+
+            vm.prank(oracles[0]);
+            so.report(rateFeedID, rate, address(0), address(0));
         }
     }
 
