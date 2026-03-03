@@ -39,14 +39,6 @@ struct FxAggregators {
     address ngn;
 }
 
-struct Collaterals {
-    address usdc;
-    address axlUsdc;
-    address axlEuroc;
-    address usdt;
-    address celo;
-}
-
 abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -66,6 +58,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     string[] internal _mockCollateralAssets;
     RateFeed[] internal _rateFeeds;
     address[] internal _collateralAssets;
+    address[] internal _reserveV2CollateralAssets;
     address[] internal _fxRateFeedIds;
     address[] internal _chainlinkRelayerRateFeedIds;
     MockAggregatorConfig[] internal _mockAggregatorConfigs;
@@ -83,6 +76,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     bytes32[] _breakerIds;
 
     mapping(string symbol => uint8) internal _tokenDecimals;
+    mapping(address collateral => uint256) internal _collateralSpendingRatio;
 
     FPMMConfig[] internal _fpmmConfigs;
 
@@ -122,6 +116,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _collateralAssets;
     }
 
+    function getReserveV2CollateralAssets() external view returns (address[] memory) {
+        return _reserveV2CollateralAssets;
+    }
+
     function getOracleConfig() external view returns (OracleConfig memory) {
         return _oracleConfig;
     }
@@ -153,7 +151,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function getReserveConfig() external view returns (ReserveConfig memory) {
-        return _reserveConfig;
+        ReserveConfig memory cfg = _reserveConfig;
+        uint256[] memory ratios = new uint256[](_collateralAssets.length);
+        for (uint i = 0; i < _collateralAssets.length; i++) {
+            ratios[i] = _collateralSpendingRatio[_collateralAssets[i]];
+        }
+        cfg.collateralAssetDailySpendingRatios = ratios;
+        return cfg;
     }
 
     function getMockAggregatorConfigs()
@@ -390,6 +394,18 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _collateral[symbol] = addy;
     }
 
+    function _addReserveV2Collateral(string memory symbol) internal {
+        address addy = _collateral[symbol];
+        require(addy != address(0), string.concat("Collateral not found: ", symbol));
+        _reserveV2CollateralAssets.push(addy);
+    }
+
+    function _setCollateralSpendingLimit(string memory symbol, uint256 limit) internal {
+        address addy = _collateral[symbol];
+        require(addy != address(0), string.concat("Collateral not found: ", symbol));
+        _collateralSpendingRatio[addy] = limit;
+    }
+
     function _addRateFeed(string memory rateFeed) internal {
         _addRateFeed(rateFeed, getRateFeedIdFromString(rateFeed));
     }
@@ -509,11 +525,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addMockAggregator(
+        string memory label,
         string memory description,
         address source
     ) internal {
         _mockAggregatorConfigs.push(
             MockAggregatorConfig({
+                label: label,
                 description: description,
                 decimals: 0,
                 initialReport: 0,
@@ -523,8 +541,11 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     /// @notice Register a mock aggregator and return its deterministic address.
-    function _mockAggregator(string memory label, address source) internal returns (address) {
-        _addMockAggregator(label, source);
+    /// @param label The CREATE3 deployment label (determines the address).
+    /// @param description The human-readable description stored on the mock aggregator.
+    /// @param source The source aggregator address to read from.
+    function _mockAggregator(string memory label, string memory description, address source) internal virtual returns (address) {
+        _addMockAggregator(label, description, source);
         return _predict("MockChainlinkAggregator", label);
     }
 

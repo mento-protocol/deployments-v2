@@ -21,6 +21,7 @@ interface IMentoConfig {
     }
 
     struct MockAggregatorConfig {
+        string label;
         string description;
         uint8 decimals;
         int256 initialReport;
@@ -160,6 +161,8 @@ interface IMentoConfig {
     ) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
+
+    function getReserveV2CollateralAssets() external view returns (address[] memory);
 
     function getChainlinkRelayerConfigs()
         external

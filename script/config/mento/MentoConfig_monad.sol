@@ -12,22 +12,25 @@ contract MentoConfig_monad is MentoConfig {
     bytes32 internal medianBreakerId;
 
     function _initialize() internal virtual override {
-        _initTokens();
+        _initStables();
+        _initCollateral();
         _initFPMMs();
         _initOracles();
     }
 
     /// ===================================================================
-    /// TOKENS
+    /// STABLE TOKENS
     /// ===================================================================
-    /// @notice Register all stable tokens and collaterals in the system
-    /// @dev On testnets we can use the _addMockCollateral to make it deploy mock
-    /// collateral tokens.
-    function _initTokens() internal {
+    function _initStables() internal {
         _addStableToken("USD", "USDm", "Mento Dollar");
         _addStableToken("EUR", "EURm", "Mento Euro");
         _addStableToken("GBP", "GBPm", "Mento British Pound");
+    }
 
+    /// ===================================================================
+    /// COLLATERAL
+    /// ===================================================================
+    function _initCollateral() internal virtual {
         _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603);
         _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a);
     }

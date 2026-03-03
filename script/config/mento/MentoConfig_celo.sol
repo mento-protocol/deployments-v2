@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits, BreakerType, CoreAggregators, FxAggregators, Collaterals} from "./MentoConfig.sol";
+import {MentoConfig, ITradingLimits, BreakerType, CoreAggregators, FxAggregators} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints} from "lib/mento-std/src/Array.sol";
 
@@ -18,12 +18,12 @@ contract MentoConfig_celo is MentoConfig {
     bool internal _useLegacyRateFeedIds; // true on mainnet where CELO cross-pair IDs are old stable token proxies
     CoreAggregators internal _coreAggs;
     FxAggregators internal _fxAggs;
-    Collaterals internal _collaterals;
 
 
     function _initialize() internal override {
         _configureParams();
-        _initTokens();
+        _initStables();
+        _initCollateral();
         _initFPMMs();
         _initCDPMigration();
         _initOracles();
@@ -67,40 +67,50 @@ contract MentoConfig_celo is MentoConfig {
             ngn: 0xc17cBE2dB40e53F4984C46F608DA6DA1fF074c11
         });
 
-        _collaterals = Collaterals({
-            usdc:     0xcebA9300f2b948710d2653dD7B07f33A8B32118C,
-            axlUsdc:  0xEB466342C4d449BC9f53A865D5Cb90586f405215,
-            axlEuroc: 0x061cc5a2C863E0C1Cb404006D559dB18A34C762d,
-            usdt:     0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e,
-            celo:     0x471EcE3750Da237f93B8E339c536989b8978a438
-        });
     }
 
     /// ===================================================================
-    /// TOKENS
+    /// STABLE TOKENS
     /// ===================================================================
-    function _initTokens() internal {
-        _addStableToken("USD", "USDm", "Celo Dollar");
-        _addStableToken("EUR", "EURm", "Celo Euro");
-        _addStableToken("BRL", "BRLm", "Celo Brazilian Real");
-        _addStableToken("XOF", "XOFm", "ECO CFA");
-        _addStableToken("KES", "KESm", "Celo Kenyan Shilling");
-        _addStableToken("PHP", "PHPm", "PUSO");
-        _addStableToken("COP", "COPm", "Celo Colombian Peso");
-        _addStableToken("GHS", "GHSm", "Celo Ghanaian Cedi");
-        _addStableToken("GBP", "GBPm", "Celo British Pound");
-        _addStableToken("ZAR", "ZARm", "Celo South African Rand");
-        _addStableToken("CAD", "CADm", "Celo Canadian Dollar");
-        _addStableToken("AUD", "AUDm", "Celo Australian Dollar");
-        _addStableToken("CHF", "CHFm", "Celo Swiss Franc");
-        _addStableToken("JPY", "JPYm", "Celo Japanese Yen");
-        _addStableToken("NGN", "NGNm", "Celo Nigerian Naira");
+    function _initStables() internal {
+        _addStableToken("USD", "USDm", "Mento Dollar");
+        _addStableToken("EUR", "EURm", "Mento Euro");
+        _addStableToken("BRL", "BRLm", "Mento Brazilian Real");
+        _addStableToken("XOF", "XOFm", "Mento West African CFA franc");
+        _addStableToken("KES", "KESm", "Mento Kenyan Shilling");
+        _addStableToken("PHP", "PHPm", "Mento Philippine Peso");
+        _addStableToken("COP", "COPm", "Mento Colombian Peso");
+        _addStableToken("GHS", "GHSm", "Mento Ghanaian Cedi");
+        _addStableToken("GBP", "GBPm", "Mento British Pound");
+        _addStableToken("ZAR", "ZARm", "Mento South African Rand");
+        _addStableToken("CAD", "CADm", "Mento Canadian Dollar");
+        _addStableToken("AUD", "AUDm", "Mento Australian Dollar");
+        _addStableToken("CHF", "CHFm", "Mento Swiss Franc");
+        _addStableToken("JPY", "JPYm", "Mento Japanese Yen");
+        _addStableToken("NGN", "NGNm", "Mento Nigerian Naira");
+    }
 
-        _addCollateral("USDC", _collaterals.usdc);
-        _addCollateral("axlUSDC", _collaterals.axlUsdc);
-        _addCollateral("axlEUROC", _collaterals.axlEuroc);
-        _addCollateral("USDT", _collaterals.usdt);
-        _addCollateral("CELO", _collaterals.celo);
+    /// ===================================================================
+    /// COLLATERAL
+    /// ===================================================================
+    function _initCollateral() internal virtual {
+        _addCollateral("USDC", lookupOrFail("USDC"));
+        _addCollateral("axlUSDC", lookupOrFail("axlUSDC"));
+        _addCollateral("axlEUROC", lookupOrFail("axlEUROC"));
+        _addCollateral("USDT", lookupOrFail("USDT"));
+        _addCollateral("CELO", lookupOrFail("CELO"));
+
+        _setCollateralSpendingLimit("USDC", 1e24);
+        _setCollateralSpendingLimit("axlUSDC", 1e24);
+        _setCollateralSpendingLimit("axlEUROC", 1e24);
+        _setCollateralSpendingLimit("USDT", 1e24);
+        _setCollateralSpendingLimit("CELO", 1e24);
+
+        _addReserveV2Collateral("USDC");
+        _addReserveV2Collateral("axlUSDC");
+        _addReserveV2Collateral("axlEUROC");
+        _addReserveV2Collateral("USDT");
+        _addReserveV2Collateral("CELO");
     }
 
     /// ===================================================================
@@ -300,7 +310,7 @@ contract MentoConfig_celo is MentoConfig {
         });
         _addChainlinkRelayer({
             rateFeed: "CELOUSD",
-            description: "CELO/USD",
+            description: "CELOUSD",
             aggregator0: _coreAggs.celoUsd,
             invert0: false
         });
@@ -432,14 +442,14 @@ contract MentoConfig_celo is MentoConfig {
             assetAllocationWeights: uints(1e24),
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
-            collateralAssetDailySpendingRatios: uints(1e24, 1e24, 1e24, 1e24, 1e24)
+            collateralAssetDailySpendingRatios: new uint256[](0)
         });
 
         _addExchange({
             asset0: "USDm",
             asset1: "USDC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
-            spread: 0,
+            spread: 0.0005 * 1e24,
             rateFeed: "USDCUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
@@ -461,7 +471,7 @@ contract MentoConfig_celo is MentoConfig {
             asset0: "USDm",
             asset1: "axlUSDC",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
-            spread: 0,
+            spread: 0.0005 * 1e24,
             rateFeed: "USDCUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
@@ -483,7 +493,7 @@ contract MentoConfig_celo is MentoConfig {
             asset0: "USDm",
             asset1: "USDT",
             pricingModule: "ConstantSumPricingModule:v2.6.5",
-            spread: 0,
+            spread: 0.0005 * 1e24,
             rateFeed: "USDTUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
@@ -569,12 +579,6 @@ contract MentoConfig_celo is MentoConfig {
             spread: 0.0015 * 1e24,
             tradingLimits: _tier1FxTradingLimits(1.38 * 1e3),
             createVirtual: true
-        });
-        _addFxExchange({
-            currency: "GBP",
-            spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(0.75 * 1e3),
-            createVirtual: false
         });
         _addFxExchange({
             currency: "ZAR",
