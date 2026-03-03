@@ -103,6 +103,11 @@ interface IMentoConfig {
         uint64 protocolIncentiveContraction;
     }
 
+    struct TokenLimits {
+        uint256 limit0;
+        uint256 limit1;
+    }
+
     struct FPMMTradingLimitsConfig {
         uint256 token0Limit0;
         uint256 token0Limit1;

@@ -40,8 +40,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
         _addStableToken("JPY", "JPY.m", "Mento Japanese Yen");
         _addStableToken("NGN", "NGN.m", "Mento Nigerian Naira");
 
-        _addCollateral("USDC", 0xf817257fed379853cDe0fa4F97AB987181B1E5Ea);
-        _addCollateral("USDT", 0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D);
+        _addCollateral("USDC", 0xf817257fed379853cDe0fa4F97AB987181B1E5Ea, 6);
+        _addCollateral("USDT", 0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D, 6);
     }
 
     /// ===================================================================
@@ -199,7 +199,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
     ) internal {
         string memory rateFeed = string.concat(currency, "/USD");
         _addRateFeed(rateFeed);
-        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
+        _fxRateFeedIds.push(_getRateFeedId(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
