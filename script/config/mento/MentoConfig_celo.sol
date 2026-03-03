@@ -94,11 +94,11 @@ contract MentoConfig_celo is MentoConfig {
         _addStableToken("JPY", "JPYm", "Celo Japanese Yen");
         _addStableToken("NGN", "NGNm", "Celo Nigerian Naira");
 
-        _addCollateral("USDC", _collaterals.usdc, 6);
-        _addCollateral("axlUSDC", _collaterals.axlUsdc, 6);
-        _addCollateral("axlEUROC", _collaterals.axlEuroc, 6);
-        _addCollateral("USDT", _collaterals.usdt, 6);
-        _addCollateral("CELO", _collaterals.celo, 18);
+        _addCollateral("USDC", _collaterals.usdc);
+        _addCollateral("axlUSDC", _collaterals.axlUsdc);
+        _addCollateral("axlEUROC", _collaterals.axlEuroc);
+        _addCollateral("USDT", _collaterals.usdt);
+        _addCollateral("CELO", _collaterals.celo);
     }
 
     /// ===================================================================

@@ -384,14 +384,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    function _addCollateral(string memory symbol, address addy, uint8 decimals) internal {
+    function _addCollateral(string memory symbol, address addy) internal {
         _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _collateral[symbol] = addy;
-        // Don't overwrite decimals if already set (e.g. by _registerMockCollateral)
-        if (_tokenDecimals[symbol] == 0) {
-            _tokenDecimals[symbol] = decimals;
-        }
     }
 
     function _addRateFeed(string memory rateFeed) internal {
@@ -700,8 +696,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         TokenLimits memory debtLimits,
         TokenLimits memory collateralLimits
     ) private view returns (FPMMTradingLimitsConfig memory) {
-        uint256 debtScale = 10 ** _tokenDecimals[debt];
-        uint256 collateralScale = 10 ** _tokenDecimals[collateral];
+        uint256 debtScale = 10 ** _getTokenDecimals(debt);
+        uint256 collateralScale = 10 ** _getTokenDecimals(collateral);
 
         TokenLimits memory scaledDebt = TokenLimits(
             debtLimits.limit0 * debtScale,
@@ -720,6 +716,12 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         });
     }
     
+
+    function _getTokenDecimals(string memory symbol) internal view returns (uint8) {
+        uint8 cached = _tokenDecimals[symbol];
+        if (cached != 0) return cached;
+        return IERC20Metadata(_lookupTokenAddress(symbol)).decimals();
+    }
 
     function _lookupTokenAddress(string memory symbol) internal view returns (address) {
         bool isStable = _isStableToken[symbol];

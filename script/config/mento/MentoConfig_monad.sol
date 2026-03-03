@@ -28,8 +28,8 @@ contract MentoConfig_monad is MentoConfig {
         _addStableToken("EUR", "EURm", "Mento Euro");
         _addStableToken("GBP", "GBPm", "Mento British Pound");
 
-        _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603, 6);
-        _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a, 18);
+        _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603);
+        _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a);
     }
 
     /// ===================================================================
