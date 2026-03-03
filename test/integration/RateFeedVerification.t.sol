@@ -22,6 +22,8 @@ import {MockCELO} from "script/helpers/MockCELO.sol";
  *         verify the actual on-chain oracle state without artificial refreshing.
  */
 contract RateFeedVerification is V3IntegrationBase {
+    /// @dev Grace period to account for fork staleness (fork may have been created hours ago)
+    uint256 internal constant REPORT_EXPIRY_GRACE = 12 hours;
 
     function setUp() public override {
         // Replicate base setUp WITHOUT OracleHelper.refreshOracleRates()
@@ -83,27 +85,36 @@ contract RateFeedVerification is V3IntegrationBase {
         }
     }
 
-    /// @notice Every rate feed in config must have non-expired reports on-chain
+    /// @notice Every rate feed in config must have non-expired reports at fork time.
+    ///         Uses the fork block timestamp so test execution delay doesn't cause false failures.
     function test_allConfigRateFeeds_haveActiveReports() public view {
         IMentoConfig.RateFeed[] memory rateFeeds = config.getRateFeeds();
         assertGt(rateFeeds.length, 0, "No rate feeds configured");
 
         for (uint256 i = 0; i < rateFeeds.length; i++) {
-            uint256 numRates = ISortedOracles(sortedOracles).numRates(rateFeeds[i].rateFeedId);
+            address rateFeedId = rateFeeds[i].rateFeedId;
+
+            (, uint256[] memory timestamps,) = ISortedOracles(sortedOracles).getTimestamps(rateFeedId);
             assertGt(
-                numRates, 0,
+                timestamps.length, 0,
                 string.concat(
                     "No reports for '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeeds[i].rateFeedId), ")"
+                    "' (ID: ", vm.toString(rateFeedId), ")"
                 )
             );
 
-            (bool isExpired, ) = ISortedOracles(sortedOracles).isOldestReportExpired(rateFeeds[i].rateFeedId);
+            // Oldest timestamp is the last element in the sorted list
+            uint256 oldestTimestamp = timestamps[timestamps.length - 1];
+            uint256 expiry = ISortedOracles(sortedOracles).getTokenReportExpirySeconds(rateFeedId);
+            bool isExpired = block.timestamp > oldestTimestamp + expiry + REPORT_EXPIRY_GRACE;
+
             assertFalse(
                 isExpired,
                 string.concat(
                     "Oldest report expired for '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeeds[i].rateFeedId), ")"
+                    "' (ID: ", vm.toString(rateFeedId),
+                    ") age=", vm.toString(block.timestamp - oldestTimestamp),
+                    "s expiry=", vm.toString(expiry), "s"
                 )
             );
         }

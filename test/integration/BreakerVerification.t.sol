@@ -42,19 +42,20 @@ contract BreakerVerification is V3IntegrationBase {
 
     // ========== BreakerBox Registration ==========
 
-    /// @notice All config rate feeds must be registered in BreakerBox
-    function test_allConfigRateFeeds_registeredInBreakerBox() public view {
-        IMentoConfig.RateFeed[] memory rateFeeds = config.getRateFeeds();
-        assertGt(rateFeeds.length, 0, "No rate feeds configured");
-
-        for (uint256 i = 0; i < rateFeeds.length; i++) {
-            assertTrue(
-                IBreakerBox(breakerBox).rateFeedStatus(rateFeeds[i].rateFeedId),
-                string.concat(
-                    "Rate feed not registered in BreakerBox: '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeeds[i].rateFeedId), ")"
-                )
-            );
+    /// @notice Rate feeds that have a breaker configured must be registered in BreakerBox.
+    ///         Rate feeds without breaker entries (e.g. informational feeds like CELOETH) are skipped.
+    function test_allBreakerRateFeeds_registeredInBreakerBox() public view {
+        for (uint256 b = 0; b < breakerConfigs.length; b++) {
+            for (uint256 i = 0; i < breakerConfigs[b].rateFeedIds.length; i++) {
+                address rateFeedId = breakerConfigs[b].rateFeedIds[i];
+                assertTrue(
+                    IBreakerBox(breakerBox).rateFeedStatus(rateFeedId),
+                    string.concat(
+                        "Rate feed not registered in BreakerBox: ",
+                        vm.toString(rateFeedId)
+                    )
+                );
+            }
         }
     }
 

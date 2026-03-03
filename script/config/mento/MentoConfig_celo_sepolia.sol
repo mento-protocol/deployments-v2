@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import {MentoConfig_celo} from "./MentoConfig_celo.sol";
 import {CoreAggregators, FxAggregators} from "./MentoConfig.sol";
+import {bytes32s, uints} from "lib/mento-std/src/Array.sol";
 
 contract MentoConfig_celo_sepolia is MentoConfig_celo {
 
@@ -64,6 +65,20 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
             eurcUsd: _mockAggregator("EUROCUSD", "EURC/USD",  _coreAggs.eurcUsd)
         });
 
+    }
+
+    function _initReserve() internal override {
+        _reserveConfig = ReserveConfig({
+            tobinTaxStalenessThreshold: 86400, // 1 day
+            spendingRatio: 1e24, // 100%
+            frozenGold: 0,
+            frozenDays: 0,
+            assetAllocationSymbols: bytes32s(bytes32("cGLD")),
+            assetAllocationWeights: uints(1e24),
+            tobinTax: 0,
+            tobinTaxReserveRatio: 0,
+            collateralAssetDailySpendingRatios: new uint256[](0)
+        });
     }
 
     function _initCollateral() internal override {

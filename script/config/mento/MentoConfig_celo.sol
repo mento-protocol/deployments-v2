@@ -27,6 +27,7 @@ contract MentoConfig_celo is MentoConfig {
         _initFPMMs();
         _initCDPMigration();
         _initOracles();
+        _initReserve();
         _initSwap();
         _initGovernance();
     }
@@ -108,9 +109,9 @@ contract MentoConfig_celo is MentoConfig {
 
         _addReserveV2Collateral("USDC");
         _addReserveV2Collateral("axlUSDC");
-        _addReserveV2Collateral("axlEUROC");
         _addReserveV2Collateral("USDT");
-        _addReserveV2Collateral("CELO");
+        // _addReserveV2Collateral("axlEUROC");
+        //_addReserveV2Collateral("CELO");
     }
 
     /// ===================================================================
@@ -432,19 +433,33 @@ contract MentoConfig_celo is MentoConfig {
     /// SWAP
     /// ===================================================================
     /// @notice Configure the reserve and exchange pools in the system
-    function _initSwap() internal {
+    function _initReserve() internal virtual {
         _reserveConfig = ReserveConfig({
-            tobinTaxStalenessThreshold: 86400,
-            spendingRatio: 1e24, // 100%
-            frozenGold: 0,
-            frozenDays: 0,
-            assetAllocationSymbols: bytes32s(bytes32("cGLD")),
-            assetAllocationWeights: uints(1e24),
+            tobinTaxStalenessThreshold: 3_153_600_000, // ~100 years (effectively disabled)
+            spendingRatio: 5e22, // 5%
+            frozenGold: 80_000_000e18,
+            frozenDays: 548,
+            assetAllocationSymbols: bytes32s(
+                bytes32("cGLD"),
+                bytes32("BTC"),
+                bytes32("ETH"),
+                bytes32("DAI"),
+                bytes32("cMCO2")
+            ),
+            assetAllocationWeights: uints(
+                5e23,    // cGLD  50%
+                1e23,    // BTC   10%
+                1e23,    // ETH   10%
+                2.95e23, // DAI   29.5%
+                5e21     // cMCO2  0.5%
+            ),
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
             collateralAssetDailySpendingRatios: new uint256[](0)
         });
+    }
 
+    function _initSwap() internal {
         _addExchange({
             asset0: "USDm",
             asset1: "USDC",
