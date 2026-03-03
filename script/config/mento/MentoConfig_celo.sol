@@ -119,12 +119,12 @@ contract MentoConfig_celo is MentoConfig {
 
         // ── USDm / GBPm ─────────────────────────────────────────────────
         _addFPMM(
-            "USDm",
             "GBPm",
+            "USDm",
             _gbpUsdRateFeedId,
             IFPMM.FPMMParams({
-                lpFee: 10,
-                protocolFee: 5,
+                lpFee: 20,
+                protocolFee: 10,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
                 rebalanceIncentive: 6,

@@ -388,7 +388,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _collateral[symbol] = addy;
-        _tokenDecimals[symbol] = decimals;
+        // Don't overwrite decimals if already set (e.g. by _registerMockCollateral)
+        if (_tokenDecimals[symbol] == 0) {
+            _tokenDecimals[symbol] = decimals;
+        }
     }
 
     function _addRateFeed(string memory rateFeed) internal {

@@ -144,6 +144,12 @@ library Anvil {
         require(success, "anvil_stopImpersonatingAccount failed");
     }
 
+    function sendTransactionAs(address from, address to, bytes memory data) internal {
+        impersonateAccount(from);
+        sendTransaction(from, to, data);
+        stopImpersonatingAccount(from);
+    }
+
     function sendTransaction(address from, address to, bytes memory data) internal {
         (bool success, ) = address(vm).call(
             abi.encodeWithSignature(
