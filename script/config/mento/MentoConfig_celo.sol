@@ -105,7 +105,7 @@ contract MentoConfig_celo is MentoConfig {
 
     /// ===================================================================
     /// FPMMs
-    /// ===================================================================OrFail
+    /// ===================================================================
     function _initFPMMs() internal {
         _defaultFPMMParams = IFPMM.FPMMParams({
             lpFee: 3,
@@ -239,7 +239,7 @@ contract MentoConfig_celo is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "USDCUSD",
             cooldown: 1,
-            threshold: 0.001 * 1e24,
+            threshold: 0.0015 * 1e24,
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
@@ -255,7 +255,7 @@ contract MentoConfig_celo is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "USDTUSD",
             cooldown: 1,
-            threshold: 0.001 * 1e24,
+            threshold: 0.0015 * 1e24,
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
