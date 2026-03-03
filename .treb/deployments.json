@@ -607,6 +607,38 @@
     "createdAt": "2026-03-03T20:14:38.505446337+01:00",
     "updatedAt": "2026-03-03T20:14:38.508066752+01:00"
   },
+  "mainnet/42220/ReserveTroveFactory": {
+    "id": "mainnet/42220/ReserveTroveFactory",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "ReserveTroveFactory",
+    "label": "",
+    "address": "0x02859465DCC7D7F2Bee183fC7FaC78544c9519e1",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700712187a6e98fde9c7e8de1",
+      "initCodeHash": "0x376d1e10bdf720fb865882318db67c47437d2918b160229f9768d4de3a6dabe0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000087647780180b8f55980c7d3ffefe08a9b29e9ae100000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458",
+      "entropy": "mainnet/ReserveTroveFactory"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/ReserveTroveFactory.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x2578e78f48f8b51508f13db6e48369eed61a62898c5b19315f6b13d594428d5f",
+      "scriptPath": "script/deploy/v3/MigrateStableToCDP.s.sol",
+      "gitCommit": "dddc1f98e13d584812807d4279f5d6c64948d79a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-03T21:17:21.862708613+01:00",
+    "updatedAt": "2026-03-03T21:17:21.865876715+01:00"
+  },
   "mainnet/42220/ReserveV2:v3.0.0": {
     "id": "mainnet/42220/ReserveV2:v3.0.0",
     "namespace": "mainnet",
