@@ -20,6 +20,7 @@ import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/e
 import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {ConfigHelper} from "../helpers/ConfigHelper.sol";
+import {OracleHelper} from "../helpers/OracleHelper.sol";
 
 contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
     using Deployer for Senders.Sender;
@@ -37,6 +38,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         address factoryAddy = lookupProxyOrFail("FPMMFactory");
         factoryHarness = IFPMMFactory(owner.harness(factoryAddy));
         factory = IFPMMFactory(factoryAddy);
+
+        OracleHelper.refreshOracleRatesIfFork(lookupProxyOrFail("SortedOracles"), config);
 
         IMentoConfig.FPMMConfig[] memory fpmmConfigs = config.getFPMMConfigs();
 

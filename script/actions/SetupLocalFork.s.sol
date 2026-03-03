@@ -30,10 +30,6 @@ contract SetupLocalFork is ForkHelper, Script {
         MockCELO mock = new MockCELO();
         Anvil.setCodeRpc(CELO, address(mock).code);
 
-        // 4. Mint CELO to deployer via direct storage writes
-        _mintCELO(PROPOSER, MINT_AMOUNT);
-        _mintCELO(DEPLOYER, MINT_AMOUNT);
-
         // -- Verify --
         // console.log("Safe configuration updated:");
         // console.log("  address:", SAFE);

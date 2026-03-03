@@ -5,13 +5,9 @@ components:
   DeployV3PreStage:
     script: DeployV3PreStage
     deps: [ 'SetupLocalFork']
-    env:
-      MARKET_HOURS_BREAKER_TOGGLEABLE: true
   ConfigureV3PreStage:
     script: ConfigureV3PreStage
     deps: [ 'DeployV3PreStage' ]
-    env:
-      MARKET_HOURS_BREAKER_TOGGLEABLE: true
   UpgradeStableTokenV3_USDm:
     script: UpgradeStableTokenV3
     deps: [ 'ConfigureV3PreStage' ]
