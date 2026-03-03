@@ -105,8 +105,11 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         sortedOracles = lookupProxyOrFail("SortedOracles");
         proxyAdmin = lookupOrFail("ProxyAdmin");
-        // marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
-        marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+        if (block.chainid == 42220) {
+            marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        } else {
+            marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+        }
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
 

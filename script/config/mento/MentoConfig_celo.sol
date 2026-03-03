@@ -15,6 +15,7 @@ contract MentoConfig_celo is MentoConfig {
     // Chain-specific parameters (set by _configureParams via virtual dispatch)
     string internal _rateFeedPrefix;
     address internal _gbpUsdRateFeedId;
+    bool internal _useLegacyRateFeedIds; // true on mainnet where CELO cross-pair IDs are old stable token proxies
     CoreAggregators internal _coreAggs;
     FxAggregators internal _fxAggs;
     Collaterals internal _collaterals;
@@ -39,6 +40,7 @@ contract MentoConfig_celo is MentoConfig {
         _rateFeedPrefix = "relayed:";
         _redemptionShortfallTolerance = 1e6;
         _gbpUsdRateFeedId = getRateFeedIdFromString("relayed:GBPUSD");
+        _useLegacyRateFeedIds = true;
 
         _coreAggs = CoreAggregators({
             celoUsd: 0x0568fD19986748cEfF3301e55c0eb1E729E0Ab7e,
@@ -283,7 +285,11 @@ contract MentoConfig_celo is MentoConfig {
             invert1: true
         });
 
-        _addRateFeed("CELOUSD", _lookupTokenAddress("USDm"));
+        if (_useLegacyRateFeedIds) {
+            _addRateFeed("CELOUSD", _lookupTokenAddress("USDm"));
+        } else {
+            _addRateFeed("CELOUSD");
+        }
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: "CELOUSD",
@@ -311,12 +317,19 @@ contract MentoConfig_celo is MentoConfig {
             invert1: true
         });
 
-        // Legacy currencies: CELO cross-pair rate feed IDs are the old stable token proxy addresses
-        _configureDefaultFxRateFeed("EUR", _fxAggs.eur, address(0), _lookupTokenAddress("EURm"));
-        _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"));
-        _configureDefaultFxRateFeed("XOF", _fxAggs.xof, address(0), _lookupTokenAddress("XOFm"));
-        // KES: both the FX/USD feed (registered without relayed: prefix) and CELO cross-pair use non-standard IDs
-        _configureDefaultFxRateFeed("KES", _fxAggs.kes, getRateFeedIdFromString("KESUSD"), _lookupTokenAddress("KESm"));
+        // Legacy currencies: on mainnet, CELO cross-pair rate feed IDs are the old stable token proxy addresses
+        if (_useLegacyRateFeedIds) {
+            _configureDefaultFxRateFeed("EUR", _fxAggs.eur, address(0), _lookupTokenAddress("EURm"));
+            _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"));
+            _configureDefaultFxRateFeed("XOF", _fxAggs.xof, address(0), _lookupTokenAddress("XOFm"));
+            // KES: both the FX/USD feed (registered without relayed: prefix) and CELO cross-pair use non-standard IDs
+            _configureDefaultFxRateFeed("KES", _fxAggs.kes, getRateFeedIdFromString("KESUSD"), _lookupTokenAddress("KESm"));
+        } else {
+            _configureDefaultFxRateFeed({currency: "EUR", aggregator: _fxAggs.eur});
+            _configureDefaultFxRateFeed({currency: "BRL", aggregator: _fxAggs.brl});
+            _configureDefaultFxRateFeed({currency: "XOF", aggregator: _fxAggs.xof});
+            _configureDefaultFxRateFeed({currency: "KES", aggregator: _fxAggs.kes});
+        }
         _configureDefaultFxRateFeed({currency: "PHP", aggregator: _fxAggs.php});
         _configureDefaultFxRateFeed({currency: "COP", aggregator: _fxAggs.cop});
         _configureDefaultFxRateFeed({currency: "GHS", aggregator: _fxAggs.ghs});
