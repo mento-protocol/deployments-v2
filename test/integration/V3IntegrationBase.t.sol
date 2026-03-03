@@ -93,8 +93,6 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         vm.selectFork(forkId);
         vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
 
-        address celo = lookupOrFail("CELO");
-
         // Resolve key V3 addresses from registry
         fpmmFactory = lookupProxyOrFail("FPMMFactory");
         oracleAdapter = lookupProxyOrFail("OracleAdapter");

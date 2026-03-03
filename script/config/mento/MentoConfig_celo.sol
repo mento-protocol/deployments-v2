@@ -20,6 +20,7 @@ contract MentoConfig_celo is MentoConfig {
     address constant EURC_USD_AGG = 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd;
     address constant EUR_USD_AGG = 0x3D207061Dbe8E2473527611BFecB87Ff12b28dDa;
 
+
     function _initialize() internal override {
         _initTokens();
         _initFPMMs();
@@ -74,7 +75,8 @@ contract MentoConfig_celo is MentoConfig {
 
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
 
-        // GBPm/USDm pool
+        // ── USDm / GBPm ─────────────────────────────────────────────────
+        // USDm = 18 decimals, GBPm = 18 decimals
         _addFPMM(
             "USDm",
             "GBPm",
@@ -111,7 +113,8 @@ contract MentoConfig_celo is MentoConfig {
             protocolIncentiveContraction: 0
         });
 
-        // USDm/axlUSDC: USDm=18 decimals, axlUSDC=6 decimals
+        // ── USDm / axlUSDC ──────────────────────────────────────────────
+        // USDm = 18 decimals, axlUSDC = 6 decimals
         _addFPMM(
             "USDm",
             "axlUSDC",
@@ -134,7 +137,8 @@ contract MentoConfig_celo is MentoConfig {
             usdCollateralPoolsRls
         );
 
-        // USDm/USDC: USDm=18 decimals, USDC=6 decimals
+        // ── USDm / USDC ────────────────────────────────────────────────
+        // USDm = 18 decimals, USDC = 6 decimals
         _addFPMM(
             "USDm",
             "USDC",
@@ -157,7 +161,8 @@ contract MentoConfig_celo is MentoConfig {
             usdCollateralPoolsRls
         );
 
-        // USDT/USDm: USDT=6 decimals, USDm=18 decimals
+        // ── USDT / USDm ────────────────────────────────────────────────
+        // USDT = 6 decimals, USDm = 18 decimals
         _addFPMM(
             "USDT",
             "USDm",
