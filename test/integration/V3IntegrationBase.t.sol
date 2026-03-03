@@ -21,6 +21,8 @@ import {ISortedOracles} from "mento-core/interfaces/ISortedOracles.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {OracleHelper} from "script/helpers/OracleHelper.sol";
 
+import {MockCELO} from "script/helpers/MockCELO.sol";
+
 import {console2 as console} from "forge-std/console2.sol";
 
 /// @dev Read the auto-generated poolConfigs getter from LiquidityStrategy
@@ -89,6 +91,9 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         _setDummySenderConfigs();
         config = Config.get();
         vm.selectFork(forkId);
+        vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+
+        address celo = lookupOrFail("CELO");
 
         // Resolve key V3 addresses from registry
         fpmmFactory = lookupProxyOrFail("FPMMFactory");
