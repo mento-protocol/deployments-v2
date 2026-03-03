@@ -138,7 +138,7 @@ contract MentoConfig_celo is MentoConfig {
 
         // Reserve liquidity strategy params for USD collateral pools
         ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
-            reserveLiquidityStrategy: lookupProxyOrFail("ReserveLiquidityStrategy"),
+            reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
             debtToken: _lookupTokenAddress("USDm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
@@ -637,7 +637,7 @@ contract MentoConfig_celo is MentoConfig {
             asset1: _symbolForCurrency[currency],
             pricingModule: "ConstantSumPricingModule:v2.6.5",
             spread: spread,
-            rateFeed: string.concat(currency, "USD"),
+            rateFeed: string.concat(_rateFeedPrefix, currency, "USD"),
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
             tradingLimits: tradingLimits,
