@@ -38,7 +38,7 @@ contract MentoConfig_celo is MentoConfig {
     /// @notice Set network-specific parameters. Override in subclasses.
     function _configureParams() internal virtual {
         _rateFeedPrefix = "relayed:";
-        _redemptionShortfallTolerance = 1e6;
+        _redemptionShortfallTolerance = 1e12;
         _gbpUsdRateFeedId = getRateFeedIdFromString("relayed:GBPUSD");
         _useLegacyRateFeedIds = true;
 
@@ -105,7 +105,7 @@ contract MentoConfig_celo is MentoConfig {
 
     /// ===================================================================
     /// FPMMs
-    /// ===================================================================
+    /// ===================================================================OrFail
     function _initFPMMs() internal {
         _defaultFPMMParams = IFPMM.FPMMParams({
             lpFee: 3,

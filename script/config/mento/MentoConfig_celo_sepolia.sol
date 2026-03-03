@@ -15,7 +15,6 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
 
         _rateFeedPrefix = "";
         _useLegacyRateFeedIds = false;
-        _redemptionShortfallTolerance = 1e12;
         _gbpUsdRateFeedId = getRateFeedIdFromString("GBPUSD");
 
         // Oracle infrastructure
