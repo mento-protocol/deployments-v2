@@ -26,6 +26,7 @@ import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 import { CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
 import { MockCELO } from "../../helpers/MockCELO.sol";
+import {OracleHelper} from "../../helpers/OracleHelper.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Deployer for Senders.Sender;
@@ -51,6 +52,8 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     function run() public broadcast {
         vm.etch(lookup("CELO"), type(MockCELO).runtimeCode);
         vm.makePersistent(lookup("CELO"));
+
+        OracleHelper.refreshOracleRatesIfFork(lookupProxyOrFail("SortedOracles"), Config.get());
 
         cfg = Config.get().getCDPMigrationConfig(vm.envString("token"));
         deployer = sender("deployer");

@@ -10,8 +10,11 @@ import {Anvil} from "../helpers/Anvil.sol";
 import {MockCELO} from "../helpers/MockCELO.sol";
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
 import {SetupLocalFork, ISafeOwnerMgr, CELO} from "./SetupLocalFork.s.sol";
+import {ProxyHelper} from "../helpers/ProxyHelper.sol";
+import {OracleHelper} from "../helpers/OracleHelper.sol";
+import {Config, IMentoConfig} from "script/config/Config.sol";
 
-contract SetupLocalFork_celo is TrebScript, SetupLocalFork {
+contract SetupLocalFork_celo is TrebScript, SetupLocalFork, ProxyHelper {
     using Senders for Senders.Sender;
     using stdStorage for StdStorage;
 
@@ -63,6 +66,13 @@ contract SetupLocalFork_celo is TrebScript, SetupLocalFork {
         console.log("  USDC:", IERC20(USDC).balanceOf(migrationOwner));
         console.log("  USDT:", IERC20(USDT).balanceOf(migrationOwner));
         console.log("  axlUSDC:", IERC20(axlUSDC).balanceOf(migrationOwner));
+
+        // 5. Refresh oracle rates on both simulation fork and Anvil node
+        IMentoConfig config = Config.get();
+        address sortedOracles = lookupProxyOrFail("SortedOracles");
+        OracleHelper.refreshOracleRates(sortedOracles, config);
+        OracleHelper.refreshOracleRatesAnvil(sortedOracles, config);
+        console.log("Oracle rates refreshed on simulation fork and Anvil node");
     }
 
     function _ensureSafeIs1of1(Senders.Sender storage _sender, address _signerAddr, string memory label) internal {

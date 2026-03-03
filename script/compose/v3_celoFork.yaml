@@ -1,7 +1,7 @@
 group: Mento V3 (Celo Fork 28/02)
 components:
   SetupLocalFork:
-    script: SetupLocalFork
+    script: SetupLocalFork_celo
   DeployV3PreStage:
     script: DeployV3PreStage
     deps: [ 'SetupLocalFork']
