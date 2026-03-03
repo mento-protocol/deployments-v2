@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits, BreakerType} from "../MentoConfig.sol";
+import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
@@ -11,19 +11,17 @@ contract MentoConfig_monad_testnet is MentoConfig {
     bytes32 internal medianBreakerId;
 
     function _initialize() internal override {
-        _initTokens();
+        _initStables();
+        _initCollateral();
         _initOracles();
         _initSwap();
         _initGovernance();
     }
 
     /// ===================================================================
-    /// TOKENS
+    /// STABLE TOKENS
     /// ===================================================================
-    /// @notice Register all stable tokens and collaterals in the system
-    /// @dev On testnets we can use the _addMockCollateral to make it deploy mock
-    /// collateral tokens.
-    function _initTokens() internal {
+    function _initStables() internal {
         _addStableToken("USD", "USD.m", "Mento Dollar");
         _addStableToken("EUR", "EUR.m", "Mento Euro");
         _addStableToken("BRL", "BRL.m", "Mento Brazilian Real");
@@ -39,9 +37,17 @@ contract MentoConfig_monad_testnet is MentoConfig {
         _addStableToken("CHF", "CHF.m", "Mento Swiss Franc");
         _addStableToken("JPY", "JPY.m", "Mento Japanese Yen");
         _addStableToken("NGN", "NGN.m", "Mento Nigerian Naira");
+    }
 
+    /// ===================================================================
+    /// COLLATERAL
+    /// ===================================================================
+    function _initCollateral() internal {
         _addCollateral("USDC", 0xf817257fed379853cDe0fa4F97AB987181B1E5Ea);
         _addCollateral("USDT", 0x88b8E2161DEDC77EF4ab7585569D2415a1C1055D);
+
+        _setCollateralSpendingLimit("USDC", 1e24);
+        _setCollateralSpendingLimit("USDT", 1e24);
     }
 
     /// ===================================================================
@@ -79,6 +85,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addMockAggregator({
+            label: "USDC/USD",
             description: "USDC/USD",
             source: 0xc7A353BaE210aed958a1A2928b654938EC59DaB2
         });
@@ -99,6 +106,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addMockAggregator({
+            label: "USDT/USD",
             description: "USDT/USD",
             source: 0x5e37AF40A7A344ec9b03CCD34a250F3dA9a20B02
         });
@@ -119,6 +127,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addMockAggregator({
+            label: "EURC/USD",
             description: "EURC/USD",
             source: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd
         });
@@ -199,7 +208,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
     ) internal {
         string memory rateFeed = string.concat(currency, "/USD");
         _addRateFeed(rateFeed);
-        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
+        _fxRateFeedIds.push(_getRateFeedId(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
@@ -208,7 +217,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
             smoothingFactor: 0.005 * 1e24,
             referenceValue: 0
         });
-        _addMockAggregator({description: rateFeed, source: source});
+        _addMockAggregator({label: rateFeed, description: rateFeed, source: source});
         _addChainlinkRelayer({
             rateFeed: rateFeed,
             description: rateFeed,
@@ -231,7 +240,7 @@ contract MentoConfig_monad_testnet is MentoConfig {
             assetAllocationWeights: uints(1e24),
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
-            collateralAssetDailySpendingRatios: uints(1e24, 1e24)
+            collateralAssetDailySpendingRatios: new uint256[](0)
         });
 
         _addExchange({

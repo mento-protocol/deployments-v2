@@ -38,6 +38,16 @@ library Anvil {
         vm.store(token, keccak256(abi.encode(wallet, slot)), bytes32(value));
     }
 
+    function setErc20BalanceRpc(
+        address token,
+        address wallet,
+        uint256 value,
+        bytes32 slot
+    ) internal {
+        bytes32 balanceSlot = keccak256(abi.encode(wallet, slot));
+        setStorageAt(token, balanceSlot, bytes32(value));
+    }
+
     function setStorageAt(
         address target,
         bytes32 slot,
@@ -91,6 +101,74 @@ library Anvil {
             )
         );
         require(success, "anvil_setCode failed");
+    }
+
+    function setBalanceRpc(address account, uint256 amount) internal {
+        (bool success, ) = address(vm).call(
+            abi.encodeWithSignature(
+                "rpc(string,string)",
+                "anvil_setBalance",
+                string(
+                    abi.encodePacked(
+                        '["',
+                        vm.toString(account),
+                        '","',
+                        vm.toString(bytes32(amount)),
+                        '"]'
+                    )
+                )
+            )
+        );
+        require(success, "anvil_setBalance failed");
+    }
+
+    function impersonateAccount(address account) internal {
+        (bool success, ) = address(vm).call(
+            abi.encodeWithSignature(
+                "rpc(string,string)",
+                "anvil_impersonateAccount",
+                string(abi.encodePacked('["', vm.toString(account), '"]'))
+            )
+        );
+        require(success, "anvil_impersonateAccount failed");
+    }
+
+    function stopImpersonatingAccount(address account) internal {
+        (bool success, ) = address(vm).call(
+            abi.encodeWithSignature(
+                "rpc(string,string)",
+                "anvil_stopImpersonatingAccount",
+                string(abi.encodePacked('["', vm.toString(account), '"]'))
+            )
+        );
+        require(success, "anvil_stopImpersonatingAccount failed");
+    }
+
+    function sendTransactionAs(address from, address to, bytes memory data) internal {
+        impersonateAccount(from);
+        sendTransaction(from, to, data);
+        stopImpersonatingAccount(from);
+    }
+
+    function sendTransaction(address from, address to, bytes memory data) internal {
+        (bool success, ) = address(vm).call(
+            abi.encodeWithSignature(
+                "rpc(string,string)",
+                "eth_sendTransaction",
+                string(
+                    abi.encodePacked(
+                        '[{"from":"',
+                        vm.toString(from),
+                        '","to":"',
+                        vm.toString(to),
+                        '","data":"',
+                        vm.toString(data),
+                        '"}]'
+                    )
+                )
+            )
+        );
+        require(success, "eth_sendTransaction failed");
     }
 
     function snapshot() internal returns (uint256) {

@@ -109,11 +109,11 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
 
         oracleAdapter = lookupProxyOrFail("OracleAdapter");
         debtToken = lookupProxyOrFail(cfg.debtTokenLabel);
-        collateralToken = lookupProxyOrFail("cUSD");
+        collateralToken = lookupProxyOrFail(cfg.collateralTokenLabel);
         cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
         gasToken = lookupOrFail("CELO");
 
-        watchdog = lookupOrFail("Watchdog");
+        watchdog = lookupOrFail("FxPriceFeedManager");
         owner = sender("migrationOwner").account;
         yieldSplitAddress = lookupOrFail("YieldSplitAddress");
 

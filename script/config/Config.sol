@@ -6,9 +6,9 @@ import {Vm} from "forge-std/Vm.sol";
 import {IMentoConfig} from "./IMentoConfig.sol";
 import {ILiquityConfig} from "./ILiquityConfig.sol";
 
+import "./mento/MentoConfig_celo.sol";
 import "./mento/MentoConfig_celo_sepolia.sol";
 import "./mento/MentoConfig_monad_testnet.sol";
-import "./mento/MentoConfig_monad_local_fork.sol";
 import "./liquity/LiquityConfig_GBPm_celo.sol";
 import "./liquity/LiquityConfig_GBPm_celo_sepolia.sol";
 
@@ -70,7 +70,13 @@ library Config {
             );
             return configContract;
         } catch {
-            return address(0);
+            revert(
+                string.concat(
+                    "Config: failed to deploy '",
+                    artifactName,
+                    "'. Check that the contract exists and NETWORK is set correctly."
+                )
+            );
         }
     }
 

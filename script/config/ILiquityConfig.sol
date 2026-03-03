@@ -9,7 +9,8 @@ interface ILiquityConfig {
         /// @dev Label used for singleton CREATE3 deployments, e.g. "v3.0.0-GBPm"
         string singletonLabel;
         // ── Registry lookup keys ─────────────────────────────────────────
-        string debtTokenLabel; // e.g. "cGBP"
+        string debtTokenLabel; // e.g. "GBPm"
+        string collateralTokenLabel; // e.g. "USDm"
         // ── Addresses ────────────────────────────────────────────────────
         address rateFeedID;
         // ── FXPriceFeed ──────────────────────────────────────────────────

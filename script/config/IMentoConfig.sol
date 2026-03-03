@@ -21,6 +21,7 @@ interface IMentoConfig {
     }
 
     struct MockAggregatorConfig {
+        string label;
         string description;
         uint8 decimals;
         int256 initialReport;
@@ -103,6 +104,11 @@ interface IMentoConfig {
         uint64 protocolIncentiveContraction;
     }
 
+    struct TokenLimits {
+        uint256 limit0;
+        uint256 limit1;
+    }
+
     struct FPMMTradingLimitsConfig {
         uint256 token0Limit0;
         uint256 token0Limit1;
@@ -155,6 +161,8 @@ interface IMentoConfig {
     ) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
+
+    function getReserveV2CollateralAssets() external view returns (address[] memory);
 
     function getChainlinkRelayerConfigs()
         external

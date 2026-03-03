@@ -2,11 +2,12 @@
 pragma solidity ^0.8.0;
 
 /// @notice Minimal ERC20 with known storage layout for replacing GoldToken on forks.
-/// @dev Storage layout: slot 0 = _balances, slot 1 = _allowances, slot 2 = _totalSupply.
+/// @dev Storage spacers s1 and s2 match GoldToken's inherited Ownable and
+///      Initializable+UsingRegistry slots so that _totalSupply aligns at slot 2.
 ///      No constructor dependencies — safe to etch via anvil_setCode.
 contract MockCELO {
-    uint256 s1;
-    uint256 s2;
+    uint256 s1; // GoldToken inherited slot 0 (Ownable._owner)
+    uint256 s2; // GoldToken inherited slot 1 (Initializable + UsingRegistry)
     uint256 private _totalSupply;
     mapping(address => mapping(address => uint256)) private _allowances;
     mapping(address => int256) private _balanceDeltas;

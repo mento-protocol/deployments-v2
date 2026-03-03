@@ -26,6 +26,7 @@ import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 import { CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
 import { MockCELO } from "../../helpers/MockCELO.sol";
+import {OracleHelper} from "../../helpers/OracleHelper.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Deployer for Senders.Sender;
@@ -33,6 +34,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     using Senders for Senders.Sender;
 
     Senders.Sender deployer;
+    Senders.Sender migrationOwner;
     IMentoConfig.CDPMigrationConfig cfg;
     IAddressesRegistry registry;
     address owner;
@@ -51,12 +53,12 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
         vm.etch(lookup("CELO"), type(MockCELO).runtimeCode);
         vm.makePersistent(lookup("CELO"));
 
-        console.log("MockHash: ", uint256(keccak256(type(MockCELO).runtimeCode)));
-        console.log("CeloCodeHash: ", uint256(keccak256(lookup("CELO").code)));
+        OracleHelper.refreshOracleRatesIfFork(lookupProxyOrFail("SortedOracles"), Config.get());
 
         cfg = Config.get().getCDPMigrationConfig(vm.envString("token"));
         deployer = sender("deployer");
-        owner = sender("migrationOwner").account;
+        migrationOwner = sender("migrationOwner");
+        owner = migrationOwner.account;
 
         registry = IAddressesRegistry(lookupOrFail(string.concat("AddressesRegistry:v3.0.0-", vm.envString("token"))));
         // 1. Setup — look up core addresses
@@ -83,7 +85,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     function _destroyV2Exchange() internal {
         address biPoolManagerAddy = lookupOrFail("Proxy:BiPoolManager");
         IBiPoolManager biPoolManagerRead = IBiPoolManager(biPoolManagerAddy);
-        IBiPoolManager biPoolManager = IBiPoolManager(deployer.harness(biPoolManagerAddy));
+        IBiPoolManager biPoolManager = IBiPoolManager(migrationOwner.harness(biPoolManagerAddy));
 
         IExchangeProvider.Exchange[] memory exchanges = biPoolManagerRead.getExchanges();
 
@@ -104,24 +106,24 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     function _updateDebtTokenRoles() internal {
         // Remove broker permissions on debt token
         address broker = lookupOrFail("Proxy:Broker");
-        IStableTokenV3(deployer.harness(debtToken)).setMinter(broker, false);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(broker, false);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setMinter(broker, false);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(broker, false);
 
         // Grant Liquity contracts permissions on debt token
-        IStableTokenV3(deployer.harness(debtToken)).setMinter(address(registry.borrowerOperations()), true);
-        IStableTokenV3(deployer.harness(debtToken)).setMinter(address(registry.activePool()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setMinter(address(registry.borrowerOperations()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setMinter(address(registry.activePool()), true);
 
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(address(registry.collateralRegistry()), true);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(address(registry.borrowerOperations()), true);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(address(registry.troveManager()), true);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(address(registry.stabilityPool()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(address(registry.collateralRegistry()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(address(registry.borrowerOperations()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(address(registry.troveManager()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(address(registry.stabilityPool()), true);
 
-        IStableTokenV3(deployer.harness(debtToken)).setOperator(address(registry.stabilityPool()), true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setOperator(address(registry.stabilityPool()), true);
     }
 
     function _enableCDPLiquidityStrategy() internal {
         // Enable CDP strategy on FPMM and add pool config
-        IFPMM(deployer.harness(fpmm)).setLiquidityStrategy(cdpLiquidityStrategy, true);
+        IFPMM(migrationOwner.harness(fpmm)).setLiquidityStrategy(cdpLiquidityStrategy, true);
 
         ILiquidityStrategy.AddPoolParams memory params = ILiquidityStrategy.AddPoolParams({
             pool: fpmm,
@@ -141,12 +143,12 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
             maxIterations: cfg.maxIterations
         });
 
-        ICDPLiquidityStrategy(deployer.harness(cdpLiquidityStrategy)).addPool(params, cdpConfig);
+        ICDPLiquidityStrategy(migrationOwner.harness(cdpLiquidityStrategy)).addPool(params, cdpConfig);
     }
 
     function _setRateFeedID() internal {
         address priceFeed = address(registry.priceFeed());
-        FXPriceFeed(deployer.harness(priceFeed)).setRateFeedID(cfg.rateFeedID);
+        FXPriceFeed(migrationOwner.harness(priceFeed)).setRateFeedID(cfg.rateFeedID);
     }
 
     function _deployReserveTroveFactory() internal {
@@ -160,24 +162,23 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
 
     function _createReserveTrove() internal {
         // Grant factory temporary permissions
-        IStableTokenV3(deployer.harness(collateralToken)).setMinter(factory, true);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(factory, true);
+        IStableTokenV3(migrationOwner.harness(collateralToken)).setMinter(factory, true);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(factory, true);
 
         // Fund factory with gas token for ETH_GAS_COMPENSATION
         uint256 gasCompensation = registry.stabilityPool().systemParams().ETH_GAS_COMPENSATION();
-        console.log("CeloCodeHash: ", uint256(keccak256(address(registry.gasToken()).code)));
-        IERC20(deployer.harness(address(registry.gasToken()))).transfer(factory, gasCompensation);
+        IERC20(migrationOwner.harness(address(registry.gasToken()))).transfer(factory, gasCompensation);
 
         // Create reserve trove
-        troveId = ReserveTroveFactory(payable(deployer.harness(factory))).createReserveTrove(
+        troveId = ReserveTroveFactory(payable(migrationOwner.harness(factory))).createReserveTrove(
             registry,
             cfg.collateralizationRatio,
             cfg.interestRate
         );
 
         // Cleanup — remove temporary permissions
-        IStableTokenV3(deployer.harness(collateralToken)).setMinter(factory, false);
-        IStableTokenV3(deployer.harness(debtToken)).setBurner(factory, false);
+        IStableTokenV3(migrationOwner.harness(collateralToken)).setMinter(factory, false);
+        IStableTokenV3(migrationOwner.harness(debtToken)).setBurner(factory, false);
     }
 
     function _postChecks() internal view {

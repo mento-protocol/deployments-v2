@@ -13,7 +13,7 @@ private_key = "${DEPLOYER_PRIVATE_KEY}"
 type = "private_key"
 private_key = "${REPORTER_PRIVATE_KEY}"
 
-[accounts.dev-safe]
+[accounts.deployer-safe]
 type = "safe"
 safe = "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F"
 signer = "dev-pk"
@@ -36,8 +36,10 @@ safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "dev-pk"
 
 [namespace.mainnet.senders]
-deployer = "dev-safe"
+signer = "dev-pk"
+deployer = "deployer-safe"
 governor = "mento-gov-celo"
+migrationOwner = "migration-safe"
 
 [namespace.testnet-v2-rc5.senders]
 deployer = "dev-pk"

@@ -19,6 +19,7 @@ import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {ISortedOracles} from "mento-core/interfaces/ISortedOracles.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
+import {OracleHelper} from "script/helpers/OracleHelper.sol";
 
 import {MockCELO} from "script/helpers/MockCELO.sol";
 
@@ -92,8 +93,6 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         vm.selectFork(forkId);
         vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
 
-        address celo = lookupOrFail("CELO");
-
         // Resolve key V3 addresses from registry
         fpmmFactory = lookupProxyOrFail("FPMMFactory");
         oracleAdapter = lookupProxyOrFail("OracleAdapter");
@@ -106,12 +105,15 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         sortedOracles = lookupProxyOrFail("SortedOracles");
         proxyAdmin = lookupOrFail("ProxyAdmin");
-        // marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
-        marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+        if (block.chainid == 42220) {
+            marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        } else {
+            marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+        }
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
 
-        _refreshOracleRates();
+        OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
     // ========== Registry Lookup Helpers ==========
@@ -242,23 +244,9 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
 
     // ========== Oracle Refresh Helpers ==========
 
-    /// @dev Re-reports current oracle rates for all deployed FPMM pools so that
-    ///      rates remain fresh after time jumps (vm.warp / skip).
+    /// @dev Re-reports current oracle rates so they remain fresh after time jumps.
     function _refreshOracleRates() internal {
-        ISortedOracles so = ISortedOracles(sortedOracles);
-        IMentoConfig.RateFeed[] memory rateFeeds = config.getRateFeeds();
-
-        for (uint256 i = 0; i < rateFeeds.length; i++) {
-            address rateFeedID = rateFeeds[i].rateFeedId;
-            (uint256 rate, ) = so.medianRate(rateFeedID);
-            if (rate == 0) continue;
-
-            address[] memory oracles = so.getOracles(rateFeedID);
-            if (oracles.length == 0) continue;
-
-            vm.prank(oracles[0]);
-            so.report(rateFeedID, rate, address(0), address(0));
-        }
+        OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
     // ========== Internal ==========
