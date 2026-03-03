@@ -36,7 +36,11 @@
     "ProtocolFeeRecipient": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
     "CELO": "0x471ece3750da237f93b8e339c536989b8978a438",
     "FxPriceFeedManager": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
-    "YieldSplitAddress": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a"
+    "YieldSplitAddress": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
+    "TransparentUpgradeableProxy:MentoGovernor": "0x47036d78bB3169b4F5560dD77BF93f4412A59852",
+    "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x247cb6ecf21bdd2bc29d726cccc8d2f066211663",
+    "TransparentUpgradeableProxy:TimelockController": "0x890DB8A597940165901372Dd7DB61C9f246e2147",
+    "TransparentUpgradeableProxy:Locking": "0x001Bb66636dCd149A1A2bA8C50E408BdDd80279C"
   },
   "143": {
     "StableTokenSpokeUSD": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
