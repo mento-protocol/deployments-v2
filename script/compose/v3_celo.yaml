@@ -1,14 +1,42 @@
-
-group: Mento V3 PreStage
+group: Mento V3 (Celo 03/03)
 components:
   DeployV3PreStage:
     script: DeployV3PreStage
   ConfigureV3PreStage:
     script: ConfigureV3PreStage
-    deps:
-      - DeployV3PreStage
+    deps: [ 'DeployV3PreStage' ]
+  UpgradeStableTokenV3_USDm:
+    script: UpgradeStableTokenV3
+    deps: [ 'ConfigureV3PreStage' ]
+    env:
+      TOKEN_SYMBOL: USDm
+  UpgradeStableTokenV3_GBPm:
+    script: UpgradeStableTokenV3
+    deps: [ 'ConfigureV3PreStage' ]
+    env:
+      TOKEN_SYMBOL: GBPm
+  UpgradeStableTokenV3_EURm:
+    script: UpgradeStableTokenV3
+    deps: [ 'ConfigureV3PreStage' ]
+    env:
+      TOKEN_SYMBOL: EURm
+  CreateFPMM:
+    script: CreateFPMM
+    deps: [ 'UpgradeStableTokenV3_USDm', 'UpgradeStableTokenV3_GBPm', 'UpgradeStableTokenV3_EURm' ]
   DeployVirtualPools:
     script: DeployVirtualPools
-    deps:
-      - ConfigureV3PreStage
+    deps: [ 'SetupLocalFork'] 
+  DeployCDPLiquidityStrategy:
+    script: DeployCDPLiquidityStrategy
+    deps: [ 'CreateFPMM'] 
+  DeployLiquityV2:
+    script: DeployLiquityV2
+    env:
+      token: GBPm
+    deps: ['DeployCDPLiquidityStrategy']
+  MigrateStableToCDP:
+    script: MigrateStableToCDP
+    env:
+      token: GBPm
+    deps: ['DeployLiquityV2']
 
