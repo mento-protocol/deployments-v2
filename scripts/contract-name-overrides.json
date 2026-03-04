@@ -1,0 +1,17 @@
+{
+  "Proxy:cUSD": "USDm",
+  "Proxy:cEUR": "EURm",
+  "Proxy:cREAL": "BRLm",
+  "Proxy:cGBP": "GBPm",
+  "Proxy:cAUD": "AUDm",
+  "Proxy:cCAD": "CADm",
+  "Proxy:cCHF": "CHFm",
+  "Proxy:cCOP": "COPm",
+  "Proxy:cGHS": "GHSm",
+  "Proxy:cJPY": "JPYm",
+  "Proxy:cKES": "KESm",
+  "Proxy:cNGN": "NGNm",
+  "Proxy:cZAR": "ZARm",
+  "Proxy:eXOF": "XOFm",
+  "Proxy:PUSO": "PHPm"
+}
