@@ -21,6 +21,7 @@ interface IMentoConfig {
     }
 
     struct MockAggregatorConfig {
+        string label;
         string description;
         uint8 decimals;
         int256 initialReport;
@@ -92,6 +93,61 @@ interface IMentoConfig {
         uint256 reportExpirySeconds;
     }
 
+    struct ReserveLiquidityStrategyPoolConfig {
+        address reserveLiquidityStrategy;
+        address debtToken;
+        uint32 cooldown;
+        address protocolFeeRecipient;
+        uint64 liquiditySourceIncentiveExpansion;
+        uint64 protocolIncentiveExpansion;
+        uint64 liquiditySourceIncentiveContraction;
+        uint64 protocolIncentiveContraction;
+    }
+
+    struct TokenLimits {
+        uint256 limit0;
+        uint256 limit1;
+    }
+
+    struct FPMMTradingLimitsConfig {
+        uint256 token0Limit0;
+        uint256 token0Limit1;
+        uint256 token1Limit0;
+        uint256 token1Limit1;
+    }
+
+    struct FPMMConfig {
+        address fpmmImplementation;
+        address oracleAdapter;
+        address proxyAdmin;
+        address token0;
+        address token1;
+        address referenceRateFeedID;
+        bool invertRateFeed;
+        IFPMM.FPMMParams params;
+        FPMMTradingLimitsConfig tradingLimits;
+        ReserveLiquidityStrategyPoolConfig rlsConfig;
+    }
+
+    struct CDPMigrationConfig {
+        // ── ReserveTroveFactory ──────────────────────────────────────────
+        uint256 collateralizationRatio; // 18 decimals, e.g. 1.5e18 = 150%
+        uint256 interestRate; // 18 decimals, annual
+        // ── CDPConfig ────────────────────────────────────────────────────
+        uint16 stabilityPoolPercentage; // bps
+        uint16 maxIterations;
+        // ── AddPoolParams ────────────────────────────────────────────────
+        uint32 cooldown; // rebalance cooldown in seconds
+        uint64 liquiditySourceIncentiveExpansion;
+        uint64 protocolIncentiveExpansion;
+        uint64 liquiditySourceIncentiveContraction;
+        uint64 protocolIncentiveContraction;
+        // ── FXPriceFeed ──────────────────────────────────────────────────
+        address rateFeedID;
+    }
+
+    function getCDPMigrationConfig(string calldata token) external view returns (CDPMigrationConfig memory);
+
     function getTokenConfigs() external view returns (TokenConfig[] memory);
 
     function getRateFeedIds() external view returns (address[] memory);
@@ -105,6 +161,8 @@ interface IMentoConfig {
     ) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
+
+    function getReserveV2CollateralAssets() external view returns (address[] memory);
 
     function getChainlinkRelayerConfigs()
         external
@@ -133,6 +191,8 @@ interface IMentoConfig {
 
     function getReserveConfig() external view returns (ReserveConfig memory);
 
+    function getFPMMConfigs() external view returns (FPMMConfig[] memory);
+
     function getDefaultFPMMParams()
         external
         view
@@ -147,10 +207,6 @@ interface IMentoConfig {
         external
         view
         returns (uint256);
-
-    function getDeployedContract(
-        string memory name
-    ) external view returns (address);
 
     function mockAggregatorReporter() external view returns (address);
 

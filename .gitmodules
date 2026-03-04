@@ -19,3 +19,6 @@
 [submodule "lib/mento-stabletoken-ntt"]
 	path = lib/mento-stabletoken-ntt
 	url = https://github.com/mento-protocol/mento-stabletoken-ntt
+[submodule "lib/bold"]
+	path = lib/bold
+	url = https://github.com/mento-protocol/bold

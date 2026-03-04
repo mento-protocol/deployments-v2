@@ -1,0 +1,22 @@
+group: Mento V3 (Celo Sepolia 02/03)
+components:
+  CreateFPMM:
+    script: CreateFPMM
+  DeployVirtualPools:
+    script: DeployVirtualPools
+  DeployCDPLiquidityStrategy:
+    script: DeployCDPLiquidityStrategy
+    deps: [ 'CreateFPMM'] 
+  DeployLiquityV2:
+    script: DeployLiquityV2
+    env:
+      token: GBPm
+    deps: ['DeployCDPLiquidityStrategy']
+  MigrateStableToCDP:
+    script: MigrateStableToCDP
+    env:
+      token: GBPm
+    deps: ['DeployLiquityV2']
+
+
+

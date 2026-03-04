@@ -79,10 +79,7 @@ contract DeployV3PreStage is
             .setLabel(label)
             .deploy(abi.encode(true));
 
-        marketHoursBreaker = deployer
-            .create3("MarketHoursBreaker")
-            .setLabel(label)
-            .deploy();
+        marketHoursBreaker = _deployMarketHoursBreaker(deployer);
 
         oracleAdapterImpl = deployer
             .create3("OracleAdapter")
@@ -104,6 +101,11 @@ contract DeployV3PreStage is
         );
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
+        require(params.lpFee > 0 || params.protocolFee > 0, "fees not set for default FPMM params");
+        require(params.protocolFeeRecipient != address(0), "protocolFeeRecipient not set for default FPMM params");
+        require(params.rebalanceIncentive > 0, "rebalanceIncentive not set for default FPMM params");
+        require(params.rebalanceThresholdAbove > 0, "rebalanceThresholdAbove not set for default FPMM params");
+        require(params.rebalanceThresholdBelow > 0, "rebalanceThresholdBelow not set for default FPMM params");
         params.feeSetter = feeSetter;
         params.protocolFeeRecipient = protocolFeeRecipient;
 
@@ -182,7 +184,7 @@ contract DeployV3PreStage is
 
         reserveLiquidityStrategyImpl = deployer
             .create3("ReserveLiquidityStrategy")
-            .setLabel(label)
+            .setLabel("v3.0.1") // Hardcoded for consistency with seploia when running this on mainnet
             .deploy(abi.encode(true));
 
         reserveLiquidityStrategy = deployProxy(
@@ -351,5 +353,19 @@ contract DeployV3PreStage is
             address(reserveLiquidityStrategyContract.reserve()) == reserveV2,
             "ReserveLiquidityStrategy.reserve does not equal to Reserve proxy address"
         );
+    }
+
+    function _deployMarketHoursBreaker(Senders.Sender storage deployer) internal returns (address) {
+        bool toggleable = vm.envOr("MARKET_HOURS_BREAKER_TOGGLEABLE", false);
+        if (toggleable) {
+            return deployer
+                .create3("MarketHoursBreakerToggleable")
+                .setLabel(label)
+                .deploy(abi.encode(deployer.account));
+        }
+        return deployer
+            .create3("MarketHoursBreaker")
+            .setLabel(label)
+            .deploy();
     }
 }

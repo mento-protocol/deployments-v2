@@ -26,7 +26,7 @@ contract DeployMockAggregators is TrebScript {
         for (uint i = 0; i < aggConfigs.length; i++) {
             address aggAddy = deployer
                 .create3("MockChainlinkAggregator")
-                .setLabel(aggConfigs[i].description)
+                .setLabel(aggConfigs[i].label)
                 .deploy(
                     abi.encode(
                         aggConfigs[i].description,

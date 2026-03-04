@@ -5,31 +5,50 @@ import {console} from "forge-std/console.sol";
 import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
+import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
 
 contract MentoConfig_monad is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
 
     function _initialize() internal virtual override {
-        _initTokens();
+        _initStables();
+        _initCollateral();
+        _initFPMMs();
         _initOracles();
-        _initParams();
-        _initDeployedContracts();
     }
 
     /// ===================================================================
-    /// TOKENS
+    /// STABLE TOKENS
     /// ===================================================================
-    /// @notice Register all stable tokens and collaterals in the system
-    /// @dev On testnets we can use the _addMockCollateral to make it deploy mock
-    /// collateral tokens.
-    function _initTokens() internal {
+    function _initStables() internal {
         _addStableToken("USD", "USDm", "Mento Dollar");
         _addStableToken("EUR", "EURm", "Mento Euro");
         _addStableToken("GBP", "GBPm", "Mento British Pound");
+    }
 
+    /// ===================================================================
+    /// COLLATERAL
+    /// ===================================================================
+    function _initCollateral() internal virtual {
         _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603);
         _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a);
+    }
+
+    /// ===================================================================
+    /// FPMMs
+    /// ===================================================================
+    function _initFPMMs() internal {
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
+        // TODO: Add FPMM configs
     }
 
     /// ===================================================================
@@ -93,17 +112,6 @@ contract MentoConfig_monad is MentoConfig {
         });
     }
 
-    /// ===================================================================
-    /// PARAMS
-    /// ===================================================================
-    /// @notice Configure protocol parameters
-    /// @dev On testnets we can use _addMockAggregator to define chainlink
-    /// aggregators.
-    function _initParams() internal {
-        _setDefaultFPMMParams(30, 5, 50, 500, 500);
-        _setRedemptionShortfallTolerance(10e12);
-    }
-
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
     function _configureDefaultFxRateFeed(
@@ -111,7 +119,7 @@ contract MentoConfig_monad is MentoConfig {
         address source
     ) internal {
         _addRateFeed(rateFeed);
-        _fxRateFeedIds.push(getRateFeedIdFromString(rateFeed));
+        _fxRateFeedIds.push(_getRateFeedId(rateFeed));
         _addToBreaker({
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
@@ -126,11 +134,5 @@ contract MentoConfig_monad is MentoConfig {
             aggregator0: source,
             invert0: false
         });
-    }
-
-    function _initDeployedContracts() internal {
-        _addDeployedContract("SortedOracles", lookupProxy("SortedOracles"));
-        _addDeployedContract("BreakerBox", lookup("BreakerBox:v2.6.5"));
-        _addDeployedContract("ProxyAdmin", lookup("ProxyAdmin"));
     }
 }

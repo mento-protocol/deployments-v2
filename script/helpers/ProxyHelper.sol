@@ -6,6 +6,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
+import {ProxyViewHelper} from "./ProxyViewHelper.sol";
 
 enum ProxyType {
     CELO, // Celo Legacy Proxy
@@ -28,7 +29,7 @@ interface ILegacyProxy {
     function _transferOwnership(address newOwner) external;
 }
 
-contract ProxyHelper is TrebScript {
+contract ProxyHelper is TrebScript, ProxyViewHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -284,22 +285,6 @@ contract ProxyHelper is TrebScript {
         );
     }
 
-    function getProxyAdmin(
-        address proxy
-    ) internal view returns (address proxyAdmin) {
-        return
-            address(
-                uint160(
-                    uint256(
-                        vm.load(
-                            proxy,
-                            0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103
-                        )
-                    )
-                )
-            );
-    }
-
     function getOZTUPProxyImplementation(
         address proxy
     ) internal view returns (address implementation) {
@@ -323,20 +308,6 @@ contract ProxyHelper is TrebScript {
                 proxyAdmin.toHexString()
             )
         );
-    }
-
-    function getProxyImplementation(
-        address proxy
-    ) internal view returns (address) {
-        try ICeloProxy(proxy)._getImplementation() returns (address impl) {
-            if (impl != address(0)) {
-                return impl;
-            }
-        } catch {}
-
-        // Fall back to EIP-1967 implementation slot (OZTUP)
-        bytes32 implSlot = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
-        return address(uint160(uint256(vm.load(proxy, implSlot))));
     }
 
     function verifyProxyImpl(

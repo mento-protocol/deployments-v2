@@ -1,18 +1,43 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
-import {ProxyHelper} from "../helpers/ProxyHelper.sol";
-import {IMentoConfig, BreakerType, IBiPoolManager, ITradingLimits, IPricingModule, FixidityLib} from "./IMentoConfig.sol";
+import {ProxyHelper} from "../../helpers/ProxyHelper.sol";
+import {IMentoConfig, BreakerType, IBiPoolManager, ITradingLimits, IPricingModule, FixidityLib} from "../IMentoConfig.sol";
 import {AggregatorV3Interface} from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
 
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
+
+struct CoreAggregators {
+    address celoUsd;
+    address ethUsd;
+    address usdcUsd;
+    address usdtUsd;
+    address eurcUsd;
+}
+
+struct FxAggregators {
+    address eur;
+    address brl;
+    address xof;
+    address kes;
+    address php;
+    address cop;
+    address ghs;
+    address gbp;
+    address zar;
+    address cad;
+    address aud;
+    address chf;
+    address jpy;
+    address ngn;
+}
 
 abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     using Deployer for Senders.Sender;
@@ -33,19 +58,27 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     string[] internal _mockCollateralAssets;
     RateFeed[] internal _rateFeeds;
     address[] internal _collateralAssets;
+    address[] internal _reserveV2CollateralAssets;
     address[] internal _fxRateFeedIds;
     address[] internal _chainlinkRelayerRateFeedIds;
     MockAggregatorConfig[] internal _mockAggregatorConfigs;
 
     mapping(address rateFeedId => address[] dependencies) _rateFeedDependencies;
     mapping(address rateFeedId => bool) internal _isRateFeed;
+    mapping(string rateFeedName => address rateFeedId) internal _rateFeedIdByName;
     mapping(address rateFeedId => ChainlinkRelayerConfig)
         internal _chainlinkRelayers;
     mapping(string symbol => address) internal _collateral;
     mapping(string symbol => bool) internal _isStableToken;
+    mapping(address token => bool) internal _isAddressStableToken;
+    mapping(address token => bool) internal _isAddressCollateralToken;
     mapping(bytes32 breakerId => BreakerConfig) _breakers;
-    mapping(string => address) _deployedContract;
     bytes32[] _breakerIds;
+
+    mapping(string symbol => uint8) internal _tokenDecimals;
+    mapping(address collateral => uint256) internal _collateralSpendingRatio;
+
+    FPMMConfig[] internal _fpmmConfigs;
 
     IFPMM.FPMMParams internal _defaultFPMMParams;
     /// @dev pairKey is for example "USDC/USDm" and it will be duplicated as "USDm/USDC"
@@ -54,6 +87,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     uint256 public baseFork;
     uint256 public mockAggregatorSourceFork;
+
+    mapping(string token => CDPMigrationConfig) _cdpMigrationConfig;
 
     // ========== Constructor ==========
 
@@ -69,12 +104,20 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     // ========== View Functions ==========
 
+    function getCDPMigrationConfig(string calldata token) external view returns (CDPMigrationConfig memory config) {
+        return _cdpMigrationConfig[token];
+    }
+
     function getTokenConfigs() external view returns (TokenConfig[] memory) {
         return _tokens;
     }
 
     function getCollateralAssets() external view returns (address[] memory) {
         return _collateralAssets;
+    }
+
+    function getReserveV2CollateralAssets() external view returns (address[] memory) {
+        return _reserveV2CollateralAssets;
     }
 
     function getOracleConfig() external view returns (OracleConfig memory) {
@@ -108,7 +151,13 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function getReserveConfig() external view returns (ReserveConfig memory) {
-        return _reserveConfig;
+        ReserveConfig memory cfg = _reserveConfig;
+        uint256[] memory ratios = new uint256[](_collateralAssets.length);
+        for (uint i = 0; i < _collateralAssets.length; i++) {
+            ratios[i] = _collateralSpendingRatio[_collateralAssets[i]];
+        }
+        cfg.collateralAssetDailySpendingRatios = ratios;
+        return cfg;
     }
 
     function getMockAggregatorConfigs()
@@ -202,6 +251,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             string.concat("Token not registered for: ", currency)
         );
         return getAddress(symbol);
+    }
+
+    function getFPMMConfigs()
+        external
+        view
+        returns (FPMMConfig[] memory)
+    {
+        return _fpmmConfigs;
     }
 
     /// @dev Get default FPMM Params
@@ -315,17 +372,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    function getDeployedContract(
-        string memory name
-    ) public view returns (address contractAddress) {
-        contractAddress = _deployedContract[name];
-        if (contractAddress == address(0)) {
-            revert(
-                string.concat("Could not find deployed contract named ", name)
-            );
-        }
-    }
-
     // ========== Internal Helper Functions ==========
 
     function _addStableToken(
@@ -334,32 +380,46 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory name
     ) internal {
         _isStableToken[symbol] = true;
+        _isAddressStableToken[_lookupTokenAddress(symbol)] = true;
         _symbolForCurrency[currency] = symbol;
+        _tokenDecimals[symbol] = 18;
         _tokens.push(
             TokenConfig({symbol: symbol, name: name, currency: currency})
         );
     }
 
     function _addCollateral(string memory symbol, address addy) internal {
+        _isAddressCollateralToken[addy] = true;
         _collateralAssets.push(addy);
         _collateral[symbol] = addy;
     }
 
-    function _addMockCollateral(string memory symbol) internal {
-        address addy = _predict("MockERC20", symbol);
-        _collateralAssets.push(addy);
-        _mockCollateralAssets.push(symbol);
-        _collateral[symbol] = addy;
+    function _addReserveV2Collateral(string memory symbol) internal {
+        address addy = _collateral[symbol];
+        require(addy != address(0), string.concat("Collateral not found: ", symbol));
+        _reserveV2CollateralAssets.push(addy);
+    }
+
+    function _setCollateralSpendingLimit(string memory symbol, uint256 limit) internal {
+        address addy = _collateral[symbol];
+        require(addy != address(0), string.concat("Collateral not found: ", symbol));
+        _collateralSpendingRatio[addy] = limit;
     }
 
     function _addRateFeed(string memory rateFeed) internal {
-        _isRateFeed[getRateFeedIdFromString(rateFeed)] = true;
-        _rateFeeds.push(
-            RateFeed({
-                rateFeed: rateFeed,
-                rateFeedId: getRateFeedIdFromString(rateFeed)
-            })
-        );
+        _addRateFeed(rateFeed, getRateFeedIdFromString(rateFeed));
+    }
+
+    function _addRateFeed(string memory rateFeed, address rateFeedId) internal {
+        _isRateFeed[rateFeedId] = true;
+        _rateFeedIdByName[rateFeed] = rateFeedId;
+        _rateFeeds.push(RateFeed({rateFeed: rateFeed, rateFeedId: rateFeedId}));
+    }
+
+    function _getRateFeedId(string memory rateFeed) internal view returns (address) {
+        address id = _rateFeedIdByName[rateFeed];
+        require(id != address(0), string.concat(rateFeed, " is not registered as a rate feed."));
+        return id;
     }
 
     function _addRateFeedDependency(
@@ -373,43 +433,22 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         address rateFeedId,
         string memory dependency
     ) internal {
-        address depId = getRateFeedIdFromString(dependency);
-        require(
-            _isRateFeed[depId],
-            string.concat(dependency, " is not registered as a rate feed.")
-        );
-
+        address depId = _getRateFeedId(dependency);
         _addRateFeedDependency(rateFeedId, depId);
-
-        _rateFeedDependencies[rateFeedId].push(depId);
     }
 
     function _addRateFeedDependency(
         string memory rateFeed,
         string memory dependency
     ) internal {
-        address rateFeedId = getRateFeedIdFromString(rateFeed);
-        address depId = getRateFeedIdFromString(dependency);
-        require(
-            _isRateFeed[rateFeedId],
-            string.concat(rateFeed, " is not registered as a rate feed.")
-        );
-        require(
-            _isRateFeed[depId],
-            string.concat(dependency, " is not registered as a rate feed.")
-        );
-
-        _addRateFeedDependency(rateFeedId, depId);
+        _addRateFeedDependency(_getRateFeedId(rateFeed), _getRateFeedId(dependency));
     }
 
     function _addRateFeed(
         string memory rateFeed,
         string[] memory dependencies
     ) internal {
-        address rateFeedId = getRateFeedIdFromString(rateFeed);
-        _isRateFeed[rateFeedId] = true;
-        _rateFeeds.push(RateFeed({rateFeed: rateFeed, rateFeedId: rateFeedId}));
-
+        _addRateFeed(rateFeed);
         for (uint i = 0; i < dependencies.length; i++) {
             _addRateFeedDependency(rateFeed, dependencies[i]);
         }
@@ -465,11 +504,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         uint256 maxTimestampSpread,
         IChainlinkRelayer.ChainlinkAggregator[] memory aggregators
     ) internal {
-        address rateFeedId = getRateFeedIdFromString(rateFeed);
-        require(
-            _isRateFeed[rateFeedId],
-            string.concat(rateFeed, " is not a registered rate feed")
-        );
+        address rateFeedId = _getRateFeedId(rateFeed);
         _chainlinkRelayerRateFeedIds.push(rateFeedId);
         ChainlinkRelayerConfig storage relayer = _chainlinkRelayers[rateFeedId];
         relayer.rateFeedId = rateFeedId;
@@ -490,17 +525,39 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     }
 
     function _addMockAggregator(
+        string memory label,
         string memory description,
         address source
     ) internal {
         _mockAggregatorConfigs.push(
             MockAggregatorConfig({
+                label: label,
                 description: description,
                 decimals: 0,
                 initialReport: 0,
                 source: source
             })
         );
+    }
+
+    /// @notice Register a mock aggregator and return its deterministic address.
+    /// @param label The CREATE3 deployment label (determines the address).
+    /// @param description The human-readable description stored on the mock aggregator.
+    /// @param source The source aggregator address to read from.
+    function _mockAggregator(string memory label, string memory description, address source) internal virtual returns (address) {
+        _addMockAggregator(label, description, source);
+        return _predict("MockChainlinkAggregator", label);
+    }
+
+    /// @notice Register a mock collateral and return its deterministic address.
+    function _registerMockCollateral(string memory symbol, uint8 decimals) internal returns (address) {
+        address addy = lookup(string.concat("MockERC20:", symbol));
+        if (addy == address(0)) {
+            addy = _predict("MockERC20", symbol);
+        }
+        _mockCollateralAssets.push(symbol);
+        _tokenDecimals[symbol] = decimals;
+        return addy;
     }
 
     function _addBreaker(
@@ -544,7 +601,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                 "MedianBreaker should have reference value"
             );
         }
-        breaker.rateFeedIds.push(getRateFeedIdFromString(rateFeed));
+        breaker.rateFeedIds.push(_getRateFeedId(rateFeed));
         breaker.cooldownTimes.push(cooldown);
         breaker.thresholds.push(threshold);
         breaker.smoothingFactors.push(smoothingFactor);
@@ -599,7 +656,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         }
         IBiPoolManager.PoolConfig memory poolConfig = IBiPoolManager.PoolConfig({
             spread: FixidityLib.wrap(spread),
-            referenceRateFeedID: getRateFeedIdFromString(rateFeed),
+            referenceRateFeedID: _getRateFeedId(rateFeed),
             referenceRateResetFrequency: resetFrequency,
             minimumReports: 1,
             stablePoolResetSize: stablePoolResetSize
@@ -621,64 +678,112 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         );
     }
 
-    /// @dev we don't set the protocol fee recipient or the fee setter because
-    ///      it will most likely need to be deployment-specific rather than
-    ///      network-specific
-    function _setDefaultFPMMParams(
-        uint256 lpFee,
-        uint256 protocolFee,
-        uint256 rebalanceIncentive,
-        uint256 rebalanceThresholdAbove,
-        uint256 rebalanceThresholdBelow
+    function _addFPMM(
+        string memory debt,
+        string memory collateral,
+        address rateFeed,
+        IFPMM.FPMMParams memory params,
+        TokenLimits memory debtLimits,
+        TokenLimits memory collateralLimits,
+        ReserveLiquidityStrategyPoolConfig memory rlsParams
     ) internal {
-        _defaultFPMMParams = IFPMM.FPMMParams(
-            lpFee,
-            protocolFee,
-            address(0),
-            address(0),
-            rebalanceIncentive,
-            rebalanceThresholdAbove,
-            rebalanceThresholdBelow
+        address debtAddress = _lookupTokenAddress(debt);
+        address collateralAddress = _lookupTokenAddress(collateral);
+
+        // Sort by address to determine token0/token1
+        bool debtIsToken0 = debtAddress < collateralAddress;
+        address token0Address = debtIsToken0 ? debtAddress : collateralAddress;
+        address token1Address = debtIsToken0 ? collateralAddress : debtAddress;
+
+        FPMMConfig memory c;
+        c.fpmmImplementation = lookup("FPMM:v3.0.0");
+        c.oracleAdapter = lookupProxy("OracleAdapter");
+        c.proxyAdmin = lookup("ProxyAdmin");
+        c.token0 = token0Address;
+        c.token1 = token1Address;
+        c.referenceRateFeedID = rateFeed;
+        c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
+        c.params = params;
+        c.tradingLimits = _buildFPMMTradingLimits(debt, collateral, debtIsToken0, debtLimits, collateralLimits);
+        c.rlsConfig = rlsParams;
+
+        _fpmmConfigs.push(c);
+    }
+
+    function _buildFPMMTradingLimits(
+        string memory debt,
+        string memory collateral,
+        bool debtIsToken0,
+        TokenLimits memory debtLimits,
+        TokenLimits memory collateralLimits
+    ) private view returns (FPMMTradingLimitsConfig memory) {
+        uint256 debtScale = 10 ** _getTokenDecimals(debt);
+        uint256 collateralScale = 10 ** _getTokenDecimals(collateral);
+
+        TokenLimits memory scaledDebt = TokenLimits(
+            debtLimits.limit0 * debtScale,
+            debtLimits.limit1 * debtScale
         );
-    }
-
-    function _addFPMMParams(
-        address token0,
-        address token1,
-        uint256 lpFee,
-        uint256 protocolFee,
-        address protocolFeeRecipient,
-        address feeSetter,
-        uint256 rebalanceIncentive,
-        uint256 rebalanceThresholdAbove,
-        uint256 rebalanceThresholdBelow
-    ) internal {
-        string memory symbol0 = IERC20Metadata(token0).symbol();
-        string memory symbol1 = IERC20Metadata(token1).symbol();
-        IFPMM.FPMMParams memory params = IFPMM.FPMMParams(
-            lpFee,
-            protocolFee,
-            protocolFeeRecipient,
-            feeSetter,
-            rebalanceIncentive,
-            rebalanceThresholdAbove,
-            rebalanceThresholdBelow
+        TokenLimits memory scaledCollateral = TokenLimits(
+            collateralLimits.limit0 * collateralScale,
+            collateralLimits.limit1 * collateralScale
         );
-        string memory poolKey01 = string.concat(symbol0, "/", symbol1);
-        string memory poolKey10 = string.concat(symbol1, "/", symbol0);
-        _fpmmParams[poolKey01] = params;
-        _fpmmParams[poolKey10] = params;
+
+        return FPMMTradingLimitsConfig({
+            token0Limit0: debtIsToken0 ? scaledDebt.limit0 : scaledCollateral.limit0,
+            token0Limit1: debtIsToken0 ? scaledDebt.limit1 : scaledCollateral.limit1,
+            token1Limit0: debtIsToken0 ? scaledCollateral.limit0 : scaledDebt.limit0,
+            token1Limit1: debtIsToken0 ? scaledCollateral.limit1 : scaledDebt.limit1
+        });
+    }
+    
+
+    function _getTokenDecimals(string memory symbol) internal view returns (uint8) {
+        uint8 cached = _tokenDecimals[symbol];
+        if (cached != 0) return cached;
+        return IERC20Metadata(_lookupTokenAddress(symbol)).decimals();
     }
 
-    function _addDeployedContract(
-        string memory name,
-        address contractAddress
-    ) internal {
-        _deployedContract[name] = contractAddress;
+    function _lookupTokenAddress(string memory symbol) internal view returns (address) {
+        bool isStable = _isStableToken[symbol];
+        bool isCollateral = isCollateralAsset(symbol);
+
+        require(!isStable || !isCollateral, "Token is both stable and collateral");
+        require(isStable || isCollateral, string.concat("Token not found: ", symbol));
+
+        if (isStable) {
+            return lookupProxyOrFail(symbol);
+        } else {
+            return _collateral[symbol];
+        }
     }
 
-    function _setRedemptionShortfallTolerance(uint256 tolerance) internal {
-        _redemptionShortfallTolerance = tolerance;
+    function _shouldInvertRateFeed(address token0, address token1) private view returns (bool) {
+        bool isFxPool = isStableToken(token0) && isStableToken(token1);
+
+        if (isFxPool) {
+            bool isToken0USDm = areStringsEqual(IERC20Metadata(token0).symbol(), "USDm");
+            return isToken0USDm ? true : false;
+        } else {
+            bool isToken0Collateral = isCollateralAsset(token0);
+            return isToken0Collateral ? false : true;
+        }
+    }
+
+    function isCollateralAsset(string memory symbol) internal view returns (bool) {
+        return _collateral[symbol] != address(0);
+    }
+
+    function isCollateralAsset(address token) internal view returns (bool) {
+        return _isAddressCollateralToken[token];
+    }
+
+    function isStableToken(address token) internal view returns (bool) {
+        return _isAddressStableToken[token];
+    }
+
+    function areStringsEqual(string memory a, string memory b) internal pure returns (bool) {
+        return keccak256(abi.encodePacked(a)) == keccak256(abi.encodePacked(b));
     }
 
     function _resolveExchangeAsset(
