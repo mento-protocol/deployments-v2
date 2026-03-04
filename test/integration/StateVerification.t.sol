@@ -251,6 +251,11 @@ contract StateVerification is V3IntegrationBase {
         assertEq(actual, marketHoursBreaker, "OracleAdapter.marketHoursBreaker() mismatch");
     }
 
+    function test_oracleAdapter_l2SequencerUptimeFeed() public view {
+        address actual = address(IOracleAdapter(oracleAdapter).l2SequencerUptimeFeed());
+        assertEq(actual, l2SequencerUptimeFeed, "OracleAdapter.l2SequencerUptimeFeed() mismatch");
+    }
+
     // ========== BreakerBox Configuration Tests (US-004) ==========
 
     function test_breakerBox_isBreaker_marketHoursBreaker() public view {
