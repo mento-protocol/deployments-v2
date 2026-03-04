@@ -10,40 +10,9 @@ import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
-
-// ── Wormhole NTT on-chain interfaces ────────────────────────────────────────
-
-/// @dev NTT Manager peer info returned by getPeer()
-struct NttManagerPeer {
-    bytes32 peerAddress;
-    uint8 tokenDecimals;
-}
-
-/// @dev Rate limit parameters returned by getInboundLimitParams() / getOutboundLimitParams()
-struct RateLimitParams {
-    uint72 limit; // TrimmedAmount (packed: amount << 8 | decimals)
-    uint72 currentCapacity; // TrimmedAmount
-    uint64 lastTxTimestamp;
-}
-
-interface INTTManager {
-    function setPeer(uint16 peerChainId, bytes32 peerContract, uint8 decimals, uint256 inboundLimit) external;
-    function getPeer(uint16 chainId) external view returns (NttManagerPeer memory);
-    function setInboundLimit(uint256 limit, uint16 chainId_) external;
-    function setOutboundLimit(uint256 limit) external;
-    function getOutboundLimitParams() external view returns (RateLimitParams memory);
-    function getInboundLimitParams(uint16 chainId_) external view returns (RateLimitParams memory);
-}
-
-interface ITransceiver {
-    function setWormholePeer(uint16 chainId, bytes32 peerContract) external payable;
-    function getWormholePeer(uint16 chainId) external view returns (bytes32);
-}
-
-interface IPausable {
-    function pauser() external view returns (address);
-    function transferPauserCapability(address newPauser) external;
-}
+import {INTTManager, NttManagerPeer, RateLimitParams} from "./interfaces/INTTManager.sol";
+import {ITransceiver} from "./interfaces/ITransceiver.sol";
+import {IPausable} from "./interfaces/IPausable.sol";
 
 // ── Script ──────────────────────────────────────────────────────────────────
 

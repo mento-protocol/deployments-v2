@@ -8,12 +8,7 @@ import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
-
-// ── Minimal interface for upgrade ─────────────────────────────────────────
-
-interface INttManagerUpgradeable {
-    function upgrade(address newImplementation) external;
-}
+import {INttManagerUpgradeable} from "./interfaces/INttManagerUpgradeable.sol";
 
 // ── Script ────────────────────────────────────────────────────────────────
 

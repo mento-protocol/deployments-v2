@@ -7,13 +7,7 @@ import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
-
-// ── Minimal interface for pauser capability ─────────────────────────────────
-
-interface IPausable {
-    function pauser() external view returns (address);
-    function transferPauserCapability(address newPauser) external;
-}
+import {IPausable} from "./interfaces/IPausable.sol";
 
 // ── Script ──────────────────────────────────────────────────────────────────
 

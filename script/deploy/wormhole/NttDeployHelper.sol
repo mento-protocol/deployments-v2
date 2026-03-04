@@ -7,11 +7,7 @@ import {
 } from "mento-stabletoken-ntt/src/Transceiver/WormholeTransceiver/WormholeTransceiver.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {ERC1967Proxy} from "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
-
-/// @dev Minimal interface for PausedOwnable.transferPauserCapability.
-interface IPausable {
-    function transferPauserCapability(address newPauser) external;
-}
+import {IPausable} from "script/actions/wormhole/interfaces/IPausable.sol";
 
 /// @title NttDeployHelper
 /// @notice Deployed via CREATE3 to bootstrap NttManager + WormholeTransceiver

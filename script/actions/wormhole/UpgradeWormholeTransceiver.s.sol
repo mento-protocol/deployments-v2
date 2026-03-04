@@ -7,12 +7,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
-
-// ── Minimal interface for upgrade ─────────────────────────────────────────
-
-interface ITransceiverUpgradeable {
-    function upgrade(address newImplementation) external;
-}
+import {ITransceiverUpgradeable} from "./interfaces/ITransceiverUpgradeable.sol";
 
 // ── Script ────────────────────────────────────────────────────────────────
 

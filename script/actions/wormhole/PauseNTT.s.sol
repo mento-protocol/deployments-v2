@@ -6,14 +6,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
-
-// ── Minimal interface for NttManager pause operations ────────────────────────
-
-interface INTTPausable {
-    function isPaused() external view returns (bool);
-    function pause() external;
-    function unpause() external;
-}
+import {INTTPausable} from "./interfaces/INTTPausable.sol";
 
 // ── Script ──────────────────────────────────────────────────────────────────
 

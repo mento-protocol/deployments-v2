@@ -6,22 +6,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
-
-// ── Wormhole NTT on-chain interfaces ────────────────────────────────────────
-
-/// @dev Rate limit parameters returned by getInboundLimitParams() / getOutboundLimitParams()
-struct RateLimitParams {
-    uint72 limit; // TrimmedAmount (packed: amount << 8 | decimals)
-    uint72 currentCapacity; // TrimmedAmount
-    uint64 lastTxTimestamp;
-}
-
-interface INTTManager {
-    function setInboundLimit(uint256 limit, uint16 chainId_) external;
-    function setOutboundLimit(uint256 limit) external;
-    function getOutboundLimitParams() external view returns (RateLimitParams memory);
-    function getInboundLimitParams(uint16 chainId_) external view returns (RateLimitParams memory);
-}
+import {INTTManager, RateLimitParams} from "./interfaces/INTTManager.sol";
 
 // ── Script ──────────────────────────────────────────────────────────────────
 
