@@ -75,6 +75,7 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal l2SequencerUptimeFeed;
     address internal broker;
     address internal reserveSafe;
+    address internal fxPriceFeedManager;
 
     function setUp() public virtual {
         // Fork chain
@@ -114,7 +115,7 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
-
+        fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
