@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "gen-addresses": "tsx scripts/gen-addresses.ts",
+    "contracts:update": "tsx scripts/gen-contracts-package.ts"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +13,9 @@
   "packageManager": "pnpm@10.18.1",
   "dependencies": {
     "@celo/contracts": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.3",
+    "tsx": "^4.19.3"
   }
 }

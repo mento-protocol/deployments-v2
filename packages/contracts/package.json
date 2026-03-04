@@ -1,0 +1,525 @@
+{
+  "name": "@mento-protocol/contracts",
+  "version": "0.1.0",
+  "description": "Mento protocol contract ABIs and addresses",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./contracts.json": "./contracts.json",
+    "./abis/*": "./abis/*",
+    "./GBPm": {
+      "types": "./dist/GBPm.d.ts",
+      "import": "./dist/GBPm.js"
+    },
+    "./USDm": {
+      "types": "./dist/USDm.d.ts",
+      "import": "./dist/USDm.js"
+    },
+    "./StableTokenSpoke": {
+      "types": "./dist/StableTokenSpoke.d.ts",
+      "import": "./dist/StableTokenSpoke.js"
+    },
+    "./BiPoolManager": {
+      "types": "./dist/BiPoolManager.d.ts",
+      "import": "./dist/BiPoolManager.js"
+    },
+    "./Broker": {
+      "types": "./dist/Broker.d.ts",
+      "import": "./dist/Broker.js"
+    },
+    "./PHPm": {
+      "types": "./dist/PHPm.d.ts",
+      "import": "./dist/PHPm.js"
+    },
+    "./Reserve": {
+      "types": "./dist/Reserve.d.ts",
+      "import": "./dist/Reserve.js"
+    },
+    "./SortedOracles": {
+      "types": "./dist/SortedOracles.d.ts",
+      "import": "./dist/SortedOracles.js"
+    },
+    "./AUDm": {
+      "types": "./dist/AUDm.d.ts",
+      "import": "./dist/AUDm.js"
+    },
+    "./CADm": {
+      "types": "./dist/CADm.d.ts",
+      "import": "./dist/CADm.js"
+    },
+    "./CHFm": {
+      "types": "./dist/CHFm.d.ts",
+      "import": "./dist/CHFm.js"
+    },
+    "./COPm": {
+      "types": "./dist/COPm.d.ts",
+      "import": "./dist/COPm.js"
+    },
+    "./EURm": {
+      "types": "./dist/EURm.d.ts",
+      "import": "./dist/EURm.js"
+    },
+    "./GHSm": {
+      "types": "./dist/GHSm.d.ts",
+      "import": "./dist/GHSm.js"
+    },
+    "./JPYm": {
+      "types": "./dist/JPYm.d.ts",
+      "import": "./dist/JPYm.js"
+    },
+    "./KESm": {
+      "types": "./dist/KESm.d.ts",
+      "import": "./dist/KESm.js"
+    },
+    "./NGNm": {
+      "types": "./dist/NGNm.d.ts",
+      "import": "./dist/NGNm.js"
+    },
+    "./BRLm": {
+      "types": "./dist/BRLm.d.ts",
+      "import": "./dist/BRLm.js"
+    },
+    "./ZARm": {
+      "types": "./dist/ZARm.d.ts",
+      "import": "./dist/ZARm.js"
+    },
+    "./XOFm": {
+      "types": "./dist/XOFm.d.ts",
+      "import": "./dist/XOFm.js"
+    },
+    "./CDPLiquidityStrategy": {
+      "types": "./dist/CDPLiquidityStrategy.d.ts",
+      "import": "./dist/CDPLiquidityStrategy.js"
+    },
+    "./ChainlinkRelayerFactory": {
+      "types": "./dist/ChainlinkRelayerFactory.d.ts",
+      "import": "./dist/ChainlinkRelayerFactory.js"
+    },
+    "./Emission": {
+      "types": "./dist/Emission.d.ts",
+      "import": "./dist/Emission.js"
+    },
+    "./FPMMFactory": {
+      "types": "./dist/FPMMFactory.d.ts",
+      "import": "./dist/FPMMFactory.js"
+    },
+    "./FactoryRegistry": {
+      "types": "./dist/FactoryRegistry.d.ts",
+      "import": "./dist/FactoryRegistry.js"
+    },
+    "./Locking": {
+      "types": "./dist/Locking.d.ts",
+      "import": "./dist/Locking.js"
+    },
+    "./MentoGovernor": {
+      "types": "./dist/MentoGovernor.d.ts",
+      "import": "./dist/MentoGovernor.js"
+    },
+    "./OracleAdapter": {
+      "types": "./dist/OracleAdapter.d.ts",
+      "import": "./dist/OracleAdapter.js"
+    },
+    "./ReserveLiquidityStrategy": {
+      "types": "./dist/ReserveLiquidityStrategy.d.ts",
+      "import": "./dist/ReserveLiquidityStrategy.js"
+    },
+    "./ReserveV2": {
+      "types": "./dist/ReserveV2.d.ts",
+      "import": "./dist/ReserveV2.js"
+    },
+    "./StabilityPoolGBPm": {
+      "types": "./dist/StabilityPoolGBPm.d.ts",
+      "import": "./dist/StabilityPoolGBPm.js"
+    },
+    "./SystemParamsProxyGBPm": {
+      "types": "./dist/SystemParamsProxyGBPm.d.ts",
+      "import": "./dist/SystemParamsProxyGBPm.js"
+    },
+    "./TimelockController": {
+      "types": "./dist/TimelockController.d.ts",
+      "import": "./dist/TimelockController.js"
+    },
+    "./ActivePool": {
+      "types": "./dist/ActivePool.d.ts",
+      "import": "./dist/ActivePool.js"
+    },
+    "./AddressSortedLinkedListWithMedian": {
+      "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
+      "import": "./dist/AddressSortedLinkedListWithMedian.js"
+    },
+    "./AddressesRegistry": {
+      "types": "./dist/AddressesRegistry.d.ts",
+      "import": "./dist/AddressesRegistry.js"
+    },
+    "./BorrowerOperations": {
+      "types": "./dist/BorrowerOperations.d.ts",
+      "import": "./dist/BorrowerOperations.js"
+    },
+    "./BreakerBox": {
+      "types": "./dist/BreakerBox.d.ts",
+      "import": "./dist/BreakerBox.js"
+    },
+    "./ChainlinkRelayerV1AUDUSD": {
+      "types": "./dist/ChainlinkRelayerV1AUDUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1AUDUSD.js"
+    },
+    "./ChainlinkRelayerV1BRLUSD": {
+      "types": "./dist/ChainlinkRelayerV1BRLUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1BRLUSD.js"
+    },
+    "./ChainlinkRelayerV1CADUSD": {
+      "types": "./dist/ChainlinkRelayerV1CADUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CADUSD.js"
+    },
+    "./ChainlinkRelayerV1CELOAUD": {
+      "types": "./dist/ChainlinkRelayerV1CELOAUD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOAUD.js"
+    },
+    "./ChainlinkRelayerV1CELOBRL": {
+      "types": "./dist/ChainlinkRelayerV1CELOBRL.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOBRL.js"
+    },
+    "./ChainlinkRelayerV1CELOCAD": {
+      "types": "./dist/ChainlinkRelayerV1CELOCAD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOCAD.js"
+    },
+    "./ChainlinkRelayerV1CELOCHF": {
+      "types": "./dist/ChainlinkRelayerV1CELOCHF.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOCHF.js"
+    },
+    "./ChainlinkRelayerV1CELOCOP": {
+      "types": "./dist/ChainlinkRelayerV1CELOCOP.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOCOP.js"
+    },
+    "./ChainlinkRelayerV1CELOETH": {
+      "types": "./dist/ChainlinkRelayerV1CELOETH.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOETH.js"
+    },
+    "./ChainlinkRelayerV1CELOEUR": {
+      "types": "./dist/ChainlinkRelayerV1CELOEUR.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOEUR.js"
+    },
+    "./ChainlinkRelayerV1CELOGBP": {
+      "types": "./dist/ChainlinkRelayerV1CELOGBP.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOGBP.js"
+    },
+    "./ChainlinkRelayerV1CELOGHS": {
+      "types": "./dist/ChainlinkRelayerV1CELOGHS.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOGHS.js"
+    },
+    "./ChainlinkRelayerV1CELOJPY": {
+      "types": "./dist/ChainlinkRelayerV1CELOJPY.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOJPY.js"
+    },
+    "./ChainlinkRelayerV1CELOKES": {
+      "types": "./dist/ChainlinkRelayerV1CELOKES.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOKES.js"
+    },
+    "./ChainlinkRelayerV1CELONGN": {
+      "types": "./dist/ChainlinkRelayerV1CELONGN.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELONGN.js"
+    },
+    "./ChainlinkRelayerV1CELOPHP": {
+      "types": "./dist/ChainlinkRelayerV1CELOPHP.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOPHP.js"
+    },
+    "./ChainlinkRelayerV1CELOUSD": {
+      "types": "./dist/ChainlinkRelayerV1CELOUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOUSD.js"
+    },
+    "./ChainlinkRelayerV1CELOXOF": {
+      "types": "./dist/ChainlinkRelayerV1CELOXOF.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOXOF.js"
+    },
+    "./ChainlinkRelayerV1CELOZAR": {
+      "types": "./dist/ChainlinkRelayerV1CELOZAR.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CELOZAR.js"
+    },
+    "./ChainlinkRelayerV1CHFUSD": {
+      "types": "./dist/ChainlinkRelayerV1CHFUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1CHFUSD.js"
+    },
+    "./ChainlinkRelayerV1COPUSD": {
+      "types": "./dist/ChainlinkRelayerV1COPUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1COPUSD.js"
+    },
+    "./ChainlinkRelayerV1EUROCEUR": {
+      "types": "./dist/ChainlinkRelayerV1EUROCEUR.d.ts",
+      "import": "./dist/ChainlinkRelayerV1EUROCEUR.js"
+    },
+    "./ChainlinkRelayerV1EURUSD": {
+      "types": "./dist/ChainlinkRelayerV1EURUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1EURUSD.js"
+    },
+    "./ChainlinkRelayerV1EURXOF": {
+      "types": "./dist/ChainlinkRelayerV1EURXOF.d.ts",
+      "import": "./dist/ChainlinkRelayerV1EURXOF.js"
+    },
+    "./ChainlinkRelayerV1GBPUSD": {
+      "types": "./dist/ChainlinkRelayerV1GBPUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1GBPUSD.js"
+    },
+    "./ChainlinkRelayerV1GHSUSD": {
+      "types": "./dist/ChainlinkRelayerV1GHSUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1GHSUSD.js"
+    },
+    "./ChainlinkRelayerV1JPYUSD": {
+      "types": "./dist/ChainlinkRelayerV1JPYUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1JPYUSD.js"
+    },
+    "./ChainlinkRelayerV1KESUSD": {
+      "types": "./dist/ChainlinkRelayerV1KESUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1KESUSD.js"
+    },
+    "./ChainlinkRelayerV1NGNUSD": {
+      "types": "./dist/ChainlinkRelayerV1NGNUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1NGNUSD.js"
+    },
+    "./ChainlinkRelayerV1PHPUSD": {
+      "types": "./dist/ChainlinkRelayerV1PHPUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1PHPUSD.js"
+    },
+    "./ChainlinkRelayerV1USDCUSD": {
+      "types": "./dist/ChainlinkRelayerV1USDCUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1USDCUSD.js"
+    },
+    "./ChainlinkRelayerV1USDTUSD": {
+      "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
+    },
+    "./ChainlinkRelayerV1XOFUSD": {
+      "types": "./dist/ChainlinkRelayerV1XOFUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1XOFUSD.js"
+    },
+    "./ChainlinkRelayerV1ZARUSD": {
+      "types": "./dist/ChainlinkRelayerV1ZARUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1ZARUSD.js"
+    },
+    "./CollSurplusPool": {
+      "types": "./dist/CollSurplusPool.d.ts",
+      "import": "./dist/CollSurplusPool.js"
+    },
+    "./CollateralRegistry": {
+      "types": "./dist/CollateralRegistry.d.ts",
+      "import": "./dist/CollateralRegistry.js"
+    },
+    "./ConstantProductPricingModule": {
+      "types": "./dist/ConstantProductPricingModule.d.ts",
+      "import": "./dist/ConstantProductPricingModule.js"
+    },
+    "./ConstantSumPricingModule": {
+      "types": "./dist/ConstantSumPricingModule.d.ts",
+      "import": "./dist/ConstantSumPricingModule.js"
+    },
+    "./DefaultPool": {
+      "types": "./dist/DefaultPool.d.ts",
+      "import": "./dist/DefaultPool.js"
+    },
+    "./FPMM": {
+      "types": "./dist/FPMM.d.ts",
+      "import": "./dist/FPMM.js"
+    },
+    "./GasPool": {
+      "types": "./dist/GasPool.d.ts",
+      "import": "./dist/GasPool.js"
+    },
+    "./HintHelpers": {
+      "types": "./dist/HintHelpers.d.ts",
+      "import": "./dist/HintHelpers.js"
+    },
+    "./MarketHoursBreaker": {
+      "types": "./dist/MarketHoursBreaker.d.ts",
+      "import": "./dist/MarketHoursBreaker.js"
+    },
+    "./MarketHoursBreakerToggleable": {
+      "types": "./dist/MarketHoursBreakerToggleable.d.ts",
+      "import": "./dist/MarketHoursBreakerToggleable.js"
+    },
+    "./MedianDeltaBreaker": {
+      "types": "./dist/MedianDeltaBreaker.d.ts",
+      "import": "./dist/MedianDeltaBreaker.js"
+    },
+    "./MentoRouter": {
+      "types": "./dist/MentoRouter.d.ts",
+      "import": "./dist/MentoRouter.js"
+    },
+    "./MentoToken": {
+      "types": "./dist/MentoToken.d.ts",
+      "import": "./dist/MentoToken.js"
+    },
+    "./MockChainlinkAggregatorAUDUSD": {
+      "types": "./dist/MockChainlinkAggregatorAUDUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorAUDUSD.js"
+    },
+    "./MockChainlinkAggregatorBRLUSD": {
+      "types": "./dist/MockChainlinkAggregatorBRLUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorBRLUSD.js"
+    },
+    "./MockChainlinkAggregatorCADUSD": {
+      "types": "./dist/MockChainlinkAggregatorCADUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorCADUSD.js"
+    },
+    "./MockChainlinkAggregatorCELOUSD": {
+      "types": "./dist/MockChainlinkAggregatorCELOUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorCELOUSD.js"
+    },
+    "./MockChainlinkAggregatorCHFUSD": {
+      "types": "./dist/MockChainlinkAggregatorCHFUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorCHFUSD.js"
+    },
+    "./MockChainlinkAggregatorCOPUSD": {
+      "types": "./dist/MockChainlinkAggregatorCOPUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorCOPUSD.js"
+    },
+    "./MockChainlinkAggregatorETHUSD": {
+      "types": "./dist/MockChainlinkAggregatorETHUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorETHUSD.js"
+    },
+    "./MockChainlinkAggregatorEUROCUSD": {
+      "types": "./dist/MockChainlinkAggregatorEUROCUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorEUROCUSD.js"
+    },
+    "./MockChainlinkAggregatorEURUSD": {
+      "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorEURUSD.js"
+    },
+    "./MockChainlinkAggregatorGBPUSD": {
+      "types": "./dist/MockChainlinkAggregatorGBPUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorGBPUSD.js"
+    },
+    "./MockChainlinkAggregatorGHSUSD": {
+      "types": "./dist/MockChainlinkAggregatorGHSUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorGHSUSD.js"
+    },
+    "./MockChainlinkAggregatorJPYUSD": {
+      "types": "./dist/MockChainlinkAggregatorJPYUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorJPYUSD.js"
+    },
+    "./MockChainlinkAggregatorKESUSD": {
+      "types": "./dist/MockChainlinkAggregatorKESUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorKESUSD.js"
+    },
+    "./MockChainlinkAggregatorNGNUSD": {
+      "types": "./dist/MockChainlinkAggregatorNGNUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorNGNUSD.js"
+    },
+    "./MockChainlinkAggregatorPHPUSD": {
+      "types": "./dist/MockChainlinkAggregatorPHPUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorPHPUSD.js"
+    },
+    "./MockChainlinkAggregatorUSDCUSD": {
+      "types": "./dist/MockChainlinkAggregatorUSDCUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorUSDCUSD.js"
+    },
+    "./MockChainlinkAggregatorUSDTUSD": {
+      "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorUSDTUSD.js"
+    },
+    "./MockChainlinkAggregatorXOFUSD": {
+      "types": "./dist/MockChainlinkAggregatorXOFUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorXOFUSD.js"
+    },
+    "./MockChainlinkAggregatorZARUSD": {
+      "types": "./dist/MockChainlinkAggregatorZARUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorZARUSD.js"
+    },
+    "./MockERC20USDC": {
+      "types": "./dist/MockERC20USDC.d.ts",
+      "import": "./dist/MockERC20USDC.js"
+    },
+    "./MockERC20USDT": {
+      "types": "./dist/MockERC20USDT.d.ts",
+      "import": "./dist/MockERC20USDT.js"
+    },
+    "./MockERC20axlEUROC": {
+      "types": "./dist/MockERC20axlEUROC.d.ts",
+      "import": "./dist/MockERC20axlEUROC.js"
+    },
+    "./MockERC20axlUSDC": {
+      "types": "./dist/MockERC20axlUSDC.d.ts",
+      "import": "./dist/MockERC20axlUSDC.js"
+    },
+    "./MultiTroveGetter": {
+      "types": "./dist/MultiTroveGetter.d.ts",
+      "import": "./dist/MultiTroveGetter.js"
+    },
+    "./ProxyAdmin": {
+      "types": "./dist/ProxyAdmin.d.ts",
+      "import": "./dist/ProxyAdmin.js"
+    },
+    "./ReserveLiquidityStrategyv300": {
+      "types": "./dist/ReserveLiquidityStrategyv300.d.ts",
+      "import": "./dist/ReserveLiquidityStrategyv300.js"
+    },
+    "./ReserveLiquidityStrategyv301": {
+      "types": "./dist/ReserveLiquidityStrategyv301.d.ts",
+      "import": "./dist/ReserveLiquidityStrategyv301.js"
+    },
+    "./ReserveTroveFactory": {
+      "types": "./dist/ReserveTroveFactory.d.ts",
+      "import": "./dist/ReserveTroveFactory.js"
+    },
+    "./Router": {
+      "types": "./dist/Router.d.ts",
+      "import": "./dist/Router.js"
+    },
+    "./SortedTroves": {
+      "types": "./dist/SortedTroves.d.ts",
+      "import": "./dist/SortedTroves.js"
+    },
+    "./StabilityPool": {
+      "types": "./dist/StabilityPool.d.ts",
+      "import": "./dist/StabilityPool.js"
+    },
+    "./StableTokenV2": {
+      "types": "./dist/StableTokenV2.d.ts",
+      "import": "./dist/StableTokenV2.js"
+    },
+    "./StableTokenV3": {
+      "types": "./dist/StableTokenV3.d.ts",
+      "import": "./dist/StableTokenV3.js"
+    },
+    "./SystemParams": {
+      "types": "./dist/SystemParams.d.ts",
+      "import": "./dist/SystemParams.js"
+    },
+    "./TroveManager": {
+      "types": "./dist/TroveManager.d.ts",
+      "import": "./dist/TroveManager.js"
+    },
+    "./TroveNFT": {
+      "types": "./dist/TroveNFT.d.ts",
+      "import": "./dist/TroveNFT.js"
+    },
+    "./ValueDeltaBreaker": {
+      "types": "./dist/ValueDeltaBreaker.d.ts",
+      "import": "./dist/ValueDeltaBreaker.js"
+    },
+    "./VirtualPoolFactory": {
+      "types": "./dist/VirtualPoolFactory.d.ts",
+      "import": "./dist/VirtualPoolFactory.js"
+    }
+  },
+  "files": [
+    "dist",
+    "abis",
+    "contracts.json"
+  ],
+  "keywords": [
+    "mento",
+    "contracts",
+    "abis"
+  ],
+  "license": "LGPL-3.0",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}
