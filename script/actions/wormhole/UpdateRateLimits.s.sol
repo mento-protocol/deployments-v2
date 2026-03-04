@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
 
@@ -34,7 +34,7 @@ interface INTTManager {
 ///      Usage:
 ///        NTT_TOKEN=USDm treb run UpdateRateLimits --network celo
 ///        NTT_TOKEN=GBPm treb run UpdateRateLimits --network monad
-contract UpdateRateLimits is AddressbookHelper {
+contract UpdateRateLimits is TrebScript {
     using Senders for Senders.Sender;
 
     // ── Storage (set in setUp, read in run — avoids stack-too-deep) ─────

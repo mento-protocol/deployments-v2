@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
@@ -29,7 +29,7 @@ interface INttManagerUpgradeable {
 ///      Usage:
 ///        NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeNttManager --network celo
 ///        NTT_TOKEN=GBPm NTT_VERSION=v3 treb run UpgradeNttManager --network monad
-contract UpgradeNttManager is AddressbookHelper {
+contract UpgradeNttManager is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -58,7 +58,7 @@ contract UpgradeNttManager is AddressbookHelper {
         localNttManagerProxy = NttDeployHelper(localHelper).nttManagerProxy();
 
         // Store constructor params — must match original deployment for _checkImmutables()
-        token = lookupAddressbook(chainConfig.tokenLabel);
+        token = lookup(chainConfig.tokenLabel);
         mode = chainConfig.isBurning ? IManagerBase.Mode.BURNING : IManagerBase.Mode.LOCKING;
         wormholeChainId = chainConfig.wormholeChainId;
 

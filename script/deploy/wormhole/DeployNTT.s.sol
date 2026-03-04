@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {NttDeployHelper} from "./NttDeployHelper.sol";
@@ -21,7 +21,7 @@ import {NttDeployHelper} from "./NttDeployHelper.sol";
 ///      Usage:
 ///        NTT_TOKEN=USDm treb run DeployNTT --network celo
 ///        NTT_TOKEN=GBPm treb run DeployNTT --network monad
-contract DeployNTT is AddressbookHelper {
+contract DeployNTT is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -39,8 +39,8 @@ contract DeployNTT is AddressbookHelper {
         NTTChainConfig memory chainConfig = _findMyChain(config);
 
         // ── Resolve addresses ───────────────────────────────────────────
-        address token = lookupAddressbook(chainConfig.tokenLabel);
-        address wormholeCoreBridge = lookupAddressbook("WormholeCoreBridge");
+        address token = lookup(chainConfig.tokenLabel);
+        address wormholeCoreBridge = lookup("WormholeCoreBridge");
         IManagerBase.Mode mode = chainConfig.isBurning
             ? IManagerBase.Mode.BURNING
             : IManagerBase.Mode.LOCKING;

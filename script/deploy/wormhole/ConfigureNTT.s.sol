@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "./NttDeployHelper.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
@@ -64,7 +64,7 @@ interface IPausable {
 ///
 ///        NTT_TOKEN=USDm treb run ConfigureNTT --network celo
 ///        NTT_TOKEN=GBPm treb run ConfigureNTT --network monad
-contract ConfigureNTT is AddressbookHelper {
+contract ConfigureNTT is TrebScript {
     using Senders for Senders.Sender;
 
     /// @dev NttDeployHelper internal CREATE nonce for NttManager proxy (2nd deployment in constructor).
@@ -101,7 +101,7 @@ contract ConfigureNTT is AddressbookHelper {
         localTransceiver = NttDeployHelper(localHelper).transceiverProxy();
 
         // Resolve owner
-        owner = lookupAddressbook(config.ownerLabel);
+        owner = lookup(config.ownerLabel);
         require(owner != address(0), string.concat("ConfigureNTT: owner '", config.ownerLabel, "' not found"));
 
         // Resolve remote peers
@@ -220,7 +220,7 @@ contract ConfigureNTT is AddressbookHelper {
     }
 
     function _setupBurnMintPermissions(Senders.Sender storage deployer) internal {
-        address token = lookupAddressbook(myChain.tokenLabel);
+        address token = lookup(myChain.tokenLabel);
 
         if (!IStableTokenSpoke(token).isBurner(localNttManager)) {
             console.log("  > Granting NTT Manager burner permission...");

@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
 
@@ -29,7 +29,7 @@ interface ITransceiverUpgradeable {
 ///      Usage:
 ///        NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeWormholeTransceiver --network celo
 ///        NTT_TOKEN=GBPm NTT_VERSION=v3 treb run UpgradeWormholeTransceiver --network monad
-contract UpgradeWormholeTransceiver is AddressbookHelper {
+contract UpgradeWormholeTransceiver is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -59,7 +59,7 @@ contract UpgradeWormholeTransceiver is AddressbookHelper {
         localNttManagerProxy = NttDeployHelper(localHelper).nttManagerProxy();
 
         // Resolve WormholeCoreBridge from addressbook
-        wormholeCoreBridge = lookupAddressbook("WormholeCoreBridge");
+        wormholeCoreBridge = lookup("WormholeCoreBridge");
 
         console.log("=== UpgradeWormholeTransceiver: %s %s on %s ===", tokenName, version, chainConfig.chainName);
         console.log("  Transceiver proxy: %s", localTransceiverProxy);

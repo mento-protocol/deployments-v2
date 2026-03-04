@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
@@ -28,7 +28,7 @@ interface IPausable {
 ///      Usage:
 ///        NTT_TOKEN=USDm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network celo
 ///        NTT_TOKEN=GBPm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network monad
-contract TransferOwnership is AddressbookHelper {
+contract TransferOwnership is TrebScript {
     using Senders for Senders.Sender;
 
     // ── Storage (set in setUp, read in run — avoids stack-too-deep) ─────
@@ -53,7 +53,7 @@ contract TransferOwnership is AddressbookHelper {
         localTransceiver = NttDeployHelper(localHelper).transceiverProxy();
 
         // Resolve new owner
-        newOwner = lookupAddressbook(newOwnerLabel);
+        newOwner = lookup(newOwnerLabel);
         require(newOwner != address(0), string.concat("TransferOwnership: '", newOwnerLabel, "' not found in addressbook"));
 
         console.log("=== TransferOwnership: %s on %s ===", tokenName, chainName);

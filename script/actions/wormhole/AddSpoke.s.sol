@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {AddressbookHelper} from "script/helpers/AddressbookHelper.sol";
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
 import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
@@ -67,7 +67,7 @@ interface IPausable {
 ///      Usage:
 ///        NTT_TOKEN=USDm treb run AddSpoke --network <new-spoke-network>
 ///        NTT_TOKEN=GBPm treb run AddSpoke --network <new-spoke-network>
-contract AddSpoke is AddressbookHelper {
+contract AddSpoke is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -100,7 +100,7 @@ contract AddSpoke is AddressbookHelper {
         myChain = _myChain;
 
         // Resolve owner
-        owner = lookupAddressbook(config.ownerLabel);
+        owner = lookup(config.ownerLabel);
         require(owner != address(0), string.concat("AddSpoke: owner '", config.ownerLabel, "' not found"));
 
         // Resolve remote peers (existing chains)
@@ -172,8 +172,8 @@ contract AddSpoke is AddressbookHelper {
     // ── Deploy helper ───────────────────────────────────────────────────
 
     function _deploy(Senders.Sender storage deployer) internal returns (address nttManagerProxy, address transceiverProxy) {
-        address token = lookupAddressbook(myChain.tokenLabel);
-        address wormholeCoreBridge = lookupAddressbook("WormholeCoreBridge");
+        address token = lookup(myChain.tokenLabel);
+        address wormholeCoreBridge = lookup("WormholeCoreBridge");
         IManagerBase.Mode mode = myChain.isBurning
             ? IManagerBase.Mode.BURNING
             : IManagerBase.Mode.LOCKING;
@@ -269,7 +269,7 @@ contract AddSpoke is AddressbookHelper {
     }
 
     function _setupBurnMintPermissions(Senders.Sender storage deployer, address localNttManager) internal {
-        address token = lookupAddressbook(myChain.tokenLabel);
+        address token = lookup(myChain.tokenLabel);
 
         if (!IStableTokenSpoke(token).isBurner(localNttManager)) {
             console.log("  > Granting NTT Manager burner permission...");
