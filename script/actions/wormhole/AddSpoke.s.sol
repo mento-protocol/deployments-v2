@@ -65,8 +65,8 @@ interface IPausable {
 ///        - This requires governance approval on each existing chain.
 ///
 ///      Usage:
-///        NTT_TOKEN=USDm treb run AddSpoke --network <new-spoke-network>
-///        NTT_TOKEN=GBPm treb run AddSpoke --network <new-spoke-network>
+///        treb run AddSpoke -e token=USDm --network <new-spoke-network>
+///        treb run AddSpoke -e token=GBPm --network <new-spoke-network>
 contract AddSpoke is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -89,9 +89,10 @@ contract AddSpoke is TrebScript {
     uint256[] internal peerInboundLimits;
     address internal owner;
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     function setUp() public {
         // Load config
-        tokenName = vm.envString("NTT_TOKEN");
+        tokenName = vm.envString("token");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         tokenDecimals = config.tokenDecimals;
 
@@ -323,7 +324,7 @@ contract AddSpoke is TrebScript {
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("AddSpoke: unknown NTT_TOKEN: ", _tokenName));
+            revert(string.concat("AddSpoke: unknown token: ", _tokenName));
         }
     }
 
