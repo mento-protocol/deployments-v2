@@ -328,14 +328,10 @@ contract AddSpoke is AddressbookHelper {
     }
 
     function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
         for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].evmChainId == cid) return config.chains[i];
+            if (config.chains[i].evmChainId == block.chainid) return config.chains[i];
         }
-        revert(string.concat("AddSpoke: current chain (", vm.toString(cid), ") not in config for ", config.tokenName));
+        revert(string.concat("AddSpoke: current chain (", vm.toString(block.chainid), ") not in config for ", config.tokenName));
     }
 
     function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName) internal pure returns (uint256) {
