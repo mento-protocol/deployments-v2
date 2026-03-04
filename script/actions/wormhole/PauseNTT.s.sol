@@ -17,8 +17,8 @@ import {INTTPausable} from "./interfaces/INTTPausable.sol";
 ///      owner. This script uses the owner sender to support both operations.
 ///
 ///      Usage:
-///        NTT_TOKEN=USDm PAUSE=true  treb run PauseNTT --network celo
-///        NTT_TOKEN=USDm PAUSE=false treb run PauseNTT --network celo
+///        token=USDm PAUSE=true  treb run PauseNTT --network celo
+///        token=USDm PAUSE=false treb run PauseNTT --network celo
 contract PauseNTT is TrebScript {
     using Senders for Senders.Sender;
 
@@ -30,7 +30,7 @@ contract PauseNTT is TrebScript {
 
     function setUp() public {
         // Load config
-        tokenName = vm.envString("NTT_TOKEN");
+        tokenName = vm.envString("token");
         shouldPause = vm.envBool("PAUSE");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         NTTChainConfig memory myChain = _findMyChain(config);
@@ -81,7 +81,7 @@ contract PauseNTT is TrebScript {
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("PauseNTT: unknown NTT_TOKEN: ", _tokenName));
+            revert(string.concat("PauseNTT: unknown token: ", _tokenName));
         }
     }
 

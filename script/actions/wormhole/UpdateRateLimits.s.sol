@@ -17,8 +17,8 @@ import {INTTManager, RateLimitParams} from "./interfaces/INTTManager.sol";
 ///      The NttManager must be owned by the governance sender (e.g. MigrationMultisig).
 ///
 ///      Usage:
-///        NTT_TOKEN=USDm treb run UpdateRateLimits --network celo
-///        NTT_TOKEN=GBPm treb run UpdateRateLimits --network monad
+///        token=USDm treb run UpdateRateLimits --network celo
+///        token=GBPm treb run UpdateRateLimits --network monad
 contract UpdateRateLimits is TrebScript {
     using Senders for Senders.Sender;
 
@@ -32,7 +32,7 @@ contract UpdateRateLimits is TrebScript {
 
     function setUp() public {
         // Load config
-        tokenName = vm.envString("NTT_TOKEN");
+        tokenName = vm.envString("token");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         tokenDecimals = config.tokenDecimals;
 
@@ -114,7 +114,7 @@ contract UpdateRateLimits is TrebScript {
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("UpdateRateLimits: unknown NTT_TOKEN: ", _tokenName));
+            revert(string.concat("UpdateRateLimits: unknown token: ", _tokenName));
         }
     }
 

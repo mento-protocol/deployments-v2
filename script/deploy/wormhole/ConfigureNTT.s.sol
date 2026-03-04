@@ -31,8 +31,8 @@ import {IPausable} from "script/actions/wormhole/interfaces/IPausable.sol";
 ///
 ///      Usage (run once per token per chain, after DeployNTT on all chains):
 ///
-///        NTT_TOKEN=USDm treb run ConfigureNTT --network celo
-///        NTT_TOKEN=GBPm treb run ConfigureNTT --network monad
+///        token=USDm treb run ConfigureNTT --network celo
+///        token=GBPm treb run ConfigureNTT --network monad
 contract ConfigureNTT is TrebScript {
     using Senders for Senders.Sender;
 
@@ -55,7 +55,7 @@ contract ConfigureNTT is TrebScript {
 
     function setUp() public {
         // Load config
-        tokenName = vm.envString("NTT_TOKEN");
+        tokenName = vm.envString("token");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         tokenDecimals = config.tokenDecimals;
 
@@ -239,7 +239,7 @@ contract ConfigureNTT is TrebScript {
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("ConfigureNTT: unknown NTT_TOKEN: ", _tokenName));
+            revert(string.concat("ConfigureNTT: unknown token: ", _tokenName));
         }
     }
 

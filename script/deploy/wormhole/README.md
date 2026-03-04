@@ -43,7 +43,7 @@ Token topology is defined in `script/config/wormhole/NTTConfig.sol`:
 - `getUSDmConfig()` — returns the full bridge topology for USDm
 - `getGBPmConfig()` — returns the full bridge topology for GBPm
 
-Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labels, burn/lock modes, and rate limits. Token and owner addresses are **not hardcoded** — they are addressbook labels resolved at runtime via `lookupAddressbook()`.
+Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labels, burn/lock modes, and rate limits. Token and owner addresses are **not hardcoded** — they are addressbook labels resolved at runtime via `lookup()`.
 
 ### Token Modes
 
@@ -57,8 +57,8 @@ Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labe
 ### Step 1: Deploy NTT contracts
 
 ```bash
-NTT_TOKEN=USDm treb run DeployNTT --network celo --debug
-NTT_TOKEN=USDm treb run DeployNTT --network monad --debug
+treb run DeployNTT -e token=USDm --network celo --debug
+treb run DeployNTT -e token=USDm --network monad --debug
 ```
 
 `DeployNTT` deploys an `NttDeployHelper` via CREATE3 that bootstraps both NttManager and WormholeTransceiver ERC1967 proxies in its constructor. This workaround is needed because NTT contracts validate `msg.sender == deployer` during `initialize()`, and CREATE3 uses intermediate contracts that break this check.
@@ -66,8 +66,8 @@ NTT_TOKEN=USDm treb run DeployNTT --network monad --debug
 ### Step 2: Configure the bridge
 
 ```bash
-NTT_TOKEN=USDm treb run ConfigureNTT --network celo --debug
-NTT_TOKEN=USDm treb run ConfigureNTT --network monad --debug
+treb run ConfigureNTT -e token=USDm --network celo --debug
+treb run ConfigureNTT -e token=USDm --network monad --debug
 ```
 
 `ConfigureNTT` performs all post-deployment setup:
@@ -82,12 +82,12 @@ All operations are **idempotent** — re-running the script is safe and only upd
 
 ## Governance Actions
 
-All action scripts live in `script/actions/wormhole/` and use the `NTT_TOKEN` env var to select the token config.
+All action scripts live in `script/actions/wormhole/` and use the `token` env var to select the token config.
 
 ### Update Rate Limits
 
 ```bash
-NTT_TOKEN=USDm treb run UpdateRateLimits --network celo --debug
+treb run UpdateRateLimits -e token=USDm --network celo --debug
 ```
 
 Reads limits from `NTTConfig` and updates on-chain values if they differ. Idempotent.
@@ -96,7 +96,7 @@ Reads limits from `NTTConfig` and updates on-chain values if they differ. Idempo
 
 ```bash
 # Phase 1: Deploy + configure on the new spoke
-NTT_TOKEN=USDm treb run AddSpoke --network <new-chain> --debug
+treb run AddSpoke -e token=USDm --network <new-chain> --debug
 ```
 
 Phase 1 deploys NTT contracts on the new spoke and configures peers pointing to all existing chains.
@@ -107,10 +107,10 @@ Phase 1 deploys NTT contracts on the new spoke and configures peers pointing to 
 
 ```bash
 # Upgrade NttManager implementation
-NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeNttManager --network celo --debug
+treb run UpgradeNttManager -e token=USDm -e NTT_VERSION=v2 --network celo --debug
 
 # Upgrade WormholeTransceiver implementation
-NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeWormholeTransceiver --network celo --debug
+treb run UpgradeWormholeTransceiver -e token=USDm -e NTT_VERSION=v2 --network celo --debug
 ```
 
 Deploys a new implementation via CREATE3 with a versioned label, then calls `upgrade()` on the proxy. New implementations must use identical constructor args (immutables) — `_checkImmutables()` validates this during upgrade.
@@ -118,7 +118,7 @@ Deploys a new implementation via CREATE3 with a versioned label, then calls `upg
 ### Transfer Ownership
 
 ```bash
-NTT_TOKEN=USDm NEW_OWNER_LABEL=NewMultisig treb run TransferOwnership --network celo --debug
+treb run TransferOwnership -e token=USDm -e NEW_OWNER_LABEL=NewMultisig --network celo --debug
 ```
 
 Transfers NttManager ownership (cascades to transceivers) and pauser capability (must be transferred separately on each contract).
@@ -127,10 +127,10 @@ Transfers NttManager ownership (cascades to transceivers) and pauser capability 
 
 ```bash
 # Pause
-NTT_TOKEN=USDm PAUSE=true treb run PauseNTT --network celo --debug
+treb run PauseNTT -e token=USDm -e PAUSE=true --network celo --debug
 
 # Unpause (requires owner, not just pauser)
-NTT_TOKEN=USDm PAUSE=false treb run PauseNTT --network celo --debug
+treb run PauseNTT -e token=USDm -e PAUSE=false --network celo --debug
 ```
 
 ## Adding a New Token

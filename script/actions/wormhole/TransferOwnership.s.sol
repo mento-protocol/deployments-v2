@@ -20,8 +20,8 @@ import {IPausable} from "./interfaces/IPausable.sol";
 ///      NttManager and WormholeTransceiver (pauser does NOT cascade).
 ///
 ///      Usage:
-///        NTT_TOKEN=USDm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network celo
-///        NTT_TOKEN=GBPm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network monad
+///        token=USDm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network celo
+///        token=GBPm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network monad
 contract TransferOwnership is TrebScript {
     using Senders for Senders.Sender;
 
@@ -34,7 +34,7 @@ contract TransferOwnership is TrebScript {
 
     function setUp() public {
         // Load config
-        tokenName = vm.envString("NTT_TOKEN");
+        tokenName = vm.envString("token");
         string memory newOwnerLabel = vm.envString("NEW_OWNER_LABEL");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         NTTChainConfig memory myChain = _findMyChain(config);
@@ -100,7 +100,7 @@ contract TransferOwnership is TrebScript {
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("TransferOwnership: unknown NTT_TOKEN: ", _tokenName));
+            revert(string.concat("TransferOwnership: unknown token: ", _tokenName));
         }
     }
 

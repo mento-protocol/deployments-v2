@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 /// @dev Per-chain NTT bridge configuration.
 ///      Token addresses are NOT hardcoded — tokenLabel is resolved at runtime
-///      via lookupAddressbook().
+///      via lookup().
 struct NTTChainConfig {
     string chainName;
     uint256 evmChainId;
@@ -32,7 +32,7 @@ struct NTTTokenConfig {
 /// @notice Typed Solidity configuration for NTT bridge deployments.
 ///         Replaces JSON-based WormholeNTTConfig with compile-time checked topology.
 ///         Token and owner addresses are stored as addressbook labels (strings)
-///         and resolved at runtime via lookupAddressbook().
+///         and resolved at runtime via lookup().
 library NTTConfig {
     // ── Chain ID constants ──────────────────────────────────────────────
     uint256 internal constant CELO_EVM_CHAIN_ID = 42220;

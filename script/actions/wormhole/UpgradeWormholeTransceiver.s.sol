@@ -22,8 +22,8 @@ import {ITransceiverUpgradeable} from "./interfaces/ITransceiverUpgradeable.sol"
 ///      during the upgrade.
 ///
 ///      Usage:
-///        NTT_TOKEN=USDm NTT_VERSION=v2 treb run UpgradeWormholeTransceiver --network celo
-///        NTT_TOKEN=GBPm NTT_VERSION=v3 treb run UpgradeWormholeTransceiver --network monad
+///        token=USDm NTT_VERSION=v2 treb run UpgradeWormholeTransceiver --network celo
+///        token=GBPm NTT_VERSION=v3 treb run UpgradeWormholeTransceiver --network monad
 contract UpgradeWormholeTransceiver is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -42,7 +42,7 @@ contract UpgradeWormholeTransceiver is TrebScript {
 
     function setUp() public {
         // Load config
-        tokenName = vm.envString("NTT_TOKEN");
+        tokenName = vm.envString("token");
         version = vm.envString("NTT_VERSION");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         NTTChainConfig memory chainConfig = _findMyChain(config);
@@ -103,7 +103,7 @@ contract UpgradeWormholeTransceiver is TrebScript {
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("UpgradeWormholeTransceiver: unknown NTT_TOKEN: ", _tokenName));
+            revert(string.concat("UpgradeWormholeTransceiver: unknown token: ", _tokenName));
         }
     }
 

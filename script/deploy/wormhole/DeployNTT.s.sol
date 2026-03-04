@@ -13,14 +13,14 @@ import {NttDeployHelper} from "./NttDeployHelper.sol";
 /// @notice Treb-native deployment of NttManager + WormholeTransceiver ERC1967 proxies
 ///         for a given token on the current chain using CREATE3.
 ///
-/// @dev Reads the NTT_TOKEN env var ("USDm" or "GBPm") to select the token config,
+/// @dev Reads the token env var ("USDm" or "GBPm") to select the token config,
 ///      then deploys an NttDeployHelper via CREATE3 that bootstraps all NTT contracts
 ///      in its constructor. After deployment, proxy addresses can be read from
 ///      the helper contract.
 ///
 ///      Usage:
-///        NTT_TOKEN=USDm treb run DeployNTT --network celo
-///        NTT_TOKEN=GBPm treb run DeployNTT --network monad
+///        token=USDm treb run DeployNTT --network celo
+///        token=GBPm treb run DeployNTT --network monad
 contract DeployNTT is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -29,12 +29,13 @@ contract DeployNTT is TrebScript {
     /// @dev Default consistency level for WormholeTransceiver (200 = instant finality).
     uint8 constant CONSISTENCY_LEVEL = 200;
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:senders deployer
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
 
         // ── Load config ─────────────────────────────────────────────────
-        string memory tokenName = vm.envString("NTT_TOKEN");
+        string memory tokenName = vm.envString("token");
         NTTTokenConfig memory config = _loadConfig(tokenName);
         NTTChainConfig memory chainConfig = _findMyChain(config);
 
@@ -93,7 +94,7 @@ contract DeployNTT is TrebScript {
         } else if (keccak256(bytes(tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
         } else {
-            revert(string.concat("Unknown NTT_TOKEN: ", tokenName));
+            revert(string.concat("Unknown token: ", tokenName));
         }
     }
 
