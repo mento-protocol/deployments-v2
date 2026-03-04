@@ -570,6 +570,7 @@
       "SortedTroves:v3.0.0-GBPm": "0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b",
       "StabilityPool:v3.0.0-GBPm": "0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5",
       "StableTokenV3:v3.0.0": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
+      "StableTokenV3:v3.0.1": "0x815795C30D0758A297B08cD4e0643620c974c318",
       "SystemParams:v3.0.0-GBPm": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
       "TransparentUpgradeableProxy:CDPLiquidityStrategy": "0x4e78BD9565341EAbe99cDC024acB044d9BDcB985",
       "TransparentUpgradeableProxy:FPMMFactory": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",

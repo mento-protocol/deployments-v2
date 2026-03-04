@@ -831,6 +831,38 @@
     "createdAt": "2026-03-03T20:14:38.505446337+01:00",
     "updatedAt": "2026-03-03T20:14:38.508066752+01:00"
   },
+  "mainnet/42220/StableTokenV3:v3.0.1": {
+    "id": "mainnet/42220/StableTokenV3:v3.0.1",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "StableTokenV3",
+    "label": "v3.0.1",
+    "address": "0x815795C30D0758A297B08cD4e0643620c974c318",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687003b32306e763643071da63b",
+      "initCodeHash": "0x2ed67f87a6cb241621617a236af985518c5aa1b79eb21b6716e314f885d2c9a1",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/StableTokenV3:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/tokens/StableTokenV3.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0xf315101422a0ca07b31ce2d7337404ba3d1e1744670398ea550b6afcea67a14c",
+      "scriptPath": "script/actions/SwitchStableTokenV3WithParisEVM.s.sol",
+      "gitCommit": "809e075a89d36284335da7972ebb415e18770135"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-04T18:17:15.626522+01:00",
+    "updatedAt": "2026-03-04T18:17:15.635635+01:00"
+  },
   "mainnet/42220/SystemParams:v3.0.0-GBPm": {
     "id": "mainnet/42220/SystemParams:v3.0.0-GBPm",
     "namespace": "mainnet",
