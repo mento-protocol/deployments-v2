@@ -22,6 +22,11 @@ contract SetL2SequencerUptimeFeed is TrebScript, ProxyHelper {
         Senders.Sender storage owner = sender("migrationOwner");
         address l2SequencerUptimeFeed = lookup("L2SequencerUptimeFeed");
 
+        if(address(IOracleAdapter(oracleAdapter).l2SequencerUptimeFeed()) == l2SequencerUptimeFeed) {
+            console.log("L2 sequencer uptime feed already set to:", l2SequencerUptimeFeed);
+            return;
+        }
+
         IOracleAdapter oa = IOracleAdapter(owner.harness(oracleAdapter));
         oa.setL2SequencerUptimeFeed(l2SequencerUptimeFeed);
 
