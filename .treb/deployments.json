@@ -21997,8 +21997,14 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
-      "history": []
+      "implementation": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
+      "history": [
+        {
+          "implementationId": "testnet-v2-rc5/11142220/StableTokenV2:v2.6.5",
+          "upgradedAt": "2026-03-04T17:33:39.042674+01:00",
+          "upgradeTxId": ""
+        }
+      ]
     },
     "artifact": {
       "path": "src/Proxy.sol",
@@ -22025,7 +22031,7 @@
     },
     "tags": null,
     "createdAt": "2025-09-12T08:03:03.2007+02:00",
-    "updatedAt": "2025-10-01T17:32:09.629543+02:00"
+    "updatedAt": "2026-03-04T17:33:39.051806+01:00"
   },
   "testnet-v2-rc5/11142220/Proxy:cGBP": {
     "id": "testnet-v2-rc5/11142220/Proxy:cGBP",
@@ -22046,8 +22052,14 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
-      "history": []
+      "implementation": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
+      "history": [
+        {
+          "implementationId": "testnet-v2-rc5/11142220/StableTokenV2:v2.6.5",
+          "upgradedAt": "2026-03-04T17:59:27.032554+01:00",
+          "upgradeTxId": ""
+        }
+      ]
     },
     "artifact": {
       "path": "src/Proxy.sol",
@@ -22074,7 +22086,7 @@
     },
     "tags": null,
     "createdAt": "2025-09-12T08:03:03.2007+02:00",
-    "updatedAt": "2025-10-01T17:36:01.05395+02:00"
+    "updatedAt": "2026-03-04T17:59:27.041038+01:00"
   },
   "testnet-v2-rc5/11142220/Proxy:cGHS": {
     "id": "testnet-v2-rc5/11142220/Proxy:cGHS",
@@ -22340,8 +22352,14 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
-      "history": []
+      "implementation": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
+      "history": [
+        {
+          "implementationId": "testnet-v2-rc5/11142220/StableTokenV2:v2.6.5",
+          "upgradedAt": "2026-03-04T18:00:37.856172+01:00",
+          "upgradeTxId": ""
+        }
+      ]
     },
     "artifact": {
       "path": "src/Proxy.sol",
@@ -22368,7 +22386,7 @@
     },
     "tags": null,
     "createdAt": "2025-09-12T08:03:03.2007+02:00",
-    "updatedAt": "2025-10-01T17:20:10.45443+02:00"
+    "updatedAt": "2026-03-04T18:00:37.864821+01:00"
   },
   "testnet-v2-rc5/11142220/Proxy:cZAR": {
     "id": "testnet-v2-rc5/11142220/Proxy:cZAR",
@@ -22941,6 +22959,38 @@
     "tags": [],
     "createdAt": "2026-02-26T21:36:43.84146+01:00",
     "updatedAt": "2026-02-26T21:46:13.246107+01:00"
+  },
+  "testnet-v2-rc5/11142220/StableTokenV3:v3.0.1": {
+    "id": "testnet-v2-rc5/11142220/StableTokenV3:v3.0.1",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "StableTokenV3",
+    "label": "v3.0.1",
+    "address": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700d45d034cfb0ab1f8ca79fb",
+      "initCodeHash": "0xdc49b35b3316dd459bb87e74635d3ea54a96d7bc27732279a3cefe725870ef7f",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/StableTokenV3:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/tokens/StableTokenV3.sol",
+      "compilerVersion": "0.8.30+commit.73712a01",
+      "bytecodeHash": "0x9bc56fae0c63c0a974f33674be0e1e246bfde5b583832ce19cd6404b7364806a",
+      "scriptPath": "script/actions/SwitchStableTokenV3WithParisEVM.s.sol",
+      "gitCommit": "8405f3d81deb6a27254e09e37a3232849a87705c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-04T17:33:39.042674+01:00",
+    "updatedAt": "2026-03-04T17:33:39.051806+01:00"
   },
   "testnet-v2-rc5/11142220/SystemParams:v3.0.0-GBPm": {
     "id": "testnet-v2-rc5/11142220/SystemParams:v3.0.0-GBPm",

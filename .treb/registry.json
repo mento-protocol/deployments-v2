@@ -512,6 +512,7 @@
       "StabilityPool:v3.0.0-GBPm": "0x1c424be1BE055a6C91ED9839a0E440E26814D1fC",
       "StableTokenV2:v2.6.5": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
       "StableTokenV3:v3.0.0": "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
+      "StableTokenV3:v3.0.1": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
       "SystemParams:v3.0.0-GBPm": "0xdf1E9330f328Ea8Fd3E974b1a2510A9791712318",
       "TimelockController:v2.6.5": "0x32346936c5bAf3c7B53Ea3fe40B405EFD3A3e656",
       "TransparentUpgradeableProxy:CDPLiquidityStrategy": "0x065AE7D4e207C8f4dca112D0B79E668cc7e93e03",
