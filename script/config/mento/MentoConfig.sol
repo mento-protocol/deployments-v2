@@ -29,6 +29,7 @@ struct CoreAggregators {
     address usdcUsd;
     address usdtUsd;
     address eurcUsd;
+    address ausdUsd;
 }
 
 struct FxAggregators {
@@ -302,7 +303,6 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function _addReserveV2Collateral(string memory symbol) internal {
         address addy = _collateral[symbol];
-        require(addy != address(0), string.concat("Collateral not found: ", symbol));
         _reserveV2CollateralAssets.push(addy);
     }
 
@@ -424,6 +424,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             addy = _predict("MockERC20", symbol);
         }
         _mockCollateralAssets.push(symbol);
+        _collateral[symbol] = addy;
         _tokenDecimals[symbol] = decimals;
         return addy;
     }
@@ -525,6 +526,9 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     ) internal {
         address debtAddress = _lookupTokenAddress(debt);
         address collateralAddress = _lookupTokenAddress(collateral);
+        if (debtAddress == address(0) || collateralAddress == address(0)) {
+            return;
+        }
 
         // Sort by address to determine token0/token1
         bool debtIsToken0 = debtAddress < collateralAddress;
@@ -582,7 +586,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         require(isStable || isCollateral, string.concat("Token not found: ", symbol));
 
         if (isStable) {
-            return lookupProxyOrFail(symbol);
+            return lookupProxy(symbol);
         } else {
             return _collateral[symbol];
         }

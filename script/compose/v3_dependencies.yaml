@@ -21,6 +21,7 @@ components:
   SortedOracles:
     script: DeploySortedOracles
     deps:
+      - MockCollaterals
       - USDm
       - GBPm
       - AddressSortedLinkedListWithMedian
@@ -33,6 +34,7 @@ components:
   MockChainlinkAggregators:
     script: DeployMockAggregators
     deps:
+      - MockCollaterals
       - USDm
       - GBPm
   ChainlinkRelayers:
@@ -40,8 +42,14 @@ components:
     deps:
       - MockChainlinkAggregators
       - ChainlinkRelayerFactory
+      - MockCollaterals
+      - USDm
+      - GBPm
   ChainlinkRelayerFactory:
     script: DeployChainlinkRelayerFactory
     deps:
       - SortedOracles
       - ProxyAdmin
+      - MockCollaterals
+      - USDm
+      - GBPm

@@ -204,6 +204,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IFPMM fpmm = IFPMM(fpmmProxy);
         address token0 = fpmm.token0();
         address token1 = fpmm.token1();
+        console.log("Token0", token0);
+        console.log("Token1", token1);
 
         // Get the oracle rate (token0/token1 after invertRateFeed)
         IOracleAdapter oracle = fpmm.oracleAdapter();
@@ -221,6 +223,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         // rate = token0_price / token1_price, so amount0 = amount1 * rateDenominator * decimals0 / (rateNumerator * decimals1)
         uint256 amount0 = (amount1 * rateDenominator * decimals0) / (rateNumerator * decimals1);
 
+        console.log("Owner", owner.account);
+        console.log("Balance", IERC20(token0).balanceOf(owner.account));
         require(
             IERC20(token0).balanceOf(owner.account) >= amount0,
             "owner has insufficient token0 balance for initial liquidity"

@@ -20,6 +20,7 @@ import {
 
 interface IProxyAdmin {
     function transferOwnership(address newOwner) external;
+
     function upgradeAndCall(ITransparentUpgradeableProxy proxy, address implementation, bytes memory data)
         external
         payable;
@@ -30,7 +31,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    address public constant MIGRATION_MULTISIG = 0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458;
+    address public initialOwner;
 
     string label;
     string tokenName;
@@ -40,6 +41,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         label = vm.envString("SPOKE_LABEL");
         tokenName = vm.envString("SPOKE_TOKEN_NAME");
         tokenSymbol = vm.envString("SPOKE_TOKEN_SYMBOL");
+        initialOwner = lookup("MigrationMultisig");
 
         require(bytes(label).length > 0, "SPOKE_LABEL env var is empty");
         require(bytes(tokenName).length > 0, "SPOKE_TOKEN_NAME env var is empty");
@@ -61,7 +63,6 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         address[] memory minters = new address[](0);
         address[] memory burners = new address[](0);
 
-        address initialOwner = MIGRATION_MULTISIG;
         address stableTokenSpokeProxy = deployOztupProxy(
             deployer,
             label,
@@ -77,7 +78,8 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
                 burners
             )
         );
-        IProxyAdmin(deployer.harness(getProxyAdmin(stableTokenSpokeProxy))).transferOwnership(MIGRATION_MULTISIG);
+        IProxyAdmin(deployer.harness(getProxyAdmin(stableTokenSpokeProxy))).transferOwnership(initialOwner);
+        IOwnable(deployer.harness(stableTokenSpokeProxy)).transferOwnership(initialOwner);
 
         // ====== Deployment checks ======
         console.log("\n sanity checks");
@@ -89,11 +91,11 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
 
         address proxyAdmin = getProxyAdmin(stableTokenSpokeProxy);
         address proxyAdminOwner = IOwnable(proxyAdmin).owner();
-        require(IOwnable(proxyAdmin).owner() == MIGRATION_MULTISIG, "migration multisig should own the proxy admin");
+        require(IOwnable(proxyAdmin).owner() == initialOwner, "migration multisig should own the proxy admin");
         console.log(" > proxy admin: %s (owner: %s)", address(proxyAdmin), proxyAdminOwner);
 
         address proxyOwner = IOwnable(stableTokenSpokeProxy).owner();
-        require(proxyOwner == MIGRATION_MULTISIG, "migration multisig should own the proxy");
+        require(proxyOwner == initialOwner, "migration multisig should own the proxy");
         console.log(" > proxy: %s (owner: %s)", address(stableTokenSpokeProxy), proxyOwner);
 
         address proxyImplementation = getOZTUPProxyImplementation(stableTokenSpokeProxy);
@@ -114,7 +116,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         require(!IStableTokenSpoke(stableTokenSpokeProxy).isMinter(newMinter), "minter already set");
         require(!IStableTokenSpoke(stableTokenSpokeProxy).isBurner(newBurner), "burner already set");
 
-        vm.startPrank(MIGRATION_MULTISIG);
+        vm.startPrank(initialOwner);
         IStableTokenSpoke(stableTokenSpokeProxy).setMinter(newMinter, true);
         IStableTokenSpoke(stableTokenSpokeProxy).setBurner(newBurner, true);
         vm.stopPrank();
@@ -130,7 +132,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
 
         address newImpl = address(new StableTokenSpoke(true));
 
-        vm.prank(MIGRATION_MULTISIG);
+        vm.prank(initialOwner);
         IProxyAdmin(proxyAdmin)
             .upgradeAndCall(
                 ITransparentUpgradeableProxy(stableTokenSpokeProxy),

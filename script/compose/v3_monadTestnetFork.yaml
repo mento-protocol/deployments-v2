@@ -1,7 +1,11 @@
 group: Mento V3 Monad Testnet
 components:
+  SetupLocalFork:
+    script: SetupLocalFork_monad_testnet
   DeployV3PreStage:
     script: DeployV3PreStage
+    deps:
+      - SetupLocalFork
   ConfigureV3PreStage:
     script: ConfigureV3PreStage
     deps:

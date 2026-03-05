@@ -109,7 +109,7 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
         _addFPMM(
             "USDm",
             "USDC",
-            getRateFeedIdFromString("USDCUSD"),
+            getRateFeedIdFromString("USDC/USD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
                 protocolFee: 2,
