@@ -15,7 +15,7 @@ private_key = "${REPORTER_PRIVATE_KEY}"
 
 [accounts.deployer-safe]
 type = "safe"
-safe = "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F"
+safe = "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687"
 signer = "dev-pk"
 
 [accounts.mento-gov-celo]
