@@ -10,23 +10,29 @@ npm install @mento-protocol/contracts
 
 ## Usage
 
-### Import a contract ABI (for use with viem, ethers, etc.)
+### Import a contract (ABI + address)
 
 ```typescript
 import { FPMM, Broker, GBPm } from '@mento-protocol/contracts';
 
-// Use FPMM.abi with viem
+// Each export has both abi and address keyed by chainId
+const CELO_SEPOLIA = 11142220;
+
+// Use with viem
 const fpmmContract = getContract({
-  address: '0x...',
+  address: FPMM.address[CELO_SEPOLIA],
   abi: FPMM.abi,
   client,
 });
 
 // Use with ethers
-const broker = new Contract(address, Broker.abi, signer);
+const broker = new Contract(Broker.address[CELO_SEPOLIA], Broker.abi, signer);
+
+// GBPm is deployed on multiple chains — pick the right one at runtime
+const gbpm = new Contract(GBPm.address[chainId], GBPm.abi, signer);
 ```
 
-Each named export is an object `{ abi: [...] as const }`. The `as const` assertion enables full TypeScript type inference with viem.
+Each named export is `{ abi: [...] as const, address: { [chainId]: '0x...' } as const }`. The `as const` assertions enable full TypeScript type inference with viem.
 
 ### Import the address registry
 
@@ -123,8 +129,8 @@ Proxies always take precedence over their implementation singletons when both wo
 packages/contracts/
 ├── abis/              # Raw ABI JSON files (one per contract)
 ├── src/               # TypeScript modules (auto-generated, do not edit)
-│   ├── FPMM.ts        # export const FPMM = { abi: [...] as const }
-│   ├── GBPm.ts
+│   ├── FPMM.ts        # export const FPMM = { abi: [...] as const, address: { 11142220: '0x...' } as const }
+│   ├── GBPm.ts        # address map spans all chains the token is deployed on
 │   ├── index.ts       # barrel re-exporting all contracts
 │   └── ...
 ├── dist/              # Compiled output (not committed, produced by tsc)
