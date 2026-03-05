@@ -1,4 +1,4 @@
-export const chainlinkRelayerV1ZARUSDAbi = [
+export const ChainlinkRelayerV1ZARUSD = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -187,4 +187,4 @@ export const chainlinkRelayerV1ZARUSDAbi = [
       "name": "TooManyExistingReports",
       "inputs": []
     }
-  ] as const;
+  ] as const };

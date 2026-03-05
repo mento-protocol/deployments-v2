@@ -1,4 +1,4 @@
-export const zARmAbi = [
+export const ZARm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const zARmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

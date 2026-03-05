@@ -1,4 +1,4 @@
-export const stableTokenV3Abi = [
+export const StableTokenV3 = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -895,4 +895,4 @@ export const stableTokenV3Abi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

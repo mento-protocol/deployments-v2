@@ -1,4 +1,4 @@
-export const marketHoursBreakerToggleableAbi = [
+export const MarketHoursBreakerToggleable = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -161,4 +161,4 @@ export const marketHoursBreakerToggleableAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

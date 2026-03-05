@@ -1,4 +1,4 @@
-export const troveManagerAbi = [
+export const TroveManager = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -2130,4 +2130,4 @@ export const troveManagerAbi = [
       "name": "ZeroAmount",
       "inputs": []
     }
-  ] as const;
+  ] as const };

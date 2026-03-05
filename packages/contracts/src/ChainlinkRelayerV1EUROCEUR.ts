@@ -1,4 +1,4 @@
-export const chainlinkRelayerV1EUROCEURAbi = [
+export const ChainlinkRelayerV1EUROCEUR = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -187,4 +187,4 @@ export const chainlinkRelayerV1EUROCEURAbi = [
       "name": "TooManyExistingReports",
       "inputs": []
     }
-  ] as const;
+  ] as const };

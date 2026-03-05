@@ -1,4 +1,4 @@
-export const mentoGovernorAbi = [
+export const MentoGovernor = { abi: [
     {
       "type": "receive",
       "stateMutability": "payable"
@@ -1447,4 +1447,4 @@ export const mentoGovernorAbi = [
       "name": "Empty",
       "inputs": []
     }
-  ] as const;
+  ] as const };

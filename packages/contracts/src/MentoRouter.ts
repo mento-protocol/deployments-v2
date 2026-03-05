@@ -1,4 +1,4 @@
-export const mentoRouterAbi = [
+export const MentoRouter = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -222,4 +222,4 @@ export const mentoRouterAbi = [
       ],
       "stateMutability": "nonpayable"
     }
-  ] as const;
+  ] as const };

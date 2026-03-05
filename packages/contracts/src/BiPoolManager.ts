@@ -1,4 +1,4 @@
-export const biPoolManagerAbi = [
+export const BiPoolManager = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -977,4 +977,4 @@ export const biPoolManagerAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

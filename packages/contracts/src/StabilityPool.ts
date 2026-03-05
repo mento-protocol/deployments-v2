@@ -1,4 +1,4 @@
-export const stabilityPoolAbi = [
+export const StabilityPool = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -844,4 +844,4 @@ export const stabilityPoolAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

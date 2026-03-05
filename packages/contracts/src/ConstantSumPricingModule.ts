@@ -1,4 +1,4 @@
-export const constantSumPricingModuleAbi = [
+export const ConstantSumPricingModule = { abi: [
     {
       "type": "function",
       "name": "getAmountIn",
@@ -80,4 +80,4 @@ export const constantSumPricingModuleAbi = [
       ],
       "stateMutability": "view"
     }
-  ] as const;
+  ] as const };

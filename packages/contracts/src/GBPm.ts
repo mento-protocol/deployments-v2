@@ -1,4 +1,4 @@
-export const gBPmAbi = [
+export const GBPm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -618,4 +618,4 @@ export const gBPmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

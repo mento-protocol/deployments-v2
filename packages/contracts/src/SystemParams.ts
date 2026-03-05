@@ -1,4 +1,4 @@
-export const systemParamsAbi = [
+export const SystemParams = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -473,4 +473,4 @@ export const systemParamsAbi = [
       "name": "SPPenaltyTooLow",
       "inputs": []
     }
-  ] as const;
+  ] as const };

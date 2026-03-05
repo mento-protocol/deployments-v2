@@ -1,4 +1,4 @@
-export const mockChainlinkAggregatorCELOUSDAbi = [
+export const MockChainlinkAggregatorCELOUSD = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -262,4 +262,4 @@ export const mockChainlinkAggregatorCELOUSDAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const borrowerOperationsAbi = [
+export const BorrowerOperations = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -1398,4 +1398,4 @@ export const borrowerOperationsAbi = [
       "name": "ZeroAdjustment",
       "inputs": []
     }
-  ] as const;
+  ] as const };

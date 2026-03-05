@@ -1,4 +1,4 @@
-export const reserveAbi = [
+export const Reserve = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -1508,4 +1508,4 @@ export const reserveAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

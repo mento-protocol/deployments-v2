@@ -1,4 +1,4 @@
-export const collateralRegistryAbi = [
+export const CollateralRegistry = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -314,4 +314,4 @@ export const collateralRegistryAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

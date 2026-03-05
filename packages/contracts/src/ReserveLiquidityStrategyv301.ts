@@ -1,4 +1,4 @@
-export const reserveLiquidityStrategyv301Abi = [
+export const ReserveLiquidityStrategyv301 = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -757,4 +757,4 @@ export const reserveLiquidityStrategyv301Abi = [
       "name": "RLS_TOKEN_OUT_NOT_SUPPORTED",
       "inputs": []
     }
-  ] as const;
+  ] as const };

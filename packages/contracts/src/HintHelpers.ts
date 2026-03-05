@@ -1,4 +1,4 @@
-export const hintHelpersAbi = [
+export const HintHelpers = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -330,4 +330,4 @@ export const hintHelpersAbi = [
       ],
       "stateMutability": "view"
     }
-  ] as const;
+  ] as const };

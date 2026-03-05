@@ -1,4 +1,4 @@
-export const timelockControllerAbi = [
+export const TimelockController = { abi: [
     {
       "type": "receive",
       "stateMutability": "payable"
@@ -889,4 +889,4 @@ export const timelockControllerAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

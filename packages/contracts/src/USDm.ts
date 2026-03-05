@@ -1,4 +1,4 @@
-export const uSDmAbi = [
+export const USDm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -618,4 +618,4 @@ export const uSDmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

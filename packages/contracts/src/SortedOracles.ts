@@ -1,4 +1,4 @@
-export const sortedOraclesAbi = [
+export const SortedOracles = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -818,4 +818,4 @@ export const sortedOraclesAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

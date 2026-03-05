@@ -1,4 +1,4 @@
-export const virtualPoolFactoryAbi = [
+export const VirtualPoolFactory = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -292,4 +292,4 @@ export const virtualPoolFactoryAbi = [
       "name": "VirtualPoolAlreadyExistsForThisPair",
       "inputs": []
     }
-  ] as const;
+  ] as const };

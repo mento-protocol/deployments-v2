@@ -1,4 +1,4 @@
-export const gasPoolAbi = [
+export const GasPool = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -10,4 +10,4 @@ export const gasPoolAbi = [
       ],
       "stateMutability": "nonpayable"
     }
-  ] as const;
+  ] as const };

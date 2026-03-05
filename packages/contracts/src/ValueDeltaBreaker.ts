@@ -1,4 +1,4 @@
-export const valueDeltaBreakerAbi = [
+export const ValueDeltaBreaker = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -476,4 +476,4 @@ export const valueDeltaBreakerAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

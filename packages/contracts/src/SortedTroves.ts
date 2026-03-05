@@ -1,4 +1,4 @@
-export const sortedTrovesAbi = [
+export const SortedTroves = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -499,4 +499,4 @@ export const sortedTrovesAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

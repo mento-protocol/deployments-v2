@@ -1,4 +1,4 @@
-export const proxyAdminAbi = [
+export const ProxyAdmin = { abi: [
     {
       "type": "function",
       "name": "changeProxyAdmin",
@@ -148,4 +148,4 @@ export const proxyAdminAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

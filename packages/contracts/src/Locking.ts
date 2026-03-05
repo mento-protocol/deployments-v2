@@ -1,4 +1,4 @@
-export const lockingAbi = [
+export const Locking = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -1194,4 +1194,4 @@ export const lockingAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

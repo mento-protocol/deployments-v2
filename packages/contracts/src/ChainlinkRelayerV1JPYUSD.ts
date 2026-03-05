@@ -1,4 +1,4 @@
-export const chainlinkRelayerV1JPYUSDAbi = [
+export const ChainlinkRelayerV1JPYUSD = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -187,4 +187,4 @@ export const chainlinkRelayerV1JPYUSDAbi = [
       "name": "TooManyExistingReports",
       "inputs": []
     }
-  ] as const;
+  ] as const };

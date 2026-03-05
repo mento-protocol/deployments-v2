@@ -1,4 +1,4 @@
-export const mockChainlinkAggregatorUSDCUSDAbi = [
+export const MockChainlinkAggregatorUSDCUSD = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -262,4 +262,4 @@ export const mockChainlinkAggregatorUSDCUSDAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

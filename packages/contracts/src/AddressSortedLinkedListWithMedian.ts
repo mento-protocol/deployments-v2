@@ -1,4 +1,4 @@
-export const addressSortedLinkedListWithMedianAbi = [
+export const AddressSortedLinkedListWithMedian = { abi: [
     {
       "type": "function",
       "name": "toAddress",
@@ -37,4 +37,4 @@ export const addressSortedLinkedListWithMedianAbi = [
       ],
       "stateMutability": "pure"
     }
-  ] as const;
+  ] as const };

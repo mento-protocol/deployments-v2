@@ -1,4 +1,4 @@
-export const cDPLiquidityStrategyAbi = [
+export const CDPLiquidityStrategy = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -868,4 +868,4 @@ export const cDPLiquidityStrategyAbi = [
       "name": "LS_ZERO_DECIMAL",
       "inputs": []
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const emissionAbi = [
+export const Emission = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -265,4 +265,4 @@ export const emissionAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

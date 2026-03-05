@@ -1,4 +1,4 @@
-export const fPMMFactoryAbi = [
+export const FPMMFactory = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -843,4 +843,4 @@ export const fPMMFactoryAbi = [
       "name": "ZeroAddress",
       "inputs": []
     }
-  ] as const;
+  ] as const };

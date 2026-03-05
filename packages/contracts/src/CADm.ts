@@ -1,4 +1,4 @@
-export const cADmAbi = [
+export const CADm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const cADmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

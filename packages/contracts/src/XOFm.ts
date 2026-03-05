@@ -1,4 +1,4 @@
-export const xOFmAbi = [
+export const XOFm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const xOFmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };
