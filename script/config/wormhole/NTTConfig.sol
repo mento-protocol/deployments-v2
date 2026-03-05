@@ -57,7 +57,7 @@ library NTTConfig {
             chainName: "celo",
             evmChainId: CELO_EVM_CHAIN_ID,
             wormholeChainId: CELO_WH_CHAIN_ID,
-            tokenLabel: "Proxy:cUSD",
+            tokenLabel: "Proxy:USDm",
             isBurning: true,
             outboundLimit: DEFAULT_RATE_LIMIT
         });
