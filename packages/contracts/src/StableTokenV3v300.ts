@@ -1,4 +1,4 @@
-export const BRLm = {
+export const StableTokenV3v300 = {
   abi: [
       {
         "type": "constructor",
@@ -93,21 +93,32 @@ export const BRLm = {
       },
       {
         "type": "function",
-        "name": "broker",
-        "inputs": [],
+        "name": "burn",
+        "inputs": [
+          {
+            "name": "value",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ],
         "outputs": [
           {
             "name": "",
-            "type": "address",
-            "internalType": "address"
+            "type": "bool",
+            "internalType": "bool"
           }
         ],
-        "stateMutability": "view"
+        "stateMutability": "nonpayable"
       },
       {
         "type": "function",
         "name": "burn",
         "inputs": [
+          {
+            "name": "account",
+            "type": "address",
+            "internalType": "address"
+          },
           {
             "name": "value",
             "type": "uint256",
@@ -128,42 +139,60 @@ export const BRLm = {
         "name": "creditGasFees",
         "inputs": [
           {
-            "name": "from",
+            "name": "recipients",
+            "type": "address[]",
+            "internalType": "address[]"
+          },
+          {
+            "name": "amounts",
+            "type": "uint256[]",
+            "internalType": "uint256[]"
+          }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+      },
+      {
+        "type": "function",
+        "name": "creditGasFees",
+        "inputs": [
+          {
+            "name": "refundRecipient",
             "type": "address",
             "internalType": "address"
           },
           {
-            "name": "feeRecipient",
+            "name": "tipRecipient",
             "type": "address",
             "internalType": "address"
           },
           {
-            "name": "gatewayFeeRecipient",
+            "name": "",
             "type": "address",
             "internalType": "address"
           },
           {
-            "name": "communityFund",
+            "name": "baseFeeRecipient",
             "type": "address",
             "internalType": "address"
           },
           {
-            "name": "refund",
+            "name": "refundAmount",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "tipTxFee",
+            "name": "tipAmount",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "gatewayFee",
+            "name": "",
             "type": "uint256",
             "internalType": "uint256"
           },
           {
-            "name": "baseTxFee",
+            "name": "baseFeeAmount",
             "type": "uint256",
             "internalType": "uint256"
           }
@@ -228,7 +257,33 @@ export const BRLm = {
       },
       {
         "type": "function",
-        "name": "exchange",
+        "name": "deprecated_broker_storage_slot__",
+        "inputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
+        "stateMutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "deprecated_exchange_storage_slot__",
+        "inputs": [],
+        "outputs": [
+          {
+            "name": "",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
+        "stateMutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "deprecated_validators_storage_slot__",
         "inputs": [],
         "outputs": [
           {
@@ -278,6 +333,11 @@ export const BRLm = {
             "internalType": "string"
           },
           {
+            "name": "_initialOwner",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
             "name": "initialBalanceAddresses",
             "type": "address[]",
             "internalType": "address[]"
@@ -286,6 +346,21 @@ export const BRLm = {
             "name": "initialBalanceValues",
             "type": "uint256[]",
             "internalType": "uint256[]"
+          },
+          {
+            "name": "_minters",
+            "type": "address[]",
+            "internalType": "address[]"
+          },
+          {
+            "name": "_burners",
+            "type": "address[]",
+            "internalType": "address[]"
+          },
+          {
+            "name": "_operators",
+            "type": "address[]",
+            "internalType": "address[]"
           }
         ],
         "outputs": [],
@@ -293,26 +368,83 @@ export const BRLm = {
       },
       {
         "type": "function",
-        "name": "initializeV2",
+        "name": "initializeV3",
         "inputs": [
           {
-            "name": "_broker",
-            "type": "address",
-            "internalType": "address"
+            "name": "_minters",
+            "type": "address[]",
+            "internalType": "address[]"
           },
           {
-            "name": "_validators",
-            "type": "address",
-            "internalType": "address"
+            "name": "_burners",
+            "type": "address[]",
+            "internalType": "address[]"
           },
           {
-            "name": "_exchange",
-            "type": "address",
-            "internalType": "address"
+            "name": "_operators",
+            "type": "address[]",
+            "internalType": "address[]"
           }
         ],
         "outputs": [],
         "stateMutability": "nonpayable"
+      },
+      {
+        "type": "function",
+        "name": "isBurner",
+        "inputs": [
+          {
+            "name": "",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ],
+        "stateMutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "isMinter",
+        "inputs": [
+          {
+            "name": "",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ],
+        "stateMutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "isOperator",
+        "inputs": [
+          {
+            "name": "",
+            "type": "address",
+            "internalType": "address"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ],
+        "stateMutability": "view"
       },
       {
         "type": "function",
@@ -435,12 +567,22 @@ export const BRLm = {
       },
       {
         "type": "function",
-        "name": "setBroker",
+        "name": "returnFromPool",
         "inputs": [
           {
-            "name": "_broker",
+            "name": "_poolAddress",
             "type": "address",
             "internalType": "address"
+          },
+          {
+            "name": "_receiver",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "_amount",
+            "type": "uint256",
+            "internalType": "uint256"
           }
         ],
         "outputs": [],
@@ -448,12 +590,22 @@ export const BRLm = {
       },
       {
         "type": "function",
-        "name": "setExchange",
+        "name": "sendToPool",
         "inputs": [
           {
-            "name": "_exchange",
+            "name": "_sender",
             "type": "address",
             "internalType": "address"
+          },
+          {
+            "name": "_poolAddress",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "_amount",
+            "type": "uint256",
+            "internalType": "uint256"
           }
         ],
         "outputs": [],
@@ -461,12 +613,53 @@ export const BRLm = {
       },
       {
         "type": "function",
-        "name": "setValidators",
+        "name": "setBurner",
         "inputs": [
           {
-            "name": "_validators",
+            "name": "_burner",
             "type": "address",
             "internalType": "address"
+          },
+          {
+            "name": "_isBurner",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+      },
+      {
+        "type": "function",
+        "name": "setMinter",
+        "inputs": [
+          {
+            "name": "_minter",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "_isMinter",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+      },
+      {
+        "type": "function",
+        "name": "setOperator",
+        "inputs": [
+          {
+            "name": "_operator",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "_isOperator",
+            "type": "bool",
+            "internalType": "bool"
           }
         ],
         "outputs": [],
@@ -565,48 +758,6 @@ export const BRLm = {
         "stateMutability": "nonpayable"
       },
       {
-        "type": "function",
-        "name": "transferWithComment",
-        "inputs": [
-          {
-            "name": "to",
-            "type": "address",
-            "internalType": "address"
-          },
-          {
-            "name": "value",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "comment",
-            "type": "string",
-            "internalType": "string"
-          }
-        ],
-        "outputs": [
-          {
-            "name": "",
-            "type": "bool",
-            "internalType": "bool"
-          }
-        ],
-        "stateMutability": "nonpayable"
-      },
-      {
-        "type": "function",
-        "name": "validators",
-        "inputs": [],
-        "outputs": [
-          {
-            "name": "",
-            "type": "address",
-            "internalType": "address"
-          }
-        ],
-        "stateMutability": "view"
-      },
-      {
         "type": "event",
         "name": "Approval",
         "inputs": [
@@ -633,26 +784,19 @@ export const BRLm = {
       },
       {
         "type": "event",
-        "name": "BrokerUpdated",
+        "name": "BurnerUpdated",
         "inputs": [
           {
-            "name": "broker",
+            "name": "burner",
             "type": "address",
-            "indexed": false,
+            "indexed": true,
             "internalType": "address"
-          }
-        ],
-        "anonymous": false
-      },
-      {
-        "type": "event",
-        "name": "ExchangeUpdated",
-        "inputs": [
+          },
           {
-            "name": "exchange",
-            "type": "address",
+            "name": "isBurner",
+            "type": "bool",
             "indexed": false,
-            "internalType": "address"
+            "internalType": "bool"
           }
         ],
         "anonymous": false
@@ -666,6 +810,44 @@ export const BRLm = {
             "type": "uint8",
             "indexed": false,
             "internalType": "uint8"
+          }
+        ],
+        "anonymous": false
+      },
+      {
+        "type": "event",
+        "name": "MinterUpdated",
+        "inputs": [
+          {
+            "name": "minter",
+            "type": "address",
+            "indexed": true,
+            "internalType": "address"
+          },
+          {
+            "name": "isMinter",
+            "type": "bool",
+            "indexed": false,
+            "internalType": "bool"
+          }
+        ],
+        "anonymous": false
+      },
+      {
+        "type": "event",
+        "name": "OperatorUpdated",
+        "inputs": [
+          {
+            "name": "operator",
+            "type": "address",
+            "indexed": true,
+            "internalType": "address"
+          },
+          {
+            "name": "isOperator",
+            "type": "bool",
+            "indexed": false,
+            "internalType": "bool"
           }
         ],
         "anonymous": false
@@ -713,35 +895,9 @@ export const BRLm = {
           }
         ],
         "anonymous": false
-      },
-      {
-        "type": "event",
-        "name": "TransferComment",
-        "inputs": [
-          {
-            "name": "comment",
-            "type": "string",
-            "indexed": false,
-            "internalType": "string"
-          }
-        ],
-        "anonymous": false
-      },
-      {
-        "type": "event",
-        "name": "ValidatorsUpdated",
-        "inputs": [
-          {
-            "name": "validators",
-            "type": "address",
-            "indexed": false,
-            "internalType": "address"
-          }
-        ],
-        "anonymous": false
       }
     ] as const,
   address: {
-    11142220: '0x2294298942fdc79417DE9E0D740A4957E0e7783a',
+    11142220: '0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb',
   } as const,
 } as const;

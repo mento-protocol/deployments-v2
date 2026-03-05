@@ -174,12 +174,24 @@ function classifyType(name: string): ContractType {
   return "contract";
 }
 
-function abiToTsConst(name: string, abi: unknown[]): string {
+function generateTsModule(
+  name: string,
+  abi: unknown[],
+  addresses: Record<string, string>,
+): string {
   const abiJson = JSON.stringify(abi, null, 2)
     .split("\n")
-    .map((line, i) => (i === 0 ? line : `  ${line}`))
+    .map((line, i) => (i === 0 ? line : `    ${line}`))
     .join("\n");
-  return `export const ${name} = { abi: ${abiJson} as const };\n`;
+  const addressLines = Object.entries(addresses)
+    .map(([chainId, addr]) => `    ${chainId}: '${addr}',`)
+    .join("\n");
+  return (
+    `export const ${name} = {\n` +
+    `  abi: ${abiJson} as const,\n` +
+    `  address: {\n${addressLines}\n  } as const,\n` +
+    `} as const;\n`
+  );
 }
 
 function diffContracts(
@@ -436,26 +448,41 @@ async function main() {
 
   // ── Write abis/ and src/ ───────────────────────────────────────────────────
 
-  // Collect all unique export names across the whole contracts.json for
-  // generating a complete index.ts and exports map.
-  const allExportNames = new Set<string>();
-  for (const chains of Object.values(newContracts)) {
-    for (const namespaces of Object.values(chains)) {
-      for (const name of Object.keys(namespaces)) {
-        allExportNames.add(name);
+  // Build chainId → address map per export name from the complete contracts.json.
+  // This must cover ALL namespaces (not just the current run) so that each TS
+  // module always has a complete address map after every generator invocation.
+  const addressesByName = new Map<string, Record<string, string>>();
+  for (const [chainId, namespaces] of Object.entries(newContracts)) {
+    for (const contracts of Object.values(namespaces)) {
+      for (const [name, entry] of Object.entries(contracts)) {
+        if (!addressesByName.has(name)) addressesByName.set(name, {});
+        addressesByName.get(name)![chainId] = entry.address;
       }
     }
   }
 
-  // Write ABI JSON files and TS modules for newly resolved contracts only
+  // Collect all unique export names across the whole contracts.json for
+  // generating a complete index.ts and exports map.
+  const allExportNames = new Set(addressesByName.keys());
+
+  // Write ABI JSONs for newly resolved contracts.
   for (const contract of resolved) {
     writeFileSync(
       join(abisDir, `${contract.exportName}.json`),
       JSON.stringify(contract.abi, null, 2) + "\n",
     );
+  }
+
+  // Regenerate ALL TS modules from the complete state so that address maps
+  // stay up-to-date when a new namespace adds a chain to an existing contract.
+  for (const name of allExportNames) {
+    const abiPath = join(abisDir, `${name}.json`);
+    if (!existsSync(abiPath)) continue;
+    const abi = JSON.parse(readFileSync(abiPath, "utf8")) as unknown[];
+    const addresses = addressesByName.get(name) ?? {};
     writeFileSync(
-      join(srcDir, `${contract.exportName}.ts`),
-      abiToTsConst(contract.exportName, contract.abi),
+      join(srcDir, `${name}.ts`),
+      generateTsModule(name, abi, addresses),
     );
   }
 
