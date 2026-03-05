@@ -10,7 +10,13 @@ components:
     script: ConfigureV3PreStage
     deps:
       - DeployV3PreStage
+  Relay:
+    script: Relay
+    # Not really a dependency but we probably want to do this as late as possible
+    # before CreateFPMM so here "deps" is just used for ordering
+    deps:
+      - ConfigureV3PreStage
   CreateFPMM:
     script: CreateFPMM
     deps: 
-      - ConfigureV3PreStage
+      - Relay
