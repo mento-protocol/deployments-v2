@@ -114,7 +114,6 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
             marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
             l2SequencerUptimeFeed = address(0); // doesn't exist on the testnet
         }
-        l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
         fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");
