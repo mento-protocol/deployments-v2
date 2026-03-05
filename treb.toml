@@ -13,10 +13,15 @@ private_key = "${DEPLOYER_PRIVATE_KEY}"
 type = "private_key"
 private_key = "${REPORTER_PRIVATE_KEY}"
 
+[accounts.local-signer]
+type = "ledger"
+address="${LOCAL_SIGNER}"
+derivation_path = "${LOCAL_SIGNER_DERIVATION_PATH}"
+
 [accounts.deployer-safe]
 type = "safe"
 safe = "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687"
-signer = "dev-pk"
+signer = "local-signer"
 
 [accounts.mento-gov-celo]
 type = "oz_governor"
@@ -36,7 +41,6 @@ safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "dev-pk"
 
 [namespace.mainnet.senders]
-signer = "dev-pk"
 deployer = "deployer-safe"
 governor = "mento-gov-celo"
 migrationOwner = "migration-safe"
