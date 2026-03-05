@@ -427,9 +427,9 @@ contract CDPMigrationVerification is V3IntegrationBase {
             (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
             address priceFeedAddr = _getPriceFeed(troveManagerAddr);
 
-            assertNotEq(
+            assertEq(
                 IFXPriceFeed(priceFeedAddr).watchdogAddress(),
-                address(0),
+                fxPriceFeedManager,
                 string.concat("FXPriceFeed.watchdogAddress() is zero for CDP pool at index ", vm.toString(i))
             );
         }
