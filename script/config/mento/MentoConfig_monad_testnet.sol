@@ -2,51 +2,22 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
+import {ITradingLimits, BreakerType} from "./MentoConfig.sol";
+import {MentoConfig_monad} from "./MentoConfig_monad.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
 import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
 
-contract MentoConfig_monad_testnet is MentoConfig {
-    bytes32 internal valueBreakerId;
-    bytes32 internal medianBreakerId;
-
-    function _initialize() internal override {
-        _initStables();
-        _initCollateral();
-        _initOracles();
-        _initSwap();
-        _initGovernance();
-    }
-
-    /// ===================================================================
-    /// STABLE TOKENS
-    /// ===================================================================
-    function _initStables() internal {
-        _addStableToken("USD", "USD.m", "Mento Dollar");
-        _addStableToken("EUR", "EUR.m", "Mento Euro");
-        _addStableToken("BRL", "BRL.m", "Mento Brazilian Real");
-        _addStableToken("XOF", "XOF.m", "Mento West African CFA");
-        _addStableToken("KES", "KES.m", "Mento Kenyan Shilling");
-        _addStableToken("PHP", "PHP.m", "Mento Philippine Peso");
-        _addStableToken("COP", "COP.m", "Mento Colombian Peso");
-        _addStableToken("GHS", "GHS.m", "Mento Ghanaian Cedi");
-        _addStableToken("GBP", "GBP.m", "Mento British Pound");
-        _addStableToken("ZAR", "ZAR.m", "Mento South African Rand");
-        _addStableToken("CAD", "CAD.m", "Mento Canadian Dollar");
-        _addStableToken("AUD", "AUD.m", "Mento Australian Dollar");
-        _addStableToken("CHF", "CHF.m", "Mento Swiss Franc");
-        _addStableToken("JPY", "JPY.m", "Mento Japanese Yen");
-        _addStableToken("NGN", "NGN.m", "Mento Nigerian Naira");
-    }
-
+contract MentoConfig_monad_testnet is MentoConfig_monad {
     /// ===================================================================
     /// COLLATERAL
     /// ===================================================================
-    function _initCollateral() internal {
+    function _initCollateral() internal virtual override {
         _addCollateral("USDC", lookup("USDC"));
-        _setCollateralSpendingLimit("USDC", 1e24);
+        _registerMockCollateral("AUSD", 6);
+
+        _addReserveV2Collateral("USDC");
     }
 
     /// ===================================================================
@@ -55,9 +26,8 @@ contract MentoConfig_monad_testnet is MentoConfig {
     /// @notice Configure oracle ratefeeds and circuit breaker
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
-    function _initOracles() internal {
+    function _initOracles() internal virtual override {
         _oracleConfig = OracleConfig({
-            // XXX: testing override
             reportExpirySeconds: 2 days // 5 minutes
         });
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
@@ -85,67 +55,79 @@ contract MentoConfig_monad_testnet is MentoConfig {
             invert0: false
         });
 
-        _addRateFeed("USDT/USD");
-        _addToBreaker({
-            breakerId: valueBreakerId,
-            rateFeed: "USDT/USD",
-            cooldown: 1,
-            threshold: 0.001 * 1e24,
-            smoothingFactor: 0,
-            referenceValue: 1 * 1e24
-        });
-        _addMockAggregator({
-            label: "USDT/USD", description: "USDT/USD", source: 0x5e37AF40A7A344ec9b03CCD34a250F3dA9a20B02
-        });
-        _addChainlinkRelayer({
-            rateFeed: "USDT/USD",
-            description: "USDT/USD",
-            aggregator0: _predict("MockChainlinkAggregator", "USDT/USD"),
-            invert0: false
-        });
-
-        _addRateFeed("EURC/EUR");
-        _addToBreaker({
-            breakerId: valueBreakerId,
-            rateFeed: "EURC/EUR",
-            cooldown: 1,
-            threshold: 0.001 * 1e24,
-            smoothingFactor: 0,
-            referenceValue: 1 * 1e24
-        });
-        _addMockAggregator({
-            label: "EURC/USD", description: "EURC/USD", source: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd
-        });
-        // EUR/USD also added bellow
-        _addChainlinkRelayer({
-            rateFeed: "EURC/EUR",
-            description: "EURC/EUR",
-            maxTimestampSpread: 1 days,
-            aggregator0: _predict("MockChainlinkAggregator", "EURC/USD"),
-            invert0: false,
-            aggregator1: _predict("MockChainlinkAggregator", "EUR/USD"),
-            invert1: true
-        });
-
-        _configureDefaultFxRateFeed({currency: "EUR", source: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd});
-        _configureDefaultFxRateFeed({currency: "BRL", source: 0xe8EcaF727080968Ed5F6DBB595B91e50eEb9F8B3});
-        _configureDefaultFxRateFeed({currency: "XOF", source: 0x1626095f9548291cA67A6Aa743c30A1BB9380c9d});
-        _configureDefaultFxRateFeed({currency: "KES", source: 0x0826492a24b1dBd1d8fcB4701b38C557CE685e9D});
-        _configureDefaultFxRateFeed({currency: "PHP", source: 0x4ce8e628Bb82Ea5271908816a6C580A71233a66c});
-        _configureDefaultFxRateFeed({currency: "COP", source: 0x97b770B0200CCe161907a9cbe0C6B177679f8F7C});
-        _configureDefaultFxRateFeed({currency: "GHS", source: 0x2719B648DB57C5601Bd4cB2ea934Dec6F4262cD8});
         _configureDefaultFxRateFeed({currency: "GBP", source: 0xe76FE54dfeD2ce8B4d1AC63c982DfF7CFc92bf82});
-        _configureDefaultFxRateFeed({currency: "ZAR", source: 0x11b7221a0DD025778A95e9E0B87b477522C32E02});
-        _configureDefaultFxRateFeed({currency: "CAD", source: 0x2f6d6cB9e01d63e1a1873BACc5BfD4e7d4e461d1});
-        _configureDefaultFxRateFeed({currency: "AUD", source: 0xf2Bd4FAa89f5A360cDf118bccD183307fDBcB6F5});
-        _configureDefaultFxRateFeed({currency: "CHF", source: 0xfd49bFcb3dc4aAa713c25e7d23B14BB39C4B8857});
-        _configureDefaultFxRateFeed({currency: "JPY", source: 0xf323563241BF8B77a2979e9edC1181788A98EcB2});
-        _configureDefaultFxRateFeed({currency: "NGN", source: 0x235e5c8697177931459fA7D19fba7256d29F17DA});
+    }
+
+    /// ===================================================================
+    /// FPMMs
+    /// ===================================================================
+    function _initFPMMs() internal virtual override {
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
+
+        ReserveLiquidityStrategyPoolConfig memory emptyRls;
+
+        // ── USDm / GBPm ─────────────────────────────────────────────────
+        _addFPMM(
+            "GBPm",
+            "USDm",
+            getRateFeedIdFromString("GBP/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 20,
+                protocolFee: 10,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 77_000, limit1: 385_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            emptyRls
+        );
+
+        // Reserve liquidity strategy params for USD collateral pools
+        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+
+        // ── USDm / USDC ────────────────────────────────────────────────
+        _addFPMM(
+            "USDm",
+            "USDC",
+            getRateFeedIdFromString("USDCUSD"),
+            IFPMM.FPMMParams({
+                lpFee: 3,
+                protocolFee: 2,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            usdCollateralPoolsRls
+        );
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(string memory currency, address source) internal {
+    function _configureDefaultFxRateFeed(string memory currency, address source) internal virtual override {
         string memory rateFeed = string.concat(currency, "/USD");
         _addRateFeed(rateFeed);
         _fxRateFeedIds.push(_getRateFeedId(rateFeed));

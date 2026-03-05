@@ -12,6 +12,8 @@ components:
       SPOKE_LABEL: "GBPm"
       SPOKE_TOKEN_NAME: "Mento British Pound"
       SPOKE_TOKEN_SYMBOL: "GBPm"
+  MockCollaterals:
+    script: DeployMockCollaterals
   ProxyAdmin:
     script: DeployProxyAdmin
   AddressSortedLinkedListWithMedian:

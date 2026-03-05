@@ -96,30 +96,27 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         _setDummySenderConfigs();
         config = Config.get();
         vm.selectFork(forkId);
-        vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+        if (block.chainid == 42220 || block.chainid == 11142220) {
+            vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+            cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
+            virtualPoolFactory = lookupOrFail("VirtualPoolFactory:v3.0.0");
+            broker = lookupProxyOrFail("Broker");
+        }
 
         // Resolve key V3 addresses from registry
         fpmmFactory = lookupProxyOrFail("FPMMFactory");
         oracleAdapter = lookupProxyOrFail("OracleAdapter");
         factoryRegistry = lookupProxyOrFail("FactoryRegistry");
-        virtualPoolFactory = lookupOrFail("VirtualPoolFactory:v3.0.0");
         router = lookupOrFail("Router:v3.0.0");
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
-        cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         sortedOracles = lookupProxyOrFail("SortedOracles");
         proxyAdmin = lookupOrFail("ProxyAdmin");
-        if (block.chainid == 42220) {
-            marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
-            l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
-        } else {
-            marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
-            l2SequencerUptimeFeed = address(0); // doesn't exist on the testnet
-        }
-        broker = lookupProxyOrFail("Broker");
+        marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        l2SequencerUptimeFeed = address(0);
         reserveSafe = lookupOrFail("ReserveSafe");
-        fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");
+        fxPriceFeedManager = address(0);
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
