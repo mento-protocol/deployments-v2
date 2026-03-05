@@ -109,10 +109,11 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         proxyAdmin = lookupOrFail("ProxyAdmin");
         if (block.chainid == 42220) {
             marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+            l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
         } else {
             marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+            l2SequencerUptimeFeed = address(0); // doesn't exist on the testnet
         }
-        l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
         fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");

@@ -230,6 +230,19 @@
     "confirmations": [],
     "executionTxHash": "0x5dfb6366fafb3c8886052bd50f4dc696a383ee5e6cf70584e3ed349b3fb7c949"
   },
+  "0x179049d3b26ed81c602835b7f51daacaf919797e16605476a9f60c8fb5cd9611": {
+    "safeTxHash": "0x179049d3b26ed81c602835b7f51daacaf919797e16605476a9f60c8fb5cd9611",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 42220,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-04T18:17:15.626522+01:00",
+    "confirmations": [],
+    "executionTxHash": "0x2361c9ca38295330b28cf86922a5cee8e2590b7e5fb206293db1be0a03ec8475"
+  },
   "0x18eab5876318a1e0e221abc7b55cf21eb3c6020a0815bdd759857e98450e7b75": {
     "safeTxHash": "0x18eab5876318a1e0e221abc7b55cf21eb3c6020a0815bdd759857e98450e7b75",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -500,6 +513,18 @@
     "proposedAt": "2025-09-01T16:51:12.786081+02:00",
     "confirmations": [],
     "executionTxHash": "0x15078d2abcd8f49942d1cc28824949676696db9c59d377c62a83259eedff5043"
+  },
+  "0x3e4a63d9d42505e8be79e63fbbcac75a8d1ce3b9a81ac785a9fe8a833bf9f22b": {
+    "safeTxHash": "0x3e4a63d9d42505e8be79e63fbbcac75a8d1ce3b9a81ac785a9fe8a833bf9f22b",
+    "safeAddress": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+    "chainId": 42220,
+    "status": "QUEUED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-04T18:36:07.176921+01:00",
+    "confirmations": []
   },
   "0x403d63cf796d7a7953ae0d2eb23576e2434e5caefe5eb1361ec62a041b1c2a45": {
     "safeTxHash": "0x403d63cf796d7a7953ae0d2eb23576e2434e5caefe5eb1361ec62a041b1c2a45",
@@ -1003,6 +1028,18 @@
     "confirmations": [],
     "executionTxHash": "0xaf0287f789bd55aa59d2850cfbfd016f91b161d3a7f87179c1d0d2c573b8fa69"
   },
+  "0x767dd93aeed4d16132121639664b9803f1348ef92f2c5d95566a5279615c52ea": {
+    "safeTxHash": "0x767dd93aeed4d16132121639664b9803f1348ef92f2c5d95566a5279615c52ea",
+    "safeAddress": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+    "chainId": 42220,
+    "status": "QUEUED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-04T18:36:23.734678+01:00",
+    "confirmations": []
+  },
   "0x773ae70e81548b11945d2c40b2bca89f4a2e556e9a5c52c0ff6438f5dd0e353d": {
     "safeTxHash": "0x773ae70e81548b11945d2c40b2bca89f4a2e556e9a5c52c0ff6438f5dd0e353d",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -1344,6 +1381,18 @@
     "confirmations": [],
     "executionTxHash": "0x6e14d0e8cbc9ca7035e211ba7eb669665d95ec4dbd50018e524475291303b15a"
   },
+  "0x9e590c98f4fffa3a7206dd4688a16165e116d08f2c6be56021c8786bccffa601": {
+    "safeTxHash": "0x9e590c98f4fffa3a7206dd4688a16165e116d08f2c6be56021c8786bccffa601",
+    "safeAddress": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+    "chainId": 42220,
+    "status": "QUEUED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-04T18:17:15.626522+01:00",
+    "confirmations": []
+  },
   "0xa40b0c3d37c27fe1fc6862c25149a9132f0818bf0e43597987cf070f28d82dab": {
     "safeTxHash": "0xa40b0c3d37c27fe1fc6862c25149a9132f0818bf0e43597987cf070f28d82dab",
     "safeAddress": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
@@ -1660,6 +1709,18 @@
     "proposedAt": "2025-08-28T08:34:52.773342+03:00",
     "confirmations": [],
     "executionTxHash": "0x3917273b7701731e16ce140a9edfd80799a7ceda8e1cd4b1fb910f77494e20da"
+  },
+  "0xca2a6899a81c46b6b99b04b25e59fcdd4fd1173ffe71a8931511d684ea31985d": {
+    "safeTxHash": "0xca2a6899a81c46b6b99b04b25e59fcdd4fd1173ffe71a8931511d684ea31985d",
+    "safeAddress": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+    "chainId": 42220,
+    "status": "QUEUED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-04T18:38:45.475261+01:00",
+    "confirmations": []
   },
   "0xcf8745a16d91ce070a0c72e86a7e1b031d071e6c2d6ca2f6406078ea30939c8a": {
     "safeTxHash": "0xcf8745a16d91ce070a0c72e86a7e1b031d071e6c2d6ca2f6406078ea30939c8a",

@@ -6,9 +6,11 @@ optimizer = true
 ffi = true
 additional_compiler_profiles = [
     { name = "no-opt", optimizer_runs = 0 },
+    { name = "paris", evm_version = "paris" }
 ]
 compilation_restrictions = [
     { paths = "lib/bold/contracts/src/TroveManager.sol", optimizer_runs = 0 },
+    { paths = "lib/mento-core/contracts/tokens/StableTokenV3.sol", evm_version = "paris" }
 ]
 fs_permissions = [
     { access = "read-write", path = "cache"},

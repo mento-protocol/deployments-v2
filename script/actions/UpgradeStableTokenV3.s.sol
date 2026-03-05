@@ -24,7 +24,7 @@ contract UpgradeStableTokenV3 is TrebScript, ProxyHelper {
         string memory tokenSymbol = vm.envString("TOKEN_SYMBOL");
 
         // Look up addresses
-        address v3Impl = lookupOrFail("StableTokenV3:v3.0.0");
+        address v3Impl = lookupOrFail("StableTokenV3:v3.0.1"); // using v3.0.1 implementation for evm_version:paris due to gas payment problem.
         address tokenProxy = lookupOrFail(string.concat("Proxy:", tokenSymbol));
         address broker = lookupOrFail("Proxy:Broker");
 
