@@ -51,6 +51,7 @@ contract DeployV3PreStage is
     address stableTokenV3Impl;
     address reserveLiquidityStrategyImpl;
     address reserveLiquidityStrategy;
+    address l2SequencerUptimeFeed;
     IMentoConfig config;
 
     string constant label = "v3.0.0";
@@ -63,6 +64,7 @@ contract DeployV3PreStage is
         proxyAdmin = lookupOrFail("ProxyAdmin");
         feeSetter = lookupOrFail("FeeSetter");
         protocolFeeRecipient = lookupOrFail("ProtocolFeeRecipient");
+        l2SequencerUptimeFeed = lookup("L2SequencerUptimeFeed");
     }
 
     /// @custom:senders deployer, migrationOwner
@@ -95,7 +97,7 @@ contract DeployV3PreStage is
                 sortedOracles,
                 breakerBox,
                 marketHoursBreaker,
-                address(0),
+                l2SequencerUptimeFeed,
                 owner
             )
         );
@@ -268,6 +270,10 @@ contract DeployV3PreStage is
             address(oracleAdapterContract.marketHoursBreaker()) ==
                 marketHoursBreaker,
             "MarketHoursBreaker initialized with mismatched address"
+        );
+        require(
+            address(oracleAdapterContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed,
+            "L2SequencerUptimeFeed initialized with mismatched address"
         );
 
         // FPMMFactory Initialization

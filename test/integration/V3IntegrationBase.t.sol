@@ -72,8 +72,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal sortedOracles;
     address internal proxyAdmin;
     address internal marketHoursBreaker;
+    address internal l2SequencerUptimeFeed;
     address internal broker;
     address internal reserveSafe;
+    address internal fxPriceFeedManager;
 
     function setUp() public virtual {
         // Fork chain
@@ -110,9 +112,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         } else {
             marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
         }
+        l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
-
+        fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
