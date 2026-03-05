@@ -1,4 +1,4 @@
-export const chainlinkRelayerFactoryAbi = [
+export const ChainlinkRelayerFactory = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -493,4 +493,4 @@ export const chainlinkRelayerFactoryAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

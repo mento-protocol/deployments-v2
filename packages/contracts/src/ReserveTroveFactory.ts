@@ -1,4 +1,4 @@
-export const reserveTroveFactoryAbi = [
+export const ReserveTroveFactory = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -201,4 +201,4 @@ export const reserveTroveFactoryAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

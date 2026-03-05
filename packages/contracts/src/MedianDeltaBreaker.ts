@@ -1,4 +1,4 @@
-export const medianDeltaBreakerAbi = [
+export const MedianDeltaBreaker = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -597,4 +597,4 @@ export const medianDeltaBreakerAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

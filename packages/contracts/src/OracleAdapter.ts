@@ -1,4 +1,4 @@
-export const oracleAdapterAbi = [
+export const OracleAdapter = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -503,4 +503,4 @@ export const oracleAdapterAbi = [
       "name": "ZeroAddress",
       "inputs": []
     }
-  ] as const;
+  ] as const };

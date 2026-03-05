@@ -1,4 +1,4 @@
-export const collSurplusPoolAbi = [
+export const CollSurplusPool = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -189,4 +189,4 @@ export const collSurplusPoolAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const brokerAbi = [
+export const Broker = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -715,4 +715,4 @@ export const brokerAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

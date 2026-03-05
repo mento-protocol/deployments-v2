@@ -1,4 +1,4 @@
-export const pHPmAbi = [
+export const PHPm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const pHPmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

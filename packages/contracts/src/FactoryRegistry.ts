@@ -1,4 +1,4 @@
-export const factoryRegistryAbi = [
+export const FactoryRegistry = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -223,4 +223,4 @@ export const factoryRegistryAbi = [
       "name": "ZeroAddress",
       "inputs": []
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const nGNmAbi = [
+export const NGNm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const nGNmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

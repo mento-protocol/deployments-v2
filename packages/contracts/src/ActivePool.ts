@@ -1,4 +1,4 @@
-export const activePoolAbi = [
+export const ActivePool = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -704,4 +704,4 @@ export const activePoolAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

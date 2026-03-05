@@ -1,4 +1,4 @@
-export const breakerBoxAbi = [
+export const BreakerBox = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -698,4 +698,4 @@ export const breakerBoxAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const gHSmAbi = [
+export const GHSm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const gHSmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

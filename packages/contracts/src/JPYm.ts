@@ -1,4 +1,4 @@
-export const jPYmAbi = [
+export const JPYm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const jPYmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

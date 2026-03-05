@@ -1,4 +1,4 @@
-export const mockChainlinkAggregatorJPYUSDAbi = [
+export const MockChainlinkAggregatorJPYUSD = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -262,4 +262,4 @@ export const mockChainlinkAggregatorJPYUSDAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

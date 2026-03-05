@@ -1,4 +1,4 @@
-export const addressesRegistryAbi = [
+export const AddressesRegistry = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -659,4 +659,4 @@ export const addressesRegistryAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

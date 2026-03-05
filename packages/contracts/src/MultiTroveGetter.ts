@@ -1,4 +1,4 @@
-export const multiTroveGetterAbi = [
+export const MultiTroveGetter = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -185,4 +185,4 @@ export const multiTroveGetterAbi = [
       ],
       "stateMutability": "view"
     }
-  ] as const;
+  ] as const };

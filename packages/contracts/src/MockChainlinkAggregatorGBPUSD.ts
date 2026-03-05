@@ -1,4 +1,4 @@
-export const mockChainlinkAggregatorGBPUSDAbi = [
+export const MockChainlinkAggregatorGBPUSD = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -262,4 +262,4 @@ export const mockChainlinkAggregatorGBPUSDAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

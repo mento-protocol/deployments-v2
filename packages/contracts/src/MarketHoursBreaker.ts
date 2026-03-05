@@ -1,4 +1,4 @@
-export const marketHoursBreakerAbi = [
+export const MarketHoursBreaker = { abi: [
     {
       "type": "function",
       "name": "isFXMarketOpen",
@@ -37,4 +37,4 @@ export const marketHoursBreakerAbi = [
       ],
       "stateMutability": "view"
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const eURmAbi = [
+export const EURm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const eURmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

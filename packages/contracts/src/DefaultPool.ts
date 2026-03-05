@@ -1,4 +1,4 @@
-export const defaultPoolAbi = [
+export const DefaultPool = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -205,4 +205,4 @@ export const defaultPoolAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const cOPmAbi = [
+export const COPm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const cOPmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

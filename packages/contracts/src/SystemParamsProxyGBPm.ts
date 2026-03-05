@@ -1,4 +1,4 @@
-export const systemParamsProxyGBPmAbi = [
+export const SystemParamsProxyGBPm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -473,4 +473,4 @@ export const systemParamsProxyGBPmAbi = [
       "name": "SPPenaltyTooLow",
       "inputs": []
     }
-  ] as const;
+  ] as const };

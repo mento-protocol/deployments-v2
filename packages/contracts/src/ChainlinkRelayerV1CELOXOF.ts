@@ -1,4 +1,4 @@
-export const chainlinkRelayerV1CELOXOFAbi = [
+export const ChainlinkRelayerV1CELOXOF = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -187,4 +187,4 @@ export const chainlinkRelayerV1CELOXOFAbi = [
       "name": "TooManyExistingReports",
       "inputs": []
     }
-  ] as const;
+  ] as const };

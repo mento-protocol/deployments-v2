@@ -1,4 +1,4 @@
-export const reserveV2Abi = [
+export const ReserveV2 = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -807,4 +807,4 @@ export const reserveV2Abi = [
       "name": "StableAssetZeroAddress",
       "inputs": []
     }
-  ] as const;
+  ] as const };

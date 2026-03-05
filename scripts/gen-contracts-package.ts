@@ -31,10 +31,11 @@ interface DeploymentEntry {
   } | null;
 }
 
+type ContractType = "token" | "pool" | "contract";
+
 interface ContractEntry {
   address: string;
-  name: string;
-  abi: string;
+  type: ContractType;
 }
 
 // chainId → namespace → contractName → ContractEntry
@@ -147,13 +148,38 @@ function readAbi(solFile: string, contractName: string): unknown[] | null {
   return artifact.abi ?? null;
 }
 
+function classifyType(name: string): ContractType {
+  // Implementation contracts are never tokens, regardless of name prefix.
+  if (name.endsWith("Implementation")) return "contract";
+
+  // Stablecoins: 2–5 uppercase letters followed by lowercase 'm' (USDm, GBPm…)
+  if (/^[A-Z]{2,5}m$/.test(name)) return "token";
+
+  // Known external collateral / ERC-20 tokens
+  const knownTokens = new Set([
+    "CELO", "USDC", "USDT", "axlUSDC", "axlEUROC", "EURC", "aUSD", "MentoToken",
+  ]);
+  if (knownTokens.has(name)) return "token";
+
+  // Mock ERC-20s and StableToken implementations (spoke tokens, etc.)
+  if (name.startsWith("MockERC20")) return "token";
+  if (name.startsWith("StableToken")) return "token";
+
+  // FPMM pools (but not FPMMFactory or FPMMProxy)
+  if (name === "FPMM") return "pool";
+  if (name.startsWith("FPMM") && !name.startsWith("FPMMFactory") && !name.startsWith("FPMMProxy")) {
+    return "pool";
+  }
+
+  return "contract";
+}
+
 function abiToTsConst(name: string, abi: unknown[]): string {
-  const camelName = name.charAt(0).toLowerCase() + name.slice(1) + "Abi";
   const abiJson = JSON.stringify(abi, null, 2)
     .split("\n")
     .map((line, i) => (i === 0 ? line : `  ${line}`))
     .join("\n");
-  return `export const ${camelName} = ${abiJson} as const;\n`;
+  return `export const ${name} = { abi: ${abiJson} as const };\n`;
 }
 
 function diffContracts(
@@ -404,8 +430,7 @@ async function main() {
     newContracts[chainId][contract.namespace] ??= {};
     newContracts[chainId][contract.namespace][contract.exportName] = {
       address: contract.address,
-      name: contract.exportName,
-      abi: `./abis/${contract.exportName}.json`,
+      type: classifyType(contract.exportName),
     };
   }
 

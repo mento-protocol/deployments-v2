@@ -1,4 +1,4 @@
-export const kESmAbi = [
+export const KESm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const kESmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

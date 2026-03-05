@@ -1,4 +1,4 @@
-export const troveNFTAbi = [
+export const TroveNFT = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -397,4 +397,4 @@ export const troveNFTAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

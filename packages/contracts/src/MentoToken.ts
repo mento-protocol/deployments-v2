@@ -1,4 +1,4 @@
-export const mentoTokenAbi = [
+export const MentoToken = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -499,4 +499,4 @@ export const mentoTokenAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

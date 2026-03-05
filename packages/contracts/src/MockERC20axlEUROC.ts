@@ -1,4 +1,4 @@
-export const mockERC20axlEUROCAbi = [
+export const MockERC20axlEUROC = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -451,4 +451,4 @@ export const mockERC20axlEUROCAbi = [
         }
       ]
     }
-  ] as const;
+  ] as const };

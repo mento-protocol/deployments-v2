@@ -1,4 +1,4 @@
-export const cHFmAbi = [
+export const CHFm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const cHFmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

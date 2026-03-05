@@ -1,4 +1,4 @@
-export const bRLmAbi = [
+export const BRLm = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -739,4 +739,4 @@ export const bRLmAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };

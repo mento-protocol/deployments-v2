@@ -1,4 +1,4 @@
-export const routerAbi = [
+export const Router = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -975,4 +975,4 @@ export const routerAbi = [
       "name": "ZeroAddress",
       "inputs": []
     }
-  ] as const;
+  ] as const };

@@ -1,4 +1,4 @@
-export const stableTokenSpokeAbi = [
+export const StableTokenSpoke = { abi: [
     {
       "type": "constructor",
       "inputs": [
@@ -618,4 +618,4 @@ export const stableTokenSpokeAbi = [
       ],
       "anonymous": false
     }
-  ] as const;
+  ] as const };
