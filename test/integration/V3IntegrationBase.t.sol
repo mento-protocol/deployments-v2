@@ -263,9 +263,13 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     ///      can be instantiated in a test context. The config is never used for sending transactions.
     function _setDummySenderConfigs() internal {
         Senders.SenderInitConfig[] memory configs = new Senders.SenderInitConfig[](1);
+
+        // We need the deployer's address here because in one test we check aggregator addresses
+        // for each relayer, if we put a dummy address here, it affects relayer configured using
+        // the _predict() function.
         configs[0] = Senders.SenderInitConfig({
             name: "deployer",
-            account: address(1),
+            account: 0x2738F38Fde510743e0c589415E0598C4ceE6eAa7,
             senderType: SenderTypes.InMemory,
             canBroadcast: false,
             config: abi.encode(uint256(1))
