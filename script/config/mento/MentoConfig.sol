@@ -285,6 +285,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         revert(string.concat("Could not find exchange for ", vm.toString(asset0), " and ", vm.toString(asset1)));
     }
 
+    function getTokenDecimals(string memory symbol) external view returns (uint8) {
+        return _tokenDecimals[symbol];
+    }
+
     // ========== Internal Helper Functions ==========
 
     function _addStableToken(string memory currency, string memory symbol, string memory name) internal {

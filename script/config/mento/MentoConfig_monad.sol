@@ -30,7 +30,7 @@ contract MentoConfig_monad is MentoConfig {
 
         _coreAggs = CoreAggregators({
             celoUsd: address(0),
-            ethUsd: 0x1B1414782B859871781bA3E4B0979b9ca57A0A04,
+            ethUsd: address(0),
             usdcUsd: 0xf5F15f188AbCB0d165D1Edb7f37F7d6fA2fCebec,
             usdtUsd: address(0),
             eurcUsd: address(0),
@@ -91,7 +91,6 @@ contract MentoConfig_monad is MentoConfig {
         ReserveLiquidityStrategyPoolConfig memory emptyRls;
 
         // ── USDm / GBPm ─────────────────────────────────────────────────
-        // TODO: Double check configs
         _addFPMM(
             "GBPm",
             "USDm",
@@ -123,11 +122,10 @@ contract MentoConfig_monad is MentoConfig {
         });
 
         // ── USDm / USDC ────────────────────────────────────────────────
-        // TODO: Double check configs
         _addFPMM(
             "USDm",
             "USDC",
-            getRateFeedIdFromString("USDCUSD"),
+            getRateFeedIdFromString("USDC/USD"),
             IFPMM.FPMMParams({
                 lpFee: 3,
                 protocolFee: 2,
@@ -137,13 +135,12 @@ contract MentoConfig_monad is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
             usdCollateralPoolsRls
         );
 
         // ── USDm / AUSD ────────────────────────────────────────────────
-        // TODO: Double check configs
         _addFPMM(
             "USDm",
             "AUSD",
@@ -157,8 +154,8 @@ contract MentoConfig_monad is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
             usdCollateralPoolsRls
         );
     }

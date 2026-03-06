@@ -26,8 +26,6 @@ contract SetupLocalFork_monad_testnet is TrebScript, ProxyHelper, SetupLocalFork
         Senders.Sender storage _deployer = sender("deployer");
         Senders.Sender storage _migrationOwner = sender("migrationOwner");
 
-        console.log("Deployer", _deployer.account);
-        console.log("Migration Owner", _migrationOwner.account);
         IStableTokenV3 gbpm = IStableTokenV3(_migrationOwner.harness(lookupProxy("GBPm", ProxyType.OZTUP)));
         IStableTokenV3 usdm = IStableTokenV3(_migrationOwner.harness(lookupProxy("USDm", ProxyType.OZTUP)));
         IMockERC20 ausd = IMockERC20(_migrationOwner.harness(lookup("MockERC20:AUSD")));

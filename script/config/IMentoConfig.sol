@@ -208,4 +208,6 @@ interface IMentoConfig {
         returns (ExchangeConfig memory config, bool found);
 
     function getAddress(string memory asset) external returns (address);
+
+    function getTokenDecimals(string memory symbol) external view returns (uint8);
 }
