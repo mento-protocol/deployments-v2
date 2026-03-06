@@ -6,11 +6,10 @@ import {ERC20Burnable} from "lib/openzeppelin-contracts/contracts/token/ERC20/ex
 import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 
 contract MockERC20 is ERC20, ERC20Burnable, Ownable {
-    constructor(
-        string memory name_,
-        string memory symbol_,
-        address initialOwner_
-    ) ERC20(name_, symbol_) Ownable(initialOwner_) {}
+    constructor(string memory name_, string memory symbol_, address initialOwner_)
+        ERC20(name_, symbol_)
+        Ownable(initialOwner_)
+    {}
 
     function mint(address to_, uint256 amount_) external onlyOwner {
         _mint(to_, amount_);

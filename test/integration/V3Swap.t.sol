@@ -11,7 +11,6 @@ import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
-
 /**
  * @title V3Swap
  * @notice Tests swap flows on all deployed pools (FPMM and VirtualPool):
@@ -94,8 +93,16 @@ contract V3Swap is V3IntegrationBase {
             fpmm.swap(0, expectedOut, trader, "");
             vm.stopPrank();
 
-            assertEq(IERC20(t0).balanceOf(trader), traderT0Before - amountIn, string.concat("token0 balance mismatch for pool ", idx));
-            assertEq(IERC20(t1).balanceOf(trader), traderT1Before + expectedOut, string.concat("token1 balance mismatch for pool ", idx));
+            assertEq(
+                IERC20(t0).balanceOf(trader),
+                traderT0Before - amountIn,
+                string.concat("token0 balance mismatch for pool ", idx)
+            );
+            assertEq(
+                IERC20(t1).balanceOf(trader),
+                traderT1Before + expectedOut,
+                string.concat("token1 balance mismatch for pool ", idx)
+            );
         }
     }
 
@@ -120,8 +127,16 @@ contract V3Swap is V3IntegrationBase {
             fpmm.swap(expectedOut, 0, trader, "");
             vm.stopPrank();
 
-            assertEq(IERC20(t1).balanceOf(trader), traderT1Before - amountIn, string.concat("token1 balance mismatch for pool ", idx));
-            assertEq(IERC20(t0).balanceOf(trader), traderT0Before + expectedOut, string.concat("token0 balance mismatch for pool ", idx));
+            assertEq(
+                IERC20(t1).balanceOf(trader),
+                traderT1Before - amountIn,
+                string.concat("token1 balance mismatch for pool ", idx)
+            );
+            assertEq(
+                IERC20(t0).balanceOf(trader),
+                traderT0Before + expectedOut,
+                string.concat("token0 balance mismatch for pool ", idx)
+            );
         }
     }
 
@@ -172,7 +187,9 @@ contract V3Swap is V3IntegrationBase {
 
             (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
 
-            assertEq(r0After, r0Before + amountIn - protocolFeeAmount, string.concat("reserve0 mismatch for pool ", idx));
+            assertEq(
+                r0After, r0Before + amountIn - protocolFeeAmount, string.concat("reserve0 mismatch for pool ", idx)
+            );
             assertEq(r1After, r1Before - expectedOut, string.concat("reserve1 mismatch for pool ", idx));
         }
     }
@@ -239,17 +256,15 @@ contract V3Swap is V3IntegrationBase {
 
         // FPMM pools
         for (uint256 i = 0; i < fpmmPools.length; i++) {
-            address resolved = routerContract.poolFor(
-                IFPMM(fpmmPools[i]).token0(), IFPMM(fpmmPools[i]).token1(), fpmmFactory
-            );
+            address resolved =
+                routerContract.poolFor(IFPMM(fpmmPools[i]).token0(), IFPMM(fpmmPools[i]).token1(), fpmmFactory);
             assertEq(resolved, fpmmPools[i], string.concat("FPMM poolFor mismatch at index ", vm.toString(i)));
         }
 
         // Virtual pools
         for (uint256 i = 0; i < vpPools.length; i++) {
-            address resolved = routerContract.poolFor(
-                IRPool(vpPools[i]).token0(), IRPool(vpPools[i]).token1(), virtualPoolFactory
-            );
+            address resolved =
+                routerContract.poolFor(IRPool(vpPools[i]).token0(), IRPool(vpPools[i]).token1(), virtualPoolFactory);
             assertEq(resolved, vpPools[i], string.concat("VP poolFor mismatch at index ", vm.toString(i)));
         }
     }
@@ -305,24 +320,25 @@ contract V3Swap is V3IntegrationBase {
 
         vm.startPrank(trader);
         IERC20(tokenIn).approve(router, amountIn);
-        uint256[] memory amounts = routerContract.swapExactTokensForTokens(
-            amountIn, expectedOut, routes, trader, block.timestamp + 1 hours
-        );
+        uint256[] memory amounts =
+            routerContract.swapExactTokensForTokens(amountIn, expectedOut, routes, trader, block.timestamp + 1 hours);
         vm.stopPrank();
 
         assertEq(amounts[0], amountIn, string.concat("amountIn mismatch for ", label));
         assertEq(amounts[1], expectedOut, string.concat("amountOut mismatch for ", label));
-        assertEq(IERC20(tokenIn).balanceOf(trader), traderInBefore - amountIn, string.concat("tokenIn balance for ", label));
-        assertEq(IERC20(tokenOut).balanceOf(trader), traderOutBefore + expectedOut, string.concat("tokenOut balance for ", label));
+        assertEq(
+            IERC20(tokenIn).balanceOf(trader), traderInBefore - amountIn, string.concat("tokenIn balance for ", label)
+        );
+        assertEq(
+            IERC20(tokenOut).balanceOf(trader),
+            traderOutBefore + expectedOut,
+            string.concat("tokenOut balance for ", label)
+        );
     }
 
-    function _test_multiHopSwap(
-        address tokenA,
-        address tokenB,
-        address tokenC,
-        address factory1,
-        address factory2
-    ) internal {
+    function _test_multiHopSwap(address tokenA, address tokenB, address tokenC, address factory1, address factory2)
+        internal
+    {
         address trader = makeAddr("multiHopTrader");
         uint256 amountIn = 10 ** IERC20Metadata(tokenA).decimals();
 

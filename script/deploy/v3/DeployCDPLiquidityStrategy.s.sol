@@ -11,11 +11,7 @@ import {Config, IMentoConfig} from "script/config/Config.sol";
 import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 
-contract DeployCDPLiquidityStrategy is
-    TrebScript,
-    ProxyHelper,
-    PostChecksHelper
-{
+contract DeployCDPLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -40,31 +36,20 @@ contract DeployCDPLiquidityStrategy is
 
         require(config.getCDPRedemptionShortfallTolerance() > 0, "redemption shortfall tolerance not set");
 
-        cdpLiquidityStrategyImpl = deployer
-            .create3("CDPLiquidityStrategy")
-            .setLabel(label)
-            .deploy(
-                abi.encode(true, config.getCDPRedemptionShortfallTolerance())
-            );
+        cdpLiquidityStrategyImpl = deployer.create3("CDPLiquidityStrategy").setLabel(label)
+            .deploy(abi.encode(true, config.getCDPRedemptionShortfallTolerance()));
 
         cdpLiquidityStrategy = deployProxy(
             deployer,
             "CDPLiquidityStrategy",
             cdpLiquidityStrategyImpl,
-            abi.encodeWithSelector(
-                ICDPLiquidityStrategy.initialize.selector,
-                owner.account
-            )
+            abi.encodeWithSelector(ICDPLiquidityStrategy.initialize.selector, owner.account)
         );
         postChecks();
     }
 
     function postChecks() internal view {
-        verifyProxyImpl(
-            "CDPLiquidityStrategy",
-            cdpLiquidityStrategy,
-            cdpLiquidityStrategyImpl
-        );
+        verifyProxyImpl("CDPLiquidityStrategy", cdpLiquidityStrategy, cdpLiquidityStrategyImpl);
         verifyOwnership("CDPLiquidityStrategy", cdpLiquidityStrategy, owner.account);
     }
 }

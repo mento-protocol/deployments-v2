@@ -67,11 +67,7 @@ contract GovernanceVerification is V3IntegrationBase {
     /// @notice TimelockController minDelay must match config timelockDelay
     function test_timelockDelay_matchesConfig() public view {
         uint256 actual = ITimelockControllerView(timelockController).getMinDelay();
-        assertEq(
-            actual,
-            govCfg.timelockDelay,
-            "TimelockController.getMinDelay() does not match config timelockDelay"
-        );
+        assertEq(actual, govCfg.timelockDelay, "TimelockController.getMinDelay() does not match config timelockDelay");
     }
 
     // ========== GovernanceConfig: MentoGovernor ==========
@@ -79,21 +75,13 @@ contract GovernanceVerification is V3IntegrationBase {
     /// @notice MentoGovernor votingDelay must match config
     function test_votingDelay_matchesConfig() public view {
         uint256 actual = IMentoGovernorView(mentoGovernor).votingDelay();
-        assertEq(
-            actual,
-            govCfg.votingDelay,
-            "MentoGovernor.votingDelay() does not match config votingDelay"
-        );
+        assertEq(actual, govCfg.votingDelay, "MentoGovernor.votingDelay() does not match config votingDelay");
     }
 
     /// @notice MentoGovernor votingPeriod must match config
     function test_votingPeriod_matchesConfig() public view {
         uint256 actual = IMentoGovernorView(mentoGovernor).votingPeriod();
-        assertEq(
-            actual,
-            govCfg.votingPeriod,
-            "MentoGovernor.votingPeriod() does not match config votingPeriod"
-        );
+        assertEq(actual, govCfg.votingPeriod, "MentoGovernor.votingPeriod() does not match config votingPeriod");
     }
 
     /// @notice MentoGovernor proposalThreshold must match config
@@ -109,11 +97,7 @@ contract GovernanceVerification is V3IntegrationBase {
     /// @notice MentoGovernor quorum numerator (percentage) must match config quorum
     function test_quorumNumerator_matchesConfig() public view {
         uint256 actual = IMentoGovernorView(mentoGovernor).quorumNumerator();
-        assertEq(
-            actual,
-            govCfg.quorum,
-            "MentoGovernor.quorumNumerator() does not match config quorum"
-        );
+        assertEq(actual, govCfg.quorum, "MentoGovernor.quorumNumerator() does not match config quorum");
     }
 
     // ========== GovernanceConfig: Watchdog ==========
@@ -144,20 +128,12 @@ contract GovernanceVerification is V3IntegrationBase {
     /// @notice Locking minCliffPeriod must match config
     function test_minCliffPeriod_matchesConfig() public view {
         uint256 actual = ILockingView(locking).minCliffPeriod();
-        assertEq(
-            actual,
-            lockingCfg.minCliffPeriod,
-            "Locking.minCliffPeriod() does not match config minCliffPeriod"
-        );
+        assertEq(actual, lockingCfg.minCliffPeriod, "Locking.minCliffPeriod() does not match config minCliffPeriod");
     }
 
     /// @notice Locking minSlopePeriod must match config
     function test_minSlopePeriod_matchesConfig() public view {
         uint256 actual = ILockingView(locking).minSlopePeriod();
-        assertEq(
-            actual,
-            lockingCfg.minSlopePeriod,
-            "Locking.minSlopePeriod() does not match config minSlopePeriod"
-        );
+        assertEq(actual, lockingCfg.minSlopePeriod, "Locking.minSlopePeriod() does not match config minSlopePeriod");
     }
 }

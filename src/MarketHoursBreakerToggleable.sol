@@ -4,7 +4,9 @@ pragma solidity 0.8.24;
 import {Ownable} from "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 
 // solhint-disable-next-line max-line-length
-import {BokkyPooBahsDateTimeLibrary as DateTimeLibrary} from "lib/mento-core/lib/BokkyPooBahsDateTimeLibrary/contracts/BokkyPooBahsDateTimeLibrary.sol";
+import {
+    BokkyPooBahsDateTimeLibrary as DateTimeLibrary
+} from "lib/mento-core/lib/BokkyPooBahsDateTimeLibrary/contracts/BokkyPooBahsDateTimeLibrary.sol";
 
 /**
  * @title MarketHoursBreakerToggleable
@@ -36,7 +38,13 @@ contract MarketHoursBreakerToggleable is Ownable {
     }
 
     // solhint-disable-next-line no-unused-vars
-    function shouldTrigger(address /* rateFeedID */) public view returns (bool triggerBreaker) {
+    function shouldTrigger(
+        address /* rateFeedID */
+    )
+        public
+        view
+        returns (bool triggerBreaker)
+    {
         require(isFXMarketOpen(block.timestamp), "MarketHoursBreaker: FX market is closed");
 
         return false;

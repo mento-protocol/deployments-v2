@@ -21,11 +21,7 @@ contract MockChainlinkAggregator is Ownable {
         _;
     }
 
-    constructor(
-        string memory _description,
-        uint8 _decimals,
-        address _initialOwner
-    ) Ownable(_initialOwner) {
+    constructor(string memory _description, uint8 _decimals, address _initialOwner) Ownable(_initialOwner) {
         description = _description;
         decimals = _decimals;
     }
@@ -42,16 +38,11 @@ contract MockChainlinkAggregator is Ownable {
         savedAnswer = _answer;
     }
 
-    function setLastUpdated(
-        uint256 _lastUpdated
-    ) external onlyOwnerOrExternalProvider {
+    function setLastUpdated(uint256 _lastUpdated) external onlyOwnerOrExternalProvider {
         lastUpdated = _lastUpdated;
     }
 
-    function report(
-        int256 _answer,
-        uint256 _lastUpdated
-    ) external onlyOwnerOrExternalProvider {
+    function report(int256 _answer, uint256 _lastUpdated) external onlyOwnerOrExternalProvider {
         savedAnswer = _answer;
         lastUpdated = _lastUpdated;
     }
@@ -59,20 +50,8 @@ contract MockChainlinkAggregator is Ownable {
     function latestRoundData()
         external
         view
-        returns (
-            uint80 roundId,
-            int256 answer,
-            uint256 startedAt,
-            uint256 updatedAt,
-            uint80 answeredInRound
-        )
+        returns (uint80 roundId, int256 answer, uint256 startedAt, uint256 updatedAt, uint80 answeredInRound)
     {
-        return (
-            uint80(0),
-            savedAnswer,
-            uint256(0),
-            block.timestamp - 5,
-            uint80(0)
-        );
+        return (uint80(0), savedAnswer, uint256(0), block.timestamp - 5, uint80(0));
     }
 }

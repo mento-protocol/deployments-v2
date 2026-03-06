@@ -123,7 +123,6 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         require(IStableTokenSpoke(stableTokenSpokeProxy).isBurner(newBurner), "burner not set");
 
         console.log(unicode" > multisig can set minter and burner ✅");
-
     }
 
     function checkMultisigCanUpgradeProxy(address stableTokenSpokeProxy) internal {
@@ -132,11 +131,12 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         address newImpl = address(new StableTokenSpoke(true));
 
         vm.prank(MIGRATION_MULTISIG);
-        IProxyAdmin(proxyAdmin).upgradeAndCall(
-            ITransparentUpgradeableProxy(stableTokenSpokeProxy),
-            newImpl,
-            abi.encodeWithSelector(IOwnable.owner.selector)
-        );
+        IProxyAdmin(proxyAdmin)
+            .upgradeAndCall(
+                ITransparentUpgradeableProxy(stableTokenSpokeProxy),
+                newImpl,
+                abi.encodeWithSelector(IOwnable.owner.selector)
+            );
 
         require(getOZTUPProxyImplementation(stableTokenSpokeProxy) == newImpl, "expected new implementation");
 

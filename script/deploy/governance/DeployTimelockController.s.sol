@@ -19,20 +19,12 @@ contract DeployTimelockController is TrebScript, ProxyHelper {
     /// @custom:senders deployer
     function run() public broadcast {
         config = Config.get();
-        IMentoConfig.GovernanceConfig memory govCfg = config
-            .getGovernanceConfig();
+        IMentoConfig.GovernanceConfig memory govCfg = config.getGovernanceConfig();
 
         Senders.Sender storage deployer = sender("deployer");
-        address mentoGovernor = predictProxy(
-            ProxyType.OZTUP,
-            deployer,
-            "MentoGovernor"
-        );
+        address mentoGovernor = predictProxy(ProxyType.OZTUP, deployer, "MentoGovernor");
 
-        address implementation = deployer
-            .create3("TimelockController")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(true));
+        address implementation = deployer.create3("TimelockController").setLabel("v2.6.5").deploy(abi.encode(true));
 
         address[] memory proposers = addresses(mentoGovernor); // only Governor can propose
         address[] memory executors = addresses(address(0)); // anybody can execute

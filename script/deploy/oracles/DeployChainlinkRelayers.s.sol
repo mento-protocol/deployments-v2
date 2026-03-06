@@ -27,22 +27,14 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
 
         Senders.Sender storage deployer = sender("deployer");
 
-        address chainlinkRelayerFactoryProxy = lookupProxyOrFail(
-            "ChainlinkRelayerFactory",
-            ProxyType.OZTUP
-        );
+        address chainlinkRelayerFactoryProxy = lookupProxyOrFail("ChainlinkRelayerFactory", ProxyType.OZTUP);
         address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
 
-        IChainlinkRelayerFactory factory = IChainlinkRelayerFactory(
-            deployer.harness(chainlinkRelayerFactoryProxy)
-        );
-        ISortedOracles sortedOracles = ISortedOracles(
-            deployer.harness(sortedOraclesProxy)
-        );
+        IChainlinkRelayerFactory factory = IChainlinkRelayerFactory(deployer.harness(chainlinkRelayerFactoryProxy));
+        ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
 
         // Get Chainlink relayer configurations from config
-        IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config
-            .getChainlinkRelayerConfigs();
+        IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config.getChainlinkRelayerConfigs();
 
         if (relayerConfigs.length == 0) {
             console.log("No Chainlink relayers configured");
@@ -50,9 +42,8 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
         }
 
         for (uint256 i = 0; i < relayerConfigs.length; i++) {
-            address existingRelayer = IChainlinkRelayerFactory(
-                chainlinkRelayerFactoryProxy
-            ).getRelayer(relayerConfigs[i].rateFeedId);
+            address existingRelayer =
+                IChainlinkRelayerFactory(chainlinkRelayerFactoryProxy).getRelayer(relayerConfigs[i].rateFeedId);
 
             if (existingRelayer != address(0)) {
                 continue;
@@ -73,9 +64,7 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
                 relayerConfigs[i].aggregators
             );
 
-            bytes memory chainlinkRelayerV1Code = vm.getCode(
-                "ChainlinkRelayerV1"
-            );
+            bytes memory chainlinkRelayerV1Code = vm.getCode("ChainlinkRelayerV1");
 
             /// Manual emit of treb ContractDeployed event so we record the relayer
             /// in the treb registry.
@@ -89,21 +78,13 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
                     entropy: "",
                     salt: keccak256("mento.chainlinkRelayer"),
                     bytecodeHash: keccak256(chainlinkRelayerV1Code),
-                    initCodeHash: keccak256(
-                        abi.encode(chainlinkRelayerV1Code, constructorArgs)
-                    ),
+                    initCodeHash: keccak256(abi.encode(chainlinkRelayerV1Code, constructorArgs)),
                     constructorArgs: constructorArgs,
                     createStrategy: "CREATE2"
                 })
             );
 
-            console.log(
-                string.concat(
-                    "Deployed Chainlink relayer for ",
-                    relayerConfigs[i].rateFeed
-                ),
-                relayer
-            );
+            console.log(string.concat("Deployed Chainlink relayer for ", relayerConfigs[i].rateFeed), relayer);
 
             // Add relayer as oracle for this rate feed
             sortedOracles.addOracle(relayerConfigs[i].rateFeedId, relayer);

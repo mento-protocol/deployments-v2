@@ -9,10 +9,7 @@ import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 // Interface for Broker initialization
 interface IBroker {
-    function initialize(
-        address[] calldata _exchangeProviders,
-        address[] calldata _reserves
-    ) external;
+    function initialize(address[] calldata _exchangeProviders, address[] calldata _reserves) external;
 }
 
 contract DeployBroker is TrebScript, ProxyHelper {
@@ -30,9 +27,7 @@ contract DeployBroker is TrebScript, ProxyHelper {
         Senders.Sender storage deployer = sender("deployer");
 
         // Step 1: Deploy Broker implementation (0.8.18)
-        brokerImpl = deployer
-            .create3("lib/mento-core/contracts/swap/Broker.sol:Broker")
-            .setLabel("v2.6.5")
+        brokerImpl = deployer.create3("lib/mento-core/contracts/swap/Broker.sol:Broker").setLabel("v2.6.5")
             .deploy(abi.encode(false)); // test parameter
         console.log("Broker implementation deployed at:", brokerImpl);
 

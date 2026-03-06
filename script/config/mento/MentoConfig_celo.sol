@@ -19,7 +19,6 @@ contract MentoConfig_celo is MentoConfig {
     CoreAggregators internal _coreAggs;
     FxAggregators internal _fxAggs;
 
-
     function _initialize() internal override {
         _configureParams();
         _initStables();
@@ -45,7 +44,7 @@ contract MentoConfig_celo is MentoConfig {
 
         _coreAggs = CoreAggregators({
             celoUsd: 0x0568fD19986748cEfF3301e55c0eb1E729E0Ab7e,
-            ethUsd:  0x1FcD30A73D67639c1cD89ff5746E7585731c083B,
+            ethUsd: 0x1FcD30A73D67639c1cD89ff5746E7585731c083B,
             usdcUsd: 0xc7A353BaE210aed958a1A2928b654938EC59DaB2,
             usdtUsd: 0x5e37AF40A7A344ec9b03CCD34a250F3dA9a20B02,
             eurcUsd: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd
@@ -67,7 +66,6 @@ contract MentoConfig_celo is MentoConfig {
             jpy: 0xf323563241BF8B77a2979e9edC1181788A98EcB2,
             ngn: 0xc17cBE2dB40e53F4984C46F608DA6DA1fF074c11
         });
-
     }
 
     /// ===================================================================
@@ -144,8 +142,8 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({ limit0: 77_000, limit1: 385_000 }),
-            TokenLimits({ limit0: 100_000, limit1: 500_000 }),
+            TokenLimits({limit0: 77_000, limit1: 385_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
             emptyRls
         );
 
@@ -175,8 +173,8 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({ limit0: 500_000, limit1: 1_000_000 }),
-            TokenLimits({ limit0: 500_000, limit1: 1_000_000 }),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             usdCollateralPoolsRls
         );
 
@@ -194,8 +192,8 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({ limit0: 500_000, limit1: 1_000_000 }),
-            TokenLimits({ limit0: 500_000, limit1: 1_000_000 }),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             usdCollateralPoolsRls
         );
 
@@ -213,8 +211,8 @@ contract MentoConfig_celo is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({ limit0: 500_000, limit1: 1_000_000 }),
-            TokenLimits({ limit0: 500_000, limit1: 1_000_000 }),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             usdCollateralPoolsRls
         );
     }
@@ -255,10 +253,7 @@ contract MentoConfig_celo is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addChainlinkRelayer({
-            rateFeed: "USDCUSD",
-            description: "USDC/USD",
-            aggregator0: _coreAggs.usdcUsd,
-            invert0: false
+            rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
         });
 
         _addRateFeed("USDTUSD");
@@ -271,10 +266,7 @@ contract MentoConfig_celo is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addChainlinkRelayer({
-            rateFeed: "USDTUSD",
-            description: "USDT/USD",
-            aggregator0: _coreAggs.usdtUsd,
-            invert0: false
+            rateFeed: "USDTUSD", description: "USDT/USD", aggregator0: _coreAggs.usdtUsd, invert0: false
         });
 
         _addRateFeed("EUROCEUR");
@@ -310,10 +302,7 @@ contract MentoConfig_celo is MentoConfig {
             referenceValue: 0
         });
         _addChainlinkRelayer({
-            rateFeed: "CELOUSD",
-            description: "CELOUSD",
-            aggregator0: _coreAggs.celoUsd,
-            invert0: false
+            rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
         });
 
         string memory celoEthFeed = string.concat(_rateFeedPrefix, "CELOETH");
@@ -334,7 +323,9 @@ contract MentoConfig_celo is MentoConfig {
             _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"));
             _configureDefaultFxRateFeed("XOF", _fxAggs.xof, address(0), _lookupTokenAddress("XOFm"));
             // KES: both the FX/USD feed (registered without relayed: prefix) and CELO cross-pair use non-standard IDs
-            _configureDefaultFxRateFeed("KES", _fxAggs.kes, getRateFeedIdFromString("KESUSD"), _lookupTokenAddress("KESm"));
+            _configureDefaultFxRateFeed(
+                "KES", _fxAggs.kes, getRateFeedIdFromString("KESUSD"), _lookupTokenAddress("KESm")
+            );
         } else {
             _configureDefaultFxRateFeed({currency: "EUR", aggregator: _fxAggs.eur});
             _configureDefaultFxRateFeed({currency: "BRL", aggregator: _fxAggs.brl});
@@ -406,10 +397,7 @@ contract MentoConfig_celo is MentoConfig {
         });
 
         _addChainlinkRelayer({
-            rateFeed: rateFeed,
-            description: string.concat(currency, "/USD"),
-            aggregator0: aggregator,
-            invert0: false
+            rateFeed: rateFeed, description: string.concat(currency, "/USD"), aggregator0: aggregator, invert0: false
         });
 
         string memory celoRateFeed = string.concat(_rateFeedPrefix, "CELO", currency);
@@ -440,18 +428,14 @@ contract MentoConfig_celo is MentoConfig {
             frozenGold: 80_000_000e18,
             frozenDays: 548,
             assetAllocationSymbols: bytes32s(
-                bytes32("cGLD"),
-                bytes32("BTC"),
-                bytes32("ETH"),
-                bytes32("DAI"),
-                bytes32("cMCO2")
+                bytes32("cGLD"), bytes32("BTC"), bytes32("ETH"), bytes32("DAI"), bytes32("cMCO2")
             ),
             assetAllocationWeights: uints(
-                5e23,    // cGLD  50%
-                1e23,    // BTC   10%
-                1e23,    // ETH   10%
+                5e23, // cGLD  50%
+                1e23, // BTC   10%
+                1e23, // ETH   10%
                 2.95e23, // DAI   29.5%
-                5e21     // cMCO2  0.5%
+                5e21 // cMCO2  0.5%
             ),
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
@@ -579,7 +563,7 @@ contract MentoConfig_celo is MentoConfig {
 
         _addFxExchange({
             currency: "EUR",
-            spread: 0.0050 * 1e24,
+            spread: 0.005 * 1e24,
             tradingLimits: _tier1FxTradingLimits(0.86 * 1e3),
             createVirtual: false
         });
@@ -597,61 +581,43 @@ contract MentoConfig_celo is MentoConfig {
         });
         _addFxExchange({
             currency: "ZAR",
-            spread: 0.0030 * 1e24,
+            spread: 0.003 * 1e24,
             tradingLimits: _tier1FxTradingLimits(17.72 * 1e3),
             createVirtual: true
         });
         _addFxExchange({
-            currency: "CHF",
-            spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(0.80 * 1e3),
-            createVirtual: true
+            currency: "CHF", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(0.8 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "JPY",
-            spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(149 * 1e3),
-            createVirtual: true
+            currency: "JPY", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(149 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "COP",
-            spread: 0.0030 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(4015 * 1e3),
-            createVirtual: true
+            currency: "COP", spread: 0.003 * 1e24, tradingLimits: _tier2FxTradingLimits(4015 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "BRL",
-            spread: 0.0030 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(5.45 * 1e3),
-            createVirtual: true
+            currency: "BRL", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(5.45 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "PHP",
-            spread: 0.0030 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(57.40 * 1e3),
-            createVirtual: true
+            currency: "PHP", spread: 0.003 * 1e24, tradingLimits: _tier2FxTradingLimits(57.4 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "GHS",
-            spread: 0.0100 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(11.92 * 1e3),
-            createVirtual: true
+            currency: "GHS", spread: 0.01 * 1e24, tradingLimits: _tier2FxTradingLimits(11.92 * 1e3), createVirtual: true
         });
         _addFxExchange({
             currency: "NGN",
-            spread: 0.0100 * 1e24,
+            spread: 0.01 * 1e24,
             tradingLimits: _tier2FxTradingLimits(1531.98 * 1e3),
             createVirtual: true
         });
         _addFxExchange({
             currency: "KES",
-            spread: 0.0100 * 1e24,
+            spread: 0.01 * 1e24,
             tradingLimits: _tier1FxTradingLimits(129.21 * 1e3),
             createVirtual: true
         });
         _addFxExchange({
             currency: "XOF",
-            spread: 0.0200 * 1e24,
+            spread: 0.02 * 1e24,
             tradingLimits: _tier2FxTradingLimits(560.46 * 1e3),
             createVirtual: true
         });

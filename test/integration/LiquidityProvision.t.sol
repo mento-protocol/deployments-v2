@@ -51,10 +51,7 @@ contract LiquidityProvision is V3IntegrationBase {
             vm.stopPrank();
 
             assertGt(liquidity, 0, string.concat("LP tokens zero for pool ", idx));
-            assertEq(
-                IERC20(pools[i]).balanceOf(lp), liquidity,
-                string.concat("LP balance mismatch for pool ", idx)
-            );
+            assertEq(IERC20(pools[i]).balanceOf(lp), liquidity, string.concat("LP balance mismatch for pool ", idx));
 
             (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
             assertEq(r0After, r0Before + amount0, string.concat("reserve0 mismatch for pool ", idx));
@@ -62,8 +59,7 @@ contract LiquidityProvision is V3IntegrationBase {
 
             uint256 totalSupplyAfter = IERC20(pools[i]).totalSupply();
             assertEq(
-                totalSupplyAfter, totalSupplyBefore + liquidity,
-                string.concat("totalSupply mismatch for pool ", idx)
+                totalSupplyAfter, totalSupplyBefore + liquidity, string.concat("totalSupply mismatch for pool ", idx)
             );
         }
     }
@@ -116,8 +112,16 @@ contract LiquidityProvision is V3IntegrationBase {
 
         assertGt(out0, 0, string.concat("out0 zero for pool ", idx));
         assertGt(out1, 0, string.concat("out1 zero for pool ", idx));
-        assertEq(IERC20(IFPMM(pool).token0()).balanceOf(lp), lpT0Before + out0, string.concat("token0 mismatch for pool ", idx));
-        assertEq(IERC20(IFPMM(pool).token1()).balanceOf(lp), lpT1Before + out1, string.concat("token1 mismatch for pool ", idx));
+        assertEq(
+            IERC20(IFPMM(pool).token0()).balanceOf(lp),
+            lpT0Before + out0,
+            string.concat("token0 mismatch for pool ", idx)
+        );
+        assertEq(
+            IERC20(IFPMM(pool).token1()).balanceOf(lp),
+            lpT1Before + out1,
+            string.concat("token1 mismatch for pool ", idx)
+        );
         assertEq(IERC20(pool).balanceOf(lp), 0, string.concat("LP still has tokens for pool ", idx));
 
         (uint256 r0After, uint256 r1After,) = IFPMM(pool).getReserves();
@@ -125,7 +129,8 @@ contract LiquidityProvision is V3IntegrationBase {
         assertEq(r1After, r1Before - out1, string.concat("reserve1 mismatch for pool ", idx));
 
         assertEq(
-            IERC20(pool).totalSupply(), totalSupplyBefore - liquidity,
+            IERC20(pool).totalSupply(),
+            totalSupplyBefore - liquidity,
             string.concat("totalSupply mismatch for pool ", idx)
         );
     }
@@ -162,12 +167,10 @@ contract LiquidityProvision is V3IntegrationBase {
 
             // Use 0.01% relative tolerance to handle rounding across different decimal tokens
             assertApproxEqRel(
-                expectedClaim0, amount0, 1e14,
-                string.concat("Proportional claim0 mismatch for pool ", idx)
+                expectedClaim0, amount0, 1e14, string.concat("Proportional claim0 mismatch for pool ", idx)
             );
             assertApproxEqRel(
-                expectedClaim1, amount1, 1e14,
-                string.concat("Proportional claim1 mismatch for pool ", idx)
+                expectedClaim1, amount1, 1e14, string.concat("Proportional claim1 mismatch for pool ", idx)
             );
         }
     }

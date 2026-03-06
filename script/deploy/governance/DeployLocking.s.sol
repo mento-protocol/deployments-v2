@@ -28,16 +28,12 @@ contract DeployLocking is TrebScript, ProxyHelper {
     /// @custom:senders deployer
     function run() public broadcast {
         config = Config.get();
-        IMentoConfig.LockingConfig memory lockingCfg = config
-            .getLockingConfig();
+        IMentoConfig.LockingConfig memory lockingCfg = config.getLockingConfig();
 
         Senders.Sender storage deployer = sender("deployer");
         address mentoToken = lookup("MentoToken");
 
-        address implementation = deployer
-            .create3("Locking")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(true));
+        address implementation = deployer.create3("Locking").setLabel("v2.6.5").deploy(abi.encode(true));
 
         uint256 startingPointWeek = ILocking(implementation).getWeek() - 1;
 

@@ -29,7 +29,7 @@ contract RebalanceReserve is V3IntegrationBase {
 
     /// @dev Deals collateral to the reserve so contraction rebalances have liquidity
     function _fundReserveWithCollateral(address pool) internal {
-        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
+        (bool isToken0Debt,,,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
         address collToken = isToken0Debt ? IFPMM(pool).token1() : IFPMM(pool).token0();
         (uint256 r0, uint256 r1,) = IFPMM(pool).getReserves();
         uint256 amount = (isToken0Debt ? r1 : r0) * 10;

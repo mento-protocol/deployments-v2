@@ -31,9 +31,7 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         assertGt(cfgs.length, 0, "No chainlink relayer configs");
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             assertNotEq(
                 relayer,
                 address(0),
@@ -55,9 +53,7 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         IMentoConfig.ChainlinkRelayerConfig[] memory cfgs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             if (relayer == address(0)) continue;
 
             string memory actual = IChainlinkRelayer(relayer).rateFeedDescription();
@@ -84,9 +80,7 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         IMentoConfig.ChainlinkRelayerConfig[] memory cfgs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             if (relayer == address(0)) continue;
 
             uint256 actual = IChainlinkRelayer(relayer).maxTimestampSpread();
@@ -112,9 +106,7 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         IMentoConfig.ChainlinkRelayerConfig[] memory cfgs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             if (relayer == address(0)) continue;
 
             IChainlinkRelayer.ChainlinkAggregator[] memory actual = IChainlinkRelayer(relayer).getAggregators();
@@ -138,15 +130,11 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         IMentoConfig.ChainlinkRelayerConfig[] memory cfgs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             if (relayer == address(0)) continue;
 
             IChainlinkRelayer.ChainlinkAggregator[] memory actual = IChainlinkRelayer(relayer).getAggregators();
-            uint256 len = cfgs[i].aggregators.length < actual.length
-                ? cfgs[i].aggregators.length
-                : actual.length;
+            uint256 len = cfgs[i].aggregators.length < actual.length ? cfgs[i].aggregators.length : actual.length;
 
             for (uint256 j = 0; j < len; j++) {
                 assertEq(
@@ -172,15 +160,11 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         IMentoConfig.ChainlinkRelayerConfig[] memory cfgs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             if (relayer == address(0)) continue;
 
             IChainlinkRelayer.ChainlinkAggregator[] memory actual = IChainlinkRelayer(relayer).getAggregators();
-            uint256 len = cfgs[i].aggregators.length < actual.length
-                ? cfgs[i].aggregators.length
-                : actual.length;
+            uint256 len = cfgs[i].aggregators.length < actual.length ? cfgs[i].aggregators.length : actual.length;
 
             for (uint256 j = 0; j < len; j++) {
                 assertEq(
@@ -208,9 +192,7 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
         IMentoConfig.ChainlinkRelayerConfig[] memory cfgs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < cfgs.length; i++) {
-            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(
-                cfgs[i].rateFeedId
-            );
+            address relayer = IChainlinkRelayerFactory(chainlinkRelayerFactory).getRelayer(cfgs[i].rateFeedId);
             if (relayer == address(0)) continue;
 
             assertTrue(

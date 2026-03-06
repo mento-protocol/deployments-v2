@@ -25,7 +25,7 @@ contract PrintRateFeeds is TrebScript, ProxyHelper {
         config = Config.get();
 
         IMentoConfig.RateFeed[] memory rateFeeds = config.getRateFeeds();
-        for (uint i = 0; i < rateFeeds.length; i++) {
+        for (uint256 i = 0; i < rateFeeds.length; i++) {
             console.log(rateFeeds[i].rateFeed, rateFeeds[i].rateFeedId);
         }
     }
