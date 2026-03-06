@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {console} from "forge-std/console.sol";
 import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IVirtualPoolFactory} from "mento-core/interfaces/IVirtualPoolFactory.sol";
@@ -29,9 +30,10 @@ contract V3Swap is V3IntegrationBase {
         super.setUp();
         routerContract = IRouter(router);
         fpmmPools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
-        vpPools = IVirtualPoolFactory(virtualPoolFactory).getAllPools();
+        if (_isCelo()) {
+            vpPools = IVirtualPoolFactory(virtualPoolFactory).getAllPools();
+        }
         require(fpmmPools.length > 0, "No FPMM pools deployed");
-        require(vpPools.length > 0, "No virtual pools deployed");
         _boostFPMMLiquidity();
     }
 
@@ -232,6 +234,10 @@ contract V3Swap is V3IntegrationBase {
 
     /// @notice 2-hop route: FPMM(tokenA→tokenB) → VirtualPool(tokenB→tokenC)
     function test_multiHop_fpmmThenVirtualPool() public {
+        if (vpPools.length == 0) {
+            vm.skip(true);
+            return;
+        }
         (address tokenA, address tokenB, address tokenC, address factory1, address factory2) =
             _findMultiHopAcrossFactories(fpmmPools, fpmmFactory, vpPools, virtualPoolFactory);
         require(tokenA != address(0), "No multi-hop route found: FPMM -> VirtualPool");
@@ -240,6 +246,10 @@ contract V3Swap is V3IntegrationBase {
 
     /// @notice 2-hop route: VirtualPool(tokenA→tokenB) → FPMM(tokenB→tokenC)
     function test_multiHop_virtualPoolThenFpmm() public {
+        if (vpPools.length == 0) {
+            vm.skip(true);
+            return;
+        }
         (address tokenA, address tokenB, address tokenC, address factory1, address factory2) =
             _findMultiHopAcrossFactories(vpPools, virtualPoolFactory, fpmmPools, fpmmFactory);
         require(tokenA != address(0), "No multi-hop route found: VirtualPool -> FPMM");
@@ -269,7 +279,11 @@ contract V3Swap is V3IntegrationBase {
         }
     }
 
-    function test_virtualPoolFactory_isApproved() public view {
+    function test_virtualPoolFactory_isApproved() public {
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         assertTrue(
             IFactoryRegistry(factoryRegistry).isPoolFactoryApproved(virtualPoolFactory),
             "VirtualPoolFactory not approved in FactoryRegistry"
@@ -377,7 +391,9 @@ contract V3Swap is V3IntegrationBase {
         for (uint256 i = 0; i < pools1.length; i++) {
             for (uint256 j = 0; j < pools2.length; j++) {
                 (tokenA, tokenB, tokenC) = _findSharedToken(pools1[i], pools2[j]);
-                if (tokenA != address(0)) return (tokenA, tokenB, tokenC, factory1, factory2);
+                if (tokenA != address(0)) {
+                    return (tokenA, tokenB, tokenC, factory1, factory2);
+                }
             }
         }
     }

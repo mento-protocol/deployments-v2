@@ -6,34 +6,43 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
+import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
 import {IRPool} from "mento-core/swap/router/interfaces/IRPool.sol";
 import {IRPoolFactory} from "mento-core/swap/router/interfaces/IRPoolFactory.sol";
 import {IVirtualPoolFactory} from "mento-core/interfaces/IVirtualPoolFactory.sol";
 import {IBiPoolManager} from "mento-core/interfaces/IBiPoolManager.sol";
+import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
-contract DeployVirtualPools is TrebScript, ProxyHelper {
+contract DeployVirtualPools is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
+    string constant label = "v3.0.0";
     IMentoConfig config;
     address virtualPoolFactory;
     address exchangeProvider;
+    address factoryRegistry;
 
     function setUp() public {
         config = Config.get();
-        virtualPoolFactory = lookupOrFail("VirtualPoolFactory:v3.0.0");
         exchangeProvider = lookupProxyOrFail("BiPoolManager");
+        exchangeProvider = lookupProxyOrFail("FactoryRegistry");
     }
 
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage owner = sender("migrationOwner");
+        Senders.Sender storage deployer = sender("migrationOwner");
+
+        virtualPoolFactory = deployer.create3("VirtualPoolFactory").setLabel(label).deploy(abi.encode(owner.account));
+        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(deployer.harness(factoryRegistry));
 
         IVirtualPoolFactory factory = IVirtualPoolFactory(owner.harness(virtualPoolFactory));
+        factoryRegistryHarness.approve(virtualPoolFactory);
 
         bytes32[] memory exchangeIds = IBiPoolManager(exchangeProvider).getExchangeIds();
         uint256 deployed;

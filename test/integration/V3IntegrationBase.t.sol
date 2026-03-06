@@ -96,10 +96,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         _setDummySenderConfigs();
         config = Config.get();
         vm.selectFork(forkId);
-        if (block.chainid == 42220 || block.chainid == 11142220) {
+        if (_isCelo()) {
             vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
-            cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
             virtualPoolFactory = lookupOrFail("VirtualPoolFactory:v3.0.0");
+            cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
             broker = lookupProxyOrFail("Broker");
         }
 
@@ -254,6 +254,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     }
 
     // ========== Internal ==========
+
+    function _isCelo() internal view returns (bool) {
+        return block.chainid == 42220 || block.chainid == 11142220;
+    }
 
     /// @dev Sets a dummy SENDER_CONFIGS env var so that MentoConfig (which inherits TrebScript)
     ///      can be instantiated in a test context. The config is never used for sending transactions.

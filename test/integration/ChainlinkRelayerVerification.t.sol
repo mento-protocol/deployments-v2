@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {console} from "forge-std/console.sol";
 import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {IChainlinkRelayerFactory} from "lib/mento-core/contracts/interfaces/IChainlinkRelayerFactory.sol";
@@ -134,6 +135,7 @@ contract ChainlinkRelayerVerification is V3IntegrationBase {
             if (relayer == address(0)) continue;
 
             IChainlinkRelayer.ChainlinkAggregator[] memory actual = IChainlinkRelayer(relayer).getAggregators();
+            // Q: why not assertEq(cfgs[i].aggregators.length, actual.length)?
             uint256 len = cfgs[i].aggregators.length < actual.length ? cfgs[i].aggregators.length : actual.length;
 
             for (uint256 j = 0; j < len; j++) {

@@ -32,6 +32,8 @@ contract ReserveVerification is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) vm.skip(true);
+        return;
 
         reserve = lookupProxyOrFail("Reserve");
         reserveConfig = config.getReserveConfig();

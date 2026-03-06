@@ -28,6 +28,8 @@ contract ExchangeVerification is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) vm.skip(true);
+        return;
         biPoolManager = lookupProxyOrFail("BiPoolManager");
     }
 

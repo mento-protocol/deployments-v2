@@ -37,7 +37,9 @@ contract RateFeedVerification is V3IntegrationBase {
         _setDummySenderConfigs();
         config = Config.get();
         vm.selectFork(forkId);
-        vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+        if (_isCelo()) {
+            vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+        }
 
         sortedOracles = lookupProxyOrFail("SortedOracles");
         fpmmFactory = lookupProxyOrFail("FPMMFactory");

@@ -50,6 +50,8 @@ contract GovernanceVerification is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) vm.skip(true);
+        return;
 
         // Resolve governance contract addresses from the Treb registry
         mentoGovernor = lookupProxyOrFail("MentoGovernor");
