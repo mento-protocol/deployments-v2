@@ -13,10 +13,7 @@ import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {Config, IMentoConfig} from "../config/Config.sol";
 
 interface ISortedOracles {
-    function setEquivalentToken(
-        address token,
-        address equivalentToken
-    ) external;
+    function setEquivalentToken(address token, address equivalentToken) external;
 }
 
 contract ResetEquivalentTokens is TrebScript, ProxyHelper {
@@ -31,9 +28,7 @@ contract ResetEquivalentTokens is TrebScript, ProxyHelper {
         // Get configuration
         config = Config.get();
         Senders.Sender storage deployer = sender("deployer");
-        ISortedOracles sortedOracles = ISortedOracles(
-            deployer.harness(lookupProxyOrFail("SortedOracles"))
-        );
+        ISortedOracles sortedOracles = ISortedOracles(deployer.harness(lookupProxyOrFail("SortedOracles")));
 
         // Get token configurations from config contract
         IMentoConfig.TokenConfig[] memory tokens = config.getTokenConfigs();
@@ -41,10 +36,7 @@ contract ResetEquivalentTokens is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < tokens.length; i++) {
             address token = lookupProxyOrFail(tokens[i].symbol);
             sortedOracles.setEquivalentToken(
-                token,
-                config.getRateFeedIdFromString(
-                    string.concat("CELO", tokens[i].currency)
-                )
+                token, config.getRateFeedIdFromString(string.concat("CELO", tokens[i].currency))
             );
         }
     }

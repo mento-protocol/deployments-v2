@@ -93,7 +93,7 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
     function preChecks() internal view {
         require(timelock != address(0), "Timelock address is zero");
         require(deployerAddress != address(0), "Deployer address is zero");
-        
+
         for (uint256 i = 0; i < stables.length; ++i) {
             address tokenAddress = stables[i];
             IOwnable impl = IOwnable(tokenAddress);
@@ -121,7 +121,7 @@ contract TransferStableTokenOwnershipToTimelock is TrebScript, ProxyHelper {
 
     function transferAllOwnership() internal {
         Senders.Sender storage deployer = sender("deployer");
-        
+
         console.log("== Transferring ownership of all (%d) tokens ==", stables.length);
         for (uint256 i = 0; i < stables.length; ++i) {
             address tokenAddress = stables[i];

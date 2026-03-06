@@ -57,8 +57,11 @@ contract RateFeedVerification is V3IntegrationBase {
                 oracles.length,
                 0,
                 string.concat(
-                    "No oracles for rate feed '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeeds[i].rateFeedId), ")"
+                    "No oracles for rate feed '",
+                    rateFeeds[i].rateFeed,
+                    "' (ID: ",
+                    vm.toString(rateFeeds[i].rateFeedId),
+                    ")"
                 )
             );
         }
@@ -72,16 +75,17 @@ contract RateFeedVerification is V3IntegrationBase {
         for (uint256 i = 0; i < rateFeeds.length; i++) {
             (uint256 rate, uint256 denominator) = ISortedOracles(sortedOracles).medianRate(rateFeeds[i].rateFeedId);
             assertGt(
-                rate, 0,
+                rate,
+                0,
                 string.concat(
-                    "Zero median rate for '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeeds[i].rateFeedId), ")"
+                    "Zero median rate for '",
+                    rateFeeds[i].rateFeed,
+                    "' (ID: ",
+                    vm.toString(rateFeeds[i].rateFeedId),
+                    ")"
                 )
             );
-            assertGt(
-                denominator, 0,
-                string.concat("Zero denominator for '", rateFeeds[i].rateFeed, "'")
-            );
+            assertGt(denominator, 0, string.concat("Zero denominator for '", rateFeeds[i].rateFeed, "'"));
         }
     }
 
@@ -96,11 +100,9 @@ contract RateFeedVerification is V3IntegrationBase {
 
             (, uint256[] memory timestamps,) = ISortedOracles(sortedOracles).getTimestamps(rateFeedId);
             assertGt(
-                timestamps.length, 0,
-                string.concat(
-                    "No reports for '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeedId), ")"
-                )
+                timestamps.length,
+                0,
+                string.concat("No reports for '", rateFeeds[i].rateFeed, "' (ID: ", vm.toString(rateFeedId), ")")
             );
 
             // Oldest timestamp is the last element in the sorted list
@@ -111,10 +113,15 @@ contract RateFeedVerification is V3IntegrationBase {
             assertFalse(
                 isExpired,
                 string.concat(
-                    "Oldest report expired for '", rateFeeds[i].rateFeed,
-                    "' (ID: ", vm.toString(rateFeedId),
-                    ") age=", vm.toString(block.timestamp - oldestTimestamp),
-                    "s expiry=", vm.toString(expiry), "s"
+                    "Oldest report expired for '",
+                    rateFeeds[i].rateFeed,
+                    "' (ID: ",
+                    vm.toString(rateFeedId),
+                    ") age=",
+                    vm.toString(block.timestamp - oldestTimestamp),
+                    "s expiry=",
+                    vm.toString(expiry),
+                    "s"
                 )
             );
         }
@@ -131,10 +138,10 @@ contract RateFeedVerification is V3IntegrationBase {
             address rateFeedId = IFPMM(pools[i]).referenceRateFeedID();
             address[] memory oracles = ISortedOracles(sortedOracles).getOracles(rateFeedId);
             assertGt(
-                oracles.length, 0,
+                oracles.length,
+                0,
                 string.concat(
-                    "No oracles for FPMM pool ", vm.toString(pools[i]),
-                    " referenceRateFeedID ", vm.toString(rateFeedId)
+                    "No oracles for FPMM pool ", vm.toString(pools[i]), " referenceRateFeedID ", vm.toString(rateFeedId)
                 )
             );
         }
@@ -147,12 +154,12 @@ contract RateFeedVerification is V3IntegrationBase {
 
         for (uint256 i = 0; i < pools.length; i++) {
             address rateFeedId = IFPMM(pools[i]).referenceRateFeedID();
-            (uint256 rate, ) = ISortedOracles(sortedOracles).medianRate(rateFeedId);
+            (uint256 rate,) = ISortedOracles(sortedOracles).medianRate(rateFeedId);
             assertGt(
-                rate, 0,
+                rate,
+                0,
                 string.concat(
-                    "Zero rate for FPMM pool ", vm.toString(pools[i]),
-                    " referenceRateFeedID ", vm.toString(rateFeedId)
+                    "Zero rate for FPMM pool ", vm.toString(pools[i]), " referenceRateFeedID ", vm.toString(rateFeedId)
                 )
             );
         }
@@ -178,9 +185,12 @@ contract RateFeedVerification is V3IntegrationBase {
                         pool.referenceRateFeedID(),
                         configRateFeedId,
                         string.concat(
-                            "referenceRateFeedID mismatch for pool ", vm.toString(pools[p]),
-                            ": config=", vm.toString(configRateFeedId),
-                            " on-chain=", vm.toString(pool.referenceRateFeedID())
+                            "referenceRateFeedID mismatch for pool ",
+                            vm.toString(pools[p]),
+                            ": config=",
+                            vm.toString(configRateFeedId),
+                            " on-chain=",
+                            vm.toString(pool.referenceRateFeedID())
                         )
                     );
                     found = true;
@@ -190,8 +200,10 @@ contract RateFeedVerification is V3IntegrationBase {
             assertTrue(
                 found,
                 string.concat(
-                    "Config FPMM not found on-chain: token0=", vm.toString(configToken0),
-                    " token1=", vm.toString(configToken1)
+                    "Config FPMM not found on-chain: token0=",
+                    vm.toString(configToken0),
+                    " token1=",
+                    vm.toString(configToken1)
                 )
             );
         }
@@ -205,10 +217,14 @@ contract RateFeedVerification is V3IntegrationBase {
         for (uint256 i = 0; i < relayers.length; i++) {
             address[] memory oracles = ISortedOracles(sortedOracles).getOracles(relayers[i].rateFeedId);
             assertGt(
-                oracles.length, 0,
+                oracles.length,
+                0,
                 string.concat(
-                    "No oracles for chainlink relayer '", relayers[i].rateFeed,
-                    "' (ID: ", vm.toString(relayers[i].rateFeedId), ")"
+                    "No oracles for chainlink relayer '",
+                    relayers[i].rateFeed,
+                    "' (ID: ",
+                    vm.toString(relayers[i].rateFeedId),
+                    ")"
                 )
             );
         }

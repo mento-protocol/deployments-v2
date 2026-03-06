@@ -39,8 +39,7 @@ contract ExchangeVerification is V3IntegrationBase {
         assertGt(exchangeIds.length, 0, "No on-chain exchanges found");
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -65,19 +64,14 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
             if (!found) continue;
 
             string memory label = _exchangeLabel(i, actual.asset0, actual.asset1);
-            assertEq(
-                actual.config.spread.value,
-                cfg.pool.config.spread.value,
-                string.concat(label, " spread mismatch")
-            );
+            assertEq(actual.config.spread.value, cfg.pool.config.spread.value, string.concat(label, " spread mismatch"));
         }
     }
 
@@ -86,8 +80,7 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -107,8 +100,7 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -128,8 +120,7 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -149,8 +140,7 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -173,8 +163,7 @@ contract ExchangeVerification is V3IntegrationBase {
         assertGt(exchangeIds.length, 0, "No on-chain exchanges found");
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -189,11 +178,7 @@ contract ExchangeVerification is V3IntegrationBase {
                 address(cfg.pool.pricingModule),
                 string.concat(label, " pricingModule mismatch")
             );
-            assertEq(
-                actual.config.spread.value,
-                cfg.pool.config.spread.value,
-                string.concat(label, " spread mismatch")
-            );
+            assertEq(actual.config.spread.value, cfg.pool.config.spread.value, string.concat(label, " spread mismatch"));
             assertEq(
                 actual.config.referenceRateFeedID,
                 cfg.pool.config.referenceRateFeedID,
@@ -224,8 +209,7 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -234,10 +218,8 @@ contract ExchangeVerification is V3IntegrationBase {
             bytes32 limitId = exchangeIds[i] ^ bytes32(uint256(uint160(actual.asset0)));
             ITradingLimits.Config memory actualLimits = _getTradingLimitsConfig(limitId);
 
-            string memory label = string.concat(
-                _exchangeLabel(i, actual.asset0, actual.asset1),
-                " asset0 trading limits"
-            );
+            string memory label =
+                string.concat(_exchangeLabel(i, actual.asset0, actual.asset1), " asset0 trading limits");
             _assertTradingLimitsEqual(actualLimits, cfg.tradingLimits.asset0, label);
         }
     }
@@ -247,8 +229,7 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
-            IBiPoolManager.PoolExchange memory actual =
-                IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            IBiPoolManager.PoolExchange memory actual = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
             (IMentoConfig.ExchangeConfig memory cfg, bool found) =
                 config.getExchangeConfig(actual.asset0, actual.asset1, address(actual.pricingModule));
@@ -257,10 +238,8 @@ contract ExchangeVerification is V3IntegrationBase {
             bytes32 limitId = exchangeIds[i] ^ bytes32(uint256(uint160(actual.asset1)));
             ITradingLimits.Config memory actualLimits = _getTradingLimitsConfig(limitId);
 
-            string memory label = string.concat(
-                _exchangeLabel(i, actual.asset0, actual.asset1),
-                " asset1 trading limits"
-            );
+            string memory label =
+                string.concat(_exchangeLabel(i, actual.asset0, actual.asset1), " asset1 trading limits");
             _assertTradingLimitsEqual(actualLimits, cfg.tradingLimits.asset1, label);
         }
     }
@@ -280,8 +259,8 @@ contract ExchangeVerification is V3IntegrationBase {
                 IBiPoolManager.PoolExchange memory onChain =
                     IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
-                bool assetsMatch = (onChain.asset0 == expected.asset0 && onChain.asset1 == expected.asset1) ||
-                    (onChain.asset0 == expected.asset1 && onChain.asset1 == expected.asset0);
+                bool assetsMatch = (onChain.asset0 == expected.asset0 && onChain.asset1 == expected.asset1)
+                    || (onChain.asset0 == expected.asset1 && onChain.asset1 == expected.asset0);
 
                 if (assetsMatch && address(onChain.pricingModule) == address(expected.pricingModule)) {
                     found = true;
@@ -289,13 +268,7 @@ contract ExchangeVerification is V3IntegrationBase {
                 }
             }
 
-            assertTrue(
-                found,
-                string.concat(
-                    _exchangeLabel(c, expected.asset0, expected.asset1),
-                    " not found on-chain"
-                )
-            );
+            assertTrue(found, string.concat(_exchangeLabel(c, expected.asset0, expected.asset1), " not found on-chain"));
         }
     }
 
@@ -322,11 +295,7 @@ contract ExchangeVerification is V3IntegrationBase {
     }
 
     /// @dev Builds a human-readable label for assertion messages, e.g. "Exchange[0] (USDm/CELO)"
-    function _exchangeLabel(uint256 index, address asset0, address asset1)
-        internal
-        view
-        returns (string memory)
-    {
+    function _exchangeLabel(uint256 index, address asset0, address asset1) internal view returns (string memory) {
         string memory symbol0 = _safeSymbol(asset0);
         string memory symbol1 = _safeSymbol(asset1);
         return string.concat("Exchange[", vm.toString(index), "] (", symbol0, "/", symbol1, ")");

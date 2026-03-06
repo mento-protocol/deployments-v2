@@ -52,7 +52,9 @@ contract CDPOperations is V3IntegrationBase {
             (uint256 troveId, uint256 debtAmount, uint256 collAmount) = _openTroveForUser(user, c);
 
             ITroveManager.Status status = ITroveManager(c.troveManager).getTroveStatus(troveId);
-            assertEq(uint256(status), uint256(ITroveManager.Status.active), string.concat("Trove not active for pool ", idx));
+            assertEq(
+                uint256(status), uint256(ITroveManager.Status.active), string.concat("Trove not active for pool ", idx)
+            );
 
             uint256 debtAfter = IERC20(c.debtToken).balanceOf(user);
             assertEq(debtAfter - debtBefore, debtAmount, string.concat("Debt token balance mismatch for pool ", idx));
@@ -70,7 +72,7 @@ contract CDPOperations is V3IntegrationBase {
             string memory idx = vm.toString(p);
 
             address user = makeAddr(string.concat("spDepositor_", idx));
-            (,uint256 debtAmount,) = _openTroveForUser(user, c);
+            (, uint256 debtAmount,) = _openTroveForUser(user, c);
 
             uint256 depositAmount = debtAmount / 2;
             uint256 depositBefore = IStabilityPool(c.stabilityPool).getCompoundedBoldDeposit(user);
@@ -85,7 +87,11 @@ contract CDPOperations is V3IntegrationBase {
             assertEq(depositAfter - depositBefore, depositAmount, string.concat("SP deposit mismatch for pool ", idx));
 
             uint256 balanceAfter = IERC20(c.debtToken).balanceOf(user);
-            assertEq(balanceBefore - balanceAfter, depositAmount, string.concat("Debt token transfer mismatch for pool ", idx));
+            assertEq(
+                balanceBefore - balanceAfter,
+                depositAmount,
+                string.concat("Debt token transfer mismatch for pool ", idx)
+            );
         }
     }
 
@@ -97,7 +103,7 @@ contract CDPOperations is V3IntegrationBase {
             string memory idx = vm.toString(p);
 
             address user = makeAddr(string.concat("spWithdrawer_", idx));
-            (,uint256 debtAmount,) = _openTroveForUser(user, c);
+            (, uint256 debtAmount,) = _openTroveForUser(user, c);
 
             uint256 depositAmount = debtAmount / 2;
             vm.startPrank(user);
@@ -116,7 +122,9 @@ contract CDPOperations is V3IntegrationBase {
             uint256 balanceAfter = IERC20(c.debtToken).balanceOf(user);
 
             assertLt(depositAfter, depositBefore, string.concat("SP deposit should decrease for pool ", idx));
-            assertEq(balanceAfter - balanceBefore, withdrawAmount, string.concat("Withdrawal amount mismatch for pool ", idx));
+            assertEq(
+                balanceAfter - balanceBefore, withdrawAmount, string.concat("Withdrawal amount mismatch for pool ", idx)
+            );
         }
     }
 
@@ -135,7 +143,11 @@ contract CDPOperations is V3IntegrationBase {
             uint256 droppedPrice = _mockLowerPrice(c, 75);
 
             uint256 icr = ITroveManager(c.troveManager).getCurrentICR(victimTroveId, droppedPrice);
-            assertLt(icr, IBorrowerOperations(c.borrowerOps).MCR(), string.concat("Trove should be undercollateralized for pool ", idx));
+            assertLt(
+                icr,
+                IBorrowerOperations(c.borrowerOps).MCR(),
+                string.concat("Trove should be undercollateralized for pool ", idx)
+            );
 
             _liquidateTrove(c, victimTroveId);
 
@@ -196,7 +208,9 @@ contract CDPOperations is V3IntegrationBase {
             vm.prank(depositor);
             IStabilityPool(c.stabilityPool).withdrawFromSP(0, true);
             uint256 collAfter = IERC20(c.collToken).balanceOf(depositor);
-            assertGt(collAfter, collBefore, string.concat("Depositor should receive coll after claiming for pool ", idx));
+            assertGt(
+                collAfter, collBefore, string.concat("Depositor should receive coll after claiming for pool ", idx)
+            );
         }
     }
 
@@ -215,12 +229,11 @@ contract CDPOperations is V3IntegrationBase {
     }
 
     /// @dev Calculate collateral amount for a given debt, price, target CR, and token decimals
-    function _calculateCollateral(
-        uint256 debtAmount,
-        uint256 price,
-        uint256 targetCR,
-        uint8 decimals
-    ) internal pure returns (uint256) {
+    function _calculateCollateral(uint256 debtAmount, uint256 price, uint256 targetCR, uint8 decimals)
+        internal
+        pure
+        returns (uint256)
+    {
         uint256 collAmount = (debtAmount * targetCR) / price;
         if (decimals < 18) {
             collAmount = collAmount / (10 ** (18 - decimals));
@@ -270,14 +283,21 @@ contract CDPOperations is V3IntegrationBase {
     }
 
     /// @dev Call IBorrowerOperations.openTrove with params struct to avoid stack-too-deep
-    function _callOpenTrove(address borrowerOps, address user, OpenTroveParams memory p)
-        internal
-        returns (uint256)
-    {
-        return IBorrowerOperations(borrowerOps).openTrove(
-            user, 0, p.collAmount, p.debtAmount, 0, 0,
-            p.interestRate, p.debtAmount, address(0), address(0), address(0)
-        );
+    function _callOpenTrove(address borrowerOps, address user, OpenTroveParams memory p) internal returns (uint256) {
+        return IBorrowerOperations(borrowerOps)
+            .openTrove(
+                user,
+                0,
+                p.collAmount,
+                p.debtAmount,
+                0,
+                0,
+                p.interestRate,
+                p.debtAmount,
+                address(0),
+                address(0),
+                address(0)
+            );
     }
 
     /// @dev Opens a trove at a specific CR multiplier percent over MCR (e.g., 115 = MCR * 1.15)

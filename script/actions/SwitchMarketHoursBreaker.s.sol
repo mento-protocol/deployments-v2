@@ -14,11 +14,7 @@ import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
 /// @title SwitchMarketHoursBreaker
 /// @notice Deploys MarketHoursBreakerToggleable (if not yet deployed) and
 ///         replaces MarketHoursBreaker with it in BreakerBox & OracleAdapter.
-contract SwitchMarketHoursBreaker is
-    TrebScript,
-    ProxyHelper,
-    PostChecksHelper
-{
+contract SwitchMarketHoursBreaker is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -49,10 +45,8 @@ contract SwitchMarketHoursBreaker is
 
         // 1. Deploy MarketHoursBreakerToggleable if not yet deployed
         if (newBreaker == address(0)) {
-            newBreaker = deployer
-                .create3("MarketHoursBreakerToggleable")
-                .setLabel(label)
-                .deploy(abi.encode(deployer.account));
+            newBreaker =
+                deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(deployer.account));
         }
 
         // 2. Switch in BreakerBox
@@ -84,9 +78,7 @@ contract SwitchMarketHoursBreaker is
         }
 
         // 3. Switch in OracleAdapter
-        IOracleAdapter oaWrite = IOracleAdapter(
-            owner.harness(oracleAdapter)
-        );
+        IOracleAdapter oaWrite = IOracleAdapter(owner.harness(oracleAdapter));
         oaWrite.setMarketHoursBreaker(newBreaker);
 
         postChecks();
@@ -97,33 +89,18 @@ contract SwitchMarketHoursBreaker is
         IOracleAdapter oaRead = IOracleAdapter(oracleAdapter);
 
         // New breaker registered with correct trading mode
-        require(
-            bbRead.isBreaker(newBreaker),
-            "New breaker not added to BreakerBox"
-        );
-        require(
-            bbRead.breakerTradingMode(newBreaker) == 3,
-            "New breaker trading mode is not 3 (halted)"
-        );
+        require(bbRead.isBreaker(newBreaker), "New breaker not added to BreakerBox");
+        require(bbRead.breakerTradingMode(newBreaker) == 3, "New breaker trading mode is not 3 (halted)");
 
         // New breaker enabled on all FX feeds
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
-            require(
-                bbRead.isBreakerEnabled(newBreaker, fxFeedIds[i]),
-                "New breaker not enabled for FX feed"
-            );
+            require(bbRead.isBreakerEnabled(newBreaker, fxFeedIds[i]), "New breaker not enabled for FX feed");
         }
 
         // Old breaker removed
-        require(
-            !bbRead.isBreaker(oldBreaker),
-            "Old breaker still registered in BreakerBox"
-        );
+        require(!bbRead.isBreaker(oldBreaker), "Old breaker still registered in BreakerBox");
 
         // OracleAdapter updated
-        require(
-            address(oaRead.marketHoursBreaker()) == newBreaker,
-            "OracleAdapter marketHoursBreaker not updated"
-        );
+        require(address(oaRead.marketHoursBreaker()) == newBreaker, "OracleAdapter marketHoursBreaker not updated");
     }
 }

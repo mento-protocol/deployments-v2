@@ -84,10 +84,20 @@ contract RebalanceCDP is V3IntegrationBase {
         vm.startPrank(seeder);
         IERC20(p.collToken).approve(p.borrowerOps, p.collAmount);
         IERC20(p.gasToken).approve(p.borrowerOps, p.ethGasComp);
-        IBorrowerOperations(p.borrowerOps).openTrove(
-            seeder, 0, p.collAmount, p.debtAmount, 0, 0,
-            p.interestRate, p.debtAmount, address(0), address(0), address(0)
-        );
+        IBorrowerOperations(p.borrowerOps)
+            .openTrove(
+                seeder,
+                0,
+                p.collAmount,
+                p.debtAmount,
+                0,
+                0,
+                p.interestRate,
+                p.debtAmount,
+                address(0),
+                address(0),
+                address(0)
+            );
         IERC20(p.debtToken).approve(p.stabilityPool, p.debtAmount);
         IStabilityPool(p.stabilityPool).provideToSP(p.debtAmount, false);
         vm.stopPrank();

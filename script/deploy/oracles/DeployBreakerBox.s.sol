@@ -31,71 +31,46 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         Senders.Sender storage deployer = sender("deployer");
 
         deployBreakerBox(deployer);
-        (
-            address[] memory breakers,
-            address[][] memory rateFeedIds
-        ) = deployBreakers(deployer);
+        (address[] memory breakers, address[][] memory rateFeedIds) = deployBreakers(deployer);
 
         // Initialize BreakerBox with deployed breakers
         IBreakerBox breakerBox = IBreakerBox(deployer.harness(breakerBoxAddy));
         IBreakerBox breakerBoxRead = IBreakerBox(breakerBoxAddy);
-        for (uint i = 0; i < breakers.length; i++) {
+        for (uint256 i = 0; i < breakers.length; i++) {
             if (!breakerBoxRead.isBreaker(breakers[i])) {
                 breakerBox.addBreaker(breakers[i], 1);
             }
-            for (uint j = 0; j < rateFeedIds[i].length; j++) {
-                if (
-                    !breakerBoxRead.isBreakerEnabled(
-                        breakers[i],
-                        rateFeedIds[i][j]
-                    )
-                ) {
-                    breakerBox.toggleBreaker(
-                        breakers[i],
-                        rateFeedIds[i][j],
-                        true
-                    );
+            for (uint256 j = 0; j < rateFeedIds[i].length; j++) {
+                if (!breakerBoxRead.isBreakerEnabled(breakers[i], rateFeedIds[i][j])) {
+                    breakerBox.toggleBreaker(breakers[i], rateFeedIds[i][j], true);
                 }
             }
         }
 
-        ISortedOracles(deployer.harness(sortedOraclesProxy)).setBreakerBox(
-            IBreakerBox(breakerBoxAddy)
-        );
+        ISortedOracles(deployer.harness(sortedOraclesProxy)).setBreakerBox(IBreakerBox(breakerBoxAddy));
 
         address[] memory rateFeeds = config.getRateFeedIds();
-        for (uint i = 0; i < rateFeeds.length; i++) {
-            address[] memory deps = config.getRateFeedDependencies(
-                rateFeeds[i]
-            );
+        for (uint256 i = 0; i < rateFeeds.length; i++) {
+            address[] memory deps = config.getRateFeedDependencies(rateFeeds[i]);
             if (deps.length > 0) {
                 breakerBox.setRateFeedDependencies(rateFeeds[i], deps);
             }
         }
     }
 
-    function deployBreakers(
-        Senders.Sender storage deployer
-    )
+    function deployBreakers(Senders.Sender storage deployer)
         internal
         returns (address[] memory breakers, address[][] memory rateFeeds)
     {
-        IMentoConfig.BreakerConfig[] memory breakerConfigs = config
-            .getBreakerConfigs();
+        IMentoConfig.BreakerConfig[] memory breakerConfigs = config.getBreakerConfigs();
         breakers = new address[](breakerConfigs.length);
         rateFeeds = new address[][](breakerConfigs.length);
         console.log(breakerConfigs.length);
-        for (uint i = 0; i < breakerConfigs.length; i++) {
+        for (uint256 i = 0; i < breakerConfigs.length; i++) {
             if (breakerConfigs[i].breakerType == BreakerType.Value) {
-                breakers[i] = deployValueDeltaBreaker(
-                    deployer,
-                    breakerConfigs[i]
-                );
+                breakers[i] = deployValueDeltaBreaker(deployer, breakerConfigs[i]);
             } else if (breakerConfigs[i].breakerType == BreakerType.Median) {
-                breakers[i] = deployMedianDeltaBreaker(
-                    deployer,
-                    breakerConfigs[i]
-                );
+                breakers[i] = deployMedianDeltaBreaker(deployer, breakerConfigs[i]);
             } else {
                 revert("Invalid breaker type");
             }
@@ -103,13 +78,11 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         }
     }
 
-    function deployMedianDeltaBreaker(
-        Senders.Sender storage deployer,
-        IMentoConfig.BreakerConfig memory breakerConfig
-    ) internal returns (address breakerAddy) {
-        breakerAddy = deployer
-            .create3("MedianDeltaBreaker")
-            .setLabel("v2.6.5")
+    function deployMedianDeltaBreaker(Senders.Sender storage deployer, IMentoConfig.BreakerConfig memory breakerConfig)
+        internal
+        returns (address breakerAddy)
+    {
+        breakerAddy = deployer.create3("MedianDeltaBreaker").setLabel("v2.6.5")
             .deploy(
                 abi.encode(
                     breakerConfig.defaultCooldownTime,
@@ -123,26 +96,19 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
                 )
             );
 
-        IMedianDeltaBreaker breaker = IMedianDeltaBreaker(
-            deployer.harness(breakerAddy)
-        );
-        for (uint i = 0; i < breakerConfig.rateFeedIds.length; i++) {
+        IMedianDeltaBreaker breaker = IMedianDeltaBreaker(deployer.harness(breakerAddy));
+        for (uint256 i = 0; i < breakerConfig.rateFeedIds.length; i++) {
             if (breakerConfig.smoothingFactors[i] > 0) {
-                breaker.setSmoothingFactor(
-                    breakerConfig.rateFeedIds[i],
-                    breakerConfig.smoothingFactors[i]
-                );
+                breaker.setSmoothingFactor(breakerConfig.rateFeedIds[i], breakerConfig.smoothingFactors[i]);
             }
         }
     }
 
-    function deployValueDeltaBreaker(
-        Senders.Sender storage deployer,
-        IMentoConfig.BreakerConfig memory breakerConfig
-    ) internal returns (address breakerAddy) {
-        breakerAddy = deployer
-            .create3("ValueDeltaBreaker")
-            .setLabel("v2.6.5")
+    function deployValueDeltaBreaker(Senders.Sender storage deployer, IMentoConfig.BreakerConfig memory breakerConfig)
+        internal
+        returns (address breakerAddy)
+    {
+        breakerAddy = deployer.create3("ValueDeltaBreaker").setLabel("v2.6.5")
             .deploy(
                 abi.encode(
                     breakerConfig.defaultCooldownTime,
@@ -155,10 +121,8 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
                 )
             );
 
-        IValueDeltaBreaker(deployer.harness(breakerAddy)).setReferenceValues(
-            breakerConfig.rateFeedIds,
-            breakerConfig.referenceValues
-        );
+        IValueDeltaBreaker(deployer.harness(breakerAddy))
+            .setReferenceValues(breakerConfig.rateFeedIds, breakerConfig.referenceValues);
     }
 
     function deployBreakerBox(Senders.Sender storage deployer) internal {
@@ -166,11 +130,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         address[] memory rateFeedIds = config.getRateFeedIds();
         require(rateFeedIds.length > 0);
 
-        breakerBoxAddy = deployer
-            .create3("BreakerBox")
-            .setLabel("v2.6.5")
-            .deploy(
-                abi.encode(rateFeedIds, sortedOraclesProxy, deployer.account)
-            );
+        breakerBoxAddy = deployer.create3("BreakerBox").setLabel("v2.6.5")
+            .deploy(abi.encode(rateFeedIds, sortedOraclesProxy, deployer.account));
     }
 }

@@ -39,7 +39,7 @@ contract ReconfigureReserveAssets is TrebScript, ProxyHelper {
         address[] memory reserveCollateral = getCollateralAssets(reserveRead);
 
         IMentoConfig.TokenConfig[] memory tokens = config.getTokenConfigs();
-        for (uint i = 0; i < tokens.length; i++) {
+        for (uint256 i = 0; i < tokens.length; i++) {
             IMentoConfig.TokenConfig memory token = tokens[i];
             address tokenAddy = lookupProxy(token.symbol);
             stableExistsInConfig[tokenAddy] = true;
@@ -47,19 +47,19 @@ contract ReconfigureReserveAssets is TrebScript, ProxyHelper {
             stableTokensToAdd.push(tokenAddy);
         }
 
-        for (uint i = reserveTokens.length; i > 0; i--) {
+        for (uint256 i = reserveTokens.length; i > 0; i--) {
             if (stableExistsInConfig[reserveTokens[i - 1]]) continue;
             reserveWrite.removeToken(reserveTokens[i - 1], i - 1);
             console.log("Removing Stable Token ", reserveTokens[i - 1]);
         }
 
-        for (uint i = 0; i < stableTokensToAdd.length; i++) {
+        for (uint256 i = 0; i < stableTokensToAdd.length; i++) {
             reserveWrite.addToken(stableTokensToAdd[i]);
             console.log("Adding Stable Token ", stableTokensToAdd[i]);
         }
 
         address[] memory collaterals = config.getCollateralAssets();
-        for (uint i = 0; i < collaterals.length; i++) {
+        for (uint256 i = 0; i < collaterals.length; i++) {
             collateralExistsInConfig[collaterals[i]] = true;
             if (reserveRead.isCollateralAsset(collaterals[i])) continue;
             collateralTokensToAdd.push(collaterals[i]);
@@ -71,26 +71,22 @@ contract ReconfigureReserveAssets is TrebScript, ProxyHelper {
             console.log("Removing Collateral Token ", reserveTokens[i - 1]);
         }
 
-        for (uint i = 0; i < collateralTokensToAdd.length; i++) {
+        for (uint256 i = 0; i < collateralTokensToAdd.length; i++) {
             reserveWrite.addCollateralAsset(collateralTokensToAdd[i]);
             console.log("Adding Collateral Token ", collateralTokensToAdd[i]);
         }
     }
 
-    function getCollateralAssets(
-        IReserve reserve
-    ) internal view returns (address[] memory) {
+    function getCollateralAssets(IReserve reserve) internal view returns (address[] memory) {
         uint256 len = getCollateralAssetsLength(reserve);
         address[] memory collaterals = new address[](len);
-        for (uint i = 0; i < len; i++) {
+        for (uint256 i = 0; i < len; i++) {
             collaterals[i] = reserve.collateralAssets(i);
         }
         return collaterals;
     }
 
-    function getCollateralAssetsLength(
-        IReserve reserve
-    ) internal view returns (uint256) {
+    function getCollateralAssetsLength(IReserve reserve) internal view returns (uint256) {
         uint256 i = 0;
         while (true) {
             try reserve.collateralAssets(i) returns (address) {

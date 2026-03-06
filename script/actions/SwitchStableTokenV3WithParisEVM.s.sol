@@ -31,10 +31,7 @@ contract SwitchStableTokenV3WithParisEVM is TrebScript, ProxyHelper {
         address v3Impl = lookup(string.concat("StableTokenV3:", label));
         if (v3Impl == address(0)) {
             console.log("StableTokenV3:%s not found, deploying...", label);
-            v3Impl = deployer
-                .create3("StableTokenV3")
-                .setLabel(label)
-                .deploy(abi.encode(true));
+            v3Impl = deployer.create3("StableTokenV3").setLabel(label).deploy(abi.encode(true));
             console.log("Deployed StableTokenV3 impl:", v3Impl);
         } else {
             console.log("Found existing StableTokenV3 impl:", v3Impl);

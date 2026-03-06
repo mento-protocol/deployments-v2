@@ -54,11 +54,7 @@ contract ReserveVerification is V3IntegrationBase {
     /// @notice Daily spending ratio for CELO must match config
     function test_spendingRatio_matchesConfig() public view {
         uint256 actual = IReserve(reserve).getDailySpendingRatio();
-        assertEq(
-            actual,
-            reserveConfig.spendingRatio,
-            "Reserve.getDailySpendingRatio() does not match config"
-        );
+        assertEq(actual, reserveConfig.spendingRatio, "Reserve.getDailySpendingRatio() does not match config");
     }
 
     // ========== Frozen Gold ==========
@@ -67,20 +63,14 @@ contract ReserveVerification is V3IntegrationBase {
     function test_frozenGold_matchesConfig() public view {
         uint256 actual = IReserveFrozenGold(reserve).frozenReserveGoldStartBalance();
         assertEq(
-            actual,
-            reserveConfig.frozenGold,
-            "Reserve.frozenReserveGoldStartBalance() does not match config frozenGold"
+            actual, reserveConfig.frozenGold, "Reserve.frozenReserveGoldStartBalance() does not match config frozenGold"
         );
     }
 
     /// @notice frozenReserveGoldDays must match config frozenDays
     function test_frozenDays_matchesConfig() public view {
         uint256 actual = IReserveFrozenGold(reserve).frozenReserveGoldDays();
-        assertEq(
-            actual,
-            reserveConfig.frozenDays,
-            "Reserve.frozenReserveGoldDays() does not match config frozenDays"
-        );
+        assertEq(actual, reserveConfig.frozenDays, "Reserve.frozenReserveGoldDays() does not match config frozenDays");
     }
 
     // ========== Asset Allocation ==========
@@ -98,10 +88,7 @@ contract ReserveVerification is V3IntegrationBase {
             assertEq(
                 actualSymbols[i],
                 reserveConfig.assetAllocationSymbols[i],
-                string.concat(
-                    "Asset allocation symbol mismatch at index ",
-                    vm.toString(i)
-                )
+                string.concat("Asset allocation symbol mismatch at index ", vm.toString(i))
             );
         }
     }
@@ -119,10 +106,7 @@ contract ReserveVerification is V3IntegrationBase {
             assertEq(
                 actualWeights[i],
                 reserveConfig.assetAllocationWeights[i],
-                string.concat(
-                    "Asset allocation weight mismatch at index ",
-                    vm.toString(i)
-                )
+                string.concat("Asset allocation weight mismatch at index ", vm.toString(i))
             );
         }
     }
@@ -132,21 +116,13 @@ contract ReserveVerification is V3IntegrationBase {
     /// @notice tobinTax must match config
     function test_tobinTax_matchesConfig() public view {
         uint256 actual = IReserve(reserve).tobinTax();
-        assertEq(
-            actual,
-            reserveConfig.tobinTax,
-            "Reserve.tobinTax() does not match config"
-        );
+        assertEq(actual, reserveConfig.tobinTax, "Reserve.tobinTax() does not match config");
     }
 
     /// @notice tobinTaxReserveRatio must match config
     function test_tobinTaxReserveRatio_matchesConfig() public view {
         uint256 actual = IReserve(reserve).tobinTaxReserveRatio();
-        assertEq(
-            actual,
-            reserveConfig.tobinTaxReserveRatio,
-            "Reserve.tobinTaxReserveRatio() does not match config"
-        );
+        assertEq(actual, reserveConfig.tobinTaxReserveRatio, "Reserve.tobinTaxReserveRatio() does not match config");
     }
 
     // ========== Collateral Asset Daily Spending Ratios ==========
@@ -167,8 +143,7 @@ contract ReserveVerification is V3IntegrationBase {
                 actual,
                 expectedRatios[i],
                 string.concat(
-                    "Collateral asset daily spending ratio mismatch for asset: ",
-                    vm.toString(collateralAssets[i])
+                    "Collateral asset daily spending ratio mismatch for asset: ", vm.toString(collateralAssets[i])
                 )
             );
         }

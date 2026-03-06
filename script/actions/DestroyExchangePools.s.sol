@@ -29,19 +29,13 @@ contract DestroyExchangePools is TrebScript, ProxyHelper {
         bytes32 pickedExchangeId = vm.envOr("exchangeId", bytes32(0));
 
         IBiPoolManager biPoolManagerRead = IBiPoolManager(biPoolManagerAddy);
-        IBiPoolManager biPoolManager = IBiPoolManager(
-            deployer.harness(biPoolManagerAddy)
-        );
+        IBiPoolManager biPoolManager = IBiPoolManager(deployer.harness(biPoolManagerAddy));
 
-        IExchangeProvider.Exchange[] memory exchanges = biPoolManagerRead
-            .getExchanges();
+        IExchangeProvider.Exchange[] memory exchanges = biPoolManagerRead.getExchanges();
 
         for (uint256 i = exchanges.length; i > 0; i--) {
             IExchangeProvider.Exchange memory exchange = exchanges[i - 1];
-            if (
-                pickedExchangeId != bytes32(0) &&
-                exchange.exchangeId != pickedExchangeId
-            ) continue;
+            if (pickedExchangeId != bytes32(0) && exchange.exchangeId != pickedExchangeId) continue;
             biPoolManager.destroyExchange(exchange.exchangeId, i - 1);
 
             console.log("Destroyed exchange pool:");
