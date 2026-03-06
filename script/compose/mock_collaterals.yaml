@@ -1,0 +1,4 @@
+group: Mento Mock Collaterals
+components:
+  MockCollaterals:
+    script: DeployMockCollaterals

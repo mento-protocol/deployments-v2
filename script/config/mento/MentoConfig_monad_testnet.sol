@@ -13,11 +13,12 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
     /// ===================================================================
     /// COLLATERAL
     /// ===================================================================
-    function _initCollateral() internal virtual override {
+    function _initCollateral() internal override {
         _addCollateral("USDC", lookup("USDC"));
         _registerMockCollateral("AUSD", 6);
 
         _addReserveV2Collateral("USDC");
+        _addReserveV2Collateral("AUSD");
     }
 
     /// ===================================================================
@@ -26,7 +27,7 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
     /// @notice Configure oracle ratefeeds and circuit breaker
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
-    function _initOracles() internal virtual override {
+    function _initOracles() internal override {
         _oracleConfig = OracleConfig({
             reportExpirySeconds: 2 days // 5 minutes
         });
@@ -79,7 +80,7 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
 
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(string memory currency, address source) internal virtual override {
+    function _configureDefaultFxRateFeed(string memory currency, address source) internal override {
         string memory rateFeed = string.concat(currency, "/USD");
         _addRateFeed(rateFeed);
         _fxRateFeedIds.push(_getRateFeedId(rateFeed));

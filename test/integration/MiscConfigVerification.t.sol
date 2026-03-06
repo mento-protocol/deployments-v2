@@ -132,8 +132,10 @@ contract MiscConfigVerification is V3IntegrationBase {
 
     /// @notice Verify each collateral asset from config is registered in Reserve (V1)
     function test_collateralAssets_registeredInReserve() public {
-        if (!_isCelo()) vm.skip(true);
-        return;
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         address reserve = lookupProxyOrFail("Reserve");
         address[] memory collateralAssets = config.getCollateralAssets();
 
@@ -165,8 +167,10 @@ contract MiscConfigVerification is V3IntegrationBase {
     ///         The collateralizationRatio is not stored on-chain directly; it is used as a target when
     ///         creating the reserve trove. We verify the resulting trove's ICR meets or exceeds the target.
     function test_cdpPools_collateralizationRatio_met() public {
-        if (!_isCelo()) vm.skip(true);
-        return;
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         address[] memory cdpPools = ICDPLiquidityStrategy(cdpLiquidityStrategy).getPools();
 
         for (uint256 i = 0; i < cdpPools.length; i++) {
@@ -189,7 +193,7 @@ contract MiscConfigVerification is V3IntegrationBase {
             string memory idx = vm.toString(i);
 
             // Allow 5% tolerance for price drift
-            uint256 minICR = cdpCfg.collateralizationRatio * 95 / 100;
+            uint256 minICR = (cdpCfg.collateralizationRatio * 95) / 100;
             assertGe(
                 currentICR,
                 minICR,
@@ -212,8 +216,10 @@ contract MiscConfigVerification is V3IntegrationBase {
 
     /// @notice Verify the CDPLiquidityStrategy's REDEMPTION_SHORTFALL_TOLERANCE matches config
     function test_cdpLiquidityStrategy_redemptionShortfallTolerance_matchesConfig() public {
-        if (!_isCelo()) vm.skip(true);
-        return;
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         uint256 expected = config.getCDPRedemptionShortfallTolerance();
         uint256 actual = ICDPLiquidityStrategyView(cdpLiquidityStrategy).REDEMPTION_SHORTFALL_TOLERANCE();
 

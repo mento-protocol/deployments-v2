@@ -131,8 +131,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
 
         stableTokenV3Impl = deployer.create3("StableTokenV3").setLabel(label).deploy(abi.encode(true));
 
+        // Hardcoded label for consistency with seploia when running this on mainnet
         reserveLiquidityStrategyImpl =
-            deployer.create3("ReserveLiquidityStrategy").setLabel("v3.0.1").deploy(abi.encode(true)); // Hardcoded for consistency with seploia when running this on mainnet
+            deployer.create3("ReserveLiquidityStrategy").setLabel("v3.0.1").deploy(abi.encode(true));
 
         reserveLiquidityStrategy = deployProxy(
             deployer,

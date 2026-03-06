@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
 import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IVirtualPoolFactory} from "mento-core/interfaces/IVirtualPoolFactory.sol";
@@ -32,6 +31,7 @@ contract V3Swap is V3IntegrationBase {
         fpmmPools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
         if (_isCelo()) {
             vpPools = IVirtualPoolFactory(virtualPoolFactory).getAllPools();
+            require(vpPools.length > 0, "No virtual pools deployed");
         }
         require(fpmmPools.length > 0, "No FPMM pools deployed");
         _boostFPMMLiquidity();
@@ -234,7 +234,7 @@ contract V3Swap is V3IntegrationBase {
 
     /// @notice 2-hop route: FPMM(tokenA→tokenB) → VirtualPool(tokenB→tokenC)
     function test_multiHop_fpmmThenVirtualPool() public {
-        if (vpPools.length == 0) {
+        if (!_isCelo()) {
             vm.skip(true);
             return;
         }
@@ -246,7 +246,7 @@ contract V3Swap is V3IntegrationBase {
 
     /// @notice 2-hop route: VirtualPool(tokenA→tokenB) → FPMM(tokenB→tokenC)
     function test_multiHop_virtualPoolThenFpmm() public {
-        if (vpPools.length == 0) {
+        if (!_isCelo()) {
             vm.skip(true);
             return;
         }

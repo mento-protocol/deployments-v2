@@ -1,7 +1,5 @@
 group: Mento V3 Dependencies
 components:
-  MockCollaterals:
-    script: DeployMockCollaterals
   ProxyAdmin:
     script: DeployProxyAdmin
   AddressSortedLinkedListWithMedian:
@@ -9,7 +7,6 @@ components:
   SortedOracles:
     script: DeploySortedOracles
     deps:
-      - MockCollaterals
       - AddressSortedLinkedListWithMedian
       - ProxyAdmin
   BreakerBox:
@@ -19,17 +16,13 @@ components:
       - SortedOracles
   MockChainlinkAggregators:
     script: DeployMockAggregators
-    deps:
-      - MockCollaterals
   ChainlinkRelayers:
     script: DeployChainlinkRelayers
     deps:
       - MockChainlinkAggregators
       - ChainlinkRelayerFactory
-      - MockCollaterals
   ChainlinkRelayerFactory:
     script: DeployChainlinkRelayerFactory
     deps:
       - SortedOracles
       - ProxyAdmin
-      - MockCollaterals

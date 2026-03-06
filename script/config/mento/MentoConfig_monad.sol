@@ -171,42 +171,38 @@ contract MentoConfig_monad is MentoConfig {
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
-        if (_collateral["USDC"] != address(0)) {
-            _addRateFeed("USDC/USD");
-            _addToBreaker({
-                breakerId: valueBreakerId,
-                rateFeed: "USDC/USD",
-                cooldown: 1,
-                threshold: 0.0015 * 1e24,
-                smoothingFactor: 0,
-                referenceValue: 1 * 1e24
-            });
-            _addChainlinkRelayer({
-                rateFeed: "USDC/USD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
-            });
-        }
+        _addRateFeed("USDC/USD");
+        _addToBreaker({
+            breakerId: valueBreakerId,
+            rateFeed: "USDC/USD",
+            cooldown: 1,
+            threshold: 0.0015 * 1e24,
+            smoothingFactor: 0,
+            referenceValue: 1 * 1e24
+        });
+        _addChainlinkRelayer({
+            rateFeed: "USDC/USD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
+        });
 
-        if (_collateral["AUSD"] != address(0)) {
-            _addRateFeed("AUSD/USD");
-            _addToBreaker({
-                breakerId: valueBreakerId,
-                rateFeed: "AUSD/USD",
-                cooldown: 1,
-                threshold: 0.0015 * 1e24,
-                smoothingFactor: 0,
-                referenceValue: 1 * 1e24
-            });
-            _addChainlinkRelayer({
-                rateFeed: "AUSD/USD", description: "AUSD/USD", aggregator0: _coreAggs.ausdUsd, invert0: false
-            });
-        }
+        _addRateFeed("AUSD/USD");
+        _addToBreaker({
+            breakerId: valueBreakerId,
+            rateFeed: "AUSD/USD",
+            cooldown: 1,
+            threshold: 0.0015 * 1e24,
+            smoothingFactor: 0,
+            referenceValue: 1 * 1e24
+        });
+        _addChainlinkRelayer({
+            rateFeed: "AUSD/USD", description: "AUSD/USD", aggregator0: _coreAggs.ausdUsd, invert0: false
+        });
 
         _configureDefaultFxRateFeed("GBP/USD", _fxAggs.gbp);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(string memory rateFeed, address source) internal {
+    function _configureDefaultFxRateFeed(string memory rateFeed, address source) internal virtual {
         _addRateFeed(rateFeed);
         _fxRateFeedIds.push(_getRateFeedId(rateFeed));
         _addToBreaker({

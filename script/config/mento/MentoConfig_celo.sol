@@ -47,7 +47,8 @@ contract MentoConfig_celo is MentoConfig {
             ethUsd: 0x1FcD30A73D67639c1cD89ff5746E7585731c083B,
             usdcUsd: 0xc7A353BaE210aed958a1A2928b654938EC59DaB2,
             usdtUsd: 0x5e37AF40A7A344ec9b03CCD34a250F3dA9a20B02,
-            eurcUsd: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd
+            eurcUsd: 0x9a48d9b0AF457eF040281A9Af3867bc65522Fecd,
+            ausdUsd: address(0)
         });
 
         _fxAggs = FxAggregators({

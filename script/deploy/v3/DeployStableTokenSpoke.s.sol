@@ -19,8 +19,6 @@ import {
 } from "lib/mento-core/lib/openzeppelin-contracts-next/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 interface IProxyAdmin {
-    function transferOwnership(address newOwner) external;
-
     function upgradeAndCall(ITransparentUpgradeableProxy proxy, address implementation, bytes memory data)
         external
         payable;
@@ -78,7 +76,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
                 burners
             )
         );
-        IProxyAdmin(deployer.harness(getProxyAdmin(stableTokenSpokeProxy))).transferOwnership(initialOwner);
+        IOwnable(deployer.harness(getProxyAdmin(stableTokenSpokeProxy))).transferOwnership(initialOwner);
         IOwnable(deployer.harness(stableTokenSpokeProxy)).transferOwnership(initialOwner);
 
         // ====== Deployment checks ======

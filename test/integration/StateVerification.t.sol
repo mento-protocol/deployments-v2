@@ -203,6 +203,7 @@ contract StateVerification is V3IntegrationBase {
     function test_virtualPoolFactory_transferOwnership_reverts_nonOwner() public {
         if (!_isCelo()) {
             vm.skip(true);
+            return;
         }
         address randomUser = makeAddr("randomUser");
         vm.prank(randomUser);
