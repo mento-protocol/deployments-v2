@@ -1,11 +1,12 @@
 import { expect } from "chai";
 import hre from "hardhat";
 import { Contract, Signer } from "ethers";
-import { impersonate, stopImpersonating } from "./anvil";
-import { contractAt, mintStableToken } from "./helpers";
-import { loadFixture } from "./fixture";
+import { impersonateAccount, stopImpersonatingAccount } from "@nomicfoundation/hardhat-network-helpers";
+import { contractAt, isCelo, mintStableToken } from "../helpers/helpers";
+import { loadFixture } from "../helpers/fixture";
+import { setupTestAccounts } from "../helpers/setup";
 
-describe("FPMM Swaps & Rebalancing", function () {
+describe("FPMM Swaps & Rebalancing", function() {
   let fpmmFactory: Contract;
   let router: Contract;
   let vpFactory: Contract;
@@ -24,12 +25,17 @@ describe("FPMM Swaps & Rebalancing", function () {
   let lpAddr: string;
   let traderAddr: string;
 
-  before(async function () {
+  before(async function() {
+    await setupTestAccounts();
+
+    const celo = await isCelo();
     const f = loadFixture();
 
     fpmmFactory = contractAt("FPMMFactory", f.contracts.fpmmFactory);
     router = contractAt("Router", f.contracts.router);
-    vpFactory = contractAt("VirtualPoolFactory", f.contracts.vpFactory);
+    if (celo) {
+      vpFactory = contractAt("VirtualPoolFactory", String(f.contracts.vpFactory));
+    }
 
     fpmmGBPmUSDm = contractAt("FPMM", f.fpmm.gbpmUsdm);
     fpmmUSDCUSDm = contractAt("FPMM", f.fpmm.usdcUsdm);
@@ -43,21 +49,21 @@ describe("FPMM Swaps & Rebalancing", function () {
     lpAddr = f.accounts.lp;
     traderAddr = f.accounts.trader;
 
-    await impersonate(lpAddr);
-    await impersonate(traderAddr);
+    await impersonateAccount(lpAddr);
+    await impersonateAccount(traderAddr);
     lp = await hre.ethers.getSigner(lpAddr);
     trader = await hre.ethers.getSigner(traderAddr);
   });
 
   after(async () => {
-    await stopImpersonating(lpAddr);
-    await stopImpersonating(traderAddr);
+    await stopImpersonatingAccount(lpAddr);
+    await stopImpersonatingAccount(traderAddr);
   });
 
   // ── Providing liquidity ──────────────────────────────────────────────
 
-  describe("Providing liquidity", function () {
-    it("Should provide liquidity to GBPm/USDm FPMM", async function () {
+  describe("Providing liquidity", function() {
+    it("Should provide liquidity to GBPm/USDm FPMM", async function() {
       const lpBalBefore = await fpmmGBPmUSDm.balanceOf(lpAddr);
 
       await contractAt("ERC20", gbpmAddr, lp).transfer(fpmmGBPmUSDm.target, 100n * 10n ** 18n);
@@ -71,8 +77,8 @@ describe("FPMM Swaps & Rebalancing", function () {
 
   // ── Swaps ────────────────────────────────────────────────────────────
 
-  describe("Swaps", function () {
-    before(async function () {
+  describe("Swaps", function() {
+    before(async function() {
       await contractAt("ERC20", gbpmAddr, lp).transfer(fpmmGBPmUSDm.target, 1_000n * 10n ** 18n);
       await contractAt("ERC20", usdmAddr, lp).transfer(fpmmGBPmUSDm.target, 1_000n * 10n ** 18n);
       await fpmmGBPmUSDm.connect(lp).mint(lpAddr);
@@ -82,7 +88,7 @@ describe("FPMM Swaps & Rebalancing", function () {
       await fpmmUSDCUSDm.connect(lp).mint(lpAddr);
     });
 
-    it("Should swap on a single FPMM (USDm -> GBPm)", async function () {
+    it("Should swap on a single FPMM (USDm -> GBPm)", async function() {
       const swapAmount = 10n * 10n ** 18n;
       const amountOut = await fpmmGBPmUSDm.getAmountOut(swapAmount, usdmAddr);
       expect(amountOut).to.be.greaterThan(0n);
@@ -95,7 +101,7 @@ describe("FPMM Swaps & Rebalancing", function () {
       expect(gbpmAfter - gbpmBefore).to.equal(amountOut);
     });
 
-    it("Should multi-hop swap via Router: USDC -> USDm -> GBPm (2 FPMMs)", async function () {
+    it("Should multi-hop swap via Router: USDC -> USDm -> GBPm (2 FPMMs)", async function() {
       const fpmmFactoryAddr = fpmmFactory.target as string;
       const swapAmount = 5n * 10n ** BigInt(usdcDecimals);
 
@@ -114,7 +120,8 @@ describe("FPMM Swaps & Rebalancing", function () {
       expect(gbpmAfter).to.be.greaterThan(gbpmBefore);
     });
 
-    it("Should multi-hop swap via Router: 1 FPMM + 1 Virtual Pool", async function () {
+    it("Should multi-hop swap via Router: 1 FPMM + 1 Virtual Pool", async function() {
+      if (!(await isCelo())) this.skip();
       const fpmmFactoryAddr = fpmmFactory.target as string;
       const vpFactoryAddr = vpFactory.target as string;
 
@@ -144,7 +151,8 @@ describe("FPMM Swaps & Rebalancing", function () {
       expect(balAfter).to.be.greaterThan(balBefore);
     });
 
-    it("Should multi-hop swap via Router: 2 Virtual Pools", async function () {
+    it("Should multi-hop swap via Router: 2 Virtual Pools", async function() {
+      if (!(await isCelo())) this.skip();
       const vpFactoryAddr = vpFactory.target as string;
       const vpAddresses: string[] = await vpFactory.getAllPools();
 
@@ -176,8 +184,6 @@ describe("FPMM Swaps & Rebalancing", function () {
 
       await mintStableToken(vp1Token!, traderAddr, 1_000n * 10n ** 18n);
 
-      const vp1Sym = await contractAt("ERC20", vp1Token!).symbol();
-      const vp2Sym = await contractAt("ERC20", vp2Token!).symbol();
       const swapAmount = 10n * 10n ** 18n;
       const routes = [
         { from: vp1Token!, to: usdmAddr, factory: vpFactoryAddr },
@@ -192,14 +198,13 @@ describe("FPMM Swaps & Rebalancing", function () {
 
       const balAfter = await contractAt("ERC20", vp2Token!).balanceOf(traderAddr);
       expect(balAfter).to.be.greaterThan(balBefore);
-      console.log(`    Multi-hop: ${swapAmount} ${vp1Sym} -> ${balAfter - balBefore} ${vp2Sym}`);
     });
   });
 
   // ── Fee accrual ──────────────────────────────────────────────────────
 
-  describe("Fee accrual", function () {
-    before(async function () {
+  describe("Fee accrual", function() {
+    before(async function() {
       await contractAt("ERC20", gbpmAddr, lp).transfer(fpmmGBPmUSDm.target, 1_000n * 10n ** 18n);
       await contractAt("ERC20", usdmAddr, lp).transfer(fpmmGBPmUSDm.target, 1_000n * 10n ** 18n);
       await fpmmGBPmUSDm.connect(lp).mint(lpAddr);
@@ -216,12 +221,12 @@ describe("FPMM Swaps & Rebalancing", function () {
       }
     });
 
-    it("Should have accumulated protocol fees", async function () {
+    it("Should have accumulated protocol fees", async function() {
       const feeRecipientLPBal = await fpmmGBPmUSDm.balanceOf(protocolFeeRecipient);
       expect(feeRecipientLPBal).to.be.greaterThan(0n);
     });
 
-    it("Should have grown reserves from LP fees", async function () {
+    it("Should have grown reserves from LP fees", async function() {
       const [r0, r1] = await Promise.all([fpmmGBPmUSDm.reserve0(), fpmmGBPmUSDm.reserve1()]);
       expect(r0).to.be.greaterThan(0n);
       expect(r1).to.be.greaterThan(0n);
@@ -230,8 +235,8 @@ describe("FPMM Swaps & Rebalancing", function () {
 
   // ── Rebalancing ──────────────────────────────────────────────────────
 
-  describe("Rebalancing", function () {
-    it("Should rebalance USDC/USDm FPMM via ReserveLiquidityStrategy", async function () {
+  describe("Rebalancing", function() {
+    it("Should rebalance USDC/USDm FPMM via ReserveLiquidityStrategy", async function() {
       this.timeout(30_000);
 
       const largeAmount = 500n * 10n ** BigInt(usdcDecimals);
@@ -259,7 +264,8 @@ describe("FPMM Swaps & Rebalancing", function () {
       }
     });
 
-    it("Should rebalance GBPm/USDm FPMM via CDPLiquidityStrategy", async function () {
+    it("Should rebalance GBPm/USDm FPMM via CDPLiquidityStrategy", async function() {
+      if (!(await isCelo())) this.skip();
       this.timeout(30_000);
 
       await contractAt("ERC20", gbpmAddr, lp).transfer(fpmmGBPmUSDm.target, 1_000n * 10n ** 18n);

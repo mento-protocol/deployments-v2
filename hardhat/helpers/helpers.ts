@@ -1,14 +1,19 @@
 import fs from "fs";
 import path from "path";
 import hre from "hardhat";
-import { Contract, Signer } from "ethers";
-import { getForgeArtifact } from "../hardhat.config";
-import { impersonate, stopImpersonating, setBalance } from "./anvil";
+import { Contract } from "ethers";
+import { setBalance, impersonateAccount, stopImpersonatingAccount } from "@nomicfoundation/hardhat-network-helpers";
+import { getForgeArtifact } from "../../hardhat.config";
+
+export async function isCelo(): Promise<boolean> {
+  const { chainId } = await hre.ethers.provider.getNetwork();
+  return chainId === 42220n || chainId === 11142220n;
+}
 
 /** ERC1967 implementation slot */
 const IMPL_SLOT = "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc";
 
-export function contractAt(name: string, address: string, signer?: Signer): Contract {
+export function contractAt(name: string, address: string, signer?: any): Contract {
   const { abi } = getForgeArtifact(name);
   return new Contract(address, abi, signer ?? hre.ethers.provider);
 }
@@ -22,15 +27,17 @@ async function getImplementation(proxyAddr: string): Promise<string> {
   return "0x" + raw.slice(26);
 }
 
-function getRegisteredImpls(prefix: string): Set<string> {
-  const registryPath = path.resolve(__dirname, "../.treb/registry.json");
+function getRegisteredImpls(prefixes: string[]): Set<string> {
+  const registryPath = path.resolve(__dirname, "../../.treb/registry.json");
   const registry = JSON.parse(fs.readFileSync(registryPath, "utf8"));
   const addrs = new Set<string>();
-  for (const chains of Object.values<any>(registry)) {
-    for (const ns of Object.values<any>(chains)) {
-      for (const [key, addr] of Object.entries<string>(ns)) {
-        if (key === prefix || key.startsWith(prefix + ":")) {
-          addrs.add(addr.toLowerCase());
+  for (const prefix of prefixes) {
+    for (const chains of Object.values<any>(registry)) {
+      for (const ns of Object.values<any>(chains)) {
+        for (const [key, addr] of Object.entries<string>(ns)) {
+          if (key === prefix || key.startsWith(prefix + ":")) {
+            addrs.add(addr.toLowerCase());
+          }
         }
       }
     }
@@ -47,7 +54,7 @@ export async function mintStableToken(
   amount: bigint,
 ): Promise<void> {
   const impl = (await getImplementation(tokenAddr)).toLowerCase();
-  const v3Impls = getRegisteredImpls("StableTokenV3");
+  const v3Impls = getRegisteredImpls(["StableTokenV3", "StableTokenSpoke"]);
 
   if (v3Impls.has(impl)) {
     await mintStableTokenV3(tokenAddr, to, amount);
@@ -64,11 +71,11 @@ async function mintStableTokenV2(
   const token = contractAt("StableTokenV2", tokenAddr);
   const broker: string = await token.broker();
 
-  await impersonate(broker);
+  await impersonateAccount(broker);
   await setBalance(broker, 10n ** 18n);
   const brokerSigner = await hre.ethers.getSigner(broker);
   await contractAt("StableTokenV2", tokenAddr, brokerSigner).mint(to, amount);
-  await stopImpersonating(broker);
+  await stopImpersonatingAccount(broker);
 }
 
 async function mintStableTokenV3(
@@ -79,7 +86,7 @@ async function mintStableTokenV3(
   const token = contractAt("StableTokenV3", tokenAddr);
   const owner: string = await token.owner();
 
-  await impersonate(owner);
+  await impersonateAccount(owner);
   await setBalance(owner, 10n ** 18n);
   const ownerSigner = await hre.ethers.getSigner(owner);
   const tokenAsOwner = contractAt("StableTokenV3", tokenAddr, ownerSigner);
@@ -93,7 +100,7 @@ async function mintStableTokenV3(
     await tokenAsOwner.setMinter(owner, false);
   }
 
-  await stopImpersonating(owner);
+  await stopImpersonatingAccount(owner);
 }
 
 /**
@@ -119,12 +126,12 @@ export async function refreshSortedOracles(
       if (v >= value) greaterKey = oracles[j] as string;
     }
 
-    await impersonate(oracle);
+    await impersonateAccount(oracle);
     await setBalance(oracle, 10n ** 18n);
     const oracleSigner = await hre.ethers.getSigner(oracle);
     await contractAt("SortedOracles", sortedOraclesAddr, oracleSigner)
       .report(rateFeedId, value, lesserKey, greaterKey);
-    await stopImpersonating(oracle);
+    await stopImpersonatingAccount(oracle);
   }
 }
 
@@ -148,18 +155,15 @@ export async function refreshAllBiPoolOracles(
   }
 }
 
-/**
- * Transfer tokens from a whale to a recipient.
- */
 export async function drainWhale(
   tokenAddr: string,
   whale: string,
   to: string,
   amount: bigint,
 ): Promise<void> {
-  await impersonate(whale);
+  await impersonateAccount(whale);
   await setBalance(whale, 10n ** 18n);
   const whaleSigner = await hre.ethers.getSigner(whale);
   await contractAt("ERC20", tokenAddr, whaleSigner).transfer(to, amount);
-  await stopImpersonating(whale);
+  await stopImpersonatingAccount(whale);
 }

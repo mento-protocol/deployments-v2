@@ -1,17 +1,16 @@
 import { expect } from "chai";
 import hre from "hardhat";
 import { Contract, Signer } from "ethers";
-import {
-  impersonate,
-  stopImpersonating,
-  setBalance,
-  increaseTime,
-  getBlockTimestamp,
-} from "./anvil";
-import { contractAt, refreshSortedOracles } from "./helpers";
-import { loadFixture, hexToBigInt } from "./fixture";
+import { setBalance, impersonateAccount, stopImpersonatingAccount, time } from "@nomicfoundation/hardhat-network-helpers";
+import { contractAt, refreshSortedOracles, isCelo } from "../helpers/helpers";
+import { loadFixture, hexToBigInt } from "../helpers/fixture";
+import { setupTestAccounts } from "../helpers/setup";
 
-describe("Troves", function () {
+describe("Troves", function() {
+  before(async function() {
+    if (!(await isCelo())) this.skip();
+    await setupTestAccounts();
+  });
   // Liquity contracts
   let borrowerOps: Contract;
   let troveManager: Contract;
@@ -46,7 +45,7 @@ describe("Troves", function () {
   const accounts: { addr: string; signer: Signer }[] = [];
   const troveIds: bigint[] = [];
 
-  before(async function () {
+  before(async function() {
     const f = loadFixture();
 
     borrowerOps = contractAt("BorrowerOperations", f.contracts.borrowerOps);
@@ -63,10 +62,6 @@ describe("Troves", function () {
     gasTokenAddr = f.trove.gasTokenAddr;
     gasToken = contractAt("ERC20", gasTokenAddr);
 
-    const boldSym = await boldToken.symbol();
-    const collSym = await collToken.symbol();
-    console.log(`    Bold: ${boldSym}, Coll: ${collSym}`);
-
     MCR = hexToBigInt(f.trove.MCR);
     MIN_DEBT = hexToBigInt(f.trove.MIN_DEBT);
     MIN_RATE = hexToBigInt(f.trove.MIN_RATE);
@@ -80,7 +75,7 @@ describe("Troves", function () {
     priceFeed = contractAt("FXPriceFeed", f.contracts.priceFeed);
 
     for (const addr of f.accounts.troveAccounts) {
-      await impersonate(addr);
+      await impersonateAccount(addr);
       const signer = await hre.ethers.getSigner(addr);
       accounts.push({ addr, signer });
     }
@@ -88,7 +83,7 @@ describe("Troves", function () {
 
   after(async () => {
     for (const acc of accounts) {
-      await stopImpersonating(acc.addr);
+      await stopImpersonatingAccount(acc.addr);
     }
   });
 
@@ -96,13 +91,13 @@ describe("Troves", function () {
 
   async function refreshOraclePrice(newChainlinkPrice?: bigint) {
     const aggOwner = await mockAggregator.owner();
-    await impersonate(aggOwner);
+    await impersonateAccount(aggOwner);
     await setBalance(aggOwner, 10n ** 18n);
     const ownerSigner = await hre.ethers.getSigner(aggOwner);
-    const ts = await getBlockTimestamp();
+    const ts = await time.latest();
     await contractAt("MockChainlinkAggregator", await mockAggregator.getAddress(), ownerSigner)
       .report(newChainlinkPrice ?? originalPrice, ts);
-    await stopImpersonating(aggOwner);
+    await stopImpersonatingAccount(aggOwner);
 
     const rateFeedId = await priceFeed.rateFeedID();
     const sortedOraclesAddr = loadFixture().contracts.sortedOracles;
@@ -139,12 +134,12 @@ describe("Troves", function () {
         if (scaledValues[j] >= value) greaterKey = oracles[j] as string;
       }
 
-      await impersonate(oracle);
+      await impersonateAccount(oracle);
       await setBalance(oracle, 10n ** 18n);
       const oracleSigner = await hre.ethers.getSigner(oracle);
       await contractAt("SortedOracles", sortedOraclesAddr, oracleSigner)
         .report(rateFeedId, value, lesserKey, greaterKey);
-      await stopImpersonating(oracle);
+      await stopImpersonatingAccount(oracle);
     }
 
     await resetBreaker(rateFeedId);
@@ -154,12 +149,12 @@ describe("Troves", function () {
     const breakerBoxAddr = loadFixture().contracts.breakerBox;
     const breakerBox = contractAt("BreakerBox", breakerBoxAddr);
     const bbOwner: string = await breakerBox.owner();
-    await impersonate(bbOwner);
+    await impersonateAccount(bbOwner);
     await setBalance(bbOwner, 10n ** 18n);
     const bbOwnerSigner = await hre.ethers.getSigner(bbOwner);
     await contractAt("BreakerBox", breakerBoxAddr, bbOwnerSigner)
       .setRateFeedTradingMode(rateFeedId, 0);
-    await stopImpersonating(bbOwner);
+    await stopImpersonatingAccount(bbOwner);
   }
 
   function toSystemPrice(chainlinkPrice: bigint): bigint {
@@ -206,8 +201,8 @@ describe("Troves", function () {
 
   // ── Tests ────────────────────────────────────────────────────────────
 
-  describe("Opening troves", function () {
-    it("Should open troves for multiple accounts", async function () {
+  describe("Opening troves", function() {
+    it("Should open troves for multiple accounts", async function() {
       this.timeout(30_000);
       await openTrovesForAll(2n * 10n ** 18n);
 
@@ -218,13 +213,13 @@ describe("Troves", function () {
     });
   });
 
-  describe("Stability pool", function () {
-    before(async function () {
+  describe("Stability pool", function() {
+    before(async function() {
       this.timeout(30_000);
       await openTrovesForAll(2n * 10n ** 18n);
     });
 
-    it("Should provide to stability pool", async function () {
+    it("Should provide to stability pool", async function() {
       for (const idx of [0, 1]) {
         const { signer, addr } = accounts[idx];
         const boldBal = await boldToken.balanceOf(addr);
@@ -240,13 +235,13 @@ describe("Troves", function () {
     });
   });
 
-  describe("Trove management", function () {
-    before(async function () {
+  describe("Trove management", function() {
+    before(async function() {
       this.timeout(30_000);
       await openTrovesForAll(2n * 10n ** 18n);
     });
 
-    it("Should adjust interest rate", async function () {
+    it("Should adjust interest rate", async function() {
       const { signer } = accounts[0];
       const troveId = troveIds[0];
       const newRate = MIN_RATE * 5n;
@@ -260,7 +255,7 @@ describe("Troves", function () {
       expect(rate).to.equal(newRate);
     });
 
-    it("Should add collateral", async function () {
+    it("Should add collateral", async function() {
       const { signer } = accounts[1];
       const troveId = troveIds[1];
       const addAmount = 1_000n * 10n ** collDecimals;
@@ -273,7 +268,7 @@ describe("Troves", function () {
       expect(dataAfter.entireColl).to.be.greaterThan(dataBefore.entireColl);
     });
 
-    it("Should withdraw collateral", async function () {
+    it("Should withdraw collateral", async function() {
       const { signer } = accounts[1];
       const troveId = troveIds[1];
       const withdrawAmount = 100n * 10n ** collDecimals;
@@ -285,7 +280,7 @@ describe("Troves", function () {
       expect(dataAfter.entireColl).to.be.lessThan(dataBefore.entireColl);
     });
 
-    it("Should repay debt", async function () {
+    it("Should repay debt", async function() {
       const { signer } = accounts[2];
       const troveId = troveIds[2];
       const repayAmount = MIN_DEBT;
@@ -298,7 +293,7 @@ describe("Troves", function () {
       expect(dataAfter.entireDebt).to.be.lessThan(dataBefore.entireDebt);
     });
 
-    it("Should borrow more", async function () {
+    it("Should borrow more", async function() {
       const { signer } = accounts[2];
       const troveId = troveIds[2];
       const borrowAmount = MIN_DEBT / 2n;
@@ -311,11 +306,11 @@ describe("Troves", function () {
       expect(dataAfter.entireDebt).to.be.greaterThan(dataBefore.entireDebt);
     });
 
-    it("Should accrue interest over time", async function () {
+    it("Should accrue interest over time", async function() {
       const troveId = troveIds[0];
       const dataBefore = await troveManager.getLatestTroveData(troveId);
 
-      await increaseTime(30 * 24 * 3600);
+      await time.increase(30 * 24 * 3600);
       await refreshOraclePrice(originalPrice);
 
       const dataAfter = await troveManager.getLatestTroveData(troveId);
@@ -323,8 +318,8 @@ describe("Troves", function () {
     });
   });
 
-  describe("Liquidations", function () {
-    before(async function () {
+  describe("Liquidations", function() {
+    before(async function() {
       this.timeout(30_000);
       await openTrovesForAll(16n * 10n ** 17n);
 
@@ -336,7 +331,7 @@ describe("Troves", function () {
       }
     });
 
-    it("Should make troves liquidatable by increasing GBP/USD", async function () {
+    it("Should make troves liquidatable by increasing GBP/USD", async function() {
       this.timeout(30_000);
 
       const icrBefore = await troveManager.getCurrentICR(troveIds[2], systemPrice);
@@ -350,7 +345,7 @@ describe("Troves", function () {
       expect(icrAfter).to.be.lessThan(MCR);
     });
 
-    it("Should liquidate via stability pool", async function () {
+    it("Should liquidate via stability pool", async function() {
       this.timeout(30_000);
 
       const spBoldBefore = await stabilityPool.getTotalBoldDeposits();
@@ -374,7 +369,7 @@ describe("Troves", function () {
       expect(collGain0 + collGain1).to.be.greaterThan(0n);
     });
 
-    it("Should batch liquidate multiple troves", async function () {
+    it("Should batch liquidate multiple troves", async function() {
       this.timeout(30_000);
 
       const raisedPrice = originalPrice * 200n / 100n;

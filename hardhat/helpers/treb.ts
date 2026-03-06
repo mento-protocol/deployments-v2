@@ -2,12 +2,12 @@ import fs from "fs";
 import path from "path";
 import hre from "hardhat";
 import { Contract, Wallet, InterfaceAbi } from "ethers";
-import { getForgeArtifact, trebRuntime } from "../hardhat.config";
+import { getForgeArtifact, trebRuntime } from "../../hardhat.config";
 
 type Registry = Record<string, Record<string, Record<string, string>>>;
 
 function loadRegistry(): Registry {
-  const registryPath = path.resolve(__dirname, "../.treb/registry.json");
+  const registryPath = path.resolve(__dirname, "../../.treb/registry.json");
   return JSON.parse(fs.readFileSync(registryPath, "utf8"));
 }
 
@@ -29,7 +29,7 @@ function getNamespaceRegistry(
   if (!nsRegistry) {
     throw new Error(
       `No registry entries for namespace "${namespace}" on chain ${chainId}. ` +
-        `Available: ${Object.keys(chainRegistry).join(", ")}`
+      `Available: ${Object.keys(chainRegistry).join(", ")}`
     );
   }
   return nsRegistry;

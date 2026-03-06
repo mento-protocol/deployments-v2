@@ -1,16 +1,13 @@
 import { expect } from "chai";
 import hre from "hardhat";
 import { Contract } from "ethers";
-import { getForgeArtifact } from "../hardhat.config";
-import { getDeployedContract, getRegistryAddress } from "./treb";
+import { getForgeArtifact } from "../../hardhat.config";
+import { getDeployedContract, getRegistryAddress } from "../helpers/treb";
+import { isCelo } from "../helpers/helpers";
 
 function contractAt(name: string, address: string): Contract {
   const { abi } = getForgeArtifact(name);
   return new Contract(address, abi, hre.ethers.provider);
-}
-
-async function tokenSymbol(address: string): Promise<string> {
-  return contractAt("ERC20", address).symbol();
 }
 
 describe("FPMMs", function() {
@@ -35,8 +32,6 @@ describe("FPMMs", function() {
         fpmm.reserve0(),
         fpmm.reserve1(),
       ]);
-      const [sym0, sym1] = await Promise.all([tokenSymbol(t0), tokenSymbol(t1)]);
-      console.log(`    ${addr}: ${sym0}/${sym1} (reserves: ${r0}, ${r1})`);
 
       expect(t0).to.not.equal(t1);
       expect(r0).to.be.greaterThan(0n);
@@ -63,7 +58,6 @@ describe("FPMMs", function() {
         fpmm.protocolFee(),
         fpmm.lpFee(),
       ]);
-      console.log(`    ${addr}: protocolFee=${protocolFee}, lpFee=${lpFee}`);
       expect(protocolFee).to.be.greaterThan(0n);
       expect(lpFee).to.be.greaterThan(0n);
     }
@@ -74,7 +68,8 @@ describe("Virtual Pools", function() {
   let vpFactory: Contract;
   let vpAddresses: string[];
 
-  before(async () => {
+  before(async function() {
+    if (!(await isCelo())) this.skip();
     vpFactory = await getDeployedContract("VirtualPoolFactory");
     vpAddresses = await vpFactory.getAllPools();
   });
@@ -87,14 +82,16 @@ describe("Virtual Pools", function() {
     for (const addr of vpAddresses) {
       const vp = contractAt("VirtualPool", addr);
       const [t0, t1] = await Promise.all([vp.token0(), vp.token1()]);
-      const [sym0, sym1] = await Promise.all([tokenSymbol(t0), tokenSymbol(t1)]);
-      console.log(`    ${addr}: ${sym0}/${sym1}`);
       expect(t0).to.not.equal(t1);
     }
   });
 });
 
 describe("Liquity (GBPm)", function() {
+  before(async function() {
+    if (!(await isCelo())) this.skip();
+  });
+
   it("Should have core Liquity contracts deployed", async () => {
     const contracts = [
       "BorrowerOperations",
@@ -112,7 +109,6 @@ describe("Liquity (GBPm)", function() {
     for (const name of contracts) {
       const contract = await getDeployedContract(name);
       expect(contract.target).to.not.equal(hre.ethers.ZeroAddress);
-      console.log(`    ${name}: ${contract.target}`);
     }
   });
 
@@ -124,7 +120,6 @@ describe("Liquity (GBPm)", function() {
       systemParams.MIN_DEBT(),
       systemParams.MIN_ANNUAL_INTEREST_RATE(),
     ]);
-    console.log(`    CCR: ${ccr}, MCR: ${mcr}, MIN_DEBT: ${minDebt}, MIN_RATE: ${minRate}`);
     expect(ccr).to.be.greaterThan(0n);
     expect(mcr).to.be.greaterThan(0n);
     expect(minDebt).to.be.greaterThan(0n);
@@ -139,9 +134,6 @@ describe("Liquity (GBPm)", function() {
     const priceFeed = contractAt("FXPriceFeed", proxyAddr);
     const rateFeedId = await priceFeed.rateFeedID();
     const oracleAdapter = await priceFeed.oracleAdapter();
-    console.log(`    proxy: ${proxyAddr}`);
-    console.log(`    rateFeedID: ${rateFeedId}`);
-    console.log(`    oracleAdapter: ${oracleAdapter}`);
     expect(rateFeedId).to.not.equal(hre.ethers.ZeroAddress);
     expect(oracleAdapter).to.not.equal(hre.ethers.ZeroAddress);
   });
@@ -153,7 +145,8 @@ describe("Infrastructure", function() {
     expect(oracleAdapter.target).to.not.equal(hre.ethers.ZeroAddress);
   });
 
-  it("Should have CDPLiquidityStrategy deployed", async () => {
+  it("Should have CDPLiquidityStrategy deployed", async function() {
+    if (!(await isCelo())) this.skip();
     const strategy = await getDeployedContract("CDPLiquidityStrategy");
     expect(strategy.target).to.not.equal(hre.ethers.ZeroAddress);
   });
@@ -168,7 +161,8 @@ describe("Infrastructure", function() {
     expect(router.target).to.not.equal(hre.ethers.ZeroAddress);
   });
 
-  it("Should have FactoryRegistry with both factories", async () => {
+  it("Should have FactoryRegistry with both factories", async function() {
+    if (!(await isCelo())) this.skip();
     const factoryRegistry = await getDeployedContract("FactoryRegistry");
     const fpmmFactory = await getDeployedContract("FPMMFactory");
     const vpFactory = await getDeployedContract("VirtualPoolFactory");

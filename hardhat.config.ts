@@ -137,25 +137,30 @@ let defaultNetwork = "hardhat";
 if (fs.existsSync(forkStatePath)) {
   const forkState = readJson(forkStatePath);
   for (const [name, fork] of Object.entries<any>(forkState.forks || {})) {
-    const forkNetworkName = `fork_${name}`;
-    networks[forkNetworkName] = {
+    networks[name] = {
       url: fork.forkUrl,
       chainId: fork.chainId,
     };
-    defaultNetwork = forkNetworkName;
+    defaultNetwork = name;
   }
 }
 
 const config: HardhatUserConfig = {
-  defaultNetwork,
   paths: {
     sources: "./__skip__",
-    tests: "./test-ts",
-    artifacts: "./artifacts-hh",
-    cache: "./cache-hh",
+    tests: "./hardhat/tests",
+    artifacts: "./hardhat/artifacts",
+    cache: "./hardhat/cache",
   },
   networks: {
-    hardhat: {},
+    hardhat: {
+      forking: {
+        enabled: true,
+        url: networks[defaultNetwork].url,
+        blockNumber: 16957470,
+      },
+      chainId: networks[defaultNetwork].chainId,
+    },
     ...networks,
   },
 };
