@@ -16,7 +16,7 @@ test *ARGS:
     NAMESPACE=$(treb config | grep 'Namespace:' | awk '{print $NF}')
 
     # 3. Resolve the RPC URL env var name from foundry.toml (e.g. monad_testnet -> MONAD_TESTNET_RPC_URL)
-    RPC_ENV_VAR=$(grep "^${NETWORK} " foundry.toml | sed 's/.*${\(.*\)}.*/\1/')
+    RPC_ENV_VAR=$(grep "^${NETWORK} " foundry.toml | head -1 | sed 's/.*${\(.*\)}.*/\1/')
     if [[ -z "$RPC_ENV_VAR" ]]; then
         echo "Error: Could not find rpc_endpoints entry for '${NETWORK}' in foundry.toml" >&2
         exit 1
