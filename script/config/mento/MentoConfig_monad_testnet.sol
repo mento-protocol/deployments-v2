@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {ITradingLimits, BreakerType} from "./MentoConfig.sol";
+import {ITradingLimits, BreakerType, CoreAggregators, FxAggregators} from "./MentoConfig.sol";
 import {MentoConfig_monad} from "./MentoConfig_monad.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
@@ -21,81 +21,43 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
         _addReserveV2Collateral("AUSD");
     }
 
-    /// ===================================================================
-    /// ORACLES
-    /// ===================================================================
-    /// @notice Configure oracle ratefeeds and circuit breaker
-    /// @dev On testnets we can use _addMockAggregator to define chainlink
-    /// aggregators.
-    function _initOracles() internal override {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
-        valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
-        medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
+    // ===================================================================
+    // Parameters (testnet overrides)
+    // ===================================================================
+    function _configureParams() internal override {
+        super._configureParams();
 
+        // Oracle infrastructure
+        _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("monad");
 
-        _addRateFeed("USDC/USD");
-        _addToBreaker({
-            breakerId: valueBreakerId,
-            rateFeed: "USDC/USD",
-            cooldown: 1,
-            threshold: 0.001 * 1e24,
-            smoothingFactor: 0,
-            referenceValue: 1 * 1e24
-        });
-        _addMockAggregator({
-            label: "USDC/USD", description: "USDC/USD", source: 0xf5F15f188AbCB0d165D1Edb7f37F7d6fA2fCebec
-        });
-        _addChainlinkRelayer({
-            rateFeed: "USDC/USD",
-            description: "USDC/USD",
-            aggregator0: _predict("MockChainlinkAggregator", "USDC/USD"),
-            invert0: false
+        // Wrap core aggregators in mocks
+        _coreAggs = CoreAggregators({
+            celoUsd: address(0),
+            ethUsd: address(0),
+            usdcUsd: _mockAggregator("USDC/USD", "USDC/USD", _coreAggs.usdcUsd),
+            usdtUsd: address(0),
+            eurcUsd: address(0),
+            ausdUsd: _mockAggregator("AUSD/USD", "AUSD/USD", _coreAggs.ausdUsd)
         });
 
-        _addRateFeed("AUSD/USD");
-        _addToBreaker({
-            breakerId: valueBreakerId,
-            rateFeed: "AUSD/USD",
-            cooldown: 1,
-            threshold: 0.001 * 1e24,
-            smoothingFactor: 0,
-            referenceValue: 1 * 1e24
-        });
-        _addMockAggregator({
-            label: "AUSD/USD", description: "AUSD/USD", source: 0xE20751C7B5867bCBef815ffc1b284c3f412a9e13
-        });
-        _addChainlinkRelayer({
-            rateFeed: "AUSD/USD",
-            description: "AUSD/USD",
-            aggregator0: _predict("MockChainlinkAggregator", "AUSD/USD"),
-            invert0: false
-        });
-
-        _configureDefaultFxRateFeed({currency: "GBP", source: 0x1ffC8B75a16FFfbd7879F042B580F7607Dcf5C30});
-    }
-
-    /// @notice Helper function to configure an FX rate feed, they have
-    /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(string memory currency, address source) internal override {
-        string memory rateFeed = string.concat(currency, "/USD");
-        _addRateFeed(rateFeed);
-        _fxRateFeedIds.push(_getRateFeedId(rateFeed));
-        _addToBreaker({
-            breakerId: medianBreakerId,
-            rateFeed: rateFeed,
-            cooldown: 15 minutes,
-            threshold: 0.04 * 1e24,
-            smoothingFactor: 0.005 * 1e24,
-            referenceValue: 0
-        });
-        _addMockAggregator({label: rateFeed, description: rateFeed, source: source});
-        _addChainlinkRelayer({
-            rateFeed: rateFeed,
-            description: rateFeed,
-            aggregator0: _predict("MockChainlinkAggregator", rateFeed),
-            invert0: false
+        // Wrap FX aggregators in mocks
+        _fxAggs = FxAggregators({
+            eur: address(0),
+            brl: address(0),
+            xof: address(0),
+            kes: address(0),
+            php: address(0),
+            cop: address(0),
+            ghs: address(0),
+            gbp: _mockAggregator("GBP/USD", "GBP/USD", _fxAggs.gbp),
+            zar: address(0),
+            cad: address(0),
+            aud: address(0),
+            chf: address(0),
+            jpy: address(0),
+            ngn: address(0)
         });
     }
 }
