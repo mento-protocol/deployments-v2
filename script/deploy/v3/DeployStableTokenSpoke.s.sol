@@ -39,16 +39,17 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         label = vm.envString("SPOKE_LABEL");
         tokenName = vm.envString("SPOKE_TOKEN_NAME");
         tokenSymbol = vm.envString("SPOKE_TOKEN_SYMBOL");
-        initialOwner = lookup("MigrationMultisig");
 
         require(bytes(label).length > 0, "SPOKE_LABEL env var is empty");
         require(bytes(tokenName).length > 0, "SPOKE_TOKEN_NAME env var is empty");
         require(bytes(tokenSymbol).length > 0, "SPOKE_TOKEN_SYMBOL env var is empty");
     }
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage migrationOwner = sender("migrationOwner");
+        initialOwner = migrationOwner.account;
 
         address stableTokenSpokeImpl = lookup("StableTokenSpoke:v3.0.0");
         if (stableTokenSpokeImpl == address(0)) {
