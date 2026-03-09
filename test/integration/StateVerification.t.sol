@@ -19,7 +19,6 @@ import {IRPoolFactory} from "mento-core/swap/router/interfaces/IRPoolFactory.sol
 import {IMentoConfig} from "script/config/IMentoConfig.sol";
 import {console2 as console} from "forge-std/console2.sol";
 
-
 /**
  * @title StateVerification
  * @notice Verifies proxy implementations, init protection, ProxyAdmin config, ownership,
@@ -88,17 +87,13 @@ contract StateVerification is V3IntegrationBase {
 
     function test_oracleAdapterImpl_initDisabled() public {
         vm.expectRevert();
-        IOracleAdapter(oracleAdapterImpl).initialize(
-            address(1), address(2), address(3), address(4), address(5)
-        );
+        IOracleAdapter(oracleAdapterImpl).initialize(address(1), address(2), address(3), address(4), address(5));
     }
 
     function test_fpmmFactoryImpl_initDisabled() public {
         IFPMM.FPMMParams memory params;
         vm.expectRevert();
-        IFPMMFactory(fpmmFactoryImpl).initialize(
-            address(1), address(2), address(3), address(4), params
-        );
+        IFPMMFactory(fpmmFactoryImpl).initialize(address(1), address(2), address(3), address(4), params);
     }
 
     function test_factoryRegistryImpl_initDisabled() public {
@@ -130,11 +125,7 @@ contract StateVerification is V3IntegrationBase {
 
         for (uint256 i = 0; i < pools.length; i++) {
             address poolAdmin = getProxyAdmin(pools[i]);
-            assertEq(
-                poolAdmin,
-                proxyAdmin,
-                string.concat("ProxyAdmin mismatch on FPMM pool at index ", vm.toString(i))
-            );
+            assertEq(poolAdmin, proxyAdmin, string.concat("ProxyAdmin mismatch on FPMM pool at index ", vm.toString(i)));
         }
     }
 
@@ -225,13 +216,14 @@ contract StateVerification is V3IntegrationBase {
         address randomUser = makeAddr("randomUser");
         vm.prank(randomUser);
         vm.expectRevert();
-        IFPMMFactory(fpmmFactory).deployFPMM(
-            fpmmFactoryImpl, // arbitrary implementation address
-            address(1),      // token0
-            address(2),      // token1
-            address(3),      // referenceRateFeedID
-            false            // invertRateFeed
-        );
+        IFPMMFactory(fpmmFactory)
+            .deployFPMM(
+                fpmmFactoryImpl, // arbitrary implementation address
+                address(1), // token0
+                address(2), // token1
+                address(3), // referenceRateFeedID
+                false // invertRateFeed
+            );
     }
 
     // ========== OracleAdapter Configuration Tests (US-004) ==========
@@ -249,6 +241,11 @@ contract StateVerification is V3IntegrationBase {
     function test_oracleAdapter_marketHoursBreaker() public view {
         address actual = address(IOracleAdapter(oracleAdapter).marketHoursBreaker());
         assertEq(actual, marketHoursBreaker, "OracleAdapter.marketHoursBreaker() mismatch");
+    }
+
+    function test_oracleAdapter_l2SequencerUptimeFeed() public view {
+        address actual = address(IOracleAdapter(oracleAdapter).l2SequencerUptimeFeed());
+        assertEq(actual, l2SequencerUptimeFeed, "OracleAdapter.l2SequencerUptimeFeed() mismatch");
     }
 
     // ========== BreakerBox Configuration Tests (US-004) ==========
@@ -272,10 +269,7 @@ contract StateVerification is V3IntegrationBase {
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
             assertTrue(
                 IBreakerBox(breakerBox).isBreakerEnabled(marketHoursBreaker, fxFeedIds[i]),
-                string.concat(
-                    "MarketHoursBreaker not enabled on FX feed: ",
-                    vm.toString(fxFeedIds[i])
-                )
+                string.concat("MarketHoursBreaker not enabled on FX feed: ", vm.toString(fxFeedIds[i]))
             );
         }
     }
@@ -287,11 +281,11 @@ contract StateVerification is V3IntegrationBase {
         assertGt(fxFeedIds.length, 0, "No FX rate feed IDs configured");
 
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
-            if(!IOracleAdapter(oracleAdapter).isFXMarketOpen()) {
+            if (!IOracleAdapter(oracleAdapter).isFXMarketOpen()) {
                 console.log("Market hours are closed, skipping feed: ", fxFeedIds[i]);
                 continue;
             }
-            
+
             (uint256 numerator, uint256 denominator) = IOracleAdapter(oracleAdapter).getFXRateIfValid(fxFeedIds[i]);
             assertGt(numerator, 0, string.concat("Zero numerator for FX feed: ", vm.toString(fxFeedIds[i])));
             assertGt(denominator, 0, string.concat("Zero denominator for FX feed: ", vm.toString(fxFeedIds[i])));
@@ -301,19 +295,11 @@ contract StateVerification is V3IntegrationBase {
     // ========== FPMMFactory State Tests (US-005) ==========
 
     function test_fpmmFactory_oracleAdapter() public view {
-        assertEq(
-            IFPMMFactory(fpmmFactory).oracleAdapter(),
-            oracleAdapter,
-            "FPMMFactory.oracleAdapter() mismatch"
-        );
+        assertEq(IFPMMFactory(fpmmFactory).oracleAdapter(), oracleAdapter, "FPMMFactory.oracleAdapter() mismatch");
     }
 
     function test_fpmmFactory_proxyAdmin() public view {
-        assertEq(
-            IFPMMFactory(fpmmFactory).proxyAdmin(),
-            proxyAdmin,
-            "FPMMFactory.proxyAdmin() mismatch"
-        );
+        assertEq(IFPMMFactory(fpmmFactory).proxyAdmin(), proxyAdmin, "FPMMFactory.proxyAdmin() mismatch");
     }
 
     function test_fpmmFactory_defaultParams() public view {
@@ -381,11 +367,7 @@ contract StateVerification is V3IntegrationBase {
     }
 
     function test_router_defaultFactory() public view {
-        assertEq(
-            IRouter(router).defaultFactory(),
-            fpmmFactory,
-            "Router.defaultFactory() should be FPMMFactory proxy"
-        );
+        assertEq(IRouter(router).defaultFactory(), fpmmFactory, "Router.defaultFactory() should be FPMMFactory proxy");
     }
 
     // ========== ReserveV2 Configuration Tests (US-006) ==========
@@ -428,11 +410,8 @@ contract StateVerification is V3IntegrationBase {
         for (uint256 i = 0; i < exchangeIds.length; i++) {
             IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
-            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config.getExchangeConfig(
-                pool.asset0,
-                pool.asset1,
-                address(pool.pricingModule)
-            );
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) =
+                config.getExchangeConfig(pool.asset0, pool.asset1, address(pool.pricingModule));
 
             if (!found || !exchangeConfig.createVirtual) {
                 continue;
@@ -447,10 +426,7 @@ contract StateVerification is V3IntegrationBase {
             assertNotEq(
                 virtualPool,
                 address(0),
-                string.concat(
-                    "VirtualPool not deployed for exchange at index ",
-                    vm.toString(i)
-                )
+                string.concat("VirtualPool not deployed for exchange at index ", vm.toString(i))
             );
         }
 
@@ -464,11 +440,8 @@ contract StateVerification is V3IntegrationBase {
         for (uint256 i = 0; i < exchangeIds.length; i++) {
             IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
-            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config.getExchangeConfig(
-                pool.asset0,
-                pool.asset1,
-                address(pool.pricingModule)
-            );
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) =
+                config.getExchangeConfig(pool.asset0, pool.asset1, address(pool.pricingModule));
 
             if (!found || !exchangeConfig.createVirtual) {
                 continue;
@@ -500,11 +473,8 @@ contract StateVerification is V3IntegrationBase {
         for (uint256 i = 0; i < exchangeIds.length; i++) {
             IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
 
-            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) = config.getExchangeConfig(
-                pool.asset0,
-                pool.asset1,
-                address(pool.pricingModule)
-            );
+            (IMentoConfig.ExchangeConfig memory exchangeConfig, bool found) =
+                config.getExchangeConfig(pool.asset0, pool.asset1, address(pool.pricingModule));
 
             if (!found || !exchangeConfig.createVirtual) {
                 continue;

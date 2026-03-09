@@ -13,8 +13,7 @@ import "./liquity/LiquityConfig_GBPm_celo.sol";
 import "./liquity/LiquityConfig_GBPm_celo_sepolia.sol";
 
 library Config {
-    address private constant VM_ADDRESS =
-        address(uint160(uint256(keccak256("hevm cheat code"))));
+    address private constant VM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
     Vm private constant vm = Vm(VM_ADDRESS);
 
     /**
@@ -37,11 +36,7 @@ library Config {
      */
     function _get(string memory baseName) internal returns (address) {
         // Get the config contract artifact name from environment
-        string memory artifactName = string.concat(
-            baseName,
-            "_",
-            vm.envString("NETWORK")
-        );
+        string memory artifactName = string.concat(baseName, "_", vm.envString("NETWORK"));
 
         // Check if we already have a cached config
         bytes32 slot = keccak256(abi.encode(artifactName));
@@ -55,19 +50,13 @@ library Config {
         }
 
         try vm.deployCode(artifactName) returns (address configContract) {
-            require(
-                configContract != address(0),
-                "Config contract deployment failed"
-            );
+            require(configContract != address(0), "Config contract deployment failed");
             // Cache the deployed config
             assembly {
                 sstore(slot, configContract)
             }
 
-            console.log(
-                string.concat("Deployed ", artifactName, " at:"),
-                configContract
-            );
+            console.log(string.concat("Deployed ", artifactName, " at:"), configContract);
             return configContract;
         } catch {
             revert(
@@ -85,11 +74,7 @@ library Config {
      * @dev Useful for testing when you want to redeploy the config
      */
     function clearCache(string memory baseName) internal {
-        string memory artifactName = string.concat(
-            baseName,
-            "_",
-            vm.envString("NETWORK")
-        );
+        string memory artifactName = string.concat(baseName, "_", vm.envString("NETWORK"));
         bytes32 slot = keccak256(abi.encode(artifactName));
         assembly {
             sstore(slot, 0)

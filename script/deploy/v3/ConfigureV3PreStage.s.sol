@@ -13,11 +13,7 @@ import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
-contract ConfigureV3PreStage is
-    TrebScript,
-    ProxyHelper,
-    PostChecksHelper
-{
+contract ConfigureV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -93,32 +89,19 @@ contract ConfigureV3PreStage is
         require(fxFeedIds.length > 0, "No FX rate feed IDs configured");
 
         // BreakerBox: breaker registered with correct trading mode
-        require(
-            bbRead.isBreaker(marketHoursBreaker),
-            "MarketHoursBreaker not added to BreakerBox"
-        );
-        require(
-            bbRead.breakerTradingMode(marketHoursBreaker) == 3,
-            "MarketHoursBreaker trading mode is not 3 (halted)"
-        );
+        require(bbRead.isBreaker(marketHoursBreaker), "MarketHoursBreaker not added to BreakerBox");
+        require(bbRead.breakerTradingMode(marketHoursBreaker) == 3, "MarketHoursBreaker trading mode is not 3 (halted)");
 
         // BreakerBox: breaker enabled on all FX feeds
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
             require(
-                bbRead.isBreakerEnabled(marketHoursBreaker, fxFeedIds[i]),
-                "MarketHoursBreaker not enabled for FX feed"
+                bbRead.isBreakerEnabled(marketHoursBreaker, fxFeedIds[i]), "MarketHoursBreaker not enabled for FX feed"
             );
         }
 
         // ReserveV2: registrations
-        require(
-            rvRead.isOtherReserveAddress(reserveSafe),
-            "ReserveSafe not registered as other reserve address"
-        );
-        require(
-            rvRead.isReserveManagerSpender(reserveSafe),
-            "ReserveSafe not registered as reserve manager spender"
-        );
+        require(rvRead.isOtherReserveAddress(reserveSafe), "ReserveSafe not registered as other reserve address");
+        require(rvRead.isReserveManagerSpender(reserveSafe), "ReserveSafe not registered as reserve manager spender");
         require(
             rvRead.isLiquidityStrategySpender(reserveLiquidityStrategy),
             "ReserveLiquidityStrategy not registered as liquidity strategy spender"

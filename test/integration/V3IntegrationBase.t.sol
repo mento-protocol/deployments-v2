@@ -27,16 +27,19 @@ import {console2 as console} from "forge-std/console2.sol";
 
 /// @dev Read the auto-generated poolConfigs getter from LiquidityStrategy
 interface IPoolConfigReader {
-    function poolConfigs(address pool) external view returns (
-        bool isToken0Debt,
-        uint32 lastRebalance,
-        uint32 rebalanceCooldown,
-        address protocolFeeRecipient,
-        uint64 liquiditySourceIncentiveExpansion,
-        uint64 protocolIncentiveExpansion,
-        uint64 liquiditySourceIncentiveContraction,
-        uint64 protocolIncentiveContraction
-    );
+    function poolConfigs(address pool)
+        external
+        view
+        returns (
+            bool isToken0Debt,
+            uint32 lastRebalance,
+            uint32 rebalanceCooldown,
+            address protocolFeeRecipient,
+            uint64 liquiditySourceIncentiveExpansion,
+            uint64 protocolIncentiveExpansion,
+            uint64 liquiditySourceIncentiveContraction,
+            uint64 protocolIncentiveContraction
+        );
 }
 
 /**
@@ -72,8 +75,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal sortedOracles;
     address internal proxyAdmin;
     address internal marketHoursBreaker;
+    address internal l2SequencerUptimeFeed;
     address internal broker;
     address internal reserveSafe;
+    address internal fxPriceFeedManager;
 
     function setUp() public virtual {
         // Fork chain
@@ -107,12 +112,14 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         proxyAdmin = lookupOrFail("ProxyAdmin");
         if (block.chainid == 42220) {
             marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+            l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
         } else {
             marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
+            l2SequencerUptimeFeed = address(0); // doesn't exist on the testnet
         }
         broker = lookupProxyOrFail("Broker");
         reserveSafe = lookupOrFail("ReserveSafe");
-
+        fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
@@ -148,7 +155,7 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
 
     /// @dev Returns the debt token for a CDP pool based on the isToken0Debt flag
     function _getDebtToken(address pool) internal view returns (address) {
-        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool);
+        (bool isToken0Debt,,,,,,,) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool);
         return isToken0Debt ? IFPMM(pool).token0() : IFPMM(pool).token1();
     }
 
@@ -159,8 +166,8 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         view
         returns (address borrowerOps, address activePoolAddr, address troveManagerAddr, address stabilityPoolAddr)
     {
-        ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
-            ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(pool);
+        ICDPLiquidityStrategy.CDPConfig memory
+            cdpConfig = ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(pool);
 
         stabilityPoolAddr = cdpConfig.stabilityPool;
 

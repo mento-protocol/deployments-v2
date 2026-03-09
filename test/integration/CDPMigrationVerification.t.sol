@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
 import {IMentoConfig} from "script/config/IMentoConfig.sol";
+import {Config, ILiquityConfig} from "script/config/Config.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
@@ -17,7 +18,14 @@ import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
 
 /// @dev Minimal interface to read FXPriceFeed public state variables
 interface IFXPriceFeed {
+    function oracleAdapter() external view returns (address);
     function rateFeedID() external view returns (address);
+    function invertRateFeed() external view returns (bool);
+    function l2SequencerGracePeriod() external view returns (uint256);
+    function watchdogAddress() external view returns (address);
+    function borrowerOperations() external view returns (address);
+    function isShutdown() external view returns (bool);
+    function isL2SequencerUp() external view returns (bool);
 }
 
 /**
@@ -64,10 +72,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
             assertFalse(
                 exchangeFound,
-                string.concat(
-                    "V2 BiPoolManager exchange still exists for CDP pool at index ",
-                    vm.toString(i)
-                )
+                string.concat("V2 BiPoolManager exchange still exists for CDP pool at index ", vm.toString(i))
             );
         }
     }
@@ -168,10 +173,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             assertTrue(
                 IFPMM(cdpPools[i]).liquidityStrategy(cdpLiquidityStrategy),
-                string.concat(
-                    "CDPLiquidityStrategy not enabled on FPMM pool at index ",
-                    vm.toString(i)
-                )
+                string.concat("CDPLiquidityStrategy not enabled on FPMM pool at index ", vm.toString(i))
             );
         }
     }
@@ -181,10 +183,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             assertTrue(
                 ICDPLiquidityStrategy(cdpLiquidityStrategy).isPoolRegistered(cdpPools[i]),
-                string.concat(
-                    "CDP pool not registered on CDPLiquidityStrategy at index ",
-                    vm.toString(i)
-                )
+                string.concat("CDP pool not registered on CDPLiquidityStrategy at index ", vm.toString(i))
             );
         }
     }
@@ -232,8 +231,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
     function test_cdpPools_poolConfig_valid() public {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             (
-                ,
-                ,
+                ,,
                 uint32 rebalanceCooldown,
                 address protocolFeeRecipient,
                 uint64 lsIncentiveExpansion,
@@ -248,9 +246,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             string memory idx = vm.toString(i);
 
             assertEq(
-                rebalanceCooldown,
-                expected.cooldown,
-                string.concat("Pool config cooldown mismatch at index ", idx)
+                rebalanceCooldown, expected.cooldown, string.concat("Pool config cooldown mismatch at index ", idx)
             );
             assertEq(
                 protocolFeeRecipient,
@@ -281,14 +277,17 @@ contract CDPMigrationVerification is V3IntegrationBase {
     }
 
     /// @dev Loads the CDPMigrationConfig for a pool by deriving the token name from the debt token symbol
-    function _getCDPMigrationConfig(address pool)
-        internal
-        view
-        returns (IMentoConfig.CDPMigrationConfig memory)
-    {
+    function _getCDPMigrationConfig(address pool) internal view returns (IMentoConfig.CDPMigrationConfig memory) {
         address debtToken = _getDebtToken(pool);
         string memory symbol = IERC20Metadata(debtToken).symbol();
         return config.getCDPMigrationConfig(symbol);
+    }
+
+    /// @dev Loads the LiquityInstanceConfig for a pool by deriving the token symbol
+    function _getLiquityInstanceConfig(address pool) internal returns (ILiquityConfig.LiquityInstanceConfig memory) {
+        address debtToken = _getDebtToken(pool);
+        string memory symbol = IERC20Metadata(debtToken).symbol();
+        return Config.getLiquity(symbol).get();
     }
 
     // ========== FXPriceFeed RateFeedID (US-010) ==========
@@ -325,6 +324,120 @@ contract CDPMigrationVerification is V3IntegrationBase {
                     "FXPriceFeed.rateFeedID does not match CDPMigrationConfig.rateFeedID for CDP pool at index ",
                     vm.toString(i)
                 )
+            );
+        }
+    }
+
+    // ========== FXPriceFeed OracleAdapter (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.oracleAdapter matches the deployed OracleAdapter proxy
+    function test_cdpPools_fxPriceFeed_oracleAdapter() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            assertEq(
+                IFXPriceFeed(priceFeedAddr).oracleAdapter(),
+                oracleAdapter,
+                string.concat("FXPriceFeed.oracleAdapter() mismatch for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== FXPriceFeed invertRateFeed (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.invertRateFeed matches the Liquity config
+    function test_cdpPools_fxPriceFeed_invertRateFeed() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            ILiquityConfig.LiquityInstanceConfig memory liquityCfg = _getLiquityInstanceConfig(cdpPools[i]);
+
+            assertEq(
+                IFXPriceFeed(priceFeedAddr).invertRateFeed(),
+                liquityCfg.invertRateFeed,
+                string.concat("FXPriceFeed.invertRateFeed() mismatch for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== FXPriceFeed l2SequencerGracePeriod (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.l2SequencerGracePeriod matches the Liquity config
+    function test_cdpPools_fxPriceFeed_l2SequencerGracePeriod() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            ILiquityConfig.LiquityInstanceConfig memory liquityCfg = _getLiquityInstanceConfig(cdpPools[i]);
+
+            assertEq(
+                IFXPriceFeed(priceFeedAddr).l2SequencerGracePeriod(),
+                liquityCfg.l2SequencerGracePeriod,
+                string.concat("FXPriceFeed.l2SequencerGracePeriod() mismatch for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== FXPriceFeed borrowerOperations (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.borrowerOperations matches the Liquity BorrowerOperations
+    function test_cdpPools_fxPriceFeed_borrowerOperations() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (address borrowerOps,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            assertEq(
+                IFXPriceFeed(priceFeedAddr).borrowerOperations(),
+                borrowerOps,
+                string.concat("FXPriceFeed.borrowerOperations() mismatch for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== FXPriceFeed watchdogAddress (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.watchdogAddress is set (non-zero)
+    function test_cdpPools_fxPriceFeed_watchdogAddress() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            assertEq(
+                IFXPriceFeed(priceFeedAddr).watchdogAddress(),
+                fxPriceFeedManager,
+                string.concat("FXPriceFeed.watchdogAddress() is zero for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== FXPriceFeed isShutdown (US-010) ==========
+
+    /// @notice Verify FXPriceFeed is not shutdown
+    function test_cdpPools_fxPriceFeed_notShutdown() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            assertFalse(
+                IFXPriceFeed(priceFeedAddr).isShutdown(),
+                string.concat("FXPriceFeed is shutdown for CDP pool at index ", vm.toString(i))
+            );
+        }
+    }
+
+    // ========== FXPriceFeed isL2SequencerUp (US-010) ==========
+
+    /// @notice Verify FXPriceFeed.isL2SequencerUp() returns true
+    function test_cdpPools_fxPriceFeed_l2SequencerUp() public {
+        for (uint256 i = 0; i < cdpPools.length; i++) {
+            (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
+            address priceFeedAddr = _getPriceFeed(troveManagerAddr);
+
+            assertTrue(
+                IFXPriceFeed(priceFeedAddr).isL2SequencerUp(),
+                string.concat("FXPriceFeed.isL2SequencerUp() is false for CDP pool at index ", vm.toString(i))
             );
         }
     }
@@ -386,15 +499,13 @@ contract CDPMigrationVerification is V3IntegrationBase {
             assertFalse(
                 IStableTokenV3(debtToken).isMinter(reserveTroveFactory),
                 string.concat(
-                    "ReserveTroveFactory is still minter on CDP debt token for pool at index ",
-                    vm.toString(i)
+                    "ReserveTroveFactory is still minter on CDP debt token for pool at index ", vm.toString(i)
                 )
             );
             assertFalse(
                 IStableTokenV3(debtToken).isBurner(reserveTroveFactory),
                 string.concat(
-                    "ReserveTroveFactory is still burner on CDP debt token for pool at index ",
-                    vm.toString(i)
+                    "ReserveTroveFactory is still burner on CDP debt token for pool at index ", vm.toString(i)
                 )
             );
         }

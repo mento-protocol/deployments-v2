@@ -49,19 +49,10 @@ contract SwapVirtualPool is TrebScript, ProxyHelper {
         IERC20Metadata(deployer.harness(fromAddy)).approve(routerAddy, amountIn);
 
         IRouter.Route[] memory routes = new IRouter.Route[](1);
-        routes[0] = IRouter.Route({
-            from: fromAddy,
-            to: toAddy,
-            factory: virtualPoolFactory
-        });
+        routes[0] = IRouter.Route({from: fromAddy, to: toAddy, factory: virtualPoolFactory});
 
-        IRouter(deployer.harness(routerAddy)).swapExactTokensForTokens(
-            amountIn,
-            0,
-            routes,
-            deployer.account,
-            block.timestamp
-        );
+        IRouter(deployer.harness(routerAddy))
+            .swapExactTokensForTokens(amountIn, 0, routes, deployer.account, block.timestamp);
 
         uint256 received = toToken.balanceOf(deployer.account) - balanceBefore;
         console.log(

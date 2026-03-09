@@ -34,32 +34,22 @@ contract SetReportExpiry is TrebScript, ProxyHelper {
             address rateFeedId = exchanges[i].pool.config.referenceRateFeedID;
 
             // Track the latest median timestamp across all feeds
-            uint256 medianTs = ISortedOracles(sortedOracles).medianTimestamp(
-                rateFeedId
-            );
+            uint256 medianTs = ISortedOracles(sortedOracles).medianTimestamp(rateFeedId);
             if (medianTs > latestMedian) {
                 latestMedian = medianTs;
             }
 
-            uint256 current = ISortedOracles(sortedOracles)
-                .getTokenReportExpirySeconds(rateFeedId);
+            uint256 current = ISortedOracles(sortedOracles).getTokenReportExpirySeconds(rateFeedId);
             if (current == EXPIRY_SECONDS) {
                 continue;
             }
 
-            stdstore
-                .target(sortedOracles)
-                .sig("tokenReportExpirySeconds(address)")
-                .with_key(rateFeedId)
+            stdstore.target(sortedOracles).sig("tokenReportExpirySeconds(address)").with_key(rateFeedId)
                 .checked_write(EXPIRY_SECONDS);
 
             // Verify
-            uint256 newExpiry = ISortedOracles(sortedOracles)
-                .getTokenReportExpirySeconds(rateFeedId);
-            require(
-                newExpiry == EXPIRY_SECONDS,
-                "Failed to set report expiry"
-            );
+            uint256 newExpiry = ISortedOracles(sortedOracles).getTokenReportExpirySeconds(rateFeedId);
+            require(newExpiry == EXPIRY_SECONDS, "Failed to set report expiry");
 
             console.log(
                 string.concat(
@@ -81,21 +71,13 @@ contract SetReportExpiry is TrebScript, ProxyHelper {
         if (latestMedian > 0) {
             vm.warp(latestMedian + 1);
             console.log(
-                string.concat(
-                    " > Warped block.timestamp to ",
-                    vm.toString(latestMedian + 1),
-                    " (latest median + 1)"
-                )
+                string.concat(" > Warped block.timestamp to ", vm.toString(latestMedian + 1), " (latest median + 1)")
             );
         }
 
         console.log(
             string.concat(
-                "\n Updated ",
-                vm.toString(updated),
-                " rate feed(s) to ",
-                vm.toString(EXPIRY_SECONDS),
-                "s expiry"
+                "\n Updated ", vm.toString(updated), " rate feed(s) to ", vm.toString(EXPIRY_SECONDS), "s expiry"
             )
         );
     }

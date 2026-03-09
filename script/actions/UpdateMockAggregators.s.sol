@@ -12,7 +12,9 @@ import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IE
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {Config, IMentoConfig} from "../config/Config.sol";
 
-import {AggregatorV3Interface} from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
+import {
+    AggregatorV3Interface
+} from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
 import {MockChainlinkAggregator} from "src/MockChainlinkAggregator.sol";
 
 contract UpdateMockAggregators is TrebScript, ProxyHelper {
@@ -30,8 +32,7 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
         config = Config.get();
         Senders.Sender storage reporter = sender("reporter");
 
-        IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config
-            .getMockAggregatorConfigs();
+        IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
 
         uint256 start = 0;
         try vm.envUint("offset") returns (uint256 o) {
@@ -50,28 +51,17 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
         int256[] memory answers = new int256[](end - start);
         uint256[] memory timestamps = new uint256[](end - start);
 
-        for (uint i = start; i < end; i++) {
-            AggregatorV3Interface agg = AggregatorV3Interface(
-                aggConfigs[i].source
-            );
+        for (uint256 i = start; i < end; i++) {
+            AggregatorV3Interface agg = AggregatorV3Interface(aggConfigs[i].source);
 
-            (, answers[i - start], , timestamps[i - start], ) = agg
-                .latestRoundData();
+            (, answers[i - start],, timestamps[i - start],) = agg.latestRoundData();
         }
 
         vm.selectFork(config.baseFork());
 
-        for (uint i = start; i < end; i++) {
-            address aggAddy = lookupOrFail(
-                string.concat(
-                    "MockChainlinkAggregator:",
-                    aggConfigs[i].description
-                )
-            );
-            MockChainlinkAggregator(reporter.harness(aggAddy)).report(
-                answers[i - start],
-                timestamps[i - start]
-            );
+        for (uint256 i = start; i < end; i++) {
+            address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].description));
+            MockChainlinkAggregator(reporter.harness(aggAddy)).report(answers[i - start], timestamps[i - start]);
         }
     }
 }

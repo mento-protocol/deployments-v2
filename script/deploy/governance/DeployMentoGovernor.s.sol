@@ -19,21 +19,14 @@ contract DeployMentoGovernor is TrebScript, ProxyHelper {
     /// @custom:senders deployer
     function run() public broadcast {
         config = Config.get();
-        IMentoConfig.GovernanceConfig memory govCfg = config
-            .getGovernanceConfig();
+        IMentoConfig.GovernanceConfig memory govCfg = config.getGovernanceConfig();
 
         Senders.Sender storage deployer = sender("deployer");
 
-        address implementation = deployer
-            .create3("MentoGovernor")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(true));
+        address implementation = deployer.create3("MentoGovernor").setLabel("v2.6.5").deploy(abi.encode(true));
 
         address locking = lookupProxyOrFail("Locking", ProxyType.OZTUP);
-        address timelock = lookupProxyOrFail(
-            "TimelockController",
-            ProxyType.OZTUP
-        );
+        address timelock = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
 
         deployProxy(
             ProxyType.OZTUP,

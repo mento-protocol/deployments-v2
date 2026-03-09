@@ -90,10 +90,26 @@ contract FPMMTradingLimits is V3IntegrationBase {
             (ITradingLimitsV2.Config memory onChain0,) = fpmm.getTradingLimits(t0);
             (ITradingLimitsV2.Config memory onChain1,) = fpmm.getTradingLimits(t1);
 
-            assertEq(onChain0.limit0, _toInternalPrecision(expectedT0Limit0, decimals0), string.concat("Pool ", idx, " token0 limit0 mismatch"));
-            assertEq(onChain0.limit1, _toInternalPrecision(expectedT0Limit1, decimals0), string.concat("Pool ", idx, " token0 limit1 mismatch"));
-            assertEq(onChain1.limit0, _toInternalPrecision(expectedT1Limit0, decimals1), string.concat("Pool ", idx, " token1 limit0 mismatch"));
-            assertEq(onChain1.limit1, _toInternalPrecision(expectedT1Limit1, decimals1), string.concat("Pool ", idx, " token1 limit1 mismatch"));
+            assertEq(
+                onChain0.limit0,
+                _toInternalPrecision(expectedT0Limit0, decimals0),
+                string.concat("Pool ", idx, " token0 limit0 mismatch")
+            );
+            assertEq(
+                onChain0.limit1,
+                _toInternalPrecision(expectedT0Limit1, decimals0),
+                string.concat("Pool ", idx, " token0 limit1 mismatch")
+            );
+            assertEq(
+                onChain1.limit0,
+                _toInternalPrecision(expectedT1Limit0, decimals1),
+                string.concat("Pool ", idx, " token1 limit0 mismatch")
+            );
+            assertEq(
+                onChain1.limit1,
+                _toInternalPrecision(expectedT1Limit1, decimals1),
+                string.concat("Pool ", idx, " token1 limit1 mismatch")
+            );
         }
     }
 
@@ -290,14 +306,16 @@ contract FPMMTradingLimits is V3IntegrationBase {
     }
 
     /// @dev Finds the FPMMConfig for a token pair (handles both orderings).
-    function _findFPMMConfig(
-        IMentoConfig.FPMMConfig[] memory fpmmConfigs,
-        address t0,
-        address t1
-    ) internal pure returns (IMentoConfig.FPMMConfig memory) {
+    function _findFPMMConfig(IMentoConfig.FPMMConfig[] memory fpmmConfigs, address t0, address t1)
+        internal
+        pure
+        returns (IMentoConfig.FPMMConfig memory)
+    {
         for (uint256 i = 0; i < fpmmConfigs.length; i++) {
-            if ((fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1) ||
-                (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)) {
+            if (
+                (fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1)
+                    || (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)
+            ) {
                 return fpmmConfigs[i];
             }
         }

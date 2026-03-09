@@ -14,10 +14,7 @@ contract DeployPricingModules is TrebScript {
         Senders.Sender storage deployer = sender("deployer");
 
         // Deploy ConstantProductPricingModule
-        deployer
-            .create3("ConstantProductPricingModule")
-            .setLabel("v2.6.5")
-            .deploy();
+        deployer.create3("ConstantProductPricingModule").setLabel("v2.6.5").deploy();
 
         // Deploy ConstantSumPricingModule
         deployer.create3("ConstantSumPricingModule").setLabel("v2.6.5").deploy();

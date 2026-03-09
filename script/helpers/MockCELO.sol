@@ -15,16 +15,29 @@ contract MockCELO {
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(address indexed owner, address indexed spender, uint256 value);
 
-    function name() external pure returns (string memory) { return "Celo"; }
-    function symbol() external pure returns (string memory) { return "CELO"; }
-    function decimals() external pure returns (uint8) { return 18; }
-    function totalSupply() external view returns (uint256) { return _totalSupply; }
-    function balanceOf(address account) external view returns (uint256) { 
+    function name() external pure returns (string memory) {
+        return "Celo";
+    }
+
+    function symbol() external pure returns (string memory) {
+        return "CELO";
+    }
+
+    function decimals() external pure returns (uint8) {
+        return 18;
+    }
+
+    function totalSupply() external view returns (uint256) {
+        return _totalSupply;
+    }
+
+    function balanceOf(address account) external view returns (uint256) {
         assert(int256(account.balance) >= 0);
         return uint256(int256(account.balance) + _balanceDeltas[account]);
     }
-    function allowance(address owner, address spender) external view returns (uint256) { 
-        return _allowances[owner][spender]; 
+
+    function allowance(address owner, address spender) external view returns (uint256) {
+        return _allowances[owner][spender];
     }
 
     function approve(address spender, uint256 amount) external returns (bool) {
@@ -44,12 +57,14 @@ contract MockCELO {
 
     function mint(address to, uint256 amount) external {
         _totalSupply += amount;
-        unchecked { _balanceDeltas[to] += int256(amount); }
+        unchecked {
+            _balanceDeltas[to] += int256(amount);
+        }
         emit Transfer(address(0), to, amount);
     }
 
     function _transfer(address from, address to, uint256 amount) internal returns (bool) {
-        unchecked { 
+        unchecked {
             _balanceDeltas[from] -= int256(amount);
             _balanceDeltas[to] += int256(amount);
         }

@@ -23,10 +23,8 @@ contract DeployChainlinkRelayerFactory is TrebScript, ProxyHelper {
         Senders.Sender storage deployer = sender("deployer");
 
         // Deploy implementation
-        chainlinkRelayerFactoryImpl = deployer
-            .create3("ChainlinkRelayerFactory")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(true));
+        chainlinkRelayerFactoryImpl =
+            deployer.create3("ChainlinkRelayerFactory").setLabel("v2.6.5").deploy(abi.encode(true));
 
         address sortedOracles = lookupProxyOrFail("SortedOracles");
 
@@ -36,20 +34,10 @@ contract DeployChainlinkRelayerFactory is TrebScript, ProxyHelper {
             deployer,
             "ChainlinkRelayerFactory",
             chainlinkRelayerFactoryImpl,
-            abi.encodeWithSelector(
-                IChainlinkRelayerFactory.initialize.selector,
-                sortedOracles,
-                deployer.account
-            )
+            abi.encodeWithSelector(IChainlinkRelayerFactory.initialize.selector, sortedOracles, deployer.account)
         );
 
-        console.log(
-            "ChainlinkRelayerFactory implementation:",
-            chainlinkRelayerFactoryImpl
-        );
-        console.log(
-            "ChainlinkRelayerFactory proxy:",
-            chainlinkRelayerFactoryProxy
-        );
+        console.log("ChainlinkRelayerFactory implementation:", chainlinkRelayerFactoryImpl);
+        console.log("ChainlinkRelayerFactory proxy:", chainlinkRelayerFactoryProxy);
     }
 }

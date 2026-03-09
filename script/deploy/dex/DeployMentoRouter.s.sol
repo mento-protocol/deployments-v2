@@ -14,8 +14,7 @@ contract DeployMentoRouter is TrebScript, ProxyHelper {
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
 
-        deployer.create3("MentoRouter").setLabel("v1.0.0").deploy(
-            abi.encode(lookupProxyOrFail("Broker"), deployer.account)
-        );
+        deployer.create3("MentoRouter").setLabel("v1.0.0")
+            .deploy(abi.encode(lookupProxyOrFail("Broker"), deployer.account));
     }
 }

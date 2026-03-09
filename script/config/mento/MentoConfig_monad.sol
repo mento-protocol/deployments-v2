@@ -59,16 +59,8 @@ contract MentoConfig_monad is MentoConfig {
     /// aggregators.
     function _initOracles() internal {
         _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
-        valueBreakerId = _addBreaker({
-            breakerType: BreakerType.Value,
-            defaultCooldownTime: 0,
-            defaultThreshold: 0
-        });
-        medianBreakerId = _addBreaker({
-            breakerType: BreakerType.Median,
-            defaultCooldownTime: 0,
-            defaultThreshold: 0
-        });
+        valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
+        medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
         _addRateFeed("USDC/USD");
         _addToBreaker({
@@ -102,22 +94,13 @@ contract MentoConfig_monad is MentoConfig {
             invert0: false
         });
 
-        _configureDefaultFxRateFeed({
-            rateFeed: "GBP/USD",
-            source: 0x1ffC8B75a16FFfbd7879F042B580F7607Dcf5C30
-        });
-        _configureDefaultFxRateFeed({
-            rateFeed: "EUR/USD",
-            source: 0x00D7E359c8CE46168eFDD4D65b708fFb16c4b99a
-        });
+        _configureDefaultFxRateFeed({rateFeed: "GBP/USD", source: 0x1ffC8B75a16FFfbd7879F042B580F7607Dcf5C30});
+        _configureDefaultFxRateFeed({rateFeed: "EUR/USD", source: 0x00D7E359c8CE46168eFDD4D65b708fFb16c4b99a});
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(
-        string memory rateFeed,
-        address source
-    ) internal {
+    function _configureDefaultFxRateFeed(string memory rateFeed, address source) internal {
         _addRateFeed(rateFeed);
         _fxRateFeedIds.push(_getRateFeedId(rateFeed));
         _addToBreaker({
@@ -128,11 +111,6 @@ contract MentoConfig_monad is MentoConfig {
             smoothingFactor: 0.005 * 1e24,
             referenceValue: 0
         });
-        _addChainlinkRelayer({
-            rateFeed: rateFeed,
-            description: rateFeed,
-            aggregator0: source,
-            invert0: false
-        });
+        _addChainlinkRelayer({rateFeed: rateFeed, description: rateFeed, aggregator0: source, invert0: false});
     }
 }

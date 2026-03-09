@@ -41,7 +41,8 @@
     "TransparentUpgradeableProxy:MentoGovernor": "0x47036d78bB3169b4F5560dD77BF93f4412A59852",
     "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x247cb6ecf21bdd2bc29d726cccc8d2f066211663",
     "TransparentUpgradeableProxy:TimelockController": "0x890DB8A597940165901372Dd7DB61C9f246e2147",
-    "TransparentUpgradeableProxy:Locking": "0x001Bb66636dCd149A1A2bA8C50E408BdDd80279C"
+    "TransparentUpgradeableProxy:Locking": "0x001Bb66636dCd149A1A2bA8C50E408BdDd80279C",
+    "L2SequencerUptimeFeed": "0x4CD491Dc27C8B0BbD10D516A502856B786939d18"
   },
   "143": {
     "StableTokenSpokeUSD": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
@@ -72,6 +73,7 @@
     "Proxy:AUDm": "0x5873Faeb42F3563dcD77F0fbbdA818E6d6DA3139",
     "Proxy:CHFm": "0x284E9b7B623eAE866914b7FA0eB720C2Bb3c2980",
     "Proxy:JPYm": "0x85Bee67D435A39f7467a8a9DE34a5B73D25Df426",
-    "Proxy:NGNm": "0x3d5ae86F34E2a82771496D140daFAEf3789dF888"
+    "Proxy:NGNm": "0x3d5ae86F34E2a82771496D140daFAEf3789dF888",
+    "L2SequencerUptimeFeed": "0x0000000000000000000000000000000000000000"
   }
 }
