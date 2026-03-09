@@ -232,9 +232,4 @@ contract ConfigureNTT is NTTScriptBase {
         }
     }
 
-    // ── Pure helpers ────────────────────────────────────────────────────
-
-    function _toBytes32(address addr) internal pure returns (bytes32) {
-        return bytes32(uint256(uint160(addr)));
-    }
 }

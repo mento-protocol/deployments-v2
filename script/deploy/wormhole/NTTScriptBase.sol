@@ -36,6 +36,10 @@ abstract contract NTTScriptBase is TrebScript {
         revert(string.concat("No inbound limit from chain '", fromChainName, "'"));
     }
 
+    function _toBytes32(address addr) internal pure returns (bytes32) {
+        return bytes32(uint256(uint160(addr)));
+    }
+
     /// @dev Decode a TrimmedAmount (uint72) back to a full-precision value.
     ///      TrimmedAmount packs: (amount << 8) | trimmedDecimals
     function _untrim(uint72 packed) internal view returns (uint256) {
