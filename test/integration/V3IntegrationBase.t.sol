@@ -80,6 +80,14 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal reserveSafe;
     address internal fxPriceFeedManager;
 
+    modifier onlyCelo() {
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
+        _;
+    }
+
     function setUp() public virtual {
         // Fork chain
         forkId = vm.createFork(vm.envString("FORK_URL"));

@@ -80,11 +80,7 @@ contract StateVerification is V3IntegrationBase {
         assertEq(actual, reserveLiquidityStrategyImpl, "ReserveLiquidityStrategy proxy implementation mismatch");
     }
 
-    function test_cdpLiquidityStrategy_proxyImpl() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_cdpLiquidityStrategy_proxyImpl() public onlyCelo {
         address actual = getProxyImplementation(cdpLiquidityStrategy);
         assertEq(actual, cdpLiquidityStrategyImpl, "CDPLiquidityStrategy proxy implementation mismatch");
     }
@@ -118,11 +114,7 @@ contract StateVerification is V3IntegrationBase {
         IReserveLiquidityStrategy(reserveLiquidityStrategyImpl).initialize(address(1), address(2));
     }
 
-    function test_cdpLiquidityStrategyImpl_initDisabled() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_cdpLiquidityStrategyImpl_initDisabled() public onlyCelo {
         vm.expectRevert();
         ICDPLiquidityStrategy(cdpLiquidityStrategyImpl).initialize(address(1));
     }
@@ -153,11 +145,7 @@ contract StateVerification is V3IntegrationBase {
         assertEq(IOwnable(factoryRegistry).owner(), _getOwner(), "FactoryRegistry owner mismatch");
     }
 
-    function test_virtualPoolFactory_owner() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_virtualPoolFactory_owner() public onlyCelo {
         assertEq(IOwnable(virtualPoolFactory).owner(), _getOwner(), "VirtualPoolFactory owner mismatch");
     }
 
@@ -169,11 +157,7 @@ contract StateVerification is V3IntegrationBase {
         assertEq(IOwnable(reserveLiquidityStrategy).owner(), _getOwner(), "ReserveLiquidityStrategy owner mismatch");
     }
 
-    function test_cdpLiquidityStrategy_owner() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_cdpLiquidityStrategy_owner() public onlyCelo {
         assertEq(IOwnable(cdpLiquidityStrategy).owner(), _getOwner(), "CDPLiquidityStrategy owner mismatch");
     }
 
@@ -200,11 +184,7 @@ contract StateVerification is V3IntegrationBase {
         IOwnable(factoryRegistry).transferOwnership(randomUser);
     }
 
-    function test_virtualPoolFactory_transferOwnership_reverts_nonOwner() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_virtualPoolFactory_transferOwnership_reverts_nonOwner() public onlyCelo {
         address randomUser = makeAddr("randomUser");
         vm.prank(randomUser);
         vm.expectRevert();
@@ -225,11 +205,7 @@ contract StateVerification is V3IntegrationBase {
         IOwnable(reserveLiquidityStrategy).transferOwnership(randomUser);
     }
 
-    function test_cdpLiquidityStrategy_transferOwnership_reverts_nonOwner() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_cdpLiquidityStrategy_transferOwnership_reverts_nonOwner() public onlyCelo {
         address randomUser = makeAddr("randomUser");
         vm.prank(randomUser);
         vm.expectRevert();
@@ -429,11 +405,7 @@ contract StateVerification is V3IntegrationBase {
     // ========== VirtualPool Deployment Tests (US-008) ==========
 
     /// @notice Verify virtual pools exist for all BiPoolManager exchanges marked createVirtual in config
-    function test_virtualPools_existForAllCreateVirtualExchanges() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_virtualPools_existForAllCreateVirtualExchanges() public onlyCelo {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         uint256 virtualCount;
@@ -464,11 +436,7 @@ contract StateVerification is V3IntegrationBase {
     }
 
     /// @notice Verify virtual pool token0/token1 match the underlying exchange pair (sorted)
-    function test_virtualPools_tokensMatchExchangePair() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_virtualPools_tokensMatchExchangePair() public onlyCelo {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {
@@ -501,11 +469,7 @@ contract StateVerification is V3IntegrationBase {
     }
 
     /// @notice Verify VirtualPoolFactory.isPool returns true for all deployed virtual pools
-    function test_virtualPools_isPool() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_virtualPools_isPool() public onlyCelo {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 i = 0; i < exchangeIds.length; i++) {

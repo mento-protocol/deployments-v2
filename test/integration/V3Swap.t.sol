@@ -233,11 +233,7 @@ contract V3Swap is V3IntegrationBase {
     // ════════════════════════════════════════════════════════════════
 
     /// @notice 2-hop route: FPMM(tokenA→tokenB) → VirtualPool(tokenB→tokenC)
-    function test_multiHop_fpmmThenVirtualPool() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_multiHop_fpmmThenVirtualPool() public onlyCelo {
         (address tokenA, address tokenB, address tokenC, address factory1, address factory2) =
             _findMultiHopAcrossFactories(fpmmPools, fpmmFactory, vpPools, virtualPoolFactory);
         require(tokenA != address(0), "No multi-hop route found: FPMM -> VirtualPool");
@@ -245,11 +241,7 @@ contract V3Swap is V3IntegrationBase {
     }
 
     /// @notice 2-hop route: VirtualPool(tokenA→tokenB) → FPMM(tokenB→tokenC)
-    function test_multiHop_virtualPoolThenFpmm() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_multiHop_virtualPoolThenFpmm() public onlyCelo {
         (address tokenA, address tokenB, address tokenC, address factory1, address factory2) =
             _findMultiHopAcrossFactories(vpPools, virtualPoolFactory, fpmmPools, fpmmFactory);
         require(tokenA != address(0), "No multi-hop route found: VirtualPool -> FPMM");
@@ -279,11 +271,7 @@ contract V3Swap is V3IntegrationBase {
         }
     }
 
-    function test_virtualPoolFactory_isApproved() public {
-        if (!_isCelo()) {
-            vm.skip(true);
-            return;
-        }
+    function test_virtualPoolFactory_isApproved() public onlyCelo {
         assertTrue(
             IFactoryRegistry(factoryRegistry).isPoolFactoryApproved(virtualPoolFactory),
             "VirtualPoolFactory not approved in FactoryRegistry"
