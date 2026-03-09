@@ -232,17 +232,6 @@ contract ConfigureNTT is NTTScriptBase {
         }
     }
 
-    // ── Config helpers ──────────────────────────────────────────────────
-
-    function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName) internal pure returns (uint256) {
-        for (uint256 i = 0; i < config.inboundLimits.length; i++) {
-            if (keccak256(bytes(config.inboundLimits[i].fromChainName)) == keccak256(bytes(fromChainName))) {
-                return config.inboundLimits[i].limit;
-            }
-        }
-        revert(string.concat("ConfigureNTT: no inbound limit from chain '", fromChainName, "'"));
-    }
-
     // ── Pure helpers ────────────────────────────────────────────────────
 
     function _toBytes32(address addr) internal pure returns (bytes32) {

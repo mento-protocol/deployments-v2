@@ -107,17 +107,6 @@ contract UpdateRateLimits is NTTScriptBase {
         }
     }
 
-    // ── Config helpers ──────────────────────────────────────────────────
-
-    function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName) internal pure returns (uint256) {
-        for (uint256 i = 0; i < config.inboundLimits.length; i++) {
-            if (keccak256(bytes(config.inboundLimits[i].fromChainName)) == keccak256(bytes(fromChainName))) {
-                return config.inboundLimits[i].limit;
-            }
-        }
-        revert(string.concat("UpdateRateLimits: no inbound limit from chain '", fromChainName, "'"));
-    }
-
     // ── Pure helpers ────────────────────────────────────────────────────
 
     /// @dev Decode a TrimmedAmount (uint72) back to a full-precision value.
