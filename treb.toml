@@ -21,7 +21,7 @@ derivation_path = "${LOCAL_SIGNER_DERIVATION_PATH}"
 [accounts.deployer-safe]
 type = "safe"
 safe = "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687"
-signer = "local-signer"
+signer = "dev-pk"
 
 [accounts.mento-gov-celo]
 type = "oz_governor"
