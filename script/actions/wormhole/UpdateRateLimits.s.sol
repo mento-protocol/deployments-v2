@@ -24,7 +24,7 @@ contract UpdateRateLimits is NTTScriptBase {
 
     // ── Storage (set in setUp, read in run — avoids stack-too-deep) ─────
     string internal tokenName;
-    uint8 internal tokenDecimals;
+
     address internal localNttManager;
     NTTChainConfig internal myChain;
     NTTChainConfig[] internal peerChains;
@@ -107,16 +107,4 @@ contract UpdateRateLimits is NTTScriptBase {
         }
     }
 
-    // ── Pure helpers ────────────────────────────────────────────────────
-
-    /// @dev Decode a TrimmedAmount (uint72) back to a full-precision value.
-    ///      TrimmedAmount packs: (amount << 8) | trimmedDecimals
-    function _untrim(uint72 packed) internal view returns (uint256) {
-        uint8 decimals = uint8(packed & 0xFF);
-        uint64 amount = uint64(packed >> 8);
-        uint8 td = tokenDecimals;
-        if (decimals == td) return uint256(amount);
-        if (decimals < td) return uint256(amount) * 10 ** (td - decimals);
-        return uint256(amount) / 10 ** (decimals - td);
-    }
 }

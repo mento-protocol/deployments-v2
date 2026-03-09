@@ -8,6 +8,8 @@ import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script
 /// @notice Shared base contract for all NTT wormhole scripts, providing
 ///         config loading and chain resolution helpers.
 abstract contract NTTScriptBase is TrebScript {
+    uint8 internal tokenDecimals;
+
     function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
         if (keccak256(bytes(_tokenName)) == keccak256("USDm")) {
             return NTTConfig.getUSDmConfig();
@@ -32,5 +34,16 @@ abstract contract NTTScriptBase is TrebScript {
             }
         }
         revert(string.concat("No inbound limit from chain '", fromChainName, "'"));
+    }
+
+    /// @dev Decode a TrimmedAmount (uint72) back to a full-precision value.
+    ///      TrimmedAmount packs: (amount << 8) | trimmedDecimals
+    function _untrim(uint72 packed) internal view returns (uint256) {
+        uint8 decimals = uint8(packed & 0xFF);
+        uint64 amount = uint64(packed >> 8);
+        uint8 td = tokenDecimals;
+        if (decimals == td) return uint256(amount);
+        if (decimals < td) return uint256(amount) * 10 ** (td - decimals);
+        return uint256(amount) / 10 ** (decimals - td);
     }
 }
