@@ -28,9 +28,7 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
     function _initOracles() internal override {
-        _oracleConfig = OracleConfig({
-            reportExpirySeconds: 2 days // 5 minutes
-        });
+        _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
