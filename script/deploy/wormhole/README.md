@@ -22,6 +22,7 @@ Solidity config library          Treb-native scripts
 │    NTTConfig.sol         │───▶│    DeployNTT.s.sol             │
 │    (topology, limits,    │    │    ConfigureNTT.s.sol          │
 │     modes per token)     │    │    NttDeployHelper.sol         │
+│                          │    │    NTTScriptBase.sol            │
 └──────────────────────────┘    └────────────────────────────────┘
                                 ┌────────────────────────────────┐
                                 │  actions/wormhole/             │
