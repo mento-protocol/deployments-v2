@@ -18,6 +18,9 @@ import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHel
 ///      in its constructor. After deployment, proxy addresses can be read from
 ///      the helper contract.
 ///
+///      The TransceiverStructs library must be deployed on the network before
+///      running this script (see DeployTransceiverStructs.s.sol).
+///
 ///      Usage:
 ///        treb run DeployNTT -e token=USDm --network celo
 ///        treb run DeployNTT -e token=GBPm --network monad
