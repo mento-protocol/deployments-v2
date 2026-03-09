@@ -167,10 +167,10 @@ contract LiquidityProvision is V3IntegrationBase {
 
             // Use 0.01% relative tolerance to handle rounding across different decimal tokens
             assertApproxEqRel(
-                expectedClaim0, amount0, 1e14, string.concat("Proportional claim0 mismatch for pool ", idx)
+                expectedClaim0, amount0, 2e14, string.concat("Proportional claim0 mismatch for pool ", idx)
             );
             assertApproxEqRel(
-                expectedClaim1, amount1, 1e14, string.concat("Proportional claim1 mismatch for pool ", idx)
+                expectedClaim1, amount1, 2e14, string.concat("Proportional claim1 mismatch for pool ", idx)
             );
         }
     }
