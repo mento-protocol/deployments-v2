@@ -5,7 +5,7 @@ import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
-import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
+import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {INTTPausable} from "./interfaces/INTTPausable.sol";
 
 // ── Script ──────────────────────────────────────────────────────────────────
@@ -39,7 +39,7 @@ contract PauseNTT is TrebScript {
         // Resolve local NttManager from registry
         address localHelper = lookup(string.concat("NttDeployHelper:", tokenName));
         require(localHelper != address(0), "PauseNTT: local NttDeployHelper not found in registry");
-        localNttManager = NttDeployHelper(localHelper).nttManagerProxy();
+        localNttManager = INttDeployHelper(localHelper).nttManagerProxy();
 
         console.log("=== PauseNTT: %s on %s ===", tokenName, chainName);
         console.log("  NttManager: %s", localNttManager);

@@ -5,7 +5,7 @@ import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
-import {NttDeployHelper} from "./NttDeployHelper.sol";
+import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHelper.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {INTTManager, NttManagerPeer, RateLimitParams} from "script/actions/wormhole/interfaces/INTTManager.sol";
@@ -66,8 +66,8 @@ contract ConfigureNTT is TrebScript {
         // Resolve local NTT contracts from registry
         address localHelper = lookup(string.concat("NttDeployHelper:", tokenName));
         require(localHelper != address(0), "ConfigureNTT: local NttDeployHelper not found in registry");
-        localNttManager = NttDeployHelper(localHelper).nttManagerProxy();
-        localTransceiver = NttDeployHelper(localHelper).transceiverProxy();
+        localNttManager = INttDeployHelper(localHelper).nttManagerProxy();
+        localTransceiver = INttDeployHelper(localHelper).transceiverProxy();
 
         // Resolve owner
         owner = lookup(config.ownerLabel);
@@ -104,6 +104,7 @@ contract ConfigureNTT is TrebScript {
         console.log("");
     }
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:senders deployer
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");

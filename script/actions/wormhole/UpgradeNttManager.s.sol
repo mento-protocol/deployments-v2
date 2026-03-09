@@ -7,7 +7,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
-import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
+import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {INttManagerUpgradeable} from "./interfaces/INttManagerUpgradeable.sol";
 
 // ── Script ────────────────────────────────────────────────────────────────
@@ -50,7 +50,7 @@ contract UpgradeNttManager is TrebScript {
         // Resolve local NttManager proxy from registry
         address localHelper = lookup(string.concat("NttDeployHelper:", tokenName));
         require(localHelper != address(0), "UpgradeNttManager: local NttDeployHelper not found in registry");
-        localNttManagerProxy = NttDeployHelper(localHelper).nttManagerProxy();
+        localNttManagerProxy = INttDeployHelper(localHelper).nttManagerProxy();
 
         // Store constructor params — must match original deployment for _checkImmutables()
         token = lookup(chainConfig.tokenLabel);

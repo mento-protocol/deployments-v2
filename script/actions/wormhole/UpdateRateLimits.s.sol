@@ -5,7 +5,7 @@ import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
-import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
+import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {INTTManager, RateLimitParams} from "./interfaces/INTTManager.sol";
 
 // ── Script ──────────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ contract UpdateRateLimits is TrebScript {
         // Resolve local NttManager from registry
         address localHelper = lookup(string.concat("NttDeployHelper:", tokenName));
         require(localHelper != address(0), "UpdateRateLimits: local NttDeployHelper not found in registry");
-        localNttManager = NttDeployHelper(localHelper).nttManagerProxy();
+        localNttManager = INttDeployHelper(localHelper).nttManagerProxy();
 
         // Collect peer chains and their inbound limits
         for (uint256 i = 0; i < config.chains.length; i++) {

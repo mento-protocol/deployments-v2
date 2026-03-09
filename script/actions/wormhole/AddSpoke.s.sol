@@ -6,7 +6,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
-import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
+import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
@@ -41,8 +41,8 @@ contract AddSpoke is TrebScript {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    /// @dev Default consistency level for WormholeTransceiver (200 = instant finality).
-    uint8 constant CONSISTENCY_LEVEL = 200;
+    /// @dev Default consistency level for WormholeTransceiver (202 = finalized).
+    uint8 constant CONSISTENCY_LEVEL = 202;
     /// @dev NttDeployHelper internal CREATE nonce for NttManager proxy.
     uint256 constant HELPER_NONCE_NTT_MANAGER_PROXY = 2;
     /// @dev NttDeployHelper internal CREATE nonce for WormholeTransceiver proxy.
@@ -166,8 +166,8 @@ contract AddSpoke is TrebScript {
                 )
             );
 
-        nttManagerProxy = NttDeployHelper(helper).nttManagerProxy();
-        transceiverProxy = NttDeployHelper(helper).transceiverProxy();
+        nttManagerProxy = INttDeployHelper(helper).nttManagerProxy();
+        transceiverProxy = INttDeployHelper(helper).transceiverProxy();
 
         console.log("    NttDeployHelper:           %s", helper);
         console.log("    NttManager proxy:          %s", nttManagerProxy);

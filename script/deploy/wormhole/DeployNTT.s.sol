@@ -7,7 +7,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
-import {NttDeployHelper} from "./NttDeployHelper.sol";
+import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHelper.sol";
 
 /// @title DeployNTT
 /// @notice Treb-native deployment of NttManager + WormholeTransceiver ERC1967 proxies
@@ -26,8 +26,8 @@ contract DeployNTT is TrebScript {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    /// @dev Default consistency level for WormholeTransceiver (200 = instant finality).
-    uint8 constant CONSISTENCY_LEVEL = 200;
+    /// @dev Default consistency level for WormholeTransceiver (202 = finalized).
+    uint8 constant CONSISTENCY_LEVEL = 202;
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:senders deployer
@@ -70,10 +70,10 @@ contract DeployNTT is TrebScript {
             );
 
         // ── Read deployed addresses ─────────────────────────────────────
-        address nttManagerProxy = NttDeployHelper(helper).nttManagerProxy();
-        address transceiverProxy = NttDeployHelper(helper).transceiverProxy();
-        address nttManagerImpl = NttDeployHelper(helper).nttManagerImpl();
-        address transceiverImpl = NttDeployHelper(helper).transceiverImpl();
+        address nttManagerProxy = INttDeployHelper(helper).nttManagerProxy();
+        address transceiverProxy = INttDeployHelper(helper).transceiverProxy();
+        address nttManagerImpl = INttDeployHelper(helper).nttManagerImpl();
+        address transceiverImpl = INttDeployHelper(helper).transceiverImpl();
 
         console.log("");
         console.log("  NttDeployHelper:           %s", helper);

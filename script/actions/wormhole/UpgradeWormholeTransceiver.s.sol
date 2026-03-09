@@ -6,7 +6,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
-import {NttDeployHelper} from "script/deploy/wormhole/NttDeployHelper.sol";
+import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {ITransceiverUpgradeable} from "./interfaces/ITransceiverUpgradeable.sol";
 
 // ── Script ────────────────────────────────────────────────────────────────
@@ -30,8 +30,8 @@ contract UpgradeWormholeTransceiver is TrebScript {
     using Senders for Senders.Sender;
 
     // ── Constants ─────────────────────────────────────────────────────────
-    /// @dev Consistency level for WormholeTransceiver (200 = instant finality).
-    uint8 constant CONSISTENCY_LEVEL = 200;
+    /// @dev Consistency level for WormholeTransceiver (202 = finalized).
+    uint8 constant CONSISTENCY_LEVEL = 202;
 
     // ── Storage (set in setUp, read in run — avoids stack-too-deep) ─────
     string internal tokenName;
@@ -50,8 +50,8 @@ contract UpgradeWormholeTransceiver is TrebScript {
         // Resolve local proxy addresses from registry
         address localHelper = lookup(string.concat("NttDeployHelper:", tokenName));
         require(localHelper != address(0), "UpgradeWormholeTransceiver: local NttDeployHelper not found in registry");
-        localTransceiverProxy = NttDeployHelper(localHelper).transceiverProxy();
-        localNttManagerProxy = NttDeployHelper(localHelper).nttManagerProxy();
+        localTransceiverProxy = INttDeployHelper(localHelper).transceiverProxy();
+        localNttManagerProxy = INttDeployHelper(localHelper).nttManagerProxy();
 
         // Resolve WormholeCoreBridge from addressbook
         wormholeCoreBridge = lookup("WormholeCoreBridge");
