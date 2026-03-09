@@ -10,8 +10,11 @@ import {ISortedOracles} from "mento-core/interfaces/ISortedOracles.sol";
 ///      GovernorVotesQuorumFractionUpgradeable, exposing these public functions.
 interface IMentoGovernorView {
     function votingDelay() external view returns (uint256);
+
     function votingPeriod() external view returns (uint256);
+
     function proposalThreshold() external view returns (uint256);
+
     function quorumNumerator() external view returns (uint256);
 }
 
@@ -20,13 +23,16 @@ interface IMentoGovernorView {
 ///      inherits AccessControlUpgradeable.
 interface ITimelockControllerView {
     function getMinDelay() external view returns (uint256);
+
     function hasRole(bytes32 role, address account) external view returns (bool);
+
     function CANCELLER_ROLE() external view returns (bytes32);
 }
 
 /// @dev Minimal interface for the Locking contract public state variables.
 interface ILockingView {
     function minCliffPeriod() external view returns (uint256);
+
     function minSlopePeriod() external view returns (uint256);
 }
 
@@ -50,6 +56,10 @@ contract GovernanceVerification is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
 
         // Resolve governance contract addresses from the Treb registry
         mentoGovernor = lookupProxyOrFail("MentoGovernor");

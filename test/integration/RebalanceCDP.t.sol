@@ -40,6 +40,10 @@ contract RebalanceCDP is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         strategy = ILiquidityStrategy(cdpLiquidityStrategy);
         cdpPools = ICDPLiquidityStrategy(cdpLiquidityStrategy).getPools();
         require(cdpPools.length > 0, "No pools registered with CDPLiquidityStrategy");

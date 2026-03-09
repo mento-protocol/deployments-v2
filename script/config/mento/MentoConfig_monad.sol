@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
-import {MentoConfig, ITradingLimits, BreakerType} from "./MentoConfig.sol";
+import {MentoConfig, ITradingLimits, BreakerType, CoreAggregators, FxAggregators} from "./MentoConfig.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
@@ -10,20 +10,56 @@ import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
 contract MentoConfig_monad is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
+    CoreAggregators internal _coreAggs;
+    FxAggregators internal _fxAggs;
 
     function _initialize() internal virtual override {
+        _configureParams();
         _initStables();
         _initCollateral();
         _initFPMMs();
         _initOracles();
     }
 
+    // ===================================================================
+    // Parameters (override in subclasses)
+    // ===================================================================
+    /// @notice Set network-specific parameters. Override in subclasses.
+    function _configureParams() internal virtual {
+        _redemptionShortfallTolerance = 1e12;
+
+        _coreAggs = CoreAggregators({
+            celoUsd: address(0),
+            ethUsd: address(0),
+            usdcUsd: 0xf5F15f188AbCB0d165D1Edb7f37F7d6fA2fCebec,
+            usdtUsd: address(0),
+            eurcUsd: address(0),
+            ausdUsd: 0xE20751C7B5867bCBef815ffc1b284c3f412a9e13
+        });
+
+        _fxAggs = FxAggregators({
+            eur: 0x00D7E359c8CE46168eFDD4D65b708fFb16c4b99a,
+            brl: address(0),
+            xof: address(0),
+            kes: address(0),
+            php: address(0),
+            cop: address(0),
+            ghs: address(0),
+            gbp: 0x1ffC8B75a16FFfbd7879F042B580F7607Dcf5C30,
+            zar: address(0),
+            cad: 0x3293eA5650E9f8c4091642b7EB1C46CFEe5197cA,
+            aud: address(0),
+            chf: 0x6DBa7f3A7B5B7c1079337104caD14D19150F6B8d,
+            jpy: 0xF64664Ea54cE47eCC7a1816C49d1Bc6deF828927,
+            ngn: address(0)
+        });
+    }
+
     /// ===================================================================
     /// STABLE TOKENS
     /// ===================================================================
-    function _initStables() internal {
+    function _initStables() internal virtual {
         _addStableToken("USD", "USDm", "Mento Dollar");
-        _addStableToken("EUR", "EURm", "Mento Euro");
         _addStableToken("GBP", "GBPm", "Mento British Pound");
     }
 
@@ -31,14 +67,17 @@ contract MentoConfig_monad is MentoConfig {
     /// COLLATERAL
     /// ===================================================================
     function _initCollateral() internal virtual {
-        _addCollateral("USDC", 0x754704Bc059F8C67012fEd69BC8A327a5aafb603);
-        _addCollateral("AUSD", 0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a);
+        _addCollateral("USDC", lookup("USDC"));
+        _addCollateral("AUSD", lookup("AUSD"));
+
+        _addReserveV2Collateral("USDC");
+        _addReserveV2Collateral("AUSD");
     }
 
     /// ===================================================================
     /// FPMMs
     /// ===================================================================
-    function _initFPMMs() internal {
+    function _initFPMMs() internal virtual {
         _defaultFPMMParams = IFPMM.FPMMParams({
             lpFee: 3,
             protocolFee: 2,
@@ -48,7 +87,77 @@ contract MentoConfig_monad is MentoConfig {
             rebalanceThresholdAbove: 5000,
             rebalanceThresholdBelow: 3333
         });
-        // TODO: Add FPMM configs
+
+        ReserveLiquidityStrategyPoolConfig memory emptyRls;
+
+        // ── USDm / GBPm ─────────────────────────────────────────────────
+        _addFPMM(
+            "GBPm",
+            "USDm",
+            getRateFeedIdFromString("GBP/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 10,
+                protocolFee: 5,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 77_000, limit1: 385_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            emptyRls
+        );
+
+        // Reserve liquidity strategy params for USD collateral pools
+        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
+            reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+
+        // ── USDm / USDC ────────────────────────────────────────────────
+        _addFPMM(
+            "USDm",
+            "USDC",
+            getRateFeedIdFromString("USDC/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 3,
+                protocolFee: 2,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            usdCollateralPoolsRls
+        );
+
+        // ── USDm / AUSD ────────────────────────────────────────────────
+        _addFPMM(
+            "USDm",
+            "AUSD",
+            getRateFeedIdFromString("AUSD/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 3,
+                protocolFee: 2,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            usdCollateralPoolsRls
+        );
     }
 
     /// ===================================================================
@@ -57,7 +166,7 @@ contract MentoConfig_monad is MentoConfig {
     /// @notice Configure oracle ratefeeds and circuit breaker
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
-    function _initOracles() internal {
+    function _initOracles() internal virtual {
         _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
@@ -72,10 +181,7 @@ contract MentoConfig_monad is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addChainlinkRelayer({
-            rateFeed: "USDC/USD",
-            description: "USDC/USD",
-            aggregator0: 0xf5F15f188AbCB0d165D1Edb7f37F7d6fA2fCebec,
-            invert0: false
+            rateFeed: "USDC/USD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
         });
 
         _addRateFeed("AUSD/USD");
@@ -88,19 +194,15 @@ contract MentoConfig_monad is MentoConfig {
             referenceValue: 1 * 1e24
         });
         _addChainlinkRelayer({
-            rateFeed: "AUSD/USD",
-            description: "AUSD/USD",
-            aggregator0: 0xE20751C7B5867bCBef815ffc1b284c3f412a9e13,
-            invert0: false
+            rateFeed: "AUSD/USD", description: "AUSD/USD", aggregator0: _coreAggs.ausdUsd, invert0: false
         });
 
-        _configureDefaultFxRateFeed({rateFeed: "GBP/USD", source: 0x1ffC8B75a16FFfbd7879F042B580F7607Dcf5C30});
-        _configureDefaultFxRateFeed({rateFeed: "EUR/USD", source: 0x00D7E359c8CE46168eFDD4D65b708fFb16c4b99a});
+        _configureDefaultFxRateFeed("GBP/USD", _fxAggs.gbp);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
     /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(string memory rateFeed, address source) internal {
+    function _configureDefaultFxRateFeed(string memory rateFeed, address source) internal virtual {
         _addRateFeed(rateFeed);
         _fxRateFeedIds.push(_getRateFeedId(rateFeed));
         _addToBreaker({

@@ -34,7 +34,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address fpmmImpl;
     address fpmmFactoryImpl;
     address fpmmFactory;
-    address virtualPoolFactory;
     address marketHoursBreaker;
     address oracleAdapterImpl;
     address oracleAdapter;
@@ -112,15 +111,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             deployer,
             "FactoryRegistry",
             factoryRegistryImpl,
-            abi.encodeWithSelector(IFactoryRegistry.initialize.selector, fpmmFactory, deployer.account)
+            abi.encodeWithSelector(IFactoryRegistry.initialize.selector, fpmmFactory, owner)
         );
-
-        virtualPoolFactory = deployer.create3("VirtualPoolFactory").setLabel(label).deploy(abi.encode(owner));
-
-        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(deployer.harness(factoryRegistry));
-        IOwnable factoryRegistryOwnable = IOwnable(deployer.harness(factoryRegistry));
-        factoryRegistryHarness.approve(virtualPoolFactory);
-        factoryRegistryOwnable.transferOwnership(owner);
 
         router = deployer.create3("Router").setLabel(label).deploy(abi.encode(address(0), factoryRegistry, fpmmFactory));
 
@@ -136,8 +128,9 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
 
         stableTokenV3Impl = deployer.create3("StableTokenV3").setLabel(label).deploy(abi.encode(true));
 
-        reserveLiquidityStrategyImpl = deployer.create3("ReserveLiquidityStrategy").setLabel("v3.0.1") // Hardcoded for consistency with seploia when running this on mainnet
-            .deploy(abi.encode(true));
+        // Hardcoded label for consistency with seploia when running this on mainnet
+        reserveLiquidityStrategyImpl =
+            deployer.create3("ReserveLiquidityStrategy").setLabel("v3.0.1").deploy(abi.encode(true));
 
         reserveLiquidityStrategy = deployProxy(
             deployer,
@@ -169,7 +162,6 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         verifyOwnership("OracleAdapter", oracleAdapter, owner);
         verifyOwnership("FPMMFactory", fpmmFactory, owner);
         verifyOwnership("FactoryRegistry", factoryRegistry, owner);
-        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, owner);
         verifyOwnership("ReserveV2", reserveV2, owner);
         verifyOwnership("ReserveLiquidityStrategy", reserveLiquidityStrategy, owner);
 

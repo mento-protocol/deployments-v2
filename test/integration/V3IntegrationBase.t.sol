@@ -80,6 +80,14 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal reserveSafe;
     address internal fxPriceFeedManager;
 
+    modifier onlyCelo() {
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
+        _;
+    }
+
     function setUp() public virtual {
         // Fork chain
         forkId = vm.createFork(vm.envString("FORK_URL"));
@@ -96,30 +104,27 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         _setDummySenderConfigs();
         config = Config.get();
         vm.selectFork(forkId);
-        vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+        if (_isCelo()) {
+            vm.etch(lookupOrFail("CELO"), type(MockCELO).runtimeCode);
+            virtualPoolFactory = lookupOrFail("VirtualPoolFactory:v3.0.0");
+            cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
+            broker = lookupProxyOrFail("Broker");
+        }
 
         // Resolve key V3 addresses from registry
         fpmmFactory = lookupProxyOrFail("FPMMFactory");
         oracleAdapter = lookupProxyOrFail("OracleAdapter");
         factoryRegistry = lookupProxyOrFail("FactoryRegistry");
-        virtualPoolFactory = lookupOrFail("VirtualPoolFactory:v3.0.0");
         router = lookupOrFail("Router:v3.0.0");
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
-        cdpLiquidityStrategy = lookupProxyOrFail("CDPLiquidityStrategy");
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
         sortedOracles = lookupProxyOrFail("SortedOracles");
         proxyAdmin = lookupOrFail("ProxyAdmin");
-        if (block.chainid == 42220) {
-            marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
-            l2SequencerUptimeFeed = lookupOrFail("L2SequencerUptimeFeed");
-        } else {
-            marketHoursBreaker = lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
-            l2SequencerUptimeFeed = address(0); // doesn't exist on the testnet
-        }
-        broker = lookupProxyOrFail("Broker");
+        marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        l2SequencerUptimeFeed = address(0);
         reserveSafe = lookupOrFail("ReserveSafe");
-        fxPriceFeedManager = lookupOrFail("FxPriceFeedManager");
+        fxPriceFeedManager = address(0);
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
@@ -258,13 +263,21 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
 
     // ========== Internal ==========
 
+    function _isCelo() internal view returns (bool) {
+        return block.chainid == 42220 || block.chainid == 11142220;
+    }
+
     /// @dev Sets a dummy SENDER_CONFIGS env var so that MentoConfig (which inherits TrebScript)
     ///      can be instantiated in a test context. The config is never used for sending transactions.
     function _setDummySenderConfigs() internal {
         Senders.SenderInitConfig[] memory configs = new Senders.SenderInitConfig[](1);
+
+        // We need the deployer's address here because in one test we check aggregator addresses
+        // for each relayer, if we put a dummy address here, it affects relayer configured using
+        // the _predict() function.
         configs[0] = Senders.SenderInitConfig({
             name: "deployer",
-            account: address(1),
+            account: 0x2738F38Fde510743e0c589415E0598C4ceE6eAa7,
             senderType: SenderTypes.InMemory,
             canBroadcast: false,
             config: abi.encode(uint256(1))
