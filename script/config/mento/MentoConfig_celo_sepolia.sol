@@ -63,7 +63,8 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
             ethUsd: _mockAggregator("ETHUSD", "ETH/USD", _coreAggs.ethUsd),
             usdcUsd: _mockAggregator("USDCUSD", "USDC/USD", _coreAggs.usdcUsd),
             usdtUsd: _mockAggregator("USDTUSD", "USDT/USD", _coreAggs.usdtUsd),
-            eurcUsd: _mockAggregator("EUROCUSD", "EURC/USD", _coreAggs.eurcUsd)
+            eurcUsd: _mockAggregator("EUROCUSD", "EURC/USD", _coreAggs.eurcUsd),
+            ausdUsd: address(0)
         });
     }
 

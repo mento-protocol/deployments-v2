@@ -36,6 +36,9 @@ contract SetupLocalFork is ForkHelper, Script {
         // CeloTransferPrecompile precompileHandler = new CeloTransferPrecompile();
         // Anvil.setCodeRpc(TRANSFER_PRECOMPILE, address(precompileHandler).code);
 
+        if (block.chainid != 42220 && block.chainid != 11142220) {
+            return;
+        }
         // 3. Replace GoldToken with standard ERC20 at CELO address
         MockCELO mock = new MockCELO();
         Anvil.setCodeRpc(CELO, address(mock).code);

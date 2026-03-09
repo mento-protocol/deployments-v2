@@ -35,6 +35,10 @@ contract CDPOperations is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         cdpPools = ICDPLiquidityStrategy(cdpLiquidityStrategy).getPools();
         require(cdpPools.length > 0, "No CDP pools");
     }
@@ -330,7 +334,7 @@ contract CDPOperations is V3IntegrationBase {
         uint8 decimals = IERC20Metadata(c.collToken).decimals();
 
         p.debtAmount = sysParams.MIN_DEBT() + 100e18;
-        p.collAmount = _calculateCollateral(p.debtAmount, price, mcr * crMultiplierPct / 100, decimals);
+        p.collAmount = _calculateCollateral(p.debtAmount, price, (mcr * crMultiplierPct) / 100, decimals);
         p.interestRate = sysParams.MIN_ANNUAL_INTEREST_RATE() + 1e16;
         p.ethGasComp = sysParams.ETH_GAS_COMPENSATION();
     }
@@ -349,7 +353,7 @@ contract CDPOperations is V3IntegrationBase {
     function _mockLowerPrice(PoolContracts memory c, uint256 pricePct) internal returns (uint256 droppedPrice) {
         address priceFeedAddr = c.priceFeed;
         uint256 currentPrice = IPriceFeed(priceFeedAddr).fetchPrice();
-        droppedPrice = currentPrice * pricePct / 100;
+        droppedPrice = (currentPrice * pricePct) / 100;
         vm.mockCall(priceFeedAddr, abi.encodeWithSelector(IPriceFeed.fetchPrice.selector), abi.encode(droppedPrice));
     }
 

@@ -19,12 +19,19 @@ import {IAddressesRegistry} from "bold/src/Interfaces/IAddressesRegistry.sol";
 /// @dev Minimal interface to read FXPriceFeed public state variables
 interface IFXPriceFeed {
     function oracleAdapter() external view returns (address);
+
     function rateFeedID() external view returns (address);
+
     function invertRateFeed() external view returns (bool);
+
     function l2SequencerGracePeriod() external view returns (uint256);
+
     function watchdogAddress() external view returns (address);
+
     function borrowerOperations() external view returns (address);
+
     function isShutdown() external view returns (bool);
+
     function isL2SequencerUp() external view returns (bool);
 }
 
@@ -40,6 +47,10 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
         cdpPools = ICDPLiquidityStrategy(cdpLiquidityStrategy).getPools();
         biPoolManager = lookupProxyOrFail("BiPoolManager");
     }

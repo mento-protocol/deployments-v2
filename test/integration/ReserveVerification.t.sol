@@ -11,7 +11,9 @@ import {IMentoConfig} from "script/config/IMentoConfig.sol";
 ///      matches the actual on-chain auto-generated getter selectors.
 interface IReserveFrozenGold {
     function frozenReserveGoldStartBalance() external view returns (uint256);
+
     function frozenReserveGoldStartDay() external view returns (uint256);
+
     function frozenReserveGoldDays() external view returns (uint256);
 }
 
@@ -32,6 +34,10 @@ contract ReserveVerification is V3IntegrationBase {
 
     function setUp() public override {
         super.setUp();
+        if (!_isCelo()) {
+            vm.skip(true);
+            return;
+        }
 
         reserve = lookupProxyOrFail("Reserve");
         reserveConfig = config.getReserveConfig();

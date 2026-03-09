@@ -536,6 +536,11 @@
     }
   },
   "143": {
+    "mainnet": {
+      "StableTokenSpoke:v3.0.0": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+      "TransparentUpgradeableProxy:GBPm": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
+      "TransparentUpgradeableProxy:USDm": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115"
+    },
     "monad-mainnet": {
       "StableTokenSpoke:v3.0.0": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
       "TransparentUpgradeableProxy:GBPm": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
