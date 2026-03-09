@@ -111,11 +111,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             deployer,
             "FactoryRegistry",
             factoryRegistryImpl,
-            abi.encodeWithSelector(IFactoryRegistry.initialize.selector, fpmmFactory, deployer.account)
+            abi.encodeWithSelector(IFactoryRegistry.initialize.selector, fpmmFactory, owner)
         );
-
-        IOwnable factoryRegistryOwnable = IOwnable(deployer.harness(factoryRegistry));
-        factoryRegistryOwnable.transferOwnership(owner);
 
         router = deployer.create3("Router").setLabel(label).deploy(abi.encode(address(0), factoryRegistry, fpmmFactory));
 
