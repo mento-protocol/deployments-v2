@@ -26,7 +26,6 @@ Solidity config library          Treb-native scripts
                                 ┌────────────────────────────────┐
                                 │  actions/wormhole/             │
                                 │    UpdateRateLimits.s.sol      │
-                                │    AddSpoke.s.sol              │
                                 │    UpgradeNttManager.s.sol     │
                                 │    UpgradeWormholeTransceiver… │
                                 │    TransferOwnership.s.sol     │
@@ -94,14 +93,22 @@ Reads limits from `NTTConfig` and updates on-chain values if they differ. Idempo
 
 ### Add a New Spoke Chain
 
+1. Add the new chain to `NTTConfig.sol` with the correct EVM/Wormhole chain IDs, token label, mode, and rate limits
+2. Deploy the SpokeToken on the new chain
+3. Run `DeployNTT` on the new chain
+4. Run `ConfigureNTT` on **each** network (including the new chain and all existing chains) to register peers
+
 ```bash
-# Phase 1: Deploy + configure on the new spoke
-treb run AddSpoke -e token=USDm --network <new-chain> --debug
+# Deploy NTT contracts on the new spoke
+treb run DeployNTT -e token=USDm --network <new-chain> --debug
+
+# Configure peers on every chain (new + existing)
+treb run ConfigureNTT -e token=USDm --network <new-chain> --debug
+treb run ConfigureNTT -e token=USDm --network celo --debug
+treb run ConfigureNTT -e token=USDm --network monad --debug
 ```
 
-Phase 1 deploys NTT contracts on the new spoke and configures peers pointing to all existing chains.
-
-**Phase 2** (separate step): Each existing chain needs a governance action to add the new spoke as a peer. This can be done via `ConfigureNTT` re-run or a governance proposal.
+On existing chains where ownership has been transferred to a multisig, the `ConfigureNTT` step must go through a governance proposal.
 
 ### Upgrade Contracts
 
