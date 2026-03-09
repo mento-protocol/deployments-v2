@@ -22,8 +22,8 @@ import {INttManagerUpgradeable} from "./interfaces/INttManagerUpgradeable.sol";
 ///      rateLimitDuration) so that _checkImmutables() passes during the upgrade.
 ///
 ///      Usage:
-///        token=USDm NTT_VERSION=v2 treb run UpgradeNttManager --network celo
-///        token=GBPm NTT_VERSION=v3 treb run UpgradeNttManager --network monad
+///        treb run UpgradeNttManager -e token=USDm -e NTT_VERSION=v2 --network celo
+///        treb run UpgradeNttManager -e token=GBPm -e NTT_VERSION=v3 --network monad
 contract UpgradeNttManager is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -64,6 +64,8 @@ contract UpgradeNttManager is TrebScript {
         console.log("");
     }
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
+    /// @custom:env {string} NTT_VERSION - Version label for the new implementation (e.g. "v2")
     /// @custom:senders owner
     function run() public broadcast {
         Senders.Sender storage ownerSender = sender("owner");

@@ -31,8 +31,8 @@ import {IPausable} from "script/actions/wormhole/interfaces/IPausable.sol";
 ///
 ///      Usage (run once per token per chain, after DeployNTT on all chains):
 ///
-///        token=USDm treb run ConfigureNTT --network celo
-///        token=GBPm treb run ConfigureNTT --network monad
+///        treb run ConfigureNTT -e token=USDm --network celo
+///        treb run ConfigureNTT -e token=GBPm --network monad
 contract ConfigureNTT is TrebScript {
     using Senders for Senders.Sender;
 

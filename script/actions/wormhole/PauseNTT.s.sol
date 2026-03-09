@@ -17,8 +17,8 @@ import {INTTPausable} from "./interfaces/INTTPausable.sol";
 ///      owner. This script uses the owner sender to support both operations.
 ///
 ///      Usage:
-///        token=USDm PAUSE=true  treb run PauseNTT --network celo
-///        token=USDm PAUSE=false treb run PauseNTT --network celo
+///        treb run PauseNTT -e token=USDm -e PAUSE=true --network celo
+///        treb run PauseNTT -e token=USDm -e PAUSE=false --network celo
 contract PauseNTT is TrebScript {
     using Senders for Senders.Sender;
 
@@ -47,6 +47,8 @@ contract PauseNTT is TrebScript {
         console.log("");
     }
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
+    /// @custom:env {bool} PAUSE - true to pause, false to unpause
     /// @custom:senders owner
     function run() public broadcast {
         Senders.Sender storage ownerSender = sender("owner");

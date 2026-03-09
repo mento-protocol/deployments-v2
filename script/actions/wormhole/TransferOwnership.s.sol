@@ -20,8 +20,8 @@ import {IPausable} from "./interfaces/IPausable.sol";
 ///      NttManager and WormholeTransceiver (pauser does NOT cascade).
 ///
 ///      Usage:
-///        token=USDm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network celo
-///        token=GBPm NEW_OWNER_LABEL=GovernanceMultisig treb run TransferOwnership --network monad
+///        treb run TransferOwnership -e token=USDm -e NEW_OWNER_LABEL=GovernanceMultisig --network celo
+///        treb run TransferOwnership -e token=GBPm -e NEW_OWNER_LABEL=GovernanceMultisig --network monad
 contract TransferOwnership is TrebScript {
     using Senders for Senders.Sender;
 
@@ -57,6 +57,8 @@ contract TransferOwnership is TrebScript {
         console.log("");
     }
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
+    /// @custom:env {string} NEW_OWNER_LABEL - Addressbook label for the new owner (e.g. "GovernanceMultisig")
     /// @custom:senders owner
     function run() public broadcast {
         Senders.Sender storage ownerSender = sender("owner");

@@ -22,8 +22,8 @@ import {ITransceiverUpgradeable} from "./interfaces/ITransceiverUpgradeable.sol"
 ///      during the upgrade.
 ///
 ///      Usage:
-///        token=USDm NTT_VERSION=v2 treb run UpgradeWormholeTransceiver --network celo
-///        token=GBPm NTT_VERSION=v3 treb run UpgradeWormholeTransceiver --network monad
+///        treb run UpgradeWormholeTransceiver -e token=USDm -e NTT_VERSION=v2 --network celo
+///        treb run UpgradeWormholeTransceiver -e token=GBPm -e NTT_VERSION=v3 --network monad
 contract UpgradeWormholeTransceiver is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -63,6 +63,8 @@ contract UpgradeWormholeTransceiver is TrebScript {
         console.log("");
     }
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
+    /// @custom:env {string} NTT_VERSION - Version label for the new implementation (e.g. "v2")
     /// @custom:senders owner
     function run() public broadcast {
         Senders.Sender storage ownerSender = sender("owner");

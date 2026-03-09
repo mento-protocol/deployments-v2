@@ -19,8 +19,8 @@ import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHel
 ///      the helper contract.
 ///
 ///      Usage:
-///        token=USDm treb run DeployNTT --network celo
-///        token=GBPm treb run DeployNTT --network monad
+///        treb run DeployNTT -e token=USDm --network celo
+///        treb run DeployNTT -e token=GBPm --network monad
 contract DeployNTT is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;

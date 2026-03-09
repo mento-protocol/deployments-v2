@@ -17,8 +17,8 @@ import {INTTManager, RateLimitParams} from "./interfaces/INTTManager.sol";
 ///      The NttManager must be owned by the governance sender (e.g. MigrationMultisig).
 ///
 ///      Usage:
-///        token=USDm treb run UpdateRateLimits --network celo
-///        token=GBPm treb run UpdateRateLimits --network monad
+///        treb run UpdateRateLimits -e token=USDm --network celo
+///        treb run UpdateRateLimits -e token=GBPm --network monad
 contract UpdateRateLimits is TrebScript {
     using Senders for Senders.Sender;
 
@@ -58,6 +58,7 @@ contract UpdateRateLimits is TrebScript {
         console.log("");
     }
 
+    /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:senders owner
     function run() public broadcast {
         Senders.Sender storage ownerSender = sender("owner");
