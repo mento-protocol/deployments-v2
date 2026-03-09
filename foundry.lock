@@ -11,6 +11,9 @@
   "lib/mento-router": {
     "rev": "80d12779d15c182249bbd4e9a245a9b08c6ba843"
   },
+  "lib/mento-stabletoken-ntt": {
+    "rev": "fee796ab89917caa72755a6d3dfeb072a2f507d1"
+  },
   "lib/mento-std": {
     "rev": "2ad51cd2f91e5d2ade22bce8887a1d733b22cedb"
   },
