@@ -32,10 +32,7 @@ contract TriggerRebalance is TrebScript, ProxyHelper {
         _rebalancePools(deployer, ILiquidityStrategy(cdpAddr));
     }
 
-    function _rebalancePools(
-        Senders.Sender storage _sender,
-        ILiquidityStrategy strategy
-    ) internal {
+    function _rebalancePools(Senders.Sender storage _sender, ILiquidityStrategy strategy) internal {
         address[] memory pools = strategy.getPools();
         console.log("  pools registered:", pools.length);
 
@@ -51,9 +48,7 @@ contract TriggerRebalance is TrebScript, ProxyHelper {
             }
 
             // Use try/catch to handle cooldown or other reverts gracefully
-            try ILiquidityStrategy(
-                _sender.harness(address(strategy))
-            ).rebalance(pool) {
+            try ILiquidityStrategy(_sender.harness(address(strategy))).rebalance(pool) {
                 console.log("  REBALANCED:", label);
             } catch (bytes memory reason) {
                 console.log("  FAILED:", label);

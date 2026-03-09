@@ -9,6 +9,7 @@ import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IMentoConfig} from "script/config/IMentoConfig.sol";
 import {console} from "forge-std/console.sol";
+
 /**
  * @title ReserveMigrationVerification
  * @notice Verifies ReserveLiquidityStrategy deployment state per pool:
@@ -39,10 +40,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
         for (uint256 i = 0; i < rlsPools.length; i++) {
             assertTrue(
                 IFPMM(rlsPools[i]).liquidityStrategy(reserveLiquidityStrategy),
-                string.concat(
-                    "ReserveLiquidityStrategy not enabled on FPMM pool at index ",
-                    vm.toString(i)
-                )
+                string.concat("ReserveLiquidityStrategy not enabled on FPMM pool at index ", vm.toString(i))
             );
         }
     }
@@ -54,8 +52,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
 
         for (uint256 i = 0; i < rlsPools.length; i++) {
             (
-                ,
-                ,
+                ,,
                 uint32 rebalanceCooldown,
                 address protocolFeeRecipient,
                 uint64 lsIncentiveExpansion,
@@ -64,15 +61,12 @@ contract ReserveMigrationVerification is V3IntegrationBase {
                 uint64 protocolIncentiveContraction
             ) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(rlsPools[i]);
 
-            IMentoConfig.ReserveLiquidityStrategyPoolConfig memory expected =
-                _findRlsConfig(fpmmConfigs, rlsPools[i]);
+            IMentoConfig.ReserveLiquidityStrategyPoolConfig memory expected = _findRlsConfig(fpmmConfigs, rlsPools[i]);
 
             string memory idx = vm.toString(i);
 
             assertEq(
-                rebalanceCooldown,
-                expected.cooldown,
-                string.concat("Pool config cooldown mismatch at index ", idx)
+                rebalanceCooldown, expected.cooldown, string.concat("Pool config cooldown mismatch at index ", idx)
             );
             assertEq(
                 protocolFeeRecipient,
@@ -103,15 +97,18 @@ contract ReserveMigrationVerification is V3IntegrationBase {
     }
 
     /// @dev Finds the RLS pool config for a pool by matching its token pair in FPMMConfigs
-    function _findRlsConfig(
-        IMentoConfig.FPMMConfig[] memory fpmmConfigs,
-        address pool
-    ) internal view returns (IMentoConfig.ReserveLiquidityStrategyPoolConfig memory) {
+    function _findRlsConfig(IMentoConfig.FPMMConfig[] memory fpmmConfigs, address pool)
+        internal
+        view
+        returns (IMentoConfig.ReserveLiquidityStrategyPoolConfig memory)
+    {
         address t0 = IFPMM(pool).token0();
         address t1 = IFPMM(pool).token1();
         for (uint256 i = 0; i < fpmmConfigs.length; i++) {
-            if ((fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1) ||
-                (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)) {
+            if (
+                (fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1)
+                    || (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)
+            ) {
                 return fpmmConfigs[i].rlsConfig;
             }
         }
@@ -127,8 +124,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
             assertTrue(
                 IReserveV2(reserveV2).isStableAsset(debtToken),
                 string.concat(
-                    "Debt token not registered as stable asset on ReserveV2 for pool at index ",
-                    vm.toString(i)
+                    "Debt token not registered as stable asset on ReserveV2 for pool at index ", vm.toString(i)
                 )
             );
         }
@@ -156,10 +152,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
             address debtToken = _getRlsDebtToken(rlsPools[i]);
             assertTrue(
                 IStableTokenV3(debtToken).isMinter(reserveLiquidityStrategy),
-                string.concat(
-                    "ReserveLiquidityStrategy not minter on debt token for pool at index ",
-                    vm.toString(i)
-                )
+                string.concat("ReserveLiquidityStrategy not minter on debt token for pool at index ", vm.toString(i))
             );
         }
     }
@@ -170,10 +163,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
             address debtToken = _getRlsDebtToken(rlsPools[i]);
             assertTrue(
                 IStableTokenV3(debtToken).isBurner(reserveLiquidityStrategy),
-                string.concat(
-                    "ReserveLiquidityStrategy not burner on debt token for pool at index ",
-                    vm.toString(i)
-                )
+                string.concat("ReserveLiquidityStrategy not burner on debt token for pool at index ", vm.toString(i))
             );
         }
     }
@@ -189,13 +179,13 @@ contract ReserveMigrationVerification is V3IntegrationBase {
 
     /// @dev Returns the debt token for an RLS pool based on the isToken0Debt flag
     function _getRlsDebtToken(address pool) internal view returns (address) {
-        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
+        (bool isToken0Debt,,,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
         return isToken0Debt ? IFPMM(pool).token0() : IFPMM(pool).token1();
     }
 
     /// @dev Returns the collateral token for an RLS pool (the non-debt token)
     function _getRlsCollateralToken(address pool) internal view returns (address) {
-        (bool isToken0Debt,,,,,,, ) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
+        (bool isToken0Debt,,,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
         return isToken0Debt ? IFPMM(pool).token1() : IFPMM(pool).token0();
     }
 }

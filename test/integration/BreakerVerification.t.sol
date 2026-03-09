@@ -50,10 +50,7 @@ contract BreakerVerification is V3IntegrationBase {
                 address rateFeedId = breakerConfigs[b].rateFeedIds[i];
                 assertTrue(
                     IBreakerBox(breakerBox).rateFeedStatus(rateFeedId),
-                    string.concat(
-                        "Rate feed not registered in BreakerBox: ",
-                        vm.toString(rateFeedId)
-                    )
+                    string.concat("Rate feed not registered in BreakerBox: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -63,8 +60,7 @@ contract BreakerVerification is V3IntegrationBase {
     function test_valueDeltaBreaker_isRegistered() public view {
         assertNotEq(valueDeltaBreaker, address(0), "ValueDeltaBreaker not found in registry");
         assertTrue(
-            IBreakerBox(breakerBox).isBreaker(valueDeltaBreaker),
-            "ValueDeltaBreaker not registered in BreakerBox"
+            IBreakerBox(breakerBox).isBreaker(valueDeltaBreaker), "ValueDeltaBreaker not registered in BreakerBox"
         );
     }
 
@@ -72,8 +68,7 @@ contract BreakerVerification is V3IntegrationBase {
     function test_medianDeltaBreaker_isRegistered() public view {
         assertNotEq(medianDeltaBreaker, address(0), "MedianDeltaBreaker not found in registry");
         assertTrue(
-            IBreakerBox(breakerBox).isBreaker(medianDeltaBreaker),
-            "MedianDeltaBreaker not registered in BreakerBox"
+            IBreakerBox(breakerBox).isBreaker(medianDeltaBreaker), "MedianDeltaBreaker not registered in BreakerBox"
         );
     }
 
@@ -88,8 +83,7 @@ contract BreakerVerification is V3IntegrationBase {
                 assertTrue(
                     IBreakerBox(breakerBox).isBreakerEnabled(valueDeltaBreaker, breakerConfigs[b].rateFeedIds[i]),
                     string.concat(
-                        "ValueDeltaBreaker not enabled for rate feed: ",
-                        vm.toString(breakerConfigs[b].rateFeedIds[i])
+                        "ValueDeltaBreaker not enabled for rate feed: ", vm.toString(breakerConfigs[b].rateFeedIds[i])
                     )
                 );
             }
@@ -105,8 +99,7 @@ contract BreakerVerification is V3IntegrationBase {
                 assertTrue(
                     IBreakerBox(breakerBox).isBreakerEnabled(medianDeltaBreaker, breakerConfigs[b].rateFeedIds[i]),
                     string.concat(
-                        "MedianDeltaBreaker not enabled for rate feed: ",
-                        vm.toString(breakerConfigs[b].rateFeedIds[i])
+                        "MedianDeltaBreaker not enabled for rate feed: ", vm.toString(breakerConfigs[b].rateFeedIds[i])
                     )
                 );
             }
@@ -125,11 +118,9 @@ contract BreakerVerification is V3IntegrationBase {
                 uint256 expected = breakerConfigs[b].cooldownTimes[i];
                 uint256 actual = IWithCooldown(valueDeltaBreaker).getCooldown(rateFeedId);
                 assertEq(
-                    actual, expected,
-                    string.concat(
-                        "ValueDeltaBreaker cooldown mismatch for feed: ",
-                        vm.toString(rateFeedId)
-                    )
+                    actual,
+                    expected,
+                    string.concat("ValueDeltaBreaker cooldown mismatch for feed: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -145,11 +136,9 @@ contract BreakerVerification is V3IntegrationBase {
                 uint256 expected = breakerConfigs[b].thresholds[i];
                 uint256 actual = IValueDeltaBreaker(valueDeltaBreaker).rateChangeThreshold(rateFeedId);
                 assertEq(
-                    actual, expected,
-                    string.concat(
-                        "ValueDeltaBreaker threshold mismatch for feed: ",
-                        vm.toString(rateFeedId)
-                    )
+                    actual,
+                    expected,
+                    string.concat("ValueDeltaBreaker threshold mismatch for feed: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -165,11 +154,9 @@ contract BreakerVerification is V3IntegrationBase {
                 uint256 expected = breakerConfigs[b].referenceValues[i];
                 uint256 actual = IValueDeltaBreaker(valueDeltaBreaker).referenceValues(rateFeedId);
                 assertEq(
-                    actual, expected,
-                    string.concat(
-                        "ValueDeltaBreaker referenceValue mismatch for feed: ",
-                        vm.toString(rateFeedId)
-                    )
+                    actual,
+                    expected,
+                    string.concat("ValueDeltaBreaker referenceValue mismatch for feed: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -187,11 +174,9 @@ contract BreakerVerification is V3IntegrationBase {
                 uint256 expected = breakerConfigs[b].cooldownTimes[i];
                 uint256 actual = IWithCooldown(medianDeltaBreaker).getCooldown(rateFeedId);
                 assertEq(
-                    actual, expected,
-                    string.concat(
-                        "MedianDeltaBreaker cooldown mismatch for feed: ",
-                        vm.toString(rateFeedId)
-                    )
+                    actual,
+                    expected,
+                    string.concat("MedianDeltaBreaker cooldown mismatch for feed: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -207,11 +192,9 @@ contract BreakerVerification is V3IntegrationBase {
                 uint256 expected = breakerConfigs[b].thresholds[i];
                 uint256 actual = IMedianDeltaBreaker(medianDeltaBreaker).rateChangeThreshold(rateFeedId);
                 assertEq(
-                    actual, expected,
-                    string.concat(
-                        "MedianDeltaBreaker threshold mismatch for feed: ",
-                        vm.toString(rateFeedId)
-                    )
+                    actual,
+                    expected,
+                    string.concat("MedianDeltaBreaker threshold mismatch for feed: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -231,11 +214,9 @@ contract BreakerVerification is V3IntegrationBase {
                     expected = IMedianDeltaBreaker(medianDeltaBreaker).DEFAULT_SMOOTHING_FACTOR();
                 }
                 assertEq(
-                    actual, expected,
-                    string.concat(
-                        "MedianDeltaBreaker smoothingFactor mismatch for feed: ",
-                        vm.toString(rateFeedId)
-                    )
+                    actual,
+                    expected,
+                    string.concat("MedianDeltaBreaker smoothingFactor mismatch for feed: ", vm.toString(rateFeedId))
                 );
             }
         }
@@ -254,11 +235,9 @@ contract BreakerVerification is V3IntegrationBase {
             for (uint256 d = 0; d < expectedDeps.length; d++) {
                 address actual = IBreakerBox(breakerBox).rateFeedDependencies(rateFeedId, d);
                 assertEq(
-                    actual, expectedDeps[d],
-                    string.concat(
-                        "Dependency mismatch for '", rateFeeds[i].rateFeed,
-                        "' at index ", vm.toString(d)
-                    )
+                    actual,
+                    expectedDeps[d],
+                    string.concat("Dependency mismatch for '", rateFeeds[i].rateFeed, "' at index ", vm.toString(d))
                 );
             }
         }
@@ -306,11 +285,7 @@ contract BreakerVerification is V3IntegrationBase {
 
     /// @notice BreakerBox must reference the correct SortedOracles
     function test_breakerBox_sortedOracles() public view {
-        assertEq(
-            IBreakerBox(breakerBox).sortedOracles(),
-            sortedOracles,
-            "BreakerBox.sortedOracles() mismatch"
-        );
+        assertEq(IBreakerBox(breakerBox).sortedOracles(), sortedOracles, "BreakerBox.sortedOracles() mismatch");
     }
 
     /// @notice ValueDeltaBreaker must reference the correct SortedOracles
@@ -330,9 +305,7 @@ contract BreakerVerification is V3IntegrationBase {
             "MedianDeltaBreaker.sortedOracles() mismatch"
         );
         assertEq(
-            IMedianDeltaBreaker(medianDeltaBreaker).breakerBox(),
-            breakerBox,
-            "MedianDeltaBreaker.breakerBox() mismatch"
+            IMedianDeltaBreaker(medianDeltaBreaker).breakerBox(), breakerBox, "MedianDeltaBreaker.breakerBox() mismatch"
         );
     }
 }

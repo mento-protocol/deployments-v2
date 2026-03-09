@@ -21,21 +21,11 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
         Senders.Sender storage deployer = sender("deployer");
         IMentoConfig config = Config.get();
 
-        address sortedOraclesImpl = deployer
-            .create3("SortedOracles")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(false));
+        address sortedOraclesImpl = deployer.create3("SortedOracles").setLabel("v2.6.5").deploy(abi.encode(false));
 
-        address sortedOraclesProxy = deployProxy(
-            deployer,
-            "SortedOracles",
-            sortedOraclesImpl,
-            ""
-        );
+        address sortedOraclesProxy = deployProxy(deployer, "SortedOracles", sortedOraclesImpl, "");
 
-        ISortedOracles sortedOracles = ISortedOracles(
-            deployer.harness(sortedOraclesProxy)
-        );
+        ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
         sortedOracles.initialize(config.getOracleConfig().reportExpirySeconds);
     }
 }

@@ -21,16 +21,9 @@ contract DeployEmission is TrebScript, ProxyHelper {
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
         address mentoToken = lookup("MentoToken");
-        address timelockController = predictProxy(
-            ProxyType.OZTUP,
-            deployer,
-            "TimelockController"
-        );
+        address timelockController = predictProxy(ProxyType.OZTUP, deployer, "TimelockController");
 
-        address implementation = deployer
-            .create3("Emission")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(true));
+        address implementation = deployer.create3("Emission").setLabel("v2.6.5").deploy(abi.encode(true));
 
         deployProxy(
             ProxyType.OZTUP,

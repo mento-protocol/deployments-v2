@@ -24,8 +24,8 @@ import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
-import { CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
-import { MockCELO } from "../../helpers/MockCELO.sol";
+import {CeloPrecompiles} from "lib/mento-core/lib/mento-std/src/CeloPrecompiles.sol";
+import {MockCELO} from "../../helpers/MockCELO.sol";
 import {OracleHelper} from "../../helpers/OracleHelper.sol";
 
 contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
@@ -91,8 +91,8 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
 
         for (uint256 i = 0; i < exchanges.length; i++) {
             IExchangeProvider.Exchange memory exchange = exchanges[i];
-            bool matchesTokens = (exchange.assets[0] == debtToken && exchange.assets[1] == collateralToken) ||
-                (exchange.assets[0] == collateralToken && exchange.assets[1] == debtToken);
+            bool matchesTokens = (exchange.assets[0] == debtToken && exchange.assets[1] == collateralToken)
+                || (exchange.assets[0] == collateralToken && exchange.assets[1] == debtToken);
 
             if (matchesTokens) {
                 biPoolManager.destroyExchange(exchange.exchangeId, i);
@@ -154,9 +154,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     function _deployReserveTroveFactory() internal {
         factory = lookup("ReserveTroveFactory");
         if (factory == address(0)) {
-            factory = deployer.create3("ReserveTroveFactory").deploy(
-                abi.encode(reserveTroveManager, owner)
-            );
+            factory = deployer.create3("ReserveTroveFactory").deploy(abi.encode(reserveTroveManager, owner));
         }
     }
 
@@ -170,11 +168,8 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
         IERC20(migrationOwner.harness(address(registry.gasToken()))).transfer(factory, gasCompensation);
 
         // Create reserve trove
-        troveId = ReserveTroveFactory(payable(migrationOwner.harness(factory))).createReserveTrove(
-            registry,
-            cfg.collateralizationRatio,
-            cfg.interestRate
-        );
+        troveId = ReserveTroveFactory(payable(migrationOwner.harness(factory)))
+            .createReserveTrove(registry, cfg.collateralizationRatio, cfg.interestRate);
 
         // Cleanup — remove temporary permissions
         IStableTokenV3(migrationOwner.harness(collateralToken)).setMinter(factory, false);
@@ -199,8 +194,8 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
 
         for (uint256 i = 0; i < exchanges.length; i++) {
             IExchangeProvider.Exchange memory exchange = exchanges[i];
-            bool matchesTokens = (exchange.assets[0] == debtToken && exchange.assets[1] == collateralToken) ||
-                (exchange.assets[0] == collateralToken && exchange.assets[1] == debtToken);
+            bool matchesTokens = (exchange.assets[0] == debtToken && exchange.assets[1] == collateralToken)
+                || (exchange.assets[0] == collateralToken && exchange.assets[1] == debtToken);
             require(!matchesTokens, "V2 exchange still exists on BiPoolManager");
         }
     }
@@ -230,17 +225,13 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
     function _checkLiquidityStrategy() internal view {
         // CDP strategy should be enabled on FPMM and have pool registered
         require(IFPMM(fpmm).liquidityStrategy(cdpLiquidityStrategy), "CDP strategy not enabled on FPMM");
-        require(
-            ILiquidityStrategy(cdpLiquidityStrategy).isPoolRegistered(fpmm),
-            "FPMM not registered on CDP strategy"
-        );
+        require(ILiquidityStrategy(cdpLiquidityStrategy).isPoolRegistered(fpmm), "FPMM not registered on CDP strategy");
     }
 
     function _checkCDPLiquidityStrategyConfig() internal view {
         // Check pool config
         (
-            bool isToken0Debt,
-            ,  // lastRebalance
+            bool isToken0Debt,, // lastRebalance
             uint32 rebalanceCooldown,
             address actualProtocolFeeRecipient,
             uint64 liquiditySourceIncentiveExpansion,
@@ -257,7 +248,10 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
             liquiditySourceIncentiveExpansion == cfg.liquiditySourceIncentiveExpansion,
             "PoolConfig liquiditySourceIncentiveExpansion mismatch"
         );
-        require(protocolIncentiveExpansion == cfg.protocolIncentiveExpansion, "PoolConfig protocolIncentiveExpansion mismatch");
+        require(
+            protocolIncentiveExpansion == cfg.protocolIncentiveExpansion,
+            "PoolConfig protocolIncentiveExpansion mismatch"
+        );
         require(
             liquiditySourceIncentiveContraction == cfg.liquiditySourceIncentiveContraction,
             "PoolConfig liquiditySourceIncentiveContraction mismatch"
@@ -271,15 +265,15 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
         ICDPLiquidityStrategy.CDPConfig memory cdpConfig =
             ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(fpmm);
 
-        require(
-            cdpConfig.stabilityPool == address(registry.stabilityPool()),
-            "CDPConfig stabilityPool mismatch"
-        );
+        require(cdpConfig.stabilityPool == address(registry.stabilityPool()), "CDPConfig stabilityPool mismatch");
         require(
             cdpConfig.collateralRegistry == address(registry.collateralRegistry()),
             "CDPConfig collateralRegistry mismatch"
         );
-        require(cdpConfig.stabilityPoolPercentage == cfg.stabilityPoolPercentage, "CDPConfig stabilityPoolPercentage mismatch");
+        require(
+            cdpConfig.stabilityPoolPercentage == cfg.stabilityPoolPercentage,
+            "CDPConfig stabilityPoolPercentage mismatch"
+        );
         require(cdpConfig.maxIterations == cfg.maxIterations, "CDPConfig maxIterations mismatch");
     }
 
@@ -287,13 +281,9 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
         ITroveManager troveManager = registry.troveManager();
 
         // Trove should be active with correct interest rate
+        require(troveManager.getTroveStatus(troveId) == ITroveManager.Status.active, "Reserve trove is not active");
         require(
-            troveManager.getTroveStatus(troveId) == ITroveManager.Status.active,
-            "Reserve trove is not active"
-        );
-        require(
-            troveManager.getTroveAnnualInterestRate(troveId) == cfg.interestRate,
-            "Reserve trove interest rate mismatch"
+            troveManager.getTroveAnnualInterestRate(troveId) == cfg.interestRate, "Reserve trove interest rate mismatch"
         );
 
         // Trove NFT should be owned by the reserve trove manager
@@ -312,10 +302,7 @@ contract MigrateStableToCDP is TrebScript, ProxyHelper, CeloPrecompiles {
 
     function _checkRateFeedID() internal view {
         address priceFeed = address(registry.priceFeed());
-        require(
-            FXPriceFeed(priceFeed).rateFeedID() == cfg.rateFeedID,
-            "FXPriceFeed rateFeedID mismatch"
-        );
+        require(FXPriceFeed(priceFeed).rateFeedID() == cfg.rateFeedID, "FXPriceFeed rateFeedID mismatch");
     }
 
     function _checkFactoryCleanup() internal view {

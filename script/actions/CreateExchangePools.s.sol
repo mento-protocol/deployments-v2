@@ -32,27 +32,18 @@ contract CreateExchangePools is TrebScript, ProxyHelper, ConfigHelper {
 
         IBroker broker = IBroker(deployer.harness(brokerAddy));
 
-        IBiPoolManager biPoolManager = IBiPoolManager(
-            deployer.harness(biPoolManagerAddy)
-        );
+        IBiPoolManager biPoolManager = IBiPoolManager(deployer.harness(biPoolManagerAddy));
         // Create pools for all stable tokens
         IMentoConfig.ExchangeConfig[] memory exchanges = config.getExchanges();
 
         for (uint256 i = 0; i < exchanges.length; i++) {
             IMentoConfig.ExchangeConfig memory exchange = exchanges[i];
-            bytes32 exchangeId = config.getExchangeId(
-                exchange.pool.asset0,
-                exchange.pool.asset1,
-                address(exchange.pool.pricingModule)
-            );
+            bytes32 exchangeId =
+                config.getExchangeId(exchange.pool.asset0, exchange.pool.asset1, address(exchange.pool.pricingModule));
 
-            if (
-                pickedExchangeId != bytes32(0) && exchangeId != pickedExchangeId
-            ) continue;
+            if (pickedExchangeId != bytes32(0) && exchangeId != pickedExchangeId) continue;
 
-            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(
-                biPoolManagerAddy
-            ).exchanges(exchangeId);
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManagerAddy).exchanges(exchangeId);
 
             if (pool.asset0 != address(0)) {
                 // pool exists
@@ -66,18 +57,10 @@ contract CreateExchangePools is TrebScript, ProxyHelper, ConfigHelper {
             exchangeId = biPoolManager.createExchange(exchange.pool);
 
             if (exchanges[i].tradingLimits.asset0.flags != 0) {
-                broker.configureTradingLimit(
-                    exchangeId,
-                    exchange.pool.asset0,
-                    exchange.tradingLimits.asset0
-                );
+                broker.configureTradingLimit(exchangeId, exchange.pool.asset0, exchange.tradingLimits.asset0);
             }
             if (exchanges[i].tradingLimits.asset1.flags != 0) {
-                broker.configureTradingLimit(
-                    exchangeId,
-                    exchange.pool.asset1,
-                    exchange.tradingLimits.asset1
-                );
+                broker.configureTradingLimit(exchangeId, exchange.pool.asset1, exchange.tradingLimits.asset1);
             }
 
             console.log("Created exchange pool:");

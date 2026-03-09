@@ -87,11 +87,7 @@ contract SetupLocalFork_celo is TrebScript, SetupLocalFork, ProxyHelper {
     }
 
     function _dealErc20(address token, address to, uint256 amount) internal {
-        uint256 slot = stdstore
-            .target(token)
-            .sig(IERC20.balanceOf.selector)
-            .with_key(to)
-            .find();
+        uint256 slot = stdstore.target(token).sig(IERC20.balanceOf.selector).with_key(to).find();
 
         // Write to simulation fork
         vm.store(token, bytes32(slot), bytes32(amount));

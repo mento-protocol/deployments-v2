@@ -28,9 +28,7 @@ contract DeployReserve is TrebScript, ProxyHelper {
         Senders.Sender storage deployer = sender("deployer");
 
         // Step 1: Deploy Reserve implementation (0.5.13)
-        reserveImpl = deployer.create3("Reserve").setLabel("v2.6.5").deploy(
-            abi.encode(false)
-        ); // test parameter
+        reserveImpl = deployer.create3("Reserve").setLabel("v2.6.5").deploy(abi.encode(false)); // test parameter
         console.log("Reserve implementation deployed at:", reserveImpl);
 
         // Step 2: Deploy proxy without initialization (to avoid msg.sender issues)
@@ -44,13 +42,9 @@ contract DeployReserve is TrebScript, ProxyHelper {
     /**
      * @notice Initialize Reserve with parameters from config
      */
-    function initializeReserve(
-        Senders.Sender storage deployer,
-        IMentoConfig config
-    ) internal {
+    function initializeReserve(Senders.Sender storage deployer, IMentoConfig config) internal {
         // Get configuration
-        IMentoConfig.ReserveConfig memory reserveConfig = config
-            .getReserveConfig();
+        IMentoConfig.ReserveConfig memory reserveConfig = config.getReserveConfig();
         address[] memory collateralAssets = config.getCollateralAssets();
 
         // Initialize through harness to preserve proper msg.sender

@@ -18,11 +18,7 @@ import {IRouter} from "mento-core/swap/router/interfaces/IRouter.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 
-contract DeployV3PreStage is
-    TrebScript,
-    ProxyHelper,
-    PostChecksHelper
-{
+contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -38,7 +34,6 @@ contract DeployV3PreStage is
     address fpmmImpl;
     address fpmmFactoryImpl;
     address fpmmFactory;
-    address virtualPoolFactory;
     address marketHoursBreaker;
     address oracleAdapterImpl;
     address oracleAdapter;
@@ -72,21 +67,13 @@ contract DeployV3PreStage is
         Senders.Sender storage deployer = sender("deployer");
         owner = sender("migrationOwner").account;
 
-        fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(
-            abi.encode(true)
-        );
+        fpmmImpl = deployer.create3("FPMM").setLabel(label).deploy(abi.encode(true));
 
-        fpmmFactoryImpl = deployer
-            .create3("FPMMFactory")
-            .setLabel(label)
-            .deploy(abi.encode(true));
+        fpmmFactoryImpl = deployer.create3("FPMMFactory").setLabel(label).deploy(abi.encode(true));
 
         marketHoursBreaker = _deployMarketHoursBreaker(deployer);
 
-        oracleAdapterImpl = deployer
-            .create3("OracleAdapter")
-            .setLabel(label)
-            .deploy(abi.encode(true));
+        oracleAdapterImpl = deployer.create3("OracleAdapter").setLabel(label).deploy(abi.encode(true));
 
         oracleAdapter = deployProxy(
             deployer,
@@ -115,89 +102,41 @@ contract DeployV3PreStage is
             deployer,
             "FPMMFactory",
             fpmmFactoryImpl,
-            abi.encodeWithSelector(
-                IFPMMFactory.initialize.selector,
-                oracleAdapter,
-                proxyAdmin,
-                owner,
-                fpmmImpl,
-                params
-            )
+            abi.encodeWithSelector(IFPMMFactory.initialize.selector, oracleAdapter, proxyAdmin, owner, fpmmImpl, params)
         );
 
-        factoryRegistryImpl = deployer
-            .create3("FactoryRegistry")
-            .setLabel(label)
-            .deploy(abi.encode(true));
+        factoryRegistryImpl = deployer.create3("FactoryRegistry").setLabel(label).deploy(abi.encode(true));
 
         factoryRegistry = deployProxy(
             deployer,
             "FactoryRegistry",
             factoryRegistryImpl,
-            abi.encodeWithSelector(
-                IFactoryRegistry.initialize.selector,
-                fpmmFactory,
-                deployer.account
-            )
+            abi.encodeWithSelector(IFactoryRegistry.initialize.selector, fpmmFactory, owner)
         );
 
-        virtualPoolFactory = deployer
-            .create3("VirtualPoolFactory")
-            .setLabel(label)
-            .deploy(abi.encode(owner));
+        router = deployer.create3("Router").setLabel(label).deploy(abi.encode(address(0), factoryRegistry, fpmmFactory));
 
-        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(
-            deployer.harness(factoryRegistry)
-        );
-        IOwnable factoryRegistryOwnable = IOwnable(
-            deployer.harness(factoryRegistry)
-        );
-        factoryRegistryHarness.approve(virtualPoolFactory);
-        factoryRegistryOwnable.transferOwnership(owner);
-
-        router = deployer.create3("Router").setLabel(label).deploy(
-            abi.encode(address(0), factoryRegistry, fpmmFactory)
-        );
-
-        reserveV2Impl = deployer.create3("ReserveV2").setLabel(label).deploy(
-            abi.encode(true)
-        );
+        reserveV2Impl = deployer.create3("ReserveV2").setLabel(label).deploy(abi.encode(true));
 
         address[] memory empty = new address[](0);
         reserveV2 = deployProxy(
             deployer,
             "ReserveV2",
             reserveV2Impl,
-            abi.encodeWithSelector(
-                IReserveV2.initialize.selector,
-                empty,
-                empty,
-                empty,
-                empty,
-                empty,
-                owner
-            )
+            abi.encodeWithSelector(IReserveV2.initialize.selector, empty, empty, empty, empty, empty, owner)
         );
 
-        stableTokenV3Impl = deployer
-            .create3("StableTokenV3")
-            .setLabel(label)
-            .deploy(abi.encode(true));
+        stableTokenV3Impl = deployer.create3("StableTokenV3").setLabel(label).deploy(abi.encode(true));
 
-        reserveLiquidityStrategyImpl = deployer
-            .create3("ReserveLiquidityStrategy")
-            .setLabel("v3.0.1") // Hardcoded for consistency with seploia when running this on mainnet
-            .deploy(abi.encode(true));
+        // Hardcoded label for consistency with seploia when running this on mainnet
+        reserveLiquidityStrategyImpl =
+            deployer.create3("ReserveLiquidityStrategy").setLabel("v3.0.1").deploy(abi.encode(true));
 
         reserveLiquidityStrategy = deployProxy(
             deployer,
             "ReserveLiquidityStrategy",
             reserveLiquidityStrategyImpl,
-            abi.encodeWithSelector(
-                IReserveLiquidityStrategy.initialize.selector,
-                owner,
-                reserveV2
-            )
+            abi.encodeWithSelector(IReserveLiquidityStrategy.initialize.selector, owner, reserveV2)
         );
 
         postChecks();
@@ -207,41 +146,24 @@ contract DeployV3PreStage is
         IOracleAdapter oracleAdapterContract = IOracleAdapter(oracleAdapter);
         IFPMMFactory fpmmFactoryContract = IFPMMFactory(fpmmFactory);
         IRouter routerContract = IRouter(router);
-        IFactoryRegistry factoryRegistryContract = IFactoryRegistry(
-            factoryRegistry
-        );
-        IReserveLiquidityStrategy reserveLiquidityStrategyContract = IReserveLiquidityStrategy(
-                reserveLiquidityStrategy
-            );
+        IFactoryRegistry factoryRegistryContract = IFactoryRegistry(factoryRegistry);
+        IReserveLiquidityStrategy reserveLiquidityStrategyContract = IReserveLiquidityStrategy(reserveLiquidityStrategy);
 
         // Proxy Implementation Checks
         // Verifies that proxies point to their implementations
         verifyProxyImpl("OracleAdapter", oracleAdapter, oracleAdapterImpl);
         verifyProxyImpl("FPMMFactory", fpmmFactory, fpmmFactoryImpl);
-        verifyProxyImpl(
-            "FactoryRegistry",
-            factoryRegistry,
-            factoryRegistryImpl
-        );
+        verifyProxyImpl("FactoryRegistry", factoryRegistry, factoryRegistryImpl);
         verifyProxyImpl("reserveV2", reserveV2, reserveV2Impl);
-        verifyProxyImpl(
-            "ReserveLiquidityStrategy",
-            reserveLiquidityStrategy,
-            reserveLiquidityStrategyImpl
-        );
+        verifyProxyImpl("ReserveLiquidityStrategy", reserveLiquidityStrategy, reserveLiquidityStrategyImpl);
 
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
         verifyOwnership("OracleAdapter", oracleAdapter, owner);
         verifyOwnership("FPMMFactory", fpmmFactory, owner);
         verifyOwnership("FactoryRegistry", factoryRegistry, owner);
-        verifyOwnership("VirtualPoolFactory", virtualPoolFactory, owner);
         verifyOwnership("ReserveV2", reserveV2, owner);
-        verifyOwnership(
-            "ReserveLiquidityStrategy",
-            reserveLiquidityStrategy,
-            owner
-        );
+        verifyOwnership("ReserveLiquidityStrategy", reserveLiquidityStrategy, owner);
 
         // Implementation Initializer Protection
         // Verifies that implementation contracts cannot be initialized directly (security check).
@@ -251,10 +173,7 @@ contract DeployV3PreStage is
         verifyInitDisabled("FactoryRegistryImpl", factoryRegistryImpl);
         verifyInitDisabled("ReserveV2Impl", reserveV2Impl);
         verifyInitDisabled("StableTokenV3Impl", stableTokenV3Impl);
-        verifyInitDisabled(
-            "ReserveLiquidityStrategy",
-            reserveLiquidityStrategyImpl
-        );
+        verifyInitDisabled("ReserveLiquidityStrategy", reserveLiquidityStrategyImpl);
 
         // OracleAdapter Initialization
         // Verifies that OracleAdapter is initialized with correct addresses.
@@ -263,12 +182,10 @@ contract DeployV3PreStage is
             "SortedOracles initialized with mismatched address"
         );
         require(
-            address(oracleAdapterContract.breakerBox()) == breakerBox,
-            "BreakerBox initialized with mismatched address"
+            address(oracleAdapterContract.breakerBox()) == breakerBox, "BreakerBox initialized with mismatched address"
         );
         require(
-            address(oracleAdapterContract.marketHoursBreaker()) ==
-                marketHoursBreaker,
+            address(oracleAdapterContract.marketHoursBreaker()) == marketHoursBreaker,
             "MarketHoursBreaker initialized with mismatched address"
         );
         require(
@@ -283,64 +200,43 @@ contract DeployV3PreStage is
             "OracleAdapter initialized with mismatched address"
         );
         require(
-            address(fpmmFactoryContract.proxyAdmin()) == proxyAdmin,
-            "ProxyAdmin initialized with mismatched address"
+            address(fpmmFactoryContract.proxyAdmin()) == proxyAdmin, "ProxyAdmin initialized with mismatched address"
         );
 
         // FPMMFactory Parameters
         // Verifies that FPMMFactory default params are set correctly.
-        IFPMM.FPMMParams memory defaultParams = fpmmFactoryContract
-            .defaultParams();
+        IFPMM.FPMMParams memory defaultParams = fpmmFactoryContract.defaultParams();
 
         IFPMM.FPMMParams memory expected = config.getDefaultFPMMParams();
 
         require(defaultParams.lpFee == expected.lpFee, "lpFee param mismatch");
+        require(defaultParams.protocolFee == expected.protocolFee, "protocolFee param mismatch");
+        require(defaultParams.protocolFeeRecipient == protocolFeeRecipient, "protocolFeeRecipient param mismatch");
+        require(defaultParams.feeSetter == feeSetter, "feeSetter param mismatch");
+        require(defaultParams.rebalanceIncentive == expected.rebalanceIncentive, "rebalanceIncentive param mismatch");
         require(
-            defaultParams.protocolFee == expected.protocolFee,
-            "protocolFee param mismatch"
-        );
-        require(
-            defaultParams.protocolFeeRecipient == protocolFeeRecipient,
-            "protocolFeeRecipient param mismatch"
-        );
-        require(
-            defaultParams.feeSetter == feeSetter,
-            "feeSetter param mismatch"
-        );
-        require(
-            defaultParams.rebalanceIncentive == expected.rebalanceIncentive,
-            "rebalanceIncentive param mismatch"
-        );
-        require(
-            defaultParams.rebalanceThresholdAbove ==
-                expected.rebalanceThresholdAbove,
+            defaultParams.rebalanceThresholdAbove == expected.rebalanceThresholdAbove,
             "rebalanceThresholdAbove param mismatch"
         );
         require(
-            defaultParams.rebalanceThresholdBelow ==
-                expected.rebalanceThresholdBelow,
+            defaultParams.rebalanceThresholdBelow == expected.rebalanceThresholdBelow,
             "rebalanceThresholdBelow param mismatch"
         );
 
         // FPMMFactory Registrations
         // Verifies that the FPMM implementation is registered.
-        require(
-            fpmmFactoryContract.isRegisteredImplementation(fpmmImpl),
-            "defaultFpmmImpl is not registered"
-        );
+        require(fpmmFactoryContract.isRegisteredImplementation(fpmmImpl), "defaultFpmmImpl is not registered");
 
         // FactoryRegistry Initialization
         // Verifies that FactoryRegistry is initialized with correct addresses.
         require(
-            factoryRegistryContract.fallbackPoolFactory() == fpmmFactory,
-            "Fallback pool factory is not FPMMFactory"
+            factoryRegistryContract.fallbackPoolFactory() == fpmmFactory, "Fallback pool factory is not FPMMFactory"
         );
 
         // FactoryRegistry Approvals
         // Verifies that factories are approved in FactoryRegistry.
         require(
-            factoryRegistryContract.isPoolFactoryApproved(fpmmFactory),
-            "FPMMFactory is not approved in FactoryRegistry"
+            factoryRegistryContract.isPoolFactoryApproved(fpmmFactory), "FPMMFactory is not approved in FactoryRegistry"
         );
 
         // Router Configuration
@@ -364,14 +260,8 @@ contract DeployV3PreStage is
     function _deployMarketHoursBreaker(Senders.Sender storage deployer) internal returns (address) {
         bool toggleable = vm.envOr("MARKET_HOURS_BREAKER_TOGGLEABLE", false);
         if (toggleable) {
-            return deployer
-                .create3("MarketHoursBreakerToggleable")
-                .setLabel(label)
-                .deploy(abi.encode(deployer.account));
+            return deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(deployer.account));
         }
-        return deployer
-            .create3("MarketHoursBreaker")
-            .setLabel(label)
-            .deploy();
+        return deployer.create3("MarketHoursBreaker").setLabel(label).deploy();
     }
 }

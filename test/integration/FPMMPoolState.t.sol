@@ -5,7 +5,7 @@ import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IERC20} from "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import {IMentoConfig} from "script/config/IMentoConfig.sol"; 
+import {IMentoConfig} from "script/config/IMentoConfig.sol";
 
 /**
  * @title FPMMPoolState
@@ -33,11 +33,7 @@ contract FPMMPoolState is V3IntegrationBase {
             IFPMM pool = IFPMM(pools[i]);
             address t0 = pool.token0();
             address t1 = pool.token1();
-            assertLt(
-                uint160(t0),
-                uint160(t1),
-                string.concat("Tokens not sorted for pool at index ", vm.toString(i))
-            );
+            assertLt(uint160(t0), uint160(t1), string.concat("Tokens not sorted for pool at index ", vm.toString(i)));
         }
     }
 
@@ -80,23 +76,41 @@ contract FPMMPoolState is V3IntegrationBase {
 
             assertEq(pool.lpFee(), expected.lpFee, string.concat("lpFee mismatch on pool ", idx));
             assertEq(pool.protocolFee(), expected.protocolFee, string.concat("protocolFee mismatch on pool ", idx));
-            assertEq(pool.protocolFeeRecipient(), expected.protocolFeeRecipient, string.concat("protocolFeeRecipient mismatch on pool ", idx));
+            assertEq(
+                pool.protocolFeeRecipient(),
+                expected.protocolFeeRecipient,
+                string.concat("protocolFeeRecipient mismatch on pool ", idx)
+            );
             assertEq(pool.feeSetter(), expected.feeSetter, string.concat("feeSetter mismatch on pool ", idx));
-            assertEq(pool.rebalanceIncentive(), expected.rebalanceIncentive, string.concat("rebalanceIncentive mismatch on pool ", idx));
-            assertEq(pool.rebalanceThresholdAbove(), expected.rebalanceThresholdAbove, string.concat("rebalanceThresholdAbove mismatch on pool ", idx));
-            assertEq(pool.rebalanceThresholdBelow(), expected.rebalanceThresholdBelow, string.concat("rebalanceThresholdBelow mismatch on pool ", idx));
+            assertEq(
+                pool.rebalanceIncentive(),
+                expected.rebalanceIncentive,
+                string.concat("rebalanceIncentive mismatch on pool ", idx)
+            );
+            assertEq(
+                pool.rebalanceThresholdAbove(),
+                expected.rebalanceThresholdAbove,
+                string.concat("rebalanceThresholdAbove mismatch on pool ", idx)
+            );
+            assertEq(
+                pool.rebalanceThresholdBelow(),
+                expected.rebalanceThresholdBelow,
+                string.concat("rebalanceThresholdBelow mismatch on pool ", idx)
+            );
         }
     }
 
     /// @dev Finds the FPMMParams for a token pair from the config array
-    function _findFPMMParams(
-        IMentoConfig.FPMMConfig[] memory fpmmConfigs,
-        address t0,
-        address t1
-    ) internal pure returns (IFPMM.FPMMParams memory) {
+    function _findFPMMParams(IMentoConfig.FPMMConfig[] memory fpmmConfigs, address t0, address t1)
+        internal
+        pure
+        returns (IFPMM.FPMMParams memory)
+    {
         for (uint256 i = 0; i < fpmmConfigs.length; i++) {
-            if ((fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1) ||
-                (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)) {
+            if (
+                (fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1)
+                    || (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)
+            ) {
                 return fpmmConfigs[i].params;
             }
         }

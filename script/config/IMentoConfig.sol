@@ -156,57 +156,35 @@ interface IMentoConfig {
 
     function getRateFeeds() external view returns (RateFeed[] memory);
 
-    function getRateFeedDependencies(
-        address
-    ) external view returns (address[] memory);
+    function getRateFeedDependencies(address) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
 
     function getReserveV2CollateralAssets() external view returns (address[] memory);
 
-    function getChainlinkRelayerConfigs()
-        external
-        view
-        returns (ChainlinkRelayerConfig[] memory);
+    function getChainlinkRelayerConfigs() external view returns (ChainlinkRelayerConfig[] memory);
 
     function getExchanges() external view returns (ExchangeConfig[] memory);
 
-    function getMockAggregatorConfigs()
-        external
-        returns (MockAggregatorConfig[] memory);
+    function getMockAggregatorConfigs() external returns (MockAggregatorConfig[] memory);
 
     function getOracleConfig() external view returns (OracleConfig memory);
 
     function getLockingConfig() external view returns (LockingConfig memory);
 
-    function getGovernanceConfig()
-        external
-        view
-        returns (GovernanceConfig memory);
+    function getGovernanceConfig() external view returns (GovernanceConfig memory);
 
-    function getBreakerConfigs()
-        external
-        view
-        returns (BreakerConfig[] memory configs);
+    function getBreakerConfigs() external view returns (BreakerConfig[] memory configs);
 
     function getReserveConfig() external view returns (ReserveConfig memory);
 
     function getFPMMConfigs() external view returns (FPMMConfig[] memory);
 
-    function getDefaultFPMMParams()
-        external
-        view
-        returns (IFPMM.FPMMParams memory);
+    function getDefaultFPMMParams() external view returns (IFPMM.FPMMParams memory);
 
-    function getFPMMParams(
-        address token0,
-        address token1
-    ) external view returns (IFPMM.FPMMParams memory);
+    function getFPMMParams(address token0, address token1) external view returns (IFPMM.FPMMParams memory);
 
-    function getCDPRedemptionShortfallTolerance()
-        external
-        view
-        returns (uint256);
+    function getCDPRedemptionShortfallTolerance() external view returns (uint256);
 
     function mockAggregatorReporter() external view returns (address);
 
@@ -218,26 +196,18 @@ interface IMentoConfig {
 
     // ========== Helpers ==========
 
-    function getRateFeedIdFromString(
-        string memory feedId
-    ) external pure returns (address);
+    function getRateFeedIdFromString(string memory feedId) external pure returns (address);
 
-    function getExchangeId(
-        address asset0,
-        address asset1,
-        address pricingModule
-    ) external view returns (bytes32);
+    function getExchangeId(address asset0, address asset1, address pricingModule) external view returns (bytes32);
 
-    function getExchangeId(
-        address asset0,
-        address asset1
-    ) external view returns (bytes32);
+    function getExchangeId(address asset0, address asset1) external view returns (bytes32);
 
-    function getExchangeConfig(
-        address asset0,
-        address asset1,
-        address pricingModule
-    ) external view returns (ExchangeConfig memory config, bool found);
+    function getExchangeConfig(address asset0, address asset1, address pricingModule)
+        external
+        view
+        returns (ExchangeConfig memory config, bool found);
 
     function getAddress(string memory asset) external returns (address);
+
+    function getTokenDecimals(string memory symbol) external view returns (uint8);
 }

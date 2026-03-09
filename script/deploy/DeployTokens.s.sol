@@ -12,10 +12,7 @@ import {Config, IMentoConfig} from "script/config/Config.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 interface ISortedOracles {
-    function setEquivalentToken(
-        address token,
-        address equivalentToken
-    ) external;
+    function setEquivalentToken(address token, address equivalentToken) external;
 }
 
 // Interface for StableTokenV2 initialization
@@ -27,11 +24,7 @@ interface IStableTokenV2 {
         uint256[] calldata initialBalanceValues
     ) external;
 
-    function initializeV2(
-        address _broker,
-        address _validators,
-        address _exchange
-    ) external;
+    function initializeV2(address _broker, address _validators, address _exchange) external;
 }
 
 contract DeployTokens is TrebScript, ProxyHelper {
@@ -58,15 +51,10 @@ contract DeployTokens is TrebScript, ProxyHelper {
         broker = lookupProxyOrFail("Broker");
         address reserveAddy = lookupProxyOrFail("Reserve");
         IReserve reserve = IReserve(deployer.harness(reserveAddy));
-        ISortedOracles sortedOracles = ISortedOracles(
-            deployer.harness(lookupProxyOrFail("SortedOracles"))
-        );
+        ISortedOracles sortedOracles = ISortedOracles(deployer.harness(lookupProxyOrFail("SortedOracles")));
 
         // Get the StableTokenV2 implementation address (should be deployed with v2.6.5 label)
-        stableTokenImpl = deployer
-            .create3("StableTokenV2")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(false)); // disable initializers
+        stableTokenImpl = deployer.create3("StableTokenV2").setLabel("v2.6.5").deploy(abi.encode(false)); // disable initializers
 
         // Get token configurations from config contract
         IMentoConfig.TokenConfig[] memory tokens = config.getTokenConfigs();
@@ -88,10 +76,7 @@ contract DeployTokens is TrebScript, ProxyHelper {
             initializeToken(deployer, tokens[i]);
             reserve.addToken(token);
             sortedOracles.setEquivalentToken(
-                token,
-                config.getRateFeedIdFromString(
-                    string.concat("CELO", tokens[i].currency)
-                )
+                token, config.getRateFeedIdFromString(string.concat("CELO", tokens[i].currency))
             );
         }
     }
@@ -99,18 +84,13 @@ contract DeployTokens is TrebScript, ProxyHelper {
     /**
      * @notice Initializes a stable token proxy (separate transaction to preserve msg.sender)
      */
-    function initializeToken(
-        Senders.Sender storage deployer,
-        IMentoConfig.TokenConfig memory cfg
-    ) internal {
+    function initializeToken(Senders.Sender storage deployer, IMentoConfig.TokenConfig memory cfg) internal {
         // Prepare initialization parameters
         address[] memory initialBalanceAddresses = new address[](0);
         uint256[] memory initialBalanceValues = new uint256[](0);
 
         // Call initialize through harness to preserve proper msg.sender
-        IStableTokenV2 token = IStableTokenV2(
-            deployer.harness(proxies[cfg.symbol])
-        );
+        IStableTokenV2 token = IStableTokenV2(deployer.harness(proxies[cfg.symbol]));
         token.initialize(
             cfg.name, // name
             cfg.symbol, // symbol

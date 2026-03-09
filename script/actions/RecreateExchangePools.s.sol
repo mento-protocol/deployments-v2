@@ -16,11 +16,7 @@ contract RecreateExchangePools is DestroyExchangePools, CreateExchangePools {
 
     /// @custom:senders deployer
     /// @custom:env {bytes32:optional} exchangeId
-    function run()
-        public
-        override(DestroyExchangePools, CreateExchangePools)
-        broadcast
-    {
+    function run() public override(DestroyExchangePools, CreateExchangePools) broadcast {
         DestroyExchangePools.run();
         CreateExchangePools.run();
     }

@@ -40,10 +40,7 @@ contract UpgradeStableTokenV3 is TrebScript, ProxyHelper {
         burners[0] = broker;
         address[] memory operators = new address[](0);
 
-        bytes memory initData = abi.encodeCall(
-            IStableTokenV3.initializeV3,
-            (minters, burners, operators)
-        );
+        bytes memory initData = abi.encodeCall(IStableTokenV3.initializeV3, (minters, burners, operators));
 
         // Upgrade proxy to V3 implementation with initializeV3
         ILegacyProxy proxy = ILegacyProxy(owner.harness(tokenProxy));
@@ -52,14 +49,8 @@ contract UpgradeStableTokenV3 is TrebScript, ProxyHelper {
         // Post-checks
         verifyProxyImpl(tokenSymbol, tokenProxy, v3Impl);
 
-        require(
-            IStableTokenV3(tokenProxy).isMinter(broker),
-            "Broker is not a minter after upgrade"
-        );
-        require(
-            IStableTokenV3(tokenProxy).isBurner(broker),
-            "Broker is not a burner after upgrade"
-        );
+        require(IStableTokenV3(tokenProxy).isMinter(broker), "Broker is not a minter after upgrade");
+        require(IStableTokenV3(tokenProxy).isBurner(broker), "Broker is not a burner after upgrade");
 
         console.log("Upgrade successful. Broker is minter: true, burner: true");
     }

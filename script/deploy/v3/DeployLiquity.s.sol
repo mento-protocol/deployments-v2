@@ -46,6 +46,7 @@ import {GnosisSafe} from "treb-sol/src/internal/sender/GnosisSafeSender.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {SSTORE2DataPointer} from "script/helpers/SSTORE2DataPointer.sol";
 import {Config, ILiquityConfig} from "script/config/Config.sol";
+
 contract DeployLiquityV2 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -123,23 +124,15 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     function deployAndConnectContracts() public {
         _deploySystemParams();
 
-        deployedContracts.addressesRegistry = deployer
-            .create3("AddressesRegistry.sol:AddressesRegistry")
-            .setLabel(cfg.singletonLabel)
-            .deploy(abi.encode(deployer.account));
+        deployedContracts.addressesRegistry = deployer.create3("AddressesRegistry.sol:AddressesRegistry")
+            .setLabel(cfg.singletonLabel).deploy(abi.encode(deployer.account));
 
         // Pre-compute all addresses before any contract that depends on them
-        precomputedAddresses.troveManager = _predict(
-            "TroveManager.sol:TroveManager",
-            deployer,
-            cfg.singletonLabel
-        );
+        precomputedAddresses.troveManager = _predict("TroveManager.sol:TroveManager", deployer, cfg.singletonLabel);
 
         _deployCollateralRegistry();
 
-        deployedContracts.hintHelpers = deployer
-            .create3("HintHelpers.sol:HintHelpers")
-            .setLabel(cfg.singletonLabel)
+        deployedContracts.hintHelpers = deployer.create3("HintHelpers.sol:HintHelpers").setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     ICollateralRegistry(deployedContracts.collateralRegistry),
@@ -147,64 +140,27 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 )
             );
 
-        deployedContracts.multiTroveGetter = deployer
-            .create3("MultiTroveGetter.sol:MultiTroveGetter")
-            .setLabel(cfg.singletonLabel)
-            .deploy(
-                abi.encode(
-                    ICollateralRegistry(deployedContracts.collateralRegistry)
-                )
-            );
+        deployedContracts.multiTroveGetter = deployer.create3("MultiTroveGetter.sol:MultiTroveGetter")
+            .setLabel(cfg.singletonLabel).deploy(abi.encode(ICollateralRegistry(deployedContracts.collateralRegistry)));
 
-        precomputedAddresses.borrowerOperations = _predict(
-            "BorrowerOperations.sol:BorrowerOperations",
-            deployer,
-            cfg.singletonLabel
-        );
-        precomputedAddresses.troveNFT = _predict(
-            "TroveNFT.sol:TroveNFT",
-            deployer,
-            cfg.singletonLabel
-        );
-        precomputedAddresses.stabilityPoolProxy = predictProxy(
-            deployer,
-            string.concat("StabilityPool:", cfg.proxyLabel)
-        );
-        precomputedAddresses.activePool = _predict(
-            "ActivePool.sol:ActivePool",
-            deployer,
-            cfg.singletonLabel
-        );
-        precomputedAddresses.defaultPool = _predict(
-            "DefaultPool.sol:DefaultPool",
-            deployer,
-            cfg.singletonLabel
-        );
-        precomputedAddresses.gasPool = _predict(
-            "GasPool.sol:GasPool",
-            deployer,
-            cfg.singletonLabel
-        );
-        precomputedAddresses.collSurplusPool = _predict(
-            "CollSurplusPool.sol:CollSurplusPool",
-            deployer,
-            cfg.singletonLabel
-        );
-        precomputedAddresses.sortedTroves = _predict(
-            "SortedTroves.sol:SortedTroves",
-            deployer,
-            cfg.singletonLabel
-        );
+        precomputedAddresses.borrowerOperations =
+            _predict("BorrowerOperations.sol:BorrowerOperations", deployer, cfg.singletonLabel);
+        precomputedAddresses.troveNFT = _predict("TroveNFT.sol:TroveNFT", deployer, cfg.singletonLabel);
+        precomputedAddresses.stabilityPoolProxy =
+            predictProxy(deployer, string.concat("StabilityPool:", cfg.proxyLabel));
+        precomputedAddresses.activePool = _predict("ActivePool.sol:ActivePool", deployer, cfg.singletonLabel);
+        precomputedAddresses.defaultPool = _predict("DefaultPool.sol:DefaultPool", deployer, cfg.singletonLabel);
+        precomputedAddresses.gasPool = _predict("GasPool.sol:GasPool", deployer, cfg.singletonLabel);
+        precomputedAddresses.collSurplusPool =
+            _predict("CollSurplusPool.sol:CollSurplusPool", deployer, cfg.singletonLabel);
+        precomputedAddresses.sortedTroves = _predict("SortedTroves.sol:SortedTroves", deployer, cfg.singletonLabel);
 
         _deployFXPriceFeed(precomputedAddresses.borrowerOperations);
         _deployMetadata();
 
-        IAddressesRegistry(
-            deployer.harness(deployedContracts.addressesRegistry)
-        ).setAddresses(_buildAddressVars());
+        IAddressesRegistry(deployer.harness(deployedContracts.addressesRegistry)).setAddresses(_buildAddressVars());
 
-        deployedContracts.borrowerOperations = deployer
-            .create3("BorrowerOperations.sol:BorrowerOperations")
+        deployedContracts.borrowerOperations = deployer.create3("BorrowerOperations.sol:BorrowerOperations")
             .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
@@ -213,9 +169,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 )
             );
 
-        deployedContracts.troveManager = deployer
-            .create3("TroveManager.sol:TroveManager")
-            .setLabel(cfg.singletonLabel)
+        deployedContracts.troveManager = deployer.create3("TroveManager.sol:TroveManager").setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     IAddressesRegistry(deployedContracts.addressesRegistry),
@@ -223,192 +177,112 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 )
             );
 
-        deployedContracts.troveNFT = deployer
-            .create3("TroveNFT.sol:TroveNFT")
-            .setLabel(cfg.singletonLabel)
-            .deploy(
-                abi.encode(
-                    IAddressesRegistry(deployedContracts.addressesRegistry)
-                )
-            );
+        deployedContracts.troveNFT = deployer.create3("TroveNFT.sol:TroveNFT").setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(IAddressesRegistry(deployedContracts.addressesRegistry)));
 
-        upgradeableContractsImplementations
-            .stabilityPoolImplementation = deployer
-            .create3("StabilityPool.sol:StabilityPool")
-            .setLabel(cfg.singletonLabel)
-            .deploy(
-                abi.encode(
-                    true,
-                    ISystemParams(deployedContracts.systemParamsProxy)
-                )
-            );
+        upgradeableContractsImplementations.stabilityPoolImplementation = deployer.create3(
+                "StabilityPool.sol:StabilityPool"
+            ).setLabel(cfg.singletonLabel).deploy(abi.encode(true, ISystemParams(deployedContracts.systemParamsProxy)));
 
         deployedContracts.stabilityPoolProxy = deployOztupProxy(
             deployer,
             string.concat("StabilityPool:", cfg.proxyLabel),
             upgradeableContractsImplementations.stabilityPoolImplementation,
             abi.encodeWithSelector(
-                StabilityPool.initialize.selector,
-                IAddressesRegistry(deployedContracts.addressesRegistry)
+                StabilityPool.initialize.selector, IAddressesRegistry(deployedContracts.addressesRegistry)
             )
         );
 
-        deployedContracts.activePool = deployer
-            .create3("ActivePool.sol:ActivePool")
-            .setLabel(cfg.singletonLabel)
-            .deploy(
-                abi.encode(
-                    deployedContracts.addressesRegistry,
-                    ISystemParams(deployedContracts.systemParamsProxy)
-                )
-            );
+        deployedContracts.activePool = deployer.create3("ActivePool.sol:ActivePool").setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(deployedContracts.addressesRegistry, ISystemParams(deployedContracts.systemParamsProxy)));
 
-        deployedContracts.defaultPool = deployer
-            .create3("DefaultPool.sol:DefaultPool")
-            .setLabel(cfg.singletonLabel)
+        deployedContracts.defaultPool = deployer.create3("DefaultPool.sol:DefaultPool").setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
-        deployedContracts.gasPool = deployer
-            .create3("GasPool.sol:GasPool")
-            .setLabel(cfg.singletonLabel)
+        deployedContracts.gasPool = deployer.create3("GasPool.sol:GasPool").setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
-        deployedContracts.collSurplusPool = deployer
-            .create3("CollSurplusPool.sol:CollSurplusPool")
-            .setLabel(cfg.singletonLabel)
+        deployedContracts.collSurplusPool = deployer.create3("CollSurplusPool.sol:CollSurplusPool")
+            .setLabel(cfg.singletonLabel).deploy(abi.encode(deployedContracts.addressesRegistry));
+
+        deployedContracts.sortedTroves = deployer.create3("SortedTroves.sol:SortedTroves").setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
-        deployedContracts.sortedTroves = deployer
-            .create3("SortedTroves.sol:SortedTroves")
-            .setLabel(cfg.singletonLabel)
-            .deploy(abi.encode(deployedContracts.addressesRegistry));
-
-        assert(
-            deployedContracts.borrowerOperations ==
-                precomputedAddresses.borrowerOperations
-        );
-        assert(
-            deployedContracts.troveManager == precomputedAddresses.troveManager
-        );
+        assert(deployedContracts.borrowerOperations == precomputedAddresses.borrowerOperations);
+        assert(deployedContracts.troveManager == precomputedAddresses.troveManager);
         assert(deployedContracts.troveNFT == precomputedAddresses.troveNFT);
-        assert(
-            deployedContracts.stabilityPoolProxy ==
-                precomputedAddresses.stabilityPoolProxy
-        );
+        assert(deployedContracts.stabilityPoolProxy == precomputedAddresses.stabilityPoolProxy);
         assert(deployedContracts.activePool == precomputedAddresses.activePool);
-        assert(
-            deployedContracts.defaultPool == precomputedAddresses.defaultPool
-        );
+        assert(deployedContracts.defaultPool == precomputedAddresses.defaultPool);
         assert(deployedContracts.gasPool == precomputedAddresses.gasPool);
-        assert(
-            deployedContracts.collSurplusPool ==
-                precomputedAddresses.collSurplusPool
-        );
-        assert(
-            deployedContracts.sortedTroves == precomputedAddresses.sortedTroves
-        );
+        assert(deployedContracts.collSurplusPool == precomputedAddresses.collSurplusPool);
+        assert(deployedContracts.sortedTroves == precomputedAddresses.sortedTroves);
 
         _transferProxyAdminOwnerships();
         _verify();
         _previewNFT();
     }
 
-    function _buildAddressVars()
-        internal
-        view
-        returns (IAddressesRegistry.AddressVars memory)
-    {
-        return
-            IAddressesRegistry.AddressVars({
-                borrowerOperations: IBorrowerOperations(
-                    precomputedAddresses.borrowerOperations
-                ),
-                troveManager: ITroveManager(precomputedAddresses.troveManager),
-                troveNFT: ITroveNFT(precomputedAddresses.troveNFT),
-                metadataNFT: IMetadataNFT(deployedContracts.metadataNFT),
-                stabilityPool: IStabilityPool(
-                    precomputedAddresses.stabilityPoolProxy
-                ),
-                priceFeed: IPriceFeed(deployedContracts.priceFeedProxy),
-                activePool: IActivePool(precomputedAddresses.activePool),
-                defaultPool: IDefaultPool(precomputedAddresses.defaultPool),
-                gasPoolAddress: precomputedAddresses.gasPool,
-                collSurplusPool: ICollSurplusPool(
-                    precomputedAddresses.collSurplusPool
-                ),
-                sortedTroves: ISortedTroves(precomputedAddresses.sortedTroves),
-                interestRouter: IInterestRouter(yieldSplitAddress),
-                hintHelpers: IHintHelpers(deployedContracts.hintHelpers),
-                multiTroveGetter: IMultiTroveGetter(
-                    deployedContracts.multiTroveGetter
-                ),
-                collateralRegistry: ICollateralRegistry(
-                    deployedContracts.collateralRegistry
-                ),
-                boldToken: IBoldToken(debtToken),
-                collToken: IERC20Metadata(collateralToken),
-                gasToken: IERC20Metadata(gasToken),
-                liquidityStrategy: cdpLiquidityStrategy
-            });
+    function _buildAddressVars() internal view returns (IAddressesRegistry.AddressVars memory) {
+        return IAddressesRegistry.AddressVars({
+            borrowerOperations: IBorrowerOperations(precomputedAddresses.borrowerOperations),
+            troveManager: ITroveManager(precomputedAddresses.troveManager),
+            troveNFT: ITroveNFT(precomputedAddresses.troveNFT),
+            metadataNFT: IMetadataNFT(deployedContracts.metadataNFT),
+            stabilityPool: IStabilityPool(precomputedAddresses.stabilityPoolProxy),
+            priceFeed: IPriceFeed(deployedContracts.priceFeedProxy),
+            activePool: IActivePool(precomputedAddresses.activePool),
+            defaultPool: IDefaultPool(precomputedAddresses.defaultPool),
+            gasPoolAddress: precomputedAddresses.gasPool,
+            collSurplusPool: ICollSurplusPool(precomputedAddresses.collSurplusPool),
+            sortedTroves: ISortedTroves(precomputedAddresses.sortedTroves),
+            interestRouter: IInterestRouter(yieldSplitAddress),
+            hintHelpers: IHintHelpers(deployedContracts.hintHelpers),
+            multiTroveGetter: IMultiTroveGetter(deployedContracts.multiTroveGetter),
+            collateralRegistry: ICollateralRegistry(deployedContracts.collateralRegistry),
+            boldToken: IBoldToken(debtToken),
+            collToken: IERC20Metadata(collateralToken),
+            gasToken: IERC20Metadata(gasToken),
+            liquidityStrategy: cdpLiquidityStrategy
+        });
     }
 
     function _transferProxyAdminOwnerships() internal {
-        Ownable(
-            deployer.harness(getProxyAdmin(deployedContracts.priceFeedProxy))
-        ).transferOwnership(owner);
-        Ownable(
-            deployer.harness(
-                getProxyAdmin(deployedContracts.stabilityPoolProxy)
-            )
-        ).transferOwnership(owner);
-        Ownable(
-            deployer.harness(getProxyAdmin(deployedContracts.systemParamsProxy))
-        ).transferOwnership(owner);
+        Ownable(deployer.harness(getProxyAdmin(deployedContracts.priceFeedProxy))).transferOwnership(owner);
+        Ownable(deployer.harness(getProxyAdmin(deployedContracts.stabilityPoolProxy))).transferOwnership(owner);
+        Ownable(deployer.harness(getProxyAdmin(deployedContracts.systemParamsProxy))).transferOwnership(owner);
     }
 
     function _deploySystemParams() internal {
-        ISystemParams.DebtParams memory debtParams = ISystemParams.DebtParams({
-            minDebt: cfg.minDebt
+        ISystemParams.DebtParams memory debtParams = ISystemParams.DebtParams({minDebt: cfg.minDebt});
+        ISystemParams.LiquidationParams memory liquidationParams = ISystemParams.LiquidationParams({
+            liquidationPenaltySP: cfg.liquidationPenaltySP,
+            liquidationPenaltyRedistribution: cfg.liquidationPenaltyRedistribution
         });
-        ISystemParams.LiquidationParams memory liquidationParams = ISystemParams
-            .LiquidationParams({
-                liquidationPenaltySP: cfg.liquidationPenaltySP,
-                liquidationPenaltyRedistribution: cfg
-                    .liquidationPenaltyRedistribution
-            });
-        ISystemParams.GasCompParams memory gasCompParams = ISystemParams
-            .GasCompParams({
-                collGasCompensationDivisor: cfg.collGasCompensationDivisor,
-                collGasCompensationCap: cfg.collGasCompensationCap,
-                ethGasCompensation: cfg.ethGasCompensation
-            });
-        ISystemParams.CollateralParams memory collateralParams = ISystemParams
-            .CollateralParams({
-                ccr: cfg.CCR,
-                scr: cfg.SCR,
-                mcr: cfg.MCR,
-                bcr: cfg.BCR
-            });
-        ISystemParams.InterestParams memory interestParams = ISystemParams
-            .InterestParams({minAnnualInterestRate: cfg.minAnnualInterestRate});
-        ISystemParams.RedemptionParams memory redemptionParams = ISystemParams
-            .RedemptionParams({
-                redemptionFeeFloor: cfg.redemptionFeeFloor,
-                initialBaseRate: cfg.initialBaseRate,
-                redemptionMinuteDecayFactor: cfg.redemptionMinuteDecayFactor,
-                redemptionBeta: cfg.redemptionBeta
-            });
-        ISystemParams.StabilityPoolParams memory poolParams = ISystemParams
-            .StabilityPoolParams({
-                spYieldSplit: cfg.spYieldSplit,
-                minBoldInSP: cfg.minBoldInSP,
-                minBoldAfterRebalance: cfg.minBoldAfterRebalance
-            });
+        ISystemParams.GasCompParams memory gasCompParams = ISystemParams.GasCompParams({
+            collGasCompensationDivisor: cfg.collGasCompensationDivisor,
+            collGasCompensationCap: cfg.collGasCompensationCap,
+            ethGasCompensation: cfg.ethGasCompensation
+        });
+        ISystemParams.CollateralParams memory collateralParams =
+            ISystemParams.CollateralParams({ccr: cfg.CCR, scr: cfg.SCR, mcr: cfg.MCR, bcr: cfg.BCR});
+        ISystemParams.InterestParams memory interestParams =
+            ISystemParams.InterestParams({minAnnualInterestRate: cfg.minAnnualInterestRate});
+        ISystemParams.RedemptionParams memory redemptionParams = ISystemParams.RedemptionParams({
+            redemptionFeeFloor: cfg.redemptionFeeFloor,
+            initialBaseRate: cfg.initialBaseRate,
+            redemptionMinuteDecayFactor: cfg.redemptionMinuteDecayFactor,
+            redemptionBeta: cfg.redemptionBeta
+        });
+        ISystemParams.StabilityPoolParams memory poolParams = ISystemParams.StabilityPoolParams({
+            spYieldSplit: cfg.spYieldSplit,
+            minBoldInSP: cfg.minBoldInSP,
+            minBoldAfterRebalance: cfg.minBoldAfterRebalance
+        });
 
-        upgradeableContractsImplementations
-            .systemParamsImplementation = deployer
-            .create3("SystemParams.sol:SystemParams")
-            .setLabel(cfg.singletonLabel)
+        upgradeableContractsImplementations.systemParamsImplementation = deployer.create3(
+                "SystemParams.sol:SystemParams"
+            ).setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     true, // disableInitializers for implementation
@@ -431,10 +305,8 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     }
 
     function _deployFXPriceFeed(address borrowerOperationsAddress) internal {
-        upgradeableContractsImplementations.fxPriceFeedImplementation = deployer
-            .create3("FXPriceFeed.sol:FXPriceFeed")
-            .setLabel(cfg.singletonLabel)
-            .deploy(abi.encode(true));
+        upgradeableContractsImplementations.fxPriceFeedImplementation =
+            deployer.create3("FXPriceFeed.sol:FXPriceFeed").setLabel(cfg.singletonLabel).deploy(abi.encode(true));
 
         deployedContracts.priceFeedProxy = deployOztupProxy(
             deployer,
@@ -460,8 +332,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         ITroveManager[] memory troveManagers = new ITroveManager[](1);
         troveManagers[0] = ITroveManager(precomputedAddresses.troveManager);
 
-        deployedContracts.collateralRegistry = deployer
-            .create3("CollateralRegistry.sol:CollateralRegistry")
+        deployedContracts.collateralRegistry = deployer.create3("CollateralRegistry.sol:CollateralRegistry")
             .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
@@ -477,244 +348,102 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
     // ── Verification ────────────────────────────────────────────────────────
 
     function _verify() internal view {
-        IAddressesRegistry ar = IAddressesRegistry(
-            deployedContracts.addressesRegistry
-        );
-        ICollateralRegistry cr = ICollateralRegistry(
-            deployedContracts.collateralRegistry
-        );
+        IAddressesRegistry ar = IAddressesRegistry(deployedContracts.addressesRegistry);
+        ICollateralRegistry cr = ICollateralRegistry(deployedContracts.collateralRegistry);
         ISystemParams sp = ISystemParams(deployedContracts.systemParamsProxy);
         FXPriceFeed pf = FXPriceFeed(deployedContracts.priceFeedProxy);
 
         // ── AddressesRegistry wiring ─────────────────────────────────────
-        require(
-            address(ar.borrowerOperations()) ==
-                deployedContracts.borrowerOperations,
-            "AR: borrowerOperations"
-        );
-        require(
-            address(ar.troveManager()) == deployedContracts.troveManager,
-            "AR: troveManager"
-        );
-        require(
-            address(ar.troveNFT()) == deployedContracts.troveNFT,
-            "AR: troveNFT"
-        );
-        require(
-            address(ar.metadataNFT()) == deployedContracts.metadataNFT,
-            "AR: metadataNFT"
-        );
-        require(
-            address(ar.stabilityPool()) == deployedContracts.stabilityPoolProxy,
-            "AR: stabilityPool"
-        );
-        require(
-            address(ar.priceFeed()) == deployedContracts.priceFeedProxy,
-            "AR: priceFeed"
-        );
-        require(
-            address(ar.activePool()) == deployedContracts.activePool,
-            "AR: activePool"
-        );
-        require(
-            address(ar.defaultPool()) == deployedContracts.defaultPool,
-            "AR: defaultPool"
-        );
-        require(
-            ar.gasPoolAddress() == deployedContracts.gasPool,
-            "AR: gasPool"
-        );
-        require(
-            address(ar.collSurplusPool()) == deployedContracts.collSurplusPool,
-            "AR: collSurplusPool"
-        );
-        require(
-            address(ar.sortedTroves()) == deployedContracts.sortedTroves,
-            "AR: sortedTroves"
-        );
-        require(
-            address(ar.interestRouter()) == yieldSplitAddress,
-            "AR: interestRouter"
-        );
-        require(
-            address(ar.hintHelpers()) == deployedContracts.hintHelpers,
-            "AR: hintHelpers"
-        );
-        require(
-            address(ar.multiTroveGetter()) ==
-                deployedContracts.multiTroveGetter,
-            "AR: multiTroveGetter"
-        );
-        require(
-            address(ar.collateralRegistry()) ==
-                deployedContracts.collateralRegistry,
-            "AR: collateralRegistry"
-        );
+        require(address(ar.borrowerOperations()) == deployedContracts.borrowerOperations, "AR: borrowerOperations");
+        require(address(ar.troveManager()) == deployedContracts.troveManager, "AR: troveManager");
+        require(address(ar.troveNFT()) == deployedContracts.troveNFT, "AR: troveNFT");
+        require(address(ar.metadataNFT()) == deployedContracts.metadataNFT, "AR: metadataNFT");
+        require(address(ar.stabilityPool()) == deployedContracts.stabilityPoolProxy, "AR: stabilityPool");
+        require(address(ar.priceFeed()) == deployedContracts.priceFeedProxy, "AR: priceFeed");
+        require(address(ar.activePool()) == deployedContracts.activePool, "AR: activePool");
+        require(address(ar.defaultPool()) == deployedContracts.defaultPool, "AR: defaultPool");
+        require(ar.gasPoolAddress() == deployedContracts.gasPool, "AR: gasPool");
+        require(address(ar.collSurplusPool()) == deployedContracts.collSurplusPool, "AR: collSurplusPool");
+        require(address(ar.sortedTroves()) == deployedContracts.sortedTroves, "AR: sortedTroves");
+        require(address(ar.interestRouter()) == yieldSplitAddress, "AR: interestRouter");
+        require(address(ar.hintHelpers()) == deployedContracts.hintHelpers, "AR: hintHelpers");
+        require(address(ar.multiTroveGetter()) == deployedContracts.multiTroveGetter, "AR: multiTroveGetter");
+        require(address(ar.collateralRegistry()) == deployedContracts.collateralRegistry, "AR: collateralRegistry");
         require(address(ar.boldToken()) == debtToken, "AR: boldToken");
         require(address(ar.collToken()) == collateralToken, "AR: collToken");
         require(address(ar.gasToken()) == gasToken, "AR: gasToken");
-        require(
-            ar.liquidityStrategy() == cdpLiquidityStrategy,
-            "AR: liquidityStrategy"
-        );
+        require(ar.liquidityStrategy() == cdpLiquidityStrategy, "AR: liquidityStrategy");
 
         // ── CollateralRegistry wiring ────────────────────────────────────
         require(cr.totalCollaterals() == 1, "CR: totalCollaterals");
-        require(
-            address(cr.getToken(0)) == collateralToken,
-            "CR: collateral[0]"
-        );
-        require(
-            address(cr.getTroveManager(0)) == deployedContracts.troveManager,
-            "CR: troveManager[0]"
-        );
+        require(address(cr.getToken(0)) == collateralToken, "CR: collateral[0]");
+        require(address(cr.getTroveManager(0)) == deployedContracts.troveManager, "CR: troveManager[0]");
         require(address(cr.boldToken()) == debtToken, "CR: boldToken");
-        require(
-            cr.liquidityStrategy() == cdpLiquidityStrategy,
-            "CR: liquidityStrategy"
-        );
+        require(cr.liquidityStrategy() == cdpLiquidityStrategy, "CR: liquidityStrategy");
 
         // ── MetadataNFT wiring ──────────────────────────────────────────
         MetadataNFT nft = MetadataNFT(deployedContracts.metadataNFT);
         FixedAssetReader assetReader = nft.assetReader();
         require(address(assetReader) != address(0), "NFT: assetReader not set");
+        require(assetReader.pointer() != address(0), "NFT: SSTORE2 pointer not set");
+        require(bytes(assetReader.readAsset(bytes4(keccak256("BOLD")))).length > 0, "NFT: debt token logo asset empty");
         require(
-            assetReader.pointer() != address(0),
-            "NFT: SSTORE2 pointer not set"
-        );
-        require(
-            bytes(assetReader.readAsset(bytes4(keccak256("BOLD")))).length > 0,
-            "NFT: debt token logo asset empty"
-        );
-        require(
-            bytes(
-                assetReader.readAsset(
-                    bytes4(keccak256(bytes(cfg.collateralTokenSymbol)))
-                )
-            ).length > 0,
+            bytes(assetReader.readAsset(bytes4(keccak256(bytes(cfg.collateralTokenSymbol))))).length > 0,
             "NFT: collateral logo asset empty"
         );
-        require(
-            bytes(assetReader.readAsset(bytes4(keccak256("geist")))).length > 0,
-            "NFT: font asset empty"
-        );
+        require(bytes(assetReader.readAsset(bytes4(keccak256("geist")))).length > 0, "NFT: font asset empty");
 
         // ── FXPriceFeed proxy parameters ─────────────────────────────────
-        require(
-            address(pf.oracleAdapter()) == oracleAdapter,
-            "PF: oracleAdapter"
-        );
+        require(address(pf.oracleAdapter()) == oracleAdapter, "PF: oracleAdapter");
         require(pf.rateFeedID() == cfg.rateFeedID, "PF: rateFeedID");
-        require(
-            pf.invertRateFeed() == cfg.invertRateFeed,
-            "PF: invertRateFeed"
-        );
-        require(
-            pf.l2SequencerGracePeriod() == cfg.l2SequencerGracePeriod,
-            "PF: l2SequencerGracePeriod"
-        );
+        require(pf.invertRateFeed() == cfg.invertRateFeed, "PF: invertRateFeed");
+        require(pf.l2SequencerGracePeriod() == cfg.l2SequencerGracePeriod, "PF: l2SequencerGracePeriod");
         require(pf.watchdogAddress() == watchdog, "PF: watchdog");
-        require(
-            address(pf.borrowerOperations()) ==
-                deployedContracts.borrowerOperations,
-            "PF: borrowerOperations"
-        );
-        require(
-            Ownable(deployedContracts.priceFeedProxy).owner() == owner,
-            "PF: owner"
-        );
+        require(address(pf.borrowerOperations()) == deployedContracts.borrowerOperations, "PF: borrowerOperations");
+        require(Ownable(deployedContracts.priceFeedProxy).owner() == owner, "PF: owner");
 
         // ── SystemParams proxy parameters ────────────────────────────────
         require(sp.CCR() == cfg.CCR, "SP: CCR");
         require(sp.MCR() == cfg.MCR, "SP: MCR");
         require(sp.BCR() == cfg.BCR, "SP: BCR");
         require(sp.SCR() == cfg.SCR, "SP: SCR");
+        require(sp.LIQUIDATION_PENALTY_SP() == cfg.liquidationPenaltySP, "SP: liquidationPenaltySP");
         require(
-            sp.LIQUIDATION_PENALTY_SP() == cfg.liquidationPenaltySP,
-            "SP: liquidationPenaltySP"
-        );
-        require(
-            sp.LIQUIDATION_PENALTY_REDISTRIBUTION() ==
-                cfg.liquidationPenaltyRedistribution,
+            sp.LIQUIDATION_PENALTY_REDISTRIBUTION() == cfg.liquidationPenaltyRedistribution,
             "SP: liquidationPenaltyRedistribution"
         );
         require(sp.MIN_DEBT() == cfg.minDebt, "SP: minDebt");
+        require(sp.COLL_GAS_COMPENSATION_DIVISOR() == cfg.collGasCompensationDivisor, "SP: collGasCompensationDivisor");
+        require(sp.COLL_GAS_COMPENSATION_CAP() == cfg.collGasCompensationCap, "SP: collGasCompensationCap");
+        require(sp.ETH_GAS_COMPENSATION() == cfg.ethGasCompensation, "SP: ethGasCompensation");
+        require(sp.MIN_ANNUAL_INTEREST_RATE() == cfg.minAnnualInterestRate, "SP: minAnnualInterestRate");
+        require(sp.REDEMPTION_FEE_FLOOR() == cfg.redemptionFeeFloor, "SP: redemptionFeeFloor");
+        require(sp.INITIAL_BASE_RATE() == cfg.initialBaseRate, "SP: initialBaseRate");
         require(
-            sp.COLL_GAS_COMPENSATION_DIVISOR() ==
-                cfg.collGasCompensationDivisor,
-            "SP: collGasCompensationDivisor"
+            sp.REDEMPTION_MINUTE_DECAY_FACTOR() == cfg.redemptionMinuteDecayFactor, "SP: redemptionMinuteDecayFactor"
         );
-        require(
-            sp.COLL_GAS_COMPENSATION_CAP() == cfg.collGasCompensationCap,
-            "SP: collGasCompensationCap"
-        );
-        require(
-            sp.ETH_GAS_COMPENSATION() == cfg.ethGasCompensation,
-            "SP: ethGasCompensation"
-        );
-        require(
-            sp.MIN_ANNUAL_INTEREST_RATE() == cfg.minAnnualInterestRate,
-            "SP: minAnnualInterestRate"
-        );
-        require(
-            sp.REDEMPTION_FEE_FLOOR() == cfg.redemptionFeeFloor,
-            "SP: redemptionFeeFloor"
-        );
-        require(
-            sp.INITIAL_BASE_RATE() == cfg.initialBaseRate,
-            "SP: initialBaseRate"
-        );
-        require(
-            sp.REDEMPTION_MINUTE_DECAY_FACTOR() ==
-                cfg.redemptionMinuteDecayFactor,
-            "SP: redemptionMinuteDecayFactor"
-        );
-        require(
-            sp.REDEMPTION_BETA() == cfg.redemptionBeta,
-            "SP: redemptionBeta"
-        );
+        require(sp.REDEMPTION_BETA() == cfg.redemptionBeta, "SP: redemptionBeta");
         require(sp.SP_YIELD_SPLIT() == cfg.spYieldSplit, "SP: spYieldSplit");
         require(sp.MIN_BOLD_IN_SP() == cfg.minBoldInSP, "SP: minBoldInSP");
-        require(
-            sp.MIN_BOLD_AFTER_REBALANCE() == cfg.minBoldAfterRebalance,
-            "SP: minBoldAfterRebalance"
-        );
+        require(sp.MIN_BOLD_AFTER_REBALANCE() == cfg.minBoldAfterRebalance, "SP: minBoldAfterRebalance");
 
         // ── Proxy upgradeability: ProxyAdmin owner == owner ─────────
+        require(Ownable(getProxyAdmin(deployedContracts.priceFeedProxy)).owner() == owner, "ProxyAdmin: priceFeed");
         require(
-            Ownable(getProxyAdmin(deployedContracts.priceFeedProxy)).owner() ==
-                owner,
-            "ProxyAdmin: priceFeed"
+            Ownable(getProxyAdmin(deployedContracts.stabilityPoolProxy)).owner() == owner, "ProxyAdmin: stabilityPool"
         );
         require(
-            Ownable(getProxyAdmin(deployedContracts.stabilityPoolProxy))
-                .owner() == owner,
-            "ProxyAdmin: stabilityPool"
-        );
-        require(
-            Ownable(getProxyAdmin(deployedContracts.systemParamsProxy))
-                .owner() == owner,
-            "ProxyAdmin: systemParams"
+            Ownable(getProxyAdmin(deployedContracts.systemParamsProxy)).owner() == owner, "ProxyAdmin: systemParams"
         );
     }
 
     function _deployMetadata() internal {
-        string memory basePath = string.concat(
-            vm.projectRoot(),
-            "/",
-            cfg.metadataAssetsBasePath
-        );
+        string memory basePath = string.concat(vm.projectRoot(), "/", cfg.metadataAssetsBasePath);
 
         // Load pre-encoded base64 asset files (run encode-assets.sh after updating SVGs)
-        bytes memory debtTokenLogo = bytes(
-            vm.readFile(string.concat(basePath, cfg.debtTokenLogoFile, ".b64"))
-        );
-        bytes memory collateralLogo = bytes(
-            vm.readFile(string.concat(basePath, cfg.collateralTokenLogoFile, ".b64"))
-        );
-        bytes memory font = bytes(
-            vm.readFile(string.concat(basePath, cfg.fontFile))
-        );
+        bytes memory debtTokenLogo = bytes(vm.readFile(string.concat(basePath, cfg.debtTokenLogoFile, ".b64")));
+        bytes memory collateralLogo = bytes(vm.readFile(string.concat(basePath, cfg.collateralTokenLogoFile, ".b64")));
+        bytes memory font = bytes(vm.readFile(string.concat(basePath, cfg.fontFile)));
 
         // Calculate byte offsets
         uint128 debtLogoEnd = uint128(debtTokenLogo.length);
@@ -722,17 +451,11 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         uint128 fontEnd = collLogoEnd + uint128(font.length);
 
         // Concatenate all data
-        bytes memory allData = bytes.concat(
-            debtTokenLogo,
-            collateralLogo,
-            font
-        );
+        bytes memory allData = bytes.concat(debtTokenLogo, collateralLogo, font);
 
         // Deploy SSTORE2DataPointer which calls SSTORE2.write in its constructor
-        address dataPointerContract = deployer
-            .create3("SSTORE2DataPointer.sol:SSTORE2DataPointer")
-            .setLabel(cfg.singletonLabel)
-            .deploy(abi.encode(allData));
+        address dataPointerContract = deployer.create3("SSTORE2DataPointer.sol:SSTORE2DataPointer")
+            .setLabel(cfg.singletonLabel).deploy(abi.encode(allData));
         address pointer = SSTORE2DataPointer(dataPointerContract).pointer();
 
         // Deploy FixedAssetReader via create3
@@ -741,29 +464,23 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         sigs[1] = bytes4(keccak256(bytes(cfg.collateralTokenSymbol)));
         sigs[2] = bytes4(keccak256("geist"));
 
-        FixedAssetReader.Asset[]
-            memory metadataAssets = new FixedAssetReader.Asset[](3);
+        FixedAssetReader.Asset[] memory metadataAssets = new FixedAssetReader.Asset[](3);
         metadataAssets[0] = FixedAssetReader.Asset(0, debtLogoEnd);
         metadataAssets[1] = FixedAssetReader.Asset(debtLogoEnd, collLogoEnd);
         metadataAssets[2] = FixedAssetReader.Asset(collLogoEnd, fontEnd);
 
-        address fixedAssetReader = deployer
-            .create3("FixedAssets.sol:FixedAssetReader")
-            .setLabel(cfg.singletonLabel)
+        address fixedAssetReader = deployer.create3("FixedAssets.sol:FixedAssetReader").setLabel(cfg.singletonLabel)
             .deploy(abi.encode(pointer, sigs, metadataAssets));
 
         // Deploy MetadataNFT via create3
-        deployedContracts.metadataNFT = deployer
-            .create3("MetadataNFT.sol:MetadataNFT")
-            .setLabel(cfg.singletonLabel)
+        deployedContracts.metadataNFT = deployer.create3("MetadataNFT.sol:MetadataNFT").setLabel(cfg.singletonLabel)
             .deploy(abi.encode(FixedAssetReader(fixedAssetReader)));
     }
 
-    function _predict(
-        string memory artifact,
-        Senders.Sender storage _deployer,
-        string memory label
-    ) internal returns (address) {
+    function _predict(string memory artifact, Senders.Sender storage _deployer, string memory label)
+        internal
+        returns (address)
+    {
         return _deployer.create3(artifact).setLabel(label).predict();
     }
 
@@ -778,9 +495,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         troveData._interestRate = 5e16; // 5%
         troveData._status = ITroveManager.Status.active;
 
-        string memory dataURI = MetadataNFT(deployedContracts.metadataNFT).uri(
-            troveData
-        );
+        string memory dataURI = MetadataNFT(deployedContracts.metadataNFT).uri(troveData);
 
         // Strip "data:application/json;base64," prefix (29 chars) and decode
         bytes memory jsonBytes = Base64.decode(_substring(dataURI, 29));
@@ -796,10 +511,7 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         console2.log("=== NFT preview SVG written to: %s ===", svgPath);
     }
 
-    function _substring(
-        string memory str,
-        uint256 startIndex
-    ) internal pure returns (string memory) {
+    function _substring(string memory str, uint256 startIndex) internal pure returns (string memory) {
         bytes memory strBytes = bytes(str);
         bytes memory result = new bytes(strBytes.length - startIndex);
         for (uint256 i = startIndex; i < strBytes.length; i++) {

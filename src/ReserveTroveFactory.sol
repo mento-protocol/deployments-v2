@@ -44,10 +44,7 @@ contract ReserveTroveFactory is Ownable {
      * @param collateralAmount The amount of collateral deposited into the trove
      */
     event ReserveTroveCreated(
-        address indexed addressesRegistry,
-        uint256 indexed troveId,
-        uint256 debtAmount,
-        uint256 collateralAmount
+        address indexed addressesRegistry, uint256 indexed troveId, uint256 debtAmount, uint256 collateralAmount
     );
 
     /* ============================================================ */
@@ -64,7 +61,6 @@ contract ReserveTroveFactory is Ownable {
         require(_initialOwner != address(0), "Invalid initial owner");
         reserveTroveManager = _reserveTroveManager;
         transferOwnership(_initialOwner);
-
     }
 
     receive() external payable {}
@@ -97,26 +93,23 @@ contract ReserveTroveFactory is Ownable {
         uint256 debtAmount = debtToken.totalSupply();
         require(debtAmount > 0, "No existing debt to back");
 
-        uint256 collateralNeeded = _mintCollateralAndApprove(
-            _addressesRegistry,
-            collateralizationRatio,
-            interestRate,
-            debtAmount
-        );
+        uint256 collateralNeeded =
+            _mintCollateralAndApprove(_addressesRegistry, collateralizationRatio, interestRate, debtAmount);
 
-        troveId = _addressesRegistry.borrowerOperations().openTrove(
-            reserveTroveManager,
-            0, // ownerIndex
-            collateralNeeded,
-            debtAmount,
-            0, // upperHint
-            0, // lowerHint
-            interestRate,
-            type(uint256).max, // maxUpfrontFee
-            address(0), // addManager
-            address(0), // removeManager
-            address(0) // receiver
-        );
+        troveId = _addressesRegistry.borrowerOperations()
+            .openTrove(
+                reserveTroveManager,
+                0, // ownerIndex
+                collateralNeeded,
+                debtAmount,
+                0, // upperHint
+                0, // lowerHint
+                interestRate,
+                type(uint256).max, // maxUpfrontFee
+                address(0), // addManager
+                address(0), // removeManager
+                address(0) // receiver
+            );
 
         // Burn the borrowed debt tokens to back the existing supply
         debtToken.burn(debtAmount);
@@ -186,11 +179,7 @@ contract ReserveTroveFactory is Ownable {
     ) internal returns (uint256 collateralNeeded) {
         uint256 price = IPriceFeed(_addressesRegistry.priceFeed()).fetchPrice();
         collateralNeeded = _calculateCollateralNeeded(
-            collateralizationRatio,
-            debtAmount,
-            interestRate,
-            price,
-            _addressesRegistry.activePool()
+            collateralizationRatio, debtAmount, interestRate, price, _addressesRegistry.activePool()
         );
 
         IStableTokenV3 collateralToken = IStableTokenV3(address(_addressesRegistry.collToken()));
@@ -235,11 +224,11 @@ contract ReserveTroveFactory is Ownable {
      * @param _interestRate The interest rate of the new trove
      * @return The estimated upfront fee in debt token units
      */
-    function _estimateUpfrontFee(
-        IActivePool _activePool,
-        uint256 _debtAmount,
-        uint256 _interestRate
-    ) internal view returns (uint256) {
+    function _estimateUpfrontFee(IActivePool _activePool, uint256 _debtAmount, uint256 _interestRate)
+        internal
+        view
+        returns (uint256)
+    {
         TroveChange memory change;
         change.debtIncrease = _debtAmount;
         change.newWeightedRecordedDebt = _debtAmount * _interestRate;

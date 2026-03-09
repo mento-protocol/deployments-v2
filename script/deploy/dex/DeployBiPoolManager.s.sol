@@ -29,38 +29,23 @@ contract DeployBiPoolManager is TrebScript, ProxyHelper {
         address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
         address breakerBoxProxy = lookupOrFail("BreakerBox:v2.6.5");
 
-        biPoolManagerImpl = deployer
-            .create3("BiPoolManager")
-            .setLabel("v2.6.5")
-            .deploy(abi.encode(false));
+        biPoolManagerImpl = deployer.create3("BiPoolManager").setLabel("v2.6.5").deploy(abi.encode(false));
 
-        biPoolManagerProxy = deployProxy(
-            deployer,
-            "BiPoolManager",
-            biPoolManagerImpl,
-            ""
-        );
+        biPoolManagerProxy = deployProxy(deployer, "BiPoolManager", biPoolManagerImpl, "");
 
-        IBiPoolManager biPoolManager = IBiPoolManager(
-            deployer.harness(biPoolManagerProxy)
-        );
+        IBiPoolManager biPoolManager = IBiPoolManager(deployer.harness(biPoolManagerProxy));
         IBroker broker = IBroker(deployer.harness(brokerProxy));
 
         biPoolManager.initialize(
-            brokerProxy,
-            IReserve(reserveProxy),
-            ISortedOracles(sortedOraclesProxy),
-            IBreakerBox(breakerBoxProxy)
+            brokerProxy, IReserve(reserveProxy), ISortedOracles(sortedOraclesProxy), IBreakerBox(breakerBoxProxy)
         );
 
         biPoolManager.setPricingModules(
             bytes32s(
-                IBiPoolManager(biPoolManagerProxy).CONSTANT_SUM(),
-                IBiPoolManager(biPoolManagerProxy).CONSTANT_PRODUCT()
+                IBiPoolManager(biPoolManagerProxy).CONSTANT_SUM(), IBiPoolManager(biPoolManagerProxy).CONSTANT_PRODUCT()
             ),
             addresses(
-                lookupOrFail("ConstantSumPricingModule:v2.6.5"),
-                lookupOrFail("ConstantProductPricingModule:v2.6.5")
+                lookupOrFail("ConstantSumPricingModule:v2.6.5"), lookupOrFail("ConstantProductPricingModule:v2.6.5")
             )
         );
 

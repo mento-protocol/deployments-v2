@@ -75,9 +75,7 @@ contract MiscConfigVerification is V3IntegrationBase {
 
             address actualImpl = getProxyImplementation(pools[i]);
             assertEq(
-                actualImpl,
-                cfg.fpmmImplementation,
-                string.concat("fpmmImplementation mismatch on pool at index ", idx)
+                actualImpl, cfg.fpmmImplementation, string.concat("fpmmImplementation mismatch on pool at index ", idx)
             );
         }
     }
@@ -99,9 +97,7 @@ contract MiscConfigVerification is V3IntegrationBase {
                 keccak256(abi.encodePacked(actualSymbol)),
                 keccak256(abi.encodePacked(tokens[i].symbol)),
                 string.concat(
-                    "Token symbol mismatch at index ", idx,
-                    ": on-chain=", actualSymbol,
-                    " config=", tokens[i].symbol
+                    "Token symbol mismatch at index ", idx, ": on-chain=", actualSymbol, " config=", tokens[i].symbol
                 )
             );
         }
@@ -124,9 +120,7 @@ contract MiscConfigVerification is V3IntegrationBase {
                 keccak256(abi.encodePacked(actualName)),
                 keccak256(abi.encodePacked(tokens[i].name)),
                 string.concat(
-                    "Token name mismatch at index ", idx,
-                    ": on-chain=", actualName,
-                    " config=", tokens[i].name
+                    "Token name mismatch at index ", idx, ": on-chain=", actualName, " config=", tokens[i].name
                 )
             );
         }
@@ -137,17 +131,14 @@ contract MiscConfigVerification is V3IntegrationBase {
     // ================================================================
 
     /// @notice Verify each collateral asset from config is registered in Reserve (V1)
-    function test_collateralAssets_registeredInReserve() public view {
+    function test_collateralAssets_registeredInReserve() public onlyCelo {
         address reserve = lookupProxyOrFail("Reserve");
         address[] memory collateralAssets = config.getCollateralAssets();
 
         for (uint256 i = 0; i < collateralAssets.length; i++) {
             assertTrue(
                 IReserve(reserve).isCollateralAsset(collateralAssets[i]),
-                string.concat(
-                    "Collateral asset not registered in Reserve: ",
-                    vm.toString(collateralAssets[i])
-                )
+                string.concat("Collateral asset not registered in Reserve: ", vm.toString(collateralAssets[i]))
             );
         }
     }
@@ -159,10 +150,7 @@ contract MiscConfigVerification is V3IntegrationBase {
         for (uint256 i = 0; i < collateralAssets.length; i++) {
             assertTrue(
                 IReserveV2(reserveV2).isCollateralAsset(collateralAssets[i]),
-                string.concat(
-                    "Collateral asset not registered in ReserveV2: ",
-                    vm.toString(collateralAssets[i])
-                )
+                string.concat("Collateral asset not registered in ReserveV2: ", vm.toString(collateralAssets[i]))
             );
         }
     }
@@ -174,7 +162,7 @@ contract MiscConfigVerification is V3IntegrationBase {
     /// @notice Verify each CDP pool's reserve trove ICR is at least the configured collateralizationRatio.
     ///         The collateralizationRatio is not stored on-chain directly; it is used as a target when
     ///         creating the reserve trove. We verify the resulting trove's ICR meets or exceeds the target.
-    function test_cdpPools_collateralizationRatio_met() public {
+    function test_cdpPools_collateralizationRatio_met() public onlyCelo {
         address[] memory cdpPools = ICDPLiquidityStrategy(cdpLiquidityStrategy).getPools();
 
         for (uint256 i = 0; i < cdpPools.length; i++) {
@@ -197,14 +185,18 @@ contract MiscConfigVerification is V3IntegrationBase {
             string memory idx = vm.toString(i);
 
             // Allow 5% tolerance for price drift
-            uint256 minICR = cdpCfg.collateralizationRatio * 95 / 100;
+            uint256 minICR = (cdpCfg.collateralizationRatio * 95) / 100;
             assertGe(
                 currentICR,
                 minICR,
                 string.concat(
-                    "Reserve trove ICR more than 5% below configured collateralizationRatio for CDP pool at index ", idx,
-                    " (ICR=", vm.toString(currentICR),
-                    ", target=", vm.toString(cdpCfg.collateralizationRatio), ")"
+                    "Reserve trove ICR more than 5% below configured collateralizationRatio for CDP pool at index ",
+                    idx,
+                    " (ICR=",
+                    vm.toString(currentICR),
+                    ", target=",
+                    vm.toString(cdpCfg.collateralizationRatio),
+                    ")"
                 )
             );
         }
@@ -215,15 +207,11 @@ contract MiscConfigVerification is V3IntegrationBase {
     // ================================================================
 
     /// @notice Verify the CDPLiquidityStrategy's REDEMPTION_SHORTFALL_TOLERANCE matches config
-    function test_cdpLiquidityStrategy_redemptionShortfallTolerance_matchesConfig() public view {
+    function test_cdpLiquidityStrategy_redemptionShortfallTolerance_matchesConfig() public onlyCelo {
         uint256 expected = config.getCDPRedemptionShortfallTolerance();
         uint256 actual = ICDPLiquidityStrategyView(cdpLiquidityStrategy).REDEMPTION_SHORTFALL_TOLERANCE();
 
-        assertEq(
-            actual,
-            expected,
-            "CDPLiquidityStrategy.REDEMPTION_SHORTFALL_TOLERANCE does not match config"
-        );
+        assertEq(actual, expected, "CDPLiquidityStrategy.REDEMPTION_SHORTFALL_TOLERANCE does not match config");
     }
 
     // ================================================================
@@ -231,14 +219,13 @@ contract MiscConfigVerification is V3IntegrationBase {
     // ================================================================
 
     /// @dev Finds the FPMMConfig for a token pair from the config array
-    function _findFPMMConfig(
-        IMentoConfig.FPMMConfig[] memory cfgs,
-        address t0,
-        address t1
-    ) internal pure returns (IMentoConfig.FPMMConfig memory) {
+    function _findFPMMConfig(IMentoConfig.FPMMConfig[] memory cfgs, address t0, address t1)
+        internal
+        pure
+        returns (IMentoConfig.FPMMConfig memory)
+    {
         for (uint256 i = 0; i < cfgs.length; i++) {
-            if ((cfgs[i].token0 == t0 && cfgs[i].token1 == t1) ||
-                (cfgs[i].token0 == t1 && cfgs[i].token1 == t0)) {
+            if ((cfgs[i].token0 == t0 && cfgs[i].token1 == t1) || (cfgs[i].token0 == t1 && cfgs[i].token1 == t0)) {
                 return cfgs[i];
             }
         }

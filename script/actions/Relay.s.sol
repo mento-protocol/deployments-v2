@@ -25,13 +25,10 @@ contract Relay is TrebScript, ProxyHelper {
         config = Config.get();
         Senders.Sender storage deployer = sender("deployer");
 
-        IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config
-            .getChainlinkRelayerConfigs();
+        IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config.getChainlinkRelayerConfigs();
 
-        for (uint i = 0; i < relayerConfigs.length; i++) {
-            address relayerAddy = lookupOrFail(
-                string.concat("ChainlinkRelayerV1:", relayerConfigs[i].rateFeed)
-            );
+        for (uint256 i = 0; i < relayerConfigs.length; i++) {
+            address relayerAddy = lookupOrFail(string.concat("ChainlinkRelayerV1:", relayerConfigs[i].rateFeed));
             IChainlinkRelayer(deployer.harness(relayerAddy)).relay();
         }
     }

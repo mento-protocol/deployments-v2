@@ -9,8 +9,7 @@ import {Anvil} from "./Anvil.sol";
 /// @title OracleHelper
 /// @notice Re-reports current oracle rates so they remain fresh on forked state.
 library OracleHelper {
-    address private constant VM_ADDRESS =
-        address(uint160(uint256(keccak256("hevm cheat code"))));
+    address private constant VM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));
     Vm private constant vm = Vm(VM_ADDRESS);
 
     /// @notice Re-reports all configured rate feeds using vm.prank (simulation fork only).
@@ -20,7 +19,7 @@ library OracleHelper {
 
         for (uint256 i = 0; i < rateFeedIDs.length; i++) {
             address rateFeedID = rateFeedIDs[i];
-            (uint256 rate, ) = so.medianRate(rateFeedID);
+            (uint256 rate,) = so.medianRate(rateFeedID);
             if (rate == 0) continue;
 
             address[] memory oracles = so.getOracles(rateFeedID);
@@ -39,7 +38,7 @@ library OracleHelper {
 
         for (uint256 i = 0; i < rateFeedIDs.length; i++) {
             address rateFeedID = rateFeedIDs[i];
-            (uint256 rate, ) = so.medianRate(rateFeedID);
+            (uint256 rate,) = so.medianRate(rateFeedID);
             if (rate == 0) continue;
 
             address[] memory oracles = so.getOracles(rateFeedID);
@@ -47,9 +46,7 @@ library OracleHelper {
 
             Anvil.setBalanceRpc(oracles[0], 1 ether);
             Anvil.sendTransactionAs(
-                oracles[0],
-                sortedOracles,
-                abi.encodeCall(so.report, (rateFeedID, rate, address(0), address(0)))
+                oracles[0], sortedOracles, abi.encodeCall(so.report, (rateFeedID, rate, address(0), address(0)))
             );
         }
     }
@@ -81,7 +78,8 @@ library OracleHelper {
             address id = fpmmConfigs[i].referenceRateFeedID;
             bool duplicate = false;
             for (uint256 j = 0; j < count; j++) {
-                if (all[j] == id) { duplicate = true; break; }
+                if (all[j] == id) duplicate = true;
+                break;
             }
             if (!duplicate) {
                 all[count++] = id;
