@@ -4,8 +4,8 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
+import {NTTScriptBase} from "script/deploy/wormhole/NTTScriptBase.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {INttManagerUpgradeable} from "./interfaces/INttManagerUpgradeable.sol";
@@ -24,7 +24,7 @@ import {INttManagerUpgradeable} from "./interfaces/INttManagerUpgradeable.sol";
 ///      Usage:
 ///        treb run UpgradeNttManager -e token=USDm -e NTT_VERSION=v2 --network celo
 ///        treb run UpgradeNttManager -e token=GBPm -e NTT_VERSION=v3 --network monad
-contract UpgradeNttManager is TrebScript {
+contract UpgradeNttManager is NTTScriptBase {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -97,26 +97,4 @@ contract UpgradeNttManager is TrebScript {
         console.log("=== UpgradeNttManager: %s %s complete ===", tokenName, version);
     }
 
-    // ── Config helpers ──────────────────────────────────────────────────
-
-    function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
-        if (keccak256(bytes(_tokenName)) == keccak256("USDm")) {
-            return NTTConfig.getUSDmConfig();
-        } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
-            return NTTConfig.getGBPmConfig();
-        } else {
-            revert(string.concat("UpgradeNttManager: unknown token: ", _tokenName));
-        }
-    }
-
-    function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].evmChainId == cid) return config.chains[i];
-        }
-        revert(string.concat("UpgradeNttManager: current chain (", vm.toString(cid), ") not in config for ", config.tokenName));
-    }
 }

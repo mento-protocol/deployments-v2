@@ -3,8 +3,8 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
+import {NTTScriptBase} from "script/deploy/wormhole/NTTScriptBase.sol";
 import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {INTTManager, RateLimitParams} from "./interfaces/INTTManager.sol";
 
@@ -19,7 +19,7 @@ import {INTTManager, RateLimitParams} from "./interfaces/INTTManager.sol";
 ///      Usage:
 ///        treb run UpdateRateLimits -e token=USDm --network celo
 ///        treb run UpdateRateLimits -e token=GBPm --network monad
-contract UpdateRateLimits is TrebScript {
+contract UpdateRateLimits is NTTScriptBase {
     using Senders for Senders.Sender;
 
     // ── Storage (set in setUp, read in run — avoids stack-too-deep) ─────
@@ -108,27 +108,6 @@ contract UpdateRateLimits is TrebScript {
     }
 
     // ── Config helpers ──────────────────────────────────────────────────
-
-    function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
-        if (keccak256(bytes(_tokenName)) == keccak256("USDm")) {
-            return NTTConfig.getUSDmConfig();
-        } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
-            return NTTConfig.getGBPmConfig();
-        } else {
-            revert(string.concat("UpdateRateLimits: unknown token: ", _tokenName));
-        }
-    }
-
-    function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].evmChainId == cid) return config.chains[i];
-        }
-        revert(string.concat("UpdateRateLimits: current chain (", vm.toString(cid), ") not in config for ", config.tokenName));
-    }
 
     function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName) internal pure returns (uint256) {
         for (uint256 i = 0; i < config.inboundLimits.length; i++) {

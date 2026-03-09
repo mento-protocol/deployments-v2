@@ -4,8 +4,8 @@ pragma solidity ^0.8.13;
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
-import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
+import {NTTScriptBase} from "script/deploy/wormhole/NTTScriptBase.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHelper.sol";
 
@@ -21,7 +21,7 @@ import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHel
 ///      Usage:
 ///        treb run DeployNTT -e token=USDm --network celo
 ///        treb run DeployNTT -e token=GBPm --network monad
-contract DeployNTT is TrebScript {
+contract DeployNTT is NTTScriptBase {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -84,28 +84,5 @@ contract DeployNTT is TrebScript {
         console.log("  Owner:                     %s", deployer.account);
         console.log("");
         console.log("=== DeployNTT: %s complete ===", config.tokenName);
-    }
-
-    // ── Config helpers ──────────────────────────────────────────────────
-
-    function _loadConfig(string memory tokenName) internal pure returns (NTTTokenConfig memory) {
-        if (keccak256(bytes(tokenName)) == keccak256("USDm")) {
-            return NTTConfig.getUSDmConfig();
-        } else if (keccak256(bytes(tokenName)) == keccak256("GBPm")) {
-            return NTTConfig.getGBPmConfig();
-        } else {
-            revert(string.concat("Unknown token: ", tokenName));
-        }
-    }
-
-    function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].evmChainId == cid) return config.chains[i];
-        }
-        revert(string.concat("Current chain (", vm.toString(cid), ") not found in NTT config for ", config.tokenName));
     }
 }

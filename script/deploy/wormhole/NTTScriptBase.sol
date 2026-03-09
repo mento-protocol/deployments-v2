@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.13;
+
+import {TrebScript} from "treb-sol/src/TrebScript.sol";
+import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
+
+/// @title NTTScriptBase
+/// @notice Shared base contract for all NTT wormhole scripts, providing
+///         config loading and chain resolution helpers.
+abstract contract NTTScriptBase is TrebScript {
+    function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
+        if (keccak256(bytes(_tokenName)) == keccak256("USDm")) {
+            return NTTConfig.getUSDmConfig();
+        } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
+            return NTTConfig.getGBPmConfig();
+        } else {
+            revert(string.concat("Unknown token: ", _tokenName));
+        }
+    }
+
+    function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
+        for (uint256 i = 0; i < config.chains.length; i++) {
+            if (config.chains[i].evmChainId == block.chainid) return config.chains[i];
+        }
+        revert(string.concat("Current chain (", vm.toString(cid), ") not found in NTT config for ", config.tokenName));
+    }
+}

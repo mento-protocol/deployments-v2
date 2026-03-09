@@ -3,8 +3,8 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
+import {NTTScriptBase} from "script/deploy/wormhole/NTTScriptBase.sol";
 import {INttDeployHelper} from "./interfaces/INttDeployHelper.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IPausable} from "./interfaces/IPausable.sol";
@@ -22,7 +22,7 @@ import {IPausable} from "./interfaces/IPausable.sol";
 ///      Usage:
 ///        treb run TransferOwnership -e token=USDm -e NEW_OWNER_LABEL=GovernanceMultisig --network celo
 ///        treb run TransferOwnership -e token=GBPm -e NEW_OWNER_LABEL=GovernanceMultisig --network monad
-contract TransferOwnership is TrebScript {
+contract TransferOwnership is NTTScriptBase {
     using Senders for Senders.Sender;
 
     // ── Storage (set in setUp, read in run — avoids stack-too-deep) ─────
@@ -94,26 +94,4 @@ contract TransferOwnership is TrebScript {
         console.log("=== TransferOwnership: %s complete ===", tokenName);
     }
 
-    // ── Config helpers ──────────────────────────────────────────────────
-
-    function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
-        if (keccak256(bytes(_tokenName)) == keccak256("USDm")) {
-            return NTTConfig.getUSDmConfig();
-        } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
-            return NTTConfig.getGBPmConfig();
-        } else {
-            revert(string.concat("TransferOwnership: unknown token: ", _tokenName));
-        }
-    }
-
-    function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].evmChainId == cid) return config.chains[i];
-        }
-        revert(string.concat("TransferOwnership: current chain (", vm.toString(cid), ") not in config for ", config.tokenName));
-    }
 }

@@ -3,8 +3,8 @@ pragma solidity ^0.8.13;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
-import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
+import {NTTScriptBase} from "script/deploy/wormhole/NTTScriptBase.sol";
 import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHelper.sol";
 import {IStableTokenSpoke} from "mento-core/interfaces/IStableTokenSpoke.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
@@ -33,7 +33,7 @@ import {IPausable} from "script/actions/wormhole/interfaces/IPausable.sol";
 ///
 ///        treb run ConfigureNTT -e token=USDm --network celo
 ///        treb run ConfigureNTT -e token=GBPm --network monad
-contract ConfigureNTT is TrebScript {
+contract ConfigureNTT is NTTScriptBase {
     using Senders for Senders.Sender;
 
     /// @dev NttDeployHelper internal CREATE nonce for NttManager proxy (2nd deployment in constructor).
@@ -233,27 +233,6 @@ contract ConfigureNTT is TrebScript {
     }
 
     // ── Config helpers ──────────────────────────────────────────────────
-
-    function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
-        if (keccak256(bytes(_tokenName)) == keccak256("USDm")) {
-            return NTTConfig.getUSDmConfig();
-        } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
-            return NTTConfig.getGBPmConfig();
-        } else {
-            revert(string.concat("ConfigureNTT: unknown token: ", _tokenName));
-        }
-    }
-
-    function _findMyChain(NTTTokenConfig memory config) internal view returns (NTTChainConfig memory) {
-        uint256 cid;
-        assembly {
-            cid := chainid()
-        }
-        for (uint256 i = 0; i < config.chains.length; i++) {
-            if (config.chains[i].evmChainId == cid) return config.chains[i];
-        }
-        revert(string.concat("ConfigureNTT: current chain (", vm.toString(cid), ") not in config for ", config.tokenName));
-    }
 
     function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName) internal pure returns (uint256) {
         for (uint256 i = 0; i < config.inboundLimits.length; i++) {
