@@ -36,10 +36,10 @@ contract DeployVirtualPools is TrebScript, ProxyHelper, PostChecksHelper {
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage owner = sender("migrationOwner");
-        Senders.Sender storage deployer = sender("migrationOwner");
+        Senders.Sender storage deployer = sender("deployer");
 
         virtualPoolFactory = deployer.create3("VirtualPoolFactory").setLabel(label).deploy(abi.encode(owner.account));
-        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(deployer.harness(factoryRegistry));
+        IFactoryRegistry factoryRegistryHarness = IFactoryRegistry(owner.harness(factoryRegistry));
 
         IVirtualPoolFactory factory = IVirtualPoolFactory(owner.harness(virtualPoolFactory));
         factoryRegistryHarness.approve(virtualPoolFactory);
