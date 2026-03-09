@@ -6,7 +6,8 @@ optimizer = true
 ffi = true
 additional_compiler_profiles = [
     { name = "no-opt", optimizer_runs = 0 },
-    { name = "ntt-opt", optimizer_runs = 200, via_ir = true, evm_version = "london", version = "=0.8.19"},
+    { name = "paris", evm_version = "paris" },
+    { name = "ntt-opt", optimizer_runs = 200, via_ir = true, evm_version = "london", version = "=0.8.19"}
 ]
 compilation_restrictions = [
     { paths = "lib/bold/contracts/src/TroveManager.sol", optimizer_runs = 0 },
