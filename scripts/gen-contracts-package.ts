@@ -179,18 +179,21 @@ function generateTsModule(
   abi: unknown[],
   addresses: Record<string, string>,
 ): string {
+  // Indent every line of the ABI 2 spaces so it nests cleanly under `abi:`.
   const abiJson = JSON.stringify(abi, null, 2)
     .split("\n")
-    .map((line, i) => (i === 0 ? line : `    ${line}`))
+    .map((line, i) => (i === 0 ? line : `  ${line}`))
     .join("\n");
   const addressLines = Object.entries(addresses)
     .map(([chainId, addr]) => `    ${chainId}: '${addr}',`)
     .join("\n");
+  // address is typed as Partial<Record<number, `0x${string}`>> so consumers
+  // can index it with the numeric chain ID from viem (client.chain.id).
   return (
     `export const ${name} = {\n` +
     `  abi: ${abiJson} as const,\n` +
-    `  address: {\n${addressLines}\n  } as const,\n` +
-    `} as const;\n`
+    `  address: {\n${addressLines}\n  } as Partial<Record<number, \`0x\${string}\`>>,\n` +
+    `};\n`
   );
 }
 
@@ -338,6 +341,28 @@ async function main() {
       "utf8",
     ),
   );
+
+  // ── Validate overrides are still referenced ────────────────────────────────
+
+  // Collect every treb key that actually exists in this namespace so we can
+  // warn about override entries that no longer match any deployment.
+  const allTrebKeys = new Set(
+    entries.map((e) => e.contractName + (e.label ? `:${e.label}` : "")),
+  );
+  const deadOverrides = Object.keys(overrides).filter(
+    (k) => !allTrebKeys.has(k),
+  );
+  if (deadOverrides.length > 0) {
+    console.warn(
+      `\n⚠  Dead override keys in contract-name-overrides.json (no matching deployment in "${namespace}"):`,
+    );
+    for (const k of deadOverrides) {
+      console.warn(`   - "${k}" → "${overrides[k]}"`);
+    }
+    console.warn(
+      "   These keys have no effect and should be removed if they are no longer needed.\n",
+    );
+  }
 
   // ── Resolve all contracts ──────────────────────────────────────────────────
 
@@ -502,7 +527,7 @@ async function main() {
 
   // ── Update packages/contracts/package.json exports ────────────────────────
 
-  const pkgJsonTemplate = existsSync(pkgJsonPath)
+  const pkgJsonTemplate: Record<string, unknown> = existsSync(pkgJsonPath)
     ? (JSON.parse(readFileSync(pkgJsonPath, "utf8")) as Record<string, unknown>)
     : {
         name: "@mento-protocol/contracts",
@@ -511,13 +536,14 @@ async function main() {
         type: "module",
         main: "./dist/index.js",
         types: "./dist/index.d.ts",
-        scripts: {
-          build: "tsc",
-        },
-        files: ["dist", "abis", "contracts.json"],
+        scripts: { build: "tsc" },
         keywords: ["mento", "contracts", "abis"],
         license: "LGPL-3.0",
       };
+
+  // Always enforce these fields so they survive incremental updates.
+  pkgJsonTemplate.files = ["dist", "abis", "contracts.json", "README.md"];
+  pkgJsonTemplate.sideEffects = false;
 
   const exportsMap: Record<string, unknown> = {
     ".": {

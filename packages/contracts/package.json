@@ -515,7 +515,8 @@
   "files": [
     "dist",
     "abis",
-    "contracts.json"
+    "contracts.json",
+    "README.md"
   ],
   "keywords": [
     "mento",
@@ -525,5 +526,6 @@
   "license": "LGPL-3.0",
   "devDependencies": {
     "typescript": "^5.9.3"
-  }
+  },
+  "sideEffects": false
 }
