@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "gen-addresses": "tsx scripts/gen-addresses.ts",
     "contracts:update": "tsx scripts/gen-contracts-package.ts"
   },
   "keywords": [],
