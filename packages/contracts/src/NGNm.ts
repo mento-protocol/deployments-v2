@@ -742,6 +742,7 @@ export const NGNm = {
     }
   ] as const,
   address: {
+    42220: '0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71',
     11142220: '0x3d5ae86F34E2a82771496D140daFAEf3789dF888',
   } as Partial<Record<number, `0x${string}`>>,
 };

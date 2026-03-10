@@ -1511,6 +1511,7 @@ export const Reserve = {
     }
   ] as const,
   address: {
+    42220: '0x9380fA34Fd9e4Fd14c06305fd7B6199089eD4eb9',
     11142220: '0x2bC2D48735842924C508468C5A02580aD4F6d99A',
   } as Partial<Record<number, `0x${string}`>>,
 };

@@ -14,6 +14,11 @@ export const MockERC20axlUSDC = {
           "internalType": "string"
         },
         {
+          "name": "decimals_",
+          "type": "uint8",
+          "internalType": "uint8"
+        },
+        {
           "name": "initialOwner_",
           "type": "address",
           "internalType": "address"

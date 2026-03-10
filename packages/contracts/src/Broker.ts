@@ -718,6 +718,7 @@ export const Broker = {
     }
   ] as const,
   address: {
+    42220: '0x777A8255cA72412f0d706dc03C9D1987306B4CaD',
     11142220: '0xB9Ae2065142EB79b6c5EB1E8778F883fad6B07Ba',
   } as Partial<Record<number, `0x${string}`>>,
 };

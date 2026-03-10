@@ -742,6 +742,7 @@ export const ZARm = {
     }
   ] as const,
   address: {
+    42220: '0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6',
     11142220: '0x10CCfB235b0E1Ed394bACE4560C3ed016697687e',
   } as Partial<Record<number, `0x${string}`>>,
 };

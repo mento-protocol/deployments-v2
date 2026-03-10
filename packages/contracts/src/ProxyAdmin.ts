@@ -151,6 +151,7 @@ export const ProxyAdmin = {
     }
   ] as const,
   address: {
+    42220: '0x70d8DC60f9701c46D4CE9AC141E154f6804e1dC3',
     11142220: '0x01bd47aa7B13a75c24E3dA760f8A503c435BB4Df',
   } as Partial<Record<number, `0x${string}`>>,
 };

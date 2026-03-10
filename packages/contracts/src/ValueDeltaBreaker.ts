@@ -479,6 +479,7 @@ export const ValueDeltaBreaker = {
     }
   ] as const,
   address: {
+    42220: '0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68',
     11142220: '0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534',
   } as Partial<Record<number, `0x${string}`>>,
 };

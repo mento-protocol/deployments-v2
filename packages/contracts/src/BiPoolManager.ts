@@ -980,6 +980,7 @@ export const BiPoolManager = {
     }
   ] as const,
   address: {
+    42220: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
     11142220: '0xeCB3C656C131fCd9bB8D1d80898716bD684feb78',
   } as Partial<Record<number, `0x${string}`>>,
 };

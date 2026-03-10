@@ -83,6 +83,7 @@ export const ConstantSumPricingModule = {
     }
   ] as const,
   address: {
+    42220: '0xDebED1F6f6ce9F6e73AA25F95acBFFE2397550Fb',
     11142220: '0x3b199d9EbEbe509bb711BfFb455c2d79102A9602',
   } as Partial<Record<number, `0x${string}`>>,
 };

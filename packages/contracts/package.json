@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/contracts",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Mento protocol contract ABIs and addresses",
   "type": "module",
   "main": "./dist/index.js",
@@ -144,101 +144,125 @@
       "types": "./dist/VirtualPoolFactory.d.ts",
       "import": "./dist/VirtualPoolFactory.js"
     },
-    "./BiPoolManager": {
-      "types": "./dist/BiPoolManager.d.ts",
-      "import": "./dist/BiPoolManager.js"
+    "./ProxyAdmin": {
+      "types": "./dist/ProxyAdmin.d.ts",
+      "import": "./dist/ProxyAdmin.js"
     },
     "./Broker": {
       "types": "./dist/Broker.d.ts",
       "import": "./dist/Broker.js"
     },
-    "./PHPm": {
-      "types": "./dist/PHPm.d.ts",
-      "import": "./dist/PHPm.js"
+    "./BiPoolManager": {
+      "types": "./dist/BiPoolManager.d.ts",
+      "import": "./dist/BiPoolManager.js"
     },
     "./Reserve": {
       "types": "./dist/Reserve.d.ts",
       "import": "./dist/Reserve.js"
     },
-    "./SortedOracles": {
-      "types": "./dist/SortedOracles.d.ts",
-      "import": "./dist/SortedOracles.js"
+    "./BreakerBox": {
+      "types": "./dist/BreakerBox.d.ts",
+      "import": "./dist/BreakerBox.js"
     },
-    "./AUDm": {
-      "types": "./dist/AUDm.d.ts",
-      "import": "./dist/AUDm.js"
+    "./MedianDeltaBreaker": {
+      "types": "./dist/MedianDeltaBreaker.d.ts",
+      "import": "./dist/MedianDeltaBreaker.js"
     },
-    "./CADm": {
-      "types": "./dist/CADm.d.ts",
-      "import": "./dist/CADm.js"
+    "./ValueDeltaBreaker": {
+      "types": "./dist/ValueDeltaBreaker.d.ts",
+      "import": "./dist/ValueDeltaBreaker.js"
     },
-    "./CHFm": {
-      "types": "./dist/CHFm.d.ts",
-      "import": "./dist/CHFm.js"
+    "./ConstantSumPricingModule": {
+      "types": "./dist/ConstantSumPricingModule.d.ts",
+      "import": "./dist/ConstantSumPricingModule.js"
     },
-    "./COPm": {
-      "types": "./dist/COPm.d.ts",
-      "import": "./dist/COPm.js"
+    "./ConstantProductPricingModule": {
+      "types": "./dist/ConstantProductPricingModule.d.ts",
+      "import": "./dist/ConstantProductPricingModule.js"
     },
     "./EURm": {
       "types": "./dist/EURm.d.ts",
       "import": "./dist/EURm.js"
     },
-    "./GHSm": {
-      "types": "./dist/GHSm.d.ts",
-      "import": "./dist/GHSm.js"
-    },
-    "./JPYm": {
-      "types": "./dist/JPYm.d.ts",
-      "import": "./dist/JPYm.js"
-    },
-    "./KESm": {
-      "types": "./dist/KESm.d.ts",
-      "import": "./dist/KESm.js"
-    },
-    "./NGNm": {
-      "types": "./dist/NGNm.d.ts",
-      "import": "./dist/NGNm.js"
-    },
     "./BRLm": {
       "types": "./dist/BRLm.d.ts",
       "import": "./dist/BRLm.js"
-    },
-    "./ZARm": {
-      "types": "./dist/ZARm.d.ts",
-      "import": "./dist/ZARm.js"
     },
     "./XOFm": {
       "types": "./dist/XOFm.d.ts",
       "import": "./dist/XOFm.js"
     },
-    "./ChainlinkRelayerFactory": {
-      "types": "./dist/ChainlinkRelayerFactory.d.ts",
-      "import": "./dist/ChainlinkRelayerFactory.js"
+    "./KESm": {
+      "types": "./dist/KESm.d.ts",
+      "import": "./dist/KESm.js"
     },
-    "./Emission": {
-      "types": "./dist/Emission.d.ts",
-      "import": "./dist/Emission.js"
+    "./PHPm": {
+      "types": "./dist/PHPm.d.ts",
+      "import": "./dist/PHPm.js"
     },
-    "./Locking": {
-      "types": "./dist/Locking.d.ts",
-      "import": "./dist/Locking.js"
+    "./COPm": {
+      "types": "./dist/COPm.d.ts",
+      "import": "./dist/COPm.js"
+    },
+    "./GHSm": {
+      "types": "./dist/GHSm.d.ts",
+      "import": "./dist/GHSm.js"
+    },
+    "./ZARm": {
+      "types": "./dist/ZARm.d.ts",
+      "import": "./dist/ZARm.js"
+    },
+    "./CADm": {
+      "types": "./dist/CADm.d.ts",
+      "import": "./dist/CADm.js"
+    },
+    "./AUDm": {
+      "types": "./dist/AUDm.d.ts",
+      "import": "./dist/AUDm.js"
+    },
+    "./CHFm": {
+      "types": "./dist/CHFm.d.ts",
+      "import": "./dist/CHFm.js"
+    },
+    "./JPYm": {
+      "types": "./dist/JPYm.d.ts",
+      "import": "./dist/JPYm.js"
+    },
+    "./NGNm": {
+      "types": "./dist/NGNm.d.ts",
+      "import": "./dist/NGNm.js"
+    },
+    "./StableTokenV2": {
+      "types": "./dist/StableTokenV2.d.ts",
+      "import": "./dist/StableTokenV2.js"
+    },
+    "./SortedOracles": {
+      "types": "./dist/SortedOracles.d.ts",
+      "import": "./dist/SortedOracles.js"
     },
     "./MentoGovernor": {
       "types": "./dist/MentoGovernor.d.ts",
       "import": "./dist/MentoGovernor.js"
     },
+    "./ChainlinkRelayerFactory": {
+      "types": "./dist/ChainlinkRelayerFactory.d.ts",
+      "import": "./dist/ChainlinkRelayerFactory.js"
+    },
     "./TimelockController": {
       "types": "./dist/TimelockController.d.ts",
       "import": "./dist/TimelockController.js"
     },
+    "./Locking": {
+      "types": "./dist/Locking.d.ts",
+      "import": "./dist/Locking.js"
+    },
+    "./Emission": {
+      "types": "./dist/Emission.d.ts",
+      "import": "./dist/Emission.js"
+    },
     "./AddressSortedLinkedListWithMedian": {
       "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
       "import": "./dist/AddressSortedLinkedListWithMedian.js"
-    },
-    "./BreakerBox": {
-      "types": "./dist/BreakerBox.d.ts",
-      "import": "./dist/BreakerBox.js"
     },
     "./ChainlinkRelayerV1AUDUSD": {
       "types": "./dist/ChainlinkRelayerV1AUDUSD.d.ts",
@@ -376,21 +400,9 @@
       "types": "./dist/ChainlinkRelayerV1ZARUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1ZARUSD.js"
     },
-    "./ConstantProductPricingModule": {
-      "types": "./dist/ConstantProductPricingModule.d.ts",
-      "import": "./dist/ConstantProductPricingModule.js"
-    },
-    "./ConstantSumPricingModule": {
-      "types": "./dist/ConstantSumPricingModule.d.ts",
-      "import": "./dist/ConstantSumPricingModule.js"
-    },
     "./MarketHoursBreakerToggleable": {
       "types": "./dist/MarketHoursBreakerToggleable.d.ts",
       "import": "./dist/MarketHoursBreakerToggleable.js"
-    },
-    "./MedianDeltaBreaker": {
-      "types": "./dist/MedianDeltaBreaker.d.ts",
-      "import": "./dist/MedianDeltaBreaker.js"
     },
     "./MentoRouter": {
       "types": "./dist/MentoRouter.d.ts",
@@ -492,10 +504,6 @@
       "types": "./dist/MockERC20axlUSDC.d.ts",
       "import": "./dist/MockERC20axlUSDC.js"
     },
-    "./ProxyAdmin": {
-      "types": "./dist/ProxyAdmin.d.ts",
-      "import": "./dist/ProxyAdmin.js"
-    },
     "./ReserveLiquidityStrategyv300": {
       "types": "./dist/ReserveLiquidityStrategyv300.d.ts",
       "import": "./dist/ReserveLiquidityStrategyv300.js"
@@ -503,14 +511,6 @@
     "./ReserveLiquidityStrategyv301": {
       "types": "./dist/ReserveLiquidityStrategyv301.d.ts",
       "import": "./dist/ReserveLiquidityStrategyv301.js"
-    },
-    "./StableTokenV2": {
-      "types": "./dist/StableTokenV2.d.ts",
-      "import": "./dist/StableTokenV2.js"
-    },
-    "./ValueDeltaBreaker": {
-      "types": "./dist/ValueDeltaBreaker.d.ts",
-      "import": "./dist/ValueDeltaBreaker.js"
     }
   },
   "files": [

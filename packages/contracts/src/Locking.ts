@@ -1197,6 +1197,7 @@ export const Locking = {
     }
   ] as const,
   address: {
+    42220: '0x001Bb66636dCd149A1A2bA8C50E408BdDd80279C',
     11142220: '0xB72320fC501cb30E55bAF0DA48c20b11fAc9f79D',
   } as Partial<Record<number, `0x${string}`>>,
 };

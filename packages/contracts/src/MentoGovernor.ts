@@ -1450,6 +1450,7 @@ export const MentoGovernor = {
     }
   ] as const,
   address: {
+    42220: '0x47036d78bB3169b4F5560dD77BF93f4412A59852',
     11142220: '0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4',
   } as Partial<Record<number, `0x${string}`>>,
 };

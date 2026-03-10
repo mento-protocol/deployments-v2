@@ -742,6 +742,7 @@ export const XOFm = {
     }
   ] as const,
   address: {
+    42220: '0x73F93dcc49cB8A239e2032663e9475dd5ef29A08',
     11142220: '0x5505b70207aE3B826c1A7607F19F3Bf73444A082',
   } as Partial<Record<number, `0x${string}`>>,
 };

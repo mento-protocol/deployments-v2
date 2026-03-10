@@ -742,6 +742,7 @@ export const GHSm = {
     }
   ] as const,
   address: {
+    42220: '0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313',
     11142220: '0x5e94B8C872bD47BC4255E60ECBF44D5E66e7401C',
   } as Partial<Record<number, `0x${string}`>>,
 };

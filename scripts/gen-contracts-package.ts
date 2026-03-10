@@ -41,6 +41,9 @@ interface ContractEntry {
 // chainId → namespace → contractName → ContractEntry
 type ContractsJson = Record<string, Record<string, Record<string, ContractEntry>>>;
 
+// chainId → label → address
+type AddressBook = Record<string, Record<string, string>>;
+
 interface ResolvedContract {
   trebKey: string;
   exportName: string;
@@ -146,6 +149,24 @@ function readAbi(solFile: string, contractName: string): unknown[] | null {
     abi: unknown[];
   };
   return artifact.abi ?? null;
+}
+
+/**
+ * Derives a clean export name from an address book key.
+ *
+ * Address book keys follow these conventions:
+ *   "Proxy:USDm"                         → "USDm"
+ *   "TransparentUpgradeableProxy:Broker"  → "Broker"
+ *   "BreakerBox:v2.6.5"                   → "BreakerBox"
+ *   "USDC"                                → "USDC"
+ */
+function deriveAddressBookExportName(key: string): string {
+  if (key.startsWith("Proxy:")) return key.slice("Proxy:".length);
+  if (key.startsWith("TransparentUpgradeableProxy:"))
+    return key.slice("TransparentUpgradeableProxy:".length);
+  const versionMatch = key.match(/^(.+):v\d+\.\d+\.\d+$/);
+  if (versionMatch) return versionMatch[1];
+  return key;
 }
 
 function classifyType(name: string): ContractType {
@@ -471,6 +492,78 @@ async function main() {
     };
   }
 
+  // ── Merge address book entries ────────────────────────────────────────────
+  // The address book contains pre-treb legacy contracts (stablecoins, oracles,
+  // governance, etc.) that are not in deployments.json. We inject them into
+  // the current namespace so the package covers all protocol contracts.
+
+  const addressBookPath = join(trebDir, "addressbook.json");
+  if (existsSync(addressBookPath)) {
+    const addressBook: AddressBook = JSON.parse(
+      readFileSync(addressBookPath, "utf8"),
+    );
+
+    // Only inject into chains that appeared in this namespace's treb entries,
+    // so we don't pollute unrelated chains.
+    const namespaceChainIds = new Set(entries.map((e) => String(e.chainId)));
+    let addressBookInjectedCount = 0;
+
+    for (const [chainId, bookEntries] of Object.entries(addressBook)) {
+      if (!namespaceChainIds.has(chainId)) continue;
+
+      // Guard: if this chain has multiple namespaces and the current one is not
+      // among them, skip to avoid ambiguity about which namespace to inject into.
+      const existingNamespaces = Object.keys(newContracts[chainId] ?? {});
+      if (existingNamespaces.length > 1 && !existingNamespaces.includes(namespace)) {
+        console.warn(
+          `\n⚠  Skipping address book injection for chain ${chainId}: ` +
+          `multiple namespaces exist (${existingNamespaces.join(", ")}) and ` +
+          `"${namespace}" is not among them. Run the correct namespace to inject.\n`,
+        );
+        continue;
+      }
+
+      newContracts[chainId] ??= {};
+      newContracts[chainId][namespace] ??= {};
+
+      for (const [key, address] of Object.entries(bookEntries)) {
+        // Skip zero/null addresses
+        if (!address || /^0x0+$/.test(address)) continue;
+
+        const exportName = deriveAddressBookExportName(key);
+
+        // Treb-deployed entries take precedence
+        if (newContracts[chainId][namespace][exportName]) continue;
+
+        newContracts[chainId][namespace][exportName] = {
+          address,
+          type: classifyType(exportName),
+        };
+        addressBookInjectedCount++;
+
+        // Attempt to find an ABI so we can emit a typed TS module.
+        // Try <ExportName>.sol/<ExportName>.json in the Foundry out/ directory.
+        const abi = readAbi(`${exportName}.sol`, exportName);
+        if (abi) {
+          resolved.push({
+            trebKey: key,
+            exportName,
+            address,
+            chainId: Number(chainId),
+            namespace,
+            abi,
+          });
+        }
+        // If no ABI found the entry still appears in contracts.json for
+        // address labelling, but won't get a typed TS module.
+      }
+    }
+
+    console.log(
+      `\n✓ Merged ${addressBookInjectedCount} address book entries for chain(s): ${[...namespaceChainIds].join(", ")}`,
+    );
+  }
+
   // ── Write abis/ and src/ ───────────────────────────────────────────────────
 
   // Build chainId → address map per export name from the complete contracts.json.
@@ -486,8 +579,7 @@ async function main() {
     }
   }
 
-  // Collect all unique export names across the whole contracts.json for
-  // generating a complete index.ts and exports map.
+  // Collect all unique export names across the whole contracts.json.
   const allExportNames = new Set(addressesByName.keys());
 
   // Write ABI JSONs for newly resolved contracts.
@@ -500,9 +592,14 @@ async function main() {
 
   // Regenerate ALL TS modules from the complete state so that address maps
   // stay up-to-date when a new namespace adds a chain to an existing contract.
+  // Only names with an ABI file get a typed TS module — address-book-only
+  // entries (e.g. CELO, USDC) appear in contracts.json for labelling but not
+  // in the typed exports.
+  const typedExportNames = new Set<string>();
   for (const name of allExportNames) {
     const abiPath = join(abisDir, `${name}.json`);
     if (!existsSync(abiPath)) continue;
+    typedExportNames.add(name);
     const abi = JSON.parse(readFileSync(abiPath, "utf8")) as unknown[];
     const addresses = addressesByName.get(name) ?? {};
     writeFileSync(
@@ -513,7 +610,7 @@ async function main() {
 
   // ── Generate src/index.ts barrel ──────────────────────────────────────────
 
-  const indexLines = [...allExportNames]
+  const indexLines = [...typedExportNames]
     .sort()
     .map((name) => `export * from "./${name}.js";`);
   writeFileSync(join(srcDir, "index.ts"), indexLines.join("\n") + "\n");
@@ -554,7 +651,7 @@ async function main() {
     "./abis/*": "./abis/*",
   };
 
-  for (const name of allExportNames) {
+  for (const name of typedExportNames) {
     exportsMap[`./${name}`] = {
       types: `./dist/${name}.d.ts`,
       import: `./dist/${name}.js`,

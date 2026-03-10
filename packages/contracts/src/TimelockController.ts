@@ -892,6 +892,7 @@ export const TimelockController = {
     }
   ] as const,
   address: {
+    42220: '0x890DB8A597940165901372Dd7DB61C9f246e2147',
     11142220: '0x74c44Be99937815173A3C56274331e0A05611e0D',
   } as Partial<Record<number, `0x${string}`>>,
 };
