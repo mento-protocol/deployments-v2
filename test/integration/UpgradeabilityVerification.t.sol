@@ -86,7 +86,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
             }
         }
 
-        // Celo-only: Governance proxies (may not exist on all Celo networks)
+        // Celo-only: Governance proxies
         if (_isCelo()) {
             emission = _lookupOztupProxy("Emission");
             locking = _lookupOztupProxy("Locking");
@@ -395,9 +395,19 @@ contract UpgradeabilityVerification is V3IntegrationBase {
 
     // ========== Internal Helpers ==========
 
+    /// @dev EIP-1967 implementation slot.
+    bytes32 private constant _IMPL_SLOT = 0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc;
+
     /// @dev Deploys a minimal dummy contract to use as a new implementation target.
     function _deployDummyImplementation() internal returns (address) {
         return address(new DummyImplementation());
+    }
+
+    /// @dev Reads the implementation address directly from the EIP-1967 storage slot.
+    ///      Unlike getProxyImplementation(), this does not call the proxy's interface,
+    ///      so it works even after upgrading to DummyImplementation (which lacks _getImplementation).
+    function _readImplSlot(address proxy) internal view returns (address) {
+        return address(uint160(uint256(vm.load(proxy, _IMPL_SLOT))));
     }
 
     /// @dev Detects whether a proxy is Celo Legacy (has _getOwner) or OZTUP.
@@ -440,12 +450,12 @@ contract UpgradeabilityVerification is V3IntegrationBase {
     function _assertCanUpgradeOztup(address proxy, string memory label) internal {
         address perProxyAdmin = getProxyAdmin(proxy);
         address dummyImpl = _deployDummyImplementation();
-        address implBefore = getProxyImplementation(proxy);
+        address implBefore = _readImplSlot(proxy);
 
         vm.prank(migrationOwner);
         IProxyAdmin(perProxyAdmin).upgradeAndCall(ITransparentUpgradeableProxy(proxy), dummyImpl, "");
 
-        address implAfter = getProxyImplementation(proxy);
+        address implAfter = _readImplSlot(proxy);
         assertEq(implAfter, dummyImpl, string.concat(label, ": upgrade did not change implementation"));
         assertFalse(implAfter == implBefore, string.concat(label, ": implementation unchanged after upgrade"));
     }
@@ -458,6 +468,8 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         vm.prank(migrationOwner);
         ICeloProxy(proxy)._setImplementation(dummyImpl);
 
+        // Celo Legacy proxies may not use EIP-1967 slot, so read via the proxy interface.
+        // After _setImplementation, _getImplementation on the proxy itself (not delegated) still works.
         address implAfter = getProxyImplementation(proxy);
         assertEq(implAfter, dummyImpl, string.concat(label, ": upgrade did not change implementation"));
         assertFalse(implAfter == implBefore, string.concat(label, ": implementation unchanged after upgrade"));
@@ -543,6 +555,11 @@ contract UpgradeabilityVerification is V3IntegrationBase {
 }
 
 /// @dev Minimal contract used as a dummy implementation for upgrade tests.
+///      Includes a fallback so that delegate calls with empty data (from OZ v4
+///      TransparentUpgradeableProxy.upgradeToAndCall with forceCall=true) succeed.
 contract DummyImplementation {
     uint256 private _placeholder;
+
+    fallback() external payable {}
+    receive() external payable {}
 }
