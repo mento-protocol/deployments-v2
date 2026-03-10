@@ -10,6 +10,7 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
+import {IOpenLiquidityStrategy} from "mento-core/interfaces/IOpenLiquidityStrategy.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
@@ -62,11 +63,11 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _configureTradingLimits(fpmmProxy, cfg);
         _verifySwap(fpmmProxy, cfg);
 
-        bool hasReserveLiqStrategy = cfg.rlsConfig.reserveLiquidityStrategy != address(0);
-        if (hasReserveLiqStrategy) {
-            _setupReserveLiquidityStrategy(fpmmProxy, cfg.token0, cfg.token1, cfg.rlsConfig);
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg = cfg.liquidityStrategyConfig;
+        if (lsCfg.liquidityStrategy != address(0)) {
+            _setupLiquidityStrategy(fpmmProxy, cfg.token0, cfg.token1, lsCfg);
         } else {
-            console.log("  > Not setting up ReserveLiquidityStrategy for FPMM");
+            console.log("  > No liquidity strategy configured for FPMM");
         }
     }
 
@@ -128,60 +129,116 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("\n");
     }
 
+    function _setupLiquidityStrategy(
+        address fpmmProxy,
+        address token0,
+        address token1,
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
+    ) internal {
+        address strategyAddy = lsCfg.liquidityStrategy;
+
+        if (_isReserveLiquidityStrategy(strategyAddy)) {
+            _setupReserveLiquidityStrategy(fpmmProxy, token0, token1, lsCfg);
+        } else {
+            _setupOpenLiquidityStrategy(fpmmProxy, lsCfg);
+        }
+    }
+
+    function _isReserveLiquidityStrategy(address strategyAddy) internal view returns (bool) {
+        try IReserveLiquidityStrategy(strategyAddy).reserve() returns (IReserveV2) {
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     function _setupReserveLiquidityStrategy(
         address fpmmProxy,
         address token0,
         address token1,
-        IMentoConfig.ReserveLiquidityStrategyPoolConfig memory rls
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
     ) internal {
-        address rlsAddy = rls.reserveLiquidityStrategy;
-        address collateralToken = rls.debtToken == token0 ? token1 : token0;
+        address strategyAddy = lsCfg.liquidityStrategy;
+        address collateralToken = lsCfg.debtToken == token0 ? token1 : token0;
 
-        // 1. Register assets and RLS spender on ReserveV2 if not yet registered
-        IReserveV2 reserveV2 = IReserveLiquidityStrategy(rlsAddy).reserve();
-        console.log("  Registering assets and RLS spender on ReserveV2");
-        _registerReserveAssets(reserveV2, rls.debtToken, collateralToken, rlsAddy);
+        // 1. Register assets and strategy spender on ReserveV2 if not yet registered
+        IReserveV2 reserveV2 = IReserveLiquidityStrategy(strategyAddy).reserve();
+        console.log("  Registering assets and strategy spender on ReserveV2");
+        _registerReserveAssets(reserveV2, lsCfg.debtToken, collateralToken, strategyAddy);
 
-        // 2. Set RLS as liquidity strategy on the FPMM
-        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(rlsAddy, true);
-        console.log("  > Set liquidity strategy on FPMM:", rlsAddy);
+        // 2. Set strategy on the FPMM
+        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(strategyAddy, true);
+        console.log("  > Set liquidity strategy on FPMM:", strategyAddy);
 
-        // 3. Configure the FPMM as a pool on the RLS
-        IReserveLiquidityStrategy(owner.harness(rlsAddy))
-            .addPool(
-                ILiquidityStrategy.AddPoolParams({
-                    pool: fpmmProxy,
-                    debtToken: rls.debtToken,
-                    cooldown: rls.cooldown,
-                    protocolFeeRecipient: rls.protocolFeeRecipient,
-                    liquiditySourceIncentiveExpansion: rls.liquiditySourceIncentiveExpansion,
-                    protocolIncentiveExpansion: rls.protocolIncentiveExpansion,
-                    liquiditySourceIncentiveContraction: rls.liquiditySourceIncentiveContraction,
-                    protocolIncentiveContraction: rls.protocolIncentiveContraction
-                })
-            );
+        // 3. Configure the FPMM as a pool on the strategy
+        IReserveLiquidityStrategy(owner.harness(strategyAddy))
+            .addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
         console.log("  > Added pool to ReserveLiquidityStrategy");
 
         // 4. Grant minting and burning rights to the strategy on the debt token
-        IStableTokenV3 debtToken = IStableTokenV3(rls.debtToken);
-        if (!debtToken.isMinter(rlsAddy)) {
-            IStableTokenV3(owner.harness(rls.debtToken)).setMinter(rlsAddy, true);
-            console.log("  > Granted minter to strategy on:", tokenSymbol(rls.debtToken));
-        }
-        if (!debtToken.isBurner(rlsAddy)) {
-            IStableTokenV3(owner.harness(rls.debtToken)).setBurner(rlsAddy, true);
-            console.log("  > Granted burner to strategy on:", tokenSymbol(rls.debtToken));
-        }
-        console.log("\n");
-        _verifyReserveLiquidityStrategy(fpmmProxy, token0, token1, rls);
+        _grantMinterBurner(lsCfg.debtToken, strategyAddy);
 
-        // Now try to trigger a rebalance through the configured RLS
-        _verifyRebalance(fpmmProxy, rls);
+        console.log("\n");
+        _verifyReserveLiquidityStrategy(fpmmProxy, token0, token1, lsCfg);
+
+        // Now try to trigger a rebalance through the configured strategy
+        _verifyRebalance(fpmmProxy, lsCfg);
     }
 
-    function _registerReserveAssets(IReserveV2 reserveV2, address debtToken, address collateralToken, address rlsAddy)
+    function _setupOpenLiquidityStrategy(
+        address fpmmProxy,
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
+    ) internal {
+        address strategyAddy = lsCfg.liquidityStrategy;
+
+        // 1. Set strategy on the FPMM
+        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(strategyAddy, true);
+        console.log("  > Set liquidity strategy on FPMM:", strategyAddy);
+
+        // 2. Configure the FPMM as a pool on the strategy
+        IOpenLiquidityStrategy(owner.harness(strategyAddy))
+            .addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
+        console.log("  > Added pool to OpenLiquidityStrategy");
+
+        console.log("\n");
+        _verifyOpenLiquidityStrategy(fpmmProxy, lsCfg);
+    }
+
+    function _buildAddPoolParams(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
         internal
+        pure
+        returns (ILiquidityStrategy.AddPoolParams memory)
     {
+        return ILiquidityStrategy.AddPoolParams({
+            pool: fpmmProxy,
+            debtToken: lsCfg.debtToken,
+            cooldown: lsCfg.cooldown,
+            protocolFeeRecipient: lsCfg.protocolFeeRecipient,
+            liquiditySourceIncentiveExpansion: lsCfg.liquiditySourceIncentiveExpansion,
+            protocolIncentiveExpansion: lsCfg.protocolIncentiveExpansion,
+            liquiditySourceIncentiveContraction: lsCfg.liquiditySourceIncentiveContraction,
+            protocolIncentiveContraction: lsCfg.protocolIncentiveContraction
+        });
+    }
+
+    function _grantMinterBurner(address debtTokenAddy, address strategyAddy) internal {
+        IStableTokenV3 debtToken = IStableTokenV3(debtTokenAddy);
+        if (!debtToken.isMinter(strategyAddy)) {
+            IStableTokenV3(owner.harness(debtTokenAddy)).setMinter(strategyAddy, true);
+            console.log("  > Granted minter to strategy on:", tokenSymbol(debtTokenAddy));
+        }
+        if (!debtToken.isBurner(strategyAddy)) {
+            IStableTokenV3(owner.harness(debtTokenAddy)).setBurner(strategyAddy, true);
+            console.log("  > Granted burner to strategy on:", tokenSymbol(debtTokenAddy));
+        }
+    }
+
+    function _registerReserveAssets(
+        IReserveV2 reserveV2,
+        address debtToken,
+        address collateralToken,
+        address strategyAddy
+    ) internal {
         address reserveAddy = address(reserveV2);
 
         if (!reserveV2.isStableAsset(debtToken)) {
@@ -194,9 +251,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             console.log("  > Registered collateral asset on ReserveV2:", tokenSymbol(collateralToken));
         }
 
-        if (!reserveV2.isLiquidityStrategySpender(rlsAddy)) {
-            IReserveV2(owner.harness(reserveAddy)).registerLiquidityStrategySpender(rlsAddy);
-            console.log("  > Registered RLS as spender on ReserveV2:", rlsAddy);
+        if (!reserveV2.isLiquidityStrategySpender(strategyAddy)) {
+            IReserveV2(owner.harness(reserveAddy)).registerLiquidityStrategySpender(strategyAddy);
+            console.log("  > Registered strategy as spender on ReserveV2:", strategyAddy);
         }
     }
 
@@ -280,32 +337,60 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         address fpmmProxy,
         address token0,
         address token1,
-        IMentoConfig.ReserveLiquidityStrategyPoolConfig memory rls
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
     ) internal view {
-        address rlsAddy = rls.reserveLiquidityStrategy;
-        address collateralToken = rls.debtToken == token0 ? token1 : token0;
+        address strategyAddy = lsCfg.liquidityStrategy;
+        address collateralToken = lsCfg.debtToken == token0 ? token1 : token0;
 
-        // Verify RLS is set as liquidity strategy on the FPMM
-        require(IFPMM(fpmmProxy).liquidityStrategy(rlsAddy), "Verify: RLS not set as liquidity strategy on FPMM");
+        // Verify strategy is set on the FPMM
+        require(
+            IFPMM(fpmmProxy).liquidityStrategy(strategyAddy), "Verify: strategy not set as liquidity strategy on FPMM"
+        );
 
-        // Verify pool is registered on the RLS
-        require(ILiquidityStrategy(rlsAddy).isPoolRegistered(fpmmProxy), "Verify: FPMM not registered as pool on RLS");
+        // Verify pool is registered on the strategy
+        require(
+            ILiquidityStrategy(strategyAddy).isPoolRegistered(fpmmProxy),
+            "Verify: FPMM not registered as pool on strategy"
+        );
 
         // Verify ReserveV2 asset registration
-        IReserveV2 reserveV2 = IReserveLiquidityStrategy(rlsAddy).reserve();
-        require(reserveV2.isStableAsset(rls.debtToken), "Verify: debtToken not registered as stable asset on ReserveV2");
+        IReserveV2 reserveV2 = IReserveLiquidityStrategy(strategyAddy).reserve();
+        require(
+            reserveV2.isStableAsset(lsCfg.debtToken), "Verify: debtToken not registered as stable asset on ReserveV2"
+        );
         require(
             reserveV2.isCollateralAsset(collateralToken),
             "Verify: collateralToken not registered as collateral asset on ReserveV2"
         );
 
-        // Verify RLS is registered as spender on ReserveV2
-        require(reserveV2.isLiquidityStrategySpender(rlsAddy), "Verify: RLS not registered as spender on ReserveV2");
+        // Verify strategy is registered as spender on ReserveV2
+        require(
+            reserveV2.isLiquidityStrategySpender(strategyAddy),
+            "Verify: strategy not registered as spender on ReserveV2"
+        );
 
         // Verify minter and burner rights
-        IStableTokenV3 debtToken = IStableTokenV3(rls.debtToken);
-        require(debtToken.isMinter(rlsAddy), "Verify: RLS not set as minter on debtToken");
-        require(debtToken.isBurner(rlsAddy), "Verify: RLS not set as burner on debtToken");
+        IStableTokenV3 debtToken = IStableTokenV3(lsCfg.debtToken);
+        require(debtToken.isMinter(strategyAddy), "Verify: strategy not set as minter on debtToken");
+        require(debtToken.isBurner(strategyAddy), "Verify: strategy not set as burner on debtToken");
+    }
+
+    function _verifyOpenLiquidityStrategy(
+        address fpmmProxy,
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
+    ) internal view {
+        address strategyAddy = lsCfg.liquidityStrategy;
+
+        // Verify strategy is set on the FPMM
+        require(
+            IFPMM(fpmmProxy).liquidityStrategy(strategyAddy), "Verify: strategy not set as liquidity strategy on FPMM"
+        );
+
+        // Verify pool is registered on the strategy
+        require(
+            ILiquidityStrategy(strategyAddy).isPoolRegistered(fpmmProxy),
+            "Verify: FPMM not registered as pool on strategy"
+        );
     }
 
     function _verifyInitialLiquidity(address fpmmProxy) internal view {
@@ -358,7 +443,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         deal(token, to, amount);
     }
 
-    function _verifyRebalance(address fpmmProxy, IMentoConfig.ReserveLiquidityStrategyPoolConfig memory rls) internal {
+    function _verifyRebalance(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
 
         address sorted0 = fpmm.token0();
@@ -385,10 +470,10 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             console.log("  > priceDifference (bps):", pd);
         }
 
-        // 3. Trigger rebalance through the ReserveLiquidityStrategy
+        // 3. Trigger rebalance through the liquidity strategy
         {
             (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
-            ILiquidityStrategy(rls.reserveLiquidityStrategy).rebalance(fpmmProxy);
+            ILiquidityStrategy(lsCfg.liquidityStrategy).rebalance(fpmmProxy);
             (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
             console.log("  > reserve0 before:", r0Before, "-> after:", r0After);
             console.log("  > reserve1 before:", r1Before, "-> after:", r1After);

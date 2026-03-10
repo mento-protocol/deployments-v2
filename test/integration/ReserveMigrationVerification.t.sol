@@ -61,7 +61,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
                 uint64 protocolIncentiveContraction
             ) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(rlsPools[i]);
 
-            IMentoConfig.ReserveLiquidityStrategyPoolConfig memory expected = _findRlsConfig(fpmmConfigs, rlsPools[i]);
+            IMentoConfig.LiquidityStrategyPoolConfig memory expected = _findRlsConfig(fpmmConfigs, rlsPools[i]);
 
             string memory idx = vm.toString(i);
 
@@ -100,7 +100,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
     function _findRlsConfig(IMentoConfig.FPMMConfig[] memory fpmmConfigs, address pool)
         internal
         view
-        returns (IMentoConfig.ReserveLiquidityStrategyPoolConfig memory)
+        returns (IMentoConfig.LiquidityStrategyPoolConfig memory)
     {
         address t0 = IFPMM(pool).token0();
         address t1 = IFPMM(pool).token1();
@@ -109,7 +109,7 @@ contract ReserveMigrationVerification is V3IntegrationBase {
                 (fpmmConfigs[i].token0 == t0 && fpmmConfigs[i].token1 == t1)
                     || (fpmmConfigs[i].token0 == t1 && fpmmConfigs[i].token1 == t0)
             ) {
-                return fpmmConfigs[i].rlsConfig;
+                return fpmmConfigs[i].liquidityStrategyConfig;
             }
         }
         revert("RLS config not found for token pair");
