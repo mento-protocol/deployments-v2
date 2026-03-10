@@ -31,6 +31,5 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
         ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
         sortedOracles.initialize(config.getOracleConfig().reportExpirySeconds);
         IOwnable(address(sortedOracles)).transferOwnership(migrationOwner.account);
-        
     }
 }

@@ -34,8 +34,7 @@ contract DeployOpenLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelpe
         deployer = sender("deployer");
         owner = sender("migrationOwner");
 
-        openLiquidityStrategyImpl =
-            deployer.create3("OpenLiquidityStrategy").setLabel(label).deploy(abi.encode(true));
+        openLiquidityStrategyImpl = deployer.create3("OpenLiquidityStrategy").setLabel(label).deploy(abi.encode(true));
 
         openLiquidityStrategy = deployProxy(
             deployer,

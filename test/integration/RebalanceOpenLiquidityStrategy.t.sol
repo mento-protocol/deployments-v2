@@ -139,7 +139,6 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
     }
 
     function _test_rebalance_reducesPriceDifference(bool sellToken0) internal {
-
         for (uint256 p = 0; p < olsPools.length; p++) {
             address pool = olsPools[p];
             IFPMM fpmm = IFPMM(pool);
@@ -167,7 +166,6 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
     // ========== Test: cannot rebalance same pool twice in one tx ==========
 
     function test_rebalance_cannotRebalanceTwiceInSameTx() public onlyMonad {
-
         for (uint256 p = 0; p < olsPools.length; p++) {
             address pool = olsPools[p];
             string memory idx = vm.toString(p);
@@ -195,7 +193,6 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
     // ========== Test: rebalance reverts when pool is within threshold ==========
 
     function test_rebalance_revertsWhenWithinThreshold() public onlyMonad {
-
         for (uint256 p = 0; p < olsPools.length; p++) {
             address pool = olsPools[p];
             IFPMM fpmm = IFPMM(pool);

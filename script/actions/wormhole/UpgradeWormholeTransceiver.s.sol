@@ -73,9 +73,7 @@ contract UpgradeWormholeTransceiver is NTTScriptBase {
         string memory label = string.concat(tokenName, ":", version);
         console.log("  > Deploying new WormholeTransceiver implementation (label: WormholeTransceiver:%s)", label);
 
-        address newImpl = owner
-            .create3("WormholeTransceiver")
-            .setLabel(label)
+        address newImpl = owner.create3("WormholeTransceiver").setLabel(label)
             .deploy(
                 abi.encode(
                     localNttManagerProxy,
@@ -96,5 +94,4 @@ contract UpgradeWormholeTransceiver is NTTScriptBase {
         console.log("");
         console.log("=== UpgradeWormholeTransceiver: %s %s complete ===", tokenName, version);
     }
-
 }

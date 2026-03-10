@@ -26,7 +26,6 @@ contract MentoConfig_monad is MentoConfig {
     // ===================================================================
     /// @notice Set network-specific parameters. Override in subclasses.
     function _configureParams() internal virtual {
-
         _coreAggs = CoreAggregators({
             celoUsd: address(0),
             ethUsd: address(0),
@@ -92,10 +91,10 @@ contract MentoConfig_monad is MentoConfig {
             debtToken: _lookupTokenAddress("GBPm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-            liquiditySourceIncentiveExpansion: 0.0005e18,// 0.05%
-            protocolIncentiveExpansion: 0,// 0%
-            liquiditySourceIncentiveContraction: 0.0005e18,// 0.05%
-            protocolIncentiveContraction: 0// 0%
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0 // 0%
         });
 
         // ── USDm / GBPm ─────────────────────────────────────────────────

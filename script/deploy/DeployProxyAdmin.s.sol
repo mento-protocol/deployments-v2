@@ -19,9 +19,6 @@ contract DeployProxyAdmin is TrebScript {
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
         Senders.Sender storage migrationOwner = sender("migrationOwner");
-        deployer.create3("ProxyAdmin")
-            .deploy(
-                abi.encode(migrationOwner.account)
-            );
+        deployer.create3("ProxyAdmin").deploy(abi.encode(migrationOwner.account));
     }
 }

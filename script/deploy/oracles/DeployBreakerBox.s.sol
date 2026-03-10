@@ -62,10 +62,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         }
     }
 
-    function deployBreakers()
-        internal
-        returns (address[] memory breakers, address[][] memory rateFeeds)
-    {
+    function deployBreakers() internal returns (address[] memory breakers, address[][] memory rateFeeds) {
         IMentoConfig.BreakerConfig[] memory breakerConfigs = config.getBreakerConfigs();
         breakers = new address[](breakerConfigs.length);
         rateFeeds = new address[][](breakerConfigs.length);

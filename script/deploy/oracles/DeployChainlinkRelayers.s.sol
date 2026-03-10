@@ -29,8 +29,9 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
 
         address chainlinkRelayerFactoryProxy = lookupProxyOrFail("ChainlinkRelayerFactory", ProxyType.OZTUP);
         address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
-        
-        IChainlinkRelayerFactory factory = IChainlinkRelayerFactory(migrationOwner.harness(chainlinkRelayerFactoryProxy));
+
+        IChainlinkRelayerFactory factory =
+            IChainlinkRelayerFactory(migrationOwner.harness(chainlinkRelayerFactoryProxy));
         ISortedOracles sortedOracles = ISortedOracles(migrationOwner.harness(sortedOraclesProxy));
 
         // Get Chainlink relayer configurations from config

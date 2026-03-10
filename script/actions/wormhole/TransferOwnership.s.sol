@@ -48,7 +48,9 @@ contract TransferOwnership is NTTScriptBase {
 
         // Resolve new owner
         newOwner = lookup(newOwnerLabel);
-        require(newOwner != address(0), string.concat("TransferOwnership: '", newOwnerLabel, "' not found in addressbook"));
+        require(
+            newOwner != address(0), string.concat("TransferOwnership: '", newOwnerLabel, "' not found in addressbook")
+        );
 
         console.log("=== TransferOwnership: %s on %s ===", tokenName, chainName);
         console.log("  NttManager:   %s", localNttManager);
@@ -93,5 +95,4 @@ contract TransferOwnership is NTTScriptBase {
         console.log("");
         console.log("=== TransferOwnership: %s complete ===", tokenName);
     }
-
 }

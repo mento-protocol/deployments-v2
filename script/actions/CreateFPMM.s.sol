@@ -171,8 +171,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > Set liquidity strategy on FPMM:", strategyAddy);
 
         // 3. Configure the FPMM as a pool on the strategy
-        IReserveLiquidityStrategy(owner.harness(strategyAddy))
-            .addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
+        IReserveLiquidityStrategy(owner.harness(strategyAddy)).addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
         console.log("  > Added pool to ReserveLiquidityStrategy");
 
         // 4. Grant minting and burning rights to the strategy on the debt token
@@ -185,10 +184,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _verifyRebalance(fpmmProxy, lsCfg);
     }
 
-    function _setupOpenLiquidityStrategy(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal {
+    function _setupOpenLiquidityStrategy(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
+        internal
+    {
         address strategyAddy = lsCfg.liquidityStrategy;
 
         // 1. Set strategy on the FPMM
@@ -196,8 +194,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > Set liquidity strategy on FPMM:", strategyAddy);
 
         // 2. Configure the FPMM as a pool on the strategy
-        IOpenLiquidityStrategy(owner.harness(strategyAddy))
-            .addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
+        IOpenLiquidityStrategy(owner.harness(strategyAddy)).addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
         console.log("  > Added pool to OpenLiquidityStrategy");
 
         console.log("\n");
@@ -375,10 +372,10 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         require(debtToken.isBurner(strategyAddy), "Verify: strategy not set as burner on debtToken");
     }
 
-    function _verifyOpenLiquidityStrategy(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal view {
+    function _verifyOpenLiquidityStrategy(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
+        internal
+        view
+    {
         address strategyAddy = lsCfg.liquidityStrategy;
 
         // Verify strategy is set on the FPMM

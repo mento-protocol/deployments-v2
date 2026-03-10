@@ -254,9 +254,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
     function test_migrationOwner_canUpgrade_fxPriceFeedProxies() public onlyCelo {
         assertGt(fxPriceFeedProxies.length, 0, "No FXPriceFeed proxies found");
         for (uint256 i = 0; i < fxPriceFeedProxies.length; i++) {
-            _assertCanUpgradeOztup(
-                fxPriceFeedProxies[i], string.concat("FXPriceFeedProxy:", fxPriceFeedLabels[i])
-            );
+            _assertCanUpgradeOztup(fxPriceFeedProxies[i], string.concat("FXPriceFeedProxy:", fxPriceFeedLabels[i]));
         }
     }
 
@@ -270,9 +268,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
     function test_migrationOwner_canUpgrade_systemParamsProxies() public onlyCelo {
         assertGt(systemParamsProxies.length, 0, "No SystemParams proxies found");
         for (uint256 i = 0; i < systemParamsProxies.length; i++) {
-            _assertCanUpgradeOztup(
-                systemParamsProxies[i], string.concat("SystemParamsProxy:", systemParamsLabels[i])
-            );
+            _assertCanUpgradeOztup(systemParamsProxies[i], string.concat("SystemParamsProxy:", systemParamsLabels[i]));
         }
     }
 

@@ -81,11 +81,8 @@ contract ConfigureNTT is NTTScriptBase {
             NTTChainConfig memory peer = config.chains[i];
             peerChains.push(peer);
 
-            address remoteHelper = lookup(
-                string.concat("NttDeployHelper:", tokenName),
-                ns,
-                vm.toString(peer.evmChainId)
-            );
+            address remoteHelper =
+                lookup(string.concat("NttDeployHelper:", tokenName), ns, vm.toString(peer.evmChainId));
             require(
                 remoteHelper != address(0),
                 string.concat("ConfigureNTT: remote NttDeployHelper not found for chain ", vm.toString(peer.evmChainId))
@@ -147,17 +144,12 @@ contract ConfigureNTT is NTTScriptBase {
 
         if (existingPeer.peerAddress != expectedPeerManager) {
             console.log("    > Setting NTT Manager peer...");
-            INTTManager(deployer.harness(localNttManager)).setPeer(
-                peer.wormholeChainId,
-                expectedPeerManager,
-                tokenDecimals,
-                inboundLimit
-            );
+            INTTManager(deployer.harness(localNttManager))
+                .setPeer(peer.wormholeChainId, expectedPeerManager, tokenDecimals, inboundLimit);
         } else {
             console.log("    > NTT Manager peer already set, checking inbound limit...");
-            uint256 currentInbound = _untrim(
-                INTTManager(localNttManager).getInboundLimitParams(peer.wormholeChainId).limit
-            );
+            uint256 currentInbound =
+                _untrim(INTTManager(localNttManager).getInboundLimitParams(peer.wormholeChainId).limit);
             if (currentInbound != inboundLimit) {
                 console.log("    > Updating inbound limit...");
                 INTTManager(deployer.harness(localNttManager)).setInboundLimit(inboundLimit, peer.wormholeChainId);
@@ -170,10 +162,7 @@ contract ConfigureNTT is NTTScriptBase {
         bytes32 expectedPeerXceiver = _toBytes32(remoteXceiver);
         if (ITransceiver(localTransceiver).getWormholePeer(peer.wormholeChainId) != expectedPeerXceiver) {
             console.log("    > Setting Transceiver wormhole peer...");
-            ITransceiver(deployer.harness(localTransceiver)).setWormholePeer(
-                peer.wormholeChainId,
-                expectedPeerXceiver
-            );
+            ITransceiver(deployer.harness(localTransceiver)).setWormholePeer(peer.wormholeChainId, expectedPeerXceiver);
         } else {
             console.log("    > Transceiver wormhole peer already set");
         }
@@ -231,5 +220,4 @@ contract ConfigureNTT is NTTScriptBase {
             console.log("  > Transceiver pauser already correct, skipping");
         }
     }
-
 }
