@@ -33,9 +33,10 @@ contract DeployNTT is NTTScriptBase {
     uint8 constant CONSISTENCY_LEVEL = 202;
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        address owner = sender("migrationOwner").account;
 
         // ── Load config ─────────────────────────────────────────────────
         string memory tokenName = vm.envString("token");
@@ -57,7 +58,7 @@ contract DeployNTT is NTTScriptBase {
         // ── Deploy via NttDeployHelper ───────────────────────────────────
         //    A single CREATE3 deployment that bootstraps NttManager +
         //    WormholeTransceiver proxies, initializes them, registers the
-        //    transceiver, and transfers ownership to the deployer EOA.
+        //    transceiver, and transfers ownership to the migrationOwner.
         address helper = deployer
             .create3("NttDeployHelper")
             .setLabel(config.tokenName)
@@ -68,7 +69,7 @@ contract DeployNTT is NTTScriptBase {
                     chainConfig.wormholeChainId,
                     wormholeCoreBridge,
                     CONSISTENCY_LEVEL,
-                    deployer.account // initialOwner — enables harness calls in ConfigureNTT
+                    owner
                 )
             );
 
@@ -84,7 +85,7 @@ contract DeployNTT is NTTScriptBase {
         console.log("  NttManager proxy:          %s", nttManagerProxy);
         console.log("  WormholeTransceiver impl:  %s", transceiverImpl);
         console.log("  WormholeTransceiver proxy: %s", transceiverProxy);
-        console.log("  Owner:                     %s", deployer.account);
+        console.log("  Owner:                     %s", owner);
         console.log("");
         console.log("=== DeployNTT: %s complete ===", config.tokenName);
     }
