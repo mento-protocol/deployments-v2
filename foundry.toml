@@ -29,7 +29,6 @@ celo = "${CELO_RPC_URL}"
 celo_sepolia = "${CELO_SEPOLIA_RPC_URL}"
 monad = "${MONAD_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
-anvil = "http://localhost:8545"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
