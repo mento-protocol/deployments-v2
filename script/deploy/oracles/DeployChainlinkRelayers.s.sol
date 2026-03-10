@@ -20,18 +20,18 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer,migrationOwner
     function run() public broadcast {
         // Get configuration
         IMentoConfig config = Config.get();
 
-        Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage migrationOwner = sender("migrationOwner");
 
         address chainlinkRelayerFactoryProxy = lookupProxyOrFail("ChainlinkRelayerFactory", ProxyType.OZTUP);
         address sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
-
-        IChainlinkRelayerFactory factory = IChainlinkRelayerFactory(deployer.harness(chainlinkRelayerFactoryProxy));
-        ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
+        
+        IChainlinkRelayerFactory factory = IChainlinkRelayerFactory(migrationOwner.harness(chainlinkRelayerFactoryProxy));
+        ISortedOracles sortedOracles = ISortedOracles(migrationOwner.harness(sortedOraclesProxy));
 
         // Get Chainlink relayer configurations from config
         IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config.getChainlinkRelayerConfigs();
