@@ -23,18 +23,22 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
     address breakerBoxAddy;
     address sortedOraclesProxy;
 
-    /// @custom:senders deployer
+    Senders.Sender deployer;
+    Senders.Sender migrationOwner;
+
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         // Get configuration
         sortedOraclesProxy = lookupProxyOrFail("SortedOracles");
 
-        Senders.Sender storage deployer = sender("deployer");
+        deployer = sender("deployer");
+        migrationOwner = sender("migrationOwner");
 
-        deployBreakerBox(deployer);
-        (address[] memory breakers, address[][] memory rateFeedIds) = deployBreakers(deployer);
+        deployBreakerBox();
+        (address[] memory breakers, address[][] memory rateFeedIds) = deployBreakers();
 
         // Initialize BreakerBox with deployed breakers
-        IBreakerBox breakerBox = IBreakerBox(deployer.harness(breakerBoxAddy));
+        IBreakerBox breakerBox = IBreakerBox(migrationOwner.harness(breakerBoxAddy));
         IBreakerBox breakerBoxRead = IBreakerBox(breakerBoxAddy);
         for (uint256 i = 0; i < breakers.length; i++) {
             if (!breakerBoxRead.isBreaker(breakers[i])) {
@@ -47,7 +51,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
             }
         }
 
-        ISortedOracles(deployer.harness(sortedOraclesProxy)).setBreakerBox(IBreakerBox(breakerBoxAddy));
+        ISortedOracles(migrationOwner.harness(sortedOraclesProxy)).setBreakerBox(IBreakerBox(breakerBoxAddy));
 
         address[] memory rateFeeds = config.getRateFeedIds();
         for (uint256 i = 0; i < rateFeeds.length; i++) {
@@ -58,7 +62,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         }
     }
 
-    function deployBreakers(Senders.Sender storage deployer)
+    function deployBreakers()
         internal
         returns (address[] memory breakers, address[][] memory rateFeeds)
     {
@@ -68,9 +72,9 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         console.log(breakerConfigs.length);
         for (uint256 i = 0; i < breakerConfigs.length; i++) {
             if (breakerConfigs[i].breakerType == BreakerType.Value) {
-                breakers[i] = deployValueDeltaBreaker(deployer, breakerConfigs[i]);
+                breakers[i] = deployValueDeltaBreaker(breakerConfigs[i]);
             } else if (breakerConfigs[i].breakerType == BreakerType.Median) {
-                breakers[i] = deployMedianDeltaBreaker(deployer, breakerConfigs[i]);
+                breakers[i] = deployMedianDeltaBreaker(breakerConfigs[i]);
             } else {
                 revert("Invalid breaker type");
             }
@@ -78,7 +82,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         }
     }
 
-    function deployMedianDeltaBreaker(Senders.Sender storage deployer, IMentoConfig.BreakerConfig memory breakerConfig)
+    function deployMedianDeltaBreaker(IMentoConfig.BreakerConfig memory breakerConfig)
         internal
         returns (address breakerAddy)
     {
@@ -92,11 +96,11 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
                     breakerConfig.rateFeedIds,
                     breakerConfig.thresholds,
                     breakerConfig.cooldownTimes,
-                    deployer.account
+                    migrationOwner.account
                 )
             );
 
-        IMedianDeltaBreaker breaker = IMedianDeltaBreaker(deployer.harness(breakerAddy));
+        IMedianDeltaBreaker breaker = IMedianDeltaBreaker(migrationOwner.harness(breakerAddy));
         for (uint256 i = 0; i < breakerConfig.rateFeedIds.length; i++) {
             if (breakerConfig.smoothingFactors[i] > 0) {
                 breaker.setSmoothingFactor(breakerConfig.rateFeedIds[i], breakerConfig.smoothingFactors[i]);
@@ -104,7 +108,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         }
     }
 
-    function deployValueDeltaBreaker(Senders.Sender storage deployer, IMentoConfig.BreakerConfig memory breakerConfig)
+    function deployValueDeltaBreaker(IMentoConfig.BreakerConfig memory breakerConfig)
         internal
         returns (address breakerAddy)
     {
@@ -125,12 +129,12 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
             .setReferenceValues(breakerConfig.rateFeedIds, breakerConfig.referenceValues);
     }
 
-    function deployBreakerBox(Senders.Sender storage deployer) internal {
+    function deployBreakerBox() internal {
         // Deploy BreakerBox with empty rate feed IDs and SortedOracles dependency
         address[] memory rateFeedIds = config.getRateFeedIds();
         require(rateFeedIds.length > 0);
 
         breakerBoxAddy = deployer.create3("BreakerBox").setLabel("v2.6.5")
-            .deploy(abi.encode(rateFeedIds, sortedOraclesProxy, deployer.account));
+            .deploy(abi.encode(rateFeedIds, sortedOraclesProxy, migrationOwner.account));
     }
 }

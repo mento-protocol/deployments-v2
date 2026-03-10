@@ -7,6 +7,7 @@ import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "lib/treb-sol/src/internal/sender/Deployer.sol";
 
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
+import {IOwnable} from "lib/mento-core/contracts/interfaces/IOwnable.sol";
 
 import {Config, IMentoConfig} from "script/config/Config.sol";
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
@@ -19,6 +20,8 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage migrationOwner = sender("migrationOwner");
+
         IMentoConfig config = Config.get();
 
         address sortedOraclesImpl = deployer.create3("SortedOracles").setLabel("v2.6.5").deploy(abi.encode(false));
@@ -27,7 +30,7 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
 
         ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
         sortedOracles.initialize(config.getOracleConfig().reportExpirySeconds);
-        sortedOracles.transferOwnership(migrationOwner.account);
+        IOwnable(address(sortedOracles)).transferOwnership(migrationOwner.account);
         
     }
 }
