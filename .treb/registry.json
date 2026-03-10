@@ -538,6 +538,7 @@
   "143": {
     "mainnet": {
       "StableTokenSpoke:v3.0.0": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+      "TransceiverStructs": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
       "TransparentUpgradeableProxy:GBPm": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
       "TransparentUpgradeableProxy:USDm": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115"
     },
@@ -577,6 +578,7 @@
       "StableTokenV3:v3.0.0": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
       "StableTokenV3:v3.0.1": "0x815795C30D0758A297B08cD4e0643620c974c318",
       "SystemParams:v3.0.0-GBPm": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
+      "TransceiverStructs": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
       "TransparentUpgradeableProxy:CDPLiquidityStrategy": "0x4e78BD9565341EAbe99cDC024acB044d9BDcB985",
       "TransparentUpgradeableProxy:FPMMFactory": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",
       "TransparentUpgradeableProxy:FXPriceFeedProxy:GBPm": "0xBBB144A67f4403112b4C895Cc85d5EE4F90013DE",

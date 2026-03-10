@@ -31,6 +31,38 @@
     "createdAt": "2026-03-09T18:05:36.422290725+01:00",
     "updatedAt": "2026-03-09T18:05:36.424206602+01:00"
   },
+  "mainnet/143/TransceiverStructs": {
+    "id": "mainnet/143/TransceiverStructs",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "TransceiverStructs",
+    "label": "",
+    "address": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
+    "type": "LIBRARY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687008b247758adf13601b4beef",
+      "initCodeHash": "0xfc540667c47985a16e837d58b86854f1ed42ecd8f2304ffd7285e49b413f7ded",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "mainnet/TransceiverStructs"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-stabletoken-ntt/evm/src/libraries/TransceiverStructs.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xfc540667c47985a16e837d58b86854f1ed42ecd8f2304ffd7285e49b413f7ded",
+      "scriptPath": "script/deploy/wormhole/DeployTransceiverStructs.s.sol",
+      "gitCommit": "cbb056120578d675a4929f2d0fc640650853253e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-10T18:53:13.37289+01:00",
+    "updatedAt": "2026-03-10T18:53:13.392336+01:00"
+  },
   "mainnet/143/TransparentUpgradeableProxy:GBPm": {
     "id": "mainnet/143/TransparentUpgradeableProxy:GBPm",
     "namespace": "mainnet",
@@ -998,6 +1030,38 @@
     "tags": null,
     "createdAt": "2026-03-03T21:15:32.424984189+01:00",
     "updatedAt": "2026-03-03T21:15:32.427204592+01:00"
+  },
+  "mainnet/42220/TransceiverStructs": {
+    "id": "mainnet/42220/TransceiverStructs",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "TransceiverStructs",
+    "label": "",
+    "address": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
+    "type": "LIBRARY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687008b247758adf13601b4beef",
+      "initCodeHash": "0xfc540667c47985a16e837d58b86854f1ed42ecd8f2304ffd7285e49b413f7ded",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "mainnet/TransceiverStructs"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-stabletoken-ntt/evm/src/libraries/TransceiverStructs.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xfc540667c47985a16e837d58b86854f1ed42ecd8f2304ffd7285e49b413f7ded",
+      "scriptPath": "script/deploy/wormhole/DeployTransceiverStructs.s.sol",
+      "gitCommit": "cbb056120578d675a4929f2d0fc640650853253e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-10T18:52:58.032258+01:00",
+    "updatedAt": "2026-03-10T18:52:58.060526+01:00"
   },
   "mainnet/42220/TransparentUpgradeableProxy:CDPLiquidityStrategy": {
     "id": "mainnet/42220/TransparentUpgradeableProxy:CDPLiquidityStrategy",
