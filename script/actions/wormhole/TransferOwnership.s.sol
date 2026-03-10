@@ -59,15 +59,15 @@ contract TransferOwnership is NTTScriptBase {
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:env {string} NEW_OWNER_LABEL - Addressbook label for the new owner (e.g. "GovernanceMultisig")
-    /// @custom:senders owner
+    /// @custom:senders migrationOwner
     function run() public broadcast {
-        Senders.Sender storage ownerSender = sender("owner");
+        Senders.Sender storage owner = sender("migrationOwner");
 
         // 1. Transfer NttManager ownership (cascades to all registered transceivers)
         address currentOwner = IOwnable(localNttManager).owner();
         if (currentOwner != newOwner) {
             console.log("  > Transferring NttManager ownership to %s...", newOwner);
-            IOwnable(ownerSender.harness(localNttManager)).transferOwnership(newOwner);
+            IOwnable(owner.harness(localNttManager)).transferOwnership(newOwner);
         } else {
             console.log("  > NttManager already owned by target, skipping");
         }
@@ -76,7 +76,7 @@ contract TransferOwnership is NTTScriptBase {
         address currentManagerPauser = IPausable(localNttManager).pauser();
         if (currentManagerPauser != newOwner) {
             console.log("  > Transferring NttManager pauser to %s...", newOwner);
-            IPausable(ownerSender.harness(localNttManager)).transferPauserCapability(newOwner);
+            IPausable(owner.harness(localNttManager)).transferPauserCapability(newOwner);
         } else {
             console.log("  > NttManager pauser already correct, skipping");
         }
@@ -85,7 +85,7 @@ contract TransferOwnership is NTTScriptBase {
         address currentXceiverPauser = IPausable(localTransceiver).pauser();
         if (currentXceiverPauser != newOwner) {
             console.log("  > Transferring Transceiver pauser to %s...", newOwner);
-            IPausable(ownerSender.harness(localTransceiver)).transferPauserCapability(newOwner);
+            IPausable(owner.harness(localTransceiver)).transferPauserCapability(newOwner);
         } else {
             console.log("  > Transceiver pauser already correct, skipping");
         }

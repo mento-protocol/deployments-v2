@@ -66,15 +66,15 @@ contract UpgradeNttManager is NTTScriptBase {
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:env {string} NTT_VERSION - Version label for the new implementation (e.g. "v2")
-    /// @custom:senders owner
+    /// @custom:senders migrationOwner
     function run() public broadcast {
-        Senders.Sender storage ownerSender = sender("owner");
+        Senders.Sender storage owner = sender("migrationOwner");
 
         // 1. Deploy new NttManager implementation via CREATE3 with versioned label
         string memory label = string.concat(tokenName, ":", version);
         console.log("  > Deploying new NttManager implementation (label: NttManagerImpl:%s)", label);
 
-        address newImpl = ownerSender
+        address newImpl = owner
             .create3("NttManager")
             .setLabel(label)
             .deploy(
@@ -91,7 +91,7 @@ contract UpgradeNttManager is NTTScriptBase {
 
         // 2. Upgrade proxy to new implementation
         console.log("  > Upgrading NttManager proxy to new implementation...");
-        INttManagerUpgradeable(ownerSender.harness(localNttManagerProxy)).upgrade(newImpl);
+        INttManagerUpgradeable(owner.harness(localNttManagerProxy)).upgrade(newImpl);
 
         console.log("");
         console.log("=== UpgradeNttManager: %s %s complete ===", tokenName, version);

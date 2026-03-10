@@ -50,7 +50,7 @@ library NTTConfig {
     function getUSDmConfig() internal pure returns (NTTTokenConfig memory config) {
         config.tokenName = "USDm";
         config.tokenDecimals = 18;
-        config.ownerLabel = "MigrationMultisig";
+        config.ownerLabel = "migrationOwner";
 
         config.chains = new NTTChainConfig[](2);
         config.chains[0] = NTTChainConfig({
@@ -80,7 +80,7 @@ library NTTConfig {
     function getGBPmConfig() internal pure returns (NTTTokenConfig memory config) {
         config.tokenName = "GBPm";
         config.tokenDecimals = 18;
-        config.ownerLabel = "MigrationMultisig";
+        config.ownerLabel = "migrationOwner";
 
         config.chains = new NTTChainConfig[](2);
         config.chains[0] = NTTChainConfig({

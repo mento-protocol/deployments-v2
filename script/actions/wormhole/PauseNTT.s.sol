@@ -49,23 +49,23 @@ contract PauseNTT is NTTScriptBase {
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:env {bool} PAUSE - true to pause, false to unpause
-    /// @custom:senders owner
+    /// @custom:senders migrationOwner
     function run() public broadcast {
-        Senders.Sender storage ownerSender = sender("owner");
+        Senders.Sender storage owner = sender("migrationOwner");
 
         bool currentlyPaused = INTTPausable(localNttManager).isPaused();
 
         if (shouldPause) {
             if (!currentlyPaused) {
                 console.log("  > Pausing NttManager...");
-                INTTPausable(ownerSender.harness(localNttManager)).pause();
+                INTTPausable(owner.harness(localNttManager)).pause();
             } else {
                 console.log("  > NttManager already paused, skipping");
             }
         } else {
             if (currentlyPaused) {
                 console.log("  > Unpausing NttManager...");
-                INTTPausable(ownerSender.harness(localNttManager)).unpause();
+                INTTPausable(owner.harness(localNttManager)).unpause();
             } else {
                 console.log("  > NttManager already unpaused, skipping");
             }
