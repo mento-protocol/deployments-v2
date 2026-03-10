@@ -108,34 +108,57 @@ The package contents are fully auto-generated. **Never edit `contracts.json`, `a
 
 1. A working Foundry setup — ABIs are read from compiled artifacts in `out/`.
 2. The deployment registry in `.treb/deployments.json` must be up to date.
+3. npm login with publish access to the `@mento-protocol` org (first-time only).
 
-### Run the generator
+### Step 1 — Re-generate after new deployments
 
-From the repo root:
+From the repo root, run the generator once per namespace that changed:
 
 ```bash
-# Generate / update for a single namespace (prompted interactively if omitted)
+# Interactive namespace picker
 npm run contracts:update
 
 # Or pass the namespace directly
+npm run contracts:update -- --namespace=mainnet
 npm run contracts:update -- --namespace=testnet-v2-rc5
-npm run contracts:update -- --namespace=monad-mainnet
 ```
 
-The script accumulates namespaces into a single `contracts.json`; run it once per namespace. It is safe to run multiple times — if nothing changed it prints "No changes detected".
+The script merges results into a single `contracts.json` and regenerates `abis/` and `src/`. It is safe to run multiple times — if nothing changed it prints "No changes detected" and exits without modifying any files.
 
-If `out/` is missing, the script will prompt you to run `forge build` first.
+If `out/` is missing, the script will prompt you to run `forge build` first (needed to read ABIs from compiled Foundry artifacts).
 
-### After generating
+### Step 2 — Commit the generated files
 
-Review the diff printed by the script, then build and publish:
+```bash
+git add packages/contracts/
+git commit -m "chore: update contracts package for <namespace>"
+```
+
+### Step 3 — Bump the version and publish
+
+Decide on the bump type:
+
+| Change type | Version bump |
+|---|---|
+| New contract added / address changed | `patch` |
+| Existing contract renamed or removed (breaking) | `minor` |
+| API redesign (breaking) | `major` |
 
 ```bash
 cd packages/contracts
-npm run build          # tsc → dist/
-npm version patch      # or minor / major
-npm publish
+
+# Bump version in package.json and create a git tag
+npm version patch   # or minor / major
+
+# Publish to npm — prepublishOnly runs tsc automatically
+npm publish --access public
+
+# Push the version commit and tag
+cd ../..
+git push && git push --tags
 ```
+
+`prepublishOnly` runs `tsc` automatically before every publish, so `dist/` is always built from the current `src/`. You never need to run `npm run build` manually before publishing.
 
 ### Naming rules
 
