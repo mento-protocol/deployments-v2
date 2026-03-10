@@ -6,11 +6,13 @@ optimizer = true
 ffi = true
 additional_compiler_profiles = [
     { name = "no-opt", optimizer_runs = 0 },
-    { name = "paris", evm_version = "paris" }
+    { name = "paris", evm_version = "paris" },
+    { name = "ntt-opt", optimizer_runs = 200, via_ir = true, evm_version = "london", version = "=0.8.19"}
 ]
 compilation_restrictions = [
     { paths = "lib/bold/contracts/src/TroveManager.sol", optimizer_runs = 0 },
-    { paths = "lib/mento-core/contracts/tokens/StableTokenV3.sol", evm_version = "paris" }
+    { paths = "lib/mento-core/contracts/tokens/StableTokenV3.sol", evm_version = "paris" },
+    { paths = "lib/mento-stabletoken-ntt/evm/src/NttManager/NttManager.sol", optimizer_runs = 200, via_ir = true, evm_version = "london", version = "=0.8.19"}
 ]
 fs_permissions = [
     { access = "read-write", path = "cache"},
@@ -32,7 +34,6 @@ monad_testnet = "${MONAD_TESTNET_RPC_URL}"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
-monad_testnet = { key = "${ETHERSCAN_API_KEY}", chain = 10143, url = "https://api.etherscan.io/v2/api?chainid=10143"}
 monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143"}
 celo = { key = "${ETHERSCAN_API_KEY}", chain = 42220, url = "https://api.etherscan.io/v2/api?chainid=42220" }
 # chain-11142220 = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
