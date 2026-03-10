@@ -1,4 +1,36 @@
 {
+  "mainnet/143/NttDeployHelper:GBPm": {
+    "id": "mainnet/143/NttDeployHelper:GBPm",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "NttDeployHelper",
+    "label": "GBPm",
+    "address": "0xF3797E9D818A47A3a604bF2346E4ff50b56ad5c4",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700111a7a1d54f8f459b0c636",
+      "initCodeHash": "0x6c3ad6888e21d37a8bcb4417282d7946ff7bb4dc04325e8bab18c696adb37b12",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000039bb4e0a204412bb98e821d25e7d955e69d40fd100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000030000000000000000000000000194b123c5e96b9b2e49763619985790dc241cac000000000000000000000000000000000000000000000000000000000000000ca00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458",
+      "entropy": "mainnet/NttDeployHelper:GBPm"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x5464e011aaa47e6feafe5d6147b84d64adcd31ab3c4d8140b922a8622d56202d",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "8908ff67767ffdc4c7f265df7189058a6ee5de95"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-10T19:37:47.598135+01:00",
+    "updatedAt": "2026-03-10T19:37:47.620984+01:00"
+  },
   "mainnet/143/NttDeployHelper:USDm": {
     "id": "mainnet/143/NttDeployHelper:USDm",
     "namespace": "mainnet",
