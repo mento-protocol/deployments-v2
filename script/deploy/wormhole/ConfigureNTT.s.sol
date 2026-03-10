@@ -190,7 +190,7 @@ contract ConfigureNTT is NTTScriptBase {
     }
 
     function _setupBurnMintPermissions(Senders.Sender storage deployer) internal {
-        address token = lookup(myChain.tokenLabel);
+        address token = lookupProxyOrFail(myChain.tokenLabel);
 
         if (!IStableTokenSpoke(token).isBurner(localNttManager)) {
             console.log("  > Granting NTT Manager burner permission...");

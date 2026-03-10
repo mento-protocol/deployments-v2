@@ -43,8 +43,8 @@ contract DeployNTT is NTTScriptBase {
         NTTChainConfig memory chainConfig = _findMyChain(config);
 
         // ── Resolve addresses ───────────────────────────────────────────
-        address token = lookup(chainConfig.tokenLabel);
-        address wormholeCoreBridge = lookup("WormholeCoreBridge");
+        address token = lookupProxyOrFail(chainConfig.tokenLabel);
+        address wormholeCoreBridge = lookupOrFail("WormholeCoreBridge");
         IManagerBase.Mode mode = chainConfig.isBurning
             ? IManagerBase.Mode.BURNING
             : IManagerBase.Mode.LOCKING;

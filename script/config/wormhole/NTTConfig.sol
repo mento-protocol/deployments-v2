@@ -57,7 +57,7 @@ library NTTConfig {
             chainName: "celo",
             evmChainId: CELO_EVM_CHAIN_ID,
             wormholeChainId: CELO_WH_CHAIN_ID,
-            tokenLabel: "Proxy:USDm",
+            tokenLabel: "USDm",
             isBurning: true,
             outboundLimit: DEFAULT_RATE_LIMIT
         });
@@ -65,7 +65,7 @@ library NTTConfig {
             chainName: "monad",
             evmChainId: MONAD_EVM_CHAIN_ID,
             wormholeChainId: MONAD_WH_CHAIN_ID,
-            tokenLabel: "StableTokenSpokeUSD",
+            tokenLabel: "USDm",
             isBurning: true,
             outboundLimit: DEFAULT_RATE_LIMIT
         });
@@ -87,7 +87,7 @@ library NTTConfig {
             chainName: "celo",
             evmChainId: CELO_EVM_CHAIN_ID,
             wormholeChainId: CELO_WH_CHAIN_ID,
-            tokenLabel: "Proxy:cGBP",
+            tokenLabel: "GBPm",
             isBurning: false,
             outboundLimit: DEFAULT_RATE_LIMIT
         });
@@ -95,7 +95,7 @@ library NTTConfig {
             chainName: "monad",
             evmChainId: MONAD_EVM_CHAIN_ID,
             wormholeChainId: MONAD_WH_CHAIN_ID,
-            tokenLabel: "StableTokenSpokeGBP",
+            tokenLabel: "GBPm",
             isBurning: true,
             outboundLimit: DEFAULT_RATE_LIMIT
         });

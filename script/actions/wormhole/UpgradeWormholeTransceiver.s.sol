@@ -54,7 +54,7 @@ contract UpgradeWormholeTransceiver is NTTScriptBase {
         localNttManagerProxy = INttDeployHelper(localHelper).nttManagerProxy();
 
         // Resolve WormholeCoreBridge from addressbook
-        wormholeCoreBridge = lookup("WormholeCoreBridge");
+        wormholeCoreBridge = lookupOrFail("WormholeCoreBridge");
 
         console.log("=== UpgradeWormholeTransceiver: %s %s on %s ===", tokenName, version, chainConfig.chainName);
         console.log("  Transceiver proxy: %s", localTransceiverProxy);

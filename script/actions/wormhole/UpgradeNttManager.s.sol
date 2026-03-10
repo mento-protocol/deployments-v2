@@ -53,7 +53,7 @@ contract UpgradeNttManager is NTTScriptBase {
         localNttManagerProxy = INttDeployHelper(localHelper).nttManagerProxy();
 
         // Store constructor params — must match original deployment for _checkImmutables()
-        token = lookup(chainConfig.tokenLabel);
+        token = lookupProxyOrFail(chainConfig.tokenLabel);
         mode = chainConfig.isBurning ? IManagerBase.Mode.BURNING : IManagerBase.Mode.LOCKING;
         wormholeChainId = chainConfig.wormholeChainId;
 

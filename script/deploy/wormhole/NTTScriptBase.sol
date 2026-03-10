@@ -3,11 +3,12 @@ pragma solidity ^0.8.13;
 
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
+import { ProxyHelper } from "script/helpers/ProxyHelper.sol";
 
 /// @title NTTScriptBase
 /// @notice Shared base contract for all NTT wormhole scripts, providing
 ///         config loading and chain resolution helpers.
-abstract contract NTTScriptBase is TrebScript {
+abstract contract NTTScriptBase is TrebScript, ProxyHelper {
     uint8 internal tokenDecimals;
 
     function _loadConfig(string memory _tokenName) internal pure returns (NTTTokenConfig memory) {
