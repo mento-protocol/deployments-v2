@@ -70,7 +70,7 @@ contract ConfigureNTT is NTTScriptBase {
         localTransceiver = INttDeployHelper(localHelper).transceiverProxy();
 
         // Resolve owner
-        owner = lookup(config.ownerLabel);
+        owner = sender(config.ownerLabel).account;
         require(owner != address(0), string.concat("ConfigureNTT: owner '", config.ownerLabel, "' not found"));
 
         // Resolve remote peers
@@ -105,25 +105,25 @@ contract ConfigureNTT is NTTScriptBase {
     }
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
-        Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage migrationOwner = sender("migrationOwner");
 
         // 1. Configure peers
         for (uint256 i = 0; i < peerChains.length; i++) {
-            _setupPeer(deployer, i);
+            _setupPeer(migrationOwner, i);
         }
 
         // 2. Set outbound rate limit
-        _setupOutboundLimit(deployer);
+        _setupOutboundLimit(migrationOwner);
 
         // 3. Grant burn/mint permissions if burning mode
         if (myChain.isBurning) {
-            _setupBurnMintPermissions(deployer);
+            _setupBurnMintPermissions(migrationOwner);
         }
 
         // 4. Transfer ownership and pauser
-        _setupOwnership(deployer);
+        _setupOwnership(migrationOwner);
 
         console.log("");
         console.log("=== ConfigureNTT: %s complete ===", tokenName);
@@ -131,7 +131,7 @@ contract ConfigureNTT is NTTScriptBase {
 
     // ── Setup helpers (idempotent) ──────────────────────────────────────
 
-    function _setupPeer(Senders.Sender storage deployer, uint256 peerIdx) internal {
+    function _setupPeer(Senders.Sender storage migrationOwner, uint256 peerIdx) internal {
         NTTChainConfig memory peer = peerChains[peerIdx];
         address remoteManager = remoteNttManagers[peerIdx];
         address remoteXceiver = remoteTransceivers[peerIdx];
@@ -147,7 +147,7 @@ contract ConfigureNTT is NTTScriptBase {
 
         if (existingPeer.peerAddress != expectedPeerManager) {
             console.log("    > Setting NTT Manager peer...");
-            INTTManager(deployer.harness(localNttManager)).setPeer(
+            INTTManager(migrationOwner.harness(localNttManager)).setPeer(
                 peer.wormholeChainId,
                 expectedPeerManager,
                 tokenDecimals,
@@ -160,7 +160,7 @@ contract ConfigureNTT is NTTScriptBase {
             );
             if (currentInbound != inboundLimit) {
                 console.log("    > Updating inbound limit...");
-                INTTManager(deployer.harness(localNttManager)).setInboundLimit(inboundLimit, peer.wormholeChainId);
+                INTTManager(migrationOwner.harness(localNttManager)).setInboundLimit(inboundLimit, peer.wormholeChainId);
             } else {
                 console.log("    > Inbound limit already correct");
             }
@@ -170,7 +170,7 @@ contract ConfigureNTT is NTTScriptBase {
         bytes32 expectedPeerXceiver = _toBytes32(remoteXceiver);
         if (ITransceiver(localTransceiver).getWormholePeer(peer.wormholeChainId) != expectedPeerXceiver) {
             console.log("    > Setting Transceiver wormhole peer...");
-            ITransceiver(deployer.harness(localTransceiver)).setWormholePeer(
+            ITransceiver(migrationOwner.harness(localTransceiver)).setWormholePeer(
                 peer.wormholeChainId,
                 expectedPeerXceiver
             );
@@ -179,39 +179,39 @@ contract ConfigureNTT is NTTScriptBase {
         }
     }
 
-    function _setupOutboundLimit(Senders.Sender storage deployer) internal {
+    function _setupOutboundLimit(Senders.Sender storage migrationOwner) internal {
         uint256 currentOutbound = _untrim(INTTManager(localNttManager).getOutboundLimitParams().limit);
         if (currentOutbound != myChain.outboundLimit) {
             console.log("  > Setting outbound limit to %d...", myChain.outboundLimit / 1e18);
-            INTTManager(deployer.harness(localNttManager)).setOutboundLimit(myChain.outboundLimit);
+            INTTManager(migrationOwner.harness(localNttManager)).setOutboundLimit(myChain.outboundLimit);
         } else {
             console.log("  > Outbound limit already correct, skipping");
         }
     }
 
-    function _setupBurnMintPermissions(Senders.Sender storage deployer) internal {
+    function _setupBurnMintPermissions(Senders.Sender storage migrationOwner) internal {
         address token = lookupProxyOrFail(myChain.tokenLabel);
 
         if (!IStableTokenSpoke(token).isBurner(localNttManager)) {
             console.log("  > Granting NTT Manager burner permission...");
-            IStableTokenSpoke(deployer.harness(token)).setBurner(localNttManager, true);
+            IStableTokenSpoke(migrationOwner.harness(token)).setBurner(localNttManager, true);
         } else {
             console.log("  > NTT Manager already has burner permission, skipping");
         }
 
         if (!IStableTokenSpoke(token).isMinter(localNttManager)) {
             console.log("  > Granting NTT Manager minter permission...");
-            IStableTokenSpoke(deployer.harness(token)).setMinter(localNttManager, true);
+            IStableTokenSpoke(migrationOwner.harness(token)).setMinter(localNttManager, true);
         } else {
             console.log("  > NTT Manager already has minter permission, skipping");
         }
     }
 
-    function _setupOwnership(Senders.Sender storage deployer) internal {
+    function _setupOwnership(Senders.Sender storage migrationOwner) internal {
         // NTT Manager ownership (cascades to all registered transceivers)
         if (IOwnable(localNttManager).owner() != owner) {
             console.log("  > Transferring NTT Manager ownership to %s...", owner);
-            IOwnable(deployer.harness(localNttManager)).transferOwnership(owner);
+            IOwnable(migrationOwner.harness(localNttManager)).transferOwnership(owner);
         } else {
             console.log("  > NTT Manager already owned by %s, skipping", owner);
         }
@@ -219,14 +219,14 @@ contract ConfigureNTT is NTTScriptBase {
         // Pauser capability does NOT cascade — must be set on each contract
         if (IPausable(localNttManager).pauser() != owner) {
             console.log("  > Transferring NTT Manager pauser to %s...", owner);
-            IPausable(deployer.harness(localNttManager)).transferPauserCapability(owner);
+            IPausable(migrationOwner.harness(localNttManager)).transferPauserCapability(owner);
         } else {
             console.log("  > NTT Manager pauser already correct, skipping");
         }
 
         if (IPausable(localTransceiver).pauser() != owner) {
             console.log("  > Transferring Transceiver pauser to %s...", owner);
-            IPausable(deployer.harness(localTransceiver)).transferPauserCapability(owner);
+            IPausable(migrationOwner.harness(localTransceiver)).transferPauserCapability(owner);
         } else {
             console.log("  > Transceiver pauser already correct, skipping");
         }
