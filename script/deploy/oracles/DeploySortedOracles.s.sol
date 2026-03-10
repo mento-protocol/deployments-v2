@@ -16,7 +16,7 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
         IMentoConfig config = Config.get();
@@ -27,5 +27,7 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
 
         ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
         sortedOracles.initialize(config.getOracleConfig().reportExpirySeconds);
+        sortedOracles.transferOwnership(migrationOwner.account);
+        
     }
 }
