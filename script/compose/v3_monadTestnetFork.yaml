@@ -18,7 +18,12 @@ components:
     # doesn't seem to work
     deps:
       - ConfigureV3PreStage
+  DeployOpenLiquidityStrategy:
+    script: DeployOpenLiquidityStrategy
+    deps:
+      - ConfigureV3PreStage
   CreateFPMM:
     script: CreateFPMM
     deps: 
       - Relay
+      - DeployOpenLiquidityStrategy

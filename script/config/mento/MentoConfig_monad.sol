@@ -26,7 +26,6 @@ contract MentoConfig_monad is MentoConfig {
     // ===================================================================
     /// @notice Set network-specific parameters. Override in subclasses.
     function _configureParams() internal virtual {
-        _redemptionShortfallTolerance = 1e12;
 
         _coreAggs = CoreAggregators({
             celoUsd: address(0),

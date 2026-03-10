@@ -20,3 +20,4 @@ import {Router} from "mento-core/swap/router/Router.sol";
 import {ReserveV2} from "mento-core/swap/ReserveV2.sol";
 import {CDPLiquidityStrategy} from "mento-core/liquidityStrategies/CDPLiquidityStrategy.sol";
 import {ReserveLiquidityStrategy} from "mento-core/liquidityStrategies/ReserveLiquidityStrategy.sol";
+import {OpenLiquidityStrategy} from "mento-core/liquidityStrategies/OpenLiquidityStrategy.sol";
