@@ -400,6 +400,7 @@ export const TroveNFT = {
       }
     ] as const,
   address: {
+    42220: '0x46273A5792013973b64a42E760E6F81d0472C6b6',
     11142220: '0x25B721CA74E6D0c2e3b9FD755cd2148A35CF1E84',
   } as const,
 } as const;

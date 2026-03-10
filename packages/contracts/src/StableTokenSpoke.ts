@@ -621,6 +621,6 @@ export const StableTokenSpoke = {
       }
     ] as const,
   address: {
-    143: '0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91',
+    143: '0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e',
   } as const,
 } as const;

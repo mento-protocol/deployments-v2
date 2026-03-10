@@ -621,7 +621,7 @@ export const USDm = {
       }
     ] as const,
   address: {
-    143: '0x866a7e4611C127DCe1a14C6841D2eA962A68dc88',
+    143: '0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115',
     11142220: '0xdE9e4C3ce781b4bA68120d6261cbad65ce0aB00b',
   } as const,
 } as const;

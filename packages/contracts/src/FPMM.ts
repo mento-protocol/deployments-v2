@@ -1743,6 +1743,7 @@ export const FPMM = {
       }
     ] as const,
   address: {
+    42220: '0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30',
     11142220: '0x43cB9D6AcF1462356303079EA4FDd8bc30042a6A',
   } as const,
 } as const;

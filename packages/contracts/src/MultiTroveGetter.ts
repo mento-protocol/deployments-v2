@@ -188,6 +188,7 @@ export const MultiTroveGetter = {
       }
     ] as const,
   address: {
+    42220: '0x78fd33d2bCe0389cF41e15947B0EB0cE9dF8327F',
     11142220: '0xED59EDfB9fCD06bb13d568ab548eC101fBb77a54',
   } as const,
 } as const;

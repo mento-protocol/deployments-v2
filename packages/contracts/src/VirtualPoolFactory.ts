@@ -295,6 +295,7 @@ export const VirtualPoolFactory = {
       }
     ] as const,
   address: {
+    42220: '0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3',
     11142220: '0x887955f28723B0e9Bddc358448CB5B1FDe692da4',
   } as const,
 } as const;

@@ -27,6 +27,122 @@
       "types": "./dist/StableTokenSpoke.d.ts",
       "import": "./dist/StableTokenSpoke.js"
     },
+    "./CDPLiquidityStrategy": {
+      "types": "./dist/CDPLiquidityStrategy.d.ts",
+      "import": "./dist/CDPLiquidityStrategy.js"
+    },
+    "./FPMMFactory": {
+      "types": "./dist/FPMMFactory.d.ts",
+      "import": "./dist/FPMMFactory.js"
+    },
+    "./FactoryRegistry": {
+      "types": "./dist/FactoryRegistry.d.ts",
+      "import": "./dist/FactoryRegistry.js"
+    },
+    "./OracleAdapter": {
+      "types": "./dist/OracleAdapter.d.ts",
+      "import": "./dist/OracleAdapter.js"
+    },
+    "./ReserveLiquidityStrategy": {
+      "types": "./dist/ReserveLiquidityStrategy.d.ts",
+      "import": "./dist/ReserveLiquidityStrategy.js"
+    },
+    "./ReserveV2": {
+      "types": "./dist/ReserveV2.d.ts",
+      "import": "./dist/ReserveV2.js"
+    },
+    "./StabilityPoolGBPm": {
+      "types": "./dist/StabilityPoolGBPm.d.ts",
+      "import": "./dist/StabilityPoolGBPm.js"
+    },
+    "./SystemParamsProxyGBPm": {
+      "types": "./dist/SystemParamsProxyGBPm.d.ts",
+      "import": "./dist/SystemParamsProxyGBPm.js"
+    },
+    "./ActivePool": {
+      "types": "./dist/ActivePool.d.ts",
+      "import": "./dist/ActivePool.js"
+    },
+    "./AddressesRegistry": {
+      "types": "./dist/AddressesRegistry.d.ts",
+      "import": "./dist/AddressesRegistry.js"
+    },
+    "./BorrowerOperations": {
+      "types": "./dist/BorrowerOperations.d.ts",
+      "import": "./dist/BorrowerOperations.js"
+    },
+    "./CollSurplusPool": {
+      "types": "./dist/CollSurplusPool.d.ts",
+      "import": "./dist/CollSurplusPool.js"
+    },
+    "./CollateralRegistry": {
+      "types": "./dist/CollateralRegistry.d.ts",
+      "import": "./dist/CollateralRegistry.js"
+    },
+    "./DefaultPool": {
+      "types": "./dist/DefaultPool.d.ts",
+      "import": "./dist/DefaultPool.js"
+    },
+    "./FPMM": {
+      "types": "./dist/FPMM.d.ts",
+      "import": "./dist/FPMM.js"
+    },
+    "./GasPool": {
+      "types": "./dist/GasPool.d.ts",
+      "import": "./dist/GasPool.js"
+    },
+    "./HintHelpers": {
+      "types": "./dist/HintHelpers.d.ts",
+      "import": "./dist/HintHelpers.js"
+    },
+    "./MarketHoursBreaker": {
+      "types": "./dist/MarketHoursBreaker.d.ts",
+      "import": "./dist/MarketHoursBreaker.js"
+    },
+    "./MultiTroveGetter": {
+      "types": "./dist/MultiTroveGetter.d.ts",
+      "import": "./dist/MultiTroveGetter.js"
+    },
+    "./ReserveTroveFactory": {
+      "types": "./dist/ReserveTroveFactory.d.ts",
+      "import": "./dist/ReserveTroveFactory.js"
+    },
+    "./Router": {
+      "types": "./dist/Router.d.ts",
+      "import": "./dist/Router.js"
+    },
+    "./SortedTroves": {
+      "types": "./dist/SortedTroves.d.ts",
+      "import": "./dist/SortedTroves.js"
+    },
+    "./StabilityPool": {
+      "types": "./dist/StabilityPool.d.ts",
+      "import": "./dist/StabilityPool.js"
+    },
+    "./StableTokenV3v300": {
+      "types": "./dist/StableTokenV3v300.d.ts",
+      "import": "./dist/StableTokenV3v300.js"
+    },
+    "./StableTokenV3v301": {
+      "types": "./dist/StableTokenV3v301.d.ts",
+      "import": "./dist/StableTokenV3v301.js"
+    },
+    "./SystemParams": {
+      "types": "./dist/SystemParams.d.ts",
+      "import": "./dist/SystemParams.js"
+    },
+    "./TroveManager": {
+      "types": "./dist/TroveManager.d.ts",
+      "import": "./dist/TroveManager.js"
+    },
+    "./TroveNFT": {
+      "types": "./dist/TroveNFT.d.ts",
+      "import": "./dist/TroveNFT.js"
+    },
+    "./VirtualPoolFactory": {
+      "types": "./dist/VirtualPoolFactory.d.ts",
+      "import": "./dist/VirtualPoolFactory.js"
+    },
     "./BiPoolManager": {
       "types": "./dist/BiPoolManager.d.ts",
       "import": "./dist/BiPoolManager.js"
@@ -95,10 +211,6 @@
       "types": "./dist/XOFm.d.ts",
       "import": "./dist/XOFm.js"
     },
-    "./CDPLiquidityStrategy": {
-      "types": "./dist/CDPLiquidityStrategy.d.ts",
-      "import": "./dist/CDPLiquidityStrategy.js"
-    },
     "./ChainlinkRelayerFactory": {
       "types": "./dist/ChainlinkRelayerFactory.d.ts",
       "import": "./dist/ChainlinkRelayerFactory.js"
@@ -106,14 +218,6 @@
     "./Emission": {
       "types": "./dist/Emission.d.ts",
       "import": "./dist/Emission.js"
-    },
-    "./FPMMFactory": {
-      "types": "./dist/FPMMFactory.d.ts",
-      "import": "./dist/FPMMFactory.js"
-    },
-    "./FactoryRegistry": {
-      "types": "./dist/FactoryRegistry.d.ts",
-      "import": "./dist/FactoryRegistry.js"
     },
     "./Locking": {
       "types": "./dist/Locking.d.ts",
@@ -123,45 +227,13 @@
       "types": "./dist/MentoGovernor.d.ts",
       "import": "./dist/MentoGovernor.js"
     },
-    "./OracleAdapter": {
-      "types": "./dist/OracleAdapter.d.ts",
-      "import": "./dist/OracleAdapter.js"
-    },
-    "./ReserveLiquidityStrategy": {
-      "types": "./dist/ReserveLiquidityStrategy.d.ts",
-      "import": "./dist/ReserveLiquidityStrategy.js"
-    },
-    "./ReserveV2": {
-      "types": "./dist/ReserveV2.d.ts",
-      "import": "./dist/ReserveV2.js"
-    },
-    "./StabilityPoolGBPm": {
-      "types": "./dist/StabilityPoolGBPm.d.ts",
-      "import": "./dist/StabilityPoolGBPm.js"
-    },
-    "./SystemParamsProxyGBPm": {
-      "types": "./dist/SystemParamsProxyGBPm.d.ts",
-      "import": "./dist/SystemParamsProxyGBPm.js"
-    },
     "./TimelockController": {
       "types": "./dist/TimelockController.d.ts",
       "import": "./dist/TimelockController.js"
     },
-    "./ActivePool": {
-      "types": "./dist/ActivePool.d.ts",
-      "import": "./dist/ActivePool.js"
-    },
     "./AddressSortedLinkedListWithMedian": {
       "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
       "import": "./dist/AddressSortedLinkedListWithMedian.js"
-    },
-    "./AddressesRegistry": {
-      "types": "./dist/AddressesRegistry.d.ts",
-      "import": "./dist/AddressesRegistry.js"
-    },
-    "./BorrowerOperations": {
-      "types": "./dist/BorrowerOperations.d.ts",
-      "import": "./dist/BorrowerOperations.js"
     },
     "./BreakerBox": {
       "types": "./dist/BreakerBox.d.ts",
@@ -303,14 +375,6 @@
       "types": "./dist/ChainlinkRelayerV1ZARUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1ZARUSD.js"
     },
-    "./CollSurplusPool": {
-      "types": "./dist/CollSurplusPool.d.ts",
-      "import": "./dist/CollSurplusPool.js"
-    },
-    "./CollateralRegistry": {
-      "types": "./dist/CollateralRegistry.d.ts",
-      "import": "./dist/CollateralRegistry.js"
-    },
     "./ConstantProductPricingModule": {
       "types": "./dist/ConstantProductPricingModule.d.ts",
       "import": "./dist/ConstantProductPricingModule.js"
@@ -318,26 +382,6 @@
     "./ConstantSumPricingModule": {
       "types": "./dist/ConstantSumPricingModule.d.ts",
       "import": "./dist/ConstantSumPricingModule.js"
-    },
-    "./DefaultPool": {
-      "types": "./dist/DefaultPool.d.ts",
-      "import": "./dist/DefaultPool.js"
-    },
-    "./FPMM": {
-      "types": "./dist/FPMM.d.ts",
-      "import": "./dist/FPMM.js"
-    },
-    "./GasPool": {
-      "types": "./dist/GasPool.d.ts",
-      "import": "./dist/GasPool.js"
-    },
-    "./HintHelpers": {
-      "types": "./dist/HintHelpers.d.ts",
-      "import": "./dist/HintHelpers.js"
-    },
-    "./MarketHoursBreaker": {
-      "types": "./dist/MarketHoursBreaker.d.ts",
-      "import": "./dist/MarketHoursBreaker.js"
     },
     "./MarketHoursBreakerToggleable": {
       "types": "./dist/MarketHoursBreakerToggleable.d.ts",
@@ -447,10 +491,6 @@
       "types": "./dist/MockERC20axlUSDC.d.ts",
       "import": "./dist/MockERC20axlUSDC.js"
     },
-    "./MultiTroveGetter": {
-      "types": "./dist/MultiTroveGetter.d.ts",
-      "import": "./dist/MultiTroveGetter.js"
-    },
     "./ProxyAdmin": {
       "types": "./dist/ProxyAdmin.d.ts",
       "import": "./dist/ProxyAdmin.js"
@@ -463,49 +503,13 @@
       "types": "./dist/ReserveLiquidityStrategyv301.d.ts",
       "import": "./dist/ReserveLiquidityStrategyv301.js"
     },
-    "./ReserveTroveFactory": {
-      "types": "./dist/ReserveTroveFactory.d.ts",
-      "import": "./dist/ReserveTroveFactory.js"
-    },
-    "./Router": {
-      "types": "./dist/Router.d.ts",
-      "import": "./dist/Router.js"
-    },
-    "./SortedTroves": {
-      "types": "./dist/SortedTroves.d.ts",
-      "import": "./dist/SortedTroves.js"
-    },
-    "./StabilityPool": {
-      "types": "./dist/StabilityPool.d.ts",
-      "import": "./dist/StabilityPool.js"
-    },
     "./StableTokenV2": {
       "types": "./dist/StableTokenV2.d.ts",
       "import": "./dist/StableTokenV2.js"
     },
-    "./StableTokenV3": {
-      "types": "./dist/StableTokenV3.d.ts",
-      "import": "./dist/StableTokenV3.js"
-    },
-    "./SystemParams": {
-      "types": "./dist/SystemParams.d.ts",
-      "import": "./dist/SystemParams.js"
-    },
-    "./TroveManager": {
-      "types": "./dist/TroveManager.d.ts",
-      "import": "./dist/TroveManager.js"
-    },
-    "./TroveNFT": {
-      "types": "./dist/TroveNFT.d.ts",
-      "import": "./dist/TroveNFT.js"
-    },
     "./ValueDeltaBreaker": {
       "types": "./dist/ValueDeltaBreaker.d.ts",
       "import": "./dist/ValueDeltaBreaker.js"
-    },
-    "./VirtualPoolFactory": {
-      "types": "./dist/VirtualPoolFactory.d.ts",
-      "import": "./dist/VirtualPoolFactory.js"
     }
   },
   "files": [

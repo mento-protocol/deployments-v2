@@ -846,6 +846,7 @@ export const FPMMFactory = {
       }
     ] as const,
   address: {
+    42220: '0xa849b475FE5a4B5C9C3280152c7a1945b907613b',
     11142220: '0x353ED52bF8482027C0e0b9e3c0e5d96A9F680980',
   } as const,
 } as const;

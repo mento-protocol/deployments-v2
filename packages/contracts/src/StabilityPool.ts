@@ -847,6 +847,7 @@ export const StabilityPool = {
       }
     ] as const,
   address: {
+    42220: '0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5',
     11142220: '0x1c424be1BE055a6C91ED9839a0E440E26814D1fC',
   } as const,
 } as const;

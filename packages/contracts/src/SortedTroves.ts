@@ -502,6 +502,7 @@ export const SortedTroves = {
       }
     ] as const,
   address: {
+    42220: '0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b',
     11142220: '0x714CBd00Be7B39A9319a434a670d51C86F994E3d',
   } as const,
 } as const;

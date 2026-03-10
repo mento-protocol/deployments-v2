@@ -810,6 +810,7 @@ export const ReserveV2 = {
       }
     ] as const,
   address: {
+    42220: '0x4255Cf38e51516766180b33122029A88Cb853806',
     11142220: '0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7',
   } as const,
 } as const;

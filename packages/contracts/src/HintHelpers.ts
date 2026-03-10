@@ -333,6 +333,7 @@ export const HintHelpers = {
       }
     ] as const,
   address: {
+    42220: '0xAfd741674bc4aa965a788dACe5b0434FD4374D82',
     11142220: '0x5A54DD5d7AD1b782b43bB08d0A40CA947a315556',
   } as const,
 } as const;

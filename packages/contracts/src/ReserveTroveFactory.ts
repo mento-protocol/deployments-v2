@@ -204,6 +204,7 @@ export const ReserveTroveFactory = {
       }
     ] as const,
   address: {
+    42220: '0x02859465DCC7D7F2Bee183fC7FaC78544c9519e1',
     11142220: '0xf179d705706CD959884E40B1eA21C95EC84D9E14',
   } as const,
 } as const;

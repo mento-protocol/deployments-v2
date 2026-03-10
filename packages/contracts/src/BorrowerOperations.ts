@@ -1401,6 +1401,7 @@ export const BorrowerOperations = {
       }
     ] as const,
   address: {
+    42220: '0x8ec9A81871F816F1EF007a82293703057A943B8A',
     11142220: '0x7fCd2F75Ed661E76f969E6D0347a93028a099d6D',
   } as const,
 } as const;

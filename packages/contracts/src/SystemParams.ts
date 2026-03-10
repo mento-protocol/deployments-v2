@@ -476,6 +476,7 @@ export const SystemParams = {
       }
     ] as const,
   address: {
+    42220: '0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9',
     11142220: '0xdf1E9330f328Ea8Fd3E974b1a2510A9791712318',
   } as const,
 } as const;

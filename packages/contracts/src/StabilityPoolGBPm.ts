@@ -847,6 +847,7 @@ export const StabilityPoolGBPm = {
       }
     ] as const,
   address: {
+    42220: '0x06346c0fAB682dBde9f245D2D84677592E8aaa15',
     11142220: '0x31f4fE29B8104969209C0474A40FCa79170Ee53e',
   } as const,
 } as const;

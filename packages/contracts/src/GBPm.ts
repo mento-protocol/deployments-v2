@@ -621,7 +621,7 @@ export const GBPm = {
       }
     ] as const,
   address: {
-    143: '0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E',
+    143: '0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1',
     11142220: '0x85F5181Abdbf0e1814Fc4358582Ae07b8eBA3aF3',
   } as const,
 } as const;

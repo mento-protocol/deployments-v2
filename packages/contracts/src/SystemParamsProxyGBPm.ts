@@ -476,6 +476,7 @@ export const SystemParamsProxyGBPm = {
       }
     ] as const,
   address: {
+    42220: '0x70536e44d1D9238BA8E35Ffe63Bb388a63F0DE51',
     11142220: '0x70855d7826d3Ae92b2B3ae154eE6945754dD4Fe5',
   } as const,
 } as const;

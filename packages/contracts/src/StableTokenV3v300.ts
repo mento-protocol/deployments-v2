@@ -898,6 +898,7 @@ export const StableTokenV3v300 = {
       }
     ] as const,
   address: {
+    42220: '0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2',
     11142220: '0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb',
   } as const,
 } as const;

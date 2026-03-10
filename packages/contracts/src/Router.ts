@@ -978,6 +978,7 @@ export const Router = {
       }
     ] as const,
   address: {
+    42220: '0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6',
     11142220: '0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd',
   } as const,
 } as const;

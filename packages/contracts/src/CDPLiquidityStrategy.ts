@@ -871,6 +871,7 @@ export const CDPLiquidityStrategy = {
       }
     ] as const,
   address: {
+    42220: '0x4e78BD9565341EAbe99cDC024acB044d9BDcB985',
     11142220: '0x065AE7D4e207C8f4dca112D0B79E668cc7e93e03',
   } as const,
 } as const;

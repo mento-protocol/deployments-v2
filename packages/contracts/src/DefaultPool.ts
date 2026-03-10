@@ -208,6 +208,7 @@ export const DefaultPool = {
       }
     ] as const,
   address: {
+    42220: '0x95191e52d01eC060cEA753CDADfEEB07b78D0047',
     11142220: '0x8f0E218fE0EB3Ef1dAF3eEAF1Cbf4Ec6d29b6fe4',
   } as const,
 } as const;

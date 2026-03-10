@@ -662,6 +662,7 @@ export const AddressesRegistry = {
       }
     ] as const,
   address: {
+    42220: '0xB3136DBadB14Ab587FFa91545538126938Fe0C6E',
     11142220: '0x8b33D626E8d79388889d404fBC515Ed131c9508e',
   } as const,
 } as const;

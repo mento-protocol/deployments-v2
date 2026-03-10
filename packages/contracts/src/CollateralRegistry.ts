@@ -317,6 +317,7 @@ export const CollateralRegistry = {
       }
     ] as const,
   address: {
+    42220: '0x1bEDD4334335522B0a0e8e610d326B16B0a605Fb',
     11142220: '0xc674b6562eaf4E40056aad628E398F58cA0b2B91',
   } as const,
 } as const;

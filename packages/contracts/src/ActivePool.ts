@@ -707,6 +707,7 @@ export const ActivePool = {
       }
     ] as const,
   address: {
+    42220: '0xa7873F4Bf2A1ea2EB20B1e8A992C4748e78473b2',
     11142220: '0x50651599c8A778732C34d1C181EEB05Ff2Ef9d73',
   } as const,
 } as const;

@@ -192,6 +192,7 @@ export const CollSurplusPool = {
       }
     ] as const,
   address: {
+    42220: '0xfFF48ee3bd2D534E35b54D538de30a9d7709d4B6',
     11142220: '0x4b8FD6eFe77B56a27c90eb46586c8903E8D0A63a',
   } as const,
 } as const;

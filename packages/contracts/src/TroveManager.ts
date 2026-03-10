@@ -2133,6 +2133,7 @@ export const TroveManager = {
       }
     ] as const,
   address: {
+    42220: '0xb38aEf2bF4e34B997330D626EBCd7629De3885C9',
     11142220: '0x3ADFF16949513480E051F451748Ee8B801731c46',
   } as const,
 } as const;

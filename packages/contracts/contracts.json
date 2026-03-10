@@ -13,6 +13,140 @@
         "address": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
         "type": "token"
       }
+    },
+    "mainnet": {
+      "GBPm": {
+        "address": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
+        "type": "token"
+      },
+      "USDm": {
+        "address": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115",
+        "type": "token"
+      },
+      "StableTokenSpoke": {
+        "address": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+        "type": "token"
+      }
+    }
+  },
+  "42220": {
+    "mainnet": {
+      "CDPLiquidityStrategy": {
+        "address": "0x4e78BD9565341EAbe99cDC024acB044d9BDcB985",
+        "type": "contract"
+      },
+      "FPMMFactory": {
+        "address": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",
+        "type": "contract"
+      },
+      "FactoryRegistry": {
+        "address": "0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6",
+        "type": "contract"
+      },
+      "OracleAdapter": {
+        "address": "0xa472fBBF4b890A54381977ac392BdF82EeC4383a",
+        "type": "contract"
+      },
+      "ReserveLiquidityStrategy": {
+        "address": "0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B",
+        "type": "contract"
+      },
+      "ReserveV2": {
+        "address": "0x4255Cf38e51516766180b33122029A88Cb853806",
+        "type": "contract"
+      },
+      "StabilityPoolGBPm": {
+        "address": "0x06346c0fAB682dBde9f245D2D84677592E8aaa15",
+        "type": "contract"
+      },
+      "SystemParamsProxyGBPm": {
+        "address": "0x70536e44d1D9238BA8E35Ffe63Bb388a63F0DE51",
+        "type": "contract"
+      },
+      "ActivePool": {
+        "address": "0xa7873F4Bf2A1ea2EB20B1e8A992C4748e78473b2",
+        "type": "contract"
+      },
+      "AddressesRegistry": {
+        "address": "0xB3136DBadB14Ab587FFa91545538126938Fe0C6E",
+        "type": "contract"
+      },
+      "BorrowerOperations": {
+        "address": "0x8ec9A81871F816F1EF007a82293703057A943B8A",
+        "type": "contract"
+      },
+      "CollSurplusPool": {
+        "address": "0xfFF48ee3bd2D534E35b54D538de30a9d7709d4B6",
+        "type": "contract"
+      },
+      "CollateralRegistry": {
+        "address": "0x1bEDD4334335522B0a0e8e610d326B16B0a605Fb",
+        "type": "contract"
+      },
+      "DefaultPool": {
+        "address": "0x95191e52d01eC060cEA753CDADfEEB07b78D0047",
+        "type": "contract"
+      },
+      "FPMM": {
+        "address": "0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30",
+        "type": "pool"
+      },
+      "GasPool": {
+        "address": "0x8b61f941D89560C7D8b3D595F44F7fd97D79817b",
+        "type": "contract"
+      },
+      "HintHelpers": {
+        "address": "0xAfd741674bc4aa965a788dACe5b0434FD4374D82",
+        "type": "contract"
+      },
+      "MarketHoursBreaker": {
+        "address": "0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF",
+        "type": "contract"
+      },
+      "MultiTroveGetter": {
+        "address": "0x78fd33d2bCe0389cF41e15947B0EB0cE9dF8327F",
+        "type": "contract"
+      },
+      "ReserveTroveFactory": {
+        "address": "0x02859465DCC7D7F2Bee183fC7FaC78544c9519e1",
+        "type": "contract"
+      },
+      "Router": {
+        "address": "0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6",
+        "type": "contract"
+      },
+      "SortedTroves": {
+        "address": "0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b",
+        "type": "contract"
+      },
+      "StabilityPool": {
+        "address": "0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5",
+        "type": "contract"
+      },
+      "StableTokenV3v300": {
+        "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
+        "type": "token"
+      },
+      "StableTokenV3v301": {
+        "address": "0x815795C30D0758A297B08cD4e0643620c974c318",
+        "type": "token"
+      },
+      "SystemParams": {
+        "address": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
+        "type": "contract"
+      },
+      "TroveManager": {
+        "address": "0xb38aEf2bF4e34B997330D626EBCd7629De3885C9",
+        "type": "contract"
+      },
+      "TroveNFT": {
+        "address": "0x46273A5792013973b64a42E760E6F81d0472C6b6",
+        "type": "contract"
+      },
+      "VirtualPoolFactory": {
+        "address": "0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3",
+        "type": "contract"
+      }
     }
   },
   "11142220": {
@@ -481,8 +615,12 @@
         "address": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
         "type": "token"
       },
-      "StableTokenV3": {
+      "StableTokenV3v300": {
         "address": "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
+        "type": "token"
+      },
+      "StableTokenV3v301": {
+        "address": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
         "type": "token"
       },
       "SystemParams": {

@@ -760,6 +760,7 @@ export const ReserveLiquidityStrategy = {
       }
     ] as const,
   address: {
+    42220: '0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B',
     11142220: '0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8',
   } as const,
 } as const;
