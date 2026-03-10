@@ -537,6 +537,7 @@
   },
   "143": {
     "mainnet": {
+      "NttDeployHelper:USDm": "0x37316334108C816f9862baB52347A0aab7551127",
       "StableTokenSpoke:v3.0.0": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
       "TransceiverStructs": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
       "TransparentUpgradeableProxy:GBPm": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
