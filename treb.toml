@@ -40,6 +40,9 @@ type = "safe"
 safe = "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458"
 signer = "dev-pk"
 
+[namespace.default.senders]
+signer = "dev-pk"
+
 [namespace.mainnet.senders]
 deployer = "deployer-safe"
 governor = "mento-gov-celo"

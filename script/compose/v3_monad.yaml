@@ -1,0 +1,24 @@
+group: Mento V3 Monad 
+components:
+  SetupLocalFork:
+    script: SetupFork
+  DeployV3PreStage:
+    script: DeployV3PreStage
+    deps:
+      - SetupLocalFork
+  ConfigureV3PreStage:
+    script: ConfigureV3PreStage
+    deps:
+      - DeployV3PreStage
+  Relay:
+    script: Relay
+    # Not really a dependency but we probably want to do this as late as
+    # possible before CreateFPMM so here "deps" is just used for ordering
+    # Also TIL: this was supposed to be handled by the Oracle Helper but it
+    # doesn't seem to work
+    deps:
+      - ConfigureV3PreStage
+  CreateFPMM:
+    script: CreateFPMM
+    deps: 
+      - Relay
