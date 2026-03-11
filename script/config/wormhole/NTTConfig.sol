@@ -41,8 +41,8 @@ library NTTConfig {
     uint16 internal constant MONAD_WH_CHAIN_ID = 48;
 
     // ── Rate limit constants ────────────────────────────────────────────
-    uint256 internal constant USDm_RATE_LIMIT = 1_000e18;
-    uint256 internal constant GBPm_RATE_LIMIT = 1_000e18;
+    uint256 internal constant USDm_RATE_LIMIT = 500_000e18;
+    uint256 internal constant GBPm_RATE_LIMIT = 500_000e18;
 
     // ── Token config getters ─────────────────────────────────────────────
 
