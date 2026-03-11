@@ -44,6 +44,7 @@ signer = "dev-pk"
 signer = "dev-pk"
 
 [namespace.mainnet.senders]
+signer = "dev-pk"
 deployer = "deployer-safe"
 governor = "mento-gov-celo"
 migrationOwner = "migration-safe"

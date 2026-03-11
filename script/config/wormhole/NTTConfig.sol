@@ -41,7 +41,8 @@ library NTTConfig {
     uint16 internal constant MONAD_WH_CHAIN_ID = 48;
 
     // ── Rate limit constants ────────────────────────────────────────────
-    uint256 internal constant DEFAULT_RATE_LIMIT = 100_000e18;
+    uint256 internal constant USDm_RATE_LIMIT = 1_000e18;
+    uint256 internal constant GBPm_RATE_LIMIT = 1_000e18;
 
     // ── Token config getters ─────────────────────────────────────────────
 
@@ -59,7 +60,7 @@ library NTTConfig {
             wormholeChainId: CELO_WH_CHAIN_ID,
             tokenLabel: "USDm",
             isBurning: true,
-            outboundLimit: DEFAULT_RATE_LIMIT
+            outboundLimit: USDm_RATE_LIMIT
         });
         config.chains[1] = NTTChainConfig({
             chainName: "monad",
@@ -67,12 +68,12 @@ library NTTConfig {
             wormholeChainId: MONAD_WH_CHAIN_ID,
             tokenLabel: "USDm",
             isBurning: true,
-            outboundLimit: DEFAULT_RATE_LIMIT
+            outboundLimit: USDm_RATE_LIMIT
         });
 
         config.inboundLimits = new NTTInboundLimit[](2);
-        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: DEFAULT_RATE_LIMIT});
-        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: DEFAULT_RATE_LIMIT});
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: USDm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: USDm_RATE_LIMIT});
     }
 
     /// @notice Returns the full NTT bridge topology for GBPm.
@@ -89,7 +90,7 @@ library NTTConfig {
             wormholeChainId: CELO_WH_CHAIN_ID,
             tokenLabel: "GBPm",
             isBurning: false,
-            outboundLimit: DEFAULT_RATE_LIMIT
+            outboundLimit: GBPm_RATE_LIMIT
         });
         config.chains[1] = NTTChainConfig({
             chainName: "monad",
@@ -97,11 +98,11 @@ library NTTConfig {
             wormholeChainId: MONAD_WH_CHAIN_ID,
             tokenLabel: "GBPm",
             isBurning: true,
-            outboundLimit: DEFAULT_RATE_LIMIT
+            outboundLimit: GBPm_RATE_LIMIT
         });
 
         config.inboundLimits = new NTTInboundLimit[](2);
-        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: DEFAULT_RATE_LIMIT});
-        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: DEFAULT_RATE_LIMIT});
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: GBPm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: GBPm_RATE_LIMIT});
     }
 }

@@ -75,6 +75,19 @@
     "confirmations": [],
     "executionTxHash": "0xe3d2c695dc8bdb578220707c78a27bd34dde584a7563a3d58f25dfabd34e6e4f"
   },
+  "0x06677e5bf31a362a440d8915802ee6d06d28cc969de29bb090d7921b10826718": {
+    "safeTxHash": "0x06677e5bf31a362a440d8915802ee6d06d28cc969de29bb090d7921b10826718",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 42220,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-10T18:52:58.032258+01:00",
+    "confirmations": [],
+    "executionTxHash": "0x6191d12b64ebc63c512fd99911afe6a9775b6b25bd20901d293e34d89dfd864e"
+  },
   "0x0774f97428e4a6ac112b1680664ec7fb17599c5193d32a857e8d7527bc48785a": {
     "safeTxHash": "0x0774f97428e4a6ac112b1680664ec7fb17599c5193d32a857e8d7527bc48785a",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -471,6 +484,19 @@
     "confirmations": [],
     "executionTxHash": "0x4529ee9e86789f7e7bc6280cd04fe76c1088a7cb0a99a82112f2995bb74e95c3"
   },
+  "0x2d60c56e02c68496dbd73ea898db7a606f876122112d62896443e76a910461b0": {
+    "safeTxHash": "0x2d60c56e02c68496dbd73ea898db7a606f876122112d62896443e76a910461b0",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 42220,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-10T18:55:13.379733+01:00",
+    "confirmations": [],
+    "executionTxHash": "0xa6cd613e1502072457907881c89c0daec535e6f9af7ffc30da3389dcffccf57c"
+  },
   "0x306b5735cf3fb11a9d34165d283459432041579b08c3399c1f35f10144867b59": {
     "safeTxHash": "0x306b5735cf3fb11a9d34165d283459432041579b08c3399c1f35f10144867b59",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -486,6 +512,19 @@
     "proposedAt": "2025-08-27T15:56:45.177422+03:00",
     "confirmations": [],
     "executionTxHash": "0xb8ccba0468d0d764eb63bd30b185421f6628ec9f49994eecbab54758cfdf4e06"
+  },
+  "0x30bd48b94e7480ab9304fc864170ba743ffb4bc8e66099d086de9971bf114f2c": {
+    "safeTxHash": "0x30bd48b94e7480ab9304fc864170ba743ffb4bc8e66099d086de9971bf114f2c",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 143,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-10T18:56:17.036068+01:00",
+    "confirmations": [],
+    "executionTxHash": "0x96d68d5908945134aadaec893104e8823ea2e2b3a8d8f686d1eec1ca5fa884f7"
   },
   "0x323ae26e38837d9fb9ee01bf8837ce97b6f4d9925df8930faf9502659b50d341": {
     "safeTxHash": "0x323ae26e38837d9fb9ee01bf8837ce97b6f4d9925df8930faf9502659b50d341",
@@ -1256,6 +1295,19 @@
     "confirmations": [],
     "executionTxHash": "0xa04f7b2635198229f5ebf9adfb5662738495ba785655b088df752f8de36d3a5d"
   },
+  "0x97530a2d10a4cbb763e4b038f38dc610cc8650fc1c7fb65dd13e7889a2e03b57": {
+    "safeTxHash": "0x97530a2d10a4cbb763e4b038f38dc610cc8650fc1c7fb65dd13e7889a2e03b57",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 42220,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-10T19:36:35.924816+01:00",
+    "confirmations": [],
+    "executionTxHash": "0x78ab28af1a24783653184bd1236d15b3caee2916150e4fed063d6de064ad3591"
+  },
   "0x98f10e876d32d3e474edb1c848d74ff609051922913c0893055365061141397d": {
     "safeTxHash": "0x98f10e876d32d3e474edb1c848d74ff609051922913c0893055365061141397d",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -1640,6 +1692,19 @@
     "confirmations": [],
     "executionTxHash": "0x0d826a5a6eacc4aa1e207629c5841106654f63fb3ae227e661dad322bc46653d"
   },
+  "0xb997e4a523f6bf314f0954ae62670b70fd67c7dd2959e9e80c9cf8a443057b24": {
+    "safeTxHash": "0xb997e4a523f6bf314f0954ae62670b70fd67c7dd2959e9e80c9cf8a443057b24",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 143,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-10T19:37:47.598135+01:00",
+    "confirmations": [],
+    "executionTxHash": "0x0760ac1d5a42099a49357faecc885c16544b258ea5a5b56812dba713725b7a18"
+  },
   "0xbdeaea64bf9503b80a895e6cb040fa1072334427e55db19cf3ab1f730570747a": {
     "safeTxHash": "0xbdeaea64bf9503b80a895e6cb040fa1072334427e55db19cf3ab1f730570747a",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -1867,6 +1932,19 @@
     "proposedAt": "2026-03-03T21:15:32.424984189+01:00",
     "confirmations": [],
     "executionTxHash": "0x4e61fa643ab9ecee8990f92e475197485237c3b1036f78bcb1e36848cd61093f"
+  },
+  "0xe554e4fd5059de9798e6f587fc8bb0b05e54f61f6235392da647fda0df68516e": {
+    "safeTxHash": "0xe554e4fd5059de9798e6f587fc8bb0b05e54f61f6235392da647fda0df68516e",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 143,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-03-10T18:53:13.37289+01:00",
+    "confirmations": [],
+    "executionTxHash": "0x0a4ff5a6ff8ff983421f68697c0575d2792945848daffec5c8171f641481f904"
   },
   "0xe699d5792e7a4c99a972882db10a0dffbe4cfe622322fb5449d47ab3a7598d0d": {
     "safeTxHash": "0xe699d5792e7a4c99a972882db10a0dffbe4cfe622322fb5449d47ab3a7598d0d",
