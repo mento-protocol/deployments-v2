@@ -12,3 +12,11 @@ components:
       SPOKE_LABEL: "GBPm"
       SPOKE_TOKEN_NAME: "Mento British Pound"
       SPOKE_TOKEN_SYMBOL: "GBPm"
+  USDm_mint:
+    script: MintStableTokens
+    env:
+      token: "USDm"
+  GBPm_mint:
+    script: MintStableTokens
+    env:
+      token: "GBPm"

@@ -1,0 +1,18 @@
+group: Mento V3 Monad 
+components:
+  DeployV3PreStage:
+    script: DeployV3PreStage
+  ConfigureV3PreStage:
+    script: ConfigureV3PreStage
+    deps:
+      - DeployV3PreStage
+  Relay:
+    script: Relay
+  DeployOpenLiquidityStrategy:
+    script: DeployOpenLiquidityStrategy
+  CreateFPMM:
+    script: CreateFPMM
+    deps: 
+      - ConfigureV3PreStage
+      - DeployOpenLiquidityStrategy
+      - Relay

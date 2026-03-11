@@ -18,9 +18,10 @@ contract DeployChainlinkRelayerFactory is TrebScript, ProxyHelper {
     address chainlinkRelayerFactoryImpl;
     address chainlinkRelayerFactoryProxy;
 
-    /// @custom:senders deployer
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
+        Senders.Sender storage migrationOwner = sender("migrationOwner");
 
         // Deploy implementation
         chainlinkRelayerFactoryImpl =
@@ -34,7 +35,7 @@ contract DeployChainlinkRelayerFactory is TrebScript, ProxyHelper {
             deployer,
             "ChainlinkRelayerFactory",
             chainlinkRelayerFactoryImpl,
-            abi.encodeWithSelector(IChainlinkRelayerFactory.initialize.selector, sortedOracles, deployer.account)
+            abi.encodeWithSelector(IChainlinkRelayerFactory.initialize.selector, sortedOracles, migrationOwner.account)
         );
 
         console.log("ChainlinkRelayerFactory implementation:", chainlinkRelayerFactoryImpl);

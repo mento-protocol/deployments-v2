@@ -25,8 +25,6 @@ contract DeployTransceiverStructs is TrebScript {
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
 
-        address lib = deployer
-            .create3("TransceiverStructs")
-            .deploy(bytes(""));
+        address lib = deployer.create3("TransceiverStructs").deploy(bytes(""));
     }
 }

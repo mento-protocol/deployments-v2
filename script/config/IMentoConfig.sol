@@ -93,8 +93,8 @@ interface IMentoConfig {
         uint256 reportExpirySeconds;
     }
 
-    struct ReserveLiquidityStrategyPoolConfig {
-        address reserveLiquidityStrategy;
+    struct LiquidityStrategyPoolConfig {
+        address liquidityStrategy;
         address debtToken;
         uint32 cooldown;
         address protocolFeeRecipient;
@@ -126,7 +126,7 @@ interface IMentoConfig {
         bool invertRateFeed;
         IFPMM.FPMMParams params;
         FPMMTradingLimitsConfig tradingLimits;
-        ReserveLiquidityStrategyPoolConfig rlsConfig;
+        LiquidityStrategyPoolConfig liquidityStrategyConfig;
     }
 
     struct CDPMigrationConfig {

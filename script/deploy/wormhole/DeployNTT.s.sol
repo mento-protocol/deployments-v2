@@ -46,11 +46,11 @@ contract DeployNTT is NTTScriptBase {
         // ── Resolve addresses ───────────────────────────────────────────
         address token = lookupProxyOrFail(chainConfig.tokenLabel);
         address wormholeCoreBridge = lookupOrFail("WormholeCoreBridge");
-        IManagerBase.Mode mode = chainConfig.isBurning
-            ? IManagerBase.Mode.BURNING
-            : IManagerBase.Mode.LOCKING;
+        IManagerBase.Mode mode = chainConfig.isBurning ? IManagerBase.Mode.BURNING : IManagerBase.Mode.LOCKING;
 
-        console.log("=== DeployNTT: %s on %s (chain %d) ===", config.tokenName, chainConfig.chainName, chainConfig.evmChainId);
+        console.log(
+            "=== DeployNTT: %s on %s (chain %d) ===", config.tokenName, chainConfig.chainName, chainConfig.evmChainId
+        );
         console.log("  Token:        %s (%s)", token, chainConfig.tokenLabel);
         console.log("  Mode:         %s", chainConfig.isBurning ? "burning" : "locking");
         console.log("  Wormhole ID:  %d", uint256(chainConfig.wormholeChainId));
@@ -59,19 +59,8 @@ contract DeployNTT is NTTScriptBase {
         //    A single CREATE3 deployment that bootstraps NttManager +
         //    WormholeTransceiver proxies, initializes them, registers the
         //    transceiver, and transfers ownership to the migrationOwner.
-        address helper = deployer
-            .create3("NttDeployHelper")
-            .setLabel(config.tokenName)
-            .deploy(
-                abi.encode(
-                    token,
-                    mode,
-                    chainConfig.wormholeChainId,
-                    wormholeCoreBridge,
-                    CONSISTENCY_LEVEL,
-                    owner
-                )
-            );
+        address helper = deployer.create3("NttDeployHelper").setLabel(config.tokenName)
+            .deploy(abi.encode(token, mode, chainConfig.wormholeChainId, wormholeCoreBridge, CONSISTENCY_LEVEL, owner));
 
         // ── Read deployed addresses ─────────────────────────────────────
         address nttManagerProxy = INttDeployHelper(helper).nttManagerProxy();

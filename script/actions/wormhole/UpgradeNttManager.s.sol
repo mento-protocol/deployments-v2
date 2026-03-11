@@ -74,9 +74,7 @@ contract UpgradeNttManager is NTTScriptBase {
         string memory label = string.concat(tokenName, ":", version);
         console.log("  > Deploying new NttManager implementation (label: NttManagerImpl:%s)", label);
 
-        address newImpl = owner
-            .create3("NttManager")
-            .setLabel(label)
+        address newImpl = owner.create3("NttManager").setLabel(label)
             .deploy(
                 abi.encode(
                     token,
@@ -96,5 +94,4 @@ contract UpgradeNttManager is NTTScriptBase {
         console.log("");
         console.log("=== UpgradeNttManager: %s %s complete ===", tokenName, version);
     }
-
 }

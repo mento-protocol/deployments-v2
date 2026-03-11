@@ -127,7 +127,7 @@ contract MentoConfig_celo is MentoConfig {
             rebalanceThresholdBelow: 3333
         });
 
-        ReserveLiquidityStrategyPoolConfig memory emptyRls;
+        LiquidityStrategyPoolConfig memory emptyLsConfig;
 
         // ── USDm / GBPm ─────────────────────────────────────────────────
         _addFPMM(
@@ -145,12 +145,12 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 77_000, limit1: 385_000}),
             TokenLimits({limit0: 100_000, limit1: 500_000}),
-            emptyRls
+            emptyLsConfig
         );
 
-        // Reserve liquidity strategy params for USD collateral pools
-        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
-            reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+        // Liquidity strategy params for USD collateral pools
+        LiquidityStrategyPoolConfig memory usdCollateralPoolsLsConfig = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
             debtToken: _lookupTokenAddress("USDm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
@@ -176,7 +176,7 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsRls
+            usdCollateralPoolsLsConfig
         );
 
         // ── USDm / USDC ────────────────────────────────────────────────
@@ -195,7 +195,7 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsRls
+            usdCollateralPoolsLsConfig
         );
 
         // ── USDm / USDT ────────────────────────────────────────────────
@@ -214,7 +214,7 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsRls
+            usdCollateralPoolsLsConfig
         );
     }
 

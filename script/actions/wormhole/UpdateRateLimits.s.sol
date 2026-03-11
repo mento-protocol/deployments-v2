@@ -90,9 +90,7 @@ contract UpdateRateLimits is NTTScriptBase {
     function _updateInboundLimit(Senders.Sender storage owner, uint256 peerIdx) internal {
         NTTChainConfig memory peer = peerChains[peerIdx];
         uint256 desiredLimit = peerInboundLimits[peerIdx];
-        uint256 currentInbound = _untrim(
-            INTTManager(localNttManager).getInboundLimitParams(peer.wormholeChainId).limit
-        );
+        uint256 currentInbound = _untrim(INTTManager(localNttManager).getInboundLimitParams(peer.wormholeChainId).limit);
 
         if (currentInbound != desiredLimit) {
             console.log(
@@ -103,8 +101,9 @@ contract UpdateRateLimits is NTTScriptBase {
             );
             INTTManager(owner.harness(localNttManager)).setInboundLimit(desiredLimit, peer.wormholeChainId);
         } else {
-            console.log("  > Inbound limit from %s already correct (%d), skipping", peer.chainName, currentInbound / 1e18);
+            console.log(
+                "  > Inbound limit from %s already correct (%d), skipping", peer.chainName, currentInbound / 1e18
+            );
         }
     }
-
 }
