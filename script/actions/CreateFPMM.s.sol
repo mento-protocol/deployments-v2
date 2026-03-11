@@ -23,6 +23,11 @@ import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {ConfigHelper} from "../helpers/ConfigHelper.sol";
 import {OracleHelper} from "../helpers/OracleHelper.sol";
 
+interface IAUSD {
+    function getMinterRoleMembers() external returns (address[] memory);
+    function mint(address to, uint256 amount) external;
+}
+
 contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
     using Deployer for Senders.Sender;
     using Senders for Senders.Sender;
@@ -417,7 +422,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         uint256 swapAmountIn = 100 * decimals0;
 
         // Mint token0 to this contract for the swap
-        _mintTokenForSwap(c.token0, SWAP_TEST_ACCOUNT, swapAmountIn);
+        _deal(c.token0, SWAP_TEST_ACCOUNT, swapAmountIn);
 
         uint256 amountOut = fpmm.getAmountOut(swapAmountIn, c.token0);
         require(amountOut > 0, "Verify: swap amountOut is zero");
@@ -436,7 +441,14 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > token1 received:", balanceAfter - balanceBefore);
     }
 
-    function _mintTokenForSwap(address token, address to, uint256 amount) internal {
+    function _deal(address token, address to, uint256 amount) internal {
+        if (token == lookup("AUSD") && block.chainid == 143) {
+            // On mainnet we need to do some tricky things.
+            address[] memory minters = IAUSD(token).getMinterRoleMembers();
+            vm.prank(minters[0]);
+            IAUSD(token).mint(to, amount);
+            return;
+        }
         deal(token, to, amount);
     }
 
@@ -450,8 +462,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         uint256 decimals1 = 10 ** IERC20Metadata(sorted1).decimals();
         address reserve = lookupProxyOrFail("ReserveV2");
 
-        deal(sorted0, reserve, 100000 * decimals0);
-        deal(sorted1, reserve, 100000 * decimals1);
+        _deal(sorted0, reserve, 100000 * decimals0);
+        _deal(sorted1, reserve, 100000 * decimals1);
 
         // 1. Do a large one-sided swap to push the pool out of balance
         _doLargeSwap(fpmmProxy, fpmm);
@@ -486,7 +498,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         address token0 = fpmm.token0();
         uint256 largeSwapAmount = 5_000 * (10 ** IERC20Metadata(token0).decimals());
 
-        _mintTokenForSwap(token0, SWAP_TEST_ACCOUNT, largeSwapAmount);
+        _deal(token0, SWAP_TEST_ACCOUNT, largeSwapAmount);
         uint256 amountOut = fpmm.getAmountOut(largeSwapAmount, token0);
 
         vm.prank(SWAP_TEST_ACCOUNT);
@@ -519,8 +531,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         uint256 amount0 = (amount1 * rateDenominator * decimals0) / (rateNumerator * decimals1);
 
         // Mint tokens for liquidity
-        _mintTokenForSwap(c.token0, SWAP_TEST_ACCOUNT, amount0);
-        _mintTokenForSwap(c.token1, SWAP_TEST_ACCOUNT, amount1);
+        _deal(c.token0, SWAP_TEST_ACCOUNT, amount0);
+        _deal(c.token1, SWAP_TEST_ACCOUNT, amount1);
 
         // Transfer and mint LP
         vm.prank(SWAP_TEST_ACCOUNT);

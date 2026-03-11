@@ -77,6 +77,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     mapping(address rateFeedId => bool) internal _isRateFeed;
     mapping(string rateFeedName => address rateFeedId) internal _rateFeedIdByName;
     mapping(address rateFeedId => ChainlinkRelayerConfig) internal _chainlinkRelayers;
+    mapping(address rateFeedId => uint256 expiry) internal _rateFeedExpirySeconds;
     mapping(string symbol => address) internal _collateral;
     mapping(string symbol => bool) internal _isStableToken;
     mapping(address token => bool) internal _isAddressStableToken;
@@ -195,6 +196,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
     function getFxRateFeedIds() external view returns (address[] memory) {
         return _fxRateFeedIds;
+    }
+
+    function getRateFeedExpirySeconds(string calldata rateFeed) external view returns (uint256) {
+        return _rateFeedExpirySeconds[getRateFeedIdFromString(rateFeed)];
     }
 
     function getRateFeedIds() external view returns (address[] memory rateFeedIds) {
@@ -320,9 +325,14 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         _addRateFeed(rateFeed, getRateFeedIdFromString(rateFeed));
     }
 
+    function _setRateFeedExpirySeconds(string memory rateFeed, uint256 expiry) internal {
+        _rateFeedExpirySeconds[getRateFeedIdFromString(rateFeed)] = expiry;
+    }
+
     function _addRateFeed(string memory rateFeed, address rateFeedId) internal {
         _isRateFeed[rateFeedId] = true;
         _rateFeedIdByName[rateFeed] = rateFeedId;
+        vm.label(rateFeedId, rateFeed);
         _rateFeeds.push(RateFeed({rateFeed: rateFeed, rateFeedId: rateFeedId}));
     }
 

@@ -156,6 +156,8 @@ interface IMentoConfig {
 
     function getRateFeeds() external view returns (RateFeed[] memory);
 
+    function getRateFeedExpirySeconds(string calldata rateFeed) external view returns (uint256);
+
     function getRateFeedDependencies(address) external view returns (address[] memory);
 
     function getCollateralAssets() external view returns (address[] memory);
