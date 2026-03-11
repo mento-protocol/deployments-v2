@@ -1,7 +1,7 @@
 group: Mento V3 (Celo Sepolia Fork 28/02)
 components:
   SetupLocalFork:
-    script: SetupLocalFork_celo_sepolia
+    script: SetupFork
   CreateFPMM:
     script: CreateFPMM
     deps: [ 'SetupLocalFork' ]
@@ -21,6 +21,5 @@ components:
     env:
       token: GBPm
     deps: ['DeployLiquityV2']
-
 
 

@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {NTTConfig, NTTTokenConfig, NTTChainConfig, NTTInboundLimit} from "script/config/wormhole/NTTConfig.sol";
-import { ProxyHelper } from "script/helpers/ProxyHelper.sol";
+import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 
 /// @title NTTScriptBase
 /// @notice Shared base contract for all NTT wormhole scripts, providing
@@ -25,10 +25,18 @@ abstract contract NTTScriptBase is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < config.chains.length; i++) {
             if (config.chains[i].evmChainId == block.chainid) return config.chains[i];
         }
-        revert(string.concat("Current chain (", vm.toString(block.chainid), ") not found in NTT config for ", config.tokenName));
+        revert(
+            string.concat(
+                "Current chain (", vm.toString(block.chainid), ") not found in NTT config for ", config.tokenName
+            )
+        );
     }
 
-    function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName) internal pure returns (uint256) {
+    function _findInboundLimit(NTTTokenConfig memory config, string memory fromChainName)
+        internal
+        pure
+        returns (uint256)
+    {
         for (uint256 i = 0; i < config.inboundLimits.length; i++) {
             if (keccak256(bytes(config.inboundLimits[i].fromChainName)) == keccak256(bytes(fromChainName))) {
                 return config.inboundLimits[i].limit;

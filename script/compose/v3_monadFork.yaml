@@ -1,7 +1,7 @@
 group: Mento V3 Monad Testnet
 components:
   SetupLocalFork:
-    script: SetupLocalFork_monad_testnet
+    script: SetupFork
   DeployV3PreStage:
     script: DeployV3PreStage
     deps:
@@ -18,7 +18,12 @@ components:
     # doesn't seem to work
     deps:
       - ConfigureV3PreStage
+  DeployOpenLiquidityStrategy:
+    script: DeployOpenLiquidityStrategy
+    deps:
+      - ConfigureV3PreStage
   CreateFPMM:
     script: CreateFPMM
     deps: 
       - Relay
+      - DeployOpenLiquidityStrategy

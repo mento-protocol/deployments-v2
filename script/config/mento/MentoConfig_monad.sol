@@ -26,8 +26,6 @@ contract MentoConfig_monad is MentoConfig {
     // ===================================================================
     /// @notice Set network-specific parameters. Override in subclasses.
     function _configureParams() internal virtual {
-        _redemptionShortfallTolerance = 1e12;
-
         _coreAggs = CoreAggregators({
             celoUsd: address(0),
             ethUsd: address(0),
@@ -88,7 +86,16 @@ contract MentoConfig_monad is MentoConfig {
             rebalanceThresholdBelow: 3333
         });
 
-        ReserveLiquidityStrategyPoolConfig memory emptyRls;
+        LiquidityStrategyPoolConfig memory openLsConfig = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("GBPm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0 // 0%
+        });
 
         // ── USDm / GBPm ─────────────────────────────────────────────────
         _addFPMM(
@@ -106,12 +113,12 @@ contract MentoConfig_monad is MentoConfig {
             }),
             TokenLimits({limit0: 77_000, limit1: 385_000}),
             TokenLimits({limit0: 100_000, limit1: 500_000}),
-            emptyRls
+            openLsConfig
         );
 
-        // Reserve liquidity strategy params for USD collateral pools
-        ReserveLiquidityStrategyPoolConfig memory usdCollateralPoolsRls = ReserveLiquidityStrategyPoolConfig({
-            reserveLiquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+        // Liquidity strategy params for USD collateral pools
+        LiquidityStrategyPoolConfig memory usdCollateralPoolsLsConfig = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
             debtToken: _lookupTokenAddress("USDm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
@@ -137,7 +144,7 @@ contract MentoConfig_monad is MentoConfig {
             }),
             TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
             TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
-            usdCollateralPoolsRls
+            usdCollateralPoolsLsConfig
         );
 
         // ── USDm / AUSD ────────────────────────────────────────────────
@@ -156,7 +163,7 @@ contract MentoConfig_monad is MentoConfig {
             }),
             TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
             TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
-            usdCollateralPoolsRls
+            usdCollateralPoolsLsConfig
         );
     }
 

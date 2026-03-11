@@ -526,7 +526,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         IFPMM.FPMMParams memory params,
         TokenLimits memory debtLimits,
         TokenLimits memory collateralLimits,
-        ReserveLiquidityStrategyPoolConfig memory rlsParams
+        LiquidityStrategyPoolConfig memory liquidityStrategyParams
     ) internal {
         address debtAddress = _lookupTokenAddress(debt);
         address collateralAddress = _lookupTokenAddress(collateral);
@@ -549,7 +549,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         c.invertRateFeed = _shouldInvertRateFeed(token0Address, token1Address);
         c.params = params;
         c.tradingLimits = _buildFPMMTradingLimits(debt, collateral, debtIsToken0, debtLimits, collateralLimits);
-        c.rlsConfig = rlsParams;
+        c.liquidityStrategyConfig = liquidityStrategyParams;
 
         _fpmmConfigs.push(c);
     }

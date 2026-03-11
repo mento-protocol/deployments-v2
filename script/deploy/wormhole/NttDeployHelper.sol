@@ -2,9 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {NttManager} from "mento-stabletoken-ntt/src/NttManager/NttManager.sol";
-import {
-    WormholeTransceiver
-} from "mento-stabletoken-ntt/src/Transceiver/WormholeTransceiver/WormholeTransceiver.sol";
+import {WormholeTransceiver} from "mento-stabletoken-ntt/src/Transceiver/WormholeTransceiver/WormholeTransceiver.sol";
 import {IManagerBase} from "mento-stabletoken-ntt/src/interfaces/IManagerBase.sol";
 import {ERC1967Proxy} from "openzeppelin-contracts/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import {IPausable} from "script/actions/wormhole/interfaces/IPausable.sol";
