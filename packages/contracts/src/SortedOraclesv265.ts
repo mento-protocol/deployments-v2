@@ -1,50 +1,27 @@
-export const BreakerBox = {
+export const SortedOraclesv265 = {
   abi: [
     {
       "type": "constructor",
       "inputs": [
         {
-          "name": "_rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
-        },
-        {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        },
-        {
-          "name": "owner",
-          "type": "address",
-          "internalType": "address"
+          "name": "test",
+          "type": "bool",
+          "internalType": "bool"
         }
       ],
       "stateMutability": "nonpayable"
     },
     {
       "type": "function",
-      "name": "addBreaker",
+      "name": "addOracle",
       "inputs": [
         {
-          "name": "breaker",
+          "name": "token",
           "type": "address",
           "internalType": "address"
         },
         {
-          "name": "tradingMode",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "addRateFeed",
-      "inputs": [
-        {
-          "name": "rateFeedID",
+          "name": "oracleAddress",
           "type": "address",
           "internalType": "address"
         }
@@ -54,12 +31,25 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "addRateFeeds",
+      "name": "breakerBox",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "contract IBreakerBox"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "deleteEquivalentToken",
       "inputs": [
         {
-          "name": "newRateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
         }
       ],
       "outputs": [],
@@ -67,7 +57,7 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "breakerTradingMode",
+      "name": "equivalentTokens",
       "inputs": [
         {
           "name": "",
@@ -77,40 +67,164 @@ export const BreakerBox = {
       ],
       "outputs": [
         {
-          "name": "",
-          "type": "uint8",
-          "internalType": "uint8"
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
         }
       ],
       "stateMutability": "view"
     },
     {
       "type": "function",
-      "name": "breakers",
+      "name": "getEquivalentToken",
       "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getOracles",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]",
+          "internalType": "address[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getRates",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]",
+          "internalType": "address[]"
+        },
+        {
+          "name": "",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "",
+          "type": "uint8[]",
+          "internalType": "enum SortedLinkedListWithMedian.MedianRelation[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getTimestamps",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address[]",
+          "internalType": "address[]"
+        },
+        {
+          "name": "",
+          "type": "uint256[]",
+          "internalType": "uint256[]"
+        },
+        {
+          "name": "",
+          "type": "uint8[]",
+          "internalType": "enum SortedLinkedListWithMedian.MedianRelation[]"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "getTokenReportExpirySeconds",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
         {
           "name": "",
           "type": "uint256",
           "internalType": "uint256"
         }
       ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
       "stateMutability": "view"
     },
     {
       "type": "function",
-      "name": "checkAndSetBreakers",
+      "name": "getVersionNumber",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "pure"
+    },
+    {
+      "type": "function",
+      "name": "initialize",
       "inputs": [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
+          "name": "_reportExpirySeconds",
+          "type": "uint256",
+          "internalType": "uint256"
         }
       ],
       "outputs": [],
@@ -118,59 +232,8 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "getBreakers",
+      "name": "initialized",
       "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "getRateFeedTradingMode",
-      "inputs": [
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "getRateFeeds",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "isBreaker",
-      "inputs": [
-        {
-          "name": "breaker",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
       "outputs": [
         {
           "name": "",
@@ -182,15 +245,39 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "isBreakerEnabled",
+      "name": "isOldestReportExpired",
       "inputs": [
         {
-          "name": "breaker",
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool",
+          "internalType": "bool"
+        },
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "isOracle",
+      "inputs": [
+        {
+          "name": "",
           "type": "address",
           "internalType": "address"
         },
         {
-          "name": "rateFeedID",
+          "name": "",
           "type": "address",
           "internalType": "address"
         }
@@ -219,6 +306,135 @@ export const BreakerBox = {
     },
     {
       "type": "function",
+      "name": "medianRate",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "medianRateWithoutEquivalentMapping",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "medianTimestamp",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "numRates",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "numTimestamps",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "oracles",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
       "name": "owner",
       "inputs": [],
       "outputs": [
@@ -232,127 +448,17 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "rateFeedBreakerStatus",
+      "name": "removeExpiredReports",
       "inputs": [
         {
-          "name": "",
+          "name": "token",
           "type": "address",
           "internalType": "address"
         },
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "tradingMode",
-          "type": "uint8",
-          "internalType": "uint8"
-        },
-        {
-          "name": "lastUpdatedTime",
-          "type": "uint64",
-          "internalType": "uint64"
-        },
-        {
-          "name": "enabled",
-          "type": "bool",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "rateFeedDependencies",
-      "inputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "",
+          "name": "n",
           "type": "uint256",
           "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "rateFeedIDs",
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "rateFeedStatus",
-      "inputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "rateFeedTradingMode",
-      "inputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
-      "name": "removeBreaker",
-      "inputs": [
-        {
-          "name": "breaker",
-          "type": "address",
-          "internalType": "address"
         }
       ],
       "outputs": [],
@@ -360,12 +466,22 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "removeRateFeed",
+      "name": "removeOracle",
       "inputs": [
         {
-          "name": "rateFeedID",
+          "name": "token",
           "type": "address",
           "internalType": "address"
+        },
+        {
+          "name": "oracleAddress",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "index",
+          "type": "uint256",
+          "internalType": "uint256"
         }
       ],
       "outputs": [],
@@ -380,48 +496,27 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "setRateFeedDependencies",
+      "name": "report",
       "inputs": [
         {
-          "name": "rateFeedID",
+          "name": "token",
           "type": "address",
           "internalType": "address"
         },
         {
-          "name": "dependencies",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setRateFeedTradingMode",
-      "inputs": [
+          "name": "value",
+          "type": "uint256",
+          "internalType": "uint256"
+        },
         {
-          "name": "rateFeedID",
+          "name": "lesserKey",
           "type": "address",
           "internalType": "address"
         },
         {
-          "name": "tradingMode",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setSortedOracles",
-      "inputs": [
-        {
-          "name": "_sortedOracles",
+          "name": "greaterKey",
           "type": "address",
-          "internalType": "contract ISortedOracles"
+          "internalType": "address"
         }
       ],
       "outputs": [],
@@ -429,39 +524,97 @@ export const BreakerBox = {
     },
     {
       "type": "function",
-      "name": "sortedOracles",
+      "name": "reportExpirySeconds",
       "inputs": [],
       "outputs": [
         {
           "name": "",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
+          "type": "uint256",
+          "internalType": "uint256"
         }
       ],
       "stateMutability": "view"
     },
     {
       "type": "function",
-      "name": "toggleBreaker",
+      "name": "setBreakerBox",
       "inputs": [
         {
-          "name": "breakerAddress",
+          "name": "newBreakerBox",
           "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        },
-        {
-          "name": "enable",
-          "type": "bool",
-          "internalType": "bool"
+          "internalType": "contract IBreakerBox"
         }
       ],
       "outputs": [],
       "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setEquivalentToken",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "equivalentToken",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setReportExpiry",
+      "inputs": [
+        {
+          "name": "_reportExpirySeconds",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setTokenReportExpiry",
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address",
+          "internalType": "address"
+        },
+        {
+          "name": "_reportExpirySeconds",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "tokenReportExpirySeconds",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
     },
     {
       "type": "function",
@@ -478,10 +631,10 @@ export const BreakerBox = {
     },
     {
       "type": "event",
-      "name": "BreakerAdded",
+      "name": "BreakerBoxUpdated",
       "inputs": [
         {
-          "name": "breaker",
+          "name": "newBreakerBox",
           "type": "address",
           "indexed": true,
           "internalType": "address"
@@ -491,10 +644,16 @@ export const BreakerBox = {
     },
     {
       "type": "event",
-      "name": "BreakerRemoved",
+      "name": "EquivalentTokenSet",
       "inputs": [
         {
-          "name": "breaker",
+          "name": "token",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "equivalentToken",
           "type": "address",
           "indexed": true,
           "internalType": "address"
@@ -504,44 +663,107 @@ export const BreakerBox = {
     },
     {
       "type": "event",
-      "name": "BreakerStatusUpdated",
+      "name": "MedianUpdated",
       "inputs": [
         {
-          "name": "breaker",
+          "name": "token",
           "type": "address",
-          "indexed": false,
+          "indexed": true,
           "internalType": "address"
         },
         {
-          "name": "rateFeedID",
-          "type": "address",
+          "name": "value",
+          "type": "uint256",
           "indexed": false,
-          "internalType": "address"
-        },
-        {
-          "name": "status",
-          "type": "bool",
-          "indexed": false,
-          "internalType": "bool"
+          "internalType": "uint256"
         }
       ],
       "anonymous": false
     },
     {
       "type": "event",
-      "name": "BreakerTripped",
+      "name": "OracleAdded",
       "inputs": [
         {
-          "name": "breaker",
+          "name": "token",
           "type": "address",
           "indexed": true,
           "internalType": "address"
         },
         {
-          "name": "rateFeedID",
+          "name": "oracleAddress",
           "type": "address",
           "indexed": true,
           "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OracleRemoved",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "oracleAddress",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OracleReportRemoved",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "oracle",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "OracleReported",
+      "inputs": [
+        {
+          "name": "token",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "oracle",
+          "type": "address",
+          "indexed": true,
+          "internalType": "address"
+        },
+        {
+          "name": "timestamp",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
+        },
+        {
+          "name": "value",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
         }
       ],
       "anonymous": false
@@ -567,131 +789,29 @@ export const BreakerBox = {
     },
     {
       "type": "event",
-      "name": "RateFeedAdded",
+      "name": "ReportExpirySet",
       "inputs": [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          "name": "reportExpiry",
+          "type": "uint256",
+          "indexed": false,
+          "internalType": "uint256"
         }
       ],
       "anonymous": false
     },
     {
       "type": "event",
-      "name": "RateFeedDependenciesSet",
+      "name": "TokenReportExpirySet",
       "inputs": [
         {
-          "name": "rateFeedID",
+          "name": "token",
           "type": "address",
-          "indexed": true,
+          "indexed": false,
           "internalType": "address"
         },
         {
-          "name": "dependencies",
-          "type": "address[]",
-          "indexed": true,
-          "internalType": "address[]"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "RateFeedRemoved",
-      "inputs": [
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "ResetAttemptCriteriaFail",
-      "inputs": [
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "ResetAttemptNotCool",
-      "inputs": [
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "ResetSuccessful",
-      "inputs": [
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "SortedOraclesUpdated",
-      "inputs": [
-        {
-          "name": "newSortedOracles",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
-      "type": "event",
-      "name": "TradingModeUpdated",
-      "inputs": [
-        {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "name": "tradingMode",
+          "name": "reportExpiry",
           "type": "uint256",
           "indexed": false,
           "internalType": "uint256"
@@ -701,8 +821,6 @@ export const BreakerBox = {
     }
   ] as const,
   address: {
-    143: '0x9fc1E0d10fb38954Da385B8B25aB2BbaF3241722',
-    42220: '0x303ED1df62Fa067659B586EbEe8De0EcE824Ab39',
-    11142220: '0x578bD46003B9D3fd4c3C3f47c98B329562a6a1dE',
+    10143: '0x437aDC949AaC8f4971728ff0a7AC7C2290E555de',
   } as Partial<Record<number, `0x${string}`>>,
 };

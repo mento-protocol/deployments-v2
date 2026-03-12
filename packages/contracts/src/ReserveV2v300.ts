@@ -1,4 +1,4 @@
-export const ReserveV2 = {
+export const ReserveV2v300 = {
   abi: [
     {
       "type": "constructor",
@@ -810,9 +810,7 @@ export const ReserveV2 = {
     }
   ] as const,
   address: {
-    143: '0x4255Cf38e51516766180b33122029A88Cb853806',
-    10143: '0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7',
-    42220: '0x4255Cf38e51516766180b33122029A88Cb853806',
-    11142220: '0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7',
+    143: '0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF',
+    10143: '0x9AF42d11e808D0d6D16CFA676769AaFa0DA9644d',
   } as Partial<Record<number, `0x${string}`>>,
 };

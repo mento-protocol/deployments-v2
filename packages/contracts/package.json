@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/contracts",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Mento protocol contract ABIs and addresses",
   "type": "module",
   "main": "./dist/index.js",
@@ -16,49 +16,165 @@
     },
     "./contracts.json": "./contracts.json",
     "./abis/*": "./abis/*",
-    "./GBPm": {
-      "types": "./dist/GBPm.d.ts",
-      "import": "./dist/GBPm.js"
+    "./AddressSortedLinkedListWithMedian": {
+      "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
+      "import": "./dist/AddressSortedLinkedListWithMedian.js"
     },
-    "./USDm": {
-      "types": "./dist/USDm.d.ts",
-      "import": "./dist/USDm.js"
+    "./BreakerBox": {
+      "types": "./dist/BreakerBox.d.ts",
+      "import": "./dist/BreakerBox.js"
     },
-    "./StableTokenSpoke": {
-      "types": "./dist/StableTokenSpoke.d.ts",
-      "import": "./dist/StableTokenSpoke.js"
+    "./ChainlinkRelayerFactory": {
+      "types": "./dist/ChainlinkRelayerFactory.d.ts",
+      "import": "./dist/ChainlinkRelayerFactory.js"
     },
-    "./CDPLiquidityStrategy": {
-      "types": "./dist/CDPLiquidityStrategy.d.ts",
-      "import": "./dist/CDPLiquidityStrategy.js"
+    "./ChainlinkRelayerV1AUSDUSD": {
+      "types": "./dist/ChainlinkRelayerV1AUSDUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1AUSDUSD.js"
+    },
+    "./ChainlinkRelayerV1GBPUSD": {
+      "types": "./dist/ChainlinkRelayerV1GBPUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1GBPUSD.js"
+    },
+    "./ChainlinkRelayerV1USDCUSD": {
+      "types": "./dist/ChainlinkRelayerV1USDCUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1USDCUSD.js"
     },
     "./FPMMFactory": {
       "types": "./dist/FPMMFactory.d.ts",
       "import": "./dist/FPMMFactory.js"
     },
+    "./FPMMFactoryv300": {
+      "types": "./dist/FPMMFactoryv300.d.ts",
+      "import": "./dist/FPMMFactoryv300.js"
+    },
+    "./FPMMv300": {
+      "types": "./dist/FPMMv300.d.ts",
+      "import": "./dist/FPMMv300.js"
+    },
     "./FactoryRegistry": {
       "types": "./dist/FactoryRegistry.d.ts",
       "import": "./dist/FactoryRegistry.js"
+    },
+    "./FactoryRegistryv300": {
+      "types": "./dist/FactoryRegistryv300.d.ts",
+      "import": "./dist/FactoryRegistryv300.js"
+    },
+    "./GBPm": {
+      "types": "./dist/GBPm.d.ts",
+      "import": "./dist/GBPm.js"
+    },
+    "./MarketHoursBreakerv300": {
+      "types": "./dist/MarketHoursBreakerv300.d.ts",
+      "import": "./dist/MarketHoursBreakerv300.js"
+    },
+    "./MedianDeltaBreaker": {
+      "types": "./dist/MedianDeltaBreaker.d.ts",
+      "import": "./dist/MedianDeltaBreaker.js"
+    },
+    "./NttDeployHelperGBPm": {
+      "types": "./dist/NttDeployHelperGBPm.d.ts",
+      "import": "./dist/NttDeployHelperGBPm.js"
+    },
+    "./NttDeployHelperUSDm": {
+      "types": "./dist/NttDeployHelperUSDm.d.ts",
+      "import": "./dist/NttDeployHelperUSDm.js"
+    },
+    "./OpenLiquidityStrategy": {
+      "types": "./dist/OpenLiquidityStrategy.d.ts",
+      "import": "./dist/OpenLiquidityStrategy.js"
     },
     "./OracleAdapter": {
       "types": "./dist/OracleAdapter.d.ts",
       "import": "./dist/OracleAdapter.js"
     },
+    "./OracleAdapterv300": {
+      "types": "./dist/OracleAdapterv300.d.ts",
+      "import": "./dist/OracleAdapterv300.js"
+    },
+    "./ProxyAdmin": {
+      "types": "./dist/ProxyAdmin.d.ts",
+      "import": "./dist/ProxyAdmin.js"
+    },
     "./ReserveLiquidityStrategy": {
       "types": "./dist/ReserveLiquidityStrategy.d.ts",
       "import": "./dist/ReserveLiquidityStrategy.js"
+    },
+    "./ReserveLiquidityStrategyv301": {
+      "types": "./dist/ReserveLiquidityStrategyv301.d.ts",
+      "import": "./dist/ReserveLiquidityStrategyv301.js"
     },
     "./ReserveV2": {
       "types": "./dist/ReserveV2.d.ts",
       "import": "./dist/ReserveV2.js"
     },
-    "./StabilityPoolGBPm": {
-      "types": "./dist/StabilityPoolGBPm.d.ts",
-      "import": "./dist/StabilityPoolGBPm.js"
+    "./ReserveV2v300": {
+      "types": "./dist/ReserveV2v300.d.ts",
+      "import": "./dist/ReserveV2v300.js"
     },
-    "./SystemParamsProxyGBPm": {
-      "types": "./dist/SystemParamsProxyGBPm.d.ts",
-      "import": "./dist/SystemParamsProxyGBPm.js"
+    "./Routerv300": {
+      "types": "./dist/Routerv300.d.ts",
+      "import": "./dist/Routerv300.js"
+    },
+    "./SortedOracles": {
+      "types": "./dist/SortedOracles.d.ts",
+      "import": "./dist/SortedOracles.js"
+    },
+    "./StableTokenSpoke": {
+      "types": "./dist/StableTokenSpoke.d.ts",
+      "import": "./dist/StableTokenSpoke.js"
+    },
+    "./StableTokenV3v300": {
+      "types": "./dist/StableTokenV3v300.d.ts",
+      "import": "./dist/StableTokenV3v300.js"
+    },
+    "./USDm": {
+      "types": "./dist/USDm.d.ts",
+      "import": "./dist/USDm.js"
+    },
+    "./ValueDeltaBreaker": {
+      "types": "./dist/ValueDeltaBreaker.d.ts",
+      "import": "./dist/ValueDeltaBreaker.js"
+    },
+    "./BreakerBoxv265": {
+      "types": "./dist/BreakerBoxv265.d.ts",
+      "import": "./dist/BreakerBoxv265.js"
+    },
+    "./ChainlinkRelayerFactoryv265": {
+      "types": "./dist/ChainlinkRelayerFactoryv265.d.ts",
+      "import": "./dist/ChainlinkRelayerFactoryv265.js"
+    },
+    "./MedianDeltaBreakerv265": {
+      "types": "./dist/MedianDeltaBreakerv265.d.ts",
+      "import": "./dist/MedianDeltaBreakerv265.js"
+    },
+    "./MockChainlinkAggregatorAUSDUSD": {
+      "types": "./dist/MockChainlinkAggregatorAUSDUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorAUSDUSD.js"
+    },
+    "./MockChainlinkAggregatorGBPUSD": {
+      "types": "./dist/MockChainlinkAggregatorGBPUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorGBPUSD.js"
+    },
+    "./MockChainlinkAggregatorUSDCUSD": {
+      "types": "./dist/MockChainlinkAggregatorUSDCUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorUSDCUSD.js"
+    },
+    "./MockERC20AUSD": {
+      "types": "./dist/MockERC20AUSD.d.ts",
+      "import": "./dist/MockERC20AUSD.js"
+    },
+    "./SortedOraclesv265": {
+      "types": "./dist/SortedOraclesv265.d.ts",
+      "import": "./dist/SortedOraclesv265.js"
+    },
+    "./ValueDeltaBreakerv265": {
+      "types": "./dist/ValueDeltaBreakerv265.d.ts",
+      "import": "./dist/ValueDeltaBreakerv265.js"
+    },
+    "./AUDm": {
+      "types": "./dist/AUDm.d.ts",
+      "import": "./dist/AUDm.js"
     },
     "./ActivePool": {
       "types": "./dist/ActivePool.d.ts",
@@ -68,9 +184,37 @@
       "types": "./dist/AddressesRegistry.d.ts",
       "import": "./dist/AddressesRegistry.js"
     },
+    "./BRLm": {
+      "types": "./dist/BRLm.d.ts",
+      "import": "./dist/BRLm.js"
+    },
+    "./BiPoolManager": {
+      "types": "./dist/BiPoolManager.d.ts",
+      "import": "./dist/BiPoolManager.js"
+    },
     "./BorrowerOperations": {
       "types": "./dist/BorrowerOperations.d.ts",
       "import": "./dist/BorrowerOperations.js"
+    },
+    "./Broker": {
+      "types": "./dist/Broker.d.ts",
+      "import": "./dist/Broker.js"
+    },
+    "./CADm": {
+      "types": "./dist/CADm.d.ts",
+      "import": "./dist/CADm.js"
+    },
+    "./CDPLiquidityStrategy": {
+      "types": "./dist/CDPLiquidityStrategy.d.ts",
+      "import": "./dist/CDPLiquidityStrategy.js"
+    },
+    "./CHFm": {
+      "types": "./dist/CHFm.d.ts",
+      "import": "./dist/CHFm.js"
+    },
+    "./COPm": {
+      "types": "./dist/COPm.d.ts",
+      "import": "./dist/COPm.js"
     },
     "./CollSurplusPool": {
       "types": "./dist/CollSurplusPool.d.ts",
@@ -80,13 +224,29 @@
       "types": "./dist/CollateralRegistry.d.ts",
       "import": "./dist/CollateralRegistry.js"
     },
+    "./ConstantProductPricingModule": {
+      "types": "./dist/ConstantProductPricingModule.d.ts",
+      "import": "./dist/ConstantProductPricingModule.js"
+    },
+    "./ConstantSumPricingModule": {
+      "types": "./dist/ConstantSumPricingModule.d.ts",
+      "import": "./dist/ConstantSumPricingModule.js"
+    },
     "./DefaultPool": {
       "types": "./dist/DefaultPool.d.ts",
       "import": "./dist/DefaultPool.js"
     },
+    "./EURm": {
+      "types": "./dist/EURm.d.ts",
+      "import": "./dist/EURm.js"
+    },
     "./FPMM": {
       "types": "./dist/FPMM.d.ts",
       "import": "./dist/FPMM.js"
+    },
+    "./GHSm": {
+      "types": "./dist/GHSm.d.ts",
+      "import": "./dist/GHSm.js"
     },
     "./GasPool": {
       "types": "./dist/GasPool.d.ts",
@@ -96,13 +256,41 @@
       "types": "./dist/HintHelpers.d.ts",
       "import": "./dist/HintHelpers.js"
     },
+    "./JPYm": {
+      "types": "./dist/JPYm.d.ts",
+      "import": "./dist/JPYm.js"
+    },
+    "./KESm": {
+      "types": "./dist/KESm.d.ts",
+      "import": "./dist/KESm.js"
+    },
+    "./Locking": {
+      "types": "./dist/Locking.d.ts",
+      "import": "./dist/Locking.js"
+    },
     "./MarketHoursBreaker": {
       "types": "./dist/MarketHoursBreaker.d.ts",
       "import": "./dist/MarketHoursBreaker.js"
     },
+    "./MentoGovernor": {
+      "types": "./dist/MentoGovernor.d.ts",
+      "import": "./dist/MentoGovernor.js"
+    },
     "./MultiTroveGetter": {
       "types": "./dist/MultiTroveGetter.d.ts",
       "import": "./dist/MultiTroveGetter.js"
+    },
+    "./NGNm": {
+      "types": "./dist/NGNm.d.ts",
+      "import": "./dist/NGNm.js"
+    },
+    "./PHPm": {
+      "types": "./dist/PHPm.d.ts",
+      "import": "./dist/PHPm.js"
+    },
+    "./Reserve": {
+      "types": "./dist/Reserve.d.ts",
+      "import": "./dist/Reserve.js"
     },
     "./ReserveTroveFactory": {
       "types": "./dist/ReserveTroveFactory.d.ts",
@@ -120,9 +308,13 @@
       "types": "./dist/StabilityPool.d.ts",
       "import": "./dist/StabilityPool.js"
     },
-    "./StableTokenV3v300": {
-      "types": "./dist/StableTokenV3v300.d.ts",
-      "import": "./dist/StableTokenV3v300.js"
+    "./StabilityPoolGBPm": {
+      "types": "./dist/StabilityPoolGBPm.d.ts",
+      "import": "./dist/StabilityPoolGBPm.js"
+    },
+    "./StableTokenV2": {
+      "types": "./dist/StableTokenV2.d.ts",
+      "import": "./dist/StableTokenV2.js"
     },
     "./StableTokenV3v301": {
       "types": "./dist/StableTokenV3v301.d.ts",
@@ -131,6 +323,14 @@
     "./SystemParams": {
       "types": "./dist/SystemParams.d.ts",
       "import": "./dist/SystemParams.js"
+    },
+    "./SystemParamsProxyGBPm": {
+      "types": "./dist/SystemParamsProxyGBPm.d.ts",
+      "import": "./dist/SystemParamsProxyGBPm.js"
+    },
+    "./TimelockController": {
+      "types": "./dist/TimelockController.d.ts",
+      "import": "./dist/TimelockController.js"
     },
     "./TroveManager": {
       "types": "./dist/TroveManager.d.ts",
@@ -144,125 +344,13 @@
       "types": "./dist/VirtualPoolFactory.d.ts",
       "import": "./dist/VirtualPoolFactory.js"
     },
-    "./ProxyAdmin": {
-      "types": "./dist/ProxyAdmin.d.ts",
-      "import": "./dist/ProxyAdmin.js"
-    },
-    "./Broker": {
-      "types": "./dist/Broker.d.ts",
-      "import": "./dist/Broker.js"
-    },
-    "./BiPoolManager": {
-      "types": "./dist/BiPoolManager.d.ts",
-      "import": "./dist/BiPoolManager.js"
-    },
-    "./Reserve": {
-      "types": "./dist/Reserve.d.ts",
-      "import": "./dist/Reserve.js"
-    },
-    "./BreakerBox": {
-      "types": "./dist/BreakerBox.d.ts",
-      "import": "./dist/BreakerBox.js"
-    },
-    "./MedianDeltaBreaker": {
-      "types": "./dist/MedianDeltaBreaker.d.ts",
-      "import": "./dist/MedianDeltaBreaker.js"
-    },
-    "./ValueDeltaBreaker": {
-      "types": "./dist/ValueDeltaBreaker.d.ts",
-      "import": "./dist/ValueDeltaBreaker.js"
-    },
-    "./ConstantSumPricingModule": {
-      "types": "./dist/ConstantSumPricingModule.d.ts",
-      "import": "./dist/ConstantSumPricingModule.js"
-    },
-    "./ConstantProductPricingModule": {
-      "types": "./dist/ConstantProductPricingModule.d.ts",
-      "import": "./dist/ConstantProductPricingModule.js"
-    },
-    "./EURm": {
-      "types": "./dist/EURm.d.ts",
-      "import": "./dist/EURm.js"
-    },
-    "./BRLm": {
-      "types": "./dist/BRLm.d.ts",
-      "import": "./dist/BRLm.js"
-    },
     "./XOFm": {
       "types": "./dist/XOFm.d.ts",
       "import": "./dist/XOFm.js"
     },
-    "./KESm": {
-      "types": "./dist/KESm.d.ts",
-      "import": "./dist/KESm.js"
-    },
-    "./PHPm": {
-      "types": "./dist/PHPm.d.ts",
-      "import": "./dist/PHPm.js"
-    },
-    "./COPm": {
-      "types": "./dist/COPm.d.ts",
-      "import": "./dist/COPm.js"
-    },
-    "./GHSm": {
-      "types": "./dist/GHSm.d.ts",
-      "import": "./dist/GHSm.js"
-    },
     "./ZARm": {
       "types": "./dist/ZARm.d.ts",
       "import": "./dist/ZARm.js"
-    },
-    "./CADm": {
-      "types": "./dist/CADm.d.ts",
-      "import": "./dist/CADm.js"
-    },
-    "./AUDm": {
-      "types": "./dist/AUDm.d.ts",
-      "import": "./dist/AUDm.js"
-    },
-    "./CHFm": {
-      "types": "./dist/CHFm.d.ts",
-      "import": "./dist/CHFm.js"
-    },
-    "./JPYm": {
-      "types": "./dist/JPYm.d.ts",
-      "import": "./dist/JPYm.js"
-    },
-    "./NGNm": {
-      "types": "./dist/NGNm.d.ts",
-      "import": "./dist/NGNm.js"
-    },
-    "./StableTokenV2": {
-      "types": "./dist/StableTokenV2.d.ts",
-      "import": "./dist/StableTokenV2.js"
-    },
-    "./SortedOracles": {
-      "types": "./dist/SortedOracles.d.ts",
-      "import": "./dist/SortedOracles.js"
-    },
-    "./MentoGovernor": {
-      "types": "./dist/MentoGovernor.d.ts",
-      "import": "./dist/MentoGovernor.js"
-    },
-    "./ChainlinkRelayerFactory": {
-      "types": "./dist/ChainlinkRelayerFactory.d.ts",
-      "import": "./dist/ChainlinkRelayerFactory.js"
-    },
-    "./TimelockController": {
-      "types": "./dist/TimelockController.d.ts",
-      "import": "./dist/TimelockController.js"
-    },
-    "./Locking": {
-      "types": "./dist/Locking.d.ts",
-      "import": "./dist/Locking.js"
-    },
-    "./Emission": {
-      "types": "./dist/Emission.d.ts",
-      "import": "./dist/Emission.js"
-    },
-    "./AddressSortedLinkedListWithMedian": {
-      "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
-      "import": "./dist/AddressSortedLinkedListWithMedian.js"
     },
     "./ChainlinkRelayerV1AUDUSD": {
       "types": "./dist/ChainlinkRelayerV1AUDUSD.d.ts",
@@ -360,10 +448,6 @@
       "types": "./dist/ChainlinkRelayerV1EURXOF.d.ts",
       "import": "./dist/ChainlinkRelayerV1EURXOF.js"
     },
-    "./ChainlinkRelayerV1GBPUSD": {
-      "types": "./dist/ChainlinkRelayerV1GBPUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1GBPUSD.js"
-    },
     "./ChainlinkRelayerV1GHSUSD": {
       "types": "./dist/ChainlinkRelayerV1GHSUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1GHSUSD.js"
@@ -384,10 +468,6 @@
       "types": "./dist/ChainlinkRelayerV1PHPUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1PHPUSD.js"
     },
-    "./ChainlinkRelayerV1USDCUSD": {
-      "types": "./dist/ChainlinkRelayerV1USDCUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1USDCUSD.js"
-    },
     "./ChainlinkRelayerV1USDTUSD": {
       "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
@@ -399,6 +479,10 @@
     "./ChainlinkRelayerV1ZARUSD": {
       "types": "./dist/ChainlinkRelayerV1ZARUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1ZARUSD.js"
+    },
+    "./Emission": {
+      "types": "./dist/Emission.d.ts",
+      "import": "./dist/Emission.js"
     },
     "./MarketHoursBreakerToggleable": {
       "types": "./dist/MarketHoursBreakerToggleable.d.ts",
@@ -448,10 +532,6 @@
       "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorEURUSD.js"
     },
-    "./MockChainlinkAggregatorGBPUSD": {
-      "types": "./dist/MockChainlinkAggregatorGBPUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorGBPUSD.js"
-    },
     "./MockChainlinkAggregatorGHSUSD": {
       "types": "./dist/MockChainlinkAggregatorGHSUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorGHSUSD.js"
@@ -471,10 +551,6 @@
     "./MockChainlinkAggregatorPHPUSD": {
       "types": "./dist/MockChainlinkAggregatorPHPUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorPHPUSD.js"
-    },
-    "./MockChainlinkAggregatorUSDCUSD": {
-      "types": "./dist/MockChainlinkAggregatorUSDCUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorUSDCUSD.js"
     },
     "./MockChainlinkAggregatorUSDTUSD": {
       "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
@@ -507,10 +583,6 @@
     "./ReserveLiquidityStrategyv300": {
       "types": "./dist/ReserveLiquidityStrategyv300.d.ts",
       "import": "./dist/ReserveLiquidityStrategyv300.js"
-    },
-    "./ReserveLiquidityStrategyv301": {
-      "types": "./dist/ReserveLiquidityStrategyv301.d.ts",
-      "import": "./dist/ReserveLiquidityStrategyv301.js"
     }
   },
   "files": [

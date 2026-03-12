@@ -760,6 +760,8 @@ export const ReserveLiquidityStrategyv301 = {
     }
   ] as const,
   address: {
+    143: '0x420FbDB50dadF0286144BFF91ed62A6893dee148',
+    10143: '0x625BD9cc583B5F9a88a38B0657ce816a3F02D367',
     11142220: '0x625BD9cc583B5F9a88a38B0657ce816a3F02D367',
   } as Partial<Record<number, `0x${string}`>>,
 };

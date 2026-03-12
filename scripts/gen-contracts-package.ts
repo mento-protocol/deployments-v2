@@ -78,8 +78,38 @@ function prompt(question: string): Promise<string> {
 }
 
 function sanitizeName(name: string): string {
-  // Remove dots and colons that would make invalid JS identifiers / filenames
-  return name.replace(/\./g, "").replace(/:/g, "");
+  // Remove dots, colons, and slashes that would make invalid JS identifiers or
+  // create nested paths (e.g. "AUSD/USD" → "AUSDUSD")
+  return name.replace(/\./g, "").replace(/:/g, "").replace(/\//g, "");
+}
+
+function ensureDirFor(path: string): void {
+  const dir = dirname(path);
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+}
+
+function safeWriteFile(path: string, content: string, context: string): void {
+  try {
+    ensureDirFor(path);
+    writeFileSync(path, content);
+  } catch (err) {
+    const isEnoent =
+      err instanceof Error &&
+      "code" in err &&
+      (err as NodeJS.ErrnoException).code === "ENOENT";
+    const msg = isEnoent
+      ? `Parent directory does not exist for ${path}. Ensure the export name does not contain path separators.`
+      : `Failed to write ${context} at ${path}`;
+    const wrapped = new Error(
+      `${msg}${err instanceof Error ? `\n  Cause: ${err.message}` : ""}`,
+    );
+    if (err instanceof Error) {
+      (wrapped as Error & { cause?: unknown }).cause = err;
+    }
+    throw wrapped;
+  }
 }
 
 function deriveExportName(
@@ -161,12 +191,12 @@ function readAbi(solFile: string, contractName: string): unknown[] | null {
  *   "USDC"                                → "USDC"
  */
 function deriveAddressBookExportName(key: string): string {
-  if (key.startsWith("Proxy:")) return key.slice("Proxy:".length);
+  if (key.startsWith("Proxy:")) return sanitizeName(key.slice("Proxy:".length));
   if (key.startsWith("TransparentUpgradeableProxy:"))
-    return key.slice("TransparentUpgradeableProxy:".length);
+    return sanitizeName(key.slice("TransparentUpgradeableProxy:".length));
   const versionMatch = key.match(/^(.+):v\d+\.\d+\.\d+$/);
-  if (versionMatch) return versionMatch[1];
-  return key;
+  if (versionMatch) return sanitizeName(versionMatch[1]);
+  return sanitizeName(key);
 }
 
 function classifyType(name: string): ContractType {
@@ -255,6 +285,21 @@ function diffContracts(
   }
 
   return { added, removed, changed };
+}
+
+function sortContractsByNamespace(contracts: ContractsJson): ContractsJson {
+  const sorted: ContractsJson = {};
+  for (const [chainId, namespaces] of Object.entries(contracts)) {
+    sorted[chainId] = {};
+    for (const [ns, contractEntries] of Object.entries(namespaces)) {
+      const sortedEntries: Record<string, ContractEntry> = {};
+      for (const name of Object.keys(contractEntries).sort()) {
+        sortedEntries[name] = contractEntries[name];
+      }
+      sorted[chainId][ns] = sortedEntries;
+    }
+  }
+  return sorted;
 }
 
 // ─── Namespace selection ──────────────────────────────────────────────────────
@@ -584,9 +629,11 @@ async function main() {
 
   // Write ABI JSONs for newly resolved contracts.
   for (const contract of resolved) {
-    writeFileSync(
-      join(abisDir, `${contract.exportName}.json`),
+    const abiPath = join(abisDir, `${contract.exportName}.json`);
+    safeWriteFile(
+      abiPath,
       JSON.stringify(contract.abi, null, 2) + "\n",
+      `ABI for ${contract.trebKey}`,
     );
   }
 
@@ -602,9 +649,11 @@ async function main() {
     typedExportNames.add(name);
     const abi = JSON.parse(readFileSync(abiPath, "utf8")) as unknown[];
     const addresses = addressesByName.get(name) ?? {};
-    writeFileSync(
-      join(srcDir, `${name}.ts`),
+    const srcPath = join(srcDir, `${name}.ts`);
+    safeWriteFile(
+      srcPath,
       generateTsModule(name, abi, addresses),
+      `TS module for ${name}`,
     );
   }
 
@@ -613,13 +662,18 @@ async function main() {
   const indexLines = [...typedExportNames]
     .sort()
     .map((name) => `export * from "./${name}.js";`);
-  writeFileSync(join(srcDir, "index.ts"), indexLines.join("\n") + "\n");
+  safeWriteFile(
+    join(srcDir, "index.ts"),
+    indexLines.join("\n") + "\n",
+    "barrel index",
+  );
 
   // ── Write contracts.json ───────────────────────────────────────────────────
 
-  writeFileSync(
+  safeWriteFile(
     contractsJsonPath,
-    JSON.stringify(newContracts, null, 2) + "\n",
+    JSON.stringify(sortContractsByNamespace(newContracts), null, 2) + "\n",
+    "contracts.json",
   );
 
   // ── Update packages/contracts/package.json exports ────────────────────────
@@ -660,7 +714,11 @@ async function main() {
 
   pkgJsonTemplate.exports = exportsMap;
 
-  writeFileSync(pkgJsonPath, JSON.stringify(pkgJsonTemplate, null, 2) + "\n");
+  safeWriteFile(
+    pkgJsonPath,
+    JSON.stringify(pkgJsonTemplate, null, 2) + "\n",
+    "package.json",
+  );
 
   // ── Diff and summary ───────────────────────────────────────────────────────
 

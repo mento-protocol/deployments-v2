@@ -1,4 +1,4 @@
-export const ReserveLiquidityStrategy = {
+export const OpenLiquidityStrategy = {
   abi: [
     {
       "type": "constructor",
@@ -236,11 +236,6 @@ export const ReserveLiquidityStrategy = {
           "name": "_initialOwner",
           "type": "address",
           "internalType": "address"
-        },
-        {
-          "name": "_reserve",
-          "type": "address",
-          "internalType": "address"
         }
       ],
       "outputs": [],
@@ -395,19 +390,6 @@ export const ReserveLiquidityStrategy = {
     },
     {
       "type": "function",
-      "name": "reserve",
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IReserveV2"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
       "name": "setRebalanceCooldown",
       "inputs": [
         {
@@ -419,19 +401,6 @@ export const ReserveLiquidityStrategy = {
           "name": "cooldown",
           "type": "uint32",
           "internalType": "uint32"
-        }
-      ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
-    },
-    {
-      "type": "function",
-      "name": "setReserve",
-      "inputs": [
-        {
-          "name": "_reserve",
-          "type": "address",
-          "internalType": "address"
         }
       ],
       "outputs": [],
@@ -619,25 +588,6 @@ export const ReserveLiquidityStrategy = {
       "anonymous": false
     },
     {
-      "type": "event",
-      "name": "ReserveSet",
-      "inputs": [
-        {
-          "name": "oldReserve",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        },
-        {
-          "name": "newReserve",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
-      ],
-      "anonymous": false
-    },
-    {
       "type": "error",
       "name": "LS_BAD_INCENTIVE",
       "inputs": []
@@ -735,34 +685,17 @@ export const ReserveLiquidityStrategy = {
     },
     {
       "type": "error",
-      "name": "RLS_COLLATERAL_TO_POOL_FAILED",
+      "name": "OLS_OUT_OF_COLLATERAL",
       "inputs": []
     },
     {
       "type": "error",
-      "name": "RLS_INVALID_RESERVE",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "RLS_RESERVE_OUT_OF_COLLATERAL",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "RLS_TOKEN_IN_NOT_SUPPORTED",
-      "inputs": []
-    },
-    {
-      "type": "error",
-      "name": "RLS_TOKEN_OUT_NOT_SUPPORTED",
+      "name": "OLS_OUT_OF_DEBT",
       "inputs": []
     }
   ] as const,
   address: {
-    143: '0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B',
-    10143: '0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8',
-    42220: '0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B',
-    11142220: '0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8',
+    143: '0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f',
+    10143: '0xCCd2aD0603a08EBc14D223a983171ef18192e8c9',
   } as Partial<Record<number, `0x${string}`>>,
 };

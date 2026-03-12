@@ -1,4 +1,4 @@
-export const ValueDeltaBreaker = {
+export const ValueDeltaBreakerv265 = {
   abi: [
     {
       "type": "constructor",
@@ -479,8 +479,6 @@ export const ValueDeltaBreaker = {
     }
   ] as const,
   address: {
-    143: '0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13',
-    42220: '0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68',
-    11142220: '0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534',
+    10143: '0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf',
   } as Partial<Record<number, `0x${string}`>>,
 };

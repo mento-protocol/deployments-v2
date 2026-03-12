@@ -1,4 +1,4 @@
-export const FactoryRegistry = {
+export const FactoryRegistryv300 = {
   abi: [
     {
       "type": "constructor",
@@ -226,9 +226,7 @@ export const FactoryRegistry = {
     }
   ] as const,
   address: {
-    143: '0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6',
-    10143: '0x47Cb00322E9cd6196915629EDD4De1EA92F98561',
-    42220: '0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6',
-    11142220: '0x47Cb00322E9cd6196915629EDD4De1EA92F98561',
+    143: '0x8124b66595Ff4E79B7F0c1b1101AFa501d219311',
+    10143: '0xca73ea6193341D676Ae9f5771d797EEE8d83BAD6',
   } as Partial<Record<number, `0x${string}`>>,
 };

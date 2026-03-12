@@ -1,4 +1,4 @@
-export const ChainlinkRelayerV1USDCUSD = {
+export const ChainlinkRelayerV1AUSDUSD = {
   abi: [
     {
       "type": "constructor",
@@ -190,8 +190,7 @@ export const ChainlinkRelayerV1USDCUSD = {
     }
   ] as const,
   address: {
-    143: '0xB1683dB4D2D74E951C54314f1BCA1e8FBB299fE2',
-    10143: '0x34b8E391e26faf1af1c751aa4F6b5E19FBF9190B',
-    11142220: '0x2026c1eA69E65dC370b46bfF9fDA1DCE256f188D',
+    143: '0x2604F6daFed5b6204868e15E89ca41C2D5f6D9c2',
+    10143: '0x73dF2f773cdEeBd33282107c5705E73321Ee0D4d',
   } as Partial<Record<number, `0x${string}`>>,
 };

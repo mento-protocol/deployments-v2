@@ -1,4 +1,4 @@
-export const OracleAdapter = {
+export const OracleAdapterv300 = {
   abi: [
     {
       "type": "constructor",
@@ -506,9 +506,7 @@ export const OracleAdapter = {
     }
   ] as const,
   address: {
-    143: '0xa472fBBF4b890A54381977ac392BdF82EeC4383a',
-    10143: '0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7',
-    42220: '0xa472fBBF4b890A54381977ac392BdF82EeC4383a',
-    11142220: '0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7',
+    143: '0xc1B767756F582d124E76BB3e246f31e6aB256059',
+    10143: '0x9CA4FA8253f14CfF40E42970df38799a78d3c482',
   } as Partial<Record<number, `0x${string}`>>,
 };

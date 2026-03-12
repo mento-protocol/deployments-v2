@@ -1,4 +1,4 @@
-export const ValueDeltaBreaker = {
+export const MedianDeltaBreakerv265 = {
   abi: [
     {
       "type": "constructor",
@@ -17,6 +17,11 @@ export const ValueDeltaBreaker = {
           "name": "_sortedOracles",
           "type": "address",
           "internalType": "contract ISortedOracles"
+        },
+        {
+          "name": "_breakerBox",
+          "type": "address",
+          "internalType": "address"
         },
         {
           "name": "rateFeedIDs",
@@ -40,6 +45,32 @@ export const ValueDeltaBreaker = {
         }
       ],
       "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "DEFAULT_SMOOTHING_FACTOR",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "breakerBox",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "stateMutability": "view"
     },
     {
       "type": "function",
@@ -117,6 +148,25 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "function",
+      "name": "getSmoothingFactor",
+      "inputs": [
+        {
+          "name": "rateFeedID",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
       "name": "isOwner",
       "inputs": [],
       "outputs": [
@@ -124,6 +174,25 @@ export const ValueDeltaBreaker = {
           "name": "",
           "type": "bool",
           "internalType": "bool"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
+      "name": "medianRatesEMA",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256",
+          "internalType": "uint256"
         }
       ],
       "stateMutability": "view"
@@ -181,25 +250,6 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "function",
-      "name": "referenceValues",
-      "inputs": [
-        {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
-      ],
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
-      ],
-      "stateMutability": "view"
-    },
-    {
-      "type": "function",
       "name": "renounceOwnership",
       "inputs": [],
       "outputs": [],
@@ -207,7 +257,33 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "function",
-      "name": "setCooldownTimes",
+      "name": "resetMedianRateEMA",
+      "inputs": [
+        {
+          "name": "rateFeedID",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setBreakerBox",
+      "inputs": [
+        {
+          "name": "_breakerBox",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [],
+      "stateMutability": "nonpayable"
+    },
+    {
+      "type": "function",
+      "name": "setCooldownTime",
       "inputs": [
         {
           "name": "rateFeedIDs",
@@ -269,17 +345,17 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "function",
-      "name": "setReferenceValues",
+      "name": "setSmoothingFactor",
       "inputs": [
         {
-          "name": "rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          "name": "rateFeedID",
+          "type": "address",
+          "internalType": "address"
         },
         {
-          "name": "_referenceValues",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
+          "name": "newSmoothingFactor",
+          "type": "uint256",
+          "internalType": "uint256"
         }
       ],
       "outputs": [],
@@ -338,6 +414,25 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "function",
+      "name": "smoothingFactors",
+      "inputs": [
+        {
+          "name": "",
+          "type": "address",
+          "internalType": "address"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "type": "uint256",
+          "internalType": "uint256"
+        }
+      ],
+      "stateMutability": "view"
+    },
+    {
+      "type": "function",
       "name": "sortedOracles",
       "inputs": [],
       "outputs": [
@@ -364,6 +459,19 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "event",
+      "name": "BreakerBoxUpdated",
+      "inputs": [
+        {
+          "name": "breakerBox",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
       "name": "DefaultCooldownTimeUpdated",
       "inputs": [
         {
@@ -384,6 +492,19 @@ export const ValueDeltaBreaker = {
           "type": "uint256",
           "indexed": false,
           "internalType": "uint256"
+        }
+      ],
+      "anonymous": false
+    },
+    {
+      "type": "event",
+      "name": "MedianRateEMAReset",
+      "inputs": [
+        {
+          "name": "rateFeedID",
+          "type": "address",
+          "indexed": false,
+          "internalType": "address"
         }
       ],
       "anonymous": false
@@ -447,16 +568,16 @@ export const ValueDeltaBreaker = {
     },
     {
       "type": "event",
-      "name": "ReferenceValueUpdated",
+      "name": "SmoothingFactorSet",
       "inputs": [
         {
-          "name": "rateFeedID",
+          "name": "rateFeedId",
           "type": "address",
           "indexed": false,
           "internalType": "address"
         },
         {
-          "name": "referenceValue",
+          "name": "smoothingFactor",
           "type": "uint256",
           "indexed": false,
           "internalType": "uint256"
@@ -479,8 +600,6 @@ export const ValueDeltaBreaker = {
     }
   ] as const,
   address: {
-    143: '0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13',
-    42220: '0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68',
-    11142220: '0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534',
+    10143: '0xf923C884F319b8866F67C5719A80E5cB4D0FAF2c',
   } as Partial<Record<number, `0x${string}`>>,
 };

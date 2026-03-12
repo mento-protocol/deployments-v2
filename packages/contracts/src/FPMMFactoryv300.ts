@@ -1,4 +1,4 @@
-export const FPMMFactory = {
+export const FPMMFactoryv300 = {
   abi: [
     {
       "type": "constructor",
@@ -846,9 +846,7 @@ export const FPMMFactory = {
     }
   ] as const,
   address: {
-    143: '0xa849b475FE5a4B5C9C3280152c7a1945b907613b',
-    10143: '0x353ED52bF8482027C0e0b9e3c0e5d96A9F680980',
-    42220: '0xa849b475FE5a4B5C9C3280152c7a1945b907613b',
-    11142220: '0x353ED52bF8482027C0e0b9e3c0e5d96A9F680980',
+    143: '0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a',
+    10143: '0x5E2A42d760Aa6969C3DA49b249ec181115887391',
   } as Partial<Record<number, `0x${string}`>>,
 };
