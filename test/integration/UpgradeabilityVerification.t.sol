@@ -127,7 +127,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         _assertOztupProxyAdminOwner(reserveV2, "ReserveV2");
     }
 
-    function test_reserveLiquidityStrategy_proxyAdminOwnedByMigrationOwner() public onlyCelo {
+    function test_reserveLiquidityStrategy_proxyAdminOwnedByMigrationOwner() public {
         _assertOztupProxyAdminOwner(reserveLiquidityStrategy, "ReserveLiquidityStrategy");
     }
 
@@ -235,7 +235,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         _assertCanUpgradeOztup(reserveV2, "ReserveV2");
     }
 
-    function test_migrationOwner_canUpgrade_reserveLiquidityStrategy() public onlyCelo {
+    function test_migrationOwner_canUpgrade_reserveLiquidityStrategy() public {
         _assertCanUpgradeOztup(reserveLiquidityStrategy, "ReserveLiquidityStrategy");
     }
 
@@ -334,7 +334,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         _assertNonOwnerCannotUpgradeOztup(reserveV2);
     }
 
-    function test_nonOwner_cannotUpgrade_reserveLiquidityStrategy() public onlyCelo {
+    function test_nonOwner_cannotUpgrade_reserveLiquidityStrategy() public {
         _assertNonOwnerCannotUpgradeOztup(reserveLiquidityStrategy);
     }
 

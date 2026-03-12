@@ -628,6 +628,38 @@
     "createdAt": "2026-03-11T15:59:45.790852076Z",
     "updatedAt": "2026-03-11T16:25:53.587324801Z"
   },
+  "mainnet/143/OpenLiquidityStrategy:v3.0.1": {
+    "id": "mainnet/143/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687002087497ca67db0dc294e23",
+      "initCodeHash": "0xd3bfaabde3d2b774eeafe902e18eb9e9ab249867ed947d3ec491397994c3aa5c",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xcd1f461294bbf8a9e70d5ffbe823b9e9f73e570314102dfb91706af2493c10c4",
+      "scriptPath": "script/deploy/v3/UpgradeOLSImpl.s.sol",
+      "gitCommit": "48c783ce5cbe93ce1da8b129198a78b5894d6202"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-12T19:45:13.013416+01:00",
+    "updatedAt": "2026-03-12T19:45:13.028902+01:00"
+  },
   "mainnet/143/OracleAdapter:v3.0.0": {
     "id": "mainnet/143/OracleAdapter:v3.0.0",
     "namespace": "mainnet",
@@ -1241,8 +1273,14 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8",
-      "history": []
+      "implementation": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+      "history": [
+        {
+          "implementationId": "mainnet/143/OpenLiquidityStrategy:v3.0.0",
+          "upgradedAt": "2026-03-12T19:45:13.013416+01:00",
+          "upgradeTxId": ""
+        }
+      ]
     },
     "artifact": {
       "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
@@ -1271,7 +1309,7 @@
     },
     "tags": null,
     "createdAt": "2026-03-11T15:59:45.790852076Z",
-    "updatedAt": "2026-03-11T16:25:58.867769798Z"
+    "updatedAt": "2026-03-12T19:45:13.028902+01:00"
   },
   "mainnet/143/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "mainnet/143/TransparentUpgradeableProxy:OracleAdapter",

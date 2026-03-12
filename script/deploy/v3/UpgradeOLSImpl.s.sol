@@ -36,7 +36,6 @@ contract UpgradeOLSImpl is TrebScript, ProxyHelper, PostChecksHelper {
 
         // 1. Deploy new implementation
         address newImpl = deployer.create3("OpenLiquidityStrategy").setLabel(NEW_LABEL).deploy(abi.encode(true)); // constructor(bool disable)
-        // address newImpl = lookupOrFail("OpenLiquidityStrategy:v3.0.1");
 
         // 2. Get the ProxyAdmin that governs this proxy (ERC-1967 admin slot)
         address proxyAdmin = getProxyAdmin(olsProxy);

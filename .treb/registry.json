@@ -589,6 +589,7 @@
       "NttDeployHelper:GBPm": "0xF3797E9D818A47A3a604bF2346E4ff50b56ad5c4",
       "NttDeployHelper:USDm": "0x37316334108C816f9862baB52347A0aab7551127",
       "OpenLiquidityStrategy:v3.0.0": "0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8",
+      "OpenLiquidityStrategy:v3.0.1": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
       "OracleAdapter:v3.0.0": "0xc1B767756F582d124E76BB3e246f31e6aB256059",
       "ProxyAdmin": "0xf759073E3a6125fFF215427AeB313A49799FECCf",
       "ReserveLiquidityStrategy:v3.0.1": "0x420FbDB50dadF0286144BFF91ed62A6893dee148",
