@@ -87,6 +87,7 @@
       "MockChainlinkAggregator:USDC/USD": "0xB1D1D3382D0F26493063cB7188Eb479d45A44cdF",
       "MockERC20:AUSD": "0x502E67D3fE9302A5e4Ec1CFCDdbD6F34F9B9484B",
       "OpenLiquidityStrategy:v3.0.0": "0x0d7faA2b2743Ab4124aEFe5B30AA7e20dd7a8005",
+      "OpenLiquidityStrategy:v3.0.1": "0xe1221f38de0a17ef170602de724db0e73e3856fb",
       "OracleAdapter:v3.0.0": "0x9CA4FA8253f14CfF40E42970df38799a78d3c482",
       "ProxyAdmin": "0xaad8b67551086609D132178dfF1dBE31b3c1C9C2",
       "ReserveLiquidityStrategy:v3.0.1": "0x625BD9cc583B5F9a88a38B0657ce816a3F02D367",

@@ -42,6 +42,7 @@ interface IProxyAdmin {
 contract UpgradeabilityVerification is V3IntegrationBase {
     address internal migrationOwner;
     address internal chainlinkRelayerFactory;
+    address internal openLiquidityStrategy;
 
     // Stable token proxies (resolved dynamically from config, may be OZTUP or Celo Legacy)
     address[] internal stableTokenProxies;
@@ -61,12 +62,25 @@ contract UpgradeabilityVerification is V3IntegrationBase {
     address internal mentoGovernor;
     address internal timelockController;
 
+    modifier onlyMonad() {
+        if (_isCelo()) {
+            vm.skip(true);
+            return;
+        }
+        _;
+    }
+
     function setUp() public override {
         super.setUp();
         migrationOwner = _getOwner();
 
         // ChainlinkRelayerFactory is present on all chains
         chainlinkRelayerFactory = lookupProxyOrFail("ChainlinkRelayerFactory");
+
+        // Monad-only contracts
+        if (!_isCelo()) {
+            openLiquidityStrategy = lookupProxyOrFail("OpenLiquidityStrategy");
+        }
 
         // Resolve stable token proxies from config (both OZTUP and Celo Legacy)
         IMentoConfig.TokenConfig[] memory tokens = config.getTokenConfigs();
@@ -115,6 +129,10 @@ contract UpgradeabilityVerification is V3IntegrationBase {
 
     function test_reserveLiquidityStrategy_proxyAdminOwnedByMigrationOwner() public onlyCelo {
         _assertOztupProxyAdminOwner(reserveLiquidityStrategy, "ReserveLiquidityStrategy");
+    }
+
+    function test_openLiquidityStrategy_proxyAdminOwnedByMigrationOwner() public onlyMonad {
+        _assertOztupProxyAdminOwner(openLiquidityStrategy, "OpenLiquidityStrategy");
     }
 
     function test_cdpLiquidityStrategy_proxyAdminOwnedByMigrationOwner() public onlyCelo {
@@ -221,6 +239,10 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         _assertCanUpgradeOztup(reserveLiquidityStrategy, "ReserveLiquidityStrategy");
     }
 
+    function test_migrationOwner_canUpgrade_openLiquidityStrategy() public onlyMonad {
+        _assertCanUpgradeOztup(openLiquidityStrategy, "OpenLiquidityStrategy");
+    }
+
     function test_migrationOwner_canUpgrade_cdpLiquidityStrategy() public onlyCelo {
         _assertCanUpgradeOztup(cdpLiquidityStrategy, "CDPLiquidityStrategy");
     }
@@ -314,6 +336,10 @@ contract UpgradeabilityVerification is V3IntegrationBase {
 
     function test_nonOwner_cannotUpgrade_reserveLiquidityStrategy() public onlyCelo {
         _assertNonOwnerCannotUpgradeOztup(reserveLiquidityStrategy);
+    }
+
+    function test_nonOwner_cannotUpgrade_openLiquidityStrategy() public onlyMonad {
+        _assertNonOwnerCannotUpgradeOztup(openLiquidityStrategy);
     }
 
     function test_nonOwner_cannotUpgrade_cdpLiquidityStrategy() public onlyCelo {

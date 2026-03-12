@@ -10547,6 +10547,31 @@
     "environment": "testnet-v2-rc2",
     "createdAt": "2025-09-04T16:06:47.106997+02:00"
   },
+  "tx-0x8075014cbfcd02c59bcd97712b5bbc5cf3b8a5b5ff85fe3c464dec155fa27b06": {
+    "id": "tx-0x8075014cbfcd02c59bcd97712b5bbc5cf3b8a5b5ff85fe3c464dec155fa27b06",
+    "chainId": 10143,
+    "hash": "0x8075014cbfcd02c59bcd97712b5bbc5cf3b8a5b5ff85fe3c464dec155fa27b06",
+    "status": "EXECUTED",
+    "blockNumber": 18337539,
+    "sender": "0x2738f38fde510743e0c589415e0598c4cee6eaa7",
+    "nonce": 199,
+    "deployments": [
+      "testnet-v2-rc5/10143/OpenLiquidityStrategy",
+      "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.1"
+    ],
+    "operations": [
+      {
+        "type": "DEPLOY",
+        "target": "0xe1221f38de0a17ef170602de724db0e73e3856fb",
+        "method": "",
+        "result": {
+          "address": "0xe1221f38de0a17ef170602de724db0e73e3856fb"
+        }
+      }
+    ],
+    "environment": "testnet-v2-rc5",
+    "createdAt": "2026-03-12T15:39:20.93292+01:00"
+  },
   "tx-0x807dd3ec1a1c2889395f3c78bb40eac4bdfd41a6ea65def4894c81d05c2fc664": {
     "id": "tx-0x807dd3ec1a1c2889395f3c78bb40eac4bdfd41a6ea65def4894c81d05c2fc664",
     "chainId": 11142220,

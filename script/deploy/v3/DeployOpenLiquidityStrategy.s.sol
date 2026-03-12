@@ -23,7 +23,7 @@ contract DeployOpenLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelpe
     Senders.Sender deployer;
     Senders.Sender owner;
 
-    string constant label = "v3.0.0";
+    string constant label = "v3.0.1";
 
     function setUp() public {
         config = Config.get();

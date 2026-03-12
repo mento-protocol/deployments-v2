@@ -20004,6 +20004,33 @@
     "createdAt": "2026-03-10T16:33:22.924275036Z",
     "updatedAt": "2026-03-10T16:33:22.927115693Z"
   },
+  "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.1": {
+    "id": "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "OpenLiquidityStrategy:v3.0.1",
+    "label": "",
+    "address": "0xe1221f38de0a17ef170602de724db0e73e3856fb",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x8075014cbfcd02c59bcd97712b5bbc5cf3b8a5b5ff85fe3c464dec155fa27b06",
+    "deploymentStrategy": {
+      "method": "CREATE"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "",
+      "compilerVersion": "",
+      "bytecodeHash": "",
+      "scriptPath": "",
+      "gitCommit": ""
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": [],
+    "createdAt": "2026-03-12T15:42:04.103876+01:00",
+    "updatedAt": "2026-03-12T15:42:04.103876+01:00"
+  },
   "testnet-v2-rc5/10143/OracleAdapter:v3.0.0": {
     "id": "testnet-v2-rc5/10143/OracleAdapter:v3.0.0",
     "namespace": "testnet-v2-rc5",
@@ -20423,8 +20450,14 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0x0d7faA2b2743Ab4124aEFe5B30AA7e20dd7a8005",
-      "history": []
+      "implementation": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+      "history": [
+        {
+          "implementationId": "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.0",
+          "upgradedAt": "2026-03-12T16:33:40.592149+01:00",
+          "upgradeTxId": ""
+        }
+      ]
     },
     "artifact": {
       "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
@@ -20438,7 +20471,7 @@
     },
     "tags": null,
     "createdAt": "2026-03-10T16:33:22.924275036Z",
-    "updatedAt": "2026-03-10T16:33:22.927115693Z"
+    "updatedAt": "2026-03-12T16:33:40.600604+01:00"
   },
   "testnet-v2-rc5/10143/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:OracleAdapter",
