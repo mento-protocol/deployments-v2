@@ -18,3 +18,4 @@ docs/
 .treb/config.local.json
 node_modules
 .treb/priv/
+.treb/*.lock
