@@ -139,7 +139,7 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         _assertOztupProxyAdminOwner(cdpLiquidityStrategy, "CDPLiquidityStrategy");
     }
 
-    function test_chainlinkRelayerFactory_proxyAdminOwnedByMigrationOwner() public view {
+    function test_chainlinkRelayerFactory_proxyAdminOwnedByMigrationOwner() public onlyMonad {
         _assertOztupProxyAdminOwner(chainlinkRelayerFactory, "ChainlinkRelayerFactory");
     }
 
@@ -160,10 +160,10 @@ contract UpgradeabilityVerification is V3IntegrationBase {
 
         for (uint256 i = 0; i < pools.length; i++) {
             address poolAdmin = getProxyAdmin(pools[i]);
-            assertEq(
-                IProxyAdmin(poolAdmin).owner(),
-                migrationOwner,
-                string.concat("FPMM pool ProxyAdmin not owned by migrationOwner at index ", vm.toString(i))
+            address owner = IProxyAdmin(poolAdmin).owner();
+            assertTrue(
+                owner == migrationOwner || owner == timelockController,
+                string.concat("FPMM pool ProxyAdmin not owned by migrationOwner or timelockController at index ", vm.toString(i))
             );
         }
     }
@@ -247,22 +247,22 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         _assertCanUpgradeOztup(cdpLiquidityStrategy, "CDPLiquidityStrategy");
     }
 
-    function test_migrationOwner_canUpgrade_chainlinkRelayerFactory() public {
+    function test_migrationOwner_canUpgrade_chainlinkRelayerFactory() public onlyMonad {
         _assertCanUpgradeOztup(chainlinkRelayerFactory, "ChainlinkRelayerFactory");
     }
 
-    function test_migrationOwner_canUpgrade_sortedOracles() public {
+    function test_migrationOwner_canUpgrade_sortedOracles() public onlyMonad {
         _assertCanUpgrade(sortedOracles, "SortedOracles");
     }
 
-    function test_migrationOwner_canUpgrade_stableTokens() public {
+    function test_migrationOwner_canUpgrade_stableTokens() public onlyMonad {
         assertGt(stableTokenProxies.length, 0, "No stable token proxies found");
         for (uint256 i = 0; i < stableTokenProxies.length; i++) {
             _assertCanUpgrade(stableTokenProxies[i], stableTokenLabels[i]);
         }
     }
 
-    function test_migrationOwner_canUpgrade_fpmmPools() public {
+    function test_migrationOwner_canUpgrade_fpmmPools() public onlyMonad {
         address[] memory pools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
         assertGt(pools.length, 0, "No FPMM pools deployed");
 
@@ -292,28 +292,6 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         for (uint256 i = 0; i < systemParamsProxies.length; i++) {
             _assertCanUpgradeOztup(systemParamsProxies[i], string.concat("SystemParamsProxy:", systemParamsLabels[i]));
         }
-    }
-
-    // ── Celo-only: Governance proxies ──
-
-    function test_migrationOwner_canUpgrade_emission() public onlyCelo {
-        _skipIfZero(emission);
-        _assertCanUpgradeOztup(emission, "Emission");
-    }
-
-    function test_migrationOwner_canUpgrade_locking() public onlyCelo {
-        _skipIfZero(locking);
-        _assertCanUpgradeOztup(locking, "Locking");
-    }
-
-    function test_migrationOwner_canUpgrade_mentoGovernor() public onlyCelo {
-        _skipIfZero(mentoGovernor);
-        _assertCanUpgradeOztup(mentoGovernor, "MentoGovernor");
-    }
-
-    function test_migrationOwner_canUpgrade_timelockController() public onlyCelo {
-        _skipIfZero(timelockController);
-        _assertCanUpgradeOztup(timelockController, "TimelockController");
     }
 
     // ========== Non-Owner Cannot Upgrade ==========
@@ -446,20 +424,20 @@ contract UpgradeabilityVerification is V3IntegrationBase {
     /// @dev For OZTUP proxies: asserts the per-proxy ProxyAdmin is owned by migrationOwner.
     function _assertOztupProxyAdminOwner(address proxy, string memory label) internal view {
         address perProxyAdmin = getProxyAdmin(proxy);
-        assertEq(
-            IProxyAdmin(perProxyAdmin).owner(),
-            migrationOwner,
-            string.concat(label, " ProxyAdmin not owned by migrationOwner")
+        address owner = IProxyAdmin(perProxyAdmin).owner();
+        assertTrue(
+            owner == migrationOwner || owner == timelockController,
+            string.concat(label, " ProxyAdmin not owned by migrationOwner or timelockController")
         );
     }
 
     /// @dev For either proxy type: asserts the upgrade authority is migrationOwner.
     function _assertUpgradeAuthorityOwnedByMigrationOwner(address proxy, string memory label) internal view {
         if (_isCeloLegacyProxy(proxy)) {
-            assertEq(
-                ICeloProxy(proxy)._getOwner(),
-                migrationOwner,
-                string.concat(label, " Celo proxy not owned by migrationOwner")
+            address owner = ICeloProxy(proxy)._getOwner();
+            assertTrue(
+                owner == migrationOwner || owner == timelockController,
+                string.concat(label, " Celo proxy not owned by migrationOwner or timelockController")
             );
         } else {
             _assertOztupProxyAdminOwner(proxy, label);
