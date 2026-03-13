@@ -42,11 +42,14 @@ contract DeployOpenLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelpe
             openLiquidityStrategyImpl,
             abi.encodeWithSelector(IOpenLiquidityStrategy.initialize.selector, owner.account)
         );
+
+        transferProxyAdminOwnership(deployer, openLiquidityStrategy, owner.account);
         postChecks();
     }
 
     function postChecks() internal view {
         verifyProxyImpl("OpenLiquidityStrategy", openLiquidityStrategy, openLiquidityStrategyImpl);
         verifyOwnership("OpenLiquidityStrategy", openLiquidityStrategy, owner.account);
+        verifyProxyAdminOwnership("OpenLiquidityStrategy", openLiquidityStrategy, owner.account);
     }
 }

@@ -88,6 +88,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
                 owner
             )
         );
+        transferProxyAdminOwnership(deployer, oracleAdapter, owner);
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
         require(params.lpFee > 0 || params.protocolFee > 0, "fees not set for default FPMM params");
@@ -104,6 +105,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             fpmmFactoryImpl,
             abi.encodeWithSelector(IFPMMFactory.initialize.selector, oracleAdapter, proxyAdmin, owner, fpmmImpl, params)
         );
+        transferProxyAdminOwnership(deployer, fpmmFactory, owner);
 
         factoryRegistryImpl = deployer.create3("FactoryRegistry").setLabel(label).deploy(abi.encode(true));
 
@@ -113,6 +115,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             factoryRegistryImpl,
             abi.encodeWithSelector(IFactoryRegistry.initialize.selector, fpmmFactory, owner)
         );
+        transferProxyAdminOwnership(deployer, factoryRegistry, owner);
 
         router = deployer.create3("Router").setLabel(label).deploy(abi.encode(address(0), factoryRegistry, fpmmFactory));
 
@@ -125,6 +128,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             reserveV2Impl,
             abi.encodeWithSelector(IReserveV2.initialize.selector, empty, empty, empty, empty, empty, owner)
         );
+        transferProxyAdminOwnership(deployer, reserveV2, owner);
 
         stableTokenV3Impl = deployer.create3("StableTokenV3").setLabel(label).deploy(abi.encode(true));
 
@@ -138,6 +142,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             reserveLiquidityStrategyImpl,
             abi.encodeWithSelector(IReserveLiquidityStrategy.initialize.selector, owner, reserveV2)
         );
+        transferProxyAdminOwnership(deployer, reserveLiquidityStrategy, owner);
 
         postChecks();
     }
@@ -164,6 +169,14 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         verifyOwnership("FactoryRegistry", factoryRegistry, owner);
         verifyOwnership("ReserveV2", reserveV2, owner);
         verifyOwnership("ReserveLiquidityStrategy", reserveLiquidityStrategy, owner);
+
+        // ProxyAdmin Ownership Checks
+        // Verifies that ProxyAdmin owners are set to multisig.
+        verifyProxyAdminOwnership("OracleAdapter", oracleAdapter, owner);
+        verifyProxyAdminOwnership("FPMMFactory", fpmmFactory, owner);
+        verifyProxyAdminOwnership("FactoryRegistry", factoryRegistry, owner);
+        verifyProxyAdminOwnership("ReserveV2", reserveV2, owner);
+        verifyProxyAdminOwnership("ReserveLiquidityStrategy", reserveLiquidityStrategy, owner);
 
         // Implementation Initializer Protection
         // Verifies that implementation contracts cannot be initialized directly (security check).

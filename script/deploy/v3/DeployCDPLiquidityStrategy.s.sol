@@ -45,11 +45,14 @@ contract DeployCDPLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelper
             cdpLiquidityStrategyImpl,
             abi.encodeWithSelector(ICDPLiquidityStrategy.initialize.selector, owner.account)
         );
+        transferProxyAdminOwnership(deployer, cdpLiquidityStrategy, owner.account);
+
         postChecks();
     }
 
     function postChecks() internal view {
         verifyProxyImpl("CDPLiquidityStrategy", cdpLiquidityStrategy, cdpLiquidityStrategyImpl);
         verifyOwnership("CDPLiquidityStrategy", cdpLiquidityStrategy, owner.account);
+        verifyProxyAdminOwnership("CDPLiquidityStrategy", cdpLiquidityStrategy, owner.account);
     }
 }
