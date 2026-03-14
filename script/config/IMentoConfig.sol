@@ -196,6 +196,8 @@ interface IMentoConfig {
 
     function getMockCollaterals() external view returns (string[] memory);
 
+    function isCollateralAsset(address token) external view returns (bool);
+
     // ========== Helpers ==========
 
     function getRateFeedIdFromString(string memory feedId) external pure returns (address);

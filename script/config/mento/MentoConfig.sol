@@ -622,7 +622,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _collateral[symbol] != address(0);
     }
 
-    function isCollateralAsset(address token) internal view returns (bool) {
+    function isCollateralAsset(address token) public view returns (bool) {
         return _isAddressCollateralToken[token];
     }
 
