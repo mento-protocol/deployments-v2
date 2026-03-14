@@ -2,7 +2,6 @@
 # Forwards all arguments to forge test, e.g.: just test --mc FPMMTradingLimits -vvv
 test *ARGS:
     #!/usr/bin/env bash
-    set -euo pipefail
 
     # 1. Read FORK_URL from treb fork status (fails if no fork is running)
     FORK_URL=$(treb fork status | grep 'Fork URL:' | awk '{print $NF}')
