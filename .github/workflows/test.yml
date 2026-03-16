@@ -5,9 +5,6 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  FOUNDRY_PROFILE: ci
-
 jobs:
   check:
     name: Foundry project
@@ -35,7 +32,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install mento-core dependencies
-        run: npm install --ignore-scripts --prefix lib/mento-core
+        run: cd lib/mento-core && npm install --ignore-scripts
 
       - name: Show Forge version
         run: |
