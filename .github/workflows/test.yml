@@ -6,6 +6,15 @@ on:
   workflow_dispatch:
 
 jobs:
+  trunk:
+    name: Trunk Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trunk Check
+        uses: trunk-io/trunk-action@v1
+
   check:
     name: Foundry project
     runs-on: ubuntu-latest
