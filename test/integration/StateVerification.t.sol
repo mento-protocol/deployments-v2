@@ -8,6 +8,7 @@ import {IFactoryRegistry} from "mento-core/interfaces/IFactoryRegistry.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
+import {IOpenLiquidityStrategy} from "mento-core/interfaces/IOpenLiquidityStrategy.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IBreakerBox} from "mento-core/interfaces/IBreakerBox.sol";
@@ -31,10 +32,20 @@ contract StateVerification is V3IntegrationBase {
     address internal factoryRegistryImpl;
     address internal reserveV2Impl;
     address internal reserveLiquidityStrategyImpl;
+    address internal openLiquidityStrategyImpl;
+    address internal openLiquidityStrategy;
     address internal cdpLiquidityStrategyImpl;
 
     // BiPoolManager (exchange provider) for virtual pool tests
     address internal biPoolManager;
+
+    modifier onlyMonad() {
+        if (_isCelo()) {
+            vm.skip(true);
+            return;
+        }
+        _;
+    }
 
     function setUp() public override {
         super.setUp();
@@ -45,6 +56,12 @@ contract StateVerification is V3IntegrationBase {
         factoryRegistryImpl = lookupOrFail("FactoryRegistry:v3.0.0");
         reserveV2Impl = lookupOrFail("ReserveV2:v3.0.0");
         reserveLiquidityStrategyImpl = lookupOrFail("ReserveLiquidityStrategy:v3.0.1");
+
+        // Monad-only contracts
+        if (!_isCelo()) {
+            openLiquidityStrategyImpl = lookupOrFail("OpenLiquidityStrategy:v3.0.1");
+            openLiquidityStrategy = lookupProxyOrFail("OpenLiquidityStrategy");
+        }
 
         // Celo-only contracts
         if (_isCelo()) {
@@ -80,6 +97,11 @@ contract StateVerification is V3IntegrationBase {
         assertEq(actual, reserveLiquidityStrategyImpl, "ReserveLiquidityStrategy proxy implementation mismatch");
     }
 
+    function test_openLiquidityStrategy_proxyImpl() public onlyMonad {
+        address actual = getProxyImplementation(openLiquidityStrategy);
+        assertEq(actual, openLiquidityStrategyImpl, "OpenLiquidityStrategy proxy implementation mismatch");
+    }
+
     function test_cdpLiquidityStrategy_proxyImpl() public onlyCelo {
         address actual = getProxyImplementation(cdpLiquidityStrategy);
         assertEq(actual, cdpLiquidityStrategyImpl, "CDPLiquidityStrategy proxy implementation mismatch");
@@ -112,6 +134,11 @@ contract StateVerification is V3IntegrationBase {
     function test_reserveLiquidityStrategyImpl_initDisabled() public {
         vm.expectRevert();
         IReserveLiquidityStrategy(reserveLiquidityStrategyImpl).initialize(address(1), address(2));
+    }
+
+    function test_openLiquidityStrategyImpl_initDisabled() public onlyMonad {
+        vm.expectRevert();
+        IOpenLiquidityStrategy(openLiquidityStrategyImpl).initialize(address(1));
     }
 
     function test_cdpLiquidityStrategyImpl_initDisabled() public onlyCelo {
@@ -155,6 +182,10 @@ contract StateVerification is V3IntegrationBase {
 
     function test_reserveLiquidityStrategy_owner() public view {
         assertEq(IOwnable(reserveLiquidityStrategy).owner(), _getOwner(), "ReserveLiquidityStrategy owner mismatch");
+    }
+
+    function test_openLiquidityStrategy_owner() public onlyMonad {
+        assertEq(IOwnable(openLiquidityStrategy).owner(), _getOwner(), "OpenLiquidityStrategy owner mismatch");
     }
 
     function test_cdpLiquidityStrategy_owner() public onlyCelo {
@@ -203,6 +234,13 @@ contract StateVerification is V3IntegrationBase {
         vm.prank(randomUser);
         vm.expectRevert();
         IOwnable(reserveLiquidityStrategy).transferOwnership(randomUser);
+    }
+
+    function test_openLiquidityStrategy_transferOwnership_reverts_nonOwner() public onlyMonad {
+        address randomUser = makeAddr("randomUser");
+        vm.prank(randomUser);
+        vm.expectRevert();
+        IOwnable(openLiquidityStrategy).transferOwnership(randomUser);
     }
 
     function test_cdpLiquidityStrategy_transferOwnership_reverts_nonOwner() public onlyCelo {

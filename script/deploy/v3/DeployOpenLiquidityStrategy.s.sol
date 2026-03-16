@@ -23,7 +23,7 @@ contract DeployOpenLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelpe
     Senders.Sender deployer;
     Senders.Sender owner;
 
-    string constant label = "v3.0.0";
+    string constant label = "v3.0.1";
 
     function setUp() public {
         config = Config.get();
@@ -42,11 +42,14 @@ contract DeployOpenLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelpe
             openLiquidityStrategyImpl,
             abi.encodeWithSelector(IOpenLiquidityStrategy.initialize.selector, owner.account)
         );
+
+        transferProxyAdminOwnership(deployer, openLiquidityStrategy, owner.account);
         postChecks();
     }
 
     function postChecks() internal view {
         verifyProxyImpl("OpenLiquidityStrategy", openLiquidityStrategy, openLiquidityStrategyImpl);
         verifyOwnership("OpenLiquidityStrategy", openLiquidityStrategy, owner.account);
+        verifyProxyAdminOwnership("OpenLiquidityStrategy", openLiquidityStrategy, owner.account);
     }
 }

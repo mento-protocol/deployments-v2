@@ -1,0 +1,36 @@
+{
+  "transactions": [
+    {
+      "hash": "0x30e7df84e453d6f29acee3570925273c0149b4ab794b36819e265a2eaa5c08a2",
+      "transactionType": "CALL",
+      "contractName": null,
+      "contractAddress": "0x1d469d38143ae4cd5805bc4f97e17d80e54fc0e3",
+      "function": "upgradeAndCall(address,address,bytes)",
+      "arguments": [
+        "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
+        "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+        "0x"
+      ],
+      "transaction": {
+        "from": "0x2738f38fde510743e0c589415e0598c4cee6eaa7",
+        "to": "0x1d469d38143ae4cd5805bc4f97e17d80e54fc0e3",
+        "gas": "0xd7e9",
+        "value": "0x0",
+        "input": "0x9623609d000000000000000000000000ccd2ad0603a08ebc14d223a983171ef18192e8c9000000000000000000000000e1221f38de0a17ef170602de724db0e73e3856fb00000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+        "nonce": "0xd1",
+        "chainId": "0x279f"
+      },
+      "additionalContracts": [],
+      "isFixedGasLimit": false
+    }
+  ],
+  "receipts": [],
+  "libraries": [
+    "lib/mento-core/node_modules/@celo/contracts/common/linkedlists/AddressSortedLinkedListWithMedian.sol:AddressSortedLinkedListWithMedian:0x8E1B1312EC92C9f8073296c4Cf1E60D31d228269"
+  ],
+  "pending": [],
+  "returns": {},
+  "timestamp": 1773329482608,
+  "chain": 10143,
+  "commit": "f7c434a"
+}

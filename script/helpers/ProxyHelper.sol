@@ -5,6 +5,7 @@ import {TrebScript} from "lib/treb-sol/src/TrebScript.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {ProxyViewHelper} from "./ProxyViewHelper.sol";
 
@@ -221,6 +222,19 @@ contract ProxyHelper is TrebScript, ProxyViewHelper {
     ) internal returns (address proxy) {
         proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label)
             .deploy(abi.encode(implementation, deployer.account, initData));
+    }
+
+    function transferProxyAdminOwnership(Senders.Sender storage deployer, address proxy, address newOwner) internal {
+        address proxyAdmin = getProxyAdmin(proxy);
+        IOwnable(deployer.harness(proxyAdmin)).transferOwnership(newOwner);
+    }
+
+    function verifyProxyAdminOwnership(string memory identifier, address proxy, address expectedOwner) internal view {
+        address proxyAdmin = getProxyAdmin(proxy);
+        require(
+            IOwnable(proxyAdmin).owner() == expectedOwner,
+            string.concat(identifier, " ProxyAdmin owner is not expected owner")
+        );
     }
 
     function getOZTUPProxyImplementation(address proxy) internal view returns (address implementation) {
