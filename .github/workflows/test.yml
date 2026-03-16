@@ -35,7 +35,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install mento-core dependencies
-        run: cd lib/mento-core && npm install --ignore-scripts
+        run: npm install --ignore-scripts --prefix lib/mento-core
 
       - name: Show Forge version
         run: |
