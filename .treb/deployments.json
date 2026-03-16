@@ -460,6 +460,38 @@
     "createdAt": "2026-03-11T15:44:19.230302269Z",
     "updatedAt": "2026-03-11T16:24:50.896081355Z"
   },
+  "mainnet/143/MarketHoursBreakerToggleable:v3.0.0": {
+    "id": "mainnet/143/MarketHoursBreakerToggleable:v3.0.0",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "MarketHoursBreakerToggleable",
+    "label": "v3.0.0",
+    "address": "0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700075fd904f239b5754385c6",
+      "initCodeHash": "0x3d0dbf609a3464e189d67ced03730e4aa370a032119e2720b08a2588e6bbe115",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458",
+      "entropy": "mainnet/MarketHoursBreakerToggleable:v3.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MarketHoursBreakerToggleable.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x19bcfc31e1a3c897dd3bc23bc157c4adbabeb892fec39e5d208aaef5a82b3dc4",
+      "scriptPath": "script/deploy/v3/FixWeekendSituation.sol",
+      "gitCommit": "496a8f8d5538add5e04fd783aedbb7555806f795"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-14T16:55:19.363362+01:00",
+    "updatedAt": "2026-03-14T16:55:19.372831+01:00"
+  },
   "mainnet/143/MedianDeltaBreaker:v2.6.5": {
     "id": "mainnet/143/MedianDeltaBreaker:v2.6.5",
     "namespace": "mainnet",
@@ -1362,6 +1394,42 @@
     "createdAt": "2026-03-11T15:44:19.230302269Z",
     "updatedAt": "2026-03-11T16:25:37.030276185Z"
   },
+  "mainnet/143/TransparentUpgradeableProxy:OracleAdapterCollateral": {
+    "id": "mainnet/143/TransparentUpgradeableProxy:OracleAdapterCollateral",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OracleAdapterCollateral",
+    "address": "0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700267e2a8c3df0f05c5c993c",
+      "initCodeHash": "0x8f87b9e21d55f06635a85c700433f9aecb67964ddb84aa87ae877650ee3aadaa",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000c1b767756f582d124e76bb3e246f31e6ab256059000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e687000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a41459457a0000000000000000000000006f92c745346057a61b259579256159458a0a6a920000000000000000000000009fc1e0d10fb38954da385b8b25ab2bbaf3241722000000000000000000000000411e0876750ee59d7d7c131e2d1f0b1a71d2ef44000000000000000000000000000000000000000000000000000000000000000000000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OracleAdapterCollateral"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc1B767756F582d124E76BB3e246f31e6aB256059",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0xddaedede1e674d0bc73c1ca30aad67eedb55f36038f33faa261fe0b8c0d79968",
+      "scriptPath": "script/deploy/v3/FixWeekendSituation.sol",
+      "gitCommit": "496a8f8d5538add5e04fd783aedbb7555806f795"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-14T16:55:19.363362+01:00",
+    "updatedAt": "2026-03-14T16:55:19.372831+01:00"
+  },
   "mainnet/143/TransparentUpgradeableProxy:ReserveLiquidityStrategy": {
     "id": "mainnet/143/TransparentUpgradeableProxy:ReserveLiquidityStrategy",
     "namespace": "mainnet",
@@ -2070,6 +2138,38 @@
     "createdAt": "2026-03-03T19:14:38.505446337Z",
     "updatedAt": "2026-03-03T19:14:38.508066752Z"
   },
+  "mainnet/42220/MarketHoursBreakerToggleable:v3.0.0": {
+    "id": "mainnet/42220/MarketHoursBreakerToggleable:v3.0.0",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "MarketHoursBreakerToggleable",
+    "label": "v3.0.0",
+    "address": "0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700075fd904f239b5754385c6",
+      "initCodeHash": "0x56315d506fa9fd0bd1819ccd79288d9d2590ae472d7f5a127a6280587a6b0bae",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458",
+      "entropy": "mainnet/MarketHoursBreakerToggleable:v3.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MarketHoursBreakerToggleable.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xd79048292b4911552263ce0f33b32e2bbefa48073e21dbfb2a8c1d99abbaed85",
+      "scriptPath": "script/deploy/v3/FixWeekendSituation.sol",
+      "gitCommit": "496a8f8d5538add5e04fd783aedbb7555806f795"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-14T16:49:26.067673+01:00",
+    "updatedAt": "2026-03-14T16:49:26.078072+01:00"
+  },
   "mainnet/42220/MetadataNFT:v3.0.0-GBPm": {
     "id": "mainnet/42220/MetadataNFT:v3.0.0-GBPm",
     "namespace": "mainnet",
@@ -2761,6 +2861,42 @@
     "tags": null,
     "createdAt": "2026-03-03T19:14:38.505446337Z",
     "updatedAt": "2026-03-03T19:14:38.508066752Z"
+  },
+  "mainnet/42220/TransparentUpgradeableProxy:OracleAdapterCollateral": {
+    "id": "mainnet/42220/TransparentUpgradeableProxy:OracleAdapterCollateral",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OracleAdapterCollateral",
+    "address": "0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700267e2a8c3df0f05c5c993c",
+      "initCodeHash": "0xb8725c7b4ae9a3355ae6c019c26e0fec449f452e136ef2ef2bec8e754d7aac9b",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000c1b767756f582d124e76bb3e246f31e6ab256059000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e687000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a41459457a000000000000000000000000efb84935239dacdecf7c5ba76d8de40b077b7b33000000000000000000000000303ed1df62fa067659b586ebee8de0ece824ab39000000000000000000000000411e0876750ee59d7d7c131e2d1f0b1a71d2ef440000000000000000000000004cd491dc27c8b0bbd10d516a502856b786939d1800000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OracleAdapterCollateral"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xc1B767756F582d124E76BB3e246f31e6aB256059",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x4d71f996cd98d46dbeb97841ebeada995f6f8e774d1016c9b46283b7f1b182f9",
+      "scriptPath": "script/deploy/v3/FixWeekendSituation.sol",
+      "gitCommit": "496a8f8d5538add5e04fd783aedbb7555806f795"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-14T16:49:26.067673+01:00",
+    "updatedAt": "2026-03-14T16:49:26.078072+01:00"
   },
   "mainnet/42220/TransparentUpgradeableProxy:ReserveLiquidityStrategy": {
     "id": "mainnet/42220/TransparentUpgradeableProxy:ReserveLiquidityStrategy",
@@ -19850,6 +19986,38 @@
     "createdAt": "2026-03-10T16:33:52.866065304Z",
     "updatedAt": "2026-03-10T16:33:52.869826129Z"
   },
+  "testnet-v2-rc5/10143/MarketHoursBreakerToggleable:v3.0.0": {
+    "id": "testnet-v2-rc5/10143/MarketHoursBreakerToggleable:v3.0.0",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MarketHoursBreakerToggleable",
+    "label": "v3.0.0",
+    "address": "0x4c67f682195d1627Ed76eD69311930c7fB069684",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700897d52204d41cb68c16f7d",
+      "initCodeHash": "0xdbe83326ad3a59c37b1f3876fff3a9ec1134161b1fa4a9adfb5cb56e7eac27a1",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "testnet-v2-rc5/MarketHoursBreakerToggleable:v3.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MarketHoursBreakerToggleable.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x74511df42d3d65de958b9b847dc47b7f8b16266b92412558c88e8b1e2ffd82da",
+      "scriptPath": "script/deploy/v3/FixWeekendSituation.sol",
+      "gitCommit": "ce72afdcf5b2d86c8c9cd8cd1aeb674cf1b6d761"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-14T16:35:24.530944+01:00",
+    "updatedAt": "2026-03-14T16:35:24.542762+01:00"
+  },
   "testnet-v2-rc5/10143/MedianDeltaBreaker:v2.6.5": {
     "id": "testnet-v2-rc5/10143/MedianDeltaBreaker:v2.6.5",
     "namespace": "testnet-v2-rc5",
@@ -20546,6 +20714,42 @@
     "tags": null,
     "createdAt": "2026-03-10T16:33:52.866065304Z",
     "updatedAt": "2026-03-10T16:33:52.869826129Z"
+  },
+  "testnet-v2-rc5/10143/TransparentUpgradeableProxy:OracleAdapterCollateral": {
+    "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:OracleAdapterCollateral",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OracleAdapterCollateral",
+    "address": "0xAb84C994b364Be03018c6528F0F68118f107578A",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7002a477f7b845fe9523b4610",
+      "initCodeHash": "0x913593a4e104446f4862bd95a8a1fe6c1aea8c4169df630fe3ca2a4520be31f0",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000009ca4fa8253f14cff40e42970df38799a78d3c4820000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000a41459457a00000000000000000000000085ed9ac57827132b8f60938f3165bc139e1f53cd00000000000000000000000088869e30609d2c0e4032463d713328c6f541878e0000000000000000000000004c67f682195d1627ed76ed69311930c7fb06968400000000000000000000000000000000000000000000000000000000000000000000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OracleAdapterCollateral"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x9CA4FA8253f14CfF40E42970df38799a78d3c482",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0xbe991fa84971a222908275bebc5f27b82996516cee3e82e692e930ec14923742",
+      "scriptPath": "script/deploy/v3/FixWeekendSituation.sol",
+      "gitCommit": "ce72afdcf5b2d86c8c9cd8cd1aeb674cf1b6d761"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-14T16:35:24.530944+01:00",
+    "updatedAt": "2026-03-14T16:35:24.542762+01:00"
   },
   "testnet-v2-rc5/10143/TransparentUpgradeableProxy:ReserveLiquidityStrategy": {
     "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:ReserveLiquidityStrategy",
