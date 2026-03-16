@@ -163,7 +163,9 @@ contract UpgradeabilityVerification is V3IntegrationBase {
             address owner = IProxyAdmin(poolAdmin).owner();
             assertTrue(
                 owner == migrationOwner || owner == timelockController,
-                string.concat("FPMM pool ProxyAdmin not owned by migrationOwner or timelockController at index ", vm.toString(i))
+                string.concat(
+                    "FPMM pool ProxyAdmin not owned by migrationOwner or timelockController at index ", vm.toString(i)
+                )
             );
         }
     }
