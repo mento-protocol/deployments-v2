@@ -179,6 +179,7 @@ contract MentoConfig_monad is MentoConfig {
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
         _addRateFeed("USDC/USD");
+        _setRateFeedExpirySeconds("USDC/USD", 1 hours + 2 minutes);
         _addToBreaker({
             breakerId: valueBreakerId,
             rateFeed: "USDC/USD",
@@ -192,6 +193,7 @@ contract MentoConfig_monad is MentoConfig {
         });
 
         _addRateFeed("AUSD/USD");
+        _setRateFeedExpirySeconds("AUSD/USD", 1 hours + 2 minutes);
         _addToBreaker({
             breakerId: valueBreakerId,
             rateFeed: "AUSD/USD",

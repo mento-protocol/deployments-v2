@@ -821,6 +821,8 @@ export const SortedOracles = {
     }
   ] as const,
   address: {
+    143: '0x6f92C745346057a61b259579256159458a0a6A92',
+    10143: '0x85ed9ac57827132B8F60938F3165BC139E1F53cd',
     42220: '0xefb84935239dacdecf7c5ba76d8de40b077b7b33',
     11142220: '0xfaa7Ca2B056E60F6733aE75AA0709140a6eAfD20',
   } as Partial<Record<number, `0x${string}`>>,

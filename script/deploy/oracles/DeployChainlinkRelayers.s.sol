@@ -15,6 +15,10 @@ import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles
 import {Config, IMentoConfig} from "script/config/Config.sol";
 import {ProxyHelper, ProxyType} from "script/helpers/ProxyHelper.sol";
 
+interface ISortedOraclesSetter is ISortedOracles {
+    function setTokenReportExpiry(address rateFeedId, uint256 expiry) external;
+}
+
 contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
@@ -32,7 +36,7 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
 
         IChainlinkRelayerFactory factory =
             IChainlinkRelayerFactory(migrationOwner.harness(chainlinkRelayerFactoryProxy));
-        ISortedOracles sortedOracles = ISortedOracles(migrationOwner.harness(sortedOraclesProxy));
+        ISortedOraclesSetter sortedOracles = ISortedOraclesSetter(migrationOwner.harness(sortedOraclesProxy));
 
         // Get Chainlink relayer configurations from config
         IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config.getChainlinkRelayerConfigs();
@@ -89,6 +93,10 @@ contract DeployChainlinkRelayers is TrebScript, ProxyHelper {
 
             // Add relayer as oracle for this rate feed
             sortedOracles.addOracle(relayerConfigs[i].rateFeedId, relayer);
+            uint256 expiry = config.getRateFeedExpirySeconds(relayerConfigs[i].rateFeed);
+            if (expiry > 0) {
+                sortedOracles.setTokenReportExpiry(relayerConfigs[i].rateFeedId, expiry);
+            }
             // IChainlinkRelayer(deployer.harness(relayer)).relay();
         }
 

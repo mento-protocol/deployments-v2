@@ -496,6 +496,8 @@ export const ChainlinkRelayerFactory = {
     }
   ] as const,
   address: {
+    143: '0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A',
+    10143: '0x438F17F0bE93db19F210E91663Cf6Cf4eaD93B4e',
     42220: '0x247cb6ecf21bdd2bc29d726cccc8d2f066211663',
     11142220: '0xd96f786f5a294fb7cbb0847307293b7A871B9d5a',
   } as Partial<Record<number, `0x${string}`>>,

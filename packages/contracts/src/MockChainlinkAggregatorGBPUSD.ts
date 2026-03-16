@@ -265,6 +265,7 @@ export const MockChainlinkAggregatorGBPUSD = {
     }
   ] as const,
   address: {
+    10143: '0xF66908600D412898a40Db9bE6d58125979b57326',
     11142220: '0x9B6EA7621eec8EcE34dD0c4A87041962B435a185',
   } as Partial<Record<number, `0x${string}`>>,
 };

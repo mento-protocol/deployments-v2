@@ -6,8 +6,6 @@ components:
     script: ConfigureV3PreStage
     deps:
       - DeployV3PreStage
-  Relay:
-    script: Relay
   DeployOpenLiquidityStrategy:
     script: DeployOpenLiquidityStrategy
   CreateFPMM:
@@ -15,4 +13,3 @@ components:
     deps: 
       - ConfigureV3PreStage
       - DeployOpenLiquidityStrategy
-      - Relay

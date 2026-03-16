@@ -622,6 +622,7 @@ export const USDm = {
   ] as const,
   address: {
     143: '0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115',
+    10143: '0x5eCc03111ad2A78F981A108759bc73BAE2AB31bc',
     42220: '0x765de816845861e75a25fca122bb6898b8b1282a',
     11142220: '0xdE9e4C3ce781b4bA68120d6261cbad65ce0aB00b',
   } as Partial<Record<number, `0x${string}`>>,

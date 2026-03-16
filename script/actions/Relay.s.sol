@@ -7,7 +7,14 @@ import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
-import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20Metadata.sol";
+
+interface IChainlinkRelayerErrors {
+    error TimestampNotNew();
+    error ExpiredTimestamp();
+    error InvalidPrice();
+    error TimestampSpreadTooHigh();
+    error TooManyExistingReports();
+}
 
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {Config, IMentoConfig} from "../config/Config.sol";
@@ -19,6 +26,24 @@ contract Relay is TrebScript, ProxyHelper {
 
     IMentoConfig config;
 
+    function _logRelayError(string memory rateFeed, bytes memory reason) internal pure {
+        bytes4 sel = bytes4(reason);
+        if (sel == IChainlinkRelayerErrors.TimestampNotNew.selector) {
+            console.log("Failed to relay %s: TimestampNotNew", rateFeed);
+        } else if (sel == IChainlinkRelayerErrors.ExpiredTimestamp.selector) {
+            console.log("Failed to relay %s: ExpiredTimestamp", rateFeed);
+        } else if (sel == IChainlinkRelayerErrors.InvalidPrice.selector) {
+            console.log("Failed to relay %s: InvalidPrice", rateFeed);
+        } else if (sel == IChainlinkRelayerErrors.TimestampSpreadTooHigh.selector) {
+            console.log("Failed to relay %s: TimestampSpreadTooHigh", rateFeed);
+        } else if (sel == IChainlinkRelayerErrors.TooManyExistingReports.selector) {
+            console.log("Failed to relay %s: TooManyExistingReports", rateFeed);
+        } else {
+            console.log("Failed to relay %s: unknown error", rateFeed);
+            console.logBytes(reason);
+        }
+    }
+
     /// @custom:senders deployer
     function run() public broadcast {
         // Get configuration
@@ -28,8 +53,13 @@ contract Relay is TrebScript, ProxyHelper {
         IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config.getChainlinkRelayerConfigs();
 
         for (uint256 i = 0; i < relayerConfigs.length; i++) {
-            address relayerAddy = lookupOrFail(string.concat("ChainlinkRelayerV1:", relayerConfigs[i].rateFeed));
-            IChainlinkRelayer(deployer.harness(relayerAddy)).relay();
+            string memory rateFeed = relayerConfigs[i].rateFeed;
+            address relayerAddy = lookupOrFail(string.concat("ChainlinkRelayerV1:", rateFeed));
+            try IChainlinkRelayer(deployer.harness(relayerAddy)).relay() {
+                console.log("Relayed %s", rateFeed);
+            } catch (bytes memory reason) {
+                _logRelayError(rateFeed, reason);
+            }
         }
     }
 }

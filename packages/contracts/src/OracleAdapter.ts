@@ -506,6 +506,8 @@ export const OracleAdapter = {
     }
   ] as const,
   address: {
+    143: '0xa472fBBF4b890A54381977ac392BdF82EeC4383a',
+    10143: '0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7',
     42220: '0xa472fBBF4b890A54381977ac392BdF82EeC4383a',
     11142220: '0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7',
   } as Partial<Record<number, `0x${string}`>>,

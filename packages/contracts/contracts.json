@@ -1,91 +1,341 @@
 {
   "143": {
-    "monad-mainnet": {
-      "GBPm": {
-        "address": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
-        "type": "token"
-      },
-      "USDm": {
-        "address": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
-        "type": "token"
-      },
-      "StableTokenSpoke": {
-        "address": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
-        "type": "token"
-      },
+    "mainnet": {
       "AUSD": {
         "address": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
         "type": "contract"
       },
-      "USDC": {
-        "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
-        "type": "token"
-      },
-      "MigrationMultisig": {
-        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
-        "type": "contract"
-      }
-    },
-    "mainnet": {
-      "GBPm": {
-        "address": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
-        "type": "token"
-      },
-      "USDm": {
-        "address": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115",
-        "type": "token"
-      },
-      "StableTokenSpoke": {
-        "address": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
-        "type": "token"
-      },
-      "AUSD": {
-        "address": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
+      "AddressSortedLinkedListWithMedian": {
+        "address": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
         "type": "contract"
       },
-      "USDC": {
-        "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
-        "type": "token"
-      },
-      "MigrationMultisig": {
-        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+      "BreakerBox": {
+        "address": "0x9fc1E0d10fb38954Da385B8B25aB2BbaF3241722",
         "type": "contract"
-      }
-    }
-  },
-  "42220": {
-    "mainnet": {
-      "CDPLiquidityStrategy": {
-        "address": "0x4e78BD9565341EAbe99cDC024acB044d9BDcB985",
+      },
+      "ChainlinkRelayerFactory": {
+        "address": "0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A",
+        "type": "contract"
+      },
+      "ChainlinkRelayerV1AUSDUSD": {
+        "address": "0x2604F6daFed5b6204868e15E89ca41C2D5f6D9c2",
+        "type": "contract"
+      },
+      "ChainlinkRelayerV1GBPUSD": {
+        "address": "0xDb8fc8c6DaaC8F73E21e9cC145440AB899d60e55",
+        "type": "contract"
+      },
+      "ChainlinkRelayerV1USDCUSD": {
+        "address": "0xB1683dB4D2D74E951C54314f1BCA1e8FBB299fE2",
         "type": "contract"
       },
       "FPMMFactory": {
         "address": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",
         "type": "contract"
       },
+      "FPMMFactoryv300": {
+        "address": "0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a",
+        "type": "contract"
+      },
+      "FPMMv300": {
+        "address": "0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30",
+        "type": "pool"
+      },
       "FactoryRegistry": {
         "address": "0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6",
+        "type": "contract"
+      },
+      "FactoryRegistryv300": {
+        "address": "0x8124b66595Ff4E79B7F0c1b1101AFa501d219311",
+        "type": "contract"
+      },
+      "FeeSetter": {
+        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+        "type": "contract"
+      },
+      "GBPm": {
+        "address": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
+        "type": "token"
+      },
+      "MarketHoursBreakerv300": {
+        "address": "0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF",
+        "type": "contract"
+      },
+      "MedianDeltaBreaker": {
+        "address": "0x3E4F2Bca4f7192Be4C3c5E5bD4840F2E90a8Ba84",
+        "type": "contract"
+      },
+      "MigrationMultisig": {
+        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+        "type": "contract"
+      },
+      "NttDeployHelperGBPm": {
+        "address": "0xF3797E9D818A47A3a604bF2346E4ff50b56ad5c4",
+        "type": "contract"
+      },
+      "NttDeployHelperUSDm": {
+        "address": "0x37316334108C816f9862baB52347A0aab7551127",
+        "type": "contract"
+      },
+      "OpenLiquidityStrategy": {
+        "address": "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
         "type": "contract"
       },
       "OracleAdapter": {
         "address": "0xa472fBBF4b890A54381977ac392BdF82EeC4383a",
         "type": "contract"
       },
+      "OracleAdapterv300": {
+        "address": "0xc1B767756F582d124E76BB3e246f31e6aB256059",
+        "type": "contract"
+      },
+      "ProtocolFeeRecipient": {
+        "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
+        "type": "contract"
+      },
+      "ProxyAdmin": {
+        "address": "0xf759073E3a6125fFF215427AeB313A49799FECCf",
+        "type": "contract"
+      },
       "ReserveLiquidityStrategy": {
         "address": "0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B",
+        "type": "contract"
+      },
+      "ReserveLiquidityStrategyv301": {
+        "address": "0x420FbDB50dadF0286144BFF91ed62A6893dee148",
+        "type": "contract"
+      },
+      "ReserveSafe": {
+        "address": "0x87647780180B8f55980C7D3fFeFe08a9B29e9aE1",
         "type": "contract"
       },
       "ReserveV2": {
         "address": "0x4255Cf38e51516766180b33122029A88Cb853806",
         "type": "contract"
       },
-      "StabilityPoolGBPm": {
-        "address": "0x06346c0fAB682dBde9f245D2D84677592E8aaa15",
+      "ReserveV2v300": {
+        "address": "0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF",
         "type": "contract"
       },
-      "SystemParamsProxyGBPm": {
-        "address": "0x70536e44d1D9238BA8E35Ffe63Bb388a63F0DE51",
+      "Routerv300": {
+        "address": "0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6",
         "type": "contract"
+      },
+      "SortedOracles": {
+        "address": "0x6f92C745346057a61b259579256159458a0a6A92",
+        "type": "contract"
+      },
+      "StableTokenSpoke": {
+        "address": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+        "type": "token"
+      },
+      "StableTokenSpokeGBP": {
+        "address": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
+        "type": "token"
+      },
+      "StableTokenSpokeImplementation": {
+        "address": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
+        "type": "contract"
+      },
+      "StableTokenSpokeUSD": {
+        "address": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
+        "type": "token"
+      },
+      "StableTokenV3v300": {
+        "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
+        "type": "token"
+      },
+      "USDC": {
+        "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
+        "type": "token"
+      },
+      "USDm": {
+        "address": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115",
+        "type": "token"
+      },
+      "ValueDeltaBreaker": {
+        "address": "0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13",
+        "type": "contract"
+      },
+      "WormholeCoreBridge": {
+        "address": "0x194B123c5E96B9b2E49763619985790Dc241CAC0",
+        "type": "contract"
+      }
+    }
+  },
+  "10143": {
+    "testnet-v2-rc5": {
+      "AddressSortedLinkedListWithMedian": {
+        "address": "0x8E1B1312EC92C9f8073296c4Cf1E60D31d228269",
+        "type": "contract"
+      },
+      "BreakerBoxv265": {
+        "address": "0x88869E30609D2C0E4032463D713328C6f541878e",
+        "type": "contract"
+      },
+      "ChainlinkRelayerFactory": {
+        "address": "0x438F17F0bE93db19F210E91663Cf6Cf4eaD93B4e",
+        "type": "contract"
+      },
+      "ChainlinkRelayerFactoryv265": {
+        "address": "0xBbDC14Ae898E7d8c11cca75bb157b55C35709479",
+        "type": "contract"
+      },
+      "ChainlinkRelayerV1AUSDUSD": {
+        "address": "0x73dF2f773cdEeBd33282107c5705E73321Ee0D4d",
+        "type": "contract"
+      },
+      "ChainlinkRelayerV1GBPUSD": {
+        "address": "0xb8433a521881C17c7cf3F45684CdC9cc5918A736",
+        "type": "contract"
+      },
+      "ChainlinkRelayerV1USDCUSD": {
+        "address": "0x34b8E391e26faf1af1c751aa4F6b5E19FBF9190B",
+        "type": "contract"
+      },
+      "FPMMFactory": {
+        "address": "0x353ED52bF8482027C0e0b9e3c0e5d96A9F680980",
+        "type": "contract"
+      },
+      "FPMMFactoryv300": {
+        "address": "0x5E2A42d760Aa6969C3DA49b249ec181115887391",
+        "type": "contract"
+      },
+      "FPMMv300": {
+        "address": "0x43cB9D6AcF1462356303079EA4FDd8bc30042a6A",
+        "type": "pool"
+      },
+      "FactoryRegistry": {
+        "address": "0x47Cb00322E9cd6196915629EDD4De1EA92F98561",
+        "type": "contract"
+      },
+      "FactoryRegistryv300": {
+        "address": "0xca73ea6193341D676Ae9f5771d797EEE8d83BAD6",
+        "type": "contract"
+      },
+      "FeeSetter": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "GBPm": {
+        "address": "0x04de554E875c9797dC4ceBd834A9e99fa8fD5Df9",
+        "type": "token"
+      },
+      "MarketHoursBreakerv300": {
+        "address": "0x99C968Bf5972C11442654b989B7eAD0237cA654B",
+        "type": "contract"
+      },
+      "MedianDeltaBreakerv265": {
+        "address": "0xf923C884F319b8866F67C5719A80E5cB4D0FAF2c",
+        "type": "contract"
+      },
+      "MigrationMultisig": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "MockChainlinkAggregatorAUSDUSD": {
+        "address": "0xcd0776D746D589d91b629D28B785443722Cea4E1",
+        "type": "contract"
+      },
+      "MockChainlinkAggregatorGBPUSD": {
+        "address": "0xF66908600D412898a40Db9bE6d58125979b57326",
+        "type": "contract"
+      },
+      "MockChainlinkAggregatorUSDCUSD": {
+        "address": "0xB1D1D3382D0F26493063cB7188Eb479d45A44cdF",
+        "type": "contract"
+      },
+      "MockERC20AUSD": {
+        "address": "0x502E67D3fE9302A5e4Ec1CFCDdbD6F34F9B9484B",
+        "type": "token"
+      },
+      "OpenLiquidityStrategy": {
+        "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
+        "type": "contract"
+      },
+      "OracleAdapter": {
+        "address": "0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7",
+        "type": "contract"
+      },
+      "OracleAdapterv300": {
+        "address": "0x9CA4FA8253f14CfF40E42970df38799a78d3c482",
+        "type": "contract"
+      },
+      "ProtocolFeeRecipient": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "ProxyAdmin": {
+        "address": "0xaad8b67551086609D132178dfF1dBE31b3c1C9C2",
+        "type": "contract"
+      },
+      "ReserveLiquidityStrategy": {
+        "address": "0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8",
+        "type": "contract"
+      },
+      "ReserveLiquidityStrategyv301": {
+        "address": "0x625BD9cc583B5F9a88a38B0657ce816a3F02D367",
+        "type": "contract"
+      },
+      "ReserveSafe": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "ReserveV2": {
+        "address": "0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7",
+        "type": "contract"
+      },
+      "ReserveV2v300": {
+        "address": "0x9AF42d11e808D0d6D16CFA676769AaFa0DA9644d",
+        "type": "contract"
+      },
+      "Routerv300": {
+        "address": "0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd",
+        "type": "contract"
+      },
+      "SortedOracles": {
+        "address": "0x85ed9ac57827132B8F60938F3165BC139E1F53cd",
+        "type": "contract"
+      },
+      "SortedOraclesv265": {
+        "address": "0x437aDC949AaC8f4971728ff0a7AC7C2290E555de",
+        "type": "contract"
+      },
+      "StableTokenSpoke": {
+        "address": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
+        "type": "token"
+      },
+      "StableTokenV3v300": {
+        "address": "0xDBd4Ea7Ce0b15C9d57DC3Fa47713477E4ef4fdcb",
+        "type": "token"
+      },
+      "USDC": {
+        "address": "0x534b2f3a21130d7a60830c2df862319e593943a3",
+        "type": "token"
+      },
+      "USDm": {
+        "address": "0x5eCc03111ad2A78F981A108759bc73BAE2AB31bc",
+        "type": "token"
+      },
+      "ValueDeltaBreakerv265": {
+        "address": "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf",
+        "type": "contract"
+      },
+      "Watchdog": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "YieldSplitAddress": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      }
+    }
+  },
+  "42220": {
+    "mainnet": {
+      "AUDm": {
+        "address": "0x7175504C455076F15c04A2F90a8e352281F492F9",
+        "type": "token"
       },
       "ActivePool": {
         "address": "0xa7873F4Bf2A1ea2EB20B1e8A992C4748e78473b2",
@@ -95,8 +345,48 @@
         "address": "0xB3136DBadB14Ab587FFa91545538126938Fe0C6E",
         "type": "contract"
       },
+      "BRLm": {
+        "address": "0xe8537a3d056da446677b9e9d6c5db704eaab4787",
+        "type": "token"
+      },
+      "BiPoolManager": {
+        "address": "0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901",
+        "type": "contract"
+      },
       "BorrowerOperations": {
         "address": "0x8ec9A81871F816F1EF007a82293703057A943B8A",
+        "type": "contract"
+      },
+      "BreakerBox": {
+        "address": "0x303ED1df62Fa067659B586EbEe8De0EcE824Ab39",
+        "type": "contract"
+      },
+      "Broker": {
+        "address": "0x777A8255cA72412f0d706dc03C9D1987306B4CaD",
+        "type": "contract"
+      },
+      "CADm": {
+        "address": "0xff4Ab19391af240c311c54200a492233052B6325",
+        "type": "token"
+      },
+      "CDPLiquidityStrategy": {
+        "address": "0x4e78BD9565341EAbe99cDC024acB044d9BDcB985",
+        "type": "contract"
+      },
+      "CELO": {
+        "address": "0x471ece3750da237f93b8e339c536989b8978a438",
+        "type": "token"
+      },
+      "CHFm": {
+        "address": "0xb55a79F398E759E43C95b979163f30eC87Ee131D",
+        "type": "token"
+      },
+      "COPm": {
+        "address": "0x8a567e2ae79ca692bd748ab832081c45de4041ea",
+        "type": "token"
+      },
+      "ChainlinkRelayerFactory": {
+        "address": "0x247cb6ecf21bdd2bc29d726cccc8d2f066211663",
         "type": "contract"
       },
       "CollSurplusPool": {
@@ -107,13 +397,49 @@
         "address": "0x1bEDD4334335522B0a0e8e610d326B16B0a605Fb",
         "type": "contract"
       },
+      "ConstantProductPricingModule": {
+        "address": "0x0c07126d0CB30E66eF7553Cc7C37143B4f06DddB",
+        "type": "contract"
+      },
+      "ConstantSumPricingModule": {
+        "address": "0xDebED1F6f6ce9F6e73AA25F95acBFFE2397550Fb",
+        "type": "contract"
+      },
       "DefaultPool": {
         "address": "0x95191e52d01eC060cEA753CDADfEEB07b78D0047",
         "type": "contract"
       },
+      "EURm": {
+        "address": "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73",
+        "type": "token"
+      },
       "FPMM": {
         "address": "0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30",
         "type": "pool"
+      },
+      "FPMMFactory": {
+        "address": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",
+        "type": "contract"
+      },
+      "FactoryRegistry": {
+        "address": "0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6",
+        "type": "contract"
+      },
+      "FeeSetter": {
+        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+        "type": "contract"
+      },
+      "FxPriceFeedManager": {
+        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+        "type": "contract"
+      },
+      "GBPm": {
+        "address": "0xCCF663b1fF11028f0b19058d0f7B674004a40746",
+        "type": "token"
+      },
+      "GHSm": {
+        "address": "0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313",
+        "type": "token"
       },
       "GasPool": {
         "address": "0x8b61f941D89560C7D8b3D595F44F7fd97D79817b",
@@ -123,20 +449,88 @@
         "address": "0xAfd741674bc4aa965a788dACe5b0434FD4374D82",
         "type": "contract"
       },
+      "JPYm": {
+        "address": "0xc45eCF20f3CD864B32D9794d6f76814aE8892e20",
+        "type": "token"
+      },
+      "KESm": {
+        "address": "0x456a3D042C0DbD3db53D5489e98dFb038553B0d0",
+        "type": "token"
+      },
+      "L2SequencerUptimeFeed": {
+        "address": "0x4CD491Dc27C8B0BbD10D516A502856B786939d18",
+        "type": "contract"
+      },
+      "Locking": {
+        "address": "0x001Bb66636dCd149A1A2bA8C50E408BdDd80279C",
+        "type": "contract"
+      },
       "MarketHoursBreaker": {
         "address": "0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF",
+        "type": "contract"
+      },
+      "MedianDeltaBreaker": {
+        "address": "0x49349F92D2B17d491e42C8fdB02D19f072F9B5D9",
+        "type": "contract"
+      },
+      "MentoGovernor": {
+        "address": "0x47036d78bB3169b4F5560dD77BF93f4412A59852",
+        "type": "contract"
+      },
+      "MigrationMultisig": {
+        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
         "type": "contract"
       },
       "MultiTroveGetter": {
         "address": "0x78fd33d2bCe0389cF41e15947B0EB0cE9dF8327F",
         "type": "contract"
       },
+      "NGNm": {
+        "address": "0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71",
+        "type": "token"
+      },
+      "OracleAdapter": {
+        "address": "0xa472fBBF4b890A54381977ac392BdF82EeC4383a",
+        "type": "contract"
+      },
+      "PHPm": {
+        "address": "0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B",
+        "type": "token"
+      },
+      "ProtocolFeeRecipient": {
+        "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
+        "type": "contract"
+      },
+      "ProxyAdmin": {
+        "address": "0x70d8DC60f9701c46D4CE9AC141E154f6804e1dC3",
+        "type": "contract"
+      },
+      "Reserve": {
+        "address": "0x9380fA34Fd9e4Fd14c06305fd7B6199089eD4eb9",
+        "type": "contract"
+      },
+      "ReserveLiquidityStrategy": {
+        "address": "0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B",
+        "type": "contract"
+      },
+      "ReserveSafe": {
+        "address": "0x87647780180B8f55980C7D3fFeFe08a9B29e9aE1",
+        "type": "contract"
+      },
       "ReserveTroveFactory": {
         "address": "0x02859465DCC7D7F2Bee183fC7FaC78544c9519e1",
         "type": "contract"
       },
+      "ReserveV2": {
+        "address": "0x4255Cf38e51516766180b33122029A88Cb853806",
+        "type": "contract"
+      },
       "Router": {
         "address": "0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6",
+        "type": "contract"
+      },
+      "SortedOracles": {
+        "address": "0xefb84935239dacdecf7c5ba76d8de40b077b7b33",
         "type": "contract"
       },
       "SortedTroves": {
@@ -146,6 +540,14 @@
       "StabilityPool": {
         "address": "0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5",
         "type": "contract"
+      },
+      "StabilityPoolGBPm": {
+        "address": "0x06346c0fAB682dBde9f245D2D84677592E8aaa15",
+        "type": "contract"
+      },
+      "StableTokenV2": {
+        "address": "0x434563B0604BE100F04B7Ae485BcafE3c9D8850E",
+        "type": "token"
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
@@ -159,124 +561,20 @@
         "address": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
         "type": "contract"
       },
+      "SystemParamsProxyGBPm": {
+        "address": "0x70536e44d1D9238BA8E35Ffe63Bb388a63F0DE51",
+        "type": "contract"
+      },
+      "TimelockController": {
+        "address": "0x890DB8A597940165901372Dd7DB61C9f246e2147",
+        "type": "contract"
+      },
       "TroveManager": {
         "address": "0xb38aEf2bF4e34B997330D626EBCd7629De3885C9",
         "type": "contract"
       },
       "TroveNFT": {
         "address": "0x46273A5792013973b64a42E760E6F81d0472C6b6",
-        "type": "contract"
-      },
-      "VirtualPoolFactory": {
-        "address": "0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3",
-        "type": "contract"
-      },
-      "ProxyAdmin": {
-        "address": "0x70d8DC60f9701c46D4CE9AC141E154f6804e1dC3",
-        "type": "contract"
-      },
-      "Broker": {
-        "address": "0x777A8255cA72412f0d706dc03C9D1987306B4CaD",
-        "type": "contract"
-      },
-      "BiPoolManager": {
-        "address": "0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901",
-        "type": "contract"
-      },
-      "Reserve": {
-        "address": "0x9380fA34Fd9e4Fd14c06305fd7B6199089eD4eb9",
-        "type": "contract"
-      },
-      "BreakerBox": {
-        "address": "0x303ED1df62Fa067659B586EbEe8De0EcE824Ab39",
-        "type": "contract"
-      },
-      "MedianDeltaBreaker": {
-        "address": "0x49349F92D2B17d491e42C8fdB02D19f072F9B5D9",
-        "type": "contract"
-      },
-      "ValueDeltaBreaker": {
-        "address": "0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68",
-        "type": "contract"
-      },
-      "ConstantSumPricingModule": {
-        "address": "0xDebED1F6f6ce9F6e73AA25F95acBFFE2397550Fb",
-        "type": "contract"
-      },
-      "ConstantProductPricingModule": {
-        "address": "0x0c07126d0CB30E66eF7553Cc7C37143B4f06DddB",
-        "type": "contract"
-      },
-      "USDm": {
-        "address": "0x765de816845861e75a25fca122bb6898b8b1282a",
-        "type": "token"
-      },
-      "EURm": {
-        "address": "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73",
-        "type": "token"
-      },
-      "BRLm": {
-        "address": "0xe8537a3d056da446677b9e9d6c5db704eaab4787",
-        "type": "token"
-      },
-      "XOFm": {
-        "address": "0x73F93dcc49cB8A239e2032663e9475dd5ef29A08",
-        "type": "token"
-      },
-      "KESm": {
-        "address": "0x456a3D042C0DbD3db53D5489e98dFb038553B0d0",
-        "type": "token"
-      },
-      "PHPm": {
-        "address": "0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B",
-        "type": "token"
-      },
-      "COPm": {
-        "address": "0x8a567e2ae79ca692bd748ab832081c45de4041ea",
-        "type": "token"
-      },
-      "GHSm": {
-        "address": "0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313",
-        "type": "token"
-      },
-      "GBPm": {
-        "address": "0xCCF663b1fF11028f0b19058d0f7B674004a40746",
-        "type": "token"
-      },
-      "ZARm": {
-        "address": "0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6",
-        "type": "token"
-      },
-      "CADm": {
-        "address": "0xff4Ab19391af240c311c54200a492233052B6325",
-        "type": "token"
-      },
-      "AUDm": {
-        "address": "0x7175504C455076F15c04A2F90a8e352281F492F9",
-        "type": "token"
-      },
-      "CHFm": {
-        "address": "0xb55a79F398E759E43C95b979163f30eC87Ee131D",
-        "type": "token"
-      },
-      "JPYm": {
-        "address": "0xc45eCF20f3CD864B32D9794d6f76814aE8892e20",
-        "type": "token"
-      },
-      "NGNm": {
-        "address": "0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71",
-        "type": "token"
-      },
-      "StableTokenV2": {
-        "address": "0x434563B0604BE100F04B7Ae485BcafE3c9D8850E",
-        "type": "token"
-      },
-      "SortedOracles": {
-        "address": "0xefb84935239dacdecf7c5ba76d8de40b077b7b33",
-        "type": "contract"
-      },
-      "MigrationMultisig": {
-        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
         "type": "contract"
       },
       "USDC": {
@@ -287,189 +585,49 @@
         "address": "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e",
         "type": "token"
       },
-      "axlUSDC": {
-        "address": "0xEB466342C4d449BC9f53A865D5Cb90586f405215",
+      "USDm": {
+        "address": "0x765de816845861e75a25fca122bb6898b8b1282a",
+        "type": "token"
+      },
+      "ValueDeltaBreaker": {
+        "address": "0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68",
+        "type": "contract"
+      },
+      "VirtualPoolFactory": {
+        "address": "0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3",
+        "type": "contract"
+      },
+      "WormholeCoreBridge": {
+        "address": "0xa321448d90d4e5b0A732867c18eA198e75CAC48E",
+        "type": "contract"
+      },
+      "XOFm": {
+        "address": "0x73F93dcc49cB8A239e2032663e9475dd5ef29A08",
+        "type": "token"
+      },
+      "YieldSplitAddress": {
+        "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
+        "type": "contract"
+      },
+      "ZARm": {
+        "address": "0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6",
         "type": "token"
       },
       "axlEUROC": {
         "address": "0x061cc5a2C863E0C1Cb404006D559dB18A34C762d",
         "type": "token"
       },
-      "ReserveSafe": {
-        "address": "0x87647780180B8f55980C7D3fFeFe08a9B29e9aE1",
-        "type": "contract"
-      },
-      "FeeSetter": {
-        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
-        "type": "contract"
-      },
-      "ProtocolFeeRecipient": {
-        "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
-        "type": "contract"
-      },
-      "CELO": {
-        "address": "0x471ece3750da237f93b8e339c536989b8978a438",
+      "axlUSDC": {
+        "address": "0xEB466342C4d449BC9f53A865D5Cb90586f405215",
         "type": "token"
-      },
-      "FxPriceFeedManager": {
-        "address": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
-        "type": "contract"
-      },
-      "YieldSplitAddress": {
-        "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
-        "type": "contract"
-      },
-      "MentoGovernor": {
-        "address": "0x47036d78bB3169b4F5560dD77BF93f4412A59852",
-        "type": "contract"
-      },
-      "ChainlinkRelayerFactory": {
-        "address": "0x247cb6ecf21bdd2bc29d726cccc8d2f066211663",
-        "type": "contract"
-      },
-      "TimelockController": {
-        "address": "0x890DB8A597940165901372Dd7DB61C9f246e2147",
-        "type": "contract"
-      },
-      "Locking": {
-        "address": "0x001Bb66636dCd149A1A2bA8C50E408BdDd80279C",
-        "type": "contract"
-      },
-      "L2SequencerUptimeFeed": {
-        "address": "0x4CD491Dc27C8B0BbD10D516A502856B786939d18",
-        "type": "contract"
       }
     }
   },
   "11142220": {
     "testnet-v2-rc5": {
-      "BiPoolManager": {
-        "address": "0xeCB3C656C131fCd9bB8D1d80898716bD684feb78",
-        "type": "contract"
-      },
-      "Broker": {
-        "address": "0xB9Ae2065142EB79b6c5EB1E8778F883fad6B07Ba",
-        "type": "contract"
-      },
-      "PHPm": {
-        "address": "0x0352976d940a2C3FBa0C3623198947Ee1d17869E",
-        "type": "token"
-      },
-      "Reserve": {
-        "address": "0x2bC2D48735842924C508468C5A02580aD4F6d99A",
-        "type": "contract"
-      },
-      "SortedOracles": {
-        "address": "0xfaa7Ca2B056E60F6733aE75AA0709140a6eAfD20",
-        "type": "contract"
-      },
       "AUDm": {
         "address": "0x5873Faeb42F3563dcD77F0fbbdA818E6d6DA3139",
         "type": "token"
-      },
-      "CADm": {
-        "address": "0xF151c9a13b78C84f93f50B8b3bC689fedc134F60",
-        "type": "token"
-      },
-      "CHFm": {
-        "address": "0x284E9b7B623eAE866914b7FA0eB720C2Bb3C2980",
-        "type": "token"
-      },
-      "COPm": {
-        "address": "0x5F8d55c3627d2dc0a2B4afa798f877242F382F67",
-        "type": "token"
-      },
-      "EURm": {
-        "address": "0xA99dC247d6b7B2E3ab48a1fEE101b83cD6aCd82a",
-        "type": "token"
-      },
-      "GBPm": {
-        "address": "0x85F5181Abdbf0e1814Fc4358582Ae07b8eBA3aF3",
-        "type": "token"
-      },
-      "GHSm": {
-        "address": "0x5e94B8C872bD47BC4255E60ECBF44D5E66e7401C",
-        "type": "token"
-      },
-      "JPYm": {
-        "address": "0x85Bee67D435A39f7467a8a9DE34a5B73D25Df426",
-        "type": "token"
-      },
-      "KESm": {
-        "address": "0xC7e4635651E3e3Af82b61d3E23c159438daE3BbF",
-        "type": "token"
-      },
-      "NGNm": {
-        "address": "0x3d5ae86F34E2a82771496D140daFAEf3789dF888",
-        "type": "token"
-      },
-      "BRLm": {
-        "address": "0x2294298942fdc79417DE9E0D740A4957E0e7783a",
-        "type": "token"
-      },
-      "USDm": {
-        "address": "0xdE9e4C3ce781b4bA68120d6261cbad65ce0aB00b",
-        "type": "token"
-      },
-      "ZARm": {
-        "address": "0x10CCfB235b0E1Ed394bACE4560C3ed016697687e",
-        "type": "token"
-      },
-      "XOFm": {
-        "address": "0x5505b70207aE3B826c1A7607F19F3Bf73444A082",
-        "type": "token"
-      },
-      "CDPLiquidityStrategy": {
-        "address": "0x065AE7D4e207C8f4dca112D0B79E668cc7e93e03",
-        "type": "contract"
-      },
-      "ChainlinkRelayerFactory": {
-        "address": "0xd96f786f5a294fb7cbb0847307293b7A871B9d5a",
-        "type": "contract"
-      },
-      "Emission": {
-        "address": "0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69",
-        "type": "contract"
-      },
-      "FPMMFactory": {
-        "address": "0x353ED52bF8482027C0e0b9e3c0e5d96A9F680980",
-        "type": "contract"
-      },
-      "FactoryRegistry": {
-        "address": "0x47Cb00322E9cd6196915629EDD4De1EA92F98561",
-        "type": "contract"
-      },
-      "Locking": {
-        "address": "0xB72320fC501cb30E55bAF0DA48c20b11fAc9f79D",
-        "type": "contract"
-      },
-      "MentoGovernor": {
-        "address": "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4",
-        "type": "contract"
-      },
-      "OracleAdapter": {
-        "address": "0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7",
-        "type": "contract"
-      },
-      "ReserveLiquidityStrategy": {
-        "address": "0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8",
-        "type": "contract"
-      },
-      "ReserveV2": {
-        "address": "0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7",
-        "type": "contract"
-      },
-      "StabilityPoolGBPm": {
-        "address": "0x31f4fE29B8104969209C0474A40FCa79170Ee53e",
-        "type": "contract"
-      },
-      "SystemParamsProxyGBPm": {
-        "address": "0x70855d7826d3Ae92b2B3ae154eE6945754dD4Fe5",
-        "type": "contract"
-      },
-      "TimelockController": {
-        "address": "0x74c44Be99937815173A3C56274331e0A05611e0D",
-        "type": "contract"
       },
       "ActivePool": {
         "address": "0x50651599c8A778732C34d1C181EEB05Ff2Ef9d73",
@@ -483,12 +641,48 @@
         "address": "0x8b33D626E8d79388889d404fBC515Ed131c9508e",
         "type": "contract"
       },
+      "BRLm": {
+        "address": "0x2294298942fdc79417DE9E0D740A4957E0e7783a",
+        "type": "token"
+      },
+      "BiPoolManager": {
+        "address": "0xeCB3C656C131fCd9bB8D1d80898716bD684feb78",
+        "type": "contract"
+      },
       "BorrowerOperations": {
         "address": "0x7fCd2F75Ed661E76f969E6D0347a93028a099d6D",
         "type": "contract"
       },
       "BreakerBox": {
         "address": "0x578bD46003B9D3fd4c3C3f47c98B329562a6a1dE",
+        "type": "contract"
+      },
+      "Broker": {
+        "address": "0xB9Ae2065142EB79b6c5EB1E8778F883fad6B07Ba",
+        "type": "contract"
+      },
+      "CADm": {
+        "address": "0xF151c9a13b78C84f93f50B8b3bC689fedc134F60",
+        "type": "token"
+      },
+      "CDPLiquidityStrategy": {
+        "address": "0x065AE7D4e207C8f4dca112D0B79E668cc7e93e03",
+        "type": "contract"
+      },
+      "CELO": {
+        "address": "0x471ece3750da237f93b8e339c536989b8978a438",
+        "type": "token"
+      },
+      "CHFm": {
+        "address": "0x284E9b7B623eAE866914b7FA0eB720C2Bb3C2980",
+        "type": "token"
+      },
+      "COPm": {
+        "address": "0x5F8d55c3627d2dc0a2B4afa798f877242F382F67",
+        "type": "token"
+      },
+      "ChainlinkRelayerFactory": {
+        "address": "0xd96f786f5a294fb7cbb0847307293b7A871B9d5a",
         "type": "contract"
       },
       "ChainlinkRelayerV1AUDUSD": {
@@ -647,9 +841,41 @@
         "address": "0x8f0E218fE0EB3Ef1dAF3eEAF1Cbf4Ec6d29b6fe4",
         "type": "contract"
       },
+      "EURm": {
+        "address": "0xA99dC247d6b7B2E3ab48a1fEE101b83cD6aCd82a",
+        "type": "token"
+      },
+      "Emission": {
+        "address": "0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69",
+        "type": "contract"
+      },
       "FPMM": {
         "address": "0x43cB9D6AcF1462356303079EA4FDd8bc30042a6A",
         "type": "pool"
+      },
+      "FPMMFactory": {
+        "address": "0x353ED52bF8482027C0e0b9e3c0e5d96A9F680980",
+        "type": "contract"
+      },
+      "FactoryRegistry": {
+        "address": "0x47Cb00322E9cd6196915629EDD4De1EA92F98561",
+        "type": "contract"
+      },
+      "FeeSetter": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "FxPriceFeedManager": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
+      "GBPm": {
+        "address": "0x85F5181Abdbf0e1814Fc4358582Ae07b8eBA3aF3",
+        "type": "token"
+      },
+      "GHSm": {
+        "address": "0x5e94B8C872bD47BC4255E60ECBF44D5E66e7401C",
+        "type": "token"
       },
       "GasPool": {
         "address": "0xcf0349BaffbEEb9f5c8871338415613610DC321E",
@@ -657,6 +883,18 @@
       },
       "HintHelpers": {
         "address": "0x5A54DD5d7AD1b782b43bB08d0A40CA947a315556",
+        "type": "contract"
+      },
+      "JPYm": {
+        "address": "0x85Bee67D435A39f7467a8a9DE34a5B73D25Df426",
+        "type": "token"
+      },
+      "KESm": {
+        "address": "0xC7e4635651E3e3Af82b61d3E23c159438daE3BbF",
+        "type": "token"
+      },
+      "Locking": {
+        "address": "0xB72320fC501cb30E55bAF0DA48c20b11fAc9f79D",
         "type": "contract"
       },
       "MarketHoursBreaker": {
@@ -671,6 +909,10 @@
         "address": "0xd29B4e743F7B84D63fBF9149B6D983DF2eF5C952",
         "type": "contract"
       },
+      "MentoGovernor": {
+        "address": "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4",
+        "type": "contract"
+      },
       "MentoRouter": {
         "address": "0x8e4Fb12D86D5DF911086a9153e79CA27e0c96156",
         "type": "contract"
@@ -678,6 +920,10 @@
       "MentoToken": {
         "address": "0x07867fd40EB56b4380bE39c88D0a7EA59Aa99A20",
         "type": "token"
+      },
+      "MigrationMultisig": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
       },
       "MockChainlinkAggregatorAUDUSD": {
         "address": "0x94d96BAef28145235fA66758b0B121Bed0ee1361",
@@ -775,8 +1021,32 @@
         "address": "0xED59EDfB9fCD06bb13d568ab548eC101fBb77a54",
         "type": "contract"
       },
+      "NGNm": {
+        "address": "0x3d5ae86F34E2a82771496D140daFAEf3789dF888",
+        "type": "token"
+      },
+      "OracleAdapter": {
+        "address": "0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7",
+        "type": "contract"
+      },
+      "PHPm": {
+        "address": "0x0352976d940a2C3FBa0C3623198947Ee1d17869E",
+        "type": "token"
+      },
+      "ProtocolFeeRecipient": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
       "ProxyAdmin": {
         "address": "0x01bd47aa7B13a75c24E3dA760f8A503c435BB4Df",
+        "type": "contract"
+      },
+      "Reserve": {
+        "address": "0x2bC2D48735842924C508468C5A02580aD4F6d99A",
+        "type": "contract"
+      },
+      "ReserveLiquidityStrategy": {
+        "address": "0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8",
         "type": "contract"
       },
       "ReserveLiquidityStrategyv300": {
@@ -787,12 +1057,24 @@
         "address": "0x625BD9cc583B5F9a88a38B0657ce816a3F02D367",
         "type": "contract"
       },
+      "ReserveSafe": {
+        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+        "type": "contract"
+      },
       "ReserveTroveFactory": {
         "address": "0xf179d705706CD959884E40B1eA21C95EC84D9E14",
         "type": "contract"
       },
+      "ReserveV2": {
+        "address": "0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7",
+        "type": "contract"
+      },
       "Router": {
         "address": "0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd",
+        "type": "contract"
+      },
+      "SortedOracles": {
+        "address": "0xfaa7Ca2B056E60F6733aE75AA0709140a6eAfD20",
         "type": "contract"
       },
       "SortedTroves": {
@@ -801,6 +1083,10 @@
       },
       "StabilityPool": {
         "address": "0x1c424be1BE055a6C91ED9839a0E440E26814D1fC",
+        "type": "contract"
+      },
+      "StabilityPoolGBPm": {
+        "address": "0x31f4fE29B8104969209C0474A40FCa79170Ee53e",
         "type": "contract"
       },
       "StableTokenV2": {
@@ -819,6 +1105,14 @@
         "address": "0xdf1E9330f328Ea8Fd3E974b1a2510A9791712318",
         "type": "contract"
       },
+      "SystemParamsProxyGBPm": {
+        "address": "0x70855d7826d3Ae92b2B3ae154eE6945754dD4Fe5",
+        "type": "contract"
+      },
+      "TimelockController": {
+        "address": "0x74c44Be99937815173A3C56274331e0A05611e0D",
+        "type": "contract"
+      },
       "TroveManager": {
         "address": "0x3ADFF16949513480E051F451748Ee8B801731c46",
         "type": "contract"
@@ -826,6 +1120,10 @@
       "TroveNFT": {
         "address": "0x25B721CA74E6D0c2e3b9FD755cd2148A35CF1E84",
         "type": "contract"
+      },
+      "USDm": {
+        "address": "0xdE9e4C3ce781b4bA68120d6261cbad65ce0aB00b",
+        "type": "token"
       },
       "ValueDeltaBreaker": {
         "address": "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534",
@@ -835,33 +1133,17 @@
         "address": "0x887955f28723B0e9Bddc358448CB5B1FDe692da4",
         "type": "contract"
       },
-      "MigrationMultisig": {
-        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
-        "type": "contract"
-      },
-      "ReserveSafe": {
-        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
-        "type": "contract"
-      },
-      "FeeSetter": {
-        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
-        "type": "contract"
-      },
-      "ProtocolFeeRecipient": {
-        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
-        "type": "contract"
-      },
-      "FxPriceFeedManager": {
-        "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
-        "type": "contract"
-      },
-      "CELO": {
-        "address": "0x471ece3750da237f93b8e339c536989b8978a438",
+      "XOFm": {
+        "address": "0x5505b70207aE3B826c1A7607F19F3Bf73444A082",
         "type": "token"
       },
       "YieldSplitAddress": {
         "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
         "type": "contract"
+      },
+      "ZARm": {
+        "address": "0x10CCfB235b0E1Ed394bACE4560C3ed016697687e",
+        "type": "token"
       }
     }
   }
