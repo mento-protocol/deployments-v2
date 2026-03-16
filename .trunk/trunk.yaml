@@ -20,8 +20,8 @@ lint:
   ignore:
     - linters: [gitleaks, trufflehog]
       paths:
-        - .treb/** # Blockchain contract addresses, not secrets
-        - broadcast/** # Forge deployment transaction logs
+        - .treb/*.json # Blockchain contract addresses, not secrets
+        - broadcast/**/*.json # Forge deployment transaction logs
   enabled:
     - gitleaks@8.30.0
     - semgrep@1.155.0
