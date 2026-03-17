@@ -564,6 +564,7 @@
       "TransparentUpgradeableProxy:Locking": "0xB72320fC501cb30E55bAF0DA48c20b11fAc9f79D",
       "TransparentUpgradeableProxy:MentoGovernor": "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4",
       "TransparentUpgradeableProxy:OracleAdapter": "0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7",
+      "TransparentUpgradeableProxy:OracleAdapterCollateral": "0xAb84C994b364Be03018c6528F0F68118f107578A",
       "TransparentUpgradeableProxy:ReserveLiquidityStrategy": "0x734bb3251Ec3f1A83f8f2A8609bcEF649D54EbF8",
       "TransparentUpgradeableProxy:ReserveV2": "0xbCdc1D0b92DfceEaa0FcD0a0D53355F4bF1DB8a7",
       "TransparentUpgradeableProxy:StabilityPool:GBPm": "0x31f4fE29B8104969209C0474A40FCa79170Ee53e",

@@ -103,18 +103,21 @@ contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
     function verifyChangesWorked() internal {
         IFPMMFactory fpmmFactory = IFPMMFactory(fpmmFactory);
         address[] memory fpmms = fpmmFactory.deployedFPMMAddresses();
+        vm.warp(1773486000);
+        console.log("warp to weekend");
         for (uint256 i = 0; i < fpmms.length; i++) {
             IFPMM fpmm = IFPMM(fpmms[i]);
             uint256 amountIn = 100 * 10 ** IERC20Metadata(fpmm.token0()).decimals();
             console.log(
                 "verify changes worked for", IERC20Metadata(fpmm.token0()).name(), IERC20Metadata(fpmm.token1()).name()
             );
+            console.log("oracle adapter", address(fpmm.oracleAdapter()));
+            console.log("market hours breaker", address(fpmm.oracleAdapter().marketHoursBreaker()));
             if (isCollateralFpmm(fpmms[i])) {
                 console.log("is collateral fpmm");
                 console.log("amount in token0", amountIn);
                 uint256 amountOut = fpmm.getAmountOut(amountIn, fpmm.token0());
                 console.log("amount out on Weekend", amountOut);
-                console.log("amount out on Weekday", fpmm.getAmountOut(amountIn, fpmm.token0()));
             } else {
                 console.log("is not collateral fpmm");
                 address token0 = fpmm.token0();
