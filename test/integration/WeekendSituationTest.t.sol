@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
 import {Registry} from "lib/treb-sol/src/internal/Registry.sol";
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
+import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import {V3IntegrationBase} from "test/integration/V3IntegrationBase.t.sol";
 import {IMentoConfig} from "../../script/config/IMentoConfig.sol";
@@ -43,7 +44,20 @@ contract WeekendSituationTest is V3IntegrationBase {
 
         for (uint256 i = 0; i < fpmms.length; i++) {
             IFPMM fpmm = IFPMM(fpmms[i]);
-            _swapBothWays(fpmm, !_isCollateralFpmm(fpmm));
+            bytes4 expectedError = _isCollateralFpmm(fpmm) ? bytes4(0) : IOracleAdapter.FXMarketClosed.selector;
+            _swapBothWays(fpmm, expectedError);
+        }
+    }
+
+    function test_swapDuringAWeekday() public {
+        vm.warp(timestamp_weekday);
+
+        IFPMMFactory fpmmFactory = IFPMMFactory(fpmmFactory);
+        address[] memory fpmms = fpmmFactory.deployedFPMMAddresses();
+
+        for (uint256 i = 0; i < fpmms.length; i++) {
+            IFPMM fpmm = IFPMM(fpmms[i]);
+            _swapBothWays(fpmm, bytes4(0));
         }
     }
 
@@ -52,11 +66,11 @@ contract WeekendSituationTest is V3IntegrationBase {
         return config.isCollateralAsset(token0) || config.isCollateralAsset(token1);
     }
 
-    function _swapBothWays(IFPMM fpmm, bool expectRevert) internal {
+    function _swapBothWays(IFPMM fpmm, bytes4 expectedError) internal {
         IERC20Metadata tokenIn = IERC20Metadata(fpmm.token0());
         uint256 amountIn = 10 ** tokenIn.decimals();
-        if (expectRevert) {
-            vm.expectRevert();
+        if (expectedError != bytes4(0)) {
+            vm.expectRevert(expectedError);
             fpmm.getAmountOut(amountIn, address(tokenIn));
             return;
         }
@@ -64,13 +78,7 @@ contract WeekendSituationTest is V3IntegrationBase {
 
         _dealSelf(address(tokenIn), amountIn);
         tokenIn.transfer(address(fpmm), amountIn);
-        if (expectRevert) {
-            vm.expectRevert();
-        }
         fpmm.swap(0, amountOut, address(this), "");
-        if (expectRevert) {
-            return;
-        }
         tokenIn = IERC20Metadata(fpmm.token1());
         amountIn = amountOut;
         amountOut = fpmm.getAmountOut(amountIn, address(tokenIn));
