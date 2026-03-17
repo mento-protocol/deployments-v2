@@ -15,17 +15,13 @@ import {Config} from "script/config/Config.sol";
 import {
     ITransparentUpgradeableProxy
 } from "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
-import {
-    LiquidityStrategy
-} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
+import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 import {console} from "forge-std/console.sol";
 
 interface IProxyAdmin {
-    function upgradeAndCall(
-        ITransparentUpgradeableProxy proxy,
-        address implementation,
-        bytes memory data
-    ) external payable;
+    function upgradeAndCall(ITransparentUpgradeableProxy proxy, address implementation, bytes memory data)
+        external
+        payable;
 }
 
 contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
@@ -39,7 +35,6 @@ contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
     address public l2SequencerUptimeFeed;
     address public oracleAdapterImpl;
     IMentoConfig public config;
-
 
     function setUp() public {
         config = Config.get();
@@ -61,10 +56,8 @@ contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
         Senders.Sender storage owner = sender("migrationOwner");
 
         // Deploy MarketHoursBreakerToggleable if not yet deployed
-        address marketHoursBreaker = deployer
-            .create3("MarketHoursBreakerToggleable")
-            .setLabel("v3.0.0")
-            .deploy(abi.encode(owner.account));
+        address marketHoursBreaker =
+            deployer.create3("MarketHoursBreakerToggleable").setLabel("v3.0.0").deploy(abi.encode(owner.account));
         console.log("Deployed MarketHoursBreakerToggleable", marketHoursBreaker);
 
         // Deploy OracleAdapterCollateral
@@ -83,11 +76,7 @@ contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
         );
         console.log("Deployed OracleAdapterCollateral proxy", oracleAdapterCollateralProxy);
 
-        transferProxyAdminOwnership(
-            deployer,
-            oracleAdapterCollateralProxy,
-            owner.account
-        );
+        transferProxyAdminOwnership(deployer, oracleAdapterCollateralProxy, owner.account);
         console.log("Transferred proxy admin ownership to migrationOwner", owner.account);
         verifyProxyAdminOwnership("OracleAdapterCollateral", oracleAdapterCollateralProxy, owner.account);
 
@@ -106,10 +95,9 @@ contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
         verifyChangesWorked();
     }
 
-    function isCollateralFpmm( address fpmm ) internal view returns (bool) {
+    function isCollateralFpmm(address fpmm) internal view returns (bool) {
         (address token0, address token1) = IFPMM(fpmm).tokens();
         return config.isCollateralAsset(token0) || config.isCollateralAsset(token1);
-
     }
 
     function verifyChangesWorked() internal {
@@ -118,7 +106,9 @@ contract FixWeekendSituation is TrebScript, ProxyHelper, PostChecksHelper {
         for (uint256 i = 0; i < fpmms.length; i++) {
             IFPMM fpmm = IFPMM(fpmms[i]);
             uint256 amountIn = 100 * 10 ** IERC20Metadata(fpmm.token0()).decimals();
-            console.log("verify changes worked for", IERC20Metadata(fpmm.token0()).name(), IERC20Metadata(fpmm.token1()).name());
+            console.log(
+                "verify changes worked for", IERC20Metadata(fpmm.token0()).name(), IERC20Metadata(fpmm.token1()).name()
+            );
             if (isCollateralFpmm(fpmms[i])) {
                 console.log("is collateral fpmm");
                 console.log("amount in token0", amountIn);
