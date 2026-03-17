@@ -17,20 +17,27 @@ address constant CELO = 0x471EcE3750Da237f93B8E339c536989b8978a438;
 
 interface ISafeOwnerMgr {
     function getOwners() external view returns (address[] memory);
+
     function getThreshold() external view returns (uint256);
+
     function isOwner(address owner) external view returns (bool);
+
     function addOwnerWithThreshold(address owner, uint256 threshold) external;
+
     function removeOwner(address prevOwner, address owner, uint256 threshold) external;
+
     function changeThreshold(uint256 threshold) external;
 }
 
 interface IMintable {
     function mint(address to, uint256 value) external;
+
     function getRoleMembers(string calldata role) external view returns (address[] memory);
 }
 
 interface IMockERC20 is IERC20 {
     function mint(address to, uint256 value) external;
+
     function burn(address from, uint256 value) external;
 }
 
@@ -91,9 +98,9 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         _ensureSafeIs1of1(migrationOwnerSender, signerSender.account, "migrationOwner");
 
         _etchCeloMock();
-        dealFork(CELO, signerSender.account, MINT_AMOUNT, true);
-        dealFork(CELO, deployerSender.account, MINT_AMOUNT, true);
-        dealFork(CELO, migrationOwnerSender.account, MINT_AMOUNT, true);
+        _dealMock(CELO, signerSender.account, MINT_AMOUNT);
+        _dealMock(CELO, deployerSender.account, MINT_AMOUNT);
+        _dealMock(CELO, migrationOwnerSender.account, MINT_AMOUNT);
 
         console.log("CELO (MockERC20) etched at:", CELO);
         console.log("  signer balance:", MockCELO(CELO).balanceOf(signerSender.account));
@@ -127,8 +134,8 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         Senders.Sender storage migrationOwnerSender = sender("migrationOwner");
 
         _etchCeloMock();
-        dealFork(CELO, deployerSender.account, MINT_AMOUNT, true);
-        dealFork(CELO, migrationOwnerSender.account, MINT_AMOUNT, true);
+        _dealMock(CELO, deployerSender.account, MINT_AMOUNT);
+        _dealMock(CELO, migrationOwnerSender.account, MINT_AMOUNT);
 
         console.log("CELO (MockERC20) etched at:", CELO);
         console.log("  deployer balance:", MockCELO(CELO).balanceOf(deployerSender.account));
@@ -269,5 +276,9 @@ contract SetupFork is TrebForkScript, ProxyHelper {
     function _etchCeloMock() internal {
         MockCELO mock = new MockCELO();
         etchFork(CELO, address(mock).code);
+    }
+
+    function _dealMock(address token, address to, uint256 amount) internal {
+        IMockERC20(token).mint(to, amount);
     }
 }
