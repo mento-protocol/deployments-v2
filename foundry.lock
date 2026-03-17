@@ -1,12 +1,12 @@
 {
   "lib/bold": {
-    "rev": "073a25f049f423b3336e3785d5f1e13235ced07b"
+    "rev": "858ef07a497d748cdf65c602a56b4de901d4080e"
   },
   "lib/forge-std": {
     "rev": "8bbcf6e3f8f62f419e5429a0bd89331c85c37824"
   },
   "lib/mento-core": {
-    "rev": "683af1f4f396d2fbf60eb2c362dd2ee4e184c201"
+    "rev": "4bb3249954ff179a5a3615c8bf87c4a9ccbe05c6"
   },
   "lib/mento-router": {
     "rev": "80d12779d15c182249bbd4e9a245a9b08c6ba843"
@@ -15,12 +15,12 @@
     "rev": "fee796ab89917caa72755a6d3dfeb072a2f507d1"
   },
   "lib/mento-std": {
-    "rev": "2ad51cd2f91e5d2ade22bce8887a1d733b22cedb"
+    "rev": "7e609362ea7bf3f6b9a3d972660c69e4339cc798"
   },
   "lib/openzeppelin-contracts": {
     "rev": "c64a1edb67b6e3f4a15cca8909c9482ad33a02b0"
   },
   "lib/treb-sol": {
-    "rev": "b55f4c5e51fc75fe9c939518908f10b08f8b4011"
+    "rev": "c9c6ff4241476058c03f3c63792d01971ed32a7e"
   }
 }
