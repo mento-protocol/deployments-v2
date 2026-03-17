@@ -437,6 +437,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         if (addy == address(0)) {
             addy = _predict("MockERC20", symbol);
         }
+        _isAddressCollateralToken[addy] = true;
         _mockCollateralAssets.push(symbol);
         _collateral[symbol] = addy;
         _tokenDecimals[symbol] = decimals;
@@ -622,7 +623,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         return _collateral[symbol] != address(0);
     }
 
-    function isCollateralAsset(address token) internal view returns (bool) {
+    function isCollateralAsset(address token) public view returns (bool) {
         return _isAddressCollateralToken[token];
     }
 

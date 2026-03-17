@@ -79,6 +79,8 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal broker;
     address internal reserveSafe;
     address internal fxPriceFeedManager;
+    uint256 internal timestamp_weekend = 1773486000;
+    uint256 internal timestamp_weekday = 1773399600;
 
     modifier onlyCelo() {
         if (!_isCelo()) {
