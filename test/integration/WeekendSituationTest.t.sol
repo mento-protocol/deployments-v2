@@ -32,14 +32,14 @@ contract WeekendSituationTest is V3IntegrationBase {
         }
 
         sortedOracles = lookupProxyOrFail("SortedOracles");
-        fpmmFactory = IFPMMFactory(lookupProxyOrFail("FPMMFactory"));
+        fpmmFactory = lookupProxyOrFail("FPMMFactory");
         oracleAdapter = lookupProxyOrFail("OracleAdapter");
     }
 
     function test_swapDuringTheWeekend() public {
         vm.warp(timestamp_weekend);
 
-        address[] memory fpmms = fpmmFactory.deployedFPMMAddresses();
+        address[] memory fpmms = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
 
         for (uint256 i = 0; i < fpmms.length; i++) {
             IFPMM fpmm = IFPMM(fpmms[i]);
@@ -51,7 +51,7 @@ contract WeekendSituationTest is V3IntegrationBase {
     function test_swapDuringAWeekday() public {
         vm.warp(timestamp_weekday);
 
-        address[] memory fpmms = fpmmFactory.deployedFPMMAddresses();
+        address[] memory fpmms = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
 
         for (uint256 i = 0; i < fpmms.length; i++) {
             IFPMM fpmm = IFPMM(fpmms[i]);
