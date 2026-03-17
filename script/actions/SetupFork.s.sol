@@ -91,9 +91,9 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         _ensureSafeIs1of1(migrationOwnerSender, signerSender.account, "migrationOwner");
 
         _etchCeloMock();
-        // dealFork(CELO, signerSender.account, MINT_AMOUNT, true);
-        // dealFork(CELO, deployerSender.account, MINT_AMOUNT, true);
-        // dealFork(CELO, migrationOwnerSender.account, MINT_AMOUNT, true);
+        dealFork(CELO, signerSender.account, MINT_AMOUNT, true);
+        dealFork(CELO, deployerSender.account, MINT_AMOUNT, true);
+        dealFork(CELO, migrationOwnerSender.account, MINT_AMOUNT, true);
 
         console.log("CELO (MockERC20) etched at:", CELO);
         console.log("  signer balance:", MockCELO(CELO).balanceOf(signerSender.account));
@@ -101,12 +101,12 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         console.log("  migrationOwner balance:", MockCELO(CELO).balanceOf(migrationOwnerSender.account));
 
         address migrationOwner = migrationOwnerSender.account;
-        // dealFork(USDm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
-        // dealFork(EURm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
-        // dealFork(GBPm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
-        // dealFork(USDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
-        // dealFork(USDT, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
-        // dealFork(axlUSDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
+        dealFork(USDm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
+        dealFork(EURm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
+        dealFork(GBPm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
+        dealFork(USDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
+        dealFork(USDT, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
+        dealFork(axlUSDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
 
         console.log("ERC20 balances set for migrationOwner:", migrationOwner);
         console.log("  USDm:", IERC20(USDm).balanceOf(migrationOwner));
@@ -118,7 +118,7 @@ contract SetupFork is TrebForkScript, ProxyHelper {
 
         IMentoConfig config = Config.get();
         address sortedOracles = lookupProxyOrFail("SortedOracles");
-        // OracleHelper.refreshOracleRatesIfFork(sortedOracles, config);
+        OracleHelper.refreshOracleRatesIfFork(sortedOracles, config);
         console.log("Oracle rates refreshed on simulation fork and Anvil node");
     }
 
