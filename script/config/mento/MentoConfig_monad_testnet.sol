@@ -29,7 +29,7 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
 
         // Oracle infrastructure
         _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
-        mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
+        mockAggregatorReporter = lookup("MockAggregatorReporter");
         _setMockAggregatorSource("monad");
 
         // Wrap core aggregators in mocks

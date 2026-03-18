@@ -6,16 +6,13 @@ import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
-import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
-import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20Metadata.sol";
-
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
 import {Config, IMentoConfig} from "../config/Config.sol";
 
 import {
     AggregatorV3Interface
 } from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
-import {MockChainlinkAggregator} from "src/MockChainlinkAggregator.sol";
+import {MockAggregatorReporter} from "src/MockAggregatorReporter.sol";
 
 contract UpdateMockAggregators is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
@@ -26,9 +23,8 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
 
     /// @custom:env {uint256:optional} offset - Skip the first N aggregators (0-based, default 0)
     /// @custom:env {uint256:optional} limit - Max number of aggregators to update (default all)
-    /// @custom:senders reporter,deployer
+    /// @custom:senders reporter
     function run() public broadcast {
-        // Get configuration
         config = Config.get();
         Senders.Sender storage reporter = sender("reporter");
 
@@ -46,27 +42,31 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
             if (end > aggConfigs.length) end = aggConfigs.length;
         } catch {}
 
+        uint256 count = end - start;
+
+        // Fetch answers and timestamps from the source fork (mainnet)
         vm.selectFork(config.mockAggregatorSourceFork());
 
-        int256[] memory answers = new int256[](end - start);
-        uint256[] memory timestamps = new uint256[](end - start);
+        address[] memory aggregators = new address[](count);
+        int256[] memory answers = new int256[](count);
+        uint256[] memory timestamps = new uint256[](count);
 
         for (uint256 i = start; i < end; i++) {
             AggregatorV3Interface agg = AggregatorV3Interface(aggConfigs[i].source);
-
             (, answers[i - start],, timestamps[i - start],) = agg.latestRoundData();
         }
 
+        // Switch to target fork and batch-report all updates in a single tx
         vm.selectFork(config.baseFork());
 
+        address reporterContract = lookupOrFail("MockAggregatorReporter");
         for (uint256 i = start; i < end; i++) {
-            address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
-            MockChainlinkAggregator(reporter.harness(aggAddy)).report(answers[i - start], timestamps[i - start]);
-            // console.log("Updated aggregator: %s to %d", aggConfigs[i].description, answers[i - start]);
+            aggregators[i - start] = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
             console.log("Updating %s", aggConfigs[i].description);
-            console.log(" > answer: %d", answers[i - start]);
-            console.log(" > timestamp: %d", timestamps[i - start]);
-            console.log();
+            console.log("  answer:", answers[i - start]);
+            console.log("  timestamp:", timestamps[i - start]);
         }
+
+        MockAggregatorReporter(reporter.harness(reporterContract)).batchReport(aggregators, answers, timestamps);
     }
 }

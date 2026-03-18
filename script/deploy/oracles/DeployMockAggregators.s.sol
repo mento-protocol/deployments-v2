@@ -26,7 +26,10 @@ contract DeployMockAggregators is TrebScript {
             address aggAddy = deployer.create3("MockChainlinkAggregator").setLabel(aggConfigs[i].label)
                 .deploy(abi.encode(aggConfigs[i].description, aggConfigs[i].decimals, deployer.account));
             MockChainlinkAggregator agg = MockChainlinkAggregator(deployer.harness(aggAddy));
-            agg.setExternalProvider(config.mockAggregatorReporter());
+            address reporterContract = config.mockAggregatorReporter();
+            if (reporterContract != address(0)) {
+                agg.setExternalProvider(reporterContract);
+            }
             agg.report(aggConfigs[i].initialReport, block.timestamp);
         }
     }

@@ -35,7 +35,7 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
 
         // Oracle infrastructure
         _oracleConfig = OracleConfig({reportExpirySeconds: 5 minutes});
-        mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
+        mockAggregatorReporter = lookup("MockAggregatorReporter");
         _setMockAggregatorSource("celo");
 
         // Wrap FX aggregators in mocks (before _coreAggs so we can reference source addresses)
