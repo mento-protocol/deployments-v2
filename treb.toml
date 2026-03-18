@@ -53,6 +53,7 @@ migrationOwner = "migration-safe"
 deployer = "dev-pk"
 governor = "mento-gov-celo-sepolia"
 migrationOwner = "dev-pk"
+reporter = "reporter-pk"
 
 [namespace.throwaway.senders]
 deployer = "dev-pk"
