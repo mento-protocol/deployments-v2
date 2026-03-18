@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -24,8 +24,8 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
 
     IMentoConfig config;
 
-    /// @custom:env {uint256} offset - Optional: skip the first N aggregators (0-based, default 0)
-    /// @custom:env {uint256} limit - Optional: max number of aggregators to update (default all)
+    /// @custom:env {uint256:optional} offset - Skip the first N aggregators (0-based, default 0)
+    /// @custom:env {uint256:optional} limit - Max number of aggregators to update (default all)
     /// @custom:senders reporter,deployer
     function run() public broadcast {
         // Get configuration
@@ -60,8 +60,13 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
         vm.selectFork(config.baseFork());
 
         for (uint256 i = start; i < end; i++) {
-            address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].description));
+            address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
             MockChainlinkAggregator(reporter.harness(aggAddy)).report(answers[i - start], timestamps[i - start]);
+            // console.log("Updated aggregator: %s to %d", aggConfigs[i].description, answers[i - start]);
+            console.log("Updating %s", aggConfigs[i].description);
+            console.log(" > answer: %d", answers[i - start]);
+            console.log(" > timestamp: %d", timestamps[i - start]);
+            console.log();
         }
     }
 }
