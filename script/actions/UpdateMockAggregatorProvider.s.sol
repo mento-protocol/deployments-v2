@@ -20,16 +20,15 @@ contract UpdateMockAggregatorProvider is TrebScript, ProxyHelper {
 
     /// @custom:senders deployer
     function run() public broadcast {
-        // Get configuration
         config = Config.get();
-        Senders.Sender storage reporter = sender("deployer");
+        Senders.Sender storage deployer = sender("deployer");
 
         IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
+        address reporterContract = lookupOrFail("MockAggregatorReporter");
 
         for (uint256 i = 0; i < aggConfigs.length; i++) {
             address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
-            address reporterContract = lookupOrFail("MockAggregatorReporter");
-            MockChainlinkAggregator(reporter.harness(aggAddy)).setExternalProvider(reporterContract);
+            MockChainlinkAggregator(deployer.harness(aggAddy)).setExternalProvider(reporterContract);
         }
     }
 }

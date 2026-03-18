@@ -21,12 +21,12 @@ contract DeployMockAggregators is TrebScript {
         Senders.Sender storage deployer = sender("deployer");
 
         IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
+        address reporterContract = config.mockAggregatorReporter();
 
         for (uint256 i = 0; i < aggConfigs.length; i++) {
             address aggAddy = deployer.create3("MockChainlinkAggregator").setLabel(aggConfigs[i].label)
                 .deploy(abi.encode(aggConfigs[i].description, aggConfigs[i].decimals, deployer.account));
             MockChainlinkAggregator agg = MockChainlinkAggregator(deployer.harness(aggAddy));
-            address reporterContract = config.mockAggregatorReporter();
             if (reporterContract != address(0)) {
                 agg.setExternalProvider(reporterContract);
             }
