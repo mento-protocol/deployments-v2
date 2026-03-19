@@ -8,10 +8,10 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
-import {MockAggregatorReporter} from "src/MockAggregatorReporter.sol";
+import {MockAggregatorBatchReporter} from "src/MockAggregatorBatchReporter.sol";
 import {Config, IMentoConfig} from "script/config/Config.sol";
 
-contract DeployMockAggregatorReporter is TrebScript {
+contract DeployMockAggregatorBatchReporter is TrebScript {
     using Deployer for Senders.Sender;
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
@@ -24,10 +24,10 @@ contract DeployMockAggregatorReporter is TrebScript {
         address reporterEOA = config.mockAggregatorReporter();
 
         address reporterAddy =
-            deployer.create3("MockAggregatorReporter").deploy(abi.encode(deployer.account, reporterEOA));
+            deployer.create3("MockAggregatorBatchReporter").deploy(abi.encode(deployer.account, reporterEOA));
 
-        console.log("MockAggregatorReporter deployed at:", reporterAddy);
+        console.log("MockAggregatorBatchReporter deployed at:", reporterAddy);
         console.log("Owner: ", IOwnable(reporterAddy).owner());
-        console.log("Reporter: ", MockAggregatorReporter(reporterAddy).reporter());
+        console.log("Reporter: ", MockAggregatorBatchReporter(reporterAddy).reporter());
     }
 }

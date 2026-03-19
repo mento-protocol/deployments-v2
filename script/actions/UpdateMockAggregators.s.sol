@@ -12,7 +12,7 @@ import {Config, IMentoConfig} from "../config/Config.sol";
 import {
     AggregatorV3Interface
 } from "lib/mento-core/lib/foundry-chainlink-toolkit/src/interfaces/feeds/AggregatorV3Interface.sol";
-import {MockAggregatorReporter} from "src/MockAggregatorReporter.sol";
+import {MockAggregatorBatchReporter} from "src/MockAggregatorBatchReporter.sol";
 
 contract UpdateMockAggregators is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
@@ -23,7 +23,7 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
 
     /// @custom:env {uint256:optional} offset - Skip the first N aggregators (0-based, default 0)
     /// @custom:env {uint256:optional} limit - Max number of aggregators to update (default all)
-    /// @custom:senders reporter
+    /// @custom:senders deployer, reporter
     function run() public broadcast {
         config = Config.get();
         Senders.Sender storage reporter = sender("reporter");
@@ -59,7 +59,7 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
         // Switch to target fork and batch-report all updates in a single tx
         vm.selectFork(config.baseFork());
 
-        address reporterContract = lookupOrFail("MockAggregatorReporter");
+        address reporterContract = lookupOrFail("MockAggregatorBatchReporter");
         for (uint256 i = start; i < end; i++) {
             aggregators[i - start] = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
             console.log("Updating %s", aggConfigs[i].description);
@@ -67,6 +67,6 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
             console.log("  timestamp:", timestamps[i - start]);
         }
 
-        MockAggregatorReporter(reporter.harness(reporterContract)).batchReport(aggregators, answers, timestamps);
+        MockAggregatorBatchReporter(reporter.harness(reporterContract)).batchReport(aggregators, answers, timestamps);
     }
 }

@@ -7,11 +7,11 @@ interface IMockChainlinkAggregator {
     function report(int256 _answer, uint256 _lastUpdated) external;
 }
 
-contract MockAggregatorReporter is Ownable {
+contract MockAggregatorBatchReporter is Ownable {
     address public reporter;
 
     modifier onlyReporter() {
-        require(msg.sender == reporter, "MockAggregatorReporter: caller is not the reporter");
+        require(msg.sender == reporter, "MockAggregatorBatchReporter: caller is not the reporter");
         _;
     }
 
@@ -30,7 +30,7 @@ contract MockAggregatorReporter is Ownable {
     ) external onlyReporter {
         require(
             aggregators.length == answers.length && aggregators.length == timestamps.length,
-            "MockAggregatorReporter: array length mismatch"
+            "MockAggregatorBatchReporter: array length mismatch"
         );
 
         for (uint256 i = 0; i < aggregators.length; i++) {
