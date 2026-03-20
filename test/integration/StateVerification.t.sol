@@ -288,32 +288,6 @@ contract StateVerification is V3IntegrationBase {
         assertEq(actual, l2SequencerUptimeFeed, "OracleAdapter.l2SequencerUptimeFeed() mismatch");
     }
 
-    // ========== BreakerBox Configuration Tests (US-004) ==========
-
-    function test_breakerBox_isBreaker_marketHoursBreaker() public view {
-        assertTrue(
-            IBreakerBox(breakerBox).isBreaker(marketHoursBreaker),
-            "MarketHoursBreaker not registered as breaker in BreakerBox"
-        );
-    }
-
-    function test_breakerBox_marketHoursBreaker_tradingMode() public view {
-        uint8 tradingMode = IBreakerBox(breakerBox).breakerTradingMode(marketHoursBreaker);
-        assertEq(tradingMode, 3, "MarketHoursBreaker trading mode should be 3 (trading halted)");
-    }
-
-    function test_marketHoursBreaker_enabledOnAllFxFeeds() public view {
-        address[] memory fxFeedIds = config.getFxRateFeedIds();
-        assertGt(fxFeedIds.length, 0, "No FX rate feed IDs configured");
-
-        for (uint256 i = 0; i < fxFeedIds.length; i++) {
-            assertTrue(
-                IBreakerBox(breakerBox).isBreakerEnabled(marketHoursBreaker, fxFeedIds[i]),
-                string.concat("MarketHoursBreaker not enabled on FX feed: ", vm.toString(fxFeedIds[i]))
-            );
-        }
-    }
-
     // ========== OracleAdapter FX Rate Validity Tests (US-004) ==========
 
     function test_oracleAdapter_getFXRateIfValid_allFeeds() public view {

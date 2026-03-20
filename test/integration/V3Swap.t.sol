@@ -59,8 +59,8 @@ contract V3Swap is V3IntegrationBase {
             if (mult == 0) continue;
 
             // Add liquidity proportional to current reserves to maintain price
-            deal(t0, lp, r0 * mult);
-            deal(t1, lp, r1 * mult);
+            _dealTokens(t0, lp, r0 * mult);
+            _dealTokens(t1, lp, r1 * mult);
 
             vm.startPrank(lp);
             IERC20(t0).transfer(address(fpmm), r0 * mult);
@@ -86,7 +86,7 @@ contract V3Swap is V3IntegrationBase {
             uint256 expectedOut = fpmm.getAmountOut(amountIn, t0);
             assertGt(expectedOut, 0, string.concat("getAmountOut should return non-zero for pool ", idx));
 
-            deal(t0, trader, amountIn);
+            _dealTokens(t0, trader, amountIn);
             uint256 traderT0Before = IERC20(t0).balanceOf(trader);
             uint256 traderT1Before = IERC20(t1).balanceOf(trader);
 
@@ -120,7 +120,7 @@ contract V3Swap is V3IntegrationBase {
             uint256 expectedOut = fpmm.getAmountOut(amountIn, t1);
             assertGt(expectedOut, 0, string.concat("getAmountOut should return non-zero for pool ", idx));
 
-            deal(t1, trader, amountIn);
+            _dealTokens(t1, trader, amountIn);
             uint256 traderT0Before = IERC20(t0).balanceOf(trader);
             uint256 traderT1Before = IERC20(t1).balanceOf(trader);
 
@@ -154,7 +154,7 @@ contract V3Swap is V3IntegrationBase {
             uint256 previewOut = fpmm.getAmountOut(amountIn, t0);
             assertGt(previewOut, 0, string.concat("Preview should return non-zero for pool ", idx));
 
-            deal(t0, trader, amountIn);
+            _dealTokens(t0, trader, amountIn);
             uint256 traderT1Before = IERC20(t1).balanceOf(trader);
 
             vm.startPrank(trader);
@@ -179,7 +179,7 @@ contract V3Swap is V3IntegrationBase {
 
             (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
 
-            deal(t0, trader, amountIn);
+            _dealTokens(t0, trader, amountIn);
             vm.startPrank(trader);
             IERC20(t0).transfer(address(fpmm), amountIn);
             fpmm.swap(0, expectedOut, trader, "");
@@ -315,7 +315,7 @@ contract V3Swap is V3IntegrationBase {
         uint256 expectedOut = expectedAmounts[1];
         assertGt(expectedOut, 0, string.concat("getAmountsOut zero for ", label));
 
-        deal(tokenIn, trader, amountIn);
+        _dealTokens(tokenIn, trader, amountIn);
 
         uint256 traderInBefore = IERC20(tokenIn).balanceOf(trader);
         uint256 traderOutBefore = IERC20(tokenOut).balanceOf(trader);
@@ -353,7 +353,7 @@ contract V3Swap is V3IntegrationBase {
         assertGt(expectedAmounts[1], 0, "Hop 1 output should be non-zero");
         assertGt(expectedAmounts[2], 0, "Hop 2 output should be non-zero");
 
-        deal(tokenA, trader, amountIn);
+        _dealTokens(tokenA, trader, amountIn);
         uint256 traderCBefore = IERC20(tokenC).balanceOf(trader);
 
         vm.startPrank(trader);

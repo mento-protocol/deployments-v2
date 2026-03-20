@@ -3,6 +3,9 @@ pragma solidity ^0.8.0;
 
 import {Test, console} from "forge-std/Test.sol";
 import {Registry} from "lib/treb-sol/src/internal/Registry.sol";
+import {
+    BokkyPooBahsDateTimeLibrary as DateTimeLib
+} from "lib/mento-core/lib/BokkyPooBahsDateTimeLibrary/contracts/BokkyPooBahsDateTimeLibrary.sol";
 import {Config, IMentoConfig} from "script/config/Config.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {SenderTypes} from "lib/treb-sol/src/internal/types.sol";
@@ -72,15 +75,16 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
     address internal reserveLiquidityStrategy;
     address internal cdpLiquidityStrategy;
     address internal breakerBox;
+    address internal deployerAccount = 0x2738F38Fde510743e0c589415E0598C4ceE6eAa7;
     address internal sortedOracles;
     address internal proxyAdmin;
     address internal marketHoursBreaker;
     address internal l2SequencerUptimeFeed;
     address internal broker;
     address internal reserveSafe;
-    address internal fxPriceFeedManager;
-    uint256 internal timestamp_weekend = 1773486000;
-    uint256 internal timestamp_weekday = 1773399600;
+    address internal oracleAdapterCollateral;
+    uint256 internal timestamp_weekend;
+    uint256 internal timestamp_weekday;
 
     modifier onlyCelo() {
         if (!_isCelo()) {
@@ -94,6 +98,10 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         // Fork chain
         forkId = vm.createFork(vm.envString("FORK_URL"));
         vm.selectFork(forkId);
+
+        // Compute future weekday/weekend timestamps dynamically from the fork's block.timestamp
+        timestamp_weekday = _nextFXWeekday(block.timestamp);
+        timestamp_weekend = _nextFXWeekend(block.timestamp);
 
         // Create registry for address lookups (must be after fork so block.chainid is correct)
         string memory namespace = vm.envOr("NAMESPACE", string("default"));
@@ -126,7 +134,7 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
         l2SequencerUptimeFeed = address(0);
         reserveSafe = lookupOrFail("ReserveSafe");
-        fxPriceFeedManager = address(0);
+        oracleAdapterCollateral = registry.lookup("TransparentUpgradeableProxy:OracleAdapterCollateral");
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
@@ -148,11 +156,30 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         require(proxy != address(0), string.concat(contractName, " proxy not deployed"));
     }
 
-    // ========== Test Helpers ==========
+    // ========== Timestamp Helpers ==========
 
-    function _mintToken(address token, address to, uint256 amount) internal {
-        deal(token, to, amount);
+    /// @dev Returns a future timestamp on the next Tuesday at 12:00 UTC (clearly within FX trading hours).
+    ///      MarketHoursBreaker defines FX weekend as: Friday >= 21:00, Saturday, Sunday < 23:00.
+    function _nextFXWeekday(uint256 from) internal pure returns (uint256) {
+        uint256 dow = DateTimeLib.getDayOfWeek(from);
+        // Target: Tuesday (dow=2), at 12:00 UTC
+        uint256 daysUntilTuesday = (2 + 7 - dow) % 7;
+        if (daysUntilTuesday == 0) daysUntilTuesday = 7;
+        uint256 dayStart = (from / 86400 + daysUntilTuesday) * 86400;
+        return dayStart + 12 hours;
     }
+
+    /// @dev Returns a future timestamp on the next Saturday at 12:00 UTC (clearly within FX weekend hours).
+    function _nextFXWeekend(uint256 from) internal pure returns (uint256) {
+        uint256 dow = DateTimeLib.getDayOfWeek(from);
+        // Target: Saturday (dow=6), at 12:00 UTC
+        uint256 daysUntilSaturday = (6 + 7 - dow) % 7;
+        if (daysUntilSaturday == 0) daysUntilSaturday = 7;
+        uint256 dayStart = (from / 86400 + daysUntilSaturday) * 86400;
+        return dayStart + 12 hours;
+    }
+
+    // ========== Test Helpers ==========
 
     function _getOwner() internal view returns (address) {
         return lookupOrFail("MigrationMultisig");
@@ -230,13 +257,24 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
 
         (uint256 r0, uint256 r1,) = fpmm.getReserves();
         uint256 reserveIn = sellToken0 ? r0 : r1;
+        uint256 reserveOut = sellToken0 ? r1 : r0;
+        // Cap amountIn so the output never exceeds the output reserve.
+        // Use getAmountOut to convert a fraction of reserveOut into the input denomination.
         uint256 amountIn = reserveIn / 10;
+        if (amountIn > 0) {
+            uint256 estOut = fpmm.getAmountOut(amountIn, tokenIn);
+            // If estimated output would consume >= 50% of output reserve, reduce amountIn
+            while (estOut >= reserveOut / 2 && amountIn > 1) {
+                amountIn = amountIn / 2;
+                estOut = fpmm.getAmountOut(amountIn, tokenIn);
+            }
+        }
         require(amountIn > 0, "Reserve too low for imbalance swap");
 
         uint256 expectedOut = fpmm.getAmountOut(amountIn, tokenIn);
         require(expectedOut > 0, "getAmountOut returned zero for imbalance swap");
 
-        deal(tokenIn, trader, amountIn);
+        _dealTokens(tokenIn, trader, amountIn);
         vm.startPrank(trader);
         IERC20(tokenIn).transfer(address(fpmm), amountIn);
         if (sellToken0) {
@@ -249,11 +287,15 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
 
     /// @dev Ensures the pool is imbalanced past its rebalancing threshold
     function _ensureImbalanced(address pool, address trader, bool sellToken0) internal {
-        _imbalancePool(pool, trader, sellToken0);
-        (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
-        if (priceDiff <= uint256(threshold)) {
+        for (uint256 i = 0; i < 10; i++) {
             _imbalancePool(pool, trader, sellToken0);
+            (,,,,, uint16 threshold, uint256 priceDiff) = IFPMM(pool).getRebalancingState();
+            if (priceDiff > uint256(threshold)) return;
+            // Warp past the L0 trading limit window so the next swap doesn't accumulate
+            vm.warp(block.timestamp + 5 minutes + 1);
+            _refreshOracleRates();
         }
+        revert("Failed to imbalance pool after 10 attempts");
     }
 
     // ========== Oracle Refresh Helpers ==========
@@ -279,11 +321,55 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         // the _predict() function.
         configs[0] = Senders.SenderInitConfig({
             name: "deployer",
-            account: 0x2738F38Fde510743e0c589415E0598C4ceE6eAa7,
+            account: deployerAccount,
             senderType: SenderTypes.InMemory,
             canBroadcast: false,
             config: abi.encode(uint256(1))
         });
         vm.setEnv("SENDER_CONFIGS", vm.toString(abi.encode(configs)));
+    }
+
+    /// @dev Tries mint() → foundry deal() → AUSD manual storage write, in that order.
+    function _dealTokens(address token, address to, uint256 amount) internal {
+        // 1. Try mint(to, amount)
+        uint256 balanceBefore = IERC20(token).balanceOf(to);
+        try MockCELO(token).mint(to, amount) {
+            if (IERC20(token).balanceOf(to) == amount + balanceBefore) return;
+        } catch {}
+
+        // 2. Try foundry's deal() which uses stdstore to find the balanceOf slot
+        try this._tryDeal(token, to, amount) {
+            if (IERC20(token).balanceOf(to) == amount) return;
+        } catch {}
+
+        // 3. Fall back to AUSD-specific ERC-7201 storage write
+        _dealAUSD(token, to, amount);
+    }
+
+    /// @dev Wrapper so we can try/catch foundry's deal().
+    function _tryDeal(address token, address to, uint256 amount) external {
+        deal(token, to, amount);
+    }
+
+    /// @dev Writes directly to AUSD's ERC-7201 storage to set a balance.
+    ///
+    /// AUSD uses ERC-7201 namespaced storage. The Erc20CoreStorage struct lives at:
+    ///   slot = keccak256(abi.encode(uint256(keccak256("AgoraDollarErc1967Proxy.Erc20CoreStorage")) - 1)) & ~bytes32(uint256(0xff))
+    ///        = 0x455730fed596673e69db1907be2e521374ba893f1a04cc5f5dd931616cd6b700
+    ///
+    /// The first field is `mapping(address => Erc20AccountData) accountData` so the
+    /// mapping base slot equals the struct slot. For a given account the data lives at:
+    ///   keccak256(abi.encode(account, base_slot))
+    ///
+    /// Erc20AccountData is { bool isFrozen; uint248 balance } packed into one word:
+    ///   - bit 0      : isFrozen
+    ///   - bits 8-255 : balance  (uint248, shifted left by 8 bits)
+    function _dealAUSD(address ausd, address to, uint256 amount) internal {
+        bytes32 baseSlot = 0x455730fed596673e69db1907be2e521374ba893f1a04cc5f5dd931616cd6b700;
+        bytes32 accountSlot = keccak256(abi.encode(to, baseSlot));
+        // Preserve the isFrozen flag (lowest byte), write balance into upper 248 bits.
+        bytes32 current = vm.load(ausd, accountSlot);
+        bytes32 newVal = bytes32((amount << 8) | (uint256(current) & 0xff));
+        vm.store(ausd, accountSlot, newVal);
     }
 }

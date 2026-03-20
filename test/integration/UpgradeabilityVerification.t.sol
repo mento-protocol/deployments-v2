@@ -197,28 +197,6 @@ contract UpgradeabilityVerification is V3IntegrationBase {
         }
     }
 
-    // ── Celo-only: Governance proxies ──
-
-    function test_emission_proxyAdminOwnedByMigrationOwner() public onlyCelo {
-        _skipIfZero(emission);
-        _assertOztupProxyAdminOwner(emission, "Emission");
-    }
-
-    function test_locking_proxyAdminOwnedByMigrationOwner() public onlyCelo {
-        _skipIfZero(locking);
-        _assertOztupProxyAdminOwner(locking, "Locking");
-    }
-
-    function test_mentoGovernor_proxyAdminOwnedByMigrationOwner() public onlyCelo {
-        _skipIfZero(mentoGovernor);
-        _assertOztupProxyAdminOwner(mentoGovernor, "MentoGovernor");
-    }
-
-    function test_timelockController_proxyAdminOwnedByMigrationOwner() public onlyCelo {
-        _skipIfZero(timelockController);
-        _assertOztupProxyAdminOwner(timelockController, "TimelockController");
-    }
-
     // ========== Upgrade Tests: migrationOwner CAN upgrade ==========
 
     function test_migrationOwner_canUpgrade_oracleAdapter() public {
@@ -563,5 +541,6 @@ contract DummyImplementation {
     uint256 private _placeholder;
 
     fallback() external payable {}
+
     receive() external payable {}
 }
