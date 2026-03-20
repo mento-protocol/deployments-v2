@@ -20386,6 +20386,38 @@
     "createdAt": "2026-03-10T16:32:49.996976019Z",
     "updatedAt": "2026-03-12T18:01:09.414877387Z"
   },
+  "testnet-v2-rc5/10143/MockAggregatorBatchReporter": {
+    "id": "testnet-v2-rc5/10143/MockAggregatorBatchReporter",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockAggregatorBatchReporter",
+    "label": "",
+    "address": "0x84aF7Ea77d80cb8080ABdf5E4982ea064B6775F8",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700d2d1803368a3e603b6b75f",
+      "initCodeHash": "0x553fd558ec8922103b760bce02f2dbf6d06934362b6fb4792a001541823ce3bf",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000abcde369cddd1665e4ebd9214b8e9a595271272c",
+      "entropy": "testnet-v2-rc5/MockAggregatorBatchReporter"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockAggregatorBatchReporter.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x7a169b457bbea32ca08363e51d7c461c469eac4deebd4c9f1472919e000d60ea",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregatorBatchReporter.s.sol",
+      "gitCommit": "6eb5f9bb447fa7a92173bb157dfad097c3e8c0f3"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:14:51.823477+01:00",
+    "updatedAt": "2026-03-20T13:14:51.842099+01:00"
+  },
   "testnet-v2-rc5/10143/MockChainlinkAggregator:AUSD/USD": {
     "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:AUSD/USD",
     "namespace": "testnet-v2-rc5",
@@ -24264,6 +24296,38 @@
     "tags": null,
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
+  },
+  "testnet-v2-rc5/11142220/MockAggregatorBatchReporter": {
+    "id": "testnet-v2-rc5/11142220/MockAggregatorBatchReporter",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "MockAggregatorBatchReporter",
+    "label": "",
+    "address": "0x84aF7Ea77d80cb8080ABdf5E4982ea064B6775F8",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700d2d1803368a3e603b6b75f",
+      "initCodeHash": "0x90cd8c38db4980e2904dea466ee650666619d91df871281b5d893c62190314f3",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000abcde369cddd1665e4ebd9214b8e9a595271272c",
+      "entropy": "testnet-v2-rc5/MockAggregatorBatchReporter"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockAggregatorBatchReporter.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x0dec5d0ca5018b9ad060123b0f66a451de4be5222faf85519c127b640a98084c",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregatorBatchReporter.s.sol",
+      "gitCommit": "b9a050110c7bedaad4caa41db8527155b934d2d8"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:07.099535+01:00",
+    "updatedAt": "2026-03-20T13:16:07.119245+01:00"
   },
   "testnet-v2-rc5/11142220/MockChainlinkAggregator:AUDUSD": {
     "id": "testnet-v2-rc5/11142220/MockChainlinkAggregator:AUDUSD",
