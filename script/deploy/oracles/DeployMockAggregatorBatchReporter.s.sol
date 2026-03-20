@@ -24,7 +24,9 @@ contract DeployMockAggregatorBatchReporter is TrebScript {
         address reporterEOA = config.mockAggregatorReporter();
 
         address reporterAddy =
-            deployer.create3("MockAggregatorBatchReporter").deploy(abi.encode(deployer.account, reporterEOA));
+            deployer.create3("MockAggregatorBatchReporter").setLabel("v3.0.0").deploy(
+                abi.encode(deployer.account, reporterEOA)
+            );
 
         console.log("MockAggregatorBatchReporter deployed at:", reporterAddy);
         console.log("Owner: ", IOwnable(reporterAddy).owner());

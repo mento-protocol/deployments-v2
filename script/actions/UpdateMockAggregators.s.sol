@@ -59,7 +59,7 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
         // Switch to target fork and batch-report all updates in a single tx
         vm.selectFork(config.baseFork());
 
-        address reporterContract = lookupOrFail("MockAggregatorBatchReporter");
+        address reporterContract = lookupOrFail("MockAggregatorBatchReporter:v3.0.0");
         console.log("\n");
         for (uint256 i = start; i < end; i++) {
             aggregators[i - start] = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));

@@ -21,10 +21,10 @@ contract DeployMockAggregators is TrebScript {
         IMentoConfig config = Config.get();
         Senders.Sender storage deployer = sender("deployer");
 
-        address reporterContract = lookup("MockAggregatorBatchReporter");
+        address reporterContract = lookup("MockAggregatorBatchReporter:v3.0.0");
         if (reporterContract == address(0)) {
             address reporterEOA = config.mockAggregatorReporter();
-            reporterContract = deployer.create3("MockAggregatorBatchReporter").deploy(
+            reporterContract = deployer.create3("MockAggregatorBatchReporter").setLabel("v3.0.0").deploy(
                 abi.encode(deployer.account, reporterEOA)
             );
             console.log("MockAggregatorBatchReporter deployed at:", reporterContract);

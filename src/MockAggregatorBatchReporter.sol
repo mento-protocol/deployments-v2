@@ -8,6 +8,8 @@ interface IMockChainlinkAggregator {
 }
 
 contract MockAggregatorBatchReporter is Ownable {
+    event MockAggregatorReport(address indexed aggregator, int256 answer, uint256 timestamp);
+
     address public reporter;
 
     modifier onlyReporter() {
@@ -35,6 +37,7 @@ contract MockAggregatorBatchReporter is Ownable {
 
         for (uint256 i = 0; i < aggregators.length; i++) {
             IMockChainlinkAggregator(aggregators[i]).report(answers[i], timestamps[i]);
+            emit MockAggregatorReport(aggregators[i], answers[i], timestamps[i]);
         }
     }
 }
