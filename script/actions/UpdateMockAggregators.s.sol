@@ -60,11 +60,13 @@ contract UpdateMockAggregators is TrebScript, ProxyHelper {
         vm.selectFork(config.baseFork());
 
         address reporterContract = lookupOrFail("MockAggregatorBatchReporter");
+        console.log("\n");
         for (uint256 i = start; i < end; i++) {
             aggregators[i - start] = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
-            console.log("Updating %s", aggConfigs[i].description);
-            console.log("  answer:", answers[i - start]);
-            console.log("  timestamp:", timestamps[i - start]);
+            console.log("Updating %s (%s)", aggConfigs[i].description, aggregators[i - start]);
+            console.log(" > answer:", answers[i - start]);
+            console.log(" > timestamp:", timestamps[i - start]);
+            console.log("\n");
         }
 
         MockAggregatorBatchReporter(reporter.harness(reporterContract)).batchReport(aggregators, answers, timestamps);
