@@ -21,7 +21,6 @@ contract DeployMockAggregators is TrebScript {
         IMentoConfig config = Config.get();
         Senders.Sender storage deployer = sender("deployer");
 
-        // Deploy MockAggregatorBatchReporter if it doesn't exist yet
         address reporterContract = lookup("MockAggregatorBatchReporter");
         if (reporterContract == address(0)) {
             address reporterEOA = config.mockAggregatorReporter();
@@ -31,7 +30,6 @@ contract DeployMockAggregators is TrebScript {
             console.log("MockAggregatorBatchReporter deployed at:", reporterContract);
         }
 
-        // Deploy mock aggregators and wire them to the reporter contract
         IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
 
         for (uint256 i = 0; i < aggConfigs.length; i++) {
