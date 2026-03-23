@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -20,15 +20,23 @@ contract UpdateMockAggregatorProvider is TrebScript, ProxyHelper {
 
     /// @custom:senders deployer
     function run() public broadcast {
-        // Get configuration
         config = Config.get();
-        Senders.Sender storage reporter = sender("deployer");
+        Senders.Sender storage deployer = sender("deployer");
 
         IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
+        address reporterContract = lookupOrFail("MockAggregatorBatchReporter:v3.0.0");
 
+        console.log("Setting MockAggregatorBatchReporter contract: %s\n", reporterContract);
         for (uint256 i = 0; i < aggConfigs.length; i++) {
-            address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].description));
-            MockChainlinkAggregator(reporter.harness(aggAddy)).setExternalProvider(config.mockAggregatorReporter());
+            address aggAddy = lookupOrFail(string.concat("MockChainlinkAggregator:", aggConfigs[i].label));
+            address currentProvider = MockChainlinkAggregator(aggAddy).externalProvider();
+
+            if (currentProvider == reporterContract) {
+                console.log("  %s - already set", aggConfigs[i].label);
+            } else {
+                console.log("  %s - updating (was %s)", aggConfigs[i].label, currentProvider);
+                MockChainlinkAggregator(deployer.harness(aggAddy)).setExternalProvider(reporterContract);
+            }
         }
     }
 }
