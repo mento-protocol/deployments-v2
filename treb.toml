@@ -15,7 +15,7 @@ private_key = "${REPORTER_PRIVATE_KEY}"
 
 [accounts.local-signer]
 type = "ledger"
-address="${LOCAL_SIGNER}"
+address = "${LOCAL_SIGNER}"
 derivation_path = "${LOCAL_SIGNER_DERIVATION_PATH}"
 
 [accounts.deployer-safe]
