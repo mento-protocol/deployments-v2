@@ -25,11 +25,10 @@ contract MockAggregatorBatchReporter is Ownable {
         reporter = _reporter;
     }
 
-    function batchReport(
-        address[] calldata aggregators,
-        int256[] calldata answers,
-        uint256[] calldata timestamps
-    ) external onlyReporter {
+    function batchReport(address[] calldata aggregators, int256[] calldata answers, uint256[] calldata timestamps)
+        external
+        onlyReporter
+    {
         require(
             aggregators.length == answers.length && aggregators.length == timestamps.length,
             "MockAggregatorBatchReporter: array length mismatch"
