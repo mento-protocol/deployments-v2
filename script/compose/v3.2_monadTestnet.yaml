@@ -1,0 +1,24 @@
+group: Mento V3.2 Monad Testnet EURm and USDT deployments
+components:
+  # EURm:
+  #   script: DeployStableTokenSpoke
+  #   env:
+  #     SPOKE_LABEL: "EURm"
+  #     SPOKE_TOKEN_NAME: "Mento Euro"
+  #     SPOKE_TOKEN_SYMBOL: "EURm"
+  USDT:
+    script: DeployMockCollaterals
+  RateFeeds:
+    script: AddRateFeed
+  # DeployMockAggregators:
+  #   script: DeployMockAggregators
+  Relay:
+    script: Relay
+    deps:
+      - RateFeeds
+  # CreateFPMMs:
+  #   script: CreateFPMM
+  #   deps:
+  #     - RateFeeds
+  #     - EURm
+  #     - USDT

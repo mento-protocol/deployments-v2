@@ -109,7 +109,7 @@ contract MentoConfig_celo is MentoConfig {
         _addReserveV2Collateral("USDC");
         _addReserveV2Collateral("axlUSDC");
         _addReserveV2Collateral("USDT");
-        // _addReserveV2Collateral("axlEUROC");
+        _addReserveV2Collateral("axlEUROC");
         //_addReserveV2Collateral("CELO");
     }
 
@@ -148,8 +148,8 @@ contract MentoConfig_celo is MentoConfig {
             emptyLsConfig
         );
 
-        // Liquidity strategy params for USD collateral pools
-        LiquidityStrategyPoolConfig memory usdCollateralPoolsLsConfig = LiquidityStrategyPoolConfig({
+        // ReserveLiquidity strategy params for USD collateral pools
+        LiquidityStrategyPoolConfig memory usdCollateralPoolsRlsConfig = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
             debtToken: _lookupTokenAddress("USDm"),
             cooldown: 300,
@@ -176,7 +176,7 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsLsConfig
+            usdCollateralPoolsRlsConfig
         );
 
         // ── USDm / USDC ────────────────────────────────────────────────
@@ -195,7 +195,7 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsLsConfig
+            usdCollateralPoolsRlsConfig
         );
 
         // ── USDm / USDT ────────────────────────────────────────────────
@@ -214,7 +214,69 @@ contract MentoConfig_celo is MentoConfig {
             }),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsLsConfig
+            usdCollateralPoolsRlsConfig
+        );
+
+        // ── EURm / axlEUROC ──────────────────────────────────────────────
+
+        // ReserveLiquidity strategy params for EUR collateral pools
+        LiquidityStrategyPoolConfig memory eurCollateralPoolsRlsConfig = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("EURm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+
+        _addFPMM(
+            "EURm",
+            "axlEUROC",
+            getRateFeedIdFromString("EUROCEUR"),
+            IFPMM.FPMMParams({
+                lpFee: 30,
+                protocolFee: 20,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            eurCollateralPoolsRlsConfig
+        );
+
+        // ── EURm / USDm ────────────────────────────────────────────────
+        LiquidityStrategyPoolConfig memory openLsConfigEUR = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05% // TODO: check if this is correct
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05% // TODO: check if this is correct
+            protocolIncentiveContraction: 0 // 0%
+        });
+
+        _addFPMM(
+            "EURm",
+            "USDm",
+            getRateFeedIdFromString("EURUSD"),
+            IFPMM.FPMMParams({
+                lpFee: 15,
+                protocolFee: 10,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 215_000, limit1: 860_000}),
+            TokenLimits({limit0: 250_000, limit1: 1_000_000}), 
+            openLsConfigEUR
         );
     }
 

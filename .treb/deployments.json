@@ -20433,6 +20433,38 @@
     "createdAt": "2026-03-10T16:31:48.691710324Z",
     "updatedAt": "2026-03-12T17:53:21.349395507Z"
   },
+  "testnet-v2-rc5/10143/MockChainlinkAggregator:EUR/USD": {
+    "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:EUR/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "EUR/USD",
+    "address": "0x904Bc5586697EF66b8B3c3189A8f059a4BD4f071",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700fbd5bf1d71afdf92033e56",
+      "initCodeHash": "0x94334a75e6acefa6c8a6986bb5174528b784920fc0c9a12edf59ad6e74620aad",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000120000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000074555522f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockChainlinkAggregator:EUR/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x022e49d289a2dbafaa90f66e1cf35405141cceeabe819831475bded72119d094",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregators.s.sol",
+      "gitCommit": "059fb4a7ea519d9bf730cf4927199c014870d38e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:18.0508+01:00",
+    "updatedAt": "2026-03-20T13:16:18.06196+01:00"
+  },
   "testnet-v2-rc5/10143/MockChainlinkAggregator:GBP/USD": {
     "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:GBP/USD",
     "namespace": "testnet-v2-rc5",
@@ -20526,6 +20558,38 @@
     "tags": null,
     "createdAt": "2026-03-10T16:31:48.691710324Z",
     "updatedAt": "2026-03-12T17:53:52.464393008Z"
+  },
+  "testnet-v2-rc5/10143/MockChainlinkAggregator:USDT/USD": {
+    "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:USDT/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "USDT/USD",
+    "address": "0x601566Fd7d319d14DAee362e15c2E8c3e5d3eF92",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7002adc6a835846a066e0fe24",
+      "initCodeHash": "0x18a0de831071baad300e45069951dd71138778b13f9b136bbc15184ac6a38549",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000080000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa70000000000000000000000000000000000000000000000000000000000000008555344542f555344000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockChainlinkAggregator:USDT/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x022e49d289a2dbafaa90f66e1cf35405141cceeabe819831475bded72119d094",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregators.s.sol",
+      "gitCommit": "059fb4a7ea519d9bf730cf4927199c014870d38e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:18.0508+01:00",
+    "updatedAt": "2026-03-20T13:16:18.06196+01:00"
   },
   "testnet-v2-rc5/10143/MockERC20:AUSD": {
     "id": "testnet-v2-rc5/10143/MockERC20:AUSD",
@@ -21088,6 +21152,42 @@
     "tags": null,
     "createdAt": "2026-03-10T16:32:10.871658755Z",
     "updatedAt": "2026-03-12T17:58:38.998680754Z"
+  },
+  "testnet-v2-rc5/10143/TransparentUpgradeableProxy:EURm": {
+    "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:EURm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "EURm",
+    "address": "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700f6aab8f336586b089b8e98",
+      "initCodeHash": "0xb068cbe9161791c0127269bc963825ba2f089d5ded64ee5bbf619f2c030d5810",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000b68f2d09241fdb5590bb7f865ae5fa6cc40bf24c0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000001e407b0020a00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000001200000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa70000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001c0000000000000000000000000000000000000000000000000000000000000000a4d656e746f204575726f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044555526d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:EURm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0xbe991fa84971a222908275bebc5f27b82996516cee3e82e692e930ec14923742",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "059fb4a7ea519d9bf730cf4927199c014870d38e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:28.036046+01:00",
+    "updatedAt": "2026-03-20T13:16:28.045118+01:00"
   },
   "testnet-v2-rc5/10143/TransparentUpgradeableProxy:FPMMFactory": {
     "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:FPMMFactory",
