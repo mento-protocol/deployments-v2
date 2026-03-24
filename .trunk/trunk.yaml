@@ -22,6 +22,10 @@ lint:
       paths:
         - .treb/*.json # Blockchain contract addresses, not secrets
         - broadcast/**/*.json # Forge deployment transaction logs
+    - linters: [prettier]
+      paths:
+        - .treb/*.json
+        - broadcast/**/*.json
   enabled:
     - gitleaks@8.30.0
     - semgrep@1.155.0
