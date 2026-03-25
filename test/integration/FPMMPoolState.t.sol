@@ -40,11 +40,14 @@ contract FPMMPoolState is V3IntegrationBase {
     // ========== Oracle Configuration ==========
 
     function test_allPools_oracleAdapter() public view {
+
+        IMentoConfig.FPMMConfig[] memory fpmmConfigs = config.getFPMMConfigs();
+        require(fpmmConfigs.length == pools.length, "FPMMConfigs length mismatch");
         for (uint256 i = 0; i < pools.length; i++) {
             IFPMM pool = IFPMM(pools[i]);
             assertEq(
                 address(pool.oracleAdapter()),
-                oracleAdapter,
+                fpmmConfigs[i].oracleAdapter,
                 string.concat("OracleAdapter mismatch on pool at index ", vm.toString(i))
             );
         }

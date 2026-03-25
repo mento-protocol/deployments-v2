@@ -16,9 +16,9 @@ components:
     script: Relay
     deps:
       - RateFeeds
-  # CreateFPMMs:
-  #   script: CreateFPMM
-  #   deps:
-  #     - RateFeeds
-  #     - EURm
-  #     - USDT
+  CreateFPMMs:
+    script: CreateFPMM
+    deps:
+      - RateFeeds
+      # - EURm
+      - USDT

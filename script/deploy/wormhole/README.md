@@ -42,6 +42,7 @@ Token topology is defined in `script/config/wormhole/NTTConfig.sol`:
 
 - `getUSDmConfig()` — returns the full bridge topology for USDm
 - `getGBPmConfig()` — returns the full bridge topology for GBPm
+- `getEURmConfig()` — returns the full bridge topology for EURm
 
 Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labels, burn/lock modes, and rate limits. Token and owner addresses are **not hardcoded** — they are addressbook labels resolved at runtime via `lookup()`.
 
@@ -50,6 +51,7 @@ Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labe
 | Token | Celo | Monad | Notes |
 |-------|------|-------|-------|
 | USDm  | Burning | Burning | Native stablecoin, can be minted on all chains |
+| EURm  | Burning | Burning | Native stablecoin, can be minted on all chains |
 | GBPm  | Locking (hub) | Burning (spoke) | Canonical supply on Celo, spokes burn/mint |
 
 ## Deployment (New Token)

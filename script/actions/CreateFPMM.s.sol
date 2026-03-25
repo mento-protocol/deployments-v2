@@ -99,6 +99,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > token1: %s (%s)", token1Symbol, fpmm.token1());
         console.log("  > referenceRateFeedID:", fpmm.referenceRateFeedID());
         console.log("  > invertRateFeed:", fpmm.invertRateFeed());
+        console.log("  > oracleAdapter:", address(fpmm.oracleAdapter()));
 
         _mintInitialLiquidity(proxy, cfg);
         _verifyFPMM(proxy, cfg);
@@ -204,6 +205,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         console.log("\n");
         _verifyOpenLiquidityStrategy(fpmmProxy, lsCfg);
+
+        // Now try to trigger a rebalance through the configured strategy
+        _verifyOpenRebalance(fpmmProxy, lsCfg);
     }
 
     function _buildAddPoolParams(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
@@ -510,6 +514,57 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("  > large swap to imbalance pool (token0 -> token1):");
         console.log("    > swapIn:", largeSwapAmount);
         console.log("    > swapOut:", amountOut);
+    }
+
+    function _verifyOpenRebalance(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg) internal {
+        IFPMM fpmm = IFPMM(fpmmProxy);
+
+        address sorted0 = fpmm.token0();
+        address sorted1 = fpmm.token1();
+
+        uint256 decimals0 = 10 ** IERC20Metadata(sorted0).decimals();
+        uint256 decimals1 = 10 ** IERC20Metadata(sorted1).decimals();
+
+        // Fund the rebalancer with tokens (OpenLiquidityStrategy requires the caller to hold tokens)
+        address rebalancer = SWAP_TEST_ACCOUNT;
+        _deal(sorted0, rebalancer, 100_000 * decimals0);
+        _deal(sorted1, rebalancer, 100_000 * decimals1);
+
+        // Approve the strategy to spend the rebalancer's tokens
+        vm.prank(rebalancer);
+        IERC20(sorted0).approve(lsCfg.liquidityStrategy, type(uint256).max);
+        vm.prank(rebalancer);
+        IERC20(sorted1).approve(lsCfg.liquidityStrategy, type(uint256).max);
+
+        // 1. Do a large one-sided swap to push the pool out of balance
+        _doLargeSwap(fpmmProxy, fpmm);
+
+        // 2. Log rebalancing state before rebalance
+        uint256 priceDifference;
+        {
+            (uint256 oPN, uint256 oPD, uint256 rPN, uint256 rPD, bool above,, uint256 pd) =
+                fpmm.getRebalancingState();
+            priceDifference = pd;
+            console.log("  > oraclePrice:", oPN, "/", oPD);
+            console.log("  > reservePrice:", rPN, "/", rPD);
+            console.log("  > reservePriceAboveOracle:", above);
+            console.log("  > priceDifference (bps):", pd);
+        }
+
+        // 3. Trigger rebalance from the funded rebalancer account
+        {
+            (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
+            vm.prank(rebalancer);
+            ILiquidityStrategy(lsCfg.liquidityStrategy).rebalance(fpmmProxy);
+            (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
+            console.log("  > reserve0 before:", r0Before, "-> after:", r0After);
+            console.log("  > reserve1 before:", r1Before, "-> after:", r1After);
+        }
+
+        // 4. Verify price difference improved
+        (,,,,,, uint256 newPriceDifference) = fpmm.getRebalancingState();
+        console.log("  > newPriceDifference (bps):", newPriceDifference);
+        require(newPriceDifference < priceDifference, "Verify: rebalance did not improve price difference");
     }
 
     function _provideLargerLiquidity(address fpmmProxy, IMentoConfig.FPMMConfig memory c) internal {

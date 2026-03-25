@@ -183,10 +183,7 @@ contract AddRateFeed is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < breakerConfigs.length; i++) {
             // Find the matching deployed breaker by type
             address breakerAddress = _findBreakerByType(breakerConfigs[i].breakerType, existingBreakers);
-            if (breakerAddress == address(0)) {
-                console.log("WARNING: No deployed breaker found for breaker config index", i);
-                continue;
-            }
+            require(breakerAddress != address(0), "No deployed breaker found for breaker config index");
 
             // Create harnessed write address once per breaker
             address breakerWrite = migrationOwner.harness(breakerAddress);
@@ -195,9 +192,7 @@ contract AddRateFeed is TrebScript, ProxyHelper {
                 address rateFeedId = breakerConfigs[i].rateFeedIds[j];
 
                 // Skip if rate feed is not in the BreakerBox
-                if (!breakerBoxRead.rateFeedStatus(rateFeedId)) {
-                    continue;
-                }
+                require(breakerBoxRead.rateFeedStatus(rateFeedId), "Rate feed not in BreakerBox");
 
                 // Enable breaker for this rate feed if not already enabled
                 if (!breakerBoxRead.isBreakerEnabled(breakerAddress, rateFeedId)) {
@@ -218,6 +213,17 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             address[] memory deps = config.getRateFeedDependencies(rateFeedIds[i]);
             if (deps.length > 0) {
                 breakerBox.setRateFeedDependencies(rateFeedIds[i], deps);
+            }
+        }
+
+        // Enable MarketHoursBreaker on FX Feeds.
+        // TODO: Move this to the breakers config per network?
+        address[] memory fxFeedIds = config.getFxRateFeedIds();
+        address marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        for (uint256 i = 0; i < fxFeedIds.length; i++) {
+            if (!breakerBoxRead.isBreakerEnabled(marketHoursBreaker, fxFeedIds[i])) {
+                console.log(string.concat("BreakerBox: enabling MarketHoursBreaker for ", vm.getLabel(fxFeedIds[i])));
+                breakerBox.toggleBreaker(marketHoursBreaker, fxFeedIds[i], true);
             }
         }
     }

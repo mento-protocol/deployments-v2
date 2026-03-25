@@ -20015,6 +20015,37 @@
     "createdAt": "2026-03-10T16:32:27.414033724Z",
     "updatedAt": "2026-03-12T17:58:56.180547715Z"
   },
+  "testnet-v2-rc5/10143/ChainlinkRelayerV1:EUR/USD": {
+    "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:EUR/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "EUR/USD",
+    "address": "0x8220032E2d3541a9D3f88B2C7247301027f2Bc27",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x4e022472546821bf9b39aa2b01196d293876119e7d271e16bd0efd2fb8801c64",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074555522f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000904bc5586697ef66b8b3c3189a8f059a4bd4f0710000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xad0c23f9f82a6fe9ff8a9581157453cb510fe1b731bea124eada4139c7be8b01",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "7041277829289c825dbff44a9b2a9e771ce0f1d9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-25T13:06:21.814316+01:00",
+    "updatedAt": "2026-03-25T13:06:21.824261+01:00"
+  },
   "testnet-v2-rc5/10143/ChainlinkRelayerV1:GBP/USD": {
     "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:GBP/USD",
     "namespace": "testnet-v2-rc5",
@@ -20110,6 +20141,37 @@
     "tags": null,
     "createdAt": "2026-03-10T16:32:27.414033724Z",
     "updatedAt": "2026-03-12T17:59:30.451332714Z"
+  },
+  "testnet-v2-rc5/10143/ChainlinkRelayerV1:USDT/USD": {
+    "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:USDT/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "USDT/USD",
+    "address": "0x10D98F3777Ce2a80fA2175C5641fBB2c15c00A98",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xd1b5d1fa51e4fc705a13c803423104f4ae63c57be21d0a7faf280f6ae79edce2",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ac414205651f4a62b614b6be9e5318a182c33eb00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344542f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000601566fd7d319d14daee362e15c2e8c3e5d3ef920000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xad0c23f9f82a6fe9ff8a9581157453cb510fe1b731bea124eada4139c7be8b01",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "7041277829289c825dbff44a9b2a9e771ce0f1d9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-25T13:06:21.814316+01:00",
+    "updatedAt": "2026-03-25T13:06:21.824261+01:00"
   },
   "testnet-v2-rc5/10143/FPMM:v3.0.0": {
     "id": "testnet-v2-rc5/10143/FPMM:v3.0.0",
@@ -20669,6 +20731,38 @@
     "tags": null,
     "createdAt": "2026-03-10T16:29:31.708077538Z",
     "updatedAt": "2026-03-12T17:51:22.316409913Z"
+  },
+  "testnet-v2-rc5/10143/MockERC20:USDT0": {
+    "id": "testnet-v2-rc5/10143/MockERC20:USDT0",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockERC20",
+    "label": "USDT0",
+    "address": "0xC304EE1876c32d1A194558B1000bE4842F960dF9",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700062d53e4a03bb3de4917e5",
+      "initCodeHash": "0xb310ceb1e1b9191556326ffafc52eb2e1cbcbb70948d2c179b6ec7b9c5660b7a",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000060000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000104d656e746f204d6f636b2055534454300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000055553445430000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockERC20:USDT0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockERC20.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x1ff730b11fc4562c7012fdce9a359dafbc5595e1aaef71a1719c2d4194bce5d9",
+      "scriptPath": "script/deploy/dex/DeployMockCollaterals.s.sol",
+      "gitCommit": "7041277829289c825dbff44a9b2a9e771ce0f1d9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-25T13:07:23.367771+01:00",
+    "updatedAt": "2026-03-25T13:07:23.378266+01:00"
   },
   "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.0": {
     "id": "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.0",

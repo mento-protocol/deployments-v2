@@ -43,6 +43,7 @@ library NTTConfig {
     // ── Rate limit constants ────────────────────────────────────────────
     uint256 internal constant USDm_RATE_LIMIT = 500_000e18;
     uint256 internal constant GBPm_RATE_LIMIT = 500_000e18;
+    uint256 internal constant EURm_RATE_LIMIT = 500_000e18;
 
     // ── Token config getters ─────────────────────────────────────────────
 
@@ -104,5 +105,35 @@ library NTTConfig {
         config.inboundLimits = new NTTInboundLimit[](2);
         config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: GBPm_RATE_LIMIT});
         config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: GBPm_RATE_LIMIT});
+    }
+
+    /// @notice Returns the full NTT bridge topology for EURm.
+    ///         EURm is burn-mint on BOTH Celo and Monad.
+    function getEURmConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "EURm";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "migrationOwner";
+
+        config.chains = new NTTChainConfig[](2);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "EURm",
+            isBurning: true,
+            outboundLimit: EURm_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "EURm",
+            isBurning: true,
+            outboundLimit: EURm_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: EURm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: EURm_RATE_LIMIT});
     }
 }
