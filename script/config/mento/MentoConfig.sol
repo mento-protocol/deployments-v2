@@ -545,7 +545,9 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             return;
         }
 
-        address oracleAdapter = isCollateralAsset(debtAddress) || isCollateralAsset(collateralAddress) ? lookupProxy("OracleAdapterCollateral") : lookupProxy("OracleAdapter");
+        address oracleAdapter = isCollateralAsset(debtAddress) || isCollateralAsset(collateralAddress)
+            ? lookupProxy("OracleAdapterCollateral")
+            : lookupProxy("OracleAdapter");
 
         // Sort by address to determine token0/token1
         bool debtIsToken0 = debtAddress < collateralAddress;

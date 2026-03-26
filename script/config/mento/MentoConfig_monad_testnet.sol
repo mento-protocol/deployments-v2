@@ -18,7 +18,6 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
         _registerMockCollateral("AUSD", 6);
         _registerMockCollateral("USDT0", 6);
 
-
         _addReserveV2Collateral("USDC");
         _addReserveV2Collateral("AUSD");
         _addReserveV2Collateral("USDT0");

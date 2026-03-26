@@ -196,9 +196,8 @@ contract AddRateFeed is TrebScript, ProxyHelper {
 
                 // Enable breaker for this rate feed if not already enabled
                 if (!breakerBoxRead.isBreakerEnabled(breakerAddress, rateFeedId)) {
-                    string memory breakerType = breakerConfigs[i].breakerType == BreakerType.Value
-                        ? "ValueBreaker"
-                        : "MedianBreaker";
+                    string memory breakerType =
+                        breakerConfigs[i].breakerType == BreakerType.Value ? "ValueBreaker" : "MedianBreaker";
                     console.log(string.concat("BreakerBox: enabling ", breakerType, " for ", vm.getLabel(rateFeedId)));
                     breakerBox.toggleBreaker(breakerAddress, rateFeedId, true);
                 }
@@ -304,9 +303,16 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             }
 
             if (breakerConfig.smoothingFactors[rateFeedIndex] > 0) {
-                if (IMedianDeltaBreaker(breakerRead).getSmoothingFactor(rateFeedId) != breakerConfig.smoothingFactors[rateFeedIndex]) {
-                    console.log(string.concat("MedianBreaker: setting smoothing factor for ", rateFeedName), breakerConfig.smoothingFactors[rateFeedIndex]);
-                    IMedianDeltaBreaker(breakerWrite).setSmoothingFactor(rateFeedId, breakerConfig.smoothingFactors[rateFeedIndex]);
+                if (
+                    IMedianDeltaBreaker(breakerRead).getSmoothingFactor(rateFeedId)
+                        != breakerConfig.smoothingFactors[rateFeedIndex]
+                ) {
+                    console.log(
+                        string.concat("MedianBreaker: setting smoothing factor for ", rateFeedName),
+                        breakerConfig.smoothingFactors[rateFeedIndex]
+                    );
+                    IMedianDeltaBreaker(breakerWrite)
+                        .setSmoothingFactor(rateFeedId, breakerConfig.smoothingFactors[rateFeedIndex]);
                 }
             }
         }

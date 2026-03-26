@@ -68,7 +68,7 @@ contract MentoConfig_monad is MentoConfig {
     function _initCollateral() internal virtual {
         _addCollateral("USDC", lookup("USDC"));
         _addCollateral("AUSD", lookup("AUSD"));
-        _addCollateral("USDT0", lookup("USDT0"));        
+        _addCollateral("USDT0", lookup("USDT0"));
         _addReserveV2Collateral("USDC");
         _addReserveV2Collateral("AUSD");
         _addReserveV2Collateral("USDT0");

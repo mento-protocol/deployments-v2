@@ -25590,6 +25590,38 @@
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
   },
+  "testnet-v2-rc5/11142220/OpenLiquidityStrategy:v3.0.1": {
+    "id": "testnet-v2-rc5/11142220/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa70073f992c48fbad8f88ecf01",
+      "initCodeHash": "0x865362e02aba69e7e85f995ded47383d81685da23ed55dcc9fb7640430979f44",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x9e86e03b5b5e37b4fee6f4d09bcae2cd4865d7d68f3443565aff8b0701e045b0",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "4e990426f8843fd245669975d2c9e1c7abedf5ee"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T16:09:58.617201+01:00",
+    "updatedAt": "2026-03-26T16:09:58.633467+01:00"
+  },
   "testnet-v2-rc5/11142220/OracleAdapter:v3.0.0": {
     "id": "testnet-v2-rc5/11142220/OracleAdapter:v3.0.0",
     "namespace": "testnet-v2-rc5",
@@ -27480,6 +27512,42 @@
     "tags": null,
     "createdAt": "2025-09-15T08:17:18.074961Z",
     "updatedAt": "2025-10-01T15:05:34.246236Z"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OpenLiquidityStrategy",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OpenLiquidityStrategy",
+    "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7005f102e27afaf66bf868dde",
+      "initCodeHash": "0x01b0bf9414927f44bfd2ac5598247251b33d043fc1d27a85ac0d978ec50613e5",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000e1221f38de0a17ef170602de724db0e73e3856fb0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OpenLiquidityStrategy"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.34+commit.80d5c536",
+      "bytecodeHash": "0x6d9bdd1281bd6fd03df915445c01e69c74f763620956ce33cd70ff7d6aaa4b31",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "4e990426f8843fd245669975d2c9e1c7abedf5ee"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T16:09:58.617201+01:00",
+    "updatedAt": "2026-03-26T16:09:58.633467+01:00"
   },
   "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OracleAdapter",

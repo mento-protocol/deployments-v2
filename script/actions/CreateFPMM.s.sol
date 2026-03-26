@@ -542,8 +542,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         // 2. Log rebalancing state before rebalance
         uint256 priceDifference;
         {
-            (uint256 oPN, uint256 oPD, uint256 rPN, uint256 rPD, bool above,, uint256 pd) =
-                fpmm.getRebalancingState();
+            (uint256 oPN, uint256 oPD, uint256 rPN, uint256 rPD, bool above,, uint256 pd) = fpmm.getRebalancingState();
             priceDifference = pd;
             console.log("  > oraclePrice:", oPN, "/", oPD);
             console.log("  > reservePrice:", rPN, "/", rPD);
