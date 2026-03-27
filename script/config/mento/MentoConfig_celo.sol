@@ -15,6 +15,7 @@ contract MentoConfig_celo is MentoConfig {
     // Chain-specific parameters (set by _configureParams via virtual dispatch)
     string internal _rateFeedPrefix;
     address internal _gbpUsdRateFeedId;
+    address internal _eurUsdRateFeedId;
     bool internal _useLegacyRateFeedIds; // true on mainnet where CELO cross-pair IDs are old stable token proxies
     CoreAggregators internal _coreAggs;
     FxAggregators internal _fxAggs;
@@ -40,6 +41,7 @@ contract MentoConfig_celo is MentoConfig {
         _rateFeedPrefix = "relayed:";
         _redemptionShortfallTolerance = 1e12;
         _gbpUsdRateFeedId = getRateFeedIdFromString("relayed:GBPUSD");
+        _eurUsdRateFeedId = getRateFeedIdFromString("relayed:EURUSD");
         _useLegacyRateFeedIds = true;
 
         _coreAggs = CoreAggregators({
@@ -264,7 +266,7 @@ contract MentoConfig_celo is MentoConfig {
         _addFPMM(
             "EURm",
             "USDm",
-            getRateFeedIdFromString("EURUSD"),
+            _eurUsdRateFeedId,
             IFPMM.FPMMParams({
                 lpFee: 15,
                 protocolFee: 10,

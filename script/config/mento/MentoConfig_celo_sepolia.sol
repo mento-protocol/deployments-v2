@@ -32,6 +32,7 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
         _rateFeedPrefix = "";
         _useLegacyRateFeedIds = false;
         _gbpUsdRateFeedId = getRateFeedIdFromString("GBPUSD");
+        _eurUsdRateFeedId = getRateFeedIdFromString("EURUSD");
 
         // Oracle infrastructure
         _oracleConfig = OracleConfig({reportExpirySeconds: 5 minutes});

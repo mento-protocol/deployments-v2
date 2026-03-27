@@ -2312,11 +2312,25 @@
       "gitCommit": "496a8f8d5538add5e04fd783aedbb7555806f795"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": "verification failed: Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. \n\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\n\u001b[2m2026-03-27T13:40:16.645455Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\n\u001b[2m2026-03-27T13:40:16.763252Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\nStart verifying contract `0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44` deployed on celo\nCompiler version: 0.8.24+commit.e11b9ed9\nConstructor args: 00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458\nError: No verifier URL specified for verifier blockscout"
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=42220/address/0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-03-14T16:49:26.067673+01:00",
-    "updatedAt": "2026-03-14T16:49:26.078072+01:00"
+    "updatedAt": "2026-03-27T14:40:18.814166+01:00"
   },
   "mainnet/42220/MetadataNFT:v3.0.0-GBPm": {
     "id": "mainnet/42220/MetadataNFT:v3.0.0-GBPm",
@@ -2445,6 +2459,52 @@
     "tags": null,
     "createdAt": "2026-03-10T17:55:13.379733Z",
     "updatedAt": "2026-03-10T17:55:13.404563Z"
+  },
+  "mainnet/42220/OpenLiquidityStrategy:v3.0.1": {
+    "id": "mainnet/42220/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687002087497ca67db0dc294e23",
+      "initCodeHash": "0xc7e6e83c3ad04e4dc91b64c1ac8a8a9290927b1e37a13246fb783d0e688c31f4",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x5ee8c9bb052686c961149aaa98f6d8eb6563b657baa5c8bdb363f27e09cfcace",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "682c1c87f4266c583853689bb1c9708ef9f8db87"
+    },
+    "verification": {
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": "verification failed: Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. \n\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\n\u001b[2m2026-03-26T17:31:13.322278Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\n\u001b[2m2026-03-26T17:31:13.447533Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\nStart verifying contract `0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7` deployed on celo\nCompiler version: 0.8.24+commit.e11b9ed9\nConstructor args: 0000000000000000000000000000000000000000000000000000000000000001\nError: No verifier URL specified for verifier blockscout"
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=42220/address/0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T18:25:02.899558+01:00",
+    "updatedAt": "2026-03-26T18:31:15.220873+01:00"
   },
   "mainnet/42220/OracleAdapter:v3.0.0": {
     "id": "mainnet/42220/OracleAdapter:v3.0.0",
@@ -2973,6 +3033,56 @@
     "tags": null,
     "createdAt": "2026-03-03T19:14:38.505446337Z",
     "updatedAt": "2026-03-03T19:14:38.508066752Z"
+  },
+  "mainnet/42220/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
+    "id": "mainnet/42220/TransparentUpgradeableProxy:OpenLiquidityStrategy",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OpenLiquidityStrategy",
+    "address": "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700e8aa7071e4787b8e9a4d15",
+      "initCodeHash": "0x23d3a315ddf49e9744aa109215ededce2f50b996594edd8b137b5dbb99fa21a5",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000010e9bd0b70716dd9e0d41ca274a5846ff513e2b7000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de800000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OpenLiquidityStrategy"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.34+commit.80d5c536",
+      "bytecodeHash": "0x32e3d6d177e8cae88a08e8d9d35c572b723cd9236e2a31aca70a882f9ca0bebc",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "682c1c87f4266c583853689bb1c9708ef9f8db87"
+    },
+    "verification": {
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": "verification failed: Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. \n\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\n\u001b[2m2026-03-26T17:31:28.155841Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\n\u001b[2m2026-03-26T17:31:28.235861Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\nStart verifying contract `0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f` deployed on celo\nCompiler version: 0.8.34+commit.80d5c536\nConstructor args: 00000000000000000000000010e9bd0b70716dd9e0d41ca274a5846ff513e2b7000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de800000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000\nError: No verifier URL specified for verifier blockscout"
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=42220/address/0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T18:25:02.899558+01:00",
+    "updatedAt": "2026-03-26T18:31:29.959773+01:00"
   },
   "mainnet/42220/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "mainnet/42220/TransparentUpgradeableProxy:OracleAdapter",
