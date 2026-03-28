@@ -20,6 +20,14 @@ contract MentoConfig_celo is MentoConfig {
     CoreAggregators internal _coreAggs;
     FxAggregators internal _fxAggs;
 
+    // Oracle/relayer overrides (mainnet values differ from testnet)
+    uint256 internal _eurocEurBreakerThreshold;
+    uint256 internal _celoEthRelayerMaxTimestampSpread;
+    string internal _celoEthRelayerDescription;
+    bool internal _includeCollateralRelayers;
+    bool internal _useLongCrossPairDesc; // true=mainnet: "A/B (A/USD:USD/B)" + 5min spread, false=sepolia: "A/B" + 1day spread
+    bool internal _includeCeloUsdRelayer; // false=mainnet (not deployed via factory), true=sepolia
+
     function _initialize() internal override {
         _configureParams();
         _initStables();
@@ -38,11 +46,20 @@ contract MentoConfig_celo is MentoConfig {
 
     /// @notice Set network-specific parameters. Override in subclasses.
     function _configureParams() internal virtual {
+        _oracleConfig = OracleConfig({reportExpirySeconds: 5 minutes});
         _rateFeedPrefix = "relayed:";
         _redemptionShortfallTolerance = 1e12;
         _gbpUsdRateFeedId = getRateFeedIdFromString("relayed:GBPUSD");
         _eurUsdRateFeedId = getRateFeedIdFromString("relayed:EURUSD");
         _useLegacyRateFeedIds = true;
+
+        // Oracle/relayer defaults (mainnet values)
+        _eurocEurBreakerThreshold = 0.005 * 1e24;
+        _celoEthRelayerMaxTimestampSpread = 1 days;
+        _celoEthRelayerDescription = "CELO/ETH (CELO/USD:USD/ETH)";
+        _includeCollateralRelayers = false;
+        _useLongCrossPairDesc = true;
+        _includeCeloUsdRelayer = false;
 
         _coreAggs = CoreAggregators({
             celoUsd: 0x0568fD19986748cEfF3301e55c0eb1E729E0Ab7e,
@@ -317,9 +334,11 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
-        _addChainlinkRelayer({
-            rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
-        });
+        if (_includeCollateralRelayers) {
+            _addChainlinkRelayer({
+                rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
+            });
+        }
 
         _addRateFeed("USDTUSD");
         _addToBreaker({
@@ -339,19 +358,21 @@ contract MentoConfig_celo is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "EUROCEUR",
             cooldown: 1,
-            threshold: 0.001 * 1e24,
+            threshold: _eurocEurBreakerThreshold,
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
-        _addChainlinkRelayer({
-            rateFeed: "EUROCEUR",
-            description: "EUROC/EUR",
-            maxTimestampSpread: 1 days,
-            aggregator0: _coreAggs.eurcUsd,
-            invert0: false,
-            aggregator1: _fxAggs.eur,
-            invert1: true
-        });
+        if (_includeCollateralRelayers) {
+            _addChainlinkRelayer({
+                rateFeed: "EUROCEUR",
+                description: "EUROC/EUR",
+                maxTimestampSpread: 1 days,
+                aggregator0: _coreAggs.eurcUsd,
+                invert0: false,
+                aggregator1: _fxAggs.eur,
+                invert1: true
+            });
+        }
 
         if (_useLegacyRateFeedIds) {
             _addRateFeed("CELOUSD", _lookupTokenAddress("USDm"));
@@ -366,16 +387,18 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 1e24,
             referenceValue: 0
         });
-        _addChainlinkRelayer({
-            rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
-        });
+        if (_includeCeloUsdRelayer) {
+            _addChainlinkRelayer({
+                rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
+            });
+        }
 
         string memory celoEthFeed = string.concat(_rateFeedPrefix, "CELOETH");
         _addRateFeed(celoEthFeed);
         _addChainlinkRelayer({
             rateFeed: celoEthFeed,
-            description: "CELOETH",
-            maxTimestampSpread: 10 minutes,
+            description: _celoEthRelayerDescription,
+            maxTimestampSpread: _celoEthRelayerMaxTimestampSpread,
             aggregator0: _coreAggs.celoUsd,
             invert0: false,
             aggregator1: _coreAggs.ethUsd,
@@ -384,12 +407,14 @@ contract MentoConfig_celo is MentoConfig {
 
         // Legacy currencies: on mainnet, CELO cross-pair rate feed IDs are the old stable token proxy addresses
         if (_useLegacyRateFeedIds) {
-            _configureDefaultFxRateFeed("EUR", _fxAggs.eur, address(0), _lookupTokenAddress("EURm"));
-            _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"));
-            _configureDefaultFxRateFeed("XOF", _fxAggs.xof, address(0), _lookupTokenAddress("XOFm"));
+            // CELO/EUR and CELO/BRL relayers are not deployed via factory on mainnet (pass 0 = skip cross-pair relayer)
+            _configureDefaultFxRateFeed("EUR", _fxAggs.eur, address(0), _lookupTokenAddress("EURm"), 0);
+            _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"), 0);
+            // CELO/XOF and CELO/KES are deployed with 5-minute maxTimestampSpread on mainnet
+            _configureDefaultFxRateFeed("XOF", _fxAggs.xof, address(0), _lookupTokenAddress("XOFm"), 5 minutes);
             // KES: both the FX/USD feed (registered without relayed: prefix) and CELO cross-pair use non-standard IDs
             _configureDefaultFxRateFeed(
-                "KES", _fxAggs.kes, getRateFeedIdFromString("KESUSD"), _lookupTokenAddress("KESm")
+                "KES", _fxAggs.kes, getRateFeedIdFromString("KESUSD"), _lookupTokenAddress("KESm"), 5 minutes
             );
         } else {
             _configureDefaultFxRateFeed({currency: "EUR", aggregator: _fxAggs.eur});
@@ -420,8 +445,8 @@ contract MentoConfig_celo is MentoConfig {
         });
         _addChainlinkRelayer({
             rateFeed: "EURXOF",
-            description: "EUR/XOF",
-            maxTimestampSpread: 1 days,
+            description: _useLongCrossPairDesc ? "EUR/XOF (EUR/USD:USD/XOF)" : "EUR/XOF",
+            maxTimestampSpread: _useLongCrossPairDesc ? 5 minutes : 1 days,
             aggregator0: _fxAggs.eur,
             invert0: false,
             aggregator1: _fxAggs.xof,
@@ -433,7 +458,7 @@ contract MentoConfig_celo is MentoConfig {
 
     /// @notice Configure an FX rate feed with its Chainlink relayer and CELO cross-pair.
     function _configureDefaultFxRateFeed(string memory currency, address aggregator) internal {
-        _configureDefaultFxRateFeed(currency, aggregator, address(0), address(0));
+        _configureDefaultFxRateFeed(currency, aggregator, address(0), address(0), 1 days);
     }
 
     /// @notice Configure an FX rate feed with explicit rate feed IDs for legacy feeds.
@@ -444,6 +469,21 @@ contract MentoConfig_celo is MentoConfig {
         address aggregator,
         address fxRateFeedId,
         address celoRateFeedId
+    ) internal {
+        _configureDefaultFxRateFeed(currency, aggregator, fxRateFeedId, celoRateFeedId, 1 days);
+    }
+
+    /// @notice Configure an FX rate feed with explicit rate feed IDs and CELO cross-pair maxTimestampSpread.
+    /// @param fxRateFeedId If non-zero, use as the FX/USD rate feed ID instead of keccak.
+    /// @param celoRateFeedId If non-zero, use as the CELO/currency rate feed ID instead of keccak.
+    /// @param celoCrossPairMaxTimestampSpread maxTimestampSpread for the CELO cross-pair relayer.
+    ///        Pass 0 to skip adding a Chainlink relayer for the CELO cross-pair (rate feed is still registered).
+    function _configureDefaultFxRateFeed(
+        string memory currency,
+        address aggregator,
+        address fxRateFeedId,
+        address celoRateFeedId,
+        uint256 celoCrossPairMaxTimestampSpread
     ) internal {
         string memory rateFeed = string.concat(_rateFeedPrefix, currency, "USD");
         if (fxRateFeedId != address(0)) {
@@ -471,15 +511,20 @@ contract MentoConfig_celo is MentoConfig {
         } else {
             _addRateFeed(celoRateFeed);
         }
-        _addChainlinkRelayer({
-            rateFeed: celoRateFeed,
-            description: string.concat("CELO/", currency),
-            maxTimestampSpread: 1 days,
-            aggregator0: _coreAggs.celoUsd,
-            invert0: false,
-            aggregator1: aggregator,
-            invert1: true
-        });
+        if (celoCrossPairMaxTimestampSpread > 0) {
+            string memory crossPairDesc = _useLongCrossPairDesc
+                ? string.concat("CELO/", currency, " (CELO/USD:USD/", currency, ")")
+                : string.concat("CELO/", currency);
+            _addChainlinkRelayer({
+                rateFeed: celoRateFeed,
+                description: crossPairDesc,
+                maxTimestampSpread: celoCrossPairMaxTimestampSpread,
+                aggregator0: _coreAggs.celoUsd,
+                invert0: false,
+                aggregator1: aggregator,
+                invert1: true
+            });
+        }
     }
 
     /// ===================================================================
@@ -633,57 +678,54 @@ contract MentoConfig_celo is MentoConfig {
             createVirtual: false
         });
         _addFxExchange({
-            currency: "AUD",
-            spread: 0.0015 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(1.54 * 1e3),
-            createVirtual: true
+            currency: "AUD", spread: 0.0015 * 1e24, tradingLimits: _tier1FxTradingLimits(1.6 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "CAD",
-            spread: 0.0015 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(1.38 * 1e3),
-            createVirtual: true
+            currency: "CAD", spread: 0.0015 * 1e24, tradingLimits: _tier1FxTradingLimits(1.4 * 1e3), createVirtual: true
         });
         _addFxExchange({
             currency: "ZAR",
             spread: 0.003 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(17.72 * 1e3),
+            tradingLimits: _fxTradingLimits(50_000, 250_000, 1_250_000, 18.0 * 1e3),
             createVirtual: true
         });
         _addFxExchange({
-            currency: "CHF", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(0.8 * 1e3), createVirtual: true
+            currency: "CHF", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(0.83 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "JPY", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(149 * 1e3), createVirtual: true
+            currency: "JPY",
+            spread: 0.003 * 1e24,
+            tradingLimits: _tier1FxTradingLimits(142.0 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
-            currency: "COP", spread: 0.003 * 1e24, tradingLimits: _tier2FxTradingLimits(4015 * 1e3), createVirtual: true
+            currency: "COP",
+            spread: 0.003 * 1e24,
+            tradingLimits: _tier2FxTradingLimits(4211.0 * 1e3),
+            createVirtual: true
         });
         _addFxExchange({
-            currency: "BRL", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(5.45 * 1e3), createVirtual: true
+            currency: "BRL", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(5.0 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "PHP", spread: 0.003 * 1e24, tradingLimits: _tier2FxTradingLimits(57.4 * 1e3), createVirtual: true
+            currency: "PHP", spread: 0.003 * 1e24, tradingLimits: _tier2FxTradingLimits(57.0 * 1e3), createVirtual: true
         });
         _addFxExchange({
-            currency: "GHS", spread: 0.01 * 1e24, tradingLimits: _tier2FxTradingLimits(11.92 * 1e3), createVirtual: true
+            currency: "GHS", spread: 0.01 * 1e24, tradingLimits: _tier2FxTradingLimits(10.0 * 1e3), createVirtual: true
         });
         _addFxExchange({
             currency: "NGN",
             spread: 0.01 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(1531.98 * 1e3),
+            tradingLimits: _tier2FxTradingLimits(1612.0 * 1e3),
             createVirtual: true
         });
         _addFxExchange({
-            currency: "KES",
-            spread: 0.01 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(129.21 * 1e3),
-            createVirtual: true
+            currency: "KES", spread: 0.01 * 1e24, tradingLimits: _tier1FxTradingLimits(133.0 * 1e3), createVirtual: true
         });
         _addFxExchange({
             currency: "XOF",
             spread: 0.02 * 1e24,
-            tradingLimits: _tier2FxTradingLimits(560.46 * 1e3),
+            tradingLimits: _fxTradingLimits(50_000, 250_000, 1_000_000, 555.0 * 1e3),
             createVirtual: true
         });
     }
@@ -744,15 +786,15 @@ contract MentoConfig_celo is MentoConfig {
     /// ===================================================================
     /// Governance
     /// ===================================================================
-    function _initGovernance() internal {
+    function _initGovernance() internal virtual {
         _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
         _governanceConfig = GovernanceConfig({
-            timelockDelay: 5 minutes,
+            timelockDelay: 2 days,
             votingDelay: 0,
-            votingPeriod: 10 minutes,
+            votingPeriod: 8 days,
             proposalThreshold: 10000e18,
             quorum: 2,
-            watchdog: 0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81
+            watchdog: 0xE6951C4176aaB41097C6f5fE11e9c515B7108acd
         });
     }
 }

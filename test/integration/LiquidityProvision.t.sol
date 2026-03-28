@@ -19,6 +19,9 @@ contract LiquidityProvision is V3IntegrationBase {
         super.setUp();
         pools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
         require(pools.length > 0, "No FPMM pools deployed");
+        for (uint256 i = 0; i < pools.length; i++) {
+            _ensurePoolLiquidity(pools[i]);
+        }
     }
 
     // ========== Provide liquidity ==========

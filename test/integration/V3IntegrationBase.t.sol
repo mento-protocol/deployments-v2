@@ -132,9 +132,13 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
         sortedOracles = lookupProxyOrFail("SortedOracles");
         proxyAdmin = lookupOrFail("ProxyAdmin");
         marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
-        l2SequencerUptimeFeed = address(0);
+        l2SequencerUptimeFeed = registry.lookup("L2SequencerUptimeFeed");
         reserveSafe = lookupOrFail("ReserveSafe");
         oracleAdapterCollateral = registry.lookup("TransparentUpgradeableProxy:OracleAdapterCollateral");
+
+        // Warp to a weekday so FX markets are open. Tests that need a specific time
+        // (e.g. WeekendSituationTest) warp to their target inside each test function.
+        vm.warp(timestamp_weekday);
         OracleHelper.refreshOracleRates(sortedOracles, config);
     }
 
@@ -296,6 +300,45 @@ abstract contract V3IntegrationBase is Test, ProxyViewHelper {
             _refreshOracleRates();
         }
         revert("Failed to imbalance pool after 10 attempts");
+    }
+
+    // ========== Pool Liquidity Helpers ==========
+
+    /// @dev Ensures a pool has at least 100 units of each token so swap/liquidity tests don't
+    ///      fail due to drained on-chain state. Deals tokens and mints LP if either reserve is low.
+    ///      Amounts are added proportionally to existing reserves so mint() yields LP > 0.
+    function _ensurePoolLiquidity(address pool) internal {
+        IFPMM fpmm = IFPMM(pool);
+        (uint256 r0, uint256 r1,) = fpmm.getReserves();
+        IERC20Metadata t0 = IERC20Metadata(fpmm.token0());
+        IERC20Metadata t1 = IERC20Metadata(fpmm.token1());
+        uint256 min0 = 100 * (10 ** t0.decimals());
+        uint256 min1 = 100 * (10 ** t1.decimals());
+        if (r0 >= min0 && r1 >= min1) return;
+
+        // Base amounts needed to reach minimums
+        uint256 add0 = r0 < min0 ? min0 - r0 : 0;
+        uint256 add1 = r1 < min1 ? min1 - r1 : 0;
+
+        // FPMM mint() computes LP = min(add0*supply/r0, add1*supply/r1).
+        // If adds are not proportional to reserves, the min collapses to ~0 and minting reverts.
+        // Enforce proportionality by scaling up the side that would otherwise be too small.
+        if (r0 > 0 && r1 > 0) {
+            uint256 add0Prop = add1 > 0 ? (add1 * r0 + r1 - 1) / r1 : 0;
+            uint256 add1Prop = add0 > 0 ? (add0 * r1 + r0 - 1) / r0 : 0;
+            if (add0Prop > add0) add0 = add0Prop;
+            if (add1Prop > add1) add1 = add1Prop;
+        }
+
+        if (add0 == 0 && add1 == 0) return;
+        if (add0 == 0) add0 = 1;
+        if (add1 == 0) add1 = 1;
+
+        _dealTokens(address(t0), address(this), add0);
+        _dealTokens(address(t1), address(this), add1);
+        IERC20(address(t0)).transfer(pool, add0);
+        IERC20(address(t1)).transfer(pool, add1);
+        fpmm.mint(address(this));
     }
 
     // ========== Oracle Refresh Helpers ==========

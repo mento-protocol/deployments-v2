@@ -36,6 +36,12 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
 
         // Oracle infrastructure
         _oracleConfig = OracleConfig({reportExpirySeconds: 5 minutes});
+        _eurocEurBreakerThreshold = 0.001 * 1e24;
+        _celoEthRelayerMaxTimestampSpread = 10 minutes;
+        _celoEthRelayerDescription = "CELOETH";
+        _includeCollateralRelayers = true;
+        _useLongCrossPairDesc = false;
+        _includeCeloUsdRelayer = true;
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("celo");
 
@@ -104,5 +110,17 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
         // TODO: register in ReserveV2 on-chain
         // _addReserveV2Collateral("axlEUROC");
         // _addReserveV2Collateral("CELO");
+    }
+
+    function _initGovernance() internal override {
+        _lockingConfig = LockingConfig({minCliffPeriod: 0, minSlopePeriod: 1});
+        _governanceConfig = GovernanceConfig({
+            timelockDelay: 5 minutes,
+            votingDelay: 0,
+            votingPeriod: 10 minutes,
+            proposalThreshold: 10000e18,
+            quorum: 2,
+            watchdog: 0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81
+        });
     }
 }

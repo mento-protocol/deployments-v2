@@ -26,6 +26,7 @@ contract WeekendSituationTest is V3IntegrationBase {
 
         for (uint256 i = 0; i < fpmms.length; i++) {
             IFPMM fpmm = IFPMM(fpmms[i]);
+            _ensurePoolLiquidity(fpmms[i]);
             bytes4 expectedError = _isCollateralFpmm(fpmm) ? bytes4(0) : IOracleAdapter.FXMarketClosed.selector;
             _swapBothWays(fpmm, expectedError);
         }
@@ -39,6 +40,7 @@ contract WeekendSituationTest is V3IntegrationBase {
         address[] memory fpmms = fpmmFactory.deployedFPMMAddresses();
 
         for (uint256 i = 0; i < fpmms.length; i++) {
+            _ensurePoolLiquidity(fpmms[i]);
             IFPMM fpmm = IFPMM(fpmms[i]);
             _swapBothWays(fpmm, bytes4(0));
         }
@@ -65,7 +67,7 @@ contract WeekendSituationTest is V3IntegrationBase {
 
             vm.prank(oracles[0]);
             try so.report(rateFeedID, rate, address(0), address(0)) {}
-            catch {
+                catch {
                 // FX feeds revert during weekend hours — this is expected
             }
         }
