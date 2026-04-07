@@ -545,6 +545,10 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
             return;
         }
 
+        address oracleAdapter = isCollateralAsset(debtAddress) || isCollateralAsset(collateralAddress)
+            ? lookupProxy("OracleAdapterCollateral")
+            : lookupProxy("OracleAdapter");
+
         // Sort by address to determine token0/token1
         bool debtIsToken0 = debtAddress < collateralAddress;
         address token0Address = debtIsToken0 ? debtAddress : collateralAddress;
@@ -552,7 +556,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
 
         FPMMConfig memory c;
         c.fpmmImplementation = lookup("FPMM:v3.0.0");
-        c.oracleAdapter = lookupProxy("OracleAdapter");
+        c.oracleAdapter = oracleAdapter;
         c.proxyAdmin = lookup("ProxyAdmin");
         c.token0 = token0Address;
         c.token1 = token1Address;

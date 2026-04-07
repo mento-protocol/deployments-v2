@@ -2312,11 +2312,25 @@
       "gitCommit": "496a8f8d5538add5e04fd783aedbb7555806f795"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": "verification failed: Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. \n\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\n\u001b[2m2026-03-27T13:40:16.645455Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\n\u001b[2m2026-03-27T13:40:16.763252Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\nStart verifying contract `0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44` deployed on celo\nCompiler version: 0.8.24+commit.e11b9ed9\nConstructor args: 00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458\nError: No verifier URL specified for verifier blockscout"
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=42220/address/0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-03-14T16:49:26.067673+01:00",
-    "updatedAt": "2026-03-14T16:49:26.078072+01:00"
+    "updatedAt": "2026-03-27T14:40:18.814166+01:00"
   },
   "mainnet/42220/MetadataNFT:v3.0.0-GBPm": {
     "id": "mainnet/42220/MetadataNFT:v3.0.0-GBPm",
@@ -2445,6 +2459,52 @@
     "tags": null,
     "createdAt": "2026-03-10T17:55:13.379733Z",
     "updatedAt": "2026-03-10T17:55:13.404563Z"
+  },
+  "mainnet/42220/OpenLiquidityStrategy:v3.0.1": {
+    "id": "mainnet/42220/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687002087497ca67db0dc294e23",
+      "initCodeHash": "0xc7e6e83c3ad04e4dc91b64c1ac8a8a9290927b1e37a13246fb783d0e688c31f4",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x5ee8c9bb052686c961149aaa98f6d8eb6563b657baa5c8bdb363f27e09cfcace",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "682c1c87f4266c583853689bb1c9708ef9f8db87"
+    },
+    "verification": {
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": "verification failed: Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. \n\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\n\u001b[2m2026-03-26T17:31:13.322278Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\n\u001b[2m2026-03-26T17:31:13.447533Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\nStart verifying contract `0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7` deployed on celo\nCompiler version: 0.8.24+commit.e11b9ed9\nConstructor args: 0000000000000000000000000000000000000000000000000000000000000001\nError: No verifier URL specified for verifier blockscout"
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=42220/address/0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T18:25:02.899558+01:00",
+    "updatedAt": "2026-03-26T18:31:15.220873+01:00"
   },
   "mainnet/42220/OracleAdapter:v3.0.0": {
     "id": "mainnet/42220/OracleAdapter:v3.0.0",
@@ -2973,6 +3033,56 @@
     "tags": null,
     "createdAt": "2026-03-03T19:14:38.505446337Z",
     "updatedAt": "2026-03-03T19:14:38.508066752Z"
+  },
+  "mainnet/42220/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
+    "id": "mainnet/42220/TransparentUpgradeableProxy:OpenLiquidityStrategy",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OpenLiquidityStrategy",
+    "address": "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700e8aa7071e4787b8e9a4d15",
+      "initCodeHash": "0x23d3a315ddf49e9744aa109215ededce2f50b996594edd8b137b5dbb99fa21a5",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000010e9bd0b70716dd9e0d41ca274a5846ff513e2b7000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de800000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OpenLiquidityStrategy"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.34+commit.80d5c536",
+      "bytecodeHash": "0x32e3d6d177e8cae88a08e8d9d35c572b723cd9236e2a31aca70a882f9ca0bebc",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "682c1c87f4266c583853689bb1c9708ef9f8db87"
+    },
+    "verification": {
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": "verification failed: Warning: This is a nightly build of Foundry. It is recommended to use the latest stable version. To mute this warning set `FOUNDRY_DISABLE_NIGHTLY_WARNING` in your environment. \n\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\nWarning: Found unknown `version` config key in section `additional_compiler_profiles` defined in foundry.toml.\n\u001b[2m2026-03-26T17:31:28.155841Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\n\u001b[2m2026-03-26T17:31:28.235861Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mfoundry_compilers_artifacts_solc::sources\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0m\"/Users/philipraetsch/mento-deployments-v2/lib/mento-core/test/integration/V3IntegrationBase.t.sol\": No such file or directory (os error 2)\nStart verifying contract `0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f` deployed on celo\nCompiler version: 0.8.34+commit.80d5c536\nConstructor args: 00000000000000000000000010e9bd0b70716dd9e0d41ca274a5846ff513e2b7000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de800000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000\nError: No verifier URL specified for verifier blockscout"
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=42220/address/0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T18:25:02.899558+01:00",
+    "updatedAt": "2026-03-26T18:31:29.959773+01:00"
   },
   "mainnet/42220/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "mainnet/42220/TransparentUpgradeableProxy:OracleAdapter",
@@ -20015,6 +20125,37 @@
     "createdAt": "2026-03-10T16:32:27.414033724Z",
     "updatedAt": "2026-03-12T17:58:56.180547715Z"
   },
+  "testnet-v2-rc5/10143/ChainlinkRelayerV1:EUR/USD": {
+    "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:EUR/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "EUR/USD",
+    "address": "0x8220032E2d3541a9D3f88B2C7247301027f2Bc27",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x4e022472546821bf9b39aa2b01196d293876119e7d271e16bd0efd2fb8801c64",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074555522f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000904bc5586697ef66b8b3c3189a8f059a4bd4f0710000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xad0c23f9f82a6fe9ff8a9581157453cb510fe1b731bea124eada4139c7be8b01",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "7041277829289c825dbff44a9b2a9e771ce0f1d9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-25T13:06:21.814316+01:00",
+    "updatedAt": "2026-03-25T13:06:21.824261+01:00"
+  },
   "testnet-v2-rc5/10143/ChainlinkRelayerV1:GBP/USD": {
     "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:GBP/USD",
     "namespace": "testnet-v2-rc5",
@@ -20110,6 +20251,37 @@
     "tags": null,
     "createdAt": "2026-03-10T16:32:27.414033724Z",
     "updatedAt": "2026-03-12T17:59:30.451332714Z"
+  },
+  "testnet-v2-rc5/10143/ChainlinkRelayerV1:USDT/USD": {
+    "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:USDT/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "USDT/USD",
+    "address": "0x10D98F3777Ce2a80fA2175C5641fBB2c15c00A98",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xd1b5d1fa51e4fc705a13c803423104f4ae63c57be21d0a7faf280f6ae79edce2",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ac414205651f4a62b614b6be9e5318a182c33eb00000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344542f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000601566fd7d319d14daee362e15c2e8c3e5d3ef920000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xad0c23f9f82a6fe9ff8a9581157453cb510fe1b731bea124eada4139c7be8b01",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "7041277829289c825dbff44a9b2a9e771ce0f1d9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-25T13:06:21.814316+01:00",
+    "updatedAt": "2026-03-25T13:06:21.824261+01:00"
   },
   "testnet-v2-rc5/10143/FPMM:v3.0.0": {
     "id": "testnet-v2-rc5/10143/FPMM:v3.0.0",
@@ -20465,6 +20637,38 @@
     "createdAt": "2026-03-10T16:31:48.691710324Z",
     "updatedAt": "2026-03-12T17:53:21.349395507Z"
   },
+  "testnet-v2-rc5/10143/MockChainlinkAggregator:EUR/USD": {
+    "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:EUR/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "EUR/USD",
+    "address": "0x904Bc5586697EF66b8B3c3189A8f059a4BD4f071",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700fbd5bf1d71afdf92033e56",
+      "initCodeHash": "0x94334a75e6acefa6c8a6986bb5174528b784920fc0c9a12edf59ad6e74620aad",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000120000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000074555522f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockChainlinkAggregator:EUR/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x022e49d289a2dbafaa90f66e1cf35405141cceeabe819831475bded72119d094",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregators.s.sol",
+      "gitCommit": "059fb4a7ea519d9bf730cf4927199c014870d38e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:18.0508+01:00",
+    "updatedAt": "2026-03-20T13:16:18.06196+01:00"
+  },
   "testnet-v2-rc5/10143/MockChainlinkAggregator:GBP/USD": {
     "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:GBP/USD",
     "namespace": "testnet-v2-rc5",
@@ -20559,6 +20763,38 @@
     "createdAt": "2026-03-10T16:31:48.691710324Z",
     "updatedAt": "2026-03-12T17:53:52.464393008Z"
   },
+  "testnet-v2-rc5/10143/MockChainlinkAggregator:USDT/USD": {
+    "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:USDT/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "USDT/USD",
+    "address": "0x601566Fd7d319d14DAee362e15c2E8c3e5d3eF92",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7002adc6a835846a066e0fe24",
+      "initCodeHash": "0x18a0de831071baad300e45069951dd71138778b13f9b136bbc15184ac6a38549",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000080000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa70000000000000000000000000000000000000000000000000000000000000008555344542f555344000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockChainlinkAggregator:USDT/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x022e49d289a2dbafaa90f66e1cf35405141cceeabe819831475bded72119d094",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregators.s.sol",
+      "gitCommit": "059fb4a7ea519d9bf730cf4927199c014870d38e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:18.0508+01:00",
+    "updatedAt": "2026-03-20T13:16:18.06196+01:00"
+  },
   "testnet-v2-rc5/10143/MockERC20:AUSD": {
     "id": "testnet-v2-rc5/10143/MockERC20:AUSD",
     "namespace": "testnet-v2-rc5",
@@ -20605,6 +20841,38 @@
     "tags": null,
     "createdAt": "2026-03-10T16:29:31.708077538Z",
     "updatedAt": "2026-03-12T17:51:22.316409913Z"
+  },
+  "testnet-v2-rc5/10143/MockERC20:USDT0": {
+    "id": "testnet-v2-rc5/10143/MockERC20:USDT0",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockERC20",
+    "label": "USDT0",
+    "address": "0xC304EE1876c32d1A194558B1000bE4842F960dF9",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700062d53e4a03bb3de4917e5",
+      "initCodeHash": "0xb310ceb1e1b9191556326ffafc52eb2e1cbcbb70948d2c179b6ec7b9c5660b7a",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000060000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000104d656e746f204d6f636b2055534454300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000055553445430000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockERC20:USDT0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockERC20.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x1ff730b11fc4562c7012fdce9a359dafbc5595e1aaef71a1719c2d4194bce5d9",
+      "scriptPath": "script/deploy/dex/DeployMockCollaterals.s.sol",
+      "gitCommit": "7041277829289c825dbff44a9b2a9e771ce0f1d9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-25T13:07:23.367771+01:00",
+    "updatedAt": "2026-03-25T13:07:23.378266+01:00"
   },
   "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.0": {
     "id": "testnet-v2-rc5/10143/OpenLiquidityStrategy:v3.0.0",
@@ -21120,6 +21388,42 @@
     "tags": null,
     "createdAt": "2026-03-10T16:32:10.871658755Z",
     "updatedAt": "2026-03-12T17:58:38.998680754Z"
+  },
+  "testnet-v2-rc5/10143/TransparentUpgradeableProxy:EURm": {
+    "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:EURm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "EURm",
+    "address": "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700f6aab8f336586b089b8e98",
+      "initCodeHash": "0xb068cbe9161791c0127269bc963825ba2f089d5ded64ee5bbf619f2c030d5810",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000b68f2d09241fdb5590bb7f865ae5fa6cc40bf24c0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000001e407b0020a00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000001200000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa70000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001c0000000000000000000000000000000000000000000000000000000000000000a4d656e746f204575726f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044555526d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:EURm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0xbe991fa84971a222908275bebc5f27b82996516cee3e82e692e930ec14923742",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "059fb4a7ea519d9bf730cf4927199c014870d38e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-20T13:16:28.036046+01:00",
+    "updatedAt": "2026-03-20T13:16:28.045118+01:00"
   },
   "testnet-v2-rc5/10143/TransparentUpgradeableProxy:FPMMFactory": {
     "id": "testnet-v2-rc5/10143/TransparentUpgradeableProxy:FPMMFactory",
@@ -25396,6 +25700,38 @@
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
   },
+  "testnet-v2-rc5/11142220/OpenLiquidityStrategy:v3.0.1": {
+    "id": "testnet-v2-rc5/11142220/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa70073f992c48fbad8f88ecf01",
+      "initCodeHash": "0x865362e02aba69e7e85f995ded47383d81685da23ed55dcc9fb7640430979f44",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x9e86e03b5b5e37b4fee6f4d09bcae2cd4865d7d68f3443565aff8b0701e045b0",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "4e990426f8843fd245669975d2c9e1c7abedf5ee"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T16:09:58.617201+01:00",
+    "updatedAt": "2026-03-26T16:09:58.633467+01:00"
+  },
   "testnet-v2-rc5/11142220/OracleAdapter:v3.0.0": {
     "id": "testnet-v2-rc5/11142220/OracleAdapter:v3.0.0",
     "namespace": "testnet-v2-rc5",
@@ -27286,6 +27622,42 @@
     "tags": null,
     "createdAt": "2025-09-15T08:17:18.074961Z",
     "updatedAt": "2025-10-01T15:05:34.246236Z"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OpenLiquidityStrategy",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OpenLiquidityStrategy",
+    "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7005f102e27afaf66bf868dde",
+      "initCodeHash": "0x01b0bf9414927f44bfd2ac5598247251b33d043fc1d27a85ac0d978ec50613e5",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000e1221f38de0a17ef170602de724db0e73e3856fb0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OpenLiquidityStrategy"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.34+commit.80d5c536",
+      "bytecodeHash": "0x6d9bdd1281bd6fd03df915445c01e69c74f763620956ce33cd70ff7d6aaa4b31",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "4e990426f8843fd245669975d2c9e1c7abedf5ee"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-03-26T16:09:58.617201+01:00",
+    "updatedAt": "2026-03-26T16:09:58.633467+01:00"
   },
   "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:OracleAdapter",

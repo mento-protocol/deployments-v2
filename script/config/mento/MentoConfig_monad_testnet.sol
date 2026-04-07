@@ -16,9 +16,11 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
     function _initCollateral() internal override {
         _addCollateral("USDC", lookup("USDC"));
         _registerMockCollateral("AUSD", 6);
+        _registerMockCollateral("USDT0", 6);
 
         _addReserveV2Collateral("USDC");
         _addReserveV2Collateral("AUSD");
+        _addReserveV2Collateral("USDT0");
     }
 
     // ===================================================================
@@ -37,14 +39,14 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
             celoUsd: address(0),
             ethUsd: address(0),
             usdcUsd: _mockAggregator("USDC/USD", "USDC/USD", _coreAggs.usdcUsd),
-            usdtUsd: address(0),
+            usdtUsd: _mockAggregator("USDT/USD", "USDT/USD", _coreAggs.usdtUsd),
             eurcUsd: address(0),
             ausdUsd: _mockAggregator("AUSD/USD", "AUSD/USD", _coreAggs.ausdUsd)
         });
 
         // Wrap FX aggregators in mocks
         _fxAggs = FxAggregators({
-            eur: address(0),
+            eur: _mockAggregator("EUR/USD", "EUR/USD", _fxAggs.eur),
             brl: address(0),
             xof: address(0),
             kes: address(0),

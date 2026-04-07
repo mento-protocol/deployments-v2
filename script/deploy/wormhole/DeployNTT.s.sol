@@ -13,7 +13,7 @@ import {INttDeployHelper} from "script/actions/wormhole/interfaces/INttDeployHel
 /// @notice Treb-native deployment of NttManager + WormholeTransceiver ERC1967 proxies
 ///         for a given token on the current chain using CREATE3.
 ///
-/// @dev Reads the token env var ("USDm" or "GBPm") to select the token config,
+/// @dev Reads the token env var ("USDm", "GBPm", or "EURm") to select the token config,
 ///      then deploys an NttDeployHelper via CREATE3 that bootstraps all NTT contracts
 ///      in its constructor. After deployment, proxy addresses can be read from
 ///      the helper contract.

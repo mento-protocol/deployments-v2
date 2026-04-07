@@ -30,7 +30,7 @@ contract MentoConfig_monad is MentoConfig {
             celoUsd: address(0),
             ethUsd: address(0),
             usdcUsd: 0xf5F15f188AbCB0d165D1Edb7f37F7d6fA2fCebec,
-            usdtUsd: address(0),
+            usdtUsd: 0x1a1Be4c184923a6BFF8c27cfDf6ac8bDE4DE00FC,
             eurcUsd: address(0),
             ausdUsd: 0xE20751C7B5867bCBef815ffc1b284c3f412a9e13
         });
@@ -59,6 +59,7 @@ contract MentoConfig_monad is MentoConfig {
     function _initStables() internal virtual {
         _addStableToken("USD", "USDm", "Mento Dollar");
         _addStableToken("GBP", "GBPm", "Mento British Pound");
+        _addStableToken("EUR", "EURm", "Mento Euro");
     }
 
     /// ===================================================================
@@ -67,9 +68,10 @@ contract MentoConfig_monad is MentoConfig {
     function _initCollateral() internal virtual {
         _addCollateral("USDC", lookup("USDC"));
         _addCollateral("AUSD", lookup("AUSD"));
-
+        _addCollateral("USDT0", lookup("USDT0"));
         _addReserveV2Collateral("USDC");
         _addReserveV2Collateral("AUSD");
+        _addReserveV2Collateral("USDT0");
     }
 
     /// ===================================================================
@@ -86,7 +88,8 @@ contract MentoConfig_monad is MentoConfig {
             rebalanceThresholdBelow: 3333
         });
 
-        LiquidityStrategyPoolConfig memory openLsConfig = LiquidityStrategyPoolConfig({
+        // ── USDm / GBPm ─────────────────────────────────────────────────
+        LiquidityStrategyPoolConfig memory openLsConfigGBP = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
             debtToken: _lookupTokenAddress("GBPm"),
             cooldown: 300,
@@ -97,7 +100,6 @@ contract MentoConfig_monad is MentoConfig {
             protocolIncentiveContraction: 0 // 0%
         });
 
-        // ── USDm / GBPm ─────────────────────────────────────────────────
         _addFPMM(
             "GBPm",
             "USDm",
@@ -113,7 +115,7 @@ contract MentoConfig_monad is MentoConfig {
             }),
             TokenLimits({limit0: 77_000, limit1: 385_000}),
             TokenLimits({limit0: 100_000, limit1: 500_000}),
-            openLsConfig
+            openLsConfigGBP
         );
 
         // Liquidity strategy params for USD collateral pools
@@ -165,6 +167,54 @@ contract MentoConfig_monad is MentoConfig {
             TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
             usdCollateralPoolsLsConfig
         );
+        // ── USDm / USDT0 ────────────────────────────────────────────────
+        _addFPMM(
+            "USDm",
+            "USDT0",
+            getRateFeedIdFromString("USDT/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 3,
+                protocolFee: 2,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            usdCollateralPoolsLsConfig
+        );
+
+        // ── USDm / EURm ────────────────────────────────────────────────
+        LiquidityStrategyPoolConfig memory openLsConfigEUR = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0 // 0%
+        });
+
+        _addFPMM(
+            "EURm",
+            "USDm",
+            getRateFeedIdFromString("EUR/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 10,
+                protocolFee: 5,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 215_000, limit1: 860_000}),
+            TokenLimits({limit0: 250_000, limit1: 1_000_000}),
+            openLsConfigEUR
+        );
     }
 
     /// ===================================================================
@@ -206,7 +256,22 @@ contract MentoConfig_monad is MentoConfig {
             rateFeed: "AUSD/USD", description: "AUSD/USD", aggregator0: _coreAggs.ausdUsd, invert0: false
         });
 
+        _addRateFeed("USDT/USD");
+        _setRateFeedExpirySeconds("USDT/USD", 1 hours + 2 minutes);
+        _addToBreaker({
+            breakerId: valueBreakerId,
+            rateFeed: "USDT/USD",
+            cooldown: 1,
+            threshold: 0.0015 * 1e24,
+            smoothingFactor: 0,
+            referenceValue: 1 * 1e24
+        });
+        _addChainlinkRelayer({
+            rateFeed: "USDT/USD", description: "USDT/USD", aggregator0: _coreAggs.usdtUsd, invert0: false
+        });
+
         _configureDefaultFxRateFeed("GBP/USD", _fxAggs.gbp);
+        _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have

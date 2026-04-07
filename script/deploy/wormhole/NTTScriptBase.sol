@@ -16,6 +16,8 @@ abstract contract NTTScriptBase is TrebScript, ProxyHelper {
             return NTTConfig.getUSDmConfig();
         } else if (keccak256(bytes(_tokenName)) == keccak256("GBPm")) {
             return NTTConfig.getGBPmConfig();
+        } else if (keccak256(bytes(_tokenName)) == keccak256("EURm")) {
+            return NTTConfig.getEURmConfig();
         } else {
             revert(string.concat("Unknown token: ", _tokenName));
         }
