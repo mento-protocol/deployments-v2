@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {console} from "forge-std/console.sol";
 import {V3IntegrationBase, IPoolConfigReader} from "./V3IntegrationBase.t.sol";
 import {ICDPLiquidityStrategy} from "mento-core/interfaces/ICDPLiquidityStrategy.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
@@ -192,10 +191,6 @@ contract RebalanceCDP is V3IntegrationBase {
             _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
-            // Skip pools that are currently imbalanced — rebalancing them first would
-            // set transient storage, blocking a second call in the same Foundry tx.
-            if (priceDiff > uint256(threshold)) continue;
-
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
             strategy.rebalance(pool);
         }

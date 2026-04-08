@@ -208,9 +208,6 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
             _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
-            // Skip pools that are currently imbalanced — rebalancing them first would
-            // set transient storage, blocking a second call in the same Foundry tx.
-            if (priceDiff > uint256(threshold)) continue;
 
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
             vm.prank(REBALANCER);

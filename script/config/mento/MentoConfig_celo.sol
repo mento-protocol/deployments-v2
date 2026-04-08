@@ -553,7 +553,7 @@ contract MentoConfig_celo is MentoConfig {
         });
     }
 
-    function _initSwap() internal {
+    function _initSwap() internal virtual {
         _addExchange({
             asset0: "USDm",
             asset1: "USDC",
@@ -562,7 +562,7 @@ contract MentoConfig_celo is MentoConfig {
             rateFeed: "USDCUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
+            tradingLimits: ExchangeTradingLimitsConfig({
                 asset0: ITradingLimits.Config({
                     timestep0: 5 minutes,
                     limit0: 2_500_000,
@@ -584,7 +584,7 @@ contract MentoConfig_celo is MentoConfig {
             rateFeed: "USDCUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
+            tradingLimits: ExchangeTradingLimitsConfig({
                 asset0: ITradingLimits.Config({
                     timestep0: 5 minutes,
                     limit0: 2_500_000,
@@ -606,7 +606,7 @@ contract MentoConfig_celo is MentoConfig {
             rateFeed: "USDTUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
+            tradingLimits: ExchangeTradingLimitsConfig({
                 asset0: ITradingLimits.Config({
                     timestep0: 5 minutes,
                     limit0: 2_500_000,
@@ -628,7 +628,7 @@ contract MentoConfig_celo is MentoConfig {
             rateFeed: "CELOUSD",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 3_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
+            tradingLimits: ExchangeTradingLimitsConfig({
                 asset0: ITradingLimits.Config({
                     timestep0: 5 minutes,
                     limit0: 100_000,
@@ -650,7 +650,7 @@ contract MentoConfig_celo is MentoConfig {
             rateFeed: "EUROCEUR",
             resetFrequency: 6 minutes,
             stablePoolResetSize: 12_000_000 * 1e18,
-            tradingLimits: ExchangeTrandingLimitsConfig({
+            tradingLimits: ExchangeTradingLimitsConfig({
                 asset0: ITradingLimits.Config({
                     timestep0: 5 minutes,
                     limit0: 100_000,
@@ -734,7 +734,7 @@ contract MentoConfig_celo is MentoConfig {
     function _addFxExchange(
         string memory currency,
         uint256 spread,
-        ExchangeTrandingLimitsConfig memory tradingLimits,
+        ExchangeTradingLimitsConfig memory tradingLimits,
         bool createVirtual
     ) internal {
         _addExchange({
@@ -750,20 +750,20 @@ contract MentoConfig_celo is MentoConfig {
         });
     }
 
-    function _tier1FxTradingLimits(int48 asset1USDRate) internal pure returns (ExchangeTrandingLimitsConfig memory) {
+    function _tier1FxTradingLimits(int48 asset1USDRate) internal pure returns (ExchangeTradingLimitsConfig memory) {
         return _fxTradingLimits(100_000, 500_000, 2_500_000, asset1USDRate);
     }
 
-    function _tier2FxTradingLimits(int48 asset1USDRate) internal pure returns (ExchangeTrandingLimitsConfig memory) {
+    function _tier2FxTradingLimits(int48 asset1USDRate) internal pure returns (ExchangeTradingLimitsConfig memory) {
         return _fxTradingLimits(50_000, 250_000, 1_250_000, asset1USDRate);
     }
 
     function _fxTradingLimits(int48 limit0, int48 limit1, int48 limitGlobal, int48 asset1USDRate)
         internal
         pure
-        returns (ExchangeTrandingLimitsConfig memory)
+        returns (ExchangeTradingLimitsConfig memory)
     {
-        return ExchangeTrandingLimitsConfig({
+        return ExchangeTradingLimitsConfig({
             asset0: ITradingLimits.Config({
                 timestep0: 5 minutes,
                 limit0: limit0,

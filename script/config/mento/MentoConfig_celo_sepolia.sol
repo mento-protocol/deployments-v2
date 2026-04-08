@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import {MentoConfig, ITradingLimits, BreakerType, CoreAggregators, FxAggregators} from "./MentoConfig.sol";
 import {MentoConfig_celo} from "./MentoConfig_celo.sol";
 import {CoreAggregators, FxAggregators} from "./MentoConfig.sol";
 import {bytes32s, uints} from "lib/mento-std/src/Array.sol";
@@ -86,6 +87,192 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
             tobinTax: 0,
             tobinTaxReserveRatio: 0,
             collateralAssetDailySpendingRatios: new uint256[](0)
+        });
+    }
+
+    function _initSwap() internal override {
+        _addExchange({
+            asset0: "USDm",
+            asset1: "USDC",
+            pricingModule: "ConstantSumPricingModule:v2.6.5",
+            spread: 0.0005 * 1e24,
+            rateFeed: "USDCUSD",
+            resetFrequency: 6 minutes,
+            stablePoolResetSize: 12_000_000 * 1e18,
+            tradingLimits: ExchangeTradingLimitsConfig({
+                asset0: ITradingLimits.Config({
+                    timestep0: 5 minutes,
+                    limit0: 2_500_000,
+                    timestep1: 1 days,
+                    limit1: 5_000_000,
+                    limitGlobal: 0,
+                    flags: 1 | 2
+                }),
+                asset1: emptyTradingLimits()
+            }),
+            createVirtual: false
+        });
+
+        _addExchange({
+            asset0: "USDm",
+            asset1: "axlUSDC",
+            pricingModule: "ConstantSumPricingModule:v2.6.5",
+            spread: 0.0005 * 1e24,
+            rateFeed: "USDCUSD",
+            resetFrequency: 6 minutes,
+            stablePoolResetSize: 12_000_000 * 1e18,
+            tradingLimits: ExchangeTradingLimitsConfig({
+                asset0: ITradingLimits.Config({
+                    timestep0: 5 minutes,
+                    limit0: 2_500_000,
+                    timestep1: 1 days,
+                    limit1: 5_000_000,
+                    limitGlobal: 0,
+                    flags: 1 | 2
+                }),
+                asset1: emptyTradingLimits()
+            }),
+            createVirtual: false
+        });
+
+        _addExchange({
+            asset0: "USDm",
+            asset1: "USDT",
+            pricingModule: "ConstantSumPricingModule:v2.6.5",
+            spread: 0.0005 * 1e24,
+            rateFeed: "USDTUSD",
+            resetFrequency: 6 minutes,
+            stablePoolResetSize: 12_000_000 * 1e18,
+            tradingLimits: ExchangeTradingLimitsConfig({
+                asset0: ITradingLimits.Config({
+                    timestep0: 5 minutes,
+                    limit0: 2_500_000,
+                    timestep1: 1 days,
+                    limit1: 5_000_000,
+                    limitGlobal: 0,
+                    flags: 1 | 2
+                }),
+                asset1: emptyTradingLimits()
+            }),
+            createVirtual: false
+        });
+
+        _addExchange({
+            asset0: "USDm",
+            asset1: "CELO",
+            pricingModule: "ConstantProductPricingModule:v2.6.5",
+            spread: 0.0025 * 1e24,
+            rateFeed: "CELOUSD",
+            resetFrequency: 6 minutes,
+            stablePoolResetSize: 3_000_000 * 1e18,
+            tradingLimits: ExchangeTradingLimitsConfig({
+                asset0: ITradingLimits.Config({
+                    timestep0: 5 minutes,
+                    limit0: 100_000,
+                    timestep1: 1 days,
+                    limit1: 500_000,
+                    limitGlobal: 0,
+                    flags: 1 | 2
+                }),
+                asset1: emptyTradingLimits()
+            }),
+            createVirtual: false
+        });
+
+        _addExchange({
+            asset0: "EURm",
+            asset1: "axlEUROC",
+            pricingModule: "ConstantSumPricingModule:v2.6.5",
+            spread: 0.005 * 1e24,
+            rateFeed: "EUROCEUR",
+            resetFrequency: 6 minutes,
+            stablePoolResetSize: 12_000_000 * 1e18,
+            tradingLimits: ExchangeTradingLimitsConfig({
+                asset0: ITradingLimits.Config({
+                    timestep0: 5 minutes,
+                    limit0: 100_000,
+                    timestep1: 1 days,
+                    limit1: 500_000,
+                    limitGlobal: 0,
+                    flags: 1 | 2
+                }),
+                asset1: ITradingLimits.Config({
+                    timestep0: 5 minutes,
+                    limit0: 100_000,
+                    timestep1: 1 days,
+                    limit1: 500_000,
+                    limitGlobal: 0,
+                    flags: 1 | 2
+                })
+            }),
+            createVirtual: false
+        });
+
+        _addFxExchange({
+            currency: "EUR",
+            spread: 0.005 * 1e24,
+            tradingLimits: _tier1FxTradingLimits(0.86 * 1e3),
+            createVirtual: false
+        });
+        _addFxExchange({
+            currency: "AUD",
+            spread: 0.0015 * 1e24,
+            tradingLimits: _tier1FxTradingLimits(1.54 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "CAD",
+            spread: 0.0015 * 1e24,
+            tradingLimits: _tier1FxTradingLimits(1.38 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "ZAR",
+            spread: 0.003 * 1e24,
+            tradingLimits: _fxTradingLimits(100_000, 500_000, 2_500_000, 17.72 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "CHF", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(0.8 * 1e3), createVirtual: true
+        });
+        _addFxExchange({
+            currency: "JPY",
+            spread: 0.003 * 1e24,
+            tradingLimits: _tier1FxTradingLimits(149.0 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "COP",
+            spread: 0.003 * 1e24,
+            tradingLimits: _tier2FxTradingLimits(4015.0 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "BRL", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(5.45 * 1e3), createVirtual: true
+        });
+        _addFxExchange({
+            currency: "PHP", spread: 0.003 * 1e24, tradingLimits: _tier2FxTradingLimits(57.4 * 1e3), createVirtual: true
+        });
+        _addFxExchange({
+            currency: "GHS", spread: 0.01 * 1e24, tradingLimits: _tier2FxTradingLimits(11.92 * 1e3), createVirtual: true
+        });
+        _addFxExchange({
+            currency: "NGN",
+            spread: 0.01 * 1e24,
+            tradingLimits: _tier2FxTradingLimits(1531.98 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "KES",
+            spread: 0.01 * 1e24,
+            tradingLimits: _tier1FxTradingLimits(129.21 * 1e3),
+            createVirtual: true
+        });
+        _addFxExchange({
+            currency: "XOF",
+            spread: 0.02 * 1e24,
+            tradingLimits: _fxTradingLimits(50_000, 250_000, 1_250_000, 560.46 * 1e3),
+            createVirtual: true
         });
     }
 

@@ -417,7 +417,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
             assertEq(
                 IFXPriceFeed(priceFeedAddr).watchdogAddress(),
-                _getOwner(),
+                lookupOrFail("FxPriceFeedManager"),
                 string.concat("FXPriceFeed.watchdogAddress() is zero for CDP pool at index ", vm.toString(i))
             );
         }

@@ -38,11 +38,11 @@ interface IMentoConfig {
 
     struct ExchangeConfig {
         IBiPoolManager.PoolExchange pool;
-        ExchangeTrandingLimitsConfig tradingLimits;
+        ExchangeTradingLimitsConfig tradingLimits;
         bool createVirtual;
     }
 
-    struct ExchangeTrandingLimitsConfig {
+    struct ExchangeTradingLimitsConfig {
         ITradingLimits.Config asset0;
         ITradingLimits.Config asset1;
     }
