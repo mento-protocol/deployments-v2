@@ -3,7 +3,8 @@
     "mainnet": {
       "AUSD": {
         "address": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "AddressSortedLinkedListWithMedian": {
         "address": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
@@ -173,7 +174,8 @@
       },
       "USDT0": {
         "address": "0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "USDm": {
         "address": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115",

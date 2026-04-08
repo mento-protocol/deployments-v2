@@ -582,10 +582,16 @@ async function main() {
     JSON.stringify(existingContracts),
   );
 
-  // Backfill decimals on existing token entries from prior runs.
+  // Reclassify and backfill decimals on existing entries from prior runs.
+  // This corrects entries that were misclassified in older generator versions
+  // (e.g. USDT0 was "contract" but is now a known token).
   for (const namespaces of Object.values(newContracts)) {
     for (const contracts of Object.values(namespaces)) {
       for (const [name, entry] of Object.entries(contracts)) {
+        const correctType = classifyType(name);
+        if (entry.type !== correctType) {
+          entry.type = correctType;
+        }
         if (entry.type === "token" && entry.decimals === undefined) {
           attachDecimals(entry, name);
         }
