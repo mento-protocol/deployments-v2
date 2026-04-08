@@ -39,10 +39,7 @@ interface ContractEntry {
   decimals?: number;
 }
 
-// chainId → namespace → contractName → ContractEntry
 type ContractsJson = Record<string, Record<string, Record<string, ContractEntry>>>;
-
-// chainId → label → address
 type AddressBook = Record<string, Record<string, string>>;
 
 interface ResolvedContract {
@@ -201,6 +198,8 @@ function deriveAddressBookExportName(key: string): string {
 }
 
 // ─── Token registry ──────────────────────────────────────────────────────────
+// Keys are case-sensitive and must match the export name exactly
+// (e.g. AUSD on Monad vs aUSD on Celo are distinct tokens).
 
 const KNOWN_TOKENS: Record<string, number> = {
   USDC: 6,
@@ -217,9 +216,16 @@ const KNOWN_TOKENS: Record<string, number> = {
 
 function getTokenDecimals(name: string): number | null {
   if (name in KNOWN_TOKENS) return KNOWN_TOKENS[name];
+  // Mento stablecoins: all [A-Z]{2,5}m tokens are 18 decimals by convention.
+  // KNOWN_TOKENS is checked first, so explicit overrides always win.
   if (/^[A-Z]{2,5}m$/.test(name)) return 18;
+  // MockERC20* tokens: strip prefix iteratively and look up the underlying.
   if (name.startsWith("MockERC20")) {
-    return getTokenDecimals(name.slice("MockERC20".length));
+    let stripped = name;
+    while (stripped.startsWith("MockERC20")) {
+      stripped = stripped.slice("MockERC20".length);
+    }
+    return stripped ? getTokenDecimals(stripped) : null;
   }
   if (name.startsWith("StableToken")) return 18;
   return null;
@@ -260,7 +266,6 @@ function generateTsModule(
   addresses: Record<string, string>,
   decimals?: number,
 ): string {
-  // Indent every line of the ABI 2 spaces so it nests cleanly under `abi:`.
   const abiJson = JSON.stringify(abi, null, 2)
     .split("\n")
     .map((line, i) => (i === 0 ? line : `  ${line}`))
@@ -268,8 +273,6 @@ function generateTsModule(
   const addressLines = Object.entries(addresses)
     .map(([chainId, addr]) => `    ${chainId}: '${addr}',`)
     .join("\n");
-  // address is typed as Partial<Record<number, `0x${string}`>> so consumers
-  // can index it with the numeric chain ID from viem (client.chain.id).
   let output =
     `export const ${name} = {\n` +
     `  abi: ${abiJson} as const,\n` +
@@ -498,9 +501,9 @@ async function main() {
   });
 
   const resolved: ResolvedContract[] = [];
-  const superseded: string[] = []; // lost name collision to a proxy — expected, no warning
-  const missingAbi: string[] = []; // could not find ABI in out/ — worth reporting
-  const exportNamesSeen = new Map<string, string>(); // exportName → trebKey
+  const superseded: string[] = [];
+  const missingAbi: string[] = [];
+  const exportNamesSeen = new Map<string, string>();
 
   for (const entry of sortedEntries) {
     const trebKey =
@@ -677,8 +680,16 @@ async function main() {
       for (const [name, entry] of Object.entries(contracts)) {
         if (!addressesByName.has(name)) addressesByName.set(name, {});
         addressesByName.get(name)![chainId] = entry.address;
-        if (entry.decimals !== undefined && !decimalsByName.has(name)) {
-          decimalsByName.set(name, entry.decimals);
+        if (entry.decimals !== undefined) {
+          const existing = decimalsByName.get(name);
+          if (existing !== undefined && existing !== entry.decimals) {
+            console.warn(
+              `⚠  Token "${name}" has conflicting decimals: ${existing} vs ${entry.decimals}`,
+            );
+          }
+          if (existing === undefined) {
+            decimalsByName.set(name, entry.decimals);
+          }
         }
       }
     }
