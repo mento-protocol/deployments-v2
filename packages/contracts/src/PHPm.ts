@@ -745,4 +745,5 @@ export const PHPm = {
     42220: '0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B',
     11142220: '0x0352976d940a2C3FBa0C3623198947Ee1d17869E',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

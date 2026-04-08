@@ -461,4 +461,5 @@ export const MockERC20axlEUROC = {
   address: {
     11142220: '0x9883d788d40F1C7595a780ed881Ea833C7743B4B',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 6,
 };

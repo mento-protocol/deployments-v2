@@ -745,4 +745,5 @@ export const CHFm = {
     42220: '0xb55a79F398E759E43C95b979163f30eC87Ee131D',
     11142220: '0x284E9b7B623eAE866914b7FA0eB720C2Bb3C2980',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

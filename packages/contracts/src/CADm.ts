@@ -745,4 +745,5 @@ export const CADm = {
     42220: '0xff4Ab19391af240c311c54200a492233052B6325',
     11142220: '0xF151c9a13b78C84f93f50B8b3bC689fedc134F60',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

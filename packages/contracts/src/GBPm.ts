@@ -626,4 +626,5 @@ export const GBPm = {
     42220: '0xCCF663b1fF11028f0b19058d0f7B674004a40746',
     11142220: '0x85F5181Abdbf0e1814Fc4358582Ae07b8eBA3aF3',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

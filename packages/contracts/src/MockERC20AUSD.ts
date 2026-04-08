@@ -461,4 +461,5 @@ export const MockERC20AUSD = {
   address: {
     10143: '0x502E67D3fE9302A5e4Ec1CFCDdbD6F34F9B9484B',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 6,
 };

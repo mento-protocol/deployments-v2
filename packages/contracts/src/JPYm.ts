@@ -745,4 +745,5 @@ export const JPYm = {
     42220: '0xc45eCF20f3CD864B32D9794d6f76814aE8892e20',
     11142220: '0x85Bee67D435A39f7467a8a9DE34a5B73D25Df426',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

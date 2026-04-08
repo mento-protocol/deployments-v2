@@ -745,4 +745,5 @@ export const KESm = {
     42220: '0x456a3D042C0DbD3db53D5489e98dFb038553B0d0',
     11142220: '0xC7e4635651E3e3Af82b61d3E23c159438daE3BbF',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

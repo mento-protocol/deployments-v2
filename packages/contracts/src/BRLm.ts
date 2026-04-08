@@ -745,4 +745,5 @@ export const BRLm = {
     42220: '0xe8537a3d056da446677b9e9d6c5db704eaab4787',
     11142220: '0x2294298942fdc79417DE9E0D740A4957E0e7783a',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

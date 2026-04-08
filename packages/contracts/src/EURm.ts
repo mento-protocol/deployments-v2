@@ -901,4 +901,5 @@ export const EURm = {
     42220: '0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73',
     11142220: '0xA99dC247d6b7B2E3ab48a1fEE101b83cD6aCd82a',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

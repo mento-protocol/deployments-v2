@@ -745,4 +745,5 @@ export const COPm = {
     42220: '0x8a567e2ae79ca692bd748ab832081c45de4041ea',
     11142220: '0x5F8d55c3627d2dc0a2B4afa798f877242F382F67',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

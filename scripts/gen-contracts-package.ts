@@ -36,6 +36,7 @@ type ContractType = "token" | "pool" | "contract";
 interface ContractEntry {
   address: string;
   type: ContractType;
+  decimals?: number;
 }
 
 // chainId → namespace → contractName → ContractEntry
@@ -199,22 +200,37 @@ function deriveAddressBookExportName(key: string): string {
   return sanitizeName(key);
 }
 
+// ─── Token registry ──────────────────────────────────────────────────────────
+
+const KNOWN_TOKENS: Record<string, number> = {
+  USDC: 6,
+  USDT: 6,
+  USDT0: 6,
+  axlUSDC: 6,
+  axlEUROC: 6,
+  EURC: 6,
+  AUSD: 6,
+  aUSD: 6,
+  CELO: 18,
+  MentoToken: 18,
+};
+
+function getTokenDecimals(name: string): number | null {
+  if (name in KNOWN_TOKENS) return KNOWN_TOKENS[name];
+  if (/^[A-Z]{2,5}m$/.test(name)) return 18;
+  if (name.startsWith("MockERC20")) {
+    return getTokenDecimals(name.slice("MockERC20".length));
+  }
+  if (name.startsWith("StableToken")) return 18;
+  return null;
+}
+
 function classifyType(name: string): ContractType {
   // Implementation contracts are never tokens, regardless of name prefix.
   if (name.endsWith("Implementation")) return "contract";
 
-  // Stablecoins: 2–5 uppercase letters followed by lowercase 'm' (USDm, GBPm…)
-  if (/^[A-Z]{2,5}m$/.test(name)) return "token";
-
-  // Known external collateral / ERC-20 tokens
-  const knownTokens = new Set([
-    "CELO", "USDC", "USDT", "axlUSDC", "axlEUROC", "EURC", "aUSD", "MentoToken",
-  ]);
-  if (knownTokens.has(name)) return "token";
-
-  // Mock ERC-20s and StableToken implementations (spoke tokens, etc.)
-  if (name.startsWith("MockERC20")) return "token";
-  if (name.startsWith("StableToken")) return "token";
+  // Tokens: known decimals, or MockERC20* (always a token even if decimals unknown)
+  if (getTokenDecimals(name) !== null || name.startsWith("MockERC20")) return "token";
 
   // FPMM pools (but not FPMMFactory or FPMMProxy)
   if (name === "FPMM") return "pool";
@@ -225,10 +241,24 @@ function classifyType(name: string): ContractType {
   return "contract";
 }
 
+function attachDecimals(entry: ContractEntry, name: string): void {
+  if (entry.type !== "token") return;
+  const decimals = getTokenDecimals(name);
+  if (decimals !== null) {
+    entry.decimals = decimals;
+  } else {
+    console.warn(
+      `⚠  Token "${name}" has no known decimals mapping. ` +
+      `Add it to KNOWN_TOKENS in gen-contracts-package.ts.`,
+    );
+  }
+}
+
 function generateTsModule(
   name: string,
   abi: unknown[],
   addresses: Record<string, string>,
+  decimals?: number,
 ): string {
   // Indent every line of the ABI 2 spaces so it nests cleanly under `abi:`.
   const abiJson = JSON.stringify(abi, null, 2)
@@ -240,12 +270,17 @@ function generateTsModule(
     .join("\n");
   // address is typed as Partial<Record<number, `0x${string}`>> so consumers
   // can index it with the numeric chain ID from viem (client.chain.id).
-  return (
+  let output =
     `export const ${name} = {\n` +
     `  abi: ${abiJson} as const,\n` +
-    `  address: {\n${addressLines}\n  } as Partial<Record<number, \`0x\${string}\`>>,\n` +
-    `};\n`
-  );
+    `  address: {\n${addressLines}\n  } as Partial<Record<number, \`0x\${string}\`>>,\n`;
+
+  if (decimals !== undefined) {
+    output += `  decimals: ${decimals},\n`;
+  }
+
+  output += `};\n`;
+  return output;
 }
 
 function diffContracts(
@@ -277,8 +312,18 @@ function diffContracts(
           added.push(key);
         } else if (!newNs[name]) {
           removed.push(key);
-        } else if (oldNs[name].address !== newNs[name].address) {
-          changed.push(`${key}: ${oldNs[name].address} → ${newNs[name].address}`);
+        } else if (
+          oldNs[name].address !== newNs[name].address ||
+          oldNs[name].decimals !== newNs[name].decimals
+        ) {
+          const parts: string[] = [];
+          if (oldNs[name].address !== newNs[name].address) {
+            parts.push(`${oldNs[name].address} → ${newNs[name].address}`);
+          }
+          if (oldNs[name].decimals !== newNs[name].decimals) {
+            parts.push(`decimals: ${oldNs[name].decimals ?? "unset"} → ${newNs[name].decimals ?? "unset"}`);
+          }
+          changed.push(`${key}: ${parts.join(", ")}`);
         }
       }
     }
@@ -527,14 +572,25 @@ async function main() {
     JSON.stringify(existingContracts),
   );
 
+  // Backfill decimals on existing token entries from prior runs.
+  for (const namespaces of Object.values(newContracts)) {
+    for (const contracts of Object.values(namespaces)) {
+      for (const [name, entry] of Object.entries(contracts)) {
+        if (entry.type === "token" && entry.decimals === undefined) {
+          attachDecimals(entry, name);
+        }
+      }
+    }
+  }
+
   for (const contract of resolved) {
     const chainId = String(contract.chainId);
     newContracts[chainId] ??= {};
     newContracts[chainId][contract.namespace] ??= {};
-    newContracts[chainId][contract.namespace][contract.exportName] = {
-      address: contract.address,
-      type: classifyType(contract.exportName),
-    };
+    const type = classifyType(contract.exportName);
+    const entry: ContractEntry = { address: contract.address, type };
+    attachDecimals(entry, contract.exportName);
+    newContracts[chainId][contract.namespace][contract.exportName] = entry;
   }
 
   // ── Merge address book entries ────────────────────────────────────────────
@@ -580,10 +636,10 @@ async function main() {
         // Treb-deployed entries take precedence
         if (newContracts[chainId][namespace][exportName]) continue;
 
-        newContracts[chainId][namespace][exportName] = {
-          address,
-          type: classifyType(exportName),
-        };
+        const abType = classifyType(exportName);
+        const abEntry: ContractEntry = { address, type: abType };
+        attachDecimals(abEntry, exportName);
+        newContracts[chainId][namespace][exportName] = abEntry;
         addressBookInjectedCount++;
 
         // Attempt to find an ABI so we can emit a typed TS module.
@@ -615,11 +671,15 @@ async function main() {
   // This must cover ALL namespaces (not just the current run) so that each TS
   // module always has a complete address map after every generator invocation.
   const addressesByName = new Map<string, Record<string, string>>();
+  const decimalsByName = new Map<string, number>();
   for (const [chainId, namespaces] of Object.entries(newContracts)) {
     for (const contracts of Object.values(namespaces)) {
       for (const [name, entry] of Object.entries(contracts)) {
         if (!addressesByName.has(name)) addressesByName.set(name, {});
         addressesByName.get(name)![chainId] = entry.address;
+        if (entry.decimals !== undefined && !decimalsByName.has(name)) {
+          decimalsByName.set(name, entry.decimals);
+        }
       }
     }
   }
@@ -652,7 +712,7 @@ async function main() {
     const srcPath = join(srcDir, `${name}.ts`);
     safeWriteFile(
       srcPath,
-      generateTsModule(name, abi, addresses),
+      generateTsModule(name, abi, addresses, decimalsByName.get(name)),
       `TS module for ${name}`,
     );
   }

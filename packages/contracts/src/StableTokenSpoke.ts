@@ -624,4 +624,5 @@ export const StableTokenSpoke = {
     143: '0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e',
     10143: '0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

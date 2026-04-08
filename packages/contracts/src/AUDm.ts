@@ -745,4 +745,5 @@ export const AUDm = {
     42220: '0x7175504C455076F15c04A2F90a8e352281F492F9',
     11142220: '0x5873Faeb42F3563dcD77F0fbbdA818E6d6DA3139',
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

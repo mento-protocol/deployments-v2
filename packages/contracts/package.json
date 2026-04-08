@@ -64,6 +64,10 @@
       "types": "./dist/GBPm.d.ts",
       "import": "./dist/GBPm.js"
     },
+    "./MarketHoursBreakerToggleablev300": {
+      "types": "./dist/MarketHoursBreakerToggleablev300.d.ts",
+      "import": "./dist/MarketHoursBreakerToggleablev300.js"
+    },
     "./MarketHoursBreakerv300": {
       "types": "./dist/MarketHoursBreakerv300.d.ts",
       "import": "./dist/MarketHoursBreakerv300.js"
@@ -84,9 +88,21 @@
       "types": "./dist/OpenLiquidityStrategy.d.ts",
       "import": "./dist/OpenLiquidityStrategy.js"
     },
+    "./OpenLiquidityStrategyv300": {
+      "types": "./dist/OpenLiquidityStrategyv300.d.ts",
+      "import": "./dist/OpenLiquidityStrategyv300.js"
+    },
+    "./OpenLiquidityStrategyv301": {
+      "types": "./dist/OpenLiquidityStrategyv301.d.ts",
+      "import": "./dist/OpenLiquidityStrategyv301.js"
+    },
     "./OracleAdapter": {
       "types": "./dist/OracleAdapter.d.ts",
       "import": "./dist/OracleAdapter.js"
+    },
+    "./OracleAdapterCollateral": {
+      "types": "./dist/OracleAdapterCollateral.d.ts",
+      "import": "./dist/OracleAdapterCollateral.js"
     },
     "./OracleAdapterv300": {
       "types": "./dist/OracleAdapterv300.d.ts",
