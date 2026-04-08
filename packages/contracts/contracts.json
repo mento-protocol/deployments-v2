@@ -3,7 +3,8 @@
     "mainnet": {
       "AUSD": {
         "address": "0x00000000eFE302BEAA2b3e6e1b18d08D69a9012a",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "AddressSortedLinkedListWithMedian": {
         "address": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
@@ -55,7 +56,12 @@
       },
       "GBPm": {
         "address": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
+      },
+      "MarketHoursBreakerToggleablev300": {
+        "address": "0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44",
+        "type": "contract"
       },
       "MarketHoursBreakerv300": {
         "address": "0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF",
@@ -81,8 +87,20 @@
         "address": "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
         "type": "contract"
       },
+      "OpenLiquidityStrategyv300": {
+        "address": "0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8",
+        "type": "contract"
+      },
+      "OpenLiquidityStrategyv301": {
+        "address": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+        "type": "contract"
+      },
       "OracleAdapter": {
         "address": "0xa472fBBF4b890A54381977ac392BdF82EeC4383a",
+        "type": "contract"
+      },
+      "OracleAdapterCollateral": {
+        "address": "0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423",
         "type": "contract"
       },
       "OracleAdapterv300": {
@@ -127,11 +145,13 @@
       },
       "StableTokenSpoke": {
         "address": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenSpokeGBP": {
         "address": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenSpokeImplementation": {
         "address": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
@@ -139,19 +159,28 @@
       },
       "StableTokenSpokeUSD": {
         "address": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "USDC": {
         "address": "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
+      },
+      "USDT0": {
+        "address": "0xe7cd86e13ac4309349f30b3435a9d337750fc82d",
+        "type": "token",
+        "decimals": 6
       },
       "USDm": {
         "address": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ValueDeltaBreaker": {
         "address": "0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13",
@@ -219,7 +248,8 @@
       },
       "GBPm": {
         "address": "0x04de554E875c9797dC4ceBd834A9e99fa8fD5Df9",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "MarketHoursBreakerv300": {
         "address": "0x99C968Bf5972C11442654b989B7eAD0237cA654B",
@@ -247,7 +277,8 @@
       },
       "MockERC20AUSD": {
         "address": "0x502E67D3fE9302A5e4Ec1CFCDdbD6F34F9B9484B",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "OpenLiquidityStrategy": {
         "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
@@ -303,19 +334,23 @@
       },
       "StableTokenSpoke": {
         "address": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v300": {
         "address": "0xDBd4Ea7Ce0b15C9d57DC3Fa47713477E4ef4fdcb",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "USDC": {
         "address": "0x534b2f3a21130d7a60830c2df862319e593943a3",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "USDm": {
         "address": "0x5eCc03111ad2A78F981A108759bc73BAE2AB31bc",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ValueDeltaBreakerv265": {
         "address": "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf",
@@ -335,7 +370,8 @@
     "mainnet": {
       "AUDm": {
         "address": "0x7175504C455076F15c04A2F90a8e352281F492F9",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ActivePool": {
         "address": "0xa7873F4Bf2A1ea2EB20B1e8A992C4748e78473b2",
@@ -347,7 +383,8 @@
       },
       "BRLm": {
         "address": "0xe8537a3d056da446677b9e9d6c5db704eaab4787",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "BiPoolManager": {
         "address": "0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901",
@@ -367,7 +404,8 @@
       },
       "CADm": {
         "address": "0xff4Ab19391af240c311c54200a492233052B6325",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "CDPLiquidityStrategy": {
         "address": "0x4e78BD9565341EAbe99cDC024acB044d9BDcB985",
@@ -375,15 +413,18 @@
       },
       "CELO": {
         "address": "0x471ece3750da237f93b8e339c536989b8978a438",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "CHFm": {
         "address": "0xb55a79F398E759E43C95b979163f30eC87Ee131D",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "COPm": {
         "address": "0x8a567e2ae79ca692bd748ab832081c45de4041ea",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ChainlinkRelayerFactory": {
         "address": "0x247cb6ecf21bdd2bc29d726cccc8d2f066211663",
@@ -411,7 +452,8 @@
       },
       "EURm": {
         "address": "0xd8763cba276a3738e6de85b4b3bf5fded6d6ca73",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "FPMM": {
         "address": "0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30",
@@ -435,11 +477,13 @@
       },
       "GBPm": {
         "address": "0xCCF663b1fF11028f0b19058d0f7B674004a40746",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "GHSm": {
         "address": "0xfAeA5F3404bbA20D3cc2f8C4B0A888F55a3c7313",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "GasPool": {
         "address": "0x8b61f941D89560C7D8b3D595F44F7fd97D79817b",
@@ -451,11 +495,13 @@
       },
       "JPYm": {
         "address": "0xc45eCF20f3CD864B32D9794d6f76814aE8892e20",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "KESm": {
         "address": "0x456a3D042C0DbD3db53D5489e98dFb038553B0d0",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "L2SequencerUptimeFeed": {
         "address": "0x4CD491Dc27C8B0BbD10D516A502856B786939d18",
@@ -487,7 +533,8 @@
       },
       "NGNm": {
         "address": "0xE2702Bd97ee33c88c8f6f92DA3B733608aa76F71",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "OracleAdapter": {
         "address": "0xa472fBBF4b890A54381977ac392BdF82EeC4383a",
@@ -495,7 +542,8 @@
       },
       "PHPm": {
         "address": "0x105d4A9306D2E55a71d2Eb95B81553AE1dC20d7B",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ProtocolFeeRecipient": {
         "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
@@ -547,15 +595,18 @@
       },
       "StableTokenV2": {
         "address": "0x434563B0604BE100F04B7Ae485BcafE3c9D8850E",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v301": {
         "address": "0x815795C30D0758A297B08cD4e0643620c974c318",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "SystemParams": {
         "address": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
@@ -579,15 +630,18 @@
       },
       "USDC": {
         "address": "0xcebA9300f2b948710d2653dD7B07f33A8B32118C",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "USDT": {
         "address": "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "USDm": {
         "address": "0x765de816845861e75a25fca122bb6898b8b1282a",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ValueDeltaBreaker": {
         "address": "0x4DBC33B3abA78475A5AA4BC7A5B11445d387BF68",
@@ -603,7 +657,8 @@
       },
       "XOFm": {
         "address": "0x73F93dcc49cB8A239e2032663e9475dd5ef29A08",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "YieldSplitAddress": {
         "address": "0x0Dd57F6f181D0469143fe9380762d8a112e96e4a",
@@ -611,15 +666,18 @@
       },
       "ZARm": {
         "address": "0x4c35853A3B4e647fD266f4de678dCc8fEC410BF6",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "axlEUROC": {
         "address": "0x061cc5a2C863E0C1Cb404006D559dB18A34C762d",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "axlUSDC": {
         "address": "0xEB466342C4d449BC9f53A865D5Cb90586f405215",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       }
     }
   },
@@ -627,7 +685,8 @@
     "testnet-v2-rc5": {
       "AUDm": {
         "address": "0x5873Faeb42F3563dcD77F0fbbdA818E6d6DA3139",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ActivePool": {
         "address": "0x50651599c8A778732C34d1C181EEB05Ff2Ef9d73",
@@ -643,7 +702,8 @@
       },
       "BRLm": {
         "address": "0x2294298942fdc79417DE9E0D740A4957E0e7783a",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "BiPoolManager": {
         "address": "0xeCB3C656C131fCd9bB8D1d80898716bD684feb78",
@@ -663,7 +723,8 @@
       },
       "CADm": {
         "address": "0xF151c9a13b78C84f93f50B8b3bC689fedc134F60",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "CDPLiquidityStrategy": {
         "address": "0x065AE7D4e207C8f4dca112D0B79E668cc7e93e03",
@@ -671,15 +732,18 @@
       },
       "CELO": {
         "address": "0x471ece3750da237f93b8e339c536989b8978a438",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "CHFm": {
         "address": "0x284E9b7B623eAE866914b7FA0eB720C2Bb3C2980",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "COPm": {
         "address": "0x5F8d55c3627d2dc0a2B4afa798f877242F382F67",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ChainlinkRelayerFactory": {
         "address": "0xd96f786f5a294fb7cbb0847307293b7A871B9d5a",
@@ -843,7 +907,8 @@
       },
       "EURm": {
         "address": "0xA99dC247d6b7B2E3ab48a1fEE101b83cD6aCd82a",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "Emission": {
         "address": "0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69",
@@ -871,11 +936,13 @@
       },
       "GBPm": {
         "address": "0x85F5181Abdbf0e1814Fc4358582Ae07b8eBA3aF3",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "GHSm": {
         "address": "0x5e94B8C872bD47BC4255E60ECBF44D5E66e7401C",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "GasPool": {
         "address": "0xcf0349BaffbEEb9f5c8871338415613610DC321E",
@@ -887,11 +954,13 @@
       },
       "JPYm": {
         "address": "0x85Bee67D435A39f7467a8a9DE34a5B73D25Df426",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "KESm": {
         "address": "0xC7e4635651E3e3Af82b61d3E23c159438daE3BbF",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "Locking": {
         "address": "0xB72320fC501cb30E55bAF0DA48c20b11fAc9f79D",
@@ -919,7 +988,8 @@
       },
       "MentoToken": {
         "address": "0x07867fd40EB56b4380bE39c88D0a7EA59Aa99A20",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "MigrationMultisig": {
         "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
@@ -1003,19 +1073,23 @@
       },
       "MockERC20USDC": {
         "address": "0xBD63e46Be8eF8D89dFde3054E7b9ECAEb8Ad83e9",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20USDT": {
         "address": "0xCA53d9b72646B254d29EBeEb4c5cde7BB4bb59e0",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20axlEUROC": {
         "address": "0x9883d788d40F1C7595a780ed881Ea833C7743B4B",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20axlUSDC": {
         "address": "0x6285De9DA7C1d329C0451628638908915002d9d1",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "MultiTroveGetter": {
         "address": "0xED59EDfB9fCD06bb13d568ab548eC101fBb77a54",
@@ -1023,7 +1097,8 @@
       },
       "NGNm": {
         "address": "0x3d5ae86F34E2a82771496D140daFAEf3789dF888",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "OracleAdapter": {
         "address": "0x26eFF54e2f0E8825996b83119b7Df5ef2C882dD7",
@@ -1031,7 +1106,8 @@
       },
       "PHPm": {
         "address": "0x0352976d940a2C3FBa0C3623198947Ee1d17869E",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ProtocolFeeRecipient": {
         "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
@@ -1091,15 +1167,18 @@
       },
       "StableTokenV2": {
         "address": "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v300": {
         "address": "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v301": {
         "address": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "SystemParams": {
         "address": "0xdf1E9330f328Ea8Fd3E974b1a2510A9791712318",
@@ -1123,7 +1202,8 @@
       },
       "USDm": {
         "address": "0xdE9e4C3ce781b4bA68120d6261cbad65ce0aB00b",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "ValueDeltaBreaker": {
         "address": "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534",
@@ -1135,7 +1215,8 @@
       },
       "XOFm": {
         "address": "0x5505b70207aE3B826c1A7607F19F3Bf73444A082",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       },
       "YieldSplitAddress": {
         "address": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
@@ -1143,7 +1224,8 @@
       },
       "ZARm": {
         "address": "0x10CCfB235b0E1Ed394bACE4560C3ed016697687e",
-        "type": "token"
+        "type": "token",
+        "decimals": 18
       }
     }
   }

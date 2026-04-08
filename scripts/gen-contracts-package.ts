@@ -36,12 +36,13 @@ type ContractType = "token" | "pool" | "contract";
 interface ContractEntry {
   address: string;
   type: ContractType;
+  decimals?: number;
 }
 
-// chainId → namespace → contractName → ContractEntry
-type ContractsJson = Record<string, Record<string, Record<string, ContractEntry>>>;
-
-// chainId → label → address
+type ContractsJson = Record<
+  string,
+  Record<string, Record<string, ContractEntry>>
+>;
 type AddressBook = Record<string, Record<string, string>>;
 
 interface ResolvedContract {
@@ -117,8 +118,7 @@ function deriveExportName(
   overrides: Record<string, string>,
   includeLabel = false,
 ): string {
-  const trebKey =
-    entry.contractName + (entry.label ? `:${entry.label}` : "");
+  const trebKey = entry.contractName + (entry.label ? `:${entry.label}` : "");
 
   if (overrides[trebKey]) {
     return overrides[trebKey];
@@ -148,7 +148,9 @@ function resolveAbiPath(
   // For proxies, follow to the implementation to get the right ABI
   if (entry.type === "PROXY" && entry.proxyInfo?.implementation) {
     const implEntry = Object.values(allEntries).find(
-      (e) => e.address.toLowerCase() === entry.proxyInfo!.implementation.toLowerCase(),
+      (e) =>
+        e.address.toLowerCase() ===
+        entry.proxyInfo!.implementation.toLowerCase(),
     );
     if (implEntry) {
       target = implEntry;
@@ -199,38 +201,80 @@ function deriveAddressBookExportName(key: string): string {
   return sanitizeName(key);
 }
 
+// ─── Token registry ──────────────────────────────────────────────────────────
+// Keys are case-sensitive and must match the export name exactly
+// (e.g. AUSD on Monad vs aUSD on Celo are distinct tokens).
+
+const KNOWN_TOKENS: Record<string, number> = {
+  USDC: 6,
+  USDT: 6,
+  USDT0: 6,
+  axlUSDC: 6,
+  axlEUROC: 6,
+  EURC: 6,
+  AUSD: 6,
+  aUSD: 6,
+  CELO: 18,
+  MentoToken: 18,
+};
+
+function getTokenDecimals(name: string): number | null {
+  if (name in KNOWN_TOKENS) return KNOWN_TOKENS[name];
+  // Mento stablecoins: all [A-Z]{2,5}m tokens are 18 decimals by convention.
+  // KNOWN_TOKENS is checked first, so explicit overrides always win.
+  if (/^[A-Z]{2,5}m$/.test(name)) return 18;
+  // MockERC20* tokens: strip prefix iteratively and look up the underlying.
+  if (name.startsWith("MockERC20")) {
+    let stripped = name;
+    while (stripped.startsWith("MockERC20")) {
+      stripped = stripped.slice("MockERC20".length);
+    }
+    return stripped ? getTokenDecimals(stripped) : null;
+  }
+  if (name.startsWith("StableToken")) return 18;
+  return null;
+}
+
 function classifyType(name: string): ContractType {
   // Implementation contracts are never tokens, regardless of name prefix.
   if (name.endsWith("Implementation")) return "contract";
 
-  // Stablecoins: 2–5 uppercase letters followed by lowercase 'm' (USDm, GBPm…)
-  if (/^[A-Z]{2,5}m$/.test(name)) return "token";
-
-  // Known external collateral / ERC-20 tokens
-  const knownTokens = new Set([
-    "CELO", "USDC", "USDT", "axlUSDC", "axlEUROC", "EURC", "aUSD", "MentoToken",
-  ]);
-  if (knownTokens.has(name)) return "token";
-
-  // Mock ERC-20s and StableToken implementations (spoke tokens, etc.)
-  if (name.startsWith("MockERC20")) return "token";
-  if (name.startsWith("StableToken")) return "token";
+  // Tokens: known decimals, or MockERC20* (always a token even if decimals unknown)
+  if (getTokenDecimals(name) !== null || name.startsWith("MockERC20"))
+    return "token";
 
   // FPMM pools (but not FPMMFactory or FPMMProxy)
   if (name === "FPMM") return "pool";
-  if (name.startsWith("FPMM") && !name.startsWith("FPMMFactory") && !name.startsWith("FPMMProxy")) {
+  if (
+    name.startsWith("FPMM") &&
+    !name.startsWith("FPMMFactory") &&
+    !name.startsWith("FPMMProxy")
+  ) {
     return "pool";
   }
 
   return "contract";
 }
 
+function attachDecimals(entry: ContractEntry, name: string): void {
+  if (entry.type !== "token") return;
+  const decimals = getTokenDecimals(name);
+  if (decimals !== null) {
+    entry.decimals = decimals;
+  } else {
+    console.warn(
+      `⚠  Token "${name}" has no known decimals mapping. ` +
+        `Add it to KNOWN_TOKENS in gen-contracts-package.ts.`,
+    );
+  }
+}
+
 function generateTsModule(
   name: string,
   abi: unknown[],
   addresses: Record<string, string>,
+  decimals?: number,
 ): string {
-  // Indent every line of the ABI 2 spaces so it nests cleanly under `abi:`.
   const abiJson = JSON.stringify(abi, null, 2)
     .split("\n")
     .map((line, i) => (i === 0 ? line : `  ${line}`))
@@ -238,14 +282,17 @@ function generateTsModule(
   const addressLines = Object.entries(addresses)
     .map(([chainId, addr]) => `    ${chainId}: '${addr}',`)
     .join("\n");
-  // address is typed as Partial<Record<number, `0x${string}`>> so consumers
-  // can index it with the numeric chain ID from viem (client.chain.id).
-  return (
+  let output =
     `export const ${name} = {\n` +
     `  abi: ${abiJson} as const,\n` +
-    `  address: {\n${addressLines}\n  } as Partial<Record<number, \`0x\${string}\`>>,\n` +
-    `};\n`
-  );
+    `  address: {\n${addressLines}\n  } as Partial<Record<number, \`0x\${string}\`>>,\n`;
+
+  if (decimals !== undefined) {
+    output += `  decimals: ${decimals},\n`;
+  }
+
+  output += `};\n`;
+  return output;
 }
 
 function diffContracts(
@@ -256,10 +303,7 @@ function diffContracts(
   const removed: string[] = [];
   const changed: string[] = [];
 
-  const allChains = new Set([
-    ...Object.keys(oldJson),
-    ...Object.keys(newJson),
-  ]);
+  const allChains = new Set([...Object.keys(oldJson), ...Object.keys(newJson)]);
 
   for (const chainId of allChains) {
     const allNs = new Set([
@@ -277,8 +321,24 @@ function diffContracts(
           added.push(key);
         } else if (!newNs[name]) {
           removed.push(key);
-        } else if (oldNs[name].address !== newNs[name].address) {
-          changed.push(`${key}: ${oldNs[name].address} → ${newNs[name].address}`);
+        } else if (
+          oldNs[name].address !== newNs[name].address ||
+          oldNs[name].type !== newNs[name].type ||
+          oldNs[name].decimals !== newNs[name].decimals
+        ) {
+          const parts: string[] = [];
+          if (oldNs[name].address !== newNs[name].address) {
+            parts.push(`${oldNs[name].address} → ${newNs[name].address}`);
+          }
+          if (oldNs[name].type !== newNs[name].type) {
+            parts.push(`type: ${oldNs[name].type} → ${newNs[name].type}`);
+          }
+          if (oldNs[name].decimals !== newNs[name].decimals) {
+            parts.push(
+              `decimals: ${oldNs[name].decimals ?? "unset"} → ${newNs[name].decimals ?? "unset"}`,
+            );
+          }
+          changed.push(`${key}: ${parts.join(", ")}`);
         }
       }
     }
@@ -453,13 +513,12 @@ async function main() {
   });
 
   const resolved: ResolvedContract[] = [];
-  const superseded: string[] = []; // lost name collision to a proxy — expected, no warning
-  const missingAbi: string[] = []; // could not find ABI in out/ — worth reporting
-  const exportNamesSeen = new Map<string, string>(); // exportName → trebKey
+  const superseded: string[] = [];
+  const missingAbi: string[] = [];
+  const exportNamesSeen = new Map<string, string>();
 
   for (const entry of sortedEntries) {
-    const trebKey =
-      entry.contractName + (entry.label ? `:${entry.label}` : "");
+    const trebKey = entry.contractName + (entry.label ? `:${entry.label}` : "");
 
     // Non-unique contractNames include the label for disambiguation
     const isNonUnique = (contractNameCount.get(entry.contractName) ?? 0) > 1;
@@ -527,14 +586,31 @@ async function main() {
     JSON.stringify(existingContracts),
   );
 
+  // Reclassify and backfill decimals on existing entries from prior runs.
+  // This corrects entries that were misclassified in older generator versions
+  // (e.g. USDT0 was "contract" but is now a known token).
+  for (const namespaces of Object.values(newContracts)) {
+    for (const contracts of Object.values(namespaces)) {
+      for (const [name, entry] of Object.entries(contracts)) {
+        const correctType = classifyType(name);
+        if (entry.type !== correctType) {
+          entry.type = correctType;
+        }
+        if (entry.type === "token" && entry.decimals === undefined) {
+          attachDecimals(entry, name);
+        }
+      }
+    }
+  }
+
   for (const contract of resolved) {
     const chainId = String(contract.chainId);
     newContracts[chainId] ??= {};
     newContracts[chainId][contract.namespace] ??= {};
-    newContracts[chainId][contract.namespace][contract.exportName] = {
-      address: contract.address,
-      type: classifyType(contract.exportName),
-    };
+    const type = classifyType(contract.exportName);
+    const entry: ContractEntry = { address: contract.address, type };
+    attachDecimals(entry, contract.exportName);
+    newContracts[chainId][contract.namespace][contract.exportName] = entry;
   }
 
   // ── Merge address book entries ────────────────────────────────────────────
@@ -559,11 +635,14 @@ async function main() {
       // Guard: if this chain has multiple namespaces and the current one is not
       // among them, skip to avoid ambiguity about which namespace to inject into.
       const existingNamespaces = Object.keys(newContracts[chainId] ?? {});
-      if (existingNamespaces.length > 1 && !existingNamespaces.includes(namespace)) {
+      if (
+        existingNamespaces.length > 1 &&
+        !existingNamespaces.includes(namespace)
+      ) {
         console.warn(
           `\n⚠  Skipping address book injection for chain ${chainId}: ` +
-          `multiple namespaces exist (${existingNamespaces.join(", ")}) and ` +
-          `"${namespace}" is not among them. Run the correct namespace to inject.\n`,
+            `multiple namespaces exist (${existingNamespaces.join(", ")}) and ` +
+            `"${namespace}" is not among them. Run the correct namespace to inject.\n`,
         );
         continue;
       }
@@ -580,10 +659,10 @@ async function main() {
         // Treb-deployed entries take precedence
         if (newContracts[chainId][namespace][exportName]) continue;
 
-        newContracts[chainId][namespace][exportName] = {
-          address,
-          type: classifyType(exportName),
-        };
+        const abType = classifyType(exportName);
+        const abEntry: ContractEntry = { address, type: abType };
+        attachDecimals(abEntry, exportName);
+        newContracts[chainId][namespace][exportName] = abEntry;
         addressBookInjectedCount++;
 
         // Attempt to find an ABI so we can emit a typed TS module.
@@ -615,11 +694,23 @@ async function main() {
   // This must cover ALL namespaces (not just the current run) so that each TS
   // module always has a complete address map after every generator invocation.
   const addressesByName = new Map<string, Record<string, string>>();
+  const decimalsByName = new Map<string, number>();
   for (const [chainId, namespaces] of Object.entries(newContracts)) {
     for (const contracts of Object.values(namespaces)) {
       for (const [name, entry] of Object.entries(contracts)) {
         if (!addressesByName.has(name)) addressesByName.set(name, {});
         addressesByName.get(name)![chainId] = entry.address;
+        if (entry.decimals !== undefined) {
+          const existing = decimalsByName.get(name);
+          if (existing !== undefined && existing !== entry.decimals) {
+            console.warn(
+              `⚠  Token "${name}" has conflicting decimals: ${existing} vs ${entry.decimals}`,
+            );
+          }
+          if (existing === undefined) {
+            decimalsByName.set(name, entry.decimals);
+          }
+        }
       }
     }
   }
@@ -652,7 +743,7 @@ async function main() {
     const srcPath = join(srcDir, `${name}.ts`);
     safeWriteFile(
       srcPath,
-      generateTsModule(name, abi, addresses),
+      generateTsModule(name, abi, addresses, decimalsByName.get(name)),
       `TS module for ${name}`,
     );
   }
@@ -726,25 +817,28 @@ async function main() {
     previousContracts,
     newContracts,
   );
-  const hasChanges = added.length > 0 || removed.length > 0 || changed.length > 0;
+  const hasChanges =
+    added.length > 0 || removed.length > 0 || changed.length > 0;
 
   console.log(`\n✓ Generated ${resolved.length} contracts`);
 
   if (missingAbi.length > 0) {
-    console.warn(`\n⚠  Skipped ${missingAbi.length} contracts (ABI not found in out/):`);
+    console.warn(
+      `\n⚠  Skipped ${missingAbi.length} contracts (ABI not found in out/):`,
+    );
     for (const s of missingAbi) {
       console.warn(`   - ${s}`);
     }
   }
 
   if (!hasChanges) {
-    console.log(
-      "\n✓ No changes detected — no new release required.",
-    );
+    console.log("\n✓ No changes detected — no new release required.");
     return;
   }
 
-  console.log("\n─── Changes ──────────────────────────────────────────────────");
+  console.log(
+    "\n─── Changes ──────────────────────────────────────────────────",
+  );
   if (added.length > 0) {
     console.log(`\n  Added (${added.length}):`);
     for (const a of added) console.log(`    + ${a}`);
