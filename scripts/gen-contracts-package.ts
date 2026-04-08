@@ -323,11 +323,15 @@ function diffContracts(
           removed.push(key);
         } else if (
           oldNs[name].address !== newNs[name].address ||
+          oldNs[name].type !== newNs[name].type ||
           oldNs[name].decimals !== newNs[name].decimals
         ) {
           const parts: string[] = [];
           if (oldNs[name].address !== newNs[name].address) {
             parts.push(`${oldNs[name].address} → ${newNs[name].address}`);
+          }
+          if (oldNs[name].type !== newNs[name].type) {
+            parts.push(`type: ${oldNs[name].type} → ${newNs[name].type}`);
           }
           if (oldNs[name].decimals !== newNs[name].decimals) {
             parts.push(
