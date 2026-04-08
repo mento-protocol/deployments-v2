@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {SenderTypes} from "lib/treb-sol/src/internal/types.sol";
@@ -112,7 +113,7 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         dealFork(EURm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
         dealFork(GBPm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
         dealFork(USDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
-        dealFork(USDT, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
+        _dealOwnable(USDT, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
         dealFork(axlUSDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
 
         console.log("ERC20 balances set for migrationOwner:", migrationOwner);
@@ -279,6 +280,13 @@ contract SetupFork is TrebForkScript, ProxyHelper {
     }
 
     function _dealMock(address token, address to, uint256 amount) internal {
+        IMockERC20(token).mint(to, amount);
+    }
+
+    function _dealOwnable(address token, address to, uint256 amount) internal {
+        address owner = IOwnable(token).owner();
+
+        vm.prank(owner);
         IMockERC20(token).mint(to, amount);
     }
 }
