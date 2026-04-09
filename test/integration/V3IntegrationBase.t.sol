@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import {Test, console} from "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 import {Registry} from "lib/treb-sol/src/internal/Registry.sol";
 import {
     BokkyPooBahsDateTimeLibrary as DateTimeLib
@@ -25,8 +25,6 @@ import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {OracleHelper} from "script/helpers/OracleHelper.sol";
 
 import {MockCELO} from "script/helpers/MockCELO.sol";
-
-import {console2 as console} from "forge-std/console2.sol";
 
 /// @dev Read the auto-generated poolConfigs getter from LiquidityStrategy
 interface IPoolConfigReader {
