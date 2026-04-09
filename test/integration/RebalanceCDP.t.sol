@@ -82,8 +82,8 @@ contract RebalanceCDP is V3IntegrationBase {
         TroveParams memory p = _computeTroveParams(pool);
 
         address seeder = makeAddr(string.concat("spSeeder_", IERC20Metadata(p.debtToken).symbol()));
-        deal(p.collToken, seeder, p.collAmount);
-        deal(p.gasToken, seeder, p.ethGasComp);
+        _dealTokens(p.collToken, seeder, p.collAmount);
+        _dealTokens(p.gasToken, seeder, p.ethGasComp);
 
         vm.startPrank(seeder);
         IERC20(p.collToken).approve(p.borrowerOps, p.collAmount);
@@ -108,7 +108,7 @@ contract RebalanceCDP is V3IntegrationBase {
 
         // Fund the strategy with collateral so it can subsidize redemption shortfalls
         // during contraction rebalances (where redemption fees reduce collateral received).
-        deal(p.collToken, cdpLiquidityStrategy, p.collAmount);
+        _dealTokens(p.collToken, cdpLiquidityStrategy, p.collAmount);
     }
 
     // ========== Test: rebalance reduces price difference (both directions) ==========
@@ -131,12 +131,15 @@ contract RebalanceCDP is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool);
 
             _seedStabilityPool(pool);
+
+            // Warp past cooldown and refresh oracle rates first, then imbalance pool
+            // so the imbalance and rebalance happen at the same timestamp with fresh rates
+            vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
+
             _ensureImbalanced(pool, trader, sellToken0);
 
             (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
-
-            vm.warp(block.timestamp + uint256(cooldown) + 1);
-            _refreshOracleRates();
 
             strategy.rebalance(pool);
 
@@ -158,10 +161,11 @@ contract RebalanceCDP is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(cdpLiquidityStrategy).poolConfigs(pool);
 
             _seedStabilityPool(pool);
-            _ensureImbalanced(pool, trader, true);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
             _refreshOracleRates();
+
+            _ensureImbalanced(pool, trader, true);
 
             strategy.rebalance(pool);
 
@@ -187,12 +191,6 @@ contract RebalanceCDP is V3IntegrationBase {
             _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
-            if (priceDiff > uint256(threshold)) {
-                strategy.rebalance(pool);
-                vm.warp(block.timestamp + uint256(cooldown) + 1);
-                _refreshOracleRates();
-            }
-
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
             strategy.rebalance(pool);
         }

@@ -8,6 +8,7 @@ import {ILiquityConfig} from "./ILiquityConfig.sol";
 
 import "./mento/MentoConfig_celo.sol";
 import "./mento/MentoConfig_celo_sepolia.sol";
+import "./mento/MentoConfig_monad.sol";
 import "./mento/MentoConfig_monad_testnet.sol";
 import "./liquity/LiquityConfig_GBPm_celo.sol";
 import "./liquity/LiquityConfig_GBPm_celo_sepolia.sol";
@@ -58,7 +59,12 @@ library Config {
 
             console.log(string.concat("Deployed ", artifactName, " at:"), configContract);
             return configContract;
-        } catch {
+        } catch (bytes memory data) {
+            if (data.length > 0) {
+                assembly {
+                    revert(add(data, 32), mload(data))
+                }
+            }
             revert(
                 string.concat(
                     "Config: failed to deploy '",

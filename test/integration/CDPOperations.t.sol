@@ -263,8 +263,8 @@ contract CDPOperations is V3IntegrationBase {
         debtAmount = p.debtAmount;
         collAmount = p.collAmount;
 
-        deal(c.collToken, user, p.collAmount);
-        deal(c.gasToken, user, p.ethGasComp);
+        _dealTokens(c.collToken, user, p.collAmount);
+        _dealTokens(c.gasToken, user, p.ethGasComp);
 
         vm.startPrank(user);
         IERC20(c.collToken).approve(c.borrowerOps, p.collAmount);
@@ -313,8 +313,8 @@ contract CDPOperations is V3IntegrationBase {
         debtAmount = p.debtAmount;
         collAmount = p.collAmount;
 
-        deal(c.collToken, user, p.collAmount);
-        deal(c.gasToken, user, p.ethGasComp);
+        _dealTokens(c.collToken, user, p.collAmount);
+        _dealTokens(c.gasToken, user, p.ethGasComp);
 
         vm.startPrank(user);
         IERC20(c.collToken).approve(c.borrowerOps, p.collAmount);

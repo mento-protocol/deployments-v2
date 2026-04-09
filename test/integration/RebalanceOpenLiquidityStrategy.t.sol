@@ -54,8 +54,8 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
         address token1 = IFPMM(pool).token1();
         (uint256 r0, uint256 r1,) = IFPMM(pool).getReserves();
 
-        deal(token0, REBALANCER, r0 * 10);
-        deal(token1, REBALANCER, r1 * 10);
+        _dealTokens(token0, REBALANCER, r0 * 10);
+        _dealTokens(token1, REBALANCER, r1 * 10);
 
         vm.startPrank(REBALANCER);
         IERC20(token0).approve(openLiquidityStrategy, type(uint256).max);
@@ -148,12 +148,13 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(openLiquidityStrategy).poolConfigs(pool);
 
             _fundRebalancer(pool);
-            _ensureImbalanced(pool, trader, sellToken0);
-
-            (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
             _refreshOracleRates();
+
+            _ensureImbalanced(pool, trader, sellToken0);
+
+            (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
 
             vm.prank(REBALANCER);
             strategy.rebalance(pool);
@@ -174,14 +175,18 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(openLiquidityStrategy).poolConfigs(pool);
 
             _fundRebalancer(pool);
-            _ensureImbalanced(pool, trader, true);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
             _refreshOracleRates();
 
+            _ensureImbalanced(pool, trader, true);
+
             vm.prank(REBALANCER);
             strategy.rebalance(pool);
 
+            // Warp to reset L0 trading limit window before re-imbalancing
+            vm.warp(block.timestamp + 5 minutes + 1);
+            _refreshOracleRates();
             _ensureImbalanced(pool, trader, true);
 
             vm.expectRevert(abi.encodeWithSelector(ILiquidityStrategy.LS_CAN_ONLY_REBALANCE_ONCE.selector, pool));
@@ -203,13 +208,6 @@ contract RebalanceOpenLiquidityStrategy is V3IntegrationBase {
             _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
-            if (priceDiff > uint256(threshold)) {
-                _fundRebalancer(pool);
-                vm.prank(REBALANCER);
-                strategy.rebalance(pool);
-                vm.warp(block.timestamp + uint256(cooldown) + 1);
-                _refreshOracleRates();
-            }
 
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
             vm.prank(REBALANCER);

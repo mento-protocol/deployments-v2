@@ -487,7 +487,7 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         string memory rateFeed,
         uint256 resetFrequency,
         uint256 stablePoolResetSize,
-        ExchangeTrandingLimitsConfig memory tradingLimits,
+        ExchangeTradingLimitsConfig memory tradingLimits,
         bool createVirtual
     ) internal {
         require(_isStableToken[asset0], string.concat("MentoConfig: ", asset0, " is not a registered stableToken"));

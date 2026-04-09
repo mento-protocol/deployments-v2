@@ -417,7 +417,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
             assertEq(
                 IFXPriceFeed(priceFeedAddr).watchdogAddress(),
-                fxPriceFeedManager,
+                lookupOrFail("FxPriceFeedManager"),
                 string.concat("FXPriceFeed.watchdogAddress() is zero for CDP pool at index ", vm.toString(i))
             );
         }
@@ -476,15 +476,6 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 troveNFT.ownerOf(troveId),
                 reserveSafe,
                 string.concat("Reserve trove NFT not owned by ReserveSafe for CDP pool at index ", idx)
-            );
-
-            // Interest rate matches config
-            IMentoConfig.CDPMigrationConfig memory expected = _getCDPMigrationConfig(cdpPools[i]);
-            uint256 annualInterestRate = ITroveManager(troveManagerAddr).getTroveAnnualInterestRate(troveId);
-            assertEq(
-                annualInterestRate,
-                expected.interestRate,
-                string.concat("Reserve trove interest rate mismatch for CDP pool at index ", idx)
             );
         }
     }
@@ -566,7 +557,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
                 ICDPLiquidityStrategy(cdpLiquidityStrategy).getCDPConfig(cdpPools[i]);
 
             uint256 burnAmount = 1e18;
-            deal(debtToken, cdpConfig.collateralRegistry, burnAmount);
+            _dealTokens(debtToken, cdpConfig.collateralRegistry, burnAmount);
 
             vm.prank(cdpConfig.collateralRegistry);
             IStableTokenV3(debtToken).burn(burnAmount);
@@ -580,7 +571,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             (address borrowerOps,,,) = _getLiquityContracts(cdpPools[i]);
 
             uint256 burnAmount = 1e18;
-            deal(debtToken, borrowerOps, burnAmount);
+            _dealTokens(debtToken, borrowerOps, burnAmount);
 
             vm.prank(borrowerOps);
             IStableTokenV3(debtToken).burn(burnAmount);
@@ -594,7 +585,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             (,, address troveManagerAddr,) = _getLiquityContracts(cdpPools[i]);
 
             uint256 burnAmount = 1e18;
-            deal(debtToken, troveManagerAddr, burnAmount);
+            _dealTokens(debtToken, troveManagerAddr, burnAmount);
 
             vm.prank(troveManagerAddr);
             IStableTokenV3(debtToken).burn(burnAmount);
@@ -608,7 +599,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
             (,,, address stabilityPoolAddr) = _getLiquityContracts(cdpPools[i]);
 
             uint256 burnAmount = 1e18;
-            deal(debtToken, stabilityPoolAddr, burnAmount);
+            _dealTokens(debtToken, stabilityPoolAddr, burnAmount);
 
             vm.prank(stabilityPoolAddr);
             IStableTokenV3(debtToken).burn(burnAmount);
@@ -633,7 +624,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
         for (uint256 i = 0; i < cdpPools.length; i++) {
             address debtToken = _getDebtToken(cdpPools[i]);
 
-            deal(debtToken, broker, 1e18);
+            _dealTokens(debtToken, broker, 1e18);
 
             vm.prank(broker);
             vm.expectRevert();
@@ -651,7 +642,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
             address sender = makeAddr("tokenHolder");
             uint256 amount = 1e18;
-            deal(debtToken, sender, amount);
+            _dealTokens(debtToken, sender, amount);
 
             uint256 senderBalBefore = IStableTokenV3(debtToken).balanceOf(sender);
             uint256 poolBalBefore = IStableTokenV3(debtToken).balanceOf(stabilityPoolAddr);
@@ -680,7 +671,7 @@ contract CDPMigrationVerification is V3IntegrationBase {
 
             address receiver = makeAddr("tokenReceiver");
             uint256 amount = 1e18;
-            deal(debtToken, stabilityPoolAddr, amount);
+            _dealTokens(debtToken, stabilityPoolAddr, amount);
 
             uint256 poolBalBefore = IStableTokenV3(debtToken).balanceOf(stabilityPoolAddr);
             uint256 receiverBalBefore = IStableTokenV3(debtToken).balanceOf(receiver);

@@ -19,6 +19,9 @@ contract LiquidityProvision is V3IntegrationBase {
         super.setUp();
         pools = IFPMMFactory(fpmmFactory).deployedFPMMAddresses();
         require(pools.length > 0, "No FPMM pools deployed");
+        for (uint256 i = 0; i < pools.length; i++) {
+            _ensurePoolLiquidity(pools[i]);
+        }
     }
 
     // ========== Provide liquidity ==========
@@ -41,8 +44,8 @@ contract LiquidityProvision is V3IntegrationBase {
             uint256 amount0 = r0Before / 100;
             uint256 amount1 = r1Before / 100;
 
-            deal(t0, lp, amount0);
-            deal(t1, lp, amount1);
+            _dealTokens(t0, lp, amount0);
+            _dealTokens(t1, lp, amount1);
 
             vm.startPrank(lp);
             IERC20(t0).transfer(pools[i], amount0);
@@ -83,8 +86,8 @@ contract LiquidityProvision is V3IntegrationBase {
         uint256 amount0 = r0 / 100;
         uint256 amount1 = r1 / 100;
 
-        deal(t0, lp, amount0);
-        deal(t1, lp, amount1);
+        _dealTokens(t0, lp, amount0);
+        _dealTokens(t1, lp, amount1);
 
         vm.startPrank(lp);
         IERC20(t0).transfer(pool, amount0);
@@ -150,8 +153,8 @@ contract LiquidityProvision is V3IntegrationBase {
             uint256 amount0 = r0Initial / 100;
             uint256 amount1 = r1Initial / 100;
 
-            deal(t0, lp, amount0);
-            deal(t1, lp, amount1);
+            _dealTokens(t0, lp, amount0);
+            _dealTokens(t1, lp, amount1);
 
             vm.startPrank(lp);
             IERC20(t0).transfer(pools[i], amount0);

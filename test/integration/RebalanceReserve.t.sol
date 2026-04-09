@@ -33,7 +33,7 @@ contract RebalanceReserve is V3IntegrationBase {
         address collToken = isToken0Debt ? IFPMM(pool).token1() : IFPMM(pool).token0();
         (uint256 r0, uint256 r1,) = IFPMM(pool).getReserves();
         uint256 amount = (isToken0Debt ? r1 : r0) * 10;
-        deal(collToken, reserveV2, amount);
+        _dealTokens(collToken, reserveV2, amount);
     }
 
     // ========== Test: rebalance reduces price difference (both directions) ==========
@@ -56,12 +56,15 @@ contract RebalanceReserve is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
 
             _fundReserveWithCollateral(pool);
+
+            // Warp past cooldown and refresh oracle rates first, then imbalance pool
+            // so the imbalance and rebalance happen at the same timestamp with fresh rates
+            vm.warp(block.timestamp + uint256(cooldown) + 1);
+            _refreshOracleRates();
+
             _ensureImbalanced(pool, trader, sellToken0);
 
             (,,,,,, uint256 priceDiffBefore) = fpmm.getRebalancingState();
-
-            vm.warp(block.timestamp + uint256(cooldown) + 1);
-            _refreshOracleRates();
 
             strategy.rebalance(pool);
 
@@ -83,10 +86,11 @@ contract RebalanceReserve is V3IntegrationBase {
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
 
             _fundReserveWithCollateral(pool);
-            _ensureImbalanced(pool, trader, true);
 
             vm.warp(block.timestamp + uint256(cooldown) + 1);
             _refreshOracleRates();
+
+            _ensureImbalanced(pool, trader, true);
 
             strategy.rebalance(pool);
 
@@ -106,15 +110,15 @@ contract RebalanceReserve is V3IntegrationBase {
 
             (,, uint32 cooldown,,,,,) = IPoolConfigReader(reserveLiquidityStrategy).poolConfigs(pool);
 
+            _fundReserveWithCollateral(pool);
+
             vm.warp(block.timestamp + uint256(cooldown) + 1);
             _refreshOracleRates();
 
             (,,,,, uint16 threshold, uint256 priceDiff) = fpmm.getRebalancingState();
-            if (priceDiff > uint256(threshold)) {
-                strategy.rebalance(pool);
-                vm.warp(block.timestamp + uint256(cooldown) + 1);
-                _refreshOracleRates();
-            }
+            // Skip pools that are currently imbalanced — rebalancing them first would
+            // set transient storage, blocking a second call in the same Foundry tx.
+            if (priceDiff > uint256(threshold)) continue;
 
             vm.expectRevert(ILiquidityStrategy.LS_POOL_NOT_REBALANCEABLE.selector);
             strategy.rebalance(pool);

@@ -133,7 +133,7 @@ contract FPMMTradingLimits is V3IntegrationBase {
 
             bool sellToken0 = tokenIn == fpmm.token0();
 
-            deal(tokenIn, trader, amountIn);
+            _dealTokens(tokenIn, trader, amountIn);
 
             vm.startPrank(trader);
             IERC20(tokenIn).transfer(address(fpmm), amountIn);
@@ -171,7 +171,7 @@ contract FPMMTradingLimits is V3IntegrationBase {
 
             (, ITradingLimitsV2.State memory stateBefore) = fpmm.getTradingLimits(tokenIn);
 
-            deal(tokenIn, trader, amountIn);
+            _dealTokens(tokenIn, trader, amountIn);
             uint256 traderOutBefore = IERC20(tokenOut).balanceOf(trader);
 
             vm.startPrank(trader);
@@ -220,7 +220,7 @@ contract FPMMTradingLimits is V3IntegrationBase {
             bool sellToken0 = tokenIn == fpmm.token0();
             address tokenOut = sellToken0 ? fpmm.token1() : fpmm.token0();
 
-            deal(tokenIn, trader, firstAmount);
+            _dealTokens(tokenIn, trader, firstAmount);
             vm.startPrank(trader);
             IERC20(tokenIn).transfer(address(fpmm), firstAmount);
             if (sellToken0) {
@@ -241,7 +241,7 @@ contract FPMMTradingLimits is V3IntegrationBase {
 
             uint256 traderOutBefore = IERC20(tokenOut).balanceOf(trader);
 
-            deal(tokenIn, trader, secondAmount);
+            _dealTokens(tokenIn, trader, secondAmount);
             vm.startPrank(trader);
             IERC20(tokenIn).transfer(address(fpmm), secondAmount);
             if (sellToken0) {
@@ -288,8 +288,8 @@ contract FPMMTradingLimits is V3IntegrationBase {
         if (mult == 0) return;
 
         // Add liquidity proportional to current reserves to maintain price
-        deal(t0, lp, r0 * mult);
-        deal(t1, lp, r1 * mult);
+        _dealTokens(t0, lp, r0 * mult);
+        _dealTokens(t1, lp, r1 * mult);
 
         vm.startPrank(lp);
         IERC20(t0).transfer(address(fpmm), r0 * mult);
