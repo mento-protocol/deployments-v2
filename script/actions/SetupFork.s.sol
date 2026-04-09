@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 import {IERC20} from "forge-std/interfaces/IERC20.sol";
 import {Senders} from "lib/treb-sol/src/internal/sender/Senders.sol";
 import {SenderTypes} from "lib/treb-sol/src/internal/types.sol";
@@ -17,20 +18,27 @@ address constant CELO = 0x471EcE3750Da237f93B8E339c536989b8978a438;
 
 interface ISafeOwnerMgr {
     function getOwners() external view returns (address[] memory);
+
     function getThreshold() external view returns (uint256);
+
     function isOwner(address owner) external view returns (bool);
+
     function addOwnerWithThreshold(address owner, uint256 threshold) external;
+
     function removeOwner(address prevOwner, address owner, uint256 threshold) external;
+
     function changeThreshold(uint256 threshold) external;
 }
 
 interface IMintable {
     function mint(address to, uint256 value) external;
+
     function getRoleMembers(string calldata role) external view returns (address[] memory);
 }
 
 interface IMockERC20 is IERC20 {
     function mint(address to, uint256 value) external;
+
     function burn(address from, uint256 value) external;
 }
 
@@ -91,9 +99,9 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         _ensureSafeIs1of1(migrationOwnerSender, signerSender.account, "migrationOwner");
 
         _etchCeloMock();
-        dealFork(CELO, signerSender.account, MINT_AMOUNT, true);
-        dealFork(CELO, deployerSender.account, MINT_AMOUNT, true);
-        dealFork(CELO, migrationOwnerSender.account, MINT_AMOUNT, true);
+        _dealMock(CELO, signerSender.account, MINT_AMOUNT);
+        _dealMock(CELO, deployerSender.account, MINT_AMOUNT);
+        _dealMock(CELO, migrationOwnerSender.account, MINT_AMOUNT);
 
         console.log("CELO (MockERC20) etched at:", CELO);
         console.log("  signer balance:", MockCELO(CELO).balanceOf(signerSender.account));
@@ -105,7 +113,7 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         dealFork(EURm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
         dealFork(GBPm, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e18);
         dealFork(USDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
-        dealFork(USDT, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
+        _dealOwnable(USDT, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
         dealFork(axlUSDC, migrationOwner, CELO_MAINNET_STABLE_AMOUNT * 1e6);
 
         console.log("ERC20 balances set for migrationOwner:", migrationOwner);
@@ -127,8 +135,8 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         Senders.Sender storage migrationOwnerSender = sender("migrationOwner");
 
         _etchCeloMock();
-        dealFork(CELO, deployerSender.account, MINT_AMOUNT, true);
-        dealFork(CELO, migrationOwnerSender.account, MINT_AMOUNT, true);
+        _dealMock(CELO, deployerSender.account, MINT_AMOUNT);
+        _dealMock(CELO, migrationOwnerSender.account, MINT_AMOUNT);
 
         console.log("CELO (MockERC20) etched at:", CELO);
         console.log("  deployer balance:", MockCELO(CELO).balanceOf(deployerSender.account));
@@ -146,7 +154,7 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         address gbpmProxy = lookupProxyOrFail("GBPm", ProxyType.OZTUP);
         address usdmProxy = lookupProxyOrFail("USDm", ProxyType.OZTUP);
 
-        _mintMonadAUSD(migrationOwnerSender.account);
+        _dealAUSD(lookupOrFail("AUSD"), migrationOwnerSender.account, MINT_AMOUNT);
         _grantMinterAndMint(
             gbpmProxy,
             migrationOwnerSender,
@@ -239,16 +247,13 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         revert("owner not found in safe");
     }
 
-    function _mintMonadAUSD(address recipient) internal {
-        address ausdAddress = lookupOrFail("AUSD");
-        IMintable ausd = IMintable(ausdAddress);
-        address[] memory minters = ausd.getRoleMembers("MINTER_ROLE");
-        require(minters.length > 0, "AUSD has no minter");
-
-        dealFork(minters[0], 1 ether);
-        Senders.Sender storage ausdMinterSender = prankSender(minters[0]);
-        IMintable ausdMinterView = IMintable(ausdMinterSender.harness(ausdAddress));
-        ausdMinterView.mint(recipient, MINT_AMOUNT);
+    function _dealAUSD(address ausd, address to, uint256 amount) internal {
+        bytes32 baseSlot = 0x455730fed596673e69db1907be2e521374ba893f1a04cc5f5dd931616cd6b700;
+        bytes32 accountSlot = keccak256(abi.encode(to, baseSlot));
+        // Preserve the isFrozen flag (lowest byte), write balance into upper 248 bits.
+        bytes32 current = vm.load(ausd, accountSlot);
+        bytes32 newVal = bytes32((amount << 8) | (uint256(current) & 0xff));
+        vm.store(ausd, accountSlot, newVal);
     }
 
     function _grantMinterAndMint(
@@ -269,5 +274,16 @@ contract SetupFork is TrebForkScript, ProxyHelper {
     function _etchCeloMock() internal {
         MockCELO mock = new MockCELO();
         etchFork(CELO, address(mock).code);
+    }
+
+    function _dealMock(address token, address to, uint256 amount) internal {
+        IMockERC20(token).mint(to, amount);
+    }
+
+    function _dealOwnable(address token, address to, uint256 amount) internal {
+        address owner = IOwnable(token).owner();
+
+        vm.prank(owner);
+        IMockERC20(token).mint(to, amount);
     }
 }
