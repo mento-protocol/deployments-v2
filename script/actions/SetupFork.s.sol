@@ -154,7 +154,7 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         address gbpmProxy = lookupProxyOrFail("GBPm", ProxyType.OZTUP);
         address usdmProxy = lookupProxyOrFail("USDm", ProxyType.OZTUP);
 
-        _mintMonadAUSD(migrationOwnerSender.account);
+        _dealAUSD(lookupOrFail("AUSD"), migrationOwnerSender.account, MINT_AMOUNT);
         _grantMinterAndMint(
             gbpmProxy,
             migrationOwnerSender,
@@ -247,16 +247,13 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         revert("owner not found in safe");
     }
 
-    function _mintMonadAUSD(address recipient) internal {
-        address ausdAddress = lookupOrFail("AUSD");
-        IMintable ausd = IMintable(ausdAddress);
-        address[] memory minters = ausd.getRoleMembers("MINTER_ROLE");
-        require(minters.length > 0, "AUSD has no minter");
-
-        dealFork(minters[0], 1 ether);
-        Senders.Sender storage ausdMinterSender = prankSender(minters[0]);
-        IMintable ausdMinterView = IMintable(ausdMinterSender.harness(ausdAddress));
-        ausdMinterView.mint(recipient, MINT_AMOUNT);
+    function _dealAUSD(address ausd, address to, uint256 amount) internal {
+        bytes32 baseSlot = 0x455730fed596673e69db1907be2e521374ba893f1a04cc5f5dd931616cd6b700;
+        bytes32 accountSlot = keccak256(abi.encode(to, baseSlot));
+        // Preserve the isFrozen flag (lowest byte), write balance into upper 248 bits.
+        bytes32 current = vm.load(ausd, accountSlot);
+        bytes32 newVal = bytes32((amount << 8) | (uint256(current) & 0xff));
+        vm.store(ausd, accountSlot, newVal);
     }
 
     function _grantMinterAndMint(
