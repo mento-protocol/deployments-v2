@@ -13,7 +13,7 @@ import {ProxyHelper, ProxyType} from "../helpers/ProxyHelper.sol";
 import {ICeloProxy} from "lib/mento-core/contracts/interfaces/ICeloProxy.sol";
 import {StableTokenV3} from "lib/mento-core/contracts/tokens/StableTokenV3.sol";
 
-contract MGP15 is TrebScript, ProxyHelper {
+contract MGP16 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
     using Senders for Senders.Sender;
     using OZGovernor for OZGovernor.Sender;
@@ -29,8 +29,8 @@ contract MGP15 is TrebScript, ProxyHelper {
     address internal migrationOwner;
 
     function setUp() public {
-        tokens.push(Contract(lookupProxyOrFail("cCHF"), "CHFm"));
-        tokens.push(Contract(lookupProxyOrFail("cJPY"), "JPYm"));
+        tokens.push(Contract(lookupProxyOrFail("CHFm"), "CHFm"));
+        tokens.push(Contract(lookupProxyOrFail("JPYm"), "JPYm"));
 
         timelockProxy = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
     }
@@ -42,8 +42,8 @@ contract MGP15 is TrebScript, ProxyHelper {
         require(migrationOwner != address(0), "migrationOwner not configured");
 
         OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-15: Mento V3 Deployment Phase 2 - CHFm & JPYm Migration");
-        ozGovSender.setProposalDescription("./mgps/mgp15.md");
+        ozGovSender.setTitle("MGP-16: Mento V3 Deployment Phase 2 - CHFm & JPYm Migration");
+        ozGovSender.setProposalDescription("./mgps/mgp16.md");
 
         preChecks();
 
