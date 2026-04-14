@@ -6,6 +6,7 @@ pragma solidity =0.8.24;
  * @notice This file imports all Mento protocol contracts that use Solidity 0.8.24
  *         to ensure they are compiled and their artifacts are available for deployment scripts.
  */
+import {ProxyAdmin} from "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
 import {OracleAdapter} from "mento-core/oracles/OracleAdapter.sol";
 import {MarketHoursBreaker} from "mento-core/oracles/breakers/MarketHoursBreaker.sol";
 
