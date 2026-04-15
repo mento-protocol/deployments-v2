@@ -600,6 +600,7 @@
       "MarketHoursBreaker:v3.0.0": "0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF",
       "MarketHoursBreakerToggleable:v3.0.0": "0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44",
       "MedianDeltaBreaker:v2.6.5": "0x3E4F2Bca4f7192Be4C3c5E5bD4840F2E90a8Ba84",
+      "NttDeployHelper:EURm": "0x0e72e26E4e08779D08B2A52F59f41E6659a3547d",
       "NttDeployHelper:GBPm": "0xF3797E9D818A47A3a604bF2346E4ff50b56ad5c4",
       "NttDeployHelper:USDm": "0x37316334108C816f9862baB52347A0aab7551127",
       "OpenLiquidityStrategy:v3.0.0": "0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8",
