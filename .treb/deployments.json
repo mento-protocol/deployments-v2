@@ -25783,14 +25783,8 @@
     },
     "proxyInfo": {
       "type": "UUPS",
-      "implementation": "0x15b38D560928029a74d1D0a56eE232fb5Ff3A4B1",
-      "history": [
-        {
-          "implementationId": "testnet-v2-rc5/11142220/BiPoolManager:v2.6.5",
-          "upgradedAt": "2026-04-15T13:57:08.041562+02:00",
-          "upgradeTxId": ""
-        }
-      ]
+      "implementation": "0x641A91B3c70D0E4A9A8bf5B3a2047ed9762F600c",
+      "history": []
     },
     "artifact": {
       "path": "src/Proxy.sol",
@@ -25817,7 +25811,7 @@
     },
     "tags": null,
     "createdAt": "2025-09-12T05:53:24.210908Z",
-    "updatedAt": "2026-04-15T13:57:08.049725+02:00"
+    "updatedAt": "2025-10-01T15:52:33.377779Z"
   },
   "testnet-v2-rc5/11142220/Proxy:Broker": {
     "id": "testnet-v2-rc5/11142220/Proxy:Broker",
