@@ -614,6 +614,7 @@
       "StableTokenV3:v3.0.0": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
       "TransceiverStructs": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
       "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A",
+      "TransparentUpgradeableProxy:EURm": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
       "TransparentUpgradeableProxy:FPMMFactory": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",
       "TransparentUpgradeableProxy:FactoryRegistry": "0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6",
       "TransparentUpgradeableProxy:GBPm": "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",

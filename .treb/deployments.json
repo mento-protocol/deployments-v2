@@ -1240,6 +1240,56 @@
     "createdAt": "2026-03-11T14:03:31.063585818Z",
     "updatedAt": "2026-03-12T14:22:18.95546715Z"
   },
+  "mainnet/143/TransparentUpgradeableProxy:EURm": {
+    "id": "mainnet/143/TransparentUpgradeableProxy:EURm",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "EURm",
+    "address": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700b0eaf94cf7a9c287e6e4e5",
+      "initCodeHash": "0x657b943106b38bc7e584da045326a462bd482f691bfe888869257e0a363008be",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000006a8ff60a89f3f359fa16f45076d6dd1712b5e62e000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e687000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000001e407b0020a00000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000012000000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba4580000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001c0000000000000000000000000000000000000000000000000000000000000000a4d656e746f204575726f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044555526d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:EURm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xddaedede1e674d0bc73c1ca30aad67eedb55f36038f33faa261fe0b8c0d79968",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "5719ce0aa39a5d48ac2f1dabcd22127c5cc1aa8e"
+    },
+    "verification": {
+      "status": "PARTIAL",
+      "verifiers": {
+        "blockscout": {
+          "status": "failed",
+          "reason": ""
+        },
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=143/address/0x4D502d735B4C574B487Ed641ae87cEaE884731C7#code"
+        },
+        "sourcify": {
+          "status": "verified",
+          "url": "https://sourcify.dev/#/lookup/0x4D502d735B4C574B487Ed641ae87cEaE884731C7"
+        }
+      }
+    },
+    "tags": null,
+    "createdAt": "2026-04-15T14:13:11.623221+02:00",
+    "updatedAt": "2026-04-15T14:15:43.24061+02:00"
+  },
   "mainnet/143/TransparentUpgradeableProxy:FPMMFactory": {
     "id": "mainnet/143/TransparentUpgradeableProxy:FPMMFactory",
     "namespace": "mainnet",
