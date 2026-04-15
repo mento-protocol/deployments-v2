@@ -1273,8 +1273,7 @@
       "status": "PARTIAL",
       "verifiers": {
         "blockscout": {
-          "status": "failed",
-          "reason": ""
+          "status": "failed"
         },
         "etherscan": {
           "status": "verified",
@@ -2445,6 +2444,38 @@
     "tags": null,
     "createdAt": "2026-03-03T20:15:32.424984189Z",
     "updatedAt": "2026-03-03T20:15:32.427204592Z"
+  },
+  "mainnet/42220/NttDeployHelper:EURm": {
+    "id": "mainnet/42220/NttDeployHelper:EURm",
+    "namespace": "mainnet",
+    "chainId": 42220,
+    "contractName": "NttDeployHelper",
+    "label": "EURm",
+    "address": "0x0e72e26E4e08779D08B2A52F59f41E6659a3547d",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e6870071ff9d7e3933b6cd4e0ca5",
+      "initCodeHash": "0xba8f4aad4b826ea5878a8c1727e00fab94bf5e8138e1aea49927cb70dc05ffcc",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000d8763cba276a3738e6de85b4b3bf5fded6d6ca730000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000a321448d90d4e5b0a732867c18ea198e75cac48e00000000000000000000000000000000000000000000000000000000000000ca00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458",
+      "entropy": "mainnet/NttDeployHelper:EURm"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x97049183d871b093ad7192da17e9ed1b9b3ac05e97b02200d339bbe3ebf878fc",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "cafbd8079297cb4c8f5dbfa2ba0d6db8cf20a129"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-15T14:22:07.380523+02:00",
+    "updatedAt": "2026-04-15T14:22:07.397458+02:00"
   },
   "mainnet/42220/NttDeployHelper:GBPm": {
     "id": "mainnet/42220/NttDeployHelper:GBPm",
