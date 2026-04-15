@@ -78,7 +78,6 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
             )
         );
         IOwnable(deployer.harness(getProxyAdmin(stableTokenSpokeProxy))).transferOwnership(initialOwner);
-        // IOwnable(deployer.harness(stableTokenSpokeProxy)).transferOwnership(initialOwner);
 
         // ====== Deployment checks ======
         console.log("\n sanity checks");
