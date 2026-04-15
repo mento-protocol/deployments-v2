@@ -27,7 +27,7 @@ contract MGP17 is TrebScript, ProxyHelper {
         timelockProxy = lookupProxyOrFail("TimelockController", ProxyType.OZTUP);
     }
 
-    /// @custom:senders deployer, governor
+    /// @custom:senders deployer, governor, migrationOwner
     function run() public virtual broadcast {
         Senders.Sender storage govSender = sender("governor");
 
@@ -80,7 +80,7 @@ contract MGP17 is TrebScript, ProxyHelper {
         console.log("");
         console.log(" (permissions on BiPoolManager setSpread)");
 
-        address owner = IOwnable(biPoolManagerProxy).owner();
+        address owner = sender("migrationOwner").account;
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManagerProxy).getExchangeIds();
         require(exchangeIds.length > 0, "no exchanges found on BiPoolManager");
 
