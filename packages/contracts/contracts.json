@@ -30,6 +30,11 @@
         "address": "0xB1683dB4D2D74E951C54314f1BCA1e8FBB299fE2",
         "type": "contract"
       },
+      "EURm": {
+        "address": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
+        "type": "token",
+        "decimals": 18
+      },
       "FPMMFactory": {
         "address": "0xa849b475FE5a4B5C9C3280152c7a1945b907613b",
         "type": "contract"
