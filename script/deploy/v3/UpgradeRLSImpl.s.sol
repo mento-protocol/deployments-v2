@@ -8,7 +8,7 @@ import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {PostChecksHelper} from "script/helpers/PostChecksHelper.sol";
 import {
     ITransparentUpgradeableProxy
-} from "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+} from "lib/mento-core/lib/openzeppelin-contracts-next/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 
 interface IProxyAdmin {
