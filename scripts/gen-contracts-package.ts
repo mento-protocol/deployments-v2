@@ -869,14 +869,30 @@ async function main() {
   // When the same (exportName, chainId) appears in multiple namespaces with
   // different addresses (e.g. an original Monad deploy in "monad-mainnet" that
   // was later superseded by a redeploy in "mainnet"), prefer the entry from the
-  // most recently-active namespace. Recency is approximated by the max
-  // updatedAt/createdAt across the namespace's treb entries; namespaces with no
-  // treb backing (pure address-book) rank last.
-  const namespaceRecency = new Map<string, string>();
+  // namespace whose *specific* treb deployment of that (exportName, chainId)
+  // is newer. Using per-contract recency rather than namespace-wide recency
+  // matters because one fresh deployment of contract X can otherwise make its
+  // namespace win conflicts on unrelated contract Y. Address-book entries have
+  // no treb backing; they rank oldest.
+  const nameCountsByNs = new Map<string, Map<string, number>>();
+  for (const entry of Object.values(allDeployments)) {
+    let counts = nameCountsByNs.get(entry.namespace);
+    if (!counts) {
+      counts = new Map<string, number>();
+      nameCountsByNs.set(entry.namespace, counts);
+    }
+    counts.set(entry.contractName, (counts.get(entry.contractName) ?? 0) + 1);
+  }
+  const entryRecency = new Map<string, string>();
   for (const entry of Object.values(allDeployments)) {
     const ts = entry.updatedAt ?? entry.createdAt ?? "";
-    const prior = namespaceRecency.get(entry.namespace) ?? "";
-    if (ts > prior) namespaceRecency.set(entry.namespace, ts);
+    if (!ts) continue;
+    const countsForNs = nameCountsByNs.get(entry.namespace);
+    const isNonUnique = (countsForNs?.get(entry.contractName) ?? 0) > 1;
+    const exportName = deriveExportName(entry, overrides, isNonUnique);
+    const key = `${entry.chainId}:${entry.namespace}:${exportName}`;
+    const prior = entryRecency.get(key) ?? "";
+    if (ts > prior) entryRecency.set(key, ts);
   }
 
   const addressesByName = new Map<string, Record<string, string>>();
@@ -895,18 +911,21 @@ async function main() {
           addressSource.set(addrKey, ns);
         } else {
           // Different addresses across namespaces for the same (name, chainId).
-          // Pick the namespace with the newer recency.
-          const existingRecency = namespaceRecency.get(existingNs ?? "") ?? "";
-          const thisRecency = namespaceRecency.get(ns) ?? "";
+          // Pick the namespace whose treb deployment of this specific entry is
+          // newer. Address-book entries have empty recency and rank oldest.
+          const existingRecency =
+            entryRecency.get(`${chainId}:${existingNs ?? ""}:${name}`) ?? "";
+          const thisRecency =
+            entryRecency.get(`${chainId}:${ns}:${name}`) ?? "";
           if (thisRecency > existingRecency) {
             console.warn(
-              `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Using "${ns}" (newer namespace).`,
+              `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Using "${ns}" (newer deployment).`,
             );
             addressesByName.get(name)![chainId] = entry.address;
             addressSource.set(addrKey, ns);
           } else {
             console.warn(
-              `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Keeping "${existingNs}" (newer namespace).`,
+              `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Keeping "${existingNs}" (newer deployment).`,
             );
           }
         }
