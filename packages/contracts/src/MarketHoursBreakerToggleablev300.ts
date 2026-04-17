@@ -165,5 +165,8 @@ export const MarketHoursBreakerToggleablev300 = {
   ] as const,
   address: {
     143: "0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44",
+    10143: "0x4c67f682195d1627Ed76eD69311930c7fB069684",
+    42220: "0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44",
+    11142220: "0x4c67f682195d1627Ed76eD69311930c7fB069684",
   } as Partial<Record<number, `0x${string}`>>,
 };

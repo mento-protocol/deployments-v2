@@ -507,5 +507,8 @@ export const OracleAdapterCollateral = {
   ] as const,
   address: {
     143: "0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423",
+    10143: "0xAb84C994b364Be03018c6528F0F68118f107578A",
+    42220: "0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423",
+    11142220: "0xAb84C994b364Be03018c6528F0F68118f107578A",
   } as Partial<Record<number, `0x${string}`>>,
 };

@@ -745,5 +745,4 @@ export const StableTokenV2 = {
     42220: "0x434563B0604BE100F04B7Ae485BcafE3c9D8850E",
     11142220: "0xEd9A3541f06E45E3d92E937AA74eD878127318E0",
   } as Partial<Record<number, `0x${string}`>>,
-  decimals: 18,
 };

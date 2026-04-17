@@ -1,4 +1,4 @@
-export const StableTokenV3v300 = {
+export const USDmSpoke = {
   abi: [
     {
       type: "constructor",
@@ -112,114 +112,6 @@ export const StableTokenV3v300 = {
     },
     {
       type: "function",
-      name: "burn",
-      inputs: [
-        {
-          name: "account",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "value",
-          type: "uint256",
-          internalType: "uint256",
-        },
-      ],
-      outputs: [
-        {
-          name: "",
-          type: "bool",
-          internalType: "bool",
-        },
-      ],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "creditGasFees",
-      inputs: [
-        {
-          name: "recipients",
-          type: "address[]",
-          internalType: "address[]",
-        },
-        {
-          name: "amounts",
-          type: "uint256[]",
-          internalType: "uint256[]",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "creditGasFees",
-      inputs: [
-        {
-          name: "refundRecipient",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "tipRecipient",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "baseFeeRecipient",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "refundAmount",
-          type: "uint256",
-          internalType: "uint256",
-        },
-        {
-          name: "tipAmount",
-          type: "uint256",
-          internalType: "uint256",
-        },
-        {
-          name: "",
-          type: "uint256",
-          internalType: "uint256",
-        },
-        {
-          name: "baseFeeAmount",
-          type: "uint256",
-          internalType: "uint256",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "debitGasFees",
-      inputs: [
-        {
-          name: "from",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "value",
-          type: "uint256",
-          internalType: "uint256",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
       name: "decimals",
       inputs: [],
       outputs: [
@@ -257,45 +149,6 @@ export const StableTokenV3v300 = {
     },
     {
       type: "function",
-      name: "deprecated_broker_storage_slot__",
-      inputs: [],
-      outputs: [
-        {
-          name: "",
-          type: "address",
-          internalType: "address",
-        },
-      ],
-      stateMutability: "view",
-    },
-    {
-      type: "function",
-      name: "deprecated_exchange_storage_slot__",
-      inputs: [],
-      outputs: [
-        {
-          name: "",
-          type: "address",
-          internalType: "address",
-        },
-      ],
-      stateMutability: "view",
-    },
-    {
-      type: "function",
-      name: "deprecated_validators_storage_slot__",
-      inputs: [],
-      outputs: [
-        {
-          name: "",
-          type: "address",
-          internalType: "address",
-        },
-      ],
-      stateMutability: "view",
-    },
-    {
-      type: "function",
       name: "increaseAllowance",
       inputs: [
         {
@@ -323,12 +176,12 @@ export const StableTokenV3v300 = {
       name: "initialize",
       inputs: [
         {
-          name: "_name",
+          name: "name",
           type: "string",
           internalType: "string",
         },
         {
-          name: "_symbol",
+          name: "symbol",
           type: "string",
           internalType: "string",
         },
@@ -354,34 +207,6 @@ export const StableTokenV3v300 = {
         },
         {
           name: "_burners",
-          type: "address[]",
-          internalType: "address[]",
-        },
-        {
-          name: "_operators",
-          type: "address[]",
-          internalType: "address[]",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "initializeV3",
-      inputs: [
-        {
-          name: "_minters",
-          type: "address[]",
-          internalType: "address[]",
-        },
-        {
-          name: "_burners",
-          type: "address[]",
-          internalType: "address[]",
-        },
-        {
-          name: "_operators",
           type: "address[]",
           internalType: "address[]",
         },
@@ -411,25 +236,6 @@ export const StableTokenV3v300 = {
     {
       type: "function",
       name: "isMinter",
-      inputs: [
-        {
-          name: "",
-          type: "address",
-          internalType: "address",
-        },
-      ],
-      outputs: [
-        {
-          name: "",
-          type: "bool",
-          internalType: "bool",
-        },
-      ],
-      stateMutability: "view",
-    },
-    {
-      type: "function",
-      name: "isOperator",
       inputs: [
         {
           name: "",
@@ -567,52 +373,6 @@ export const StableTokenV3v300 = {
     },
     {
       type: "function",
-      name: "returnFromPool",
-      inputs: [
-        {
-          name: "_poolAddress",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "_receiver",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "_amount",
-          type: "uint256",
-          internalType: "uint256",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "sendToPool",
-      inputs: [
-        {
-          name: "_sender",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "_poolAddress",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "_amount",
-          type: "uint256",
-          internalType: "uint256",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
       name: "setBurner",
       inputs: [
         {
@@ -640,24 +400,6 @@ export const StableTokenV3v300 = {
         },
         {
           name: "_isMinter",
-          type: "bool",
-          internalType: "bool",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "setOperator",
-      inputs: [
-        {
-          name: "_operator",
-          type: "address",
-          internalType: "address",
-        },
-        {
-          name: "_isOperator",
           type: "bool",
           internalType: "bool",
         },
@@ -835,25 +577,6 @@ export const StableTokenV3v300 = {
     },
     {
       type: "event",
-      name: "OperatorUpdated",
-      inputs: [
-        {
-          name: "operator",
-          type: "address",
-          indexed: true,
-          internalType: "address",
-        },
-        {
-          name: "isOperator",
-          type: "bool",
-          indexed: false,
-          internalType: "bool",
-        },
-      ],
-      anonymous: false,
-    },
-    {
-      type: "event",
       name: "OwnershipTransferred",
       inputs: [
         {
@@ -898,9 +621,8 @@ export const StableTokenV3v300 = {
     },
   ] as const,
   address: {
-    143: "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-    10143: "0xDBd4Ea7Ce0b15C9d57DC3Fa47713477E4ef4fdcb",
-    42220: "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-    11142220: "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
+    143: "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115",
+    10143: "0x5eCc03111ad2A78F981A108759bc73BAE2AB31bc",
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };

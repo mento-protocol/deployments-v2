@@ -1,301 +1,301 @@
 export const VirtualPoolFactory = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_owner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_owner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "CREATEX",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "CREATEX",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "CREATEX_BYTECODE_HASH",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "CREATEX_BYTECODE_HASH",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "deployVirtualPool",
-      "inputs": [
+      type: "function",
+      name: "deployVirtualPool",
+      inputs: [
         {
-          "name": "exchangeProvider",
-          "type": "address",
-          "internalType": "address"
+          name: "exchangeProvider",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "deprecatePool",
-      "inputs": [
+      type: "function",
+      name: "deprecatePool",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "getAllPools",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getAllPools",
+      inputs: [],
+      outputs: [
         {
-          "name": "activePools",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "activePools",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getOrPrecomputeProxyAddress",
-      "inputs": [
+      type: "function",
+      name: "getOrPrecomputeProxyAddress",
+      inputs: [
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token1",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getPool",
-      "inputs": [
+      type: "function",
+      name: "getPool",
+      inputs: [
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token1",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isPool",
-      "inputs": [
+      type: "function",
+      name: "isPool",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isPoolDeprecated",
-      "inputs": [
+      type: "function",
+      name: "isPoolDeprecated",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "PoolDeprecated",
-      "inputs": [
+      type: "event",
+      name: "PoolDeprecated",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "VirtualPoolDeployed",
-      "inputs": [
+      type: "event",
+      name: "VirtualPoolDeployed",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "pool",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "token0",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "token1",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "error",
-      "name": "InvalidCreateXBytecode",
-      "inputs": []
+      type: "error",
+      name: "InvalidCreateXBytecode",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InvalidExchangeId",
-      "inputs": []
+      type: "error",
+      name: "InvalidExchangeId",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InvalidExchangeProvider",
-      "inputs": []
+      type: "error",
+      name: "InvalidExchangeProvider",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "PoolAlreadyDeprecated",
-      "inputs": []
+      type: "error",
+      name: "PoolAlreadyDeprecated",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "PoolNotFound",
-      "inputs": []
+      type: "error",
+      name: "PoolNotFound",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "VirtualPoolAlreadyExistsForThisPair",
-      "inputs": []
-    }
+      type: "error",
+      name: "VirtualPoolAlreadyExistsForThisPair",
+      inputs: [],
+    },
   ] as const,
   address: {
-    42220: '0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3',
-    11142220: '0x887955f28723B0e9Bddc358448CB5B1FDe692da4',
+    42220: "0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3",
+    11142220: "0x887955f28723B0e9Bddc358448CB5B1FDe692da4",
   } as Partial<Record<number, `0x${string}`>>,
 };

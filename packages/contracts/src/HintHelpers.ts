@@ -1,339 +1,339 @@
 export const HintHelpers = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_collateralRegistry",
-          "type": "address",
-          "internalType": "contract ICollateralRegistry"
+          name: "_collateralRegistry",
+          type: "address",
+          internalType: "contract ICollateralRegistry",
         },
         {
-          "name": "_systemParams",
-          "type": "address",
-          "internalType": "contract ISystemParams"
-        }
+          name: "_systemParams",
+          type: "address",
+          internalType: "contract ISystemParams",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "NAME",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "NAME",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collateralRegistry",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collateralRegistry",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ICollateralRegistry"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ICollateralRegistry",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "forcePredictAdjustInterestRateUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "forcePredictAdjustInterestRateUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_troveId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_troveId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_newInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_newInterestRate",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getApproxHint",
-      "inputs": [
+      type: "function",
+      name: "getApproxHint",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_interestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_interestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_numTrials",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_numTrials",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_inputRandomSeed",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_inputRandomSeed",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "hintId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "hintId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "diff",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "diff",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "latestRandomSeed",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "latestRandomSeed",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictAdjustBatchInterestRateUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictAdjustBatchInterestRateUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_batchAddress",
-          "type": "address",
-          "internalType": "address"
+          name: "_batchAddress",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_newInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_newInterestRate",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictAdjustInterestRateUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictAdjustInterestRateUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_troveId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_troveId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_newInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_newInterestRate",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictAdjustTroveUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictAdjustTroveUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_troveId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_troveId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_debtIncrease",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_debtIncrease",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictJoinBatchInterestRateUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictJoinBatchInterestRateUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_troveId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_troveId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_batchAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_batchAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictOpenTroveAndJoinBatchUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictOpenTroveAndJoinBatchUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_borrowedAmount",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_borrowedAmount",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_batchAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_batchAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictOpenTroveUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictOpenTroveUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_borrowedAmount",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_borrowedAmount",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_interestRate",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_interestRate",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "predictRemoveFromBatchUpfrontFee",
-      "inputs": [
+      type: "function",
+      name: "predictRemoveFromBatchUpfrontFee",
+      inputs: [
         {
-          "name": "_collIndex",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_collIndex",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_troveId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_troveId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_newInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_newInterestRate",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "systemParamsAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "systemParamsAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
-    }
+      stateMutability: "view",
+    },
   ] as const,
   address: {
-    42220: '0xAfd741674bc4aa965a788dACe5b0434FD4374D82',
-    11142220: '0x5A54DD5d7AD1b782b43bB08d0A40CA947a315556',
+    42220: "0xAfd741674bc4aa965a788dACe5b0434FD4374D82",
+    11142220: "0x5A54DD5d7AD1b782b43bB08d0A40CA947a315556",
   } as Partial<Record<number, `0x${string}`>>,
 };

@@ -1,46 +1,46 @@
 export const MarketHoursBreaker = {
   abi: [
     {
-      "type": "function",
-      "name": "isFXMarketOpen",
-      "inputs": [
+      type: "function",
+      name: "isFXMarketOpen",
+      inputs: [
         {
-          "name": "timestamp",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "timestamp",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "pure"
+      stateMutability: "pure",
     },
     {
-      "type": "function",
-      "name": "shouldTrigger",
-      "inputs": [
+      type: "function",
+      name: "shouldTrigger",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "triggerBreaker",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "triggerBreaker",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
-    }
+      stateMutability: "view",
+    },
   ] as const,
   address: {
-    42220: '0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF',
-    11142220: '0x99C968Bf5972C11442654b989B7eAD0237cA654B',
+    42220: "0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF",
+    11142220: "0x99C968Bf5972C11442654b989B7eAD0237cA654B",
   } as Partial<Record<number, `0x${string}`>>,
 };

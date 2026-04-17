@@ -1,986 +1,986 @@
 export const BiPoolManager = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "test",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "test",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "CONSTANT_PRODUCT",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "CONSTANT_PRODUCT",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "CONSTANT_SUM",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "CONSTANT_SUM",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "breakerBox",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "breakerBox",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IBreakerBox"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IBreakerBox",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "broker",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "broker",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "createExchange",
-      "inputs": [
+      type: "function",
+      name: "createExchange",
+      inputs: [
         {
-          "name": "_exchange",
-          "type": "tuple",
-          "internalType": "struct IBiPoolManager.PoolExchange",
-          "components": [
+          name: "_exchange",
+          type: "tuple",
+          internalType: "struct IBiPoolManager.PoolExchange",
+          components: [
             {
-              "name": "asset0",
-              "type": "address",
-              "internalType": "address"
+              name: "asset0",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "asset1",
-              "type": "address",
-              "internalType": "address"
+              name: "asset1",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "pricingModule",
-              "type": "address",
-              "internalType": "contract IPricingModule"
+              name: "pricingModule",
+              type: "address",
+              internalType: "contract IPricingModule",
             },
             {
-              "name": "bucket0",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "bucket0",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "bucket1",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "bucket1",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "lastBucketUpdate",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lastBucketUpdate",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "config",
-              "type": "tuple",
-              "internalType": "struct IBiPoolManager.PoolConfig",
-              "components": [
+              name: "config",
+              type: "tuple",
+              internalType: "struct IBiPoolManager.PoolConfig",
+              components: [
                 {
-                  "name": "spread",
-                  "type": "tuple",
-                  "internalType": "struct FixidityLib.Fraction",
-                  "components": [
+                  name: "spread",
+                  type: "tuple",
+                  internalType: "struct FixidityLib.Fraction",
+                  components: [
                     {
-                      "name": "value",
-                      "type": "uint256",
-                      "internalType": "uint256"
-                    }
-                  ]
+                      name: "value",
+                      type: "uint256",
+                      internalType: "uint256",
+                    },
+                  ],
                 },
                 {
-                  "name": "referenceRateFeedID",
-                  "type": "address",
-                  "internalType": "address"
+                  name: "referenceRateFeedID",
+                  type: "address",
+                  internalType: "address",
                 },
                 {
-                  "name": "referenceRateResetFrequency",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "referenceRateResetFrequency",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "minimumReports",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "minimumReports",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "stablePoolResetSize",
-                  "type": "uint256",
-                  "internalType": "uint256"
-                }
-              ]
-            }
-          ]
-        }
+                  name: "stablePoolResetSize",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
+            },
+          ],
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "destroyExchange",
-      "inputs": [
+      type: "function",
+      name: "destroyExchange",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
         },
         {
-          "name": "exchangeIdIndex",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "exchangeIdIndex",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "destroyed",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "destroyed",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "exchangeIds",
-      "inputs": [
+      type: "function",
+      name: "exchangeIds",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "exchanges",
-      "inputs": [
+      type: "function",
+      name: "exchanges",
+      inputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "asset0",
-          "type": "address",
-          "internalType": "address"
+          name: "asset0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "asset1",
-          "type": "address",
-          "internalType": "address"
+          name: "asset1",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "pricingModule",
-          "type": "address",
-          "internalType": "contract IPricingModule"
+          name: "pricingModule",
+          type: "address",
+          internalType: "contract IPricingModule",
         },
         {
-          "name": "bucket0",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "bucket0",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "bucket1",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "bucket1",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "lastBucketUpdate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "lastBucketUpdate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "config",
-          "type": "tuple",
-          "internalType": "struct IBiPoolManager.PoolConfig",
-          "components": [
+          name: "config",
+          type: "tuple",
+          internalType: "struct IBiPoolManager.PoolConfig",
+          components: [
             {
-              "name": "spread",
-              "type": "tuple",
-              "internalType": "struct FixidityLib.Fraction",
-              "components": [
+              name: "spread",
+              type: "tuple",
+              internalType: "struct FixidityLib.Fraction",
+              components: [
                 {
-                  "name": "value",
-                  "type": "uint256",
-                  "internalType": "uint256"
-                }
-              ]
+                  name: "value",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
             },
             {
-              "name": "referenceRateFeedID",
-              "type": "address",
-              "internalType": "address"
+              name: "referenceRateFeedID",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "referenceRateResetFrequency",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "referenceRateResetFrequency",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "minimumReports",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "minimumReports",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "stablePoolResetSize",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "stablePoolResetSize",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getAmountIn",
-      "inputs": [
+      type: "function",
+      name: "getAmountIn",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
         },
         {
-          "name": "tokenIn",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenIn",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tokenOut",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenOut",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "amountOut",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountOut",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "amountIn",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountIn",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getAmountOut",
-      "inputs": [
+      type: "function",
+      name: "getAmountOut",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
         },
         {
-          "name": "tokenIn",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenIn",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tokenOut",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenOut",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "amountIn",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountIn",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "amountOut",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountOut",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getExchangeIds",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getExchangeIds",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32[]",
-          "internalType": "bytes32[]"
-        }
+          name: "",
+          type: "bytes32[]",
+          internalType: "bytes32[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getExchanges",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getExchanges",
+      inputs: [],
+      outputs: [
         {
-          "name": "_exchanges",
-          "type": "tuple[]",
-          "internalType": "struct IExchangeProvider.Exchange[]",
-          "components": [
+          name: "_exchanges",
+          type: "tuple[]",
+          internalType: "struct IExchangeProvider.Exchange[]",
+          components: [
             {
-              "name": "exchangeId",
-              "type": "bytes32",
-              "internalType": "bytes32"
+              name: "exchangeId",
+              type: "bytes32",
+              internalType: "bytes32",
             },
             {
-              "name": "assets",
-              "type": "address[]",
-              "internalType": "address[]"
-            }
-          ]
-        }
+              name: "assets",
+              type: "address[]",
+              internalType: "address[]",
+            },
+          ],
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getPoolExchange",
-      "inputs": [
+      type: "function",
+      name: "getPoolExchange",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "exchange",
-          "type": "tuple",
-          "internalType": "struct IBiPoolManager.PoolExchange",
-          "components": [
+          name: "exchange",
+          type: "tuple",
+          internalType: "struct IBiPoolManager.PoolExchange",
+          components: [
             {
-              "name": "asset0",
-              "type": "address",
-              "internalType": "address"
+              name: "asset0",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "asset1",
-              "type": "address",
-              "internalType": "address"
+              name: "asset1",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "pricingModule",
-              "type": "address",
-              "internalType": "contract IPricingModule"
+              name: "pricingModule",
+              type: "address",
+              internalType: "contract IPricingModule",
             },
             {
-              "name": "bucket0",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "bucket0",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "bucket1",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "bucket1",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "lastBucketUpdate",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lastBucketUpdate",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "config",
-              "type": "tuple",
-              "internalType": "struct IBiPoolManager.PoolConfig",
-              "components": [
+              name: "config",
+              type: "tuple",
+              internalType: "struct IBiPoolManager.PoolConfig",
+              components: [
                 {
-                  "name": "spread",
-                  "type": "tuple",
-                  "internalType": "struct FixidityLib.Fraction",
-                  "components": [
+                  name: "spread",
+                  type: "tuple",
+                  internalType: "struct FixidityLib.Fraction",
+                  components: [
                     {
-                      "name": "value",
-                      "type": "uint256",
-                      "internalType": "uint256"
-                    }
-                  ]
+                      name: "value",
+                      type: "uint256",
+                      internalType: "uint256",
+                    },
+                  ],
                 },
                 {
-                  "name": "referenceRateFeedID",
-                  "type": "address",
-                  "internalType": "address"
+                  name: "referenceRateFeedID",
+                  type: "address",
+                  internalType: "address",
                 },
                 {
-                  "name": "referenceRateResetFrequency",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "referenceRateResetFrequency",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "minimumReports",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "minimumReports",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "stablePoolResetSize",
-                  "type": "uint256",
-                  "internalType": "uint256"
-                }
-              ]
-            }
-          ]
-        }
+                  name: "stablePoolResetSize",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
+            },
+          ],
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "_broker",
-          "type": "address",
-          "internalType": "address"
+          name: "_broker",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_reserve",
-          "type": "address",
-          "internalType": "contract IReserve"
+          name: "_reserve",
+          type: "address",
+          internalType: "contract IReserve",
         },
         {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
+          name: "_sortedOracles",
+          type: "address",
+          internalType: "contract ISortedOracles",
         },
         {
-          "name": "_breakerBox",
-          "type": "address",
-          "internalType": "contract IBreakerBox"
-        }
+          name: "_breakerBox",
+          type: "address",
+          internalType: "contract IBreakerBox",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "initialized",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "initialized",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOwner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isOwner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "pricingModules",
-      "inputs": [
+      type: "function",
+      name: "pricingModules",
+      inputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "reserve",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "reserve",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IReserve"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IReserve",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "setBreakerBox",
-      "inputs": [
+      type: "function",
+      name: "setBreakerBox",
+      inputs: [
         {
-          "name": "_breakerBox",
-          "type": "address",
-          "internalType": "contract IBreakerBox"
-        }
+          name: "_breakerBox",
+          type: "address",
+          internalType: "contract IBreakerBox",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setBroker",
-      "inputs": [
+      type: "function",
+      name: "setBroker",
+      inputs: [
         {
-          "name": "_broker",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_broker",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setPricingModules",
-      "inputs": [
+      type: "function",
+      name: "setPricingModules",
+      inputs: [
         {
-          "name": "identifiers",
-          "type": "bytes32[]",
-          "internalType": "bytes32[]"
+          name: "identifiers",
+          type: "bytes32[]",
+          internalType: "bytes32[]",
         },
         {
-          "name": "modules",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "modules",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setReserve",
-      "inputs": [
+      type: "function",
+      name: "setReserve",
+      inputs: [
         {
-          "name": "_reserve",
-          "type": "address",
-          "internalType": "contract IReserve"
-        }
+          name: "_reserve",
+          type: "address",
+          internalType: "contract IReserve",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setSortedOracles",
-      "inputs": [
+      type: "function",
+      name: "setSortedOracles",
+      inputs: [
         {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        }
+          name: "_sortedOracles",
+          type: "address",
+          internalType: "contract ISortedOracles",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setSpread",
-      "inputs": [
+      type: "function",
+      name: "setSpread",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
         },
         {
-          "name": "spread",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "spread",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "sortedOracles",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "sortedOracles",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ISortedOracles",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "swapIn",
-      "inputs": [
+      type: "function",
+      name: "swapIn",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
         },
         {
-          "name": "tokenIn",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenIn",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tokenOut",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenOut",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "amountIn",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountIn",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "amountOut",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountOut",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "swapOut",
-      "inputs": [
+      type: "function",
+      name: "swapOut",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          internalType: "bytes32",
         },
         {
-          "name": "tokenIn",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenIn",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tokenOut",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenOut",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "amountOut",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountOut",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "amountIn",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountIn",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "tokenPrecisionMultipliers",
-      "inputs": [
+      type: "function",
+      name: "tokenPrecisionMultipliers",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "BreakerBoxUpdated",
-      "inputs": [
+      type: "event",
+      name: "BreakerBoxUpdated",
+      inputs: [
         {
-          "name": "newBreakerBox",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "newBreakerBox",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BrokerUpdated",
-      "inputs": [
+      type: "event",
+      name: "BrokerUpdated",
+      inputs: [
         {
-          "name": "newBroker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newBroker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BucketsUpdated",
-      "inputs": [
+      type: "event",
+      name: "BucketsUpdated",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "indexed": true,
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          indexed: true,
+          internalType: "bytes32",
         },
         {
-          "name": "bucket0",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "bucket0",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "bucket1",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "bucket1",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ExchangeCreated",
-      "inputs": [
+      type: "event",
+      name: "ExchangeCreated",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "indexed": true,
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          indexed: true,
+          internalType: "bytes32",
         },
         {
-          "name": "asset0",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "asset0",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "asset1",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "asset1",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "pricingModule",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "pricingModule",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ExchangeDestroyed",
-      "inputs": [
+      type: "event",
+      name: "ExchangeDestroyed",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "indexed": true,
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          indexed: true,
+          internalType: "bytes32",
         },
         {
-          "name": "asset0",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "asset0",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "asset1",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "asset1",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "pricingModule",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "pricingModule",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "PricingModulesUpdated",
-      "inputs": [
+      type: "event",
+      name: "PricingModulesUpdated",
+      inputs: [
         {
-          "name": "newIdentifiers",
-          "type": "bytes32[]",
-          "indexed": false,
-          "internalType": "bytes32[]"
+          name: "newIdentifiers",
+          type: "bytes32[]",
+          indexed: false,
+          internalType: "bytes32[]",
         },
         {
-          "name": "newAddresses",
-          "type": "address[]",
-          "indexed": false,
-          "internalType": "address[]"
-        }
+          name: "newAddresses",
+          type: "address[]",
+          indexed: false,
+          internalType: "address[]",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReserveUpdated",
-      "inputs": [
+      type: "event",
+      name: "ReserveUpdated",
+      inputs: [
         {
-          "name": "newReserve",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newReserve",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SortedOraclesUpdated",
-      "inputs": [
+      type: "event",
+      name: "SortedOraclesUpdated",
+      inputs: [
         {
-          "name": "newSortedOracles",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newSortedOracles",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SpreadUpdated",
-      "inputs": [
+      type: "event",
+      name: "SpreadUpdated",
+      inputs: [
         {
-          "name": "exchangeId",
-          "type": "bytes32",
-          "indexed": true,
-          "internalType": "bytes32"
+          name: "exchangeId",
+          type: "bytes32",
+          indexed: true,
+          internalType: "bytes32",
         },
         {
-          "name": "spread",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "spread",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    42220: '0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901',
-    11142220: '0xeCB3C656C131fCd9bB8D1d80898716bD684feb78',
+    42220: "0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901",
+    11142220: "0xeCB3C656C131fCd9bB8D1d80898716bD684feb78",
   } as Partial<Record<number, `0x${string}`>>,
 };
