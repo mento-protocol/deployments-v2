@@ -1,485 +1,485 @@
 export const ValueDeltaBreakerv265 = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_defaultCooldownTime",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_defaultCooldownTime",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_defaultRateChangeThreshold",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_defaultRateChangeThreshold",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
+          name: "_sortedOracles",
+          type: "address",
+          internalType: "contract ISortedOracles",
         },
         {
-          "name": "rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "rateFeedIDs",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "rateChangeThresholds",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
+          name: "rateChangeThresholds",
+          type: "uint256[]",
+          internalType: "uint256[]",
         },
         {
-          "name": "cooldownTimes",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
+          name: "cooldownTimes",
+          type: "uint256[]",
+          internalType: "uint256[]",
         },
         {
-          "name": "owner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "owner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "defaultCooldownTime",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "defaultCooldownTime",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "defaultRateChangeThreshold",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "defaultRateChangeThreshold",
+      inputs: [],
+      outputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "exceedsThreshold",
-      "inputs": [
+      type: "function",
+      name: "exceedsThreshold",
+      inputs: [
         {
-          "name": "referenceValue",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "referenceValue",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "currentValue",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "currentValue",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getCooldown",
-      "inputs": [
+      type: "function",
+      name: "getCooldown",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOwner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isOwner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateChangeThreshold",
-      "inputs": [
+      type: "function",
+      name: "rateChangeThreshold",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateFeedCooldownTime",
-      "inputs": [
+      type: "function",
+      name: "rateFeedCooldownTime",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "referenceValues",
-      "inputs": [
+      type: "function",
+      name: "referenceValues",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setCooldownTimes",
-      "inputs": [
+      type: "function",
+      name: "setCooldownTimes",
+      inputs: [
         {
-          "name": "rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "rateFeedIDs",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "cooldownTimes",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "cooldownTimes",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setDefaultCooldownTime",
-      "inputs": [
+      type: "function",
+      name: "setDefaultCooldownTime",
+      inputs: [
         {
-          "name": "cooldownTime",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "cooldownTime",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setDefaultRateChangeThreshold",
-      "inputs": [
+      type: "function",
+      name: "setDefaultRateChangeThreshold",
+      inputs: [
         {
-          "name": "_defaultRateChangeThreshold",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_defaultRateChangeThreshold",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setRateChangeThresholds",
-      "inputs": [
+      type: "function",
+      name: "setRateChangeThresholds",
+      inputs: [
         {
-          "name": "rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "rateFeedIDs",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "rateChangeThresholds",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "rateChangeThresholds",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setReferenceValues",
-      "inputs": [
+      type: "function",
+      name: "setReferenceValues",
+      inputs: [
         {
-          "name": "rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "rateFeedIDs",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_referenceValues",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "_referenceValues",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setSortedOracles",
-      "inputs": [
+      type: "function",
+      name: "setSortedOracles",
+      inputs: [
         {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        }
+          name: "_sortedOracles",
+          type: "address",
+          internalType: "contract ISortedOracles",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "shouldReset",
-      "inputs": [
+      type: "function",
+      name: "shouldReset",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "resetBreaker",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "resetBreaker",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "shouldTrigger",
-      "inputs": [
+      type: "function",
+      name: "shouldTrigger",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "triggerBreaker",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "triggerBreaker",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "sortedOracles",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "sortedOracles",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ISortedOracles",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "DefaultCooldownTimeUpdated",
-      "inputs": [
+      type: "event",
+      name: "DefaultCooldownTimeUpdated",
+      inputs: [
         {
-          "name": "newCooldownTime",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "newCooldownTime",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DefaultRateChangeThresholdUpdated",
-      "inputs": [
+      type: "event",
+      name: "DefaultRateChangeThresholdUpdated",
+      inputs: [
         {
-          "name": "defaultRateChangeThreshold",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "defaultRateChangeThreshold",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RateChangeThresholdUpdated",
-      "inputs": [
+      type: "event",
+      name: "RateChangeThresholdUpdated",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "rateChangeThreshold",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "rateChangeThreshold",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RateFeedCooldownTimeUpdated",
-      "inputs": [
+      type: "event",
+      name: "RateFeedCooldownTimeUpdated",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "newCooldownTime",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "newCooldownTime",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReferenceValueUpdated",
-      "inputs": [
+      type: "event",
+      name: "ReferenceValueUpdated",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "referenceValue",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "referenceValue",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SortedOraclesUpdated",
-      "inputs": [
+      type: "event",
+      name: "SortedOraclesUpdated",
+      inputs: [
         {
-          "name": "newSortedOracles",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "newSortedOracles",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    10143: '0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf',
-    11142220: '0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534',
+    10143: "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf",
+    11142220: "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534",
   } as Partial<Record<number, `0x${string}`>>,
 };

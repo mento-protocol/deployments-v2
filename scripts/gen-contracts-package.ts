@@ -1020,6 +1020,30 @@ async function main() {
     "package.json",
   );
 
+  // ── Format generated output so it survives the trunk/prettier CI check ────
+  // The generator serialises ABIs via JSON.stringify which leaves keys quoted;
+  // prettier wants unquoted TS-style keys. Rather than re-implement a TS-object
+  // serialiser, run trunk fmt over the generated files. Skip silently if trunk
+  // isn't on PATH — the CI will still flag the formatting issue.
+  const fmtTargets = [srcDir, abisDir, contractsJsonPath, pkgJsonPath];
+  const fmtResult = spawnSync("trunk", ["fmt", ...fmtTargets], {
+    cwd: repoRoot,
+    stdio: "ignore",
+  });
+  if (fmtResult.status === 0) {
+    console.log("✓ Formatted generated files via trunk fmt");
+  } else if (
+    fmtResult.error &&
+    "code" in fmtResult.error &&
+    fmtResult.error.code === "ENOENT"
+  ) {
+    console.warn(
+      "⚠  trunk not found on PATH — skipping auto-format. Run `trunk fmt` manually before committing.",
+    );
+  } else {
+    console.warn("⚠  trunk fmt exited non-zero; check the output above.");
+  }
+
   // ── Diff and summary ───────────────────────────────────────────────────────
 
   const { added, removed, changed } = diffContracts(

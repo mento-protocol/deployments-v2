@@ -1,701 +1,701 @@
 export const OpenLiquidityStrategyv300 = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "disable",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "disable",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addPool",
-      "inputs": [
+      type: "function",
+      name: "addPool",
+      inputs: [
         {
-          "name": "params",
-          "type": "tuple",
-          "internalType": "struct ILiquidityStrategy.AddPoolParams",
-          "components": [
+          name: "params",
+          type: "tuple",
+          internalType: "struct ILiquidityStrategy.AddPoolParams",
+          components: [
             {
-              "name": "pool",
-              "type": "address",
-              "internalType": "address"
+              name: "pool",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "debtToken",
-              "type": "address",
-              "internalType": "address"
+              name: "debtToken",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "cooldown",
-              "type": "uint32",
-              "internalType": "uint32"
+              name: "cooldown",
+              type: "uint32",
+              internalType: "uint32",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "liquiditySourceIncentiveExpansion",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "liquiditySourceIncentiveExpansion",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "protocolIncentiveExpansion",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "protocolIncentiveExpansion",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "liquiditySourceIncentiveContraction",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "liquiditySourceIncentiveContraction",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "protocolIncentiveContraction",
-              "type": "uint64",
-              "internalType": "uint64"
-            }
-          ]
-        }
+              name: "protocolIncentiveContraction",
+              type: "uint64",
+              internalType: "uint64",
+            },
+          ],
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "determineAction",
-      "inputs": [
+      type: "function",
+      name: "determineAction",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "ctx",
-          "type": "tuple",
-          "internalType": "struct LiquidityStrategyTypes.Context",
-          "components": [
+          name: "ctx",
+          type: "tuple",
+          internalType: "struct LiquidityStrategyTypes.Context",
+          components: [
             {
-              "name": "pool",
-              "type": "address",
-              "internalType": "address"
+              name: "pool",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "reserves",
-              "type": "tuple",
-              "internalType": "struct LiquidityStrategyTypes.Reserves",
-              "components": [
+              name: "reserves",
+              type: "tuple",
+              internalType: "struct LiquidityStrategyTypes.Reserves",
+              components: [
                 {
-                  "name": "reserveNum",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "reserveNum",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "reserveDen",
-                  "type": "uint256",
-                  "internalType": "uint256"
-                }
-              ]
+                  name: "reserveDen",
+                  type: "uint256",
+                  internalType: "uint256",
+                },
+              ],
             },
             {
-              "name": "prices",
-              "type": "tuple",
-              "internalType": "struct LiquidityStrategyTypes.Prices",
-              "components": [
+              name: "prices",
+              type: "tuple",
+              internalType: "struct LiquidityStrategyTypes.Prices",
+              components: [
                 {
-                  "name": "oracleNum",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "oracleNum",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "oracleDen",
-                  "type": "uint256",
-                  "internalType": "uint256"
+                  name: "oracleDen",
+                  type: "uint256",
+                  internalType: "uint256",
                 },
                 {
-                  "name": "poolPriceAbove",
-                  "type": "bool",
-                  "internalType": "bool"
+                  name: "poolPriceAbove",
+                  type: "bool",
+                  internalType: "bool",
                 },
                 {
-                  "name": "rebalanceThreshold",
-                  "type": "uint16",
-                  "internalType": "uint16"
-                }
-              ]
+                  name: "rebalanceThreshold",
+                  type: "uint16",
+                  internalType: "uint16",
+                },
+              ],
             },
             {
-              "name": "token0",
-              "type": "address",
-              "internalType": "address"
+              name: "token0",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "token1",
-              "type": "address",
-              "internalType": "address"
+              name: "token1",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "token0Dec",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "token0Dec",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "token1Dec",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "token1Dec",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "isToken0Debt",
-              "type": "bool",
-              "internalType": "bool"
+              name: "isToken0Debt",
+              type: "bool",
+              internalType: "bool",
             },
             {
-              "name": "incentives",
-              "type": "tuple",
-              "internalType": "struct LiquidityStrategyTypes.RebalanceIncentives",
-              "components": [
+              name: "incentives",
+              type: "tuple",
+              internalType: "struct LiquidityStrategyTypes.RebalanceIncentives",
+              components: [
                 {
-                  "name": "liquiditySourceIncentiveExpansion",
-                  "type": "uint64",
-                  "internalType": "uint64"
+                  name: "liquiditySourceIncentiveExpansion",
+                  type: "uint64",
+                  internalType: "uint64",
                 },
                 {
-                  "name": "protocolIncentiveExpansion",
-                  "type": "uint64",
-                  "internalType": "uint64"
+                  name: "protocolIncentiveExpansion",
+                  type: "uint64",
+                  internalType: "uint64",
                 },
                 {
-                  "name": "liquiditySourceIncentiveContraction",
-                  "type": "uint64",
-                  "internalType": "uint64"
+                  name: "liquiditySourceIncentiveContraction",
+                  type: "uint64",
+                  internalType: "uint64",
                 },
                 {
-                  "name": "protocolIncentiveContraction",
-                  "type": "uint64",
-                  "internalType": "uint64"
-                }
-              ]
-            }
-          ]
+                  name: "protocolIncentiveContraction",
+                  type: "uint64",
+                  internalType: "uint64",
+                },
+              ],
+            },
+          ],
         },
         {
-          "name": "action",
-          "type": "tuple",
-          "internalType": "struct LiquidityStrategyTypes.Action",
-          "components": [
+          name: "action",
+          type: "tuple",
+          internalType: "struct LiquidityStrategyTypes.Action",
+          components: [
             {
-              "name": "dir",
-              "type": "uint8",
-              "internalType": "enum LiquidityStrategyTypes.Direction"
+              name: "dir",
+              type: "uint8",
+              internalType: "enum LiquidityStrategyTypes.Direction",
             },
             {
-              "name": "amount0Out",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "amount0Out",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "amount1Out",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "amount1Out",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "amountOwedToPool",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "amountOwedToPool",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getPools",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getPools",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "_initialOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_initialOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "isPoolRegistered",
-      "inputs": [
+      type: "function",
+      name: "isPoolRegistered",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "onRebalance",
-      "inputs": [
+      type: "function",
+      name: "onRebalance",
+      inputs: [
         {
-          "name": "sender",
-          "type": "address",
-          "internalType": "address"
+          name: "sender",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "amount0Out",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "amount0Out",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "amount1Out",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "amount1Out",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "data",
-          "type": "bytes",
-          "internalType": "bytes"
-        }
+          name: "data",
+          type: "bytes",
+          internalType: "bytes",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "poolConfigs",
-      "inputs": [
+      type: "function",
+      name: "poolConfigs",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "isToken0Debt",
-          "type": "bool",
-          "internalType": "bool"
+          name: "isToken0Debt",
+          type: "bool",
+          internalType: "bool",
         },
         {
-          "name": "lastRebalance",
-          "type": "uint32",
-          "internalType": "uint32"
+          name: "lastRebalance",
+          type: "uint32",
+          internalType: "uint32",
         },
         {
-          "name": "rebalanceCooldown",
-          "type": "uint32",
-          "internalType": "uint32"
+          name: "rebalanceCooldown",
+          type: "uint32",
+          internalType: "uint32",
         },
         {
-          "name": "protocolFeeRecipient",
-          "type": "address",
-          "internalType": "address"
+          name: "protocolFeeRecipient",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "liquiditySourceIncentiveExpansion",
-          "type": "uint64",
-          "internalType": "uint64"
+          name: "liquiditySourceIncentiveExpansion",
+          type: "uint64",
+          internalType: "uint64",
         },
         {
-          "name": "protocolIncentiveExpansion",
-          "type": "uint64",
-          "internalType": "uint64"
+          name: "protocolIncentiveExpansion",
+          type: "uint64",
+          internalType: "uint64",
         },
         {
-          "name": "liquiditySourceIncentiveContraction",
-          "type": "uint64",
-          "internalType": "uint64"
+          name: "liquiditySourceIncentiveContraction",
+          type: "uint64",
+          internalType: "uint64",
         },
         {
-          "name": "protocolIncentiveContraction",
-          "type": "uint64",
-          "internalType": "uint64"
-        }
+          name: "protocolIncentiveContraction",
+          type: "uint64",
+          internalType: "uint64",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rebalance",
-      "inputs": [
+      type: "function",
+      name: "rebalance",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removePool",
-      "inputs": [
+      type: "function",
+      name: "removePool",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setRebalanceCooldown",
-      "inputs": [
+      type: "function",
+      name: "setRebalanceCooldown",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
+          name: "pool",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "cooldown",
-          "type": "uint32",
-          "internalType": "uint32"
-        }
+          name: "cooldown",
+          type: "uint32",
+          internalType: "uint32",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "Initialized",
-      "inputs": [
+      type: "event",
+      name: "Initialized",
+      inputs: [
         {
-          "name": "version",
-          "type": "uint8",
-          "indexed": false,
-          "internalType": "uint8"
-        }
+          name: "version",
+          type: "uint8",
+          indexed: false,
+          internalType: "uint8",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "LiquidityMoved",
-      "inputs": [
+      type: "event",
+      name: "LiquidityMoved",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "pool",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "direction",
-          "type": "uint8",
-          "indexed": true,
-          "internalType": "enum LiquidityStrategyTypes.Direction"
+          name: "direction",
+          type: "uint8",
+          indexed: true,
+          internalType: "enum LiquidityStrategyTypes.Direction",
         },
         {
-          "name": "tokenGivenToPool",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "tokenGivenToPool",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "amountGivenToPool",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "amountGivenToPool",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "tokenTakenFromPool",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "tokenTakenFromPool",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "amountTakenFromPool",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "amountTakenFromPool",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "PoolAdded",
-      "inputs": [
+      type: "event",
+      name: "PoolAdded",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "pool",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "params",
-          "type": "tuple",
-          "indexed": false,
-          "internalType": "struct ILiquidityStrategy.AddPoolParams",
-          "components": [
+          name: "params",
+          type: "tuple",
+          indexed: false,
+          internalType: "struct ILiquidityStrategy.AddPoolParams",
+          components: [
             {
-              "name": "pool",
-              "type": "address",
-              "internalType": "address"
+              name: "pool",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "debtToken",
-              "type": "address",
-              "internalType": "address"
+              name: "debtToken",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "cooldown",
-              "type": "uint32",
-              "internalType": "uint32"
+              name: "cooldown",
+              type: "uint32",
+              internalType: "uint32",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "liquiditySourceIncentiveExpansion",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "liquiditySourceIncentiveExpansion",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "protocolIncentiveExpansion",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "protocolIncentiveExpansion",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "liquiditySourceIncentiveContraction",
-              "type": "uint64",
-              "internalType": "uint64"
+              name: "liquiditySourceIncentiveContraction",
+              type: "uint64",
+              internalType: "uint64",
             },
             {
-              "name": "protocolIncentiveContraction",
-              "type": "uint64",
-              "internalType": "uint64"
-            }
-          ]
-        }
+              name: "protocolIncentiveContraction",
+              type: "uint64",
+              internalType: "uint64",
+            },
+          ],
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "PoolRemoved",
-      "inputs": [
+      type: "event",
+      name: "PoolRemoved",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RebalanceCooldownSet",
-      "inputs": [
+      type: "event",
+      name: "RebalanceCooldownSet",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "pool",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "cooldown",
-          "type": "uint32",
-          "indexed": false,
-          "internalType": "uint32"
-        }
+          name: "cooldown",
+          type: "uint32",
+          indexed: false,
+          internalType: "uint32",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "error",
-      "name": "LS_BAD_INCENTIVE",
-      "inputs": []
+      type: "error",
+      name: "LS_BAD_INCENTIVE",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_CAN_ONLY_REBALANCE_ONCE",
-      "inputs": [
+      type: "error",
+      name: "LS_CAN_ONLY_REBALANCE_ONCE",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
-      ]
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
+      ],
     },
     {
-      "type": "error",
-      "name": "LS_COOLDOWN_ACTIVE",
-      "inputs": []
+      type: "error",
+      name: "LS_COOLDOWN_ACTIVE",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_DEBT_TOKEN_NOT_IN_POOL",
-      "inputs": []
+      type: "error",
+      name: "LS_DEBT_TOKEN_NOT_IN_POOL",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_HOOK_NOT_CALLED",
-      "inputs": []
+      type: "error",
+      name: "LS_HOOK_NOT_CALLED",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_INCENTIVE_TOO_HIGH",
-      "inputs": []
+      type: "error",
+      name: "LS_INCENTIVE_TOO_HIGH",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_INVALID_DECIMAL",
-      "inputs": []
+      type: "error",
+      name: "LS_INVALID_DECIMAL",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_INVALID_OWNER",
-      "inputs": []
+      type: "error",
+      name: "LS_INVALID_OWNER",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_INVALID_PRICES",
-      "inputs": []
+      type: "error",
+      name: "LS_INVALID_PRICES",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_INVALID_SENDER",
-      "inputs": []
+      type: "error",
+      name: "LS_INVALID_SENDER",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_INVALID_THRESHOLD",
-      "inputs": []
+      type: "error",
+      name: "LS_INVALID_THRESHOLD",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_POOL_ALREADY_EXISTS",
-      "inputs": []
+      type: "error",
+      name: "LS_POOL_ALREADY_EXISTS",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_POOL_MUST_BE_SET",
-      "inputs": []
+      type: "error",
+      name: "LS_POOL_MUST_BE_SET",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_POOL_NOT_FOUND",
-      "inputs": []
+      type: "error",
+      name: "LS_POOL_NOT_FOUND",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_POOL_NOT_REBALANCEABLE",
-      "inputs": []
+      type: "error",
+      name: "LS_POOL_NOT_REBALANCEABLE",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_PROTOCOL_FEE_RECIPIENT_REQUIRED",
-      "inputs": []
+      type: "error",
+      name: "LS_PROTOCOL_FEE_RECIPIENT_REQUIRED",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_STRATEGY_EXECUTION_FAILED",
-      "inputs": []
+      type: "error",
+      name: "LS_STRATEGY_EXECUTION_FAILED",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LS_ZERO_DECIMAL",
-      "inputs": []
+      type: "error",
+      name: "LS_ZERO_DECIMAL",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "OLS_OUT_OF_COLLATERAL",
-      "inputs": []
+      type: "error",
+      name: "OLS_OUT_OF_COLLATERAL",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "OLS_OUT_OF_DEBT",
-      "inputs": []
-    }
+      type: "error",
+      name: "OLS_OUT_OF_DEBT",
+      inputs: [],
+    },
   ] as const,
   address: {
-    143: '0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8',
-    10143: '0x0d7faA2b2743Ab4124aEFe5B30AA7e20dd7a8005',
+    143: "0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8",
+    10143: "0x0d7faA2b2743Ab4124aEFe5B30AA7e20dd7a8005",
   } as Partial<Record<number, `0x${string}`>>,
 };

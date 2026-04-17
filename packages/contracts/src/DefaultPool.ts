@@ -1,214 +1,214 @@
 export const DefaultPool = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_addressesRegistry",
-          "type": "address",
-          "internalType": "contract IAddressesRegistry"
-        }
+          name: "_addressesRegistry",
+          type: "address",
+          internalType: "contract IAddressesRegistry",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "NAME",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "NAME",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "activePoolAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "activePoolAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IERC20"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IERC20",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "decreaseBoldDebt",
-      "inputs": [
+      type: "function",
+      name: "decreaseBoldDebt",
+      inputs: [
         {
-          "name": "_amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "getBoldDebt",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getBoldDebt",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getCollBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getCollBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "increaseBoldDebt",
-      "inputs": [
+      type: "function",
+      name: "increaseBoldDebt",
+      inputs: [
         {
-          "name": "_amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "receiveColl",
-      "inputs": [
+      type: "function",
+      name: "receiveColl",
+      inputs: [
         {
-          "name": "_amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "sendCollToActivePool",
-      "inputs": [
+      type: "function",
+      name: "sendCollToActivePool",
+      inputs: [
         {
-          "name": "_amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "troveManagerAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "troveManagerAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "event",
-      "name": "ActivePoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "ActivePoolAddressChanged",
+      inputs: [
         {
-          "name": "_newActivePoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newActivePoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollTokenAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "CollTokenAddressChanged",
+      inputs: [
         {
-          "name": "_newCollTokenAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newCollTokenAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DefaultPoolBoldDebtUpdated",
-      "inputs": [
+      type: "event",
+      name: "DefaultPoolBoldDebtUpdated",
+      inputs: [
         {
-          "name": "_boldDebt",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_boldDebt",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DefaultPoolCollBalanceUpdated",
-      "inputs": [
+      type: "event",
+      name: "DefaultPoolCollBalanceUpdated",
+      inputs: [
         {
-          "name": "_collBalance",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_collBalance",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TroveManagerAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "TroveManagerAddressChanged",
+      inputs: [
         {
-          "name": "_newTroveManagerAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newTroveManagerAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    42220: '0x95191e52d01eC060cEA753CDADfEEB07b78D0047',
-    11142220: '0x8f0E218fE0EB3Ef1dAF3eEAF1Cbf4Ec6d29b6fe4',
+    42220: "0x95191e52d01eC060cEA753CDADfEEB07b78D0047",
+    11142220: "0x8f0E218fE0EB3Ef1dAF3eEAF1Cbf4Ec6d29b6fe4",
   } as Partial<Record<number, `0x${string}`>>,
 };

@@ -168,6 +168,14 @@
       "types": "./dist/ChainlinkRelayerFactoryv265.d.ts",
       "import": "./dist/ChainlinkRelayerFactoryv265.js"
     },
+    "./ChainlinkRelayerV1EURUSD": {
+      "types": "./dist/ChainlinkRelayerV1EURUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1EURUSD.js"
+    },
+    "./ChainlinkRelayerV1USDTUSD": {
+      "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
+    },
     "./MedianDeltaBreakerv265": {
       "types": "./dist/MedianDeltaBreakerv265.d.ts",
       "import": "./dist/MedianDeltaBreakerv265.js"
@@ -175,6 +183,10 @@
     "./MockChainlinkAggregatorAUSDUSD": {
       "types": "./dist/MockChainlinkAggregatorAUSDUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorAUSDUSD.js"
+    },
+    "./MockChainlinkAggregatorEURUSD": {
+      "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorEURUSD.js"
     },
     "./MockChainlinkAggregatorGBPUSD": {
       "types": "./dist/MockChainlinkAggregatorGBPUSD.d.ts",
@@ -184,9 +196,17 @@
       "types": "./dist/MockChainlinkAggregatorUSDCUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorUSDCUSD.js"
     },
+    "./MockChainlinkAggregatorUSDTUSD": {
+      "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorUSDTUSD.js"
+    },
     "./MockERC20AUSD": {
       "types": "./dist/MockERC20AUSD.d.ts",
       "import": "./dist/MockERC20AUSD.js"
+    },
+    "./MockERC20USDT0": {
+      "types": "./dist/MockERC20USDT0.d.ts",
+      "import": "./dist/MockERC20USDT0.js"
     },
     "./SortedOraclesv265": {
       "types": "./dist/SortedOraclesv265.d.ts",
@@ -195,26 +215,6 @@
     "./ValueDeltaBreakerv265": {
       "types": "./dist/ValueDeltaBreakerv265.d.ts",
       "import": "./dist/ValueDeltaBreakerv265.js"
-    },
-    "./ChainlinkRelayerV1EURUSD": {
-      "types": "./dist/ChainlinkRelayerV1EURUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1EURUSD.js"
-    },
-    "./ChainlinkRelayerV1USDTUSD": {
-      "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
-    },
-    "./MockChainlinkAggregatorEURUSD": {
-      "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorEURUSD.js"
-    },
-    "./MockChainlinkAggregatorUSDTUSD": {
-      "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorUSDTUSD.js"
-    },
-    "./MockERC20USDT0": {
-      "types": "./dist/MockERC20USDT0.d.ts",
-      "import": "./dist/MockERC20USDT0.js"
     },
     "./AUDm": {
       "types": "./dist/AUDm.d.ts",

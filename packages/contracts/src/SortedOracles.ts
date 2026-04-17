@@ -1,829 +1,829 @@
 export const SortedOracles = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "test",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "test",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addOracle",
-      "inputs": [
+      type: "function",
+      name: "addOracle",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "oracleAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "oracleAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "breakerBox",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "breakerBox",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IBreakerBox"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IBreakerBox",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "deleteEquivalentToken",
-      "inputs": [
+      type: "function",
+      name: "deleteEquivalentToken",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "equivalentTokens",
-      "inputs": [
+      type: "function",
+      name: "equivalentTokens",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getEquivalentToken",
-      "inputs": [
+      type: "function",
+      name: "getEquivalentToken",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getOracles",
-      "inputs": [
+      type: "function",
+      name: "getOracles",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getRates",
-      "inputs": [
+      type: "function",
+      name: "getRates",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
+          name: "",
+          type: "uint256[]",
+          internalType: "uint256[]",
         },
         {
-          "name": "",
-          "type": "uint8[]",
-          "internalType": "enum SortedLinkedListWithMedian.MedianRelation[]"
-        }
+          name: "",
+          type: "uint8[]",
+          internalType: "enum SortedLinkedListWithMedian.MedianRelation[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getTimestamps",
-      "inputs": [
+      type: "function",
+      name: "getTimestamps",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
+          name: "",
+          type: "uint256[]",
+          internalType: "uint256[]",
         },
         {
-          "name": "",
-          "type": "uint8[]",
-          "internalType": "enum SortedLinkedListWithMedian.MedianRelation[]"
-        }
+          name: "",
+          type: "uint8[]",
+          internalType: "enum SortedLinkedListWithMedian.MedianRelation[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getTokenReportExpirySeconds",
-      "inputs": [
+      type: "function",
+      name: "getTokenReportExpirySeconds",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getVersionNumber",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getVersionNumber",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "pure"
+      stateMutability: "pure",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "_reportExpirySeconds",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_reportExpirySeconds",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "initialized",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "initialized",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOldestReportExpired",
-      "inputs": [
+      type: "function",
+      name: "isOldestReportExpired",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
+          name: "",
+          type: "bool",
+          internalType: "bool",
         },
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOracle",
-      "inputs": [
+      type: "function",
+      name: "isOracle",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
+          name: "",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOwner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isOwner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "medianRate",
-      "inputs": [
+      type: "function",
+      name: "medianRate",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "medianRateWithoutEquivalentMapping",
-      "inputs": [
+      type: "function",
+      name: "medianRateWithoutEquivalentMapping",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "medianTimestamp",
-      "inputs": [
+      type: "function",
+      name: "medianTimestamp",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "numRates",
-      "inputs": [
+      type: "function",
+      name: "numRates",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "numTimestamps",
-      "inputs": [
+      type: "function",
+      name: "numTimestamps",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "oracles",
-      "inputs": [
+      type: "function",
+      name: "oracles",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
+          name: "",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "removeExpiredReports",
-      "inputs": [
+      type: "function",
+      name: "removeExpiredReports",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "n",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "n",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeOracle",
-      "inputs": [
+      type: "function",
+      name: "removeOracle",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "oracleAddress",
-          "type": "address",
-          "internalType": "address"
+          name: "oracleAddress",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "report",
-      "inputs": [
+      type: "function",
+      name: "report",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "lesserKey",
-          "type": "address",
-          "internalType": "address"
+          name: "lesserKey",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "greaterKey",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "greaterKey",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "reportExpirySeconds",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "reportExpirySeconds",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "setBreakerBox",
-      "inputs": [
+      type: "function",
+      name: "setBreakerBox",
+      inputs: [
         {
-          "name": "newBreakerBox",
-          "type": "address",
-          "internalType": "contract IBreakerBox"
-        }
+          name: "newBreakerBox",
+          type: "address",
+          internalType: "contract IBreakerBox",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setEquivalentToken",
-      "inputs": [
+      type: "function",
+      name: "setEquivalentToken",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "equivalentToken",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "equivalentToken",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setReportExpiry",
-      "inputs": [
+      type: "function",
+      name: "setReportExpiry",
+      inputs: [
         {
-          "name": "_reportExpirySeconds",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_reportExpirySeconds",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setTokenReportExpiry",
-      "inputs": [
+      type: "function",
+      name: "setTokenReportExpiry",
+      inputs: [
         {
-          "name": "_token",
-          "type": "address",
-          "internalType": "address"
+          name: "_token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_reportExpirySeconds",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_reportExpirySeconds",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "tokenReportExpirySeconds",
-      "inputs": [
+      type: "function",
+      name: "tokenReportExpirySeconds",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "BreakerBoxUpdated",
-      "inputs": [
+      type: "event",
+      name: "BreakerBoxUpdated",
+      inputs: [
         {
-          "name": "newBreakerBox",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newBreakerBox",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "EquivalentTokenSet",
-      "inputs": [
+      type: "event",
+      name: "EquivalentTokenSet",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "equivalentToken",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "equivalentToken",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "MedianUpdated",
-      "inputs": [
+      type: "event",
+      name: "MedianUpdated",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OracleAdded",
-      "inputs": [
+      type: "event",
+      name: "OracleAdded",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "oracleAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "oracleAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OracleRemoved",
-      "inputs": [
+      type: "event",
+      name: "OracleRemoved",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "oracleAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "oracleAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OracleReportRemoved",
-      "inputs": [
+      type: "event",
+      name: "OracleReportRemoved",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "oracle",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "oracle",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OracleReported",
-      "inputs": [
+      type: "event",
+      name: "OracleReported",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "oracle",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "oracle",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "timestamp",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "timestamp",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReportExpirySet",
-      "inputs": [
+      type: "event",
+      name: "ReportExpirySet",
+      inputs: [
         {
-          "name": "reportExpiry",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "reportExpiry",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TokenReportExpirySet",
-      "inputs": [
+      type: "event",
+      name: "TokenReportExpirySet",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "reportExpiry",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "reportExpiry",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    143: '0x6f92C745346057a61b259579256159458a0a6A92',
-    10143: '0x85ed9ac57827132B8F60938F3165BC139E1F53cd',
-    42220: '0xefb84935239dacdecf7c5ba76d8de40b077b7b33',
-    11142220: '0xfaa7Ca2B056E60F6733aE75AA0709140a6eAfD20',
+    143: "0x6f92C745346057a61b259579256159458a0a6A92",
+    10143: "0x85ed9ac57827132B8F60938F3165BC139E1F53cd",
+    42220: "0xefb84935239dacdecf7c5ba76d8de40b077b7b33",
+    11142220: "0xfaa7Ca2B056E60F6733aE75AA0709140a6eAfD20",
   } as Partial<Record<number, `0x${string}`>>,
 };

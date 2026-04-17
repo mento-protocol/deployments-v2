@@ -1,273 +1,273 @@
 export const Emission = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "disable",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "disable",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "A",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "A",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "SCALER",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "SCALER",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "calculateEmission",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "calculateEmission",
+      inputs: [],
+      outputs: [
         {
-          "name": "amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "emissionStartTime",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "emissionStartTime",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "emissionSupply",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "emissionSupply",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "emissionTarget",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "emissionTarget",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "emitTokens",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "emitTokens",
+      inputs: [],
+      outputs: [
         {
-          "name": "amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "mentoToken_",
-          "type": "address",
-          "internalType": "address"
+          name: "mentoToken_",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "emissionTarget_",
-          "type": "address",
-          "internalType": "address"
+          name: "emissionTarget_",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "emissionSupply_",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "emissionSupply_",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "initialOwner_",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "initialOwner_",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "mentoToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "mentoToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract MentoToken"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract MentoToken",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setEmissionTarget",
-      "inputs": [
+      type: "function",
+      name: "setEmissionTarget",
+      inputs: [
         {
-          "name": "emissionTarget_",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "emissionTarget_",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "totalEmittedAmount",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "totalEmittedAmount",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "EmissionTargetSet",
-      "inputs": [
+      type: "event",
+      name: "EmissionTargetSet",
+      inputs: [
         {
-          "name": "newTargetAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "newTargetAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "Initialized",
-      "inputs": [
+      type: "event",
+      name: "Initialized",
+      inputs: [
         {
-          "name": "version",
-          "type": "uint8",
-          "indexed": false,
-          "internalType": "uint8"
-        }
+          name: "version",
+          type: "uint8",
+          indexed: false,
+          internalType: "uint8",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TokensEmitted",
-      "inputs": [
+      type: "event",
+      name: "TokensEmitted",
+      inputs: [
         {
-          "name": "target",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "target",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "amount",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "amount",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    11142220: '0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69',
+    11142220: "0x3C1BEA0F35b5dcAc1065CA9b3b6877657dEa4A69",
   } as Partial<Record<number, `0x${string}`>>,
 };

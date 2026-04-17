@@ -1,1517 +1,1517 @@
 export const Reservev265 = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "test",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "test",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "fallback",
-      "stateMutability": "payable"
+      type: "fallback",
+      stateMutability: "payable",
     },
     {
-      "type": "function",
-      "name": "addCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "addCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addExchangeSpender",
-      "inputs": [
+      type: "function",
+      name: "addExchangeSpender",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "spender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addOtherReserveAddress",
-      "inputs": [
+      type: "function",
+      name: "addOtherReserveAddress",
+      inputs: [
         {
-          "name": "reserveAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "reserveAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addSpender",
-      "inputs": [
+      type: "function",
+      name: "addSpender",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "spender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addToken",
-      "inputs": [
+      type: "function",
+      name: "addToken",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "assetAllocationSymbols",
-      "inputs": [
+      type: "function",
+      name: "assetAllocationSymbols",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "assetAllocationWeights",
-      "inputs": [
+      type: "function",
+      name: "assetAllocationWeights",
+      inputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "checkIsCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "checkIsCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collateralAssetLastSpendingDay",
-      "inputs": [
+      type: "function",
+      name: "collateralAssetLastSpendingDay",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collateralAssetSpendingLimit",
-      "inputs": [
+      type: "function",
+      name: "collateralAssetSpendingLimit",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collateralAssets",
-      "inputs": [
+      type: "function",
+      name: "collateralAssets",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "exchangeSpenderAddresses",
-      "inputs": [
+      type: "function",
+      name: "exchangeSpenderAddresses",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "frozenReserveGoldDays",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "frozenReserveGoldDays",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "frozenReserveGoldStartBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "frozenReserveGoldStartBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "frozenReserveGoldStartDay",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "frozenReserveGoldStartDay",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getAssetAllocationSymbols",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getAssetAllocationSymbols",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32[]",
-          "internalType": "bytes32[]"
-        }
+          name: "",
+          type: "bytes32[]",
+          internalType: "bytes32[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getAssetAllocationWeights",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getAssetAllocationWeights",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getDailySpendingRatio",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getDailySpendingRatio",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getDailySpendingRatioForCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "getDailySpendingRatioForCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getExchangeSpenders",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getExchangeSpenders",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getFrozenReserveGoldBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getFrozenReserveGoldBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getOrComputeTobinTax",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getOrComputeTobinTax",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "getOtherReserveAddresses",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getOtherReserveAddresses",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getOtherReserveAddressesGoldBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getOtherReserveAddressesGoldBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getReserveAddressesCollateralAssetBalance",
-      "inputs": [
+      type: "function",
+      name: "getReserveAddressesCollateralAssetBalance",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getReserveGoldBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getReserveGoldBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getReserveRatio",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getReserveRatio",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getTokens",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getTokens",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getUnfrozenBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getUnfrozenBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getUnfrozenReserveGoldBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getUnfrozenReserveGoldBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getVersionNumber",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getVersionNumber",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "pure"
+      stateMutability: "pure",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "registryAddress",
-          "type": "address",
-          "internalType": "address"
+          name: "registryAddress",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_tobinTaxStalenessThreshold",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_tobinTaxStalenessThreshold",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_spendingRatioForCelo",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_spendingRatioForCelo",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_frozenGold",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_frozenGold",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_frozenDays",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_frozenDays",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_assetAllocationSymbols",
-          "type": "bytes32[]",
-          "internalType": "bytes32[]"
+          name: "_assetAllocationSymbols",
+          type: "bytes32[]",
+          internalType: "bytes32[]",
         },
         {
-          "name": "_assetAllocationWeights",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
+          name: "_assetAllocationWeights",
+          type: "uint256[]",
+          internalType: "uint256[]",
         },
         {
-          "name": "_tobinTax",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_tobinTax",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_tobinTaxReserveRatio",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_tobinTaxReserveRatio",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_collateralAssets",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_collateralAssets",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_collateralAssetDailySpendingRatios",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "_collateralAssetDailySpendingRatios",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "initialized",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "initialized",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "isCollateralAsset",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isExchangeSpender",
-      "inputs": [
+      type: "function",
+      name: "isExchangeSpender",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOtherReserveAddress",
-      "inputs": [
+      type: "function",
+      name: "isOtherReserveAddress",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOwner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isOwner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isSpender",
-      "inputs": [
+      type: "function",
+      name: "isSpender",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isStableAsset",
-      "inputs": [
+      type: "function",
+      name: "isStableAsset",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isToken",
-      "inputs": [
+      type: "function",
+      name: "isToken",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "lastSpendingDay",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "lastSpendingDay",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "otherReserveAddresses",
-      "inputs": [
+      type: "function",
+      name: "otherReserveAddresses",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "registry",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "registry",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IRegistry"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IRegistry",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "removeCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "removeCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeExchangeSpender",
-      "inputs": [
+      type: "function",
+      name: "removeExchangeSpender",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "internalType": "address"
+          name: "spender",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeOtherReserveAddress",
-      "inputs": [
+      type: "function",
+      name: "removeOtherReserveAddress",
+      inputs: [
         {
-          "name": "reserveAddress",
-          "type": "address",
-          "internalType": "address"
+          name: "reserveAddress",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeSpender",
-      "inputs": [
+      type: "function",
+      name: "removeSpender",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "spender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeToken",
-      "inputs": [
+      type: "function",
+      name: "removeToken",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setAssetAllocations",
-      "inputs": [
+      type: "function",
+      name: "setAssetAllocations",
+      inputs: [
         {
-          "name": "symbols",
-          "type": "bytes32[]",
-          "internalType": "bytes32[]"
+          name: "symbols",
+          type: "bytes32[]",
+          internalType: "bytes32[]",
         },
         {
-          "name": "weights",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "weights",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setDailySpendingRatio",
-      "inputs": [
+      type: "function",
+      name: "setDailySpendingRatio",
+      inputs: [
         {
-          "name": "ratio",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "ratio",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setDailySpendingRatioForCollateralAssets",
-      "inputs": [
+      type: "function",
+      name: "setDailySpendingRatioForCollateralAssets",
+      inputs: [
         {
-          "name": "_collateralAssets",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_collateralAssets",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "collateralAssetDailySpendingRatios",
-          "type": "uint256[]",
-          "internalType": "uint256[]"
-        }
+          name: "collateralAssetDailySpendingRatios",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setFrozenGold",
-      "inputs": [
+      type: "function",
+      name: "setFrozenGold",
+      inputs: [
         {
-          "name": "frozenGold",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "frozenGold",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "frozenDays",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "frozenDays",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setRegistry",
-      "inputs": [
+      type: "function",
+      name: "setRegistry",
+      inputs: [
         {
-          "name": "registryAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "registryAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setTobinTax",
-      "inputs": [
+      type: "function",
+      name: "setTobinTax",
+      inputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setTobinTaxReserveRatio",
-      "inputs": [
+      type: "function",
+      name: "setTobinTaxReserveRatio",
+      inputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setTobinTaxStalenessThreshold",
-      "inputs": [
+      type: "function",
+      name: "setTobinTaxStalenessThreshold",
+      inputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "spendingLimit",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "spendingLimit",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "tobinTax",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "tobinTax",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "tobinTaxCache",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "tobinTaxCache",
+      inputs: [],
+      outputs: [
         {
-          "name": "numerator",
-          "type": "uint128",
-          "internalType": "uint128"
+          name: "numerator",
+          type: "uint128",
+          internalType: "uint128",
         },
         {
-          "name": "timestamp",
-          "type": "uint128",
-          "internalType": "uint128"
-        }
+          name: "timestamp",
+          type: "uint128",
+          internalType: "uint128",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "tobinTaxReserveRatio",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "tobinTaxReserveRatio",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "tobinTaxStalenessThreshold",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "tobinTaxStalenessThreshold",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "transferCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "transferCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address payable"
+          name: "to",
+          type: "address",
+          internalType: "address payable",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferExchangeCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "transferExchangeCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address payable"
+          name: "to",
+          type: "address",
+          internalType: "address payable",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferExchangeGold",
-      "inputs": [
+      type: "function",
+      name: "transferExchangeGold",
+      inputs: [
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address payable"
+          name: "to",
+          type: "address",
+          internalType: "address payable",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferGold",
-      "inputs": [
+      type: "function",
+      name: "transferGold",
+      inputs: [
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address payable"
+          name: "to",
+          type: "address",
+          internalType: "address payable",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "AssetAllocationSet",
-      "inputs": [
+      type: "event",
+      name: "AssetAllocationSet",
+      inputs: [
         {
-          "name": "symbols",
-          "type": "bytes32[]",
-          "indexed": false,
-          "internalType": "bytes32[]"
+          name: "symbols",
+          type: "bytes32[]",
+          indexed: false,
+          internalType: "bytes32[]",
         },
         {
-          "name": "weights",
-          "type": "uint256[]",
-          "indexed": false,
-          "internalType": "uint256[]"
-        }
+          name: "weights",
+          type: "uint256[]",
+          indexed: false,
+          internalType: "uint256[]",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollateralAssetAdded",
-      "inputs": [
+      type: "event",
+      name: "CollateralAssetAdded",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollateralAssetRemoved",
-      "inputs": [
+      type: "event",
+      name: "CollateralAssetRemoved",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DailySpendingRatioForCollateralAssetSet",
-      "inputs": [
+      type: "event",
+      name: "DailySpendingRatioForCollateralAssetSet",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "collateralAssetDailySpendingRatios",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "collateralAssetDailySpendingRatios",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DailySpendingRatioSet",
-      "inputs": [
+      type: "event",
+      name: "DailySpendingRatioSet",
+      inputs: [
         {
-          "name": "ratio",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "ratio",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ExchangeSpenderAdded",
-      "inputs": [
+      type: "event",
+      name: "ExchangeSpenderAdded",
+      inputs: [
         {
-          "name": "exchangeSpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "exchangeSpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ExchangeSpenderRemoved",
-      "inputs": [
+      type: "event",
+      name: "ExchangeSpenderRemoved",
+      inputs: [
         {
-          "name": "exchangeSpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "exchangeSpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OtherReserveAddressAdded",
-      "inputs": [
+      type: "event",
+      name: "OtherReserveAddressAdded",
+      inputs: [
         {
-          "name": "otherReserveAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "otherReserveAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OtherReserveAddressRemoved",
-      "inputs": [
+      type: "event",
+      name: "OtherReserveAddressRemoved",
+      inputs: [
         {
-          "name": "otherReserveAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "otherReserveAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RegistrySet",
-      "inputs": [
+      type: "event",
+      name: "RegistrySet",
+      inputs: [
         {
-          "name": "registryAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "registryAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReserveCollateralAssetsTransferred",
-      "inputs": [
+      type: "event",
+      name: "ReserveCollateralAssetsTransferred",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "spender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "token",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReserveGoldTransferred",
-      "inputs": [
+      type: "event",
+      name: "ReserveGoldTransferred",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "spender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SpenderAdded",
-      "inputs": [
+      type: "event",
+      name: "SpenderAdded",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "spender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SpenderRemoved",
-      "inputs": [
+      type: "event",
+      name: "SpenderRemoved",
+      inputs: [
         {
-          "name": "spender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "spender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TobinTaxReserveRatioSet",
-      "inputs": [
+      type: "event",
+      name: "TobinTaxReserveRatioSet",
+      inputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TobinTaxSet",
-      "inputs": [
+      type: "event",
+      name: "TobinTaxSet",
+      inputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TobinTaxStalenessThresholdSet",
-      "inputs": [
+      type: "event",
+      name: "TobinTaxStalenessThresholdSet",
+      inputs: [
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TokenAdded",
-      "inputs": [
+      type: "event",
+      name: "TokenAdded",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TokenRemoved",
-      "inputs": [
+      type: "event",
+      name: "TokenRemoved",
+      inputs: [
         {
-          "name": "token",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    8453: '0xAE58f577a79cddA649758E744F3060D3da8Ade2d',
-    42220: '0xAE58f577a79cddA649758E744F3060D3da8Ade2d',
+    8453: "0xAE58f577a79cddA649758E744F3060D3da8Ade2d",
+    42220: "0xAE58f577a79cddA649758E744F3060D3da8Ade2d",
   } as Partial<Record<number, `0x${string}`>>,
 };

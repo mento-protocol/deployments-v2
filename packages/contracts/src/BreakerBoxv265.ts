@@ -1,707 +1,707 @@
 export const BreakerBoxv265 = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_rateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_rateFeedIDs",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
+          name: "_sortedOracles",
+          type: "address",
+          internalType: "contract ISortedOracles",
         },
         {
-          "name": "owner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "owner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addBreaker",
-      "inputs": [
+      type: "function",
+      name: "addBreaker",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "internalType": "address"
+          name: "breaker",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tradingMode",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
+          name: "tradingMode",
+          type: "uint8",
+          internalType: "uint8",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addRateFeed",
-      "inputs": [
+      type: "function",
+      name: "addRateFeed",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "addRateFeeds",
-      "inputs": [
+      type: "function",
+      name: "addRateFeeds",
+      inputs: [
         {
-          "name": "newRateFeedIDs",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "newRateFeedIDs",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "breakerTradingMode",
-      "inputs": [
+      type: "function",
+      name: "breakerTradingMode",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
+          name: "",
+          type: "uint8",
+          internalType: "uint8",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "breakers",
-      "inputs": [
+      type: "function",
+      name: "breakers",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "checkAndSetBreakers",
-      "inputs": [
+      type: "function",
+      name: "checkAndSetBreakers",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "getBreakers",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getBreakers",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getRateFeedTradingMode",
-      "inputs": [
+      type: "function",
+      name: "getRateFeedTradingMode",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
+          name: "",
+          type: "uint8",
+          internalType: "uint8",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getRateFeeds",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getRateFeeds",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isBreaker",
-      "inputs": [
+      type: "function",
+      name: "isBreaker",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isBreakerEnabled",
-      "inputs": [
+      type: "function",
+      name: "isBreakerEnabled",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "internalType": "address"
+          name: "breaker",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOwner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isOwner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateFeedBreakerStatus",
-      "inputs": [
+      type: "function",
+      name: "rateFeedBreakerStatus",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
+          name: "",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "tradingMode",
-          "type": "uint8",
-          "internalType": "uint8"
+          name: "tradingMode",
+          type: "uint8",
+          internalType: "uint8",
         },
         {
-          "name": "lastUpdatedTime",
-          "type": "uint64",
-          "internalType": "uint64"
+          name: "lastUpdatedTime",
+          type: "uint64",
+          internalType: "uint64",
         },
         {
-          "name": "enabled",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "enabled",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateFeedDependencies",
-      "inputs": [
+      type: "function",
+      name: "rateFeedDependencies",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
+          name: "",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateFeedIDs",
-      "inputs": [
+      type: "function",
+      name: "rateFeedIDs",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateFeedStatus",
-      "inputs": [
+      type: "function",
+      name: "rateFeedStatus",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "rateFeedTradingMode",
-      "inputs": [
+      type: "function",
+      name: "rateFeedTradingMode",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
+          name: "",
+          type: "uint8",
+          internalType: "uint8",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "removeBreaker",
-      "inputs": [
+      type: "function",
+      name: "removeBreaker",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeRateFeed",
-      "inputs": [
+      type: "function",
+      name: "removeRateFeed",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setRateFeedDependencies",
-      "inputs": [
+      type: "function",
+      name: "setRateFeedDependencies",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "dependencies",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "dependencies",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setRateFeedTradingMode",
-      "inputs": [
+      type: "function",
+      name: "setRateFeedTradingMode",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tradingMode",
-          "type": "uint8",
-          "internalType": "uint8"
-        }
+          name: "tradingMode",
+          type: "uint8",
+          internalType: "uint8",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setSortedOracles",
-      "inputs": [
+      type: "function",
+      name: "setSortedOracles",
+      inputs: [
         {
-          "name": "_sortedOracles",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        }
+          name: "_sortedOracles",
+          type: "address",
+          internalType: "contract ISortedOracles",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "sortedOracles",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "sortedOracles",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ISortedOracles"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ISortedOracles",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "toggleBreaker",
-      "inputs": [
+      type: "function",
+      name: "toggleBreaker",
+      inputs: [
         {
-          "name": "breakerAddress",
-          "type": "address",
-          "internalType": "address"
+          name: "breakerAddress",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "enable",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "enable",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "BreakerAdded",
-      "inputs": [
+      type: "event",
+      name: "BreakerAdded",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BreakerRemoved",
-      "inputs": [
+      type: "event",
+      name: "BreakerRemoved",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BreakerStatusUpdated",
-      "inputs": [
+      type: "event",
+      name: "BreakerStatusUpdated",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "breaker",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "status",
-          "type": "bool",
-          "indexed": false,
-          "internalType": "bool"
-        }
+          name: "status",
+          type: "bool",
+          indexed: false,
+          internalType: "bool",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BreakerTripped",
-      "inputs": [
+      type: "event",
+      name: "BreakerTripped",
+      inputs: [
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "breaker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RateFeedAdded",
-      "inputs": [
+      type: "event",
+      name: "RateFeedAdded",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RateFeedDependenciesSet",
-      "inputs": [
+      type: "event",
+      name: "RateFeedDependenciesSet",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "dependencies",
-          "type": "address[]",
-          "indexed": true,
-          "internalType": "address[]"
-        }
+          name: "dependencies",
+          type: "address[]",
+          indexed: true,
+          internalType: "address[]",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RateFeedRemoved",
-      "inputs": [
+      type: "event",
+      name: "RateFeedRemoved",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ResetAttemptCriteriaFail",
-      "inputs": [
+      type: "event",
+      name: "ResetAttemptCriteriaFail",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ResetAttemptNotCool",
-      "inputs": [
+      type: "event",
+      name: "ResetAttemptNotCool",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ResetSuccessful",
-      "inputs": [
+      type: "event",
+      name: "ResetSuccessful",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "breaker",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "breaker",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SortedOraclesUpdated",
-      "inputs": [
+      type: "event",
+      name: "SortedOraclesUpdated",
+      inputs: [
         {
-          "name": "newSortedOracles",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newSortedOracles",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TradingModeUpdated",
-      "inputs": [
+      type: "event",
+      name: "TradingModeUpdated",
+      inputs: [
         {
-          "name": "rateFeedID",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "rateFeedID",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "tradingMode",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "tradingMode",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    10143: '0x88869E30609D2C0E4032463D713328C6f541878e',
-    11142220: '0x578bD46003B9D3fd4c3C3f47c98B329562a6a1dE',
+    10143: "0x88869E30609D2C0E4032463D713328C6f541878e",
+    11142220: "0x578bD46003B9D3fd4c3C3f47c98B329562a6a1dE",
   } as Partial<Record<number, `0x${string}`>>,
 };

@@ -1,853 +1,853 @@
 export const StabilityPoolGBPm = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "disable",
-          "type": "bool",
-          "internalType": "bool"
+          name: "disable",
+          type: "bool",
+          internalType: "bool",
         },
         {
-          "name": "_systemParams",
-          "type": "address",
-          "internalType": "contract ISystemParams"
-        }
+          name: "_systemParams",
+          type: "address",
+          internalType: "contract ISystemParams",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "MAX_SCALE_FACTOR_EXPONENT",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "MAX_SCALE_FACTOR_EXPONENT",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "NAME",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "NAME",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "P",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "P",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "P_PRECISION",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "P_PRECISION",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "SCALE_FACTOR",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "SCALE_FACTOR",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "SCALE_SPAN",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "SCALE_SPAN",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "activePool",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "activePool",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IActivePool"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IActivePool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "boldToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "boldToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IBoldToken"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IBoldToken",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "claimAllCollGains",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "claimAllCollGains",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "collToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IERC20"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IERC20",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "currentScale",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "currentScale",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "depositSnapshots",
-      "inputs": [
+      type: "function",
+      name: "depositSnapshots",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "S",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "S",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "P",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "P",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "B",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "B",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "scale",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "scale",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "deposits",
-      "inputs": [
+      type: "function",
+      name: "deposits",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "initialValue",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "initialValue",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getCollBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getCollBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getCompoundedBoldDeposit",
-      "inputs": [
+      type: "function",
+      name: "getCompoundedBoldDeposit",
+      inputs: [
         {
-          "name": "_depositor",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_depositor",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "compoundedDeposit",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "compoundedDeposit",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getDepositorCollGain",
-      "inputs": [
+      type: "function",
+      name: "getDepositorCollGain",
+      inputs: [
         {
-          "name": "_depositor",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_depositor",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getDepositorYieldGain",
-      "inputs": [
+      type: "function",
+      name: "getDepositorYieldGain",
+      inputs: [
         {
-          "name": "_depositor",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_depositor",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getDepositorYieldGainWithPending",
-      "inputs": [
+      type: "function",
+      name: "getDepositorYieldGainWithPending",
+      inputs: [
         {
-          "name": "_depositor",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_depositor",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getEntireBranchColl",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getEntireBranchColl",
+      inputs: [],
+      outputs: [
         {
-          "name": "entireSystemColl",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "entireSystemColl",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getEntireBranchDebt",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getEntireBranchDebt",
+      inputs: [],
+      outputs: [
         {
-          "name": "entireSystemDebt",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "entireSystemDebt",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getTotalBoldDeposits",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getTotalBoldDeposits",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getYieldGainsOwed",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getYieldGainsOwed",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getYieldGainsPending",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getYieldGainsPending",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "_addressesRegistry",
-          "type": "address",
-          "internalType": "contract IAddressesRegistry"
-        }
+          name: "_addressesRegistry",
+          type: "address",
+          internalType: "contract IAddressesRegistry",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "liquidityStrategy",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "liquidityStrategy",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "offset",
-      "inputs": [
+      type: "function",
+      name: "offset",
+      inputs: [
         {
-          "name": "_debtToOffset",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_debtToOffset",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_collToAdd",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_collToAdd",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "provideToSP",
-      "inputs": [
+      type: "function",
+      name: "provideToSP",
+      inputs: [
         {
-          "name": "_topUp",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_topUp",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_doClaim",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "_doClaim",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "scaleToB",
-      "inputs": [
+      type: "function",
+      name: "scaleToB",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "scaleToS",
-      "inputs": [
+      type: "function",
+      name: "scaleToS",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "stashedColl",
-      "inputs": [
+      type: "function",
+      name: "stashedColl",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "swapCollateralForStable",
-      "inputs": [
+      type: "function",
+      name: "swapCollateralForStable",
+      inputs: [
         {
-          "name": "amountCollIn",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "amountCollIn",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "amountStableOut",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "amountStableOut",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "systemParams",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "systemParams",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ISystemParams"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ISystemParams",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "triggerBoldRewards",
-      "inputs": [
+      type: "function",
+      name: "triggerBoldRewards",
+      inputs: [
         {
-          "name": "_boldYield",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_boldYield",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "troveManager",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "troveManager",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ITroveManager"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ITroveManager",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "withdrawFromSP",
-      "inputs": [
+      type: "function",
+      name: "withdrawFromSP",
+      inputs: [
         {
-          "name": "_amount",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_doClaim",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "_doClaim",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "ActivePoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "ActivePoolAddressChanged",
+      inputs: [
         {
-          "name": "_newActivePoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newActivePoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "B_Updated",
-      "inputs": [
+      type: "event",
+      name: "B_Updated",
+      inputs: [
         {
-          "name": "_B",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_B",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_scale",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_scale",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BoldTokenAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "BoldTokenAddressChanged",
+      inputs: [
         {
-          "name": "_newBoldTokenAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newBoldTokenAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DefaultPoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "DefaultPoolAddressChanged",
+      inputs: [
         {
-          "name": "_newDefaultPoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newDefaultPoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DepositOperation",
-      "inputs": [
+      type: "event",
+      name: "DepositOperation",
+      inputs: [
         {
-          "name": "_depositor",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "_depositor",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "_operation",
-          "type": "uint8",
-          "indexed": false,
-          "internalType": "enum IStabilityPoolEvents.Operation"
+          name: "_operation",
+          type: "uint8",
+          indexed: false,
+          internalType: "enum IStabilityPoolEvents.Operation",
         },
         {
-          "name": "_depositLossSinceLastOperation",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_depositLossSinceLastOperation",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_topUpOrWithdrawal",
-          "type": "int256",
-          "indexed": false,
-          "internalType": "int256"
+          name: "_topUpOrWithdrawal",
+          type: "int256",
+          indexed: false,
+          internalType: "int256",
         },
         {
-          "name": "_yieldGainSinceLastOperation",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_yieldGainSinceLastOperation",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_yieldGainClaimed",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_yieldGainClaimed",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_ethGainSinceLastOperation",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_ethGainSinceLastOperation",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_ethGainClaimed",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_ethGainClaimed",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DepositUpdated",
-      "inputs": [
+      type: "event",
+      name: "DepositUpdated",
+      inputs: [
         {
-          "name": "_depositor",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "_depositor",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "_newDeposit",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_newDeposit",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_stashedColl",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_stashedColl",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_snapshotP",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_snapshotP",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_snapshotS",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_snapshotS",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_snapshotB",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_snapshotB",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_snapshotScale",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_snapshotScale",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "Initialized",
-      "inputs": [
+      type: "event",
+      name: "Initialized",
+      inputs: [
         {
-          "name": "version",
-          "type": "uint8",
-          "indexed": false,
-          "internalType": "uint8"
-        }
+          name: "version",
+          type: "uint8",
+          indexed: false,
+          internalType: "uint8",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "P_Updated",
-      "inputs": [
+      type: "event",
+      name: "P_Updated",
+      inputs: [
         {
-          "name": "_P",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_P",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "PriceFeedAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "PriceFeedAddressChanged",
+      inputs: [
         {
-          "name": "_newPriceFeedAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newPriceFeedAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "RebalanceExecuted",
-      "inputs": [
+      type: "event",
+      name: "RebalanceExecuted",
+      inputs: [
         {
-          "name": "amountCollIn",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "amountCollIn",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "amountStableOut",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "amountStableOut",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "S_Updated",
-      "inputs": [
+      type: "event",
+      name: "S_Updated",
+      inputs: [
         {
-          "name": "_S",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
+          name: "_S",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
         },
         {
-          "name": "_scale",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_scale",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ScaleUpdated",
-      "inputs": [
+      type: "event",
+      name: "ScaleUpdated",
+      inputs: [
         {
-          "name": "_currentScale",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_currentScale",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "StabilityPoolBoldBalanceUpdated",
-      "inputs": [
+      type: "event",
+      name: "StabilityPoolBoldBalanceUpdated",
+      inputs: [
         {
-          "name": "_newBalance",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_newBalance",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "StabilityPoolCollBalanceUpdated",
-      "inputs": [
+      type: "event",
+      name: "StabilityPoolCollBalanceUpdated",
+      inputs: [
         {
-          "name": "_newBalance",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_newBalance",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TroveManagerAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "TroveManagerAddressChanged",
+      inputs: [
         {
-          "name": "_newTroveManagerAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newTroveManagerAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    42220: '0x06346c0fAB682dBde9f245D2D84677592E8aaa15',
-    11142220: '0x31f4fE29B8104969209C0474A40FCa79170Ee53e',
+    42220: "0x06346c0fAB682dBde9f245D2D84677592E8aaa15",
+    11142220: "0x31f4fE29B8104969209C0474A40FCa79170Ee53e",
   } as Partial<Record<number, `0x${string}`>>,
 };

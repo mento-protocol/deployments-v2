@@ -1,854 +1,854 @@
 export const FPMMFactoryv300 = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "disable",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "disable",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "CREATEX",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "CREATEX",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "CREATEX_BYTECODE_HASH",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "CREATEX_BYTECODE_HASH",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bytes32",
-          "internalType": "bytes32"
-        }
+          name: "",
+          type: "bytes32",
+          internalType: "bytes32",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "defaultParams",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "defaultParams",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "tuple",
-          "internalType": "struct IFPMM.FPMMParams",
-          "components": [
+          name: "",
+          type: "tuple",
+          internalType: "struct IFPMM.FPMMParams",
+          components: [
             {
-              "name": "lpFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lpFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "protocolFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "feeSetter",
-              "type": "address",
-              "internalType": "address"
+              name: "feeSetter",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "rebalanceIncentive",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceIncentive",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdAbove",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceThresholdAbove",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdBelow",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "rebalanceThresholdBelow",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "deployFPMM",
-      "inputs": [
+      type: "function",
+      name: "deployFPMM",
+      inputs: [
         {
-          "name": "fpmmImplementation",
-          "type": "address",
-          "internalType": "address"
+          name: "fpmmImplementation",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "customOracleAdapter",
-          "type": "address",
-          "internalType": "address"
+          name: "customOracleAdapter",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "customProxyAdmin",
-          "type": "address",
-          "internalType": "address"
+          name: "customProxyAdmin",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "customOwner",
-          "type": "address",
-          "internalType": "address"
+          name: "customOwner",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
+          name: "token1",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "referenceRateFeedID",
-          "type": "address",
-          "internalType": "address"
+          name: "referenceRateFeedID",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "invertRateFeed",
-          "type": "bool",
-          "internalType": "bool"
+          name: "invertRateFeed",
+          type: "bool",
+          internalType: "bool",
         },
         {
-          "name": "customParams",
-          "type": "tuple",
-          "internalType": "struct IFPMM.FPMMParams",
-          "components": [
+          name: "customParams",
+          type: "tuple",
+          internalType: "struct IFPMM.FPMMParams",
+          components: [
             {
-              "name": "lpFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lpFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "protocolFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "feeSetter",
-              "type": "address",
-              "internalType": "address"
+              name: "feeSetter",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "rebalanceIncentive",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceIncentive",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdAbove",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceThresholdAbove",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdBelow",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "rebalanceThresholdBelow",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "deployFPMM",
-      "inputs": [
+      type: "function",
+      name: "deployFPMM",
+      inputs: [
         {
-          "name": "fpmmImplementation",
-          "type": "address",
-          "internalType": "address"
+          name: "fpmmImplementation",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
+          name: "token1",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "referenceRateFeedID",
-          "type": "address",
-          "internalType": "address"
+          name: "referenceRateFeedID",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "invertRateFeed",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "invertRateFeed",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "deployedFPMMAddresses",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "deployedFPMMAddresses",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getOrPrecomputeProxyAddress",
-      "inputs": [
+      type: "function",
+      name: "getOrPrecomputeProxyAddress",
+      inputs: [
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token1",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getPool",
-      "inputs": [
+      type: "function",
+      name: "getPool",
+      inputs: [
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token1",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "_oracleAdapter",
-          "type": "address",
-          "internalType": "address"
+          name: "_oracleAdapter",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_proxyAdmin",
-          "type": "address",
-          "internalType": "address"
+          name: "_proxyAdmin",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_initialOwner",
-          "type": "address",
-          "internalType": "address"
+          name: "_initialOwner",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_fpmmImplementation",
-          "type": "address",
-          "internalType": "address"
+          name: "_fpmmImplementation",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_defaultParams",
-          "type": "tuple",
-          "internalType": "struct IFPMM.FPMMParams",
-          "components": [
+          name: "_defaultParams",
+          type: "tuple",
+          internalType: "struct IFPMM.FPMMParams",
+          components: [
             {
-              "name": "lpFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lpFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "protocolFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "feeSetter",
-              "type": "address",
-              "internalType": "address"
+              name: "feeSetter",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "rebalanceIncentive",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceIncentive",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdAbove",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceThresholdAbove",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdBelow",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "rebalanceThresholdBelow",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "isPool",
-      "inputs": [
+      type: "function",
+      name: "isPool",
+      inputs: [
         {
-          "name": "pool",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "pool",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isRegisteredImplementation",
-      "inputs": [
+      type: "function",
+      name: "isRegisteredImplementation",
+      inputs: [
         {
-          "name": "fpmmImplementation",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "fpmmImplementation",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "oracleAdapter",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "oracleAdapter",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "proxyAdmin",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "proxyAdmin",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "registerFPMMImplementation",
-      "inputs": [
+      type: "function",
+      name: "registerFPMMImplementation",
+      inputs: [
         {
-          "name": "fpmmImplementation",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "fpmmImplementation",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "registeredImplementations",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "registeredImplementations",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setDefaultParams",
-      "inputs": [
+      type: "function",
+      name: "setDefaultParams",
+      inputs: [
         {
-          "name": "_defaultParams",
-          "type": "tuple",
-          "internalType": "struct IFPMM.FPMMParams",
-          "components": [
+          name: "_defaultParams",
+          type: "tuple",
+          internalType: "struct IFPMM.FPMMParams",
+          components: [
             {
-              "name": "lpFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lpFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "protocolFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "feeSetter",
-              "type": "address",
-              "internalType": "address"
+              name: "feeSetter",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "rebalanceIncentive",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceIncentive",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdAbove",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceThresholdAbove",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdBelow",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "rebalanceThresholdBelow",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setOracleAdapter",
-      "inputs": [
+      type: "function",
+      name: "setOracleAdapter",
+      inputs: [
         {
-          "name": "_oracleAdapter",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_oracleAdapter",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "setProxyAdmin",
-      "inputs": [
+      type: "function",
+      name: "setProxyAdmin",
+      inputs: [
         {
-          "name": "_proxyAdmin",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_proxyAdmin",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "sortTokens",
-      "inputs": [
+      type: "function",
+      name: "sortTokens",
+      inputs: [
         {
-          "name": "tokenA",
-          "type": "address",
-          "internalType": "address"
+          name: "tokenA",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "tokenB",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "tokenB",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "token0",
-          "type": "address",
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "token1",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "pure"
+      stateMutability: "pure",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "unregisterFPMMImplementation",
-      "inputs": [
+      type: "function",
+      name: "unregisterFPMMImplementation",
+      inputs: [
         {
-          "name": "fpmmImplementation",
-          "type": "address",
-          "internalType": "address"
+          name: "fpmmImplementation",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "index",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "index",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "DefaultParamsSet",
-      "inputs": [
+      type: "event",
+      name: "DefaultParamsSet",
+      inputs: [
         {
-          "name": "defaultParams",
-          "type": "tuple",
-          "indexed": false,
-          "internalType": "struct IFPMM.FPMMParams",
-          "components": [
+          name: "defaultParams",
+          type: "tuple",
+          indexed: false,
+          internalType: "struct IFPMM.FPMMParams",
+          components: [
             {
-              "name": "lpFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "lpFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFee",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "protocolFee",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "protocolFeeRecipient",
-              "type": "address",
-              "internalType": "address"
+              name: "protocolFeeRecipient",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "feeSetter",
-              "type": "address",
-              "internalType": "address"
+              name: "feeSetter",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "rebalanceIncentive",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceIncentive",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdAbove",
-              "type": "uint256",
-              "internalType": "uint256"
+              name: "rebalanceThresholdAbove",
+              type: "uint256",
+              internalType: "uint256",
             },
             {
-              "name": "rebalanceThresholdBelow",
-              "type": "uint256",
-              "internalType": "uint256"
-            }
-          ]
-        }
+              name: "rebalanceThresholdBelow",
+              type: "uint256",
+              internalType: "uint256",
+            },
+          ],
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "FPMMDeployed",
-      "inputs": [
+      type: "event",
+      name: "FPMMDeployed",
+      inputs: [
         {
-          "name": "token0",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token0",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "token1",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "token1",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "fpmmProxy",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
+          name: "fpmmProxy",
+          type: "address",
+          indexed: false,
+          internalType: "address",
         },
         {
-          "name": "fpmmImplementation",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "fpmmImplementation",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "FPMMImplementationRegistered",
-      "inputs": [
+      type: "event",
+      name: "FPMMImplementationRegistered",
+      inputs: [
         {
-          "name": "implementation",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "implementation",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "FPMMImplementationUnregistered",
-      "inputs": [
+      type: "event",
+      name: "FPMMImplementationUnregistered",
+      inputs: [
         {
-          "name": "implementation",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "implementation",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "Initialized",
-      "inputs": [
+      type: "event",
+      name: "Initialized",
+      inputs: [
         {
-          "name": "version",
-          "type": "uint8",
-          "indexed": false,
-          "internalType": "uint8"
-        }
+          name: "version",
+          type: "uint8",
+          indexed: false,
+          internalType: "uint8",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OracleAdapterSet",
-      "inputs": [
+      type: "event",
+      name: "OracleAdapterSet",
+      inputs: [
         {
-          "name": "oracleAdapter",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "oracleAdapter",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ProxyAdminSet",
-      "inputs": [
+      type: "event",
+      name: "ProxyAdminSet",
+      inputs: [
         {
-          "name": "proxyAdmin",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "proxyAdmin",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "error",
-      "name": "CreateXBytecodeHashMismatch",
-      "inputs": []
+      type: "error",
+      name: "CreateXBytecodeHashMismatch",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "FeeTooHigh",
-      "inputs": []
+      type: "error",
+      name: "FeeTooHigh",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "IdenticalTokenAddresses",
-      "inputs": []
+      type: "error",
+      name: "IdenticalTokenAddresses",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ImplementationAlreadyRegistered",
-      "inputs": []
+      type: "error",
+      name: "ImplementationAlreadyRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ImplementationIndexMismatch",
-      "inputs": []
+      type: "error",
+      name: "ImplementationIndexMismatch",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ImplementationNotRegistered",
-      "inputs": []
+      type: "error",
+      name: "ImplementationNotRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "IndexOutOfBounds",
-      "inputs": []
+      type: "error",
+      name: "IndexOutOfBounds",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InvalidOracleAdapter",
-      "inputs": []
+      type: "error",
+      name: "InvalidOracleAdapter",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InvalidOwner",
-      "inputs": []
+      type: "error",
+      name: "InvalidOwner",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InvalidProxyAdmin",
-      "inputs": []
+      type: "error",
+      name: "InvalidProxyAdmin",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InvalidReferenceRateFeedID",
-      "inputs": []
+      type: "error",
+      name: "InvalidReferenceRateFeedID",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "PairAlreadyExists",
-      "inputs": []
+      type: "error",
+      name: "PairAlreadyExists",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "RebalanceIncentiveTooHigh",
-      "inputs": []
+      type: "error",
+      name: "RebalanceIncentiveTooHigh",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "RebalanceThresholdTooHigh",
-      "inputs": []
+      type: "error",
+      name: "RebalanceThresholdTooHigh",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "SortTokensZeroAddress",
-      "inputs": []
+      type: "error",
+      name: "SortTokensZeroAddress",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ZeroAddress",
-      "inputs": []
-    }
+      type: "error",
+      name: "ZeroAddress",
+      inputs: [],
+    },
   ] as const,
   address: {
-    143: '0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a',
-    10143: '0x5E2A42d760Aa6969C3DA49b249ec181115887391',
-    42220: '0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a',
-    11142220: '0x5E2A42d760Aa6969C3DA49b249ec181115887391',
+    143: "0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a",
+    10143: "0x5E2A42d760Aa6969C3DA49b249ec181115887391",
+    42220: "0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a",
+    11142220: "0x5E2A42d760Aa6969C3DA49b249ec181115887391",
   } as Partial<Record<number, `0x${string}`>>,
 };
