@@ -1061,19 +1061,6 @@ async function main() {
   // Collect all unique export names across the whole contracts.json.
   const allExportNames = new Set(addressesByName.keys());
 
-  // Sweep any stale Mock* artifacts left on disk from prior regens. Mocks are
-  // testnet-only and not part of the published API surface (see the skip in
-  // the typedExportNames loop below), but previous generator versions emitted
-  // TS/ABI files for them. Remove everything at once — the typedExportNames
-  // pass won't recreate them, so anything left is guaranteed stale.
-  for (const dir of [srcDir, abisDir]) {
-    if (!existsSync(dir)) continue;
-    for (const entry of readdirSync(dir)) {
-      if (!entry.startsWith("Mock")) continue;
-      unlinkSync(join(dir, entry));
-    }
-  }
-
   // Write ABI JSONs for newly resolved contracts.
   for (const contract of resolved) {
     const abiPath = join(abisDir, `${contract.exportName}.json`);
@@ -1159,13 +1146,10 @@ async function main() {
   const typedExportNames = new Set<string>();
   if (clrExportWritten) typedExportNames.add(CLR_PREFIX);
   for (const name of allExportNames) {
-    if (name.startsWith("Mock")) {
-      const abiPath = join(abisDir, `${name}.json`);
-      const srcPath = join(srcDir, `${name}.ts`);
-      if (existsSync(abiPath)) unlinkSync(abiPath);
-      if (existsSync(srcPath)) unlinkSync(srcPath);
-      continue;
-    }
+    // Mock* contracts are testnet-only scaffolding — registry only, no typed
+    // export. Any stale Mock*.ts/json on disk is cleaned up by the orphan
+    // sweep further down (since Mocks never land in typedExportNames).
+    if (name.startsWith("Mock")) continue;
     if (missingAbiNames.has(name)) continue;
     const abiPath = join(abisDir, `${name}.json`);
     if (!existsSync(abiPath)) continue;
@@ -1178,6 +1162,24 @@ async function main() {
       generateTsModule(name, abi, addresses, decimalsByName.get(name)),
       `TS module for ${name}`,
     );
+  }
+
+  // ── Sweep orphaned abi/src artifacts ──────────────────────────────────────
+  // Any abis/<Name>.json or src/<Name>.ts whose name isn't in typedExportNames
+  // is no longer backed by the registry — usually a leftover from a previous
+  // regen of a namespace that's since been removed, an override rename, or
+  // running the generator against an excluded namespace. Because package.json
+  // publishes `./abis/*` as a wildcard subpath, stale ABI files would still
+  // be importable and count as public API surface. Delete them.
+  for (const file of readdirSync(abisDir)) {
+    if (!file.endsWith(".json")) continue;
+    const name = file.slice(0, -".json".length);
+    if (!typedExportNames.has(name)) unlinkSync(join(abisDir, file));
+  }
+  for (const file of readdirSync(srcDir)) {
+    if (!file.endsWith(".ts") || file === "index.ts") continue;
+    const name = file.slice(0, -".ts".length);
+    if (!typedExportNames.has(name)) unlinkSync(join(srcDir, file));
   }
 
   // ── Generate src/index.ts barrel ──────────────────────────────────────────
