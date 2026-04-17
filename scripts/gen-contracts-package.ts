@@ -863,13 +863,52 @@ async function main() {
   // Build chainId → address map per export name from the complete contracts.json.
   // This must cover ALL namespaces (not just the current run) so that each TS
   // module always has a complete address map after every generator invocation.
+  //
+  // When the same (exportName, chainId) appears in multiple namespaces with
+  // different addresses (e.g. an original Monad deploy in "monad-mainnet" that
+  // was later superseded by a redeploy in "mainnet"), prefer the entry from the
+  // most recently-active namespace. Recency is approximated by the max
+  // updatedAt/createdAt across the namespace's treb entries; namespaces with no
+  // treb backing (pure address-book) rank last.
+  const namespaceRecency = new Map<string, string>();
+  for (const entry of Object.values(allDeployments)) {
+    const ts = entry.updatedAt ?? entry.createdAt ?? "";
+    const prior = namespaceRecency.get(entry.namespace) ?? "";
+    if (ts > prior) namespaceRecency.set(entry.namespace, ts);
+  }
+
   const addressesByName = new Map<string, Record<string, string>>();
   const decimalsByName = new Map<string, number>();
+  const addressSource = new Map<string, string>(); // `${name}:${chainId}` → namespace
   for (const [chainId, namespaces] of Object.entries(newContracts)) {
-    for (const contracts of Object.values(namespaces)) {
+    for (const [ns, contracts] of Object.entries(namespaces)) {
       for (const [name, entry] of Object.entries(contracts)) {
         if (!addressesByName.has(name)) addressesByName.set(name, {});
-        addressesByName.get(name)![chainId] = entry.address;
+        const addrKey = `${name}:${chainId}`;
+        const existingNs = addressSource.get(addrKey);
+        const existingAddr = addressesByName.get(name)![chainId];
+
+        if (existingAddr === undefined || existingAddr === entry.address) {
+          addressesByName.get(name)![chainId] = entry.address;
+          addressSource.set(addrKey, ns);
+        } else {
+          // Different addresses across namespaces for the same (name, chainId).
+          // Pick the namespace with the newer recency.
+          const existingRecency = namespaceRecency.get(existingNs ?? "") ?? "";
+          const thisRecency = namespaceRecency.get(ns) ?? "";
+          if (thisRecency > existingRecency) {
+            console.warn(
+              `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Using "${ns}" (newer namespace).`,
+            );
+            addressesByName.get(name)![chainId] = entry.address;
+            addressSource.set(addrKey, ns);
+          } else {
+            console.warn(
+              `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Keeping "${existingNs}" (newer namespace).`,
+            );
+          }
+        }
+
         if (entry.decimals !== undefined) {
           const existing = decimalsByName.get(name);
           if (existing !== undefined && existing !== entry.decimals) {

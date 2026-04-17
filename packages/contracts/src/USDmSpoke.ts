@@ -621,7 +621,7 @@ export const USDmSpoke = {
     }
   ] as const,
   address: {
-    143: '0x866a7e4611C127DCe1a14C6841D2eA962A68dc88',
+    143: '0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115',
     10143: '0x5eCc03111ad2A78F981A108759bc73BAE2AB31bc',
   } as Partial<Record<number, `0x${string}`>>,
   decimals: 18,

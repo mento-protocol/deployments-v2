@@ -78,10 +78,7 @@ contract MGP16 is TrebScript, ProxyHelper {
 
     function preChecks() internal view {
         console.log("== Pre-checks ==");
-        console.log(
-            unicode" > 👀 checking current ownership of %d contracts",
-            tokens.length
-        );
+        console.log(unicode" > 👀 checking current ownership of %d contracts", tokens.length);
 
         for (uint256 i = 0; i < tokens.length; ++i) {
             require(equalStrings(IERC20Metadata(tokens[i].addr).symbol(), tokens[i].name), "unexpected token symbol");

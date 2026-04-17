@@ -621,7 +621,7 @@ export const GBPmSpoke = {
     }
   ] as const,
   address: {
-    143: '0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E',
+    143: '0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1',
     10143: '0x04de554E875c9797dC4ceBd834A9e99fa8fD5Df9',
   } as Partial<Record<number, `0x${string}`>>,
   decimals: 18,
