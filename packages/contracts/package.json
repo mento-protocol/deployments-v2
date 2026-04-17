@@ -84,6 +84,10 @@
       "types": "./dist/NttDeployHelperUSDm.d.ts",
       "import": "./dist/NttDeployHelperUSDm.js"
     },
+    "./OpenLiquidityStrategy": {
+      "types": "./dist/OpenLiquidityStrategy.d.ts",
+      "import": "./dist/OpenLiquidityStrategy.js"
+    },
     "./OpenLiquidityStrategyv300": {
       "types": "./dist/OpenLiquidityStrategyv300.d.ts",
       "import": "./dist/OpenLiquidityStrategyv300.js"

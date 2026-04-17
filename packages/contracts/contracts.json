@@ -392,12 +392,12 @@
         "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
         "type": "contract"
       },
-      "OpenLiquidityStrategy:v3.0.1": {
-        "address": "0xe1221f38de0a17ef170602de724db0e73e3856fb",
-        "type": "contract"
-      },
       "OpenLiquidityStrategyv300": {
         "address": "0x0d7faA2b2743Ab4124aEFe5B30AA7e20dd7a8005",
+        "type": "contract"
+      },
+      "OpenLiquidityStrategyv301": {
+        "address": "0xe1221f38de0a17ef170602de724db0e73e3856fb",
         "type": "contract"
       },
       "OracleAdapter": {

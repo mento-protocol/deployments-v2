@@ -1,4 +1,4 @@
-export const OpenLiquidityStrategyv301 = {
+export const OpenLiquidityStrategy = {
   abi: [
     {
       type: "constructor",
@@ -695,9 +695,9 @@ export const OpenLiquidityStrategyv301 = {
     },
   ] as const,
   address: {
-    143: "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
-    10143: "0xe1221f38de0a17ef170602de724db0e73e3856fb",
-    42220: "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
-    11142220: "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+    143: "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
+    10143: "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
+    42220: "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
+    11142220: "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
   } as Partial<Record<number, `0x${string}`>>,
 };

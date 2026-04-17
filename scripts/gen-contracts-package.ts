@@ -140,7 +140,11 @@ function deriveExportName(
     return sanitizeName(entry.contractName + entry.label);
   }
 
-  return entry.contractName;
+  // Some treb entries carry a version suffix in the contractName itself
+  // (e.g. "OpenLiquidityStrategy:v3.0.1" with a null label). Sanitize the
+  // fallback so it collapses to the same export name other entries produce
+  // via the (contractName, label) path.
+  return sanitizeName(entry.contractName);
 }
 
 function resolveAbiPath(
@@ -169,10 +173,15 @@ function resolveAbiPath(
     return { solFile, contractName: target.contractName };
   }
 
-  // Fallback: assume <ContractName>.sol/<ContractName>.json
+  // Fallback: assume <ContractName>.sol/<ContractName>.json. Strip any
+  // version suffix baked into the contractName itself (some older treb
+  // entries like "OpenLiquidityStrategy:v3.0.1" carry the version inside the
+  // name rather than in the label) so the artifact lookup matches the clean
+  // source file on disk.
+  const baseContractName = target.contractName.split(":")[0];
   return {
-    solFile: `${target.contractName}.sol`,
-    contractName: target.contractName,
+    solFile: `${baseContractName}.sol`,
+    contractName: baseContractName,
   };
 }
 
@@ -755,9 +764,16 @@ async function main() {
   // This corrects entries that were misclassified in older generator versions
   // (e.g. USDT0 was "contract" but is now a known token). Use trebTypeByExport
   // when available so SINGLETON/LIBRARY impls don't get upgraded to
-  // token/pool just because their name matches a heuristic.
+  // token/pool just because their name matches a heuristic. Also evict any
+  // colon-bearing keys left over from older generator versions that didn't
+  // sanitize deriveExportName's fallback branch (e.g. the pre-sanitize name
+  // "OpenLiquidityStrategy:v3.0.1" — the sanitized form is a separate entry
+  // now, so the colon form is redundant and won't survive future regens).
   for (const [chainId, namespaces] of Object.entries(newContracts)) {
     for (const [ns, contracts] of Object.entries(namespaces)) {
+      for (const name of Object.keys(contracts)) {
+        if (name.includes(":")) delete contracts[name];
+      }
       for (const [name, entry] of Object.entries(contracts)) {
         const trebType = trebTypeByExport.get(`${chainId}:${ns}:${name}`);
         const correctType = classifyType(name, trebType);

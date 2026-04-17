@@ -94,11 +94,12 @@ import abi from "@mento-protocol/contracts/abis/FPMM.json";
 
 ## Available namespaces
 
-| Chain ID   | Network       | Namespace        |
-| ---------- | ------------- | ---------------- |
-| `42220`    | Celo Mainnet  | `mainnet`        |
-| `11142220` | Celo Sepolia  | `testnet-v2-rc5` |
-| `143`      | Monad Testnet | `mainnet`        |
+| Chain ID   | Network       | Namespace(s)               |
+| ---------- | ------------- | -------------------------- |
+| `42220`    | Celo Mainnet  | `mainnet`                  |
+| `11142220` | Celo Sepolia  | `testnet-v2-rc5`           |
+| `143`      | Monad Mainnet | `mainnet`, `monad-mainnet` |
+| `10143`    | Monad Testnet | `testnet-v2-rc5`           |
 
 ## Generating / updating the package
 
@@ -120,6 +121,7 @@ npm run contracts:update
 
 # Or pass the namespace directly
 npm run contracts:update -- --namespace=mainnet
+npm run contracts:update -- --namespace=monad-mainnet
 npm run contracts:update -- --namespace=testnet-v2-rc5
 ```
 
