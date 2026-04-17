@@ -28,7 +28,11 @@ const fpmmContract = getContract({
 // Use with ethers
 const broker = new Contract(Broker.address[CELO_SEPOLIA], Broker.abi, signer);
 
-// GBPm is deployed on multiple chains — pick the right one at runtime
+// GBPm is deployed on multiple chains — pick the right one at runtime.
+// NOTE: GBPm covers the *hub* chains (Celo mainnet and Sepolia). On the
+// Monad *spoke* chains (143, 10143) use GBPmSpoke instead — the hub and
+// spoke contracts have different ABIs. Same pattern for USDm / USDmSpoke
+// and EURm / EURmSpoke.
 const gbpm = new Contract(GBPm.address[chainId], GBPm.abi, signer);
 ```
 
@@ -62,7 +66,11 @@ const fpmmAddress = sepolia.FPMM.address; // string
 const fpmmType = sepolia.FPMM.type; // "pool"
 
 // ── Collect all contracts for a given chain ────────────────────────────────
-// Flatten across all namespaces (last write wins on name collisions).
+// A chain can appear under multiple namespaces (e.g. chain 143 has both
+// `mainnet` and `monad-mainnet` entries). The flatMap below returns the
+// full cross-product, so the same contract name may appear more than once
+// if it's present in multiple namespaces with different addresses — dedupe
+// by (name, address) if that matters for your use case.
 
 const chainId = "11142220";
 const allForChain = Object.values(contracts[chainId] ?? {})
@@ -79,7 +87,10 @@ const tokens = Object.entries(contracts).flatMap(([chain, namespaces]) =>
 );
 
 // ── Look up a contract across all namespaces on a chain ────────────────────
-// Useful when you don't know which namespace a contract lives in.
+// When a chain has multiple namespaces, this returns the FIRST match
+// encountered in iteration order. That's fine for unique contracts, but for
+// names that appear in more than one namespace (e.g. different deployment
+// generations) you should filter on the namespace key explicitly.
 
 function findContract(chainId: string, contractName: string) {
   const namespaces = contracts[chainId] ?? {};

@@ -261,18 +261,9 @@ function classifyType(
   // Libraries are always contracts.
   if (trebType === "LIBRARY") return "contract";
 
-  // A SINGLETON that's referenced as the implementation by some PROXY entry
-  // elsewhere is an impl contract, not a user-facing token/pool — even if the
-  // name matches a token/pool heuristic (e.g. the StableTokenSpoke singleton
-  // on Monad). SINGLETONs that no proxy references (e.g. MentoToken,
-  // standalone FPMM deployments) fall through to the name heuristics below.
-  if (trebType === "SINGLETON" && isImplForProxy) return "contract";
-
-  // Tokens: known decimals, or MockERC20* (always a token even if decimals unknown)
-  if (getTokenDecimals(name) !== null || name.startsWith("MockERC20"))
-    return "token";
-
-  // FPMM pools (but not FPMMFactory or FPMMProxy)
+  // FPMM pools (but not FPMMFactory or FPMMProxy) are classified by name even
+  // when the address is a versioned-impl singleton — the entry name is how
+  // consumers reference pool templates.
   if (name === "FPMM") return "pool";
   if (
     name.startsWith("FPMM") &&
@@ -281,6 +272,19 @@ function classifyType(
   ) {
     return "pool";
   }
+
+  // Any address referenced as the implementation by some PROXY (treb
+  // proxyInfo or address-book versioned-impl key) or any SINGLETON with a
+  // versioned label is an impl contract, not a user-facing token — even if
+  // the name matches a token heuristic (e.g. StableTokenSpoke on Monad,
+  // StableTokenV2:v2.6.5 on Celo, StableTokenV3 v3.0.0/v3.0.1 impls).
+  // Entries whose address isn't flagged as impl anywhere (MentoToken) fall
+  // through to the name heuristics below.
+  if (isImplForProxy) return "contract";
+
+  // Tokens: known decimals, or MockERC20* (always a token even if decimals unknown)
+  if (getTokenDecimals(name) !== null || name.startsWith("MockERC20"))
+    return "token";
 
   return "contract";
 }
@@ -567,14 +571,37 @@ async function main() {
     }
   }
 
-  // Set of addresses referenced as the implementation by at least one PROXY
-  // entry. Used to distinguish "SINGLETON that's really a user-facing token/
-  // pool" (MentoToken, standalone FPMM) from "SINGLETON that's an impl behind
-  // a proxy" (StableTokenSpoke, impl behind USDmSpoke/EURmSpoke/GBPmSpoke).
+  // Set of addresses known to be implementation contracts, from two sources:
+  //   - treb PROXY entries' proxyInfo.implementation
+  //   - address-book keys shaped like "<Name>:vN.N.N" (versioned impls by
+  //     convention — e.g. "StableTokenV2:v2.6.5" is the impl behind the
+  //     canonical cUSD proxy, which treb doesn't track)
+  // Used to distinguish "SINGLETON that's really a user-facing token/pool"
+  // (MentoToken, standalone FPMM) from "SINGLETON that's an impl behind a
+  // proxy" (StableTokenSpoke, StableTokenV2).
   const implAddresses = new Set<string>();
   for (const e of Object.values(allDeployments)) {
     if (e.type === "PROXY" && e.proxyInfo?.implementation) {
       implAddresses.add(e.proxyInfo.implementation.toLowerCase());
+    }
+    // SINGLETONs with a versioned label (e.g. "v3.0.0") are impl deployments
+    // by convention even when no treb PROXY references them (the canonical
+    // cUSD/cEUR proxies on Celo mainnet aren't tracked in treb).
+    if (e.type === "SINGLETON" && /^v\d+\.\d+\.\d+$/.test(e.label ?? "")) {
+      implAddresses.add(e.address.toLowerCase());
+    }
+  }
+  const addressBookPathEarly = join(trebDir, "addressbook.json");
+  if (existsSync(addressBookPathEarly)) {
+    const book = JSON.parse(
+      readFileSync(addressBookPathEarly, "utf8"),
+    ) as AddressBook;
+    for (const entries of Object.values(book)) {
+      for (const [key, addr] of Object.entries(entries)) {
+        if (/^(.+):v\d+\.\d+\.\d+$/.test(key) && addr) {
+          implAddresses.add(addr.toLowerCase());
+        }
+      }
     }
   }
   const isImplAddress = (addr: string) => implAddresses.has(addr.toLowerCase());
@@ -802,6 +829,13 @@ async function main() {
         if (entry.type === "token" && entry.decimals === undefined) {
           attachDecimals(entry, name);
         }
+        // Strip decimals from entries that are no longer classified as tokens
+        // (e.g. a previous run wrote StableTokenV2 as "token" + decimals=18;
+        // now that it's recognised as an impl "contract", the decimals field
+        // is misleading).
+        if (entry.type !== "token" && entry.decimals !== undefined) {
+          delete entry.decimals;
+        }
       }
     }
   }
@@ -928,7 +962,11 @@ async function main() {
         // Treb-deployed entries take precedence
         if (newContracts[chainId][namespace][exportName]) continue;
 
-        const abType = classifyType(exportName);
+        // Address book keys shaped like "<Name>:vN.N.N" are versioned impls
+        // by convention (e.g. "StableTokenV2:v2.6.5"), not user-facing
+        // tokens/pools — even if the name matches a token heuristic.
+        const isVersionedImpl = /^(.+):v\d+\.\d+\.\d+$/.test(key);
+        const abType = isVersionedImpl ? "contract" : classifyType(exportName);
         const abEntry: ContractEntry = { address, type: abType };
         attachDecimals(abEntry, exportName);
         newContracts[chainId][namespace][exportName] = abEntry;

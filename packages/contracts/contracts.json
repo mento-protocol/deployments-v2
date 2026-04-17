@@ -172,8 +172,7 @@
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-        "type": "token",
-        "decimals": 18
+        "type": "contract"
       },
       "TransceiverStructs": {
         "address": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
@@ -461,8 +460,7 @@
       },
       "StableTokenV3v300": {
         "address": "0xDBd4Ea7Ce0b15C9d57DC3Fa47713477E4ef4fdcb",
-        "type": "token",
-        "decimals": 18
+        "type": "contract"
       },
       "USDC": {
         "address": "0x534b2f3a21130d7a60830c2df862319e593943a3",
@@ -801,18 +799,15 @@
       },
       "StableTokenV2": {
         "address": "0x434563B0604BE100F04B7Ae485BcafE3c9D8850E",
-        "type": "token",
-        "decimals": 18
+        "type": "contract"
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-        "type": "token",
-        "decimals": 18
+        "type": "contract"
       },
       "StableTokenV3v301": {
         "address": "0x815795C30D0758A297B08cD4e0643620c974c318",
-        "type": "token",
-        "decimals": 18
+        "type": "contract"
       },
       "SystemParams": {
         "address": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
@@ -1469,8 +1464,7 @@
       },
       "StableTokenV3v300": {
         "address": "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
-        "type": "token",
-        "decimals": 18
+        "type": "contract"
       },
       "StableTokenV3v301": {
         "address": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",
