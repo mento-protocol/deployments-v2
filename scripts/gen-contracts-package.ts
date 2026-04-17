@@ -1047,6 +1047,21 @@ async function main() {
   // in the typed exports. Mock* contracts are testnet-only and not part of the
   // published API surface; their addresses remain in contracts.json so
   // deployment tooling can still look them up, but no TS module is emitted.
+  // Names that ended up in missingAbi this run had their address written to
+  // contracts.json but we have no current ABI for them. If a stale
+  // abis/<name>.json lingers from a prior run we'd regenerate the typed module
+  // with that old ABI paired against the newly-recorded address — exactly the
+  // stale-ABI-on-new-address hazard Cursor flagged. Drop the ABI artifact and
+  // skip the typed export for this run; a future run that successfully reads
+  // the ABI will rebuild it from scratch.
+  const missingAbiNames = new Set(missingAbi.map((m) => m.exportName));
+  for (const name of missingAbiNames) {
+    const abiPath = join(abisDir, `${name}.json`);
+    const srcPath = join(srcDir, `${name}.ts`);
+    if (existsSync(abiPath)) unlinkSync(abiPath);
+    if (existsSync(srcPath)) unlinkSync(srcPath);
+  }
+
   const typedExportNames = new Set<string>();
   if (clrExportWritten) typedExportNames.add(CLR_PREFIX);
   for (const name of allExportNames) {
@@ -1057,6 +1072,7 @@ async function main() {
       if (existsSync(srcPath)) unlinkSync(srcPath);
       continue;
     }
+    if (missingAbiNames.has(name)) continue;
     const abiPath = join(abisDir, `${name}.json`);
     if (!existsSync(abiPath)) continue;
     typedExportNames.add(name);

@@ -51,7 +51,6 @@ export * from "./NGNm.js";
 export * from "./NttDeployHelperEURm.js";
 export * from "./NttDeployHelperGBPm.js";
 export * from "./NttDeployHelperUSDm.js";
-export * from "./OpenLiquidityStrategy.js";
 export * from "./OpenLiquidityStrategyv300.js";
 export * from "./OpenLiquidityStrategyv301.js";
 export * from "./OracleAdapter.js";
