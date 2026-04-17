@@ -16,6 +16,10 @@
     },
     "./contracts.json": "./contracts.json",
     "./abis/*": "./abis/*",
+    "./ChainlinkRelayerV1": {
+      "types": "./dist/ChainlinkRelayerV1.d.ts",
+      "import": "./dist/ChainlinkRelayerV1.js"
+    },
     "./AddressSortedLinkedListWithMedian": {
       "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
       "import": "./dist/AddressSortedLinkedListWithMedian.js"
@@ -27,18 +31,6 @@
     "./ChainlinkRelayerFactory": {
       "types": "./dist/ChainlinkRelayerFactory.d.ts",
       "import": "./dist/ChainlinkRelayerFactory.js"
-    },
-    "./ChainlinkRelayerV1AUSDUSD": {
-      "types": "./dist/ChainlinkRelayerV1AUSDUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1AUSDUSD.js"
-    },
-    "./ChainlinkRelayerV1GBPUSD": {
-      "types": "./dist/ChainlinkRelayerV1GBPUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1GBPUSD.js"
-    },
-    "./ChainlinkRelayerV1USDCUSD": {
-      "types": "./dist/ChainlinkRelayerV1USDCUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1USDCUSD.js"
     },
     "./EURmSpoke": {
       "types": "./dist/EURmSpoke.d.ts",
@@ -168,45 +160,9 @@
       "types": "./dist/ChainlinkRelayerFactoryv265.d.ts",
       "import": "./dist/ChainlinkRelayerFactoryv265.js"
     },
-    "./ChainlinkRelayerV1EURUSD": {
-      "types": "./dist/ChainlinkRelayerV1EURUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1EURUSD.js"
-    },
-    "./ChainlinkRelayerV1USDTUSD": {
-      "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
-    },
     "./MedianDeltaBreakerv265": {
       "types": "./dist/MedianDeltaBreakerv265.d.ts",
       "import": "./dist/MedianDeltaBreakerv265.js"
-    },
-    "./MockChainlinkAggregatorAUSDUSD": {
-      "types": "./dist/MockChainlinkAggregatorAUSDUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorAUSDUSD.js"
-    },
-    "./MockChainlinkAggregatorEURUSD": {
-      "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorEURUSD.js"
-    },
-    "./MockChainlinkAggregatorGBPUSD": {
-      "types": "./dist/MockChainlinkAggregatorGBPUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorGBPUSD.js"
-    },
-    "./MockChainlinkAggregatorUSDCUSD": {
-      "types": "./dist/MockChainlinkAggregatorUSDCUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorUSDCUSD.js"
-    },
-    "./MockChainlinkAggregatorUSDTUSD": {
-      "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorUSDTUSD.js"
-    },
-    "./MockERC20AUSD": {
-      "types": "./dist/MockERC20AUSD.d.ts",
-      "import": "./dist/MockERC20AUSD.js"
-    },
-    "./MockERC20USDT0": {
-      "types": "./dist/MockERC20USDT0.d.ts",
-      "import": "./dist/MockERC20USDT0.js"
     },
     "./SortedOraclesv265": {
       "types": "./dist/SortedOraclesv265.d.ts",
@@ -404,126 +360,6 @@
       "types": "./dist/ZARm.d.ts",
       "import": "./dist/ZARm.js"
     },
-    "./ChainlinkRelayerV1AUDUSD": {
-      "types": "./dist/ChainlinkRelayerV1AUDUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1AUDUSD.js"
-    },
-    "./ChainlinkRelayerV1BRLUSD": {
-      "types": "./dist/ChainlinkRelayerV1BRLUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1BRLUSD.js"
-    },
-    "./ChainlinkRelayerV1CADUSD": {
-      "types": "./dist/ChainlinkRelayerV1CADUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CADUSD.js"
-    },
-    "./ChainlinkRelayerV1CELOAUD": {
-      "types": "./dist/ChainlinkRelayerV1CELOAUD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOAUD.js"
-    },
-    "./ChainlinkRelayerV1CELOBRL": {
-      "types": "./dist/ChainlinkRelayerV1CELOBRL.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOBRL.js"
-    },
-    "./ChainlinkRelayerV1CELOCAD": {
-      "types": "./dist/ChainlinkRelayerV1CELOCAD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOCAD.js"
-    },
-    "./ChainlinkRelayerV1CELOCHF": {
-      "types": "./dist/ChainlinkRelayerV1CELOCHF.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOCHF.js"
-    },
-    "./ChainlinkRelayerV1CELOCOP": {
-      "types": "./dist/ChainlinkRelayerV1CELOCOP.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOCOP.js"
-    },
-    "./ChainlinkRelayerV1CELOETH": {
-      "types": "./dist/ChainlinkRelayerV1CELOETH.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOETH.js"
-    },
-    "./ChainlinkRelayerV1CELOEUR": {
-      "types": "./dist/ChainlinkRelayerV1CELOEUR.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOEUR.js"
-    },
-    "./ChainlinkRelayerV1CELOGBP": {
-      "types": "./dist/ChainlinkRelayerV1CELOGBP.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOGBP.js"
-    },
-    "./ChainlinkRelayerV1CELOGHS": {
-      "types": "./dist/ChainlinkRelayerV1CELOGHS.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOGHS.js"
-    },
-    "./ChainlinkRelayerV1CELOJPY": {
-      "types": "./dist/ChainlinkRelayerV1CELOJPY.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOJPY.js"
-    },
-    "./ChainlinkRelayerV1CELOKES": {
-      "types": "./dist/ChainlinkRelayerV1CELOKES.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOKES.js"
-    },
-    "./ChainlinkRelayerV1CELONGN": {
-      "types": "./dist/ChainlinkRelayerV1CELONGN.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELONGN.js"
-    },
-    "./ChainlinkRelayerV1CELOPHP": {
-      "types": "./dist/ChainlinkRelayerV1CELOPHP.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOPHP.js"
-    },
-    "./ChainlinkRelayerV1CELOUSD": {
-      "types": "./dist/ChainlinkRelayerV1CELOUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOUSD.js"
-    },
-    "./ChainlinkRelayerV1CELOXOF": {
-      "types": "./dist/ChainlinkRelayerV1CELOXOF.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOXOF.js"
-    },
-    "./ChainlinkRelayerV1CELOZAR": {
-      "types": "./dist/ChainlinkRelayerV1CELOZAR.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CELOZAR.js"
-    },
-    "./ChainlinkRelayerV1CHFUSD": {
-      "types": "./dist/ChainlinkRelayerV1CHFUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1CHFUSD.js"
-    },
-    "./ChainlinkRelayerV1COPUSD": {
-      "types": "./dist/ChainlinkRelayerV1COPUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1COPUSD.js"
-    },
-    "./ChainlinkRelayerV1EUROCEUR": {
-      "types": "./dist/ChainlinkRelayerV1EUROCEUR.d.ts",
-      "import": "./dist/ChainlinkRelayerV1EUROCEUR.js"
-    },
-    "./ChainlinkRelayerV1EURXOF": {
-      "types": "./dist/ChainlinkRelayerV1EURXOF.d.ts",
-      "import": "./dist/ChainlinkRelayerV1EURXOF.js"
-    },
-    "./ChainlinkRelayerV1GHSUSD": {
-      "types": "./dist/ChainlinkRelayerV1GHSUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1GHSUSD.js"
-    },
-    "./ChainlinkRelayerV1JPYUSD": {
-      "types": "./dist/ChainlinkRelayerV1JPYUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1JPYUSD.js"
-    },
-    "./ChainlinkRelayerV1KESUSD": {
-      "types": "./dist/ChainlinkRelayerV1KESUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1KESUSD.js"
-    },
-    "./ChainlinkRelayerV1NGNUSD": {
-      "types": "./dist/ChainlinkRelayerV1NGNUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1NGNUSD.js"
-    },
-    "./ChainlinkRelayerV1PHPUSD": {
-      "types": "./dist/ChainlinkRelayerV1PHPUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1PHPUSD.js"
-    },
-    "./ChainlinkRelayerV1XOFUSD": {
-      "types": "./dist/ChainlinkRelayerV1XOFUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1XOFUSD.js"
-    },
-    "./ChainlinkRelayerV1ZARUSD": {
-      "types": "./dist/ChainlinkRelayerV1ZARUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1ZARUSD.js"
-    },
     "./Emission": {
       "types": "./dist/Emission.d.ts",
       "import": "./dist/Emission.js"
@@ -539,82 +375,6 @@
     "./MentoToken": {
       "types": "./dist/MentoToken.d.ts",
       "import": "./dist/MentoToken.js"
-    },
-    "./MockChainlinkAggregatorAUDUSD": {
-      "types": "./dist/MockChainlinkAggregatorAUDUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorAUDUSD.js"
-    },
-    "./MockChainlinkAggregatorBRLUSD": {
-      "types": "./dist/MockChainlinkAggregatorBRLUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorBRLUSD.js"
-    },
-    "./MockChainlinkAggregatorCADUSD": {
-      "types": "./dist/MockChainlinkAggregatorCADUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorCADUSD.js"
-    },
-    "./MockChainlinkAggregatorCELOUSD": {
-      "types": "./dist/MockChainlinkAggregatorCELOUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorCELOUSD.js"
-    },
-    "./MockChainlinkAggregatorCHFUSD": {
-      "types": "./dist/MockChainlinkAggregatorCHFUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorCHFUSD.js"
-    },
-    "./MockChainlinkAggregatorCOPUSD": {
-      "types": "./dist/MockChainlinkAggregatorCOPUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorCOPUSD.js"
-    },
-    "./MockChainlinkAggregatorETHUSD": {
-      "types": "./dist/MockChainlinkAggregatorETHUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorETHUSD.js"
-    },
-    "./MockChainlinkAggregatorEUROCUSD": {
-      "types": "./dist/MockChainlinkAggregatorEUROCUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorEUROCUSD.js"
-    },
-    "./MockChainlinkAggregatorGHSUSD": {
-      "types": "./dist/MockChainlinkAggregatorGHSUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorGHSUSD.js"
-    },
-    "./MockChainlinkAggregatorJPYUSD": {
-      "types": "./dist/MockChainlinkAggregatorJPYUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorJPYUSD.js"
-    },
-    "./MockChainlinkAggregatorKESUSD": {
-      "types": "./dist/MockChainlinkAggregatorKESUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorKESUSD.js"
-    },
-    "./MockChainlinkAggregatorNGNUSD": {
-      "types": "./dist/MockChainlinkAggregatorNGNUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorNGNUSD.js"
-    },
-    "./MockChainlinkAggregatorPHPUSD": {
-      "types": "./dist/MockChainlinkAggregatorPHPUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorPHPUSD.js"
-    },
-    "./MockChainlinkAggregatorXOFUSD": {
-      "types": "./dist/MockChainlinkAggregatorXOFUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorXOFUSD.js"
-    },
-    "./MockChainlinkAggregatorZARUSD": {
-      "types": "./dist/MockChainlinkAggregatorZARUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorZARUSD.js"
-    },
-    "./MockERC20USDC": {
-      "types": "./dist/MockERC20USDC.d.ts",
-      "import": "./dist/MockERC20USDC.js"
-    },
-    "./MockERC20USDT": {
-      "types": "./dist/MockERC20USDT.d.ts",
-      "import": "./dist/MockERC20USDT.js"
-    },
-    "./MockERC20axlEUROC": {
-      "types": "./dist/MockERC20axlEUROC.d.ts",
-      "import": "./dist/MockERC20axlEUROC.js"
-    },
-    "./MockERC20axlUSDC": {
-      "types": "./dist/MockERC20axlUSDC.d.ts",
-      "import": "./dist/MockERC20axlUSDC.js"
     },
     "./ReserveLiquidityStrategyv300": {
       "types": "./dist/ReserveLiquidityStrategyv300.d.ts",

@@ -300,6 +300,32 @@ function generateTsModule(
   return output;
 }
 
+function generateInstancesTsModule(
+  name: string,
+  abi: unknown[],
+  instances: Map<string, Record<string, string>>,
+): string {
+  const abiJson = JSON.stringify(abi, null, 2)
+    .split("\n")
+    .map((line, i) => (i === 0 ? line : `  ${line}`))
+    .join("\n");
+  const instanceLines = [...instances.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([instanceName, addresses]) => {
+      const addressLines = Object.entries(addresses)
+        .map(([chainId, addr]) => `      ${chainId}: '${addr}',`)
+        .join("\n");
+      return `    ${JSON.stringify(instanceName)}: {\n${addressLines}\n    },`;
+    })
+    .join("\n");
+  return (
+    `export const ${name} = {\n` +
+    `  abi: ${abiJson} as const,\n` +
+    `  instances: {\n${instanceLines}\n  } as Record<string, Partial<Record<number, \`0x\${string}\`>>>,\n` +
+    `};\n`
+  );
+}
+
 function diffContracts(
   oldJson: ContractsJson,
   newJson: ContractsJson,
@@ -948,6 +974,19 @@ async function main() {
   // Collect all unique export names across the whole contracts.json.
   const allExportNames = new Set(addressesByName.keys());
 
+  // Sweep any stale Mock* artifacts left on disk from prior regens. Mocks are
+  // testnet-only and not part of the published API surface (see the skip in
+  // the typedExportNames loop below), but previous generator versions emitted
+  // TS/ABI files for them. Remove everything at once — the typedExportNames
+  // pass won't recreate them, so anything left is guaranteed stale.
+  for (const dir of [srcDir, abisDir]) {
+    if (!existsSync(dir)) continue;
+    for (const entry of readdirSync(dir)) {
+      if (!entry.startsWith("Mock")) continue;
+      unlinkSync(join(dir, entry));
+    }
+  }
+
   // Write ABI JSONs for newly resolved contracts.
   for (const contract of resolved) {
     const abiPath = join(abisDir, `${contract.exportName}.json`);
@@ -958,13 +997,66 @@ async function main() {
     );
   }
 
+  // Collapse ChainlinkRelayerV1* per-pair instances into a single typed export.
+  // Every ChainlinkRelayerV1<Pair> shares the same implementation contract and
+  // therefore the same ABI — publishing N typed modules is 99% duplication. We
+  // emit one `ChainlinkRelayerV1` export with an `instances` map keyed by the
+  // pair suffix (e.g. "EURUSD") so consumers do:
+  //   new Contract(ChainlinkRelayerV1.instances.EURUSD[chainId], ChainlinkRelayerV1.abi, signer)
+  // Per-pair entries still live in contracts.json for registry lookups.
+  const CLR_PREFIX = "ChainlinkRelayerV1";
+  const clrInstances = new Map<string, Record<string, string>>();
+  let clrAbi: unknown[] | undefined;
+  for (const name of [...allExportNames]) {
+    if (!name.startsWith(CLR_PREFIX) || name === CLR_PREFIX) continue;
+    const pair = name.slice(CLR_PREFIX.length);
+    if (!pair) continue;
+    const abiPath = join(abisDir, `${name}.json`);
+    if (existsSync(abiPath)) {
+      if (!clrAbi) {
+        clrAbi = JSON.parse(readFileSync(abiPath, "utf8")) as unknown[];
+      }
+      unlinkSync(abiPath);
+    }
+    const srcPath = join(srcDir, `${name}.ts`);
+    if (existsSync(srcPath)) unlinkSync(srcPath);
+    clrInstances.set(pair, addressesByName.get(name) ?? {});
+    allExportNames.delete(name);
+  }
+  let clrExportWritten = false;
+  if (clrAbi && clrInstances.size > 0) {
+    const abiPath = join(abisDir, `${CLR_PREFIX}.json`);
+    safeWriteFile(
+      abiPath,
+      JSON.stringify(clrAbi, null, 2) + "\n",
+      `ABI for ${CLR_PREFIX}`,
+    );
+    const srcPath = join(srcDir, `${CLR_PREFIX}.ts`);
+    safeWriteFile(
+      srcPath,
+      generateInstancesTsModule(CLR_PREFIX, clrAbi, clrInstances),
+      `TS module for ${CLR_PREFIX}`,
+    );
+    clrExportWritten = true;
+  }
+
   // Regenerate ALL TS modules from the complete state so that address maps
   // stay up-to-date when a new namespace adds a chain to an existing contract.
   // Only names with an ABI file get a typed TS module — address-book-only
   // entries (e.g. CELO, USDC) appear in contracts.json for labelling but not
-  // in the typed exports.
+  // in the typed exports. Mock* contracts are testnet-only and not part of the
+  // published API surface; their addresses remain in contracts.json so
+  // deployment tooling can still look them up, but no TS module is emitted.
   const typedExportNames = new Set<string>();
+  if (clrExportWritten) typedExportNames.add(CLR_PREFIX);
   for (const name of allExportNames) {
+    if (name.startsWith("Mock")) {
+      const abiPath = join(abisDir, `${name}.json`);
+      const srcPath = join(srcDir, `${name}.ts`);
+      if (existsSync(abiPath)) unlinkSync(abiPath);
+      if (existsSync(srcPath)) unlinkSync(srcPath);
+      continue;
+    }
     const abiPath = join(abisDir, `${name}.json`);
     if (!existsSync(abiPath)) continue;
     typedExportNames.add(name);
