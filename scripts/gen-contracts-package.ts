@@ -253,15 +253,20 @@ function getTokenDecimals(name: string): number | null {
 function classifyType(
   name: string,
   trebType?: DeploymentEntry["type"],
+  isImplForProxy?: boolean,
 ): ContractType {
   // Implementation contracts are never tokens, regardless of name prefix.
   if (name.endsWith("Implementation")) return "contract";
 
-  // Treb SINGLETON/LIBRARY entries are raw implementation contracts and not
-  // user-facing tokens or pools, even if the contract name happens to match a
-  // token/pool heuristic (e.g. the StableTokenSpoke singleton on Monad is the
-  // impl behind multiple proxies, not a token itself).
-  if (trebType === "SINGLETON" || trebType === "LIBRARY") return "contract";
+  // Libraries are always contracts.
+  if (trebType === "LIBRARY") return "contract";
+
+  // A SINGLETON that's referenced as the implementation by some PROXY entry
+  // elsewhere is an impl contract, not a user-facing token/pool — even if the
+  // name matches a token/pool heuristic (e.g. the StableTokenSpoke singleton
+  // on Monad). SINGLETONs that no proxy references (e.g. MentoToken,
+  // standalone FPMM deployments) fall through to the name heuristics below.
+  if (trebType === "SINGLETON" && isImplForProxy) return "contract";
 
   // Tokens: known decimals, or MockERC20* (always a token even if decimals unknown)
   if (getTokenDecimals(name) !== null || name.startsWith("MockERC20"))
@@ -562,6 +567,18 @@ async function main() {
     }
   }
 
+  // Set of addresses referenced as the implementation by at least one PROXY
+  // entry. Used to distinguish "SINGLETON that's really a user-facing token/
+  // pool" (MentoToken, standalone FPMM) from "SINGLETON that's an impl behind
+  // a proxy" (StableTokenSpoke, impl behind USDmSpoke/EURmSpoke/GBPmSpoke).
+  const implAddresses = new Set<string>();
+  for (const e of Object.values(allDeployments)) {
+    if (e.type === "PROXY" && e.proxyInfo?.implementation) {
+      implAddresses.add(e.proxyInfo.implementation.toLowerCase());
+    }
+  }
+  const isImplAddress = (addr: string) => implAddresses.has(addr.toLowerCase());
+
   // ── Validate overrides are still referenced ────────────────────────────────
 
   // Collect every treb key that actually exists in this namespace so we can
@@ -776,7 +793,11 @@ async function main() {
       }
       for (const [name, entry] of Object.entries(contracts)) {
         const trebType = trebTypeByExport.get(`${chainId}:${ns}:${name}`);
-        const correctType = classifyType(name, trebType);
+        const correctType = classifyType(
+          name,
+          trebType,
+          isImplAddress(entry.address),
+        );
         if (entry.type !== correctType) entry.type = correctType;
         if (entry.type === "token" && entry.decimals === undefined) {
           attachDecimals(entry, name);
@@ -798,7 +819,11 @@ async function main() {
     const chainId = String(contract.chainId);
     newContracts[chainId] ??= {};
     newContracts[chainId][contract.namespace] ??= {};
-    const type = classifyType(contract.exportName, contract.trebType);
+    const type = classifyType(
+      contract.exportName,
+      contract.trebType,
+      isImplAddress(contract.address),
+    );
     const entry: ContractEntry = { address: contract.address, type };
     attachDecimals(entry, contract.exportName);
     newContracts[chainId][contract.namespace][contract.exportName] = entry;
@@ -811,7 +836,11 @@ async function main() {
     const chainId = String(d.chainId);
     newContracts[chainId] ??= {};
     newContracts[chainId][namespace] ??= {};
-    const type = classifyType(d.exportName, d.trebType);
+    const type = classifyType(
+      d.exportName,
+      d.trebType,
+      isImplAddress(d.address),
+    );
     const entry: ContractEntry = { address: d.address, type };
     attachDecimals(entry, d.exportName);
     newContracts[chainId][namespace][d.exportName] = entry;
@@ -842,7 +871,11 @@ async function main() {
     if (wasWrittenThisRun(chainId, namespace, m.exportName)) continue;
     newContracts[chainId] ??= {};
     newContracts[chainId][namespace] ??= {};
-    const type = classifyType(m.exportName, m.trebType);
+    const type = classifyType(
+      m.exportName,
+      m.trebType,
+      isImplAddress(m.address),
+    );
     const entry: ContractEntry = { address: m.address, type };
     attachDecimals(entry, m.exportName);
     newContracts[chainId][namespace][m.exportName] = entry;

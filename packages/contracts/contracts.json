@@ -45,7 +45,7 @@
       },
       "FPMMv300": {
         "address": "0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30",
-        "type": "contract"
+        "type": "pool"
       },
       "FactoryRegistry": {
         "address": "0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6",
@@ -172,7 +172,8 @@
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-        "type": "contract"
+        "type": "token",
+        "decimals": 18
       },
       "TransceiverStructs": {
         "address": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
@@ -321,7 +322,7 @@
       },
       "FPMMv300": {
         "address": "0x43cB9D6AcF1462356303079EA4FDd8bc30042a6A",
-        "type": "contract"
+        "type": "pool"
       },
       "FactoryRegistry": {
         "address": "0x47Cb00322E9cd6196915629EDD4De1EA92F98561",
@@ -382,11 +383,13 @@
       },
       "MockERC20AUSD": {
         "address": "0x502E67D3fE9302A5e4Ec1CFCDdbD6F34F9B9484B",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20USDT0": {
         "address": "0xC304EE1876c32d1A194558B1000bE4842F960dF9",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "OpenLiquidityStrategy": {
         "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
@@ -458,7 +461,8 @@
       },
       "StableTokenV3v300": {
         "address": "0xDBd4Ea7Ce0b15C9d57DC3Fa47713477E4ef4fdcb",
-        "type": "contract"
+        "type": "token",
+        "decimals": 18
       },
       "USDC": {
         "address": "0x534b2f3a21130d7a60830c2df862319e593943a3",
@@ -591,7 +595,7 @@
       },
       "FPMMv300": {
         "address": "0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30",
-        "type": "contract"
+        "type": "pool"
       },
       "FXPriceFeed": {
         "address": "0x994F75Fa669eb7e5bF7d465e796c2c7845D707A9",
@@ -802,11 +806,13 @@
       },
       "StableTokenV3v300": {
         "address": "0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2",
-        "type": "contract"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v301": {
         "address": "0x815795C30D0758A297B08cD4e0643620c974c318",
-        "type": "contract"
+        "type": "token",
+        "decimals": 18
       },
       "SystemParams": {
         "address": "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
@@ -1144,7 +1150,7 @@
       },
       "FPMMv300": {
         "address": "0x43cB9D6AcF1462356303079EA4FDd8bc30042a6A",
-        "type": "contract"
+        "type": "pool"
       },
       "FXPriceFeed": {
         "address": "0x40e9403712ED5b991710224e73655470E077a398",
@@ -1240,7 +1246,8 @@
       },
       "MentoToken": {
         "address": "0x07867fd40EB56b4380bE39c88D0a7EA59Aa99A20",
-        "type": "contract"
+        "type": "token",
+        "decimals": 18
       },
       "MetadataNFT": {
         "address": "0x549d09E8104ad88d53BA82fe45090e121725586C",
@@ -1332,19 +1339,23 @@
       },
       "MockERC20USDC": {
         "address": "0xBD63e46Be8eF8D89dFde3054E7b9ECAEb8Ad83e9",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20USDT": {
         "address": "0xCA53d9b72646B254d29EBeEb4c5cde7BB4bb59e0",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20axlEUROC": {
         "address": "0x9883d788d40F1C7595a780ed881Ea833C7743B4B",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20axlUSDC": {
         "address": "0x6285De9DA7C1d329C0451628638908915002d9d1",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "MultiTroveGetter": {
         "address": "0xED59EDfB9fCD06bb13d568ab548eC101fBb77a54",
@@ -1458,7 +1469,8 @@
       },
       "StableTokenV3v300": {
         "address": "0xdbd4ea7ce0b15c9d57dc3fa47713477e4ef4fdcb",
-        "type": "contract"
+        "type": "token",
+        "decimals": 18
       },
       "StableTokenV3v301": {
         "address": "0xeA3A7FCb6706dB3DdeBF8859307059d2601452E6",

@@ -504,4 +504,5 @@ export const MentoToken = {
   address: {
     11142220: "0x07867fd40EB56b4380bE39c88D0a7EA59Aa99A20",
   } as Partial<Record<number, `0x${string}`>>,
+  decimals: 18,
 };
