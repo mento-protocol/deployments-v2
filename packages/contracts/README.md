@@ -13,7 +13,7 @@ npm install @mento-protocol/contracts
 ### Import a contract (ABI + address)
 
 ```typescript
-import { FPMM, Broker, GBPm } from '@mento-protocol/contracts';
+import { FPMM, Broker, GBPm } from "@mento-protocol/contracts";
 
 // Each export has both abi and address keyed by chainId
 const CELO_SEPOLIA = 11142220;
@@ -41,18 +41,18 @@ Each named export is `{ abi: [...] as const, address: Partial<Record<number, `0x
 It is primarily useful for internal tooling that needs to iterate over all contracts (e.g., dashboards, monitoring). For app code that just needs one contract, prefer the typed named exports above.
 
 ```typescript
-import contracts from '@mento-protocol/contracts/contracts.json';
+import contracts from "@mento-protocol/contracts/contracts.json";
 
 // ── Look up a single contract ──────────────────────────────────────────────
 
-const sepolia = contracts['11142220']['testnet-v2-rc5'];
-const fpmmAddress = sepolia.FPMM.address;   // string
-const fpmmType    = sepolia.FPMM.type;      // "pool"
+const sepolia = contracts["11142220"]["testnet-v2-rc5"];
+const fpmmAddress = sepolia.FPMM.address; // string
+const fpmmType = sepolia.FPMM.type; // "pool"
 
 // ── Collect all contracts for a given chain ────────────────────────────────
 // Flatten across all namespaces (last write wins on name collisions).
 
-const chainId = '11142220';
+const chainId = "11142220";
 const allForChain = Object.values(contracts[chainId] ?? {})
   .flatMap((ns) => Object.entries(ns))
   .map(([name, entry]) => ({ name, ...entry }));
@@ -62,7 +62,7 @@ const allForChain = Object.values(contracts[chainId] ?? {})
 const tokens = Object.entries(contracts).flatMap(([chain, namespaces]) =>
   Object.values(namespaces)
     .flatMap((ns) => Object.entries(ns))
-    .filter(([, entry]) => entry.type === 'token')
+    .filter(([, entry]) => entry.type === "token")
     .map(([name, entry]) => ({ chain, name, ...entry })),
 );
 
@@ -80,25 +80,25 @@ function findContract(chainId: string, contractName: string) {
 
 #### Contract types
 
-| `type`       | Description                                     |
-|--------------|-------------------------------------------------|
-| `"token"`    | ERC-20 stablecoins and collateral tokens        |
-| `"pool"`     | FPMM liquidity pools                            |
+| `type`       | Description                                    |
+| ------------ | ---------------------------------------------- |
+| `"token"`    | ERC-20 stablecoins and collateral tokens       |
+| `"pool"`     | FPMM liquidity pools                           |
 | `"contract"` | All other protocol contracts (oracles, CDP, …) |
 
 ### Import a raw ABI JSON (alternative)
 
 ```typescript
-import abi from '@mento-protocol/contracts/abis/FPMM.json';
+import abi from "@mento-protocol/contracts/abis/FPMM.json";
 ```
 
 ## Available namespaces
 
-| Chain ID   | Network               | Namespace          |
-|------------|-----------------------|--------------------|
-| `42220`    | Celo Mainnet          | `mainnet`          |
-| `11142220` | Celo Sepolia          | `testnet-v2-rc5`   |
-| `143`      | Monad Testnet         | `mainnet`          |
+| Chain ID   | Network       | Namespace        |
+| ---------- | ------------- | ---------------- |
+| `42220`    | Celo Mainnet  | `mainnet`        |
+| `11142220` | Celo Sepolia  | `testnet-v2-rc5` |
+| `143`      | Monad Testnet | `mainnet`        |
 
 ## Generating / updating the package
 
@@ -138,11 +138,11 @@ git commit -m "chore: update contracts package for <namespace>"
 
 Decide on the bump type:
 
-| Change type | Version bump |
-|---|---|
-| New contract added / address changed | `patch` |
-| Existing contract renamed or removed (breaking) | `minor` |
-| API redesign (breaking) | `major` |
+| Change type                                     | Version bump |
+| ----------------------------------------------- | ------------ |
+| New contract added / address changed            | `patch`      |
+| Existing contract renamed or removed (breaking) | `minor`      |
+| API redesign (breaking)                         | `major`      |
 
 ```bash
 cd packages/contracts
@@ -164,13 +164,13 @@ git push && git push --tags
 
 The script derives a canonical export name from each entry in the treb registry using these rules (in priority order):
 
-| Registry key pattern          | Export name               |
-|-------------------------------|---------------------------|
-| `Proxy:GBPm`                  | `GBPm`                    |
-| `TransparentUpgradeableProxy:X` | `X`                     |
-| `TransparentUpgradeableProxy:X:Y` | `XY`                  |
+| Registry key pattern               | Export name                |
+| ---------------------------------- | -------------------------- |
+| `Proxy:GBPm`                       | `GBPm`                     |
+| `TransparentUpgradeableProxy:X`    | `X`                        |
+| `TransparentUpgradeableProxy:X:Y`  | `XY`                       |
 | `ChainlinkRelayerV1:vN.N.N-AUDUSD` | `ChainlinkRelayerV1AUDUSD` |
-| `plain key`                   | as-is                     |
+| `plain key`                        | as-is                      |
 
 Old V2 token names (`cGBP`, `cUSD`, etc.) are mapped to their V3 equivalents (`GBPm`, `USDm`, etc.) via `scripts/contract-name-overrides.json`. Multichain tokens use a hub-and-spoke deployment with different ABIs per side; the Monad-side proxies are mapped to `USDmSpoke`/`EURmSpoke`/`GBPmSpoke` so each export carries exactly the ABI that matches its address map.
 
