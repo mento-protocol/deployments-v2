@@ -40,6 +40,10 @@
       "types": "./dist/ChainlinkRelayerV1USDCUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1USDCUSD.js"
     },
+    "./EURmSpoke": {
+      "types": "./dist/EURmSpoke.d.ts",
+      "import": "./dist/EURmSpoke.js"
+    },
     "./FPMMFactory": {
       "types": "./dist/FPMMFactory.d.ts",
       "import": "./dist/FPMMFactory.js"
@@ -60,9 +64,9 @@
       "types": "./dist/FactoryRegistryv300.d.ts",
       "import": "./dist/FactoryRegistryv300.js"
     },
-    "./GBPm": {
-      "types": "./dist/GBPm.d.ts",
-      "import": "./dist/GBPm.js"
+    "./GBPmSpoke": {
+      "types": "./dist/GBPmSpoke.d.ts",
+      "import": "./dist/GBPmSpoke.js"
     },
     "./MarketHoursBreakerToggleablev300": {
       "types": "./dist/MarketHoursBreakerToggleablev300.d.ts",
@@ -75,6 +79,10 @@
     "./MedianDeltaBreaker": {
       "types": "./dist/MedianDeltaBreaker.d.ts",
       "import": "./dist/MedianDeltaBreaker.js"
+    },
+    "./NttDeployHelperEURm": {
+      "types": "./dist/NttDeployHelperEURm.d.ts",
+      "import": "./dist/NttDeployHelperEURm.js"
     },
     "./NttDeployHelperGBPm": {
       "types": "./dist/NttDeployHelperGBPm.d.ts",
@@ -144,9 +152,9 @@
       "types": "./dist/StableTokenV3v300.d.ts",
       "import": "./dist/StableTokenV3v300.js"
     },
-    "./USDm": {
-      "types": "./dist/USDm.d.ts",
-      "import": "./dist/USDm.js"
+    "./USDmSpoke": {
+      "types": "./dist/USDmSpoke.d.ts",
+      "import": "./dist/USDmSpoke.js"
     },
     "./ValueDeltaBreaker": {
       "types": "./dist/ValueDeltaBreaker.d.ts",
@@ -187,6 +195,26 @@
     "./ValueDeltaBreakerv265": {
       "types": "./dist/ValueDeltaBreakerv265.d.ts",
       "import": "./dist/ValueDeltaBreakerv265.js"
+    },
+    "./ChainlinkRelayerV1EURUSD": {
+      "types": "./dist/ChainlinkRelayerV1EURUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1EURUSD.js"
+    },
+    "./ChainlinkRelayerV1USDTUSD": {
+      "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
+      "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
+    },
+    "./MockChainlinkAggregatorEURUSD": {
+      "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorEURUSD.js"
+    },
+    "./MockChainlinkAggregatorUSDTUSD": {
+      "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
+      "import": "./dist/MockChainlinkAggregatorUSDTUSD.js"
+    },
+    "./MockERC20USDT0": {
+      "types": "./dist/MockERC20USDT0.d.ts",
+      "import": "./dist/MockERC20USDT0.js"
     },
     "./AUDm": {
       "types": "./dist/AUDm.d.ts",
@@ -259,6 +287,10 @@
     "./FPMM": {
       "types": "./dist/FPMM.d.ts",
       "import": "./dist/FPMM.js"
+    },
+    "./GBPm": {
+      "types": "./dist/GBPm.d.ts",
+      "import": "./dist/GBPm.js"
     },
     "./GHSm": {
       "types": "./dist/GHSm.d.ts",
@@ -355,6 +387,10 @@
     "./TroveNFT": {
       "types": "./dist/TroveNFT.d.ts",
       "import": "./dist/TroveNFT.js"
+    },
+    "./USDm": {
+      "types": "./dist/USDm.d.ts",
+      "import": "./dist/USDm.js"
     },
     "./VirtualPoolFactory": {
       "types": "./dist/VirtualPoolFactory.d.ts",
@@ -456,10 +492,6 @@
       "types": "./dist/ChainlinkRelayerV1EUROCEUR.d.ts",
       "import": "./dist/ChainlinkRelayerV1EUROCEUR.js"
     },
-    "./ChainlinkRelayerV1EURUSD": {
-      "types": "./dist/ChainlinkRelayerV1EURUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1EURUSD.js"
-    },
     "./ChainlinkRelayerV1EURXOF": {
       "types": "./dist/ChainlinkRelayerV1EURXOF.d.ts",
       "import": "./dist/ChainlinkRelayerV1EURXOF.js"
@@ -483,10 +515,6 @@
     "./ChainlinkRelayerV1PHPUSD": {
       "types": "./dist/ChainlinkRelayerV1PHPUSD.d.ts",
       "import": "./dist/ChainlinkRelayerV1PHPUSD.js"
-    },
-    "./ChainlinkRelayerV1USDTUSD": {
-      "types": "./dist/ChainlinkRelayerV1USDTUSD.d.ts",
-      "import": "./dist/ChainlinkRelayerV1USDTUSD.js"
     },
     "./ChainlinkRelayerV1XOFUSD": {
       "types": "./dist/ChainlinkRelayerV1XOFUSD.d.ts",
@@ -544,10 +572,6 @@
       "types": "./dist/MockChainlinkAggregatorEUROCUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorEUROCUSD.js"
     },
-    "./MockChainlinkAggregatorEURUSD": {
-      "types": "./dist/MockChainlinkAggregatorEURUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorEURUSD.js"
-    },
     "./MockChainlinkAggregatorGHSUSD": {
       "types": "./dist/MockChainlinkAggregatorGHSUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorGHSUSD.js"
@@ -567,10 +591,6 @@
     "./MockChainlinkAggregatorPHPUSD": {
       "types": "./dist/MockChainlinkAggregatorPHPUSD.d.ts",
       "import": "./dist/MockChainlinkAggregatorPHPUSD.js"
-    },
-    "./MockChainlinkAggregatorUSDTUSD": {
-      "types": "./dist/MockChainlinkAggregatorUSDTUSD.d.ts",
-      "import": "./dist/MockChainlinkAggregatorUSDTUSD.js"
     },
     "./MockChainlinkAggregatorXOFUSD": {
       "types": "./dist/MockChainlinkAggregatorXOFUSD.d.ts",

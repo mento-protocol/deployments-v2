@@ -91,5 +91,6 @@ export const NttDeployHelperUSDm = {
   ] as const,
   address: {
     143: '0x37316334108C816f9862baB52347A0aab7551127',
+    42220: '0x37316334108C816f9862baB52347A0aab7551127',
   } as Partial<Record<number, `0x${string}`>>,
 };

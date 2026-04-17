@@ -228,5 +228,7 @@ export const FactoryRegistryv300 = {
   address: {
     143: '0x8124b66595Ff4E79B7F0c1b1101AFa501d219311',
     10143: '0xca73ea6193341D676Ae9f5771d797EEE8d83BAD6',
+    42220: '0x8124b66595Ff4E79B7F0c1b1101AFa501d219311',
+    11142220: '0xca73ea6193341D676Ae9f5771d797EEE8d83BAD6',
   } as Partial<Record<number, `0x${string}`>>,
 };

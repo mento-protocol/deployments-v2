@@ -172,7 +172,7 @@ The script derives a canonical export name from each entry in the treb registry 
 | `ChainlinkRelayerV1:vN.N.N-AUDUSD` | `ChainlinkRelayerV1AUDUSD` |
 | `plain key`                   | as-is                     |
 
-Old V2 token names (`cGBP`, `cUSD`, etc.) are mapped to their V3 equivalents (`GBPm`, `USDm`, etc.) via `scripts/contract-name-overrides.json`.
+Old V2 token names (`cGBP`, `cUSD`, etc.) are mapped to their V3 equivalents (`GBPm`, `USDm`, etc.) via `scripts/contract-name-overrides.json`. Multichain tokens use a hub-and-spoke deployment with different ABIs per side; the Monad-side proxies are mapped to `USDmSpoke`/`EURmSpoke`/`GBPmSpoke` so each export carries exactly the ABI that matches its address map.
 
 The generator validates every entry in `contract-name-overrides.json` against the active namespace on each run and warns about keys that no longer match any deployment — a sign the entry is stale and can be deleted.
 

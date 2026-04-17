@@ -508,5 +508,7 @@ export const OracleAdapterv300 = {
   address: {
     143: '0xc1B767756F582d124E76BB3e246f31e6aB256059',
     10143: '0x9CA4FA8253f14CfF40E42970df38799a78d3c482',
+    42220: '0xc1B767756F582d124E76BB3e246f31e6aB256059',
+    11142220: '0x9CA4FA8253f14CfF40E42970df38799a78d3c482',
   } as Partial<Record<number, `0x${string}`>>,
 };

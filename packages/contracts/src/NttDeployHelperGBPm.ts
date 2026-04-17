@@ -91,5 +91,6 @@ export const NttDeployHelperGBPm = {
   ] as const,
   address: {
     143: '0xF3797E9D818A47A3a604bF2346E4ff50b56ad5c4',
+    42220: '0xF3797E9D818A47A3a604bF2346E4ff50b56ad5c4',
   } as Partial<Record<number, `0x${string}`>>,
 };

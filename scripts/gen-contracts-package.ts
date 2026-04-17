@@ -3,6 +3,7 @@ import {
   mkdirSync,
   readFileSync,
   readdirSync,
+  unlinkSync,
   writeFileSync,
 } from "fs";
 import { basename, dirname, join } from "path";
@@ -223,6 +224,8 @@ function getTokenDecimals(name: string): number | null {
   // Mento stablecoins: all [A-Z]{2,5}m tokens are 18 decimals by convention.
   // KNOWN_TOKENS is checked first, so explicit overrides always win.
   if (/^[A-Z]{2,5}m$/.test(name)) return 18;
+  // Wormhole NTT spoke variants of Mento stablecoins (e.g. USDmSpoke).
+  if (/^[A-Z]{2,5}mSpoke$/.test(name)) return 18;
   // MockERC20* tokens: strip prefix iteratively and look up the underlying.
   if (name.startsWith("MockERC20")) {
     let stripped = name;
@@ -448,6 +451,20 @@ async function main() {
     process.exit(1);
   }
 
+  // The "virtual" namespace holds fork/simulation deployments (pre-MGP-14 state,
+  // Base fork addresses, etc.) that do not match on-chain reality. Regenerating
+  // the package against it overwrites canonical hub addresses with fork addresses
+  // and downgrades ABIs (e.g. V3 → V2 for StableToken). Refuse by default.
+  if (namespace === "virtual") {
+    console.error(
+      `\n✖  The "virtual" namespace contains fork/simulation deployments, not on-chain reality.\n` +
+        `   Running the generator against it will overwrite canonical contract addresses and ABIs\n` +
+        `   with stale fork data (e.g. StableTokenV2 addresses/ABI for proxies that are upgraded to V3).\n` +
+        `   Use "mainnet", "monad-mainnet", or "testnet-v2-rc5" instead.`,
+    );
+    process.exit(1);
+  }
+
   const chainIds = [...new Set(entries.map((e) => String(e.chainId)))];
   if (chainIds.length > 1) {
     console.warn(
@@ -514,8 +531,34 @@ async function main() {
 
   const resolved: ResolvedContract[] = [];
   const superseded: string[] = [];
-  const missingAbi: string[] = [];
-  const exportNamesSeen = new Map<string, string>();
+  const missingAbi: {
+    trebKey: string;
+    exportName: string;
+    address: string;
+    chainId: number;
+  }[] = [];
+  const exportNamesSeen = new Map<
+    string,
+    { trebKey: string; artifactKey: string; chainId: number }
+  >();
+  // Deployments sharing an export name + artifact across *different* chains are
+  // legitimate (same contract, multi-chain). Record their addresses so the
+  // resulting address map covers every chain, even though we only regenerate
+  // the ABI once (from the first-resolved entry).
+  const crossChainDuplicates: {
+    exportName: string;
+    address: string;
+    chainId: number;
+  }[] = [];
+  // When contract-name-overrides.json rewrites an entry's export name (e.g.
+  // "TransparentUpgradeableProxy:USDm" → "USDmSpoke"), the name that would have
+  // been produced without the override may still be sitting in contracts.json
+  // from an earlier generator run. Track those so we can evict them after merge.
+  const preOverrideRenames: {
+    chainId: number;
+    namespace: string;
+    oldName: string;
+  }[] = [];
 
   for (const entry of sortedEntries) {
     const trebKey = entry.contractName + (entry.label ? `:${entry.label}` : "");
@@ -523,26 +566,74 @@ async function main() {
     // Non-unique contractNames include the label for disambiguation
     const isNonUnique = (contractNameCount.get(entry.contractName) ?? 0) > 1;
     const exportName = deriveExportName(entry, overrides, isNonUnique);
-
-    // Guard against remaining collisions (e.g., after override merges two different
-    // treb keys to the same friendly name). Since proxies are sorted first, the
-    // loser here is always the implementation singleton — which is superseded by
-    // its proxy and intentionally not included.
-    if (exportNamesSeen.has(exportName)) {
-      superseded.push(trebKey);
-      continue;
+    const noOverrideName = deriveExportName(entry, {}, isNonUnique);
+    if (noOverrideName !== exportName) {
+      preOverrideRenames.push({
+        chainId: entry.chainId,
+        namespace,
+        oldName: noOverrideName,
+      });
     }
-    exportNamesSeen.set(exportName, trebKey);
 
     const abiTarget = resolveAbiPath(entry, allDeployments);
     if (!abiTarget) {
-      missingAbi.push(trebKey);
+      missingAbi.push({
+        trebKey,
+        exportName,
+        address: entry.address,
+        chainId: entry.chainId,
+      });
       continue;
     }
+    const artifactKey = `${abiTarget.solFile}:${abiTarget.contractName}`;
+
+    // Guard against remaining collisions (e.g., after override merges two different
+    // treb keys to the same friendly name). Since proxies are sorted first, the
+    // loser here is usually the implementation singleton — which is superseded
+    // by its proxy (same underlying artifact) and intentionally not included.
+    // If two deployments resolve to the same export name but different artifacts
+    // (e.g. a hub-and-spoke token where one chain uses StableTokenV2 and another
+    // uses StableTokenSpoke), fail loudly so the operator adds a disambiguating
+    // entry to contract-name-overrides.json.
+    const prior = exportNamesSeen.get(exportName);
+    if (prior) {
+      if (prior.artifactKey === artifactKey) {
+        if (prior.chainId === entry.chainId) {
+          // Same chain + same artifact = proxy-vs-implementation dedup.
+          // Drop entirely — consumers want the proxy address, not the impl.
+          superseded.push(trebKey);
+        } else {
+          // Different chain + same artifact = legitimate multi-chain deployment.
+          // Keep the address; the ABI was already recorded by the first entry.
+          crossChainDuplicates.push({
+            exportName,
+            address: entry.address,
+            chainId: entry.chainId,
+          });
+        }
+        continue;
+      }
+      throw new Error(
+        `Export name collision on "${exportName}" with divergent implementations:\n` +
+          `  "${prior.trebKey}" → ${prior.artifactKey}\n` +
+          `  "${trebKey}" → ${artifactKey}\n` +
+          `Add a disambiguating entry to scripts/contract-name-overrides.json so each export maps to a single implementation.`,
+      );
+    }
+    exportNamesSeen.set(exportName, {
+      trebKey,
+      artifactKey,
+      chainId: entry.chainId,
+    });
 
     const abi = readAbi(abiTarget.solFile, abiTarget.contractName);
     if (!abi) {
-      missingAbi.push(trebKey);
+      missingAbi.push({
+        trebKey,
+        exportName,
+        address: entry.address,
+        chainId: entry.chainId,
+      });
       continue;
     }
 
@@ -603,6 +694,15 @@ async function main() {
     }
   }
 
+  // Track which (chainId, namespace, exportName) tuples this run wrote so the
+  // missingAbi and cross-chain injection steps can distinguish "wrote this run"
+  // from "carried over from previous state" and avoid stale data.
+  const writtenThisRun = new Set<string>();
+  const markWritten = (chainId: string, ns: string, name: string) =>
+    writtenThisRun.add(`${chainId}:${ns}:${name}`);
+  const wasWrittenThisRun = (chainId: string, ns: string, name: string) =>
+    writtenThisRun.has(`${chainId}:${ns}:${name}`);
+
   for (const contract of resolved) {
     const chainId = String(contract.chainId);
     newContracts[chainId] ??= {};
@@ -611,6 +711,51 @@ async function main() {
     const entry: ContractEntry = { address: contract.address, type };
     attachDecimals(entry, contract.exportName);
     newContracts[chainId][contract.namespace][contract.exportName] = entry;
+    markWritten(chainId, contract.namespace, contract.exportName);
+  }
+
+  // Same contract deployed on additional chains in this namespace — record the
+  // address (ABI already emitted by the first-resolved entry).
+  for (const d of crossChainDuplicates) {
+    const chainId = String(d.chainId);
+    newContracts[chainId] ??= {};
+    newContracts[chainId][namespace] ??= {};
+    const type = classifyType(d.exportName);
+    const entry: ContractEntry = { address: d.address, type };
+    attachDecimals(entry, d.exportName);
+    newContracts[chainId][namespace][d.exportName] = entry;
+    markWritten(chainId, namespace, d.exportName);
+  }
+
+  // Evict entries that exist in contracts.json only because an earlier generator
+  // run produced them under the pre-override export name (e.g. a Monad spoke
+  // deployment produced "USDm" before "TransparentUpgradeableProxy:USDm" →
+  // "USDmSpoke" was added to contract-name-overrides.json). The current run
+  // produces the override name instead, leaving the pre-override name stale.
+  for (const r of preOverrideRenames) {
+    const chainId = String(r.chainId);
+    const partition = newContracts[chainId]?.[r.namespace];
+    if (partition && partition[r.oldName]) {
+      delete partition[r.oldName];
+    }
+  }
+
+  // Preserve addresses for contracts the run saw but couldn't resolve an ABI for
+  // (forge didn't compile the impl, artifact JSON missing, etc.). Overwrite the
+  // address if the prior state had a different one — otherwise a redeployed
+  // contract would keep pointing consumers at the old address just because its
+  // ABI isn't buildable this run. Skip only if *this* run already wrote a
+  // resolved entry at the same (chainId, namespace, exportName).
+  for (const m of missingAbi) {
+    const chainId = String(m.chainId);
+    if (wasWrittenThisRun(chainId, namespace, m.exportName)) continue;
+    newContracts[chainId] ??= {};
+    newContracts[chainId][namespace] ??= {};
+    const type = classifyType(m.exportName);
+    const entry: ContractEntry = { address: m.address, type };
+    attachDecimals(entry, m.exportName);
+    newContracts[chainId][namespace][m.exportName] = entry;
+    markWritten(chainId, namespace, m.exportName);
   }
 
   // ── Merge address book entries ────────────────────────────────────────────
@@ -686,6 +831,31 @@ async function main() {
     console.log(
       `\n✓ Merged ${addressBookInjectedCount} address book entries for chain(s): ${[...namespaceChainIds].join(", ")}`,
     );
+  }
+
+  // ── Clean up stale artifacts for evicted rename targets ──────────────────
+  // After all merges, any preOverrideRenames oldName that no longer appears in
+  // newContracts is fully retired — delete its abi/src files so consumers can't
+  // import a fossilised ABI for a name the registry no longer recognises. If
+  // the oldName still lives in another (chainId, namespace) partition (e.g. a
+  // hub-chain deployment under the same export name), we leave the files alone.
+  const evictedOldNames = new Set(preOverrideRenames.map((r) => r.oldName));
+  if (evictedOldNames.size > 0) {
+    const stillLivingNames = new Set<string>();
+    for (const namespaces of Object.values(newContracts)) {
+      for (const contracts of Object.values(namespaces)) {
+        for (const name of Object.keys(contracts)) {
+          if (evictedOldNames.has(name)) stillLivingNames.add(name);
+        }
+      }
+    }
+    for (const oldName of evictedOldNames) {
+      if (stillLivingNames.has(oldName)) continue;
+      const abiPath = join(abisDir, `${oldName}.json`);
+      const srcPath = join(srcDir, `${oldName}.ts`);
+      if (existsSync(abiPath)) unlinkSync(abiPath);
+      if (existsSync(srcPath)) unlinkSync(srcPath);
+    }
   }
 
   // ── Write abis/ and src/ ───────────────────────────────────────────────────
@@ -824,10 +994,10 @@ async function main() {
 
   if (missingAbi.length > 0) {
     console.warn(
-      `\n⚠  Skipped ${missingAbi.length} contracts (ABI not found in out/):`,
+      `\n⚠  Skipped ${missingAbi.length} contracts (ABI not found in out/, address-only):`,
     );
-    for (const s of missingAbi) {
-      console.warn(`   - ${s}`);
+    for (const m of missingAbi) {
+      console.warn(`   - ${m.trebKey}`);
     }
   }
 

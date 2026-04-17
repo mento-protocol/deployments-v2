@@ -601,5 +601,6 @@ export const MedianDeltaBreakerv265 = {
   ] as const,
   address: {
     10143: '0xf923C884F319b8866F67C5719A80E5cB4D0FAF2c',
+    11142220: '0xd29B4e743F7B84D63fBF9149B6D983DF2eF5C952',
   } as Partial<Record<number, `0x${string}`>>,
 };

@@ -265,6 +265,7 @@ export const MockChainlinkAggregatorEURUSD = {
     }
   ] as const,
   address: {
+    10143: '0x904Bc5586697EF66b8B3c3189A8f059a4BD4f071',
     11142220: '0x6E55B9BE545adD377ebB7bcDa03cEb5819d650a6',
   } as Partial<Record<number, `0x${string}`>>,
 };

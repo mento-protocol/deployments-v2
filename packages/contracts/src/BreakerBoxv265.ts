@@ -702,5 +702,6 @@ export const BreakerBoxv265 = {
   ] as const,
   address: {
     10143: '0x88869E30609D2C0E4032463D713328C6f541878e',
+    11142220: '0x578bD46003B9D3fd4c3C3f47c98B329562a6a1dE',
   } as Partial<Record<number, `0x${string}`>>,
 };

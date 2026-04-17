@@ -190,6 +190,7 @@ export const ChainlinkRelayerV1USDTUSD = {
     }
   ] as const,
   address: {
+    10143: '0x10D98F3777Ce2a80fA2175C5641fBB2c15c00A98',
     11142220: '0x19ea130846452733ff2359974Cd58984A2e3963D',
   } as Partial<Record<number, `0x${string}`>>,
 };

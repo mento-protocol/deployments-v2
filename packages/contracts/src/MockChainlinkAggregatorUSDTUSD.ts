@@ -265,6 +265,7 @@ export const MockChainlinkAggregatorUSDTUSD = {
     }
   ] as const,
   address: {
+    10143: '0x601566Fd7d319d14DAee362e15c2E8c3e5d3eF92',
     11142220: '0x3fd706c98fF4f1688A4bb1C9bb01F5f6d58B9EA1',
   } as Partial<Record<number, `0x${string}`>>,
 };
