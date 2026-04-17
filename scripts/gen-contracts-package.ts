@@ -30,6 +30,8 @@ interface DeploymentEntry {
     compilerVersion: string;
     scriptPath: string;
   } | null;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 type ContractType = "token" | "pool" | "contract";
