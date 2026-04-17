@@ -55,6 +55,7 @@ interface ResolvedContract {
   chainId: number;
   namespace: string;
   abi: unknown[];
+  trebType?: DeploymentEntry["type"]; // absent for address-book-only entries
 }
 
 // ─── Paths ────────────────────────────────────────────────────────────────────
@@ -240,9 +241,18 @@ function getTokenDecimals(name: string): number | null {
   return null;
 }
 
-function classifyType(name: string): ContractType {
+function classifyType(
+  name: string,
+  trebType?: DeploymentEntry["type"],
+): ContractType {
   // Implementation contracts are never tokens, regardless of name prefix.
   if (name.endsWith("Implementation")) return "contract";
+
+  // Treb SINGLETON/LIBRARY entries are raw implementation contracts and not
+  // user-facing tokens or pools, even if the contract name happens to match a
+  // token/pool heuristic (e.g. the StableTokenSpoke singleton on Monad is the
+  // impl behind multiple proxies, not a token itself).
+  if (trebType === "SINGLETON" || trebType === "LIBRARY") return "contract";
 
   // Tokens: known decimals, or MockERC20* (always a token even if decimals unknown)
   if (getTokenDecimals(name) !== null || name.startsWith("MockERC20"))
@@ -513,6 +523,36 @@ async function main() {
     ),
   );
 
+  // Precompute lookups over the full treb dataset:
+  //   nameCountsByNs:    per-namespace contract-name counts (drives the
+  //                      `isNonUnique` flag in deriveExportName)
+  //   trebTypeByExport:  (chainId, namespace, exportName) → treb type
+  //                      (PROXY/SINGLETON/LIBRARY) — used to classify entries
+  //                      correctly as "contract" vs "token"/"pool" when a
+  //                      singleton impl happens to match a token-name heuristic.
+  const nameCountsByNs = new Map<string, Map<string, number>>();
+  for (const e of Object.values(allDeployments)) {
+    let counts = nameCountsByNs.get(e.namespace);
+    if (!counts) {
+      counts = new Map<string, number>();
+      nameCountsByNs.set(e.namespace, counts);
+    }
+    counts.set(e.contractName, (counts.get(e.contractName) ?? 0) + 1);
+  }
+  const trebTypeByExport = new Map<string, DeploymentEntry["type"]>();
+  for (const e of Object.values(allDeployments)) {
+    const countsForNs = nameCountsByNs.get(e.namespace);
+    const isNonUnique = (countsForNs?.get(e.contractName) ?? 0) > 1;
+    const exportName = deriveExportName(e, overrides, isNonUnique);
+    const key = `${e.chainId}:${e.namespace}:${exportName}`;
+    // Prefer PROXY type when multiple entries collide (proxies are the
+    // user-facing address; singletons are the impl and superseded elsewhere).
+    const existing = trebTypeByExport.get(key);
+    if (!existing || (existing !== "PROXY" && e.type === "PROXY")) {
+      trebTypeByExport.set(key, e.type);
+    }
+  }
+
   // ── Validate overrides are still referenced ────────────────────────────────
 
   // Collect every treb key that actually exists in this namespace so we can
@@ -564,6 +604,7 @@ async function main() {
     exportName: string;
     address: string;
     chainId: number;
+    trebType: DeploymentEntry["type"];
   }[] = [];
   const exportNamesSeen = new Map<
     string,
@@ -577,6 +618,7 @@ async function main() {
     exportName: string;
     address: string;
     chainId: number;
+    trebType: DeploymentEntry["type"];
   }[] = [];
   // When contract-name-overrides.json rewrites an entry's export name (e.g.
   // "TransparentUpgradeableProxy:USDm" → "USDmSpoke"), the name that would have
@@ -610,6 +652,7 @@ async function main() {
         exportName,
         address: entry.address,
         chainId: entry.chainId,
+        trebType: entry.type,
       });
       continue;
     }
@@ -637,6 +680,7 @@ async function main() {
             exportName,
             address: entry.address,
             chainId: entry.chainId,
+            trebType: entry.type,
           });
         }
         continue;
@@ -661,6 +705,7 @@ async function main() {
         exportName,
         address: entry.address,
         chainId: entry.chainId,
+        trebType: entry.type,
       });
       continue;
     }
@@ -672,6 +717,7 @@ async function main() {
       chainId: entry.chainId,
       namespace,
       abi,
+      trebType: entry.type,
     });
   }
 
@@ -707,14 +753,15 @@ async function main() {
 
   // Reclassify and backfill decimals on existing entries from prior runs.
   // This corrects entries that were misclassified in older generator versions
-  // (e.g. USDT0 was "contract" but is now a known token).
-  for (const namespaces of Object.values(newContracts)) {
-    for (const contracts of Object.values(namespaces)) {
+  // (e.g. USDT0 was "contract" but is now a known token). Use trebTypeByExport
+  // when available so SINGLETON/LIBRARY impls don't get upgraded to
+  // token/pool just because their name matches a heuristic.
+  for (const [chainId, namespaces] of Object.entries(newContracts)) {
+    for (const [ns, contracts] of Object.entries(namespaces)) {
       for (const [name, entry] of Object.entries(contracts)) {
-        const correctType = classifyType(name);
-        if (entry.type !== correctType) {
-          entry.type = correctType;
-        }
+        const trebType = trebTypeByExport.get(`${chainId}:${ns}:${name}`);
+        const correctType = classifyType(name, trebType);
+        if (entry.type !== correctType) entry.type = correctType;
         if (entry.type === "token" && entry.decimals === undefined) {
           attachDecimals(entry, name);
         }
@@ -735,7 +782,7 @@ async function main() {
     const chainId = String(contract.chainId);
     newContracts[chainId] ??= {};
     newContracts[chainId][contract.namespace] ??= {};
-    const type = classifyType(contract.exportName);
+    const type = classifyType(contract.exportName, contract.trebType);
     const entry: ContractEntry = { address: contract.address, type };
     attachDecimals(entry, contract.exportName);
     newContracts[chainId][contract.namespace][contract.exportName] = entry;
@@ -748,7 +795,7 @@ async function main() {
     const chainId = String(d.chainId);
     newContracts[chainId] ??= {};
     newContracts[chainId][namespace] ??= {};
-    const type = classifyType(d.exportName);
+    const type = classifyType(d.exportName, d.trebType);
     const entry: ContractEntry = { address: d.address, type };
     attachDecimals(entry, d.exportName);
     newContracts[chainId][namespace][d.exportName] = entry;
@@ -779,7 +826,7 @@ async function main() {
     if (wasWrittenThisRun(chainId, namespace, m.exportName)) continue;
     newContracts[chainId] ??= {};
     newContracts[chainId][namespace] ??= {};
-    const type = classifyType(m.exportName);
+    const type = classifyType(m.exportName, m.trebType);
     const entry: ContractEntry = { address: m.address, type };
     attachDecimals(entry, m.exportName);
     newContracts[chainId][namespace][m.exportName] = entry;
@@ -900,15 +947,6 @@ async function main() {
   // matters because one fresh deployment of contract X can otherwise make its
   // namespace win conflicts on unrelated contract Y. Address-book entries have
   // no treb backing; they rank oldest.
-  const nameCountsByNs = new Map<string, Map<string, number>>();
-  for (const entry of Object.values(allDeployments)) {
-    let counts = nameCountsByNs.get(entry.namespace);
-    if (!counts) {
-      counts = new Map<string, number>();
-      nameCountsByNs.set(entry.namespace, counts);
-    }
-    counts.set(entry.contractName, (counts.get(entry.contractName) ?? 0) + 1);
-  }
   const entryRecency = new Map<string, string>();
   for (const entry of Object.values(allDeployments)) {
     const ts = entry.updatedAt ?? entry.createdAt ?? "";
@@ -1007,6 +1045,13 @@ async function main() {
   const CLR_PREFIX = "ChainlinkRelayerV1";
   const clrInstances = new Map<string, Record<string, string>>();
   let clrAbi: unknown[] | undefined;
+  // If the previous run already consolidated into abis/ChainlinkRelayerV1.json,
+  // reuse that ABI. Otherwise we fall through to reading it from a per-pair
+  // file below (which is the first-ever-consolidation case).
+  const consolidatedAbiPath = join(abisDir, `${CLR_PREFIX}.json`);
+  if (existsSync(consolidatedAbiPath)) {
+    clrAbi = JSON.parse(readFileSync(consolidatedAbiPath, "utf8")) as unknown[];
+  }
   for (const name of [...allExportNames]) {
     if (!name.startsWith(CLR_PREFIX) || name === CLR_PREFIX) continue;
     const pair = name.slice(CLR_PREFIX.length);
