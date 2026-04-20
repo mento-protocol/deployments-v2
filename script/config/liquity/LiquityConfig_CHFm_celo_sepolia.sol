@@ -4,20 +4,20 @@ pragma solidity ^0.8.0;
 import {ILiquityConfig} from "../ILiquityConfig.sol";
 
 /**
- * @notice Liquity JPYm/USDm instance config for Celo.
+ * @notice Liquity CHFm/USDm instance config for Celo.
  */
-contract LiquityConfig_JPYm_celo is ILiquityConfig {
+contract LiquityConfig_CHFm_celo_sepolia is ILiquityConfig {
     function get() external pure override returns (ILiquityConfig.LiquityInstanceConfig memory) {
         return ILiquityConfig.LiquityInstanceConfig({
-            proxyLabel: "JPYm",
-            singletonLabel: "v3.0.0-JPYm",
+            proxyLabel: "CHFm",
+            singletonLabel: "v3.0.0-CHFm",
             // ── Registry lookup keys ────────────────────────────────
-            debtTokenLabel: "JPYm",
+            debtTokenLabel: "CHFm",
             collateralTokenLabel: "USDm",
             // ── Addresses ──────────────────────────────────────────
-            rateFeedID: 0xFDE35B45cBd2504FB5dC514F007bC2DE27034274, // JPY/USD
+            rateFeedID: 0x4F2746E21A13Ea9A8A832D929CDBf32ffC113A2C, // CHF/USD
             // ── FXPriceFeed ────────────────────────────────────────
-            invertRateFeed: true, // SortedOracles: JPY/USD is inverted as (USD/JPY)
+            invertRateFeed: true, // SortedOracles: CHF/USD is inverted as (USD/CHF)
             l2SequencerGracePeriod: 1200, // 20 minutes
             // ── Collateral params ──────────────────────────────────
             CCR: 1e18 * 1.35, // 135%
@@ -27,7 +27,7 @@ contract LiquityConfig_JPYm_celo is ILiquityConfig {
             liquidationPenaltySP: 1e18 * 0.05, // 5%
             liquidationPenaltyRedistribution: 1e18 * 0.1, // 10%
             // ── SystemParams: debt ─────────────────────────────────
-            minDebt: 200_000e18, // 200,000 JPYm
+            minDebt: 1_000e18, // 1,000 CHFm
             // ── SystemParams: gas compensation ─────────────────────
             collGasCompensationDivisor: 200,
             collGasCompensationCap: 10e18, // 10 USDm
@@ -41,11 +41,11 @@ contract LiquityConfig_JPYm_celo is ILiquityConfig {
             redemptionBeta: 1,
             // ── SystemParams: stability pool ───────────────────────
             spYieldSplit: 1e18 * 0.75, // 75%
-            minBoldInSP: 200e18, // 200 JPYm
-            minBoldAfterRebalance: 1_000_000e18, // 1_000_000 JPYm
+            minBoldInSP: 1e18, // 1 CHFm
+            minBoldAfterRebalance: 5_000e18, // 5_000 CHFm
             // ── NFT Metadata assets ───────────────────────────────
             metadataAssetsBasePath: "script/config/liquity/assets/",
-            debtTokenLogoFile: "JPYm.svg",
+            debtTokenLogoFile: "CHFm.svg",
             collateralTokenLogoFile: "USDm.svg",
             collateralTokenSymbol: "USDm",
             fontFile: "geist.txt"

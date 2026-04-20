@@ -57,8 +57,8 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
             zar: address(0),
             cad: address(0),
             aud: address(0),
-            chf: address(0),
-            jpy: address(0),
+            chf: _mockAggregator("CHF/USD", "CHF/USD", _fxAggs.chf),
+            jpy: _mockAggregator("JPY/USD", "JPY/USD", _fxAggs.jpy),
             ngn: address(0)
         });
     }

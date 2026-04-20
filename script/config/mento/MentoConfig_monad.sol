@@ -60,6 +60,8 @@ contract MentoConfig_monad is MentoConfig {
         _addStableToken("USD", "USDm", "Mento Dollar");
         _addStableToken("GBP", "GBPm", "Mento British Pound");
         _addStableToken("EUR", "EURm", "Mento Euro");
+        _addStableToken("JPY", "JPYm", "Mento Japanese Yen");
+        _addStableToken("CHF", "CHFm", "Mento Swiss Franc");
     }
 
     /// ===================================================================
@@ -215,6 +217,66 @@ contract MentoConfig_monad is MentoConfig {
             TokenLimits({limit0: 250_000, limit1: 1_000_000}),
             openLsConfigEUR
         );
+
+        // ── USDm / JPYm ────────────────────────────────────────────────
+        LiquidityStrategyPoolConfig memory openLsConfigJPY = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0 // 0%
+        });
+
+        _addFPMM(
+            "JPYm",
+            "USDm",
+            getRateFeedIdFromString("JPY/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 10,
+                protocolFee: 5,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 15_400_000, limit1: 77_000_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            openLsConfigJPY
+        );
+
+        // ── USDm / CHFm ────────────────────────────────────────────────
+        LiquidityStrategyPoolConfig memory openLsConfigCHF = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("USDm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0, // 0%
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0 // 0%
+        });
+
+        _addFPMM(
+            "CHFm",
+            "USDm",
+            getRateFeedIdFromString("CHF/USD"),
+            IFPMM.FPMMParams({
+                lpFee: 10,
+                protocolFee: 5,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 77_000, limit1: 385_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            openLsConfigCHF
+        );
     }
 
     /// ===================================================================
@@ -272,6 +334,8 @@ contract MentoConfig_monad is MentoConfig {
 
         _configureDefaultFxRateFeed("GBP/USD", _fxAggs.gbp);
         _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
+        _configureDefaultFxRateFeed("JPY/USD", _fxAggs.jpy);
+        _configureDefaultFxRateFeed("CHF/USD", _fxAggs.chf);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have

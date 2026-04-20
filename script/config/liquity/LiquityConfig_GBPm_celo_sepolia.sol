@@ -12,7 +12,6 @@ contract LiquityConfig_GBPm_celo_sepolia is ILiquityConfig {
             proxyLabel: "GBPm",
             singletonLabel: "v3.0.0-GBPm",
             // ── Registry lookup keys ────────────────────────────────
-            // TODO: change to labels used in prestage Celo script
             debtTokenLabel: "GBPm",
             collateralTokenLabel: "USDm",
             // ── Addresses ──────────────────────────────────────────

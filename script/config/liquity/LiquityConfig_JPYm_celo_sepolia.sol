@@ -6,7 +6,7 @@ import {ILiquityConfig} from "../ILiquityConfig.sol";
 /**
  * @notice Liquity JPYm/USDm instance config for Celo.
  */
-contract LiquityConfig_JPYm_celo is ILiquityConfig {
+contract LiquityConfig_JPYm_celo_sepolia is ILiquityConfig {
     function get() external pure override returns (ILiquityConfig.LiquityInstanceConfig memory) {
         return ILiquityConfig.LiquityInstanceConfig({
             proxyLabel: "JPYm",
@@ -15,7 +15,7 @@ contract LiquityConfig_JPYm_celo is ILiquityConfig {
             debtTokenLabel: "JPYm",
             collateralTokenLabel: "USDm",
             // ── Addresses ──────────────────────────────────────────
-            rateFeedID: 0xFDE35B45cBd2504FB5dC514F007bC2DE27034274, // JPY/USD
+            rateFeedID: 0x403EA4186ce479fF162636c37fDf4086bD286F8c, // JPY/USD
             // ── FXPriceFeed ────────────────────────────────────────
             invertRateFeed: true, // SortedOracles: JPY/USD is inverted as (USD/JPY)
             l2SequencerGracePeriod: 1200, // 20 minutes

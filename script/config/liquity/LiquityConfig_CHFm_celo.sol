@@ -12,13 +12,12 @@ contract LiquityConfig_CHFm_celo is ILiquityConfig {
             proxyLabel: "CHFm",
             singletonLabel: "v3.0.0-CHFm",
             // ── Registry lookup keys ────────────────────────────────
-            // TODO: change to labels used in prestage Celo script
             debtTokenLabel: "CHFm",
             collateralTokenLabel: "USDm",
             // ── Addresses ──────────────────────────────────────────
-            rateFeedID: , // CHF/USD
+            rateFeedID: 0x0f61BA9c30ef7CaEE7E5CC1F96BFFCb0f52ccD64, // CHF/USD
             // ── FXPriceFeed ────────────────────────────────────────
-            invertRateFeed: , // SortedOracles: GBP/USD is inverted as (USD/GBP)
+            invertRateFeed: true, // SortedOracles: CHF/USD is inverted as (USD/CHF)
             l2SequencerGracePeriod: 1200, // 20 minutes
             // ── Collateral params ──────────────────────────────────
             CCR: 1e18 * 1.35, // 135%
