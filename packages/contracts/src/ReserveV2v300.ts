@@ -1,816 +1,818 @@
 export const ReserveV2v300 = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "disable",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "disable",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "receive",
-      "stateMutability": "payable"
+      type: "receive",
+      stateMutability: "payable",
     },
     {
-      "type": "function",
-      "name": "getCollateralAssets",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getCollateralAssets",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getLiquidityStrategySpenders",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getLiquidityStrategySpenders",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getOtherReserveAddresses",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getOtherReserveAddresses",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getReserveManagerSpenders",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getReserveManagerSpenders",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getStableAssets",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getStableAssets",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address[]",
-          "internalType": "address[]"
-        }
+          name: "",
+          type: "address[]",
+          internalType: "address[]",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "initialize",
-      "inputs": [
+      type: "function",
+      name: "initialize",
+      inputs: [
         {
-          "name": "_stableAssets",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_stableAssets",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_collateralAssets",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_collateralAssets",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_otherReserveAddresses",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_otherReserveAddresses",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_liquidityStrategySpenders",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_liquidityStrategySpenders",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_reserveManagerSpenders",
-          "type": "address[]",
-          "internalType": "address[]"
+          name: "_reserveManagerSpenders",
+          type: "address[]",
+          internalType: "address[]",
         },
         {
-          "name": "_initialOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_initialOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "isCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "isCollateralAsset",
+      inputs: [
         {
-          "name": "_collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isLiquidityStrategySpender",
-      "inputs": [
+      type: "function",
+      name: "isLiquidityStrategySpender",
+      inputs: [
         {
-          "name": "_liquidityStrategySpender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_liquidityStrategySpender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOtherReserveAddress",
-      "inputs": [
+      type: "function",
+      name: "isOtherReserveAddress",
+      inputs: [
         {
-          "name": "_otherReserveAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_otherReserveAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isReserveManagerSpender",
-      "inputs": [
+      type: "function",
+      name: "isReserveManagerSpender",
+      inputs: [
         {
-          "name": "_reserveManagerSpender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_reserveManagerSpender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isStableAsset",
-      "inputs": [
+      type: "function",
+      name: "isStableAsset",
+      inputs: [
         {
-          "name": "_stableAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_stableAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "registerCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "registerCollateralAsset",
+      inputs: [
         {
-          "name": "_collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "registerLiquidityStrategySpender",
-      "inputs": [
+      type: "function",
+      name: "registerLiquidityStrategySpender",
+      inputs: [
         {
-          "name": "_liquidityStrategySpender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_liquidityStrategySpender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "registerOtherReserveAddress",
-      "inputs": [
+      type: "function",
+      name: "registerOtherReserveAddress",
+      inputs: [
         {
-          "name": "_otherReserveAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_otherReserveAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "registerReserveManagerSpender",
-      "inputs": [
+      type: "function",
+      name: "registerReserveManagerSpender",
+      inputs: [
         {
-          "name": "_reserveManagerSpender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_reserveManagerSpender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "registerStableAsset",
-      "inputs": [
+      type: "function",
+      name: "registerStableAsset",
+      inputs: [
         {
-          "name": "_stableAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_stableAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "transferCollateralAsset",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferCollateralAssetToOtherReserve",
-      "inputs": [
+      type: "function",
+      name: "transferCollateralAssetToOtherReserve",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferStableAsset",
-      "inputs": [
+      type: "function",
+      name: "transferStableAsset",
+      inputs: [
         {
-          "name": "stableAsset",
-          "type": "address",
-          "internalType": "address"
+          name: "stableAsset",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "unregisterCollateralAsset",
-      "inputs": [
+      type: "function",
+      name: "unregisterCollateralAsset",
+      inputs: [
         {
-          "name": "_collateralAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_collateralAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "unregisterLiquidityStrategySpender",
-      "inputs": [
+      type: "function",
+      name: "unregisterLiquidityStrategySpender",
+      inputs: [
         {
-          "name": "_liquidityStrategySpender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_liquidityStrategySpender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "unregisterOtherReserveAddress",
-      "inputs": [
+      type: "function",
+      name: "unregisterOtherReserveAddress",
+      inputs: [
         {
-          "name": "_otherReserveAddress",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_otherReserveAddress",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "unregisterReserveManagerSpender",
-      "inputs": [
+      type: "function",
+      name: "unregisterReserveManagerSpender",
+      inputs: [
         {
-          "name": "_reserveManagerSpender",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_reserveManagerSpender",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "unregisterStableAsset",
-      "inputs": [
+      type: "function",
+      name: "unregisterStableAsset",
+      inputs: [
         {
-          "name": "_stableAsset",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_stableAsset",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "event",
-      "name": "CollateralAssetRegistered",
-      "inputs": [
+      type: "event",
+      name: "CollateralAssetRegistered",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollateralAssetTransferredLiquidityStrategySpender",
-      "inputs": [
+      type: "event",
+      name: "CollateralAssetTransferredLiquidityStrategySpender",
+      inputs: [
         {
-          "name": "liquidityStrategySpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "liquidityStrategySpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollateralAssetTransferredReserveManagerSpender",
-      "inputs": [
+      type: "event",
+      name: "CollateralAssetTransferredReserveManagerSpender",
+      inputs: [
         {
-          "name": "reserveManagerSpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "reserveManagerSpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "collateralAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "otherReserveAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "otherReserveAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollateralAssetUnregistered",
-      "inputs": [
+      type: "event",
+      name: "CollateralAssetUnregistered",
+      inputs: [
         {
-          "name": "collateralAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "collateralAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "Initialized",
-      "inputs": [
+      type: "event",
+      name: "Initialized",
+      inputs: [
         {
-          "name": "version",
-          "type": "uint8",
-          "indexed": false,
-          "internalType": "uint8"
-        }
+          name: "version",
+          type: "uint8",
+          indexed: false,
+          internalType: "uint8",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "LiquidityStrategySpenderRegistered",
-      "inputs": [
+      type: "event",
+      name: "LiquidityStrategySpenderRegistered",
+      inputs: [
         {
-          "name": "liquidityStrategySpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "liquidityStrategySpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "LiquidityStrategySpenderUnregistered",
-      "inputs": [
+      type: "event",
+      name: "LiquidityStrategySpenderUnregistered",
+      inputs: [
         {
-          "name": "liquidityStrategySpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "liquidityStrategySpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OtherReserveAddressRegistered",
-      "inputs": [
+      type: "event",
+      name: "OtherReserveAddressRegistered",
+      inputs: [
         {
-          "name": "otherReserveAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "otherReserveAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OtherReserveAddressUnregistered",
-      "inputs": [
+      type: "event",
+      name: "OtherReserveAddressUnregistered",
+      inputs: [
         {
-          "name": "otherReserveAddress",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "otherReserveAddress",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReserveManagerSpenderRegistered",
-      "inputs": [
+      type: "event",
+      name: "ReserveManagerSpenderRegistered",
+      inputs: [
         {
-          "name": "reserveManagerSpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "reserveManagerSpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "ReserveManagerSpenderUnregistered",
-      "inputs": [
+      type: "event",
+      name: "ReserveManagerSpenderUnregistered",
+      inputs: [
         {
-          "name": "reserveManagerSpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "reserveManagerSpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "StableAssetRegistered",
-      "inputs": [
+      type: "event",
+      name: "StableAssetRegistered",
+      inputs: [
         {
-          "name": "stableAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "stableAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "StableAssetTransferred",
-      "inputs": [
+      type: "event",
+      name: "StableAssetTransferred",
+      inputs: [
         {
-          "name": "reserveManagerSpender",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "reserveManagerSpender",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "stableAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "stableAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "to",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "value",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "value",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "StableAssetUnregistered",
-      "inputs": [
+      type: "event",
+      name: "StableAssetUnregistered",
+      inputs: [
         {
-          "name": "stableAsset",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "stableAsset",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "error",
-      "name": "AddressNotInArray",
-      "inputs": []
+      type: "error",
+      name: "AddressNotInArray",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ArrayEmpty",
-      "inputs": []
+      type: "error",
+      name: "ArrayEmpty",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "CollateralAssetAlreadyRegistered",
-      "inputs": []
+      type: "error",
+      name: "CollateralAssetAlreadyRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "CollateralAssetNotRegistered",
-      "inputs": []
+      type: "error",
+      name: "CollateralAssetNotRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "CollateralAssetZeroAddress",
-      "inputs": []
+      type: "error",
+      name: "CollateralAssetZeroAddress",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "InsufficientReserveBalance",
-      "inputs": []
+      type: "error",
+      name: "InsufficientReserveBalance",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LiquidityStrategySpenderAlreadyRegistered",
-      "inputs": []
+      type: "error",
+      name: "LiquidityStrategySpenderAlreadyRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LiquidityStrategySpenderNotRegistered",
-      "inputs": []
+      type: "error",
+      name: "LiquidityStrategySpenderNotRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "LiquidityStrategySpenderZeroAddress",
-      "inputs": []
+      type: "error",
+      name: "LiquidityStrategySpenderZeroAddress",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "OtherReserveAddressAlreadyRegistered",
-      "inputs": []
+      type: "error",
+      name: "OtherReserveAddressAlreadyRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "OtherReserveAddressNotRegistered",
-      "inputs": []
+      type: "error",
+      name: "OtherReserveAddressNotRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "OtherReserveAddressZeroAddress",
-      "inputs": []
+      type: "error",
+      name: "OtherReserveAddressZeroAddress",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ReserveManagerSpenderAlreadyRegistered",
-      "inputs": []
+      type: "error",
+      name: "ReserveManagerSpenderAlreadyRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ReserveManagerSpenderNotRegistered",
-      "inputs": []
+      type: "error",
+      name: "ReserveManagerSpenderNotRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "ReserveManagerSpenderZeroAddress",
-      "inputs": []
+      type: "error",
+      name: "ReserveManagerSpenderZeroAddress",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "StableAssetAlreadyRegistered",
-      "inputs": []
+      type: "error",
+      name: "StableAssetAlreadyRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "StableAssetNotRegistered",
-      "inputs": []
+      type: "error",
+      name: "StableAssetNotRegistered",
+      inputs: [],
     },
     {
-      "type": "error",
-      "name": "StableAssetZeroAddress",
-      "inputs": []
-    }
+      type: "error",
+      name: "StableAssetZeroAddress",
+      inputs: [],
+    },
   ] as const,
   address: {
-    143: '0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF',
-    10143: '0x9AF42d11e808D0d6D16CFA676769AaFa0DA9644d',
+    143: "0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF",
+    10143: "0x9AF42d11e808D0d6D16CFA676769AaFa0DA9644d",
+    42220: "0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF",
+    11142220: "0x9AF42d11e808D0d6D16CFA676769AaFa0DA9644d",
   } as Partial<Record<number, `0x${string}`>>,
 };

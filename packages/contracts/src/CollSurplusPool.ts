@@ -1,198 +1,198 @@
 export const CollSurplusPool = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_addressesRegistry",
-          "type": "address",
-          "internalType": "contract IAddressesRegistry"
-        }
+          name: "_addressesRegistry",
+          type: "address",
+          internalType: "contract IAddressesRegistry",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "NAME",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "NAME",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "accountSurplus",
-      "inputs": [
+      type: "function",
+      name: "accountSurplus",
+      inputs: [
         {
-          "name": "_account",
-          "type": "address",
-          "internalType": "address"
+          name: "_account",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "_amount",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "borrowerOperationsAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "borrowerOperationsAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "claimColl",
-      "inputs": [
+      type: "function",
+      name: "claimColl",
+      inputs: [
         {
-          "name": "_account",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_account",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "collToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IERC20"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IERC20",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getCollBalance",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getCollBalance",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getCollateral",
-      "inputs": [
+      type: "function",
+      name: "getCollateral",
+      inputs: [
         {
-          "name": "_account",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_account",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "troveManagerAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "troveManagerAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "event",
-      "name": "BorrowerOperationsAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "BorrowerOperationsAddressChanged",
+      inputs: [
         {
-          "name": "_newBorrowerOperationsAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newBorrowerOperationsAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollBalanceUpdated",
-      "inputs": [
+      type: "event",
+      name: "CollBalanceUpdated",
+      inputs: [
         {
-          "name": "_account",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "_account",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "_newBalance",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_newBalance",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollSent",
-      "inputs": [
+      type: "event",
+      name: "CollSent",
+      inputs: [
         {
-          "name": "_to",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "_to",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "_amount",
-          "type": "uint256",
-          "indexed": false,
-          "internalType": "uint256"
-        }
+          name: "_amount",
+          type: "uint256",
+          indexed: false,
+          internalType: "uint256",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TroveManagerAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "TroveManagerAddressChanged",
+      inputs: [
         {
-          "name": "_newTroveManagerAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_newTroveManagerAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    42220: '0xfFF48ee3bd2D534E35b54D538de30a9d7709d4B6',
-    11142220: '0x4b8FD6eFe77B56a27c90eb46586c8903E8D0A63a',
+    42220: "0xfFF48ee3bd2D534E35b54D538de30a9d7709d4B6",
+    11142220: "0x4b8FD6eFe77B56a27c90eb46586c8903E8D0A63a",
   } as Partial<Record<number, `0x${string}`>>,
 };

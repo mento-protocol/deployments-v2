@@ -13,5 +13,8 @@
   "Proxy:cNGN": "NGNm",
   "Proxy:cZAR": "ZARm",
   "Proxy:eXOF": "XOFm",
-  "Proxy:PUSO": "PHPm"
+  "Proxy:PUSO": "PHPm",
+  "TransparentUpgradeableProxy:USDm": "USDmSpoke",
+  "TransparentUpgradeableProxy:EURm": "EURmSpoke",
+  "TransparentUpgradeableProxy:GBPm": "GBPmSpoke"
 }

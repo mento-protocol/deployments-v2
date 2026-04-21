@@ -112,6 +112,114 @@ export const GBPm = {
     },
     {
       type: "function",
+      name: "burn",
+      inputs: [
+        {
+          name: "account",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
+      ],
+      outputs: [
+        {
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
+      ],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "creditGasFees",
+      inputs: [
+        {
+          name: "recipients",
+          type: "address[]",
+          internalType: "address[]",
+        },
+        {
+          name: "amounts",
+          type: "uint256[]",
+          internalType: "uint256[]",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "creditGasFees",
+      inputs: [
+        {
+          name: "refundRecipient",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "tipRecipient",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "baseFeeRecipient",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "refundAmount",
+          type: "uint256",
+          internalType: "uint256",
+        },
+        {
+          name: "tipAmount",
+          type: "uint256",
+          internalType: "uint256",
+        },
+        {
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
+        {
+          name: "baseFeeAmount",
+          type: "uint256",
+          internalType: "uint256",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "debitGasFees",
+      inputs: [
+        {
+          name: "from",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "value",
+          type: "uint256",
+          internalType: "uint256",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
       name: "decimals",
       inputs: [],
       outputs: [
@@ -149,6 +257,45 @@ export const GBPm = {
     },
     {
       type: "function",
+      name: "deprecated_broker_storage_slot__",
+      inputs: [],
+      outputs: [
+        {
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "deprecated_exchange_storage_slot__",
+      inputs: [],
+      outputs: [
+        {
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "deprecated_validators_storage_slot__",
+      inputs: [],
+      outputs: [
+        {
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
       name: "increaseAllowance",
       inputs: [
         {
@@ -176,12 +323,12 @@ export const GBPm = {
       name: "initialize",
       inputs: [
         {
-          name: "name",
+          name: "_name",
           type: "string",
           internalType: "string",
         },
         {
-          name: "symbol",
+          name: "_symbol",
           type: "string",
           internalType: "string",
         },
@@ -207,6 +354,34 @@ export const GBPm = {
         },
         {
           name: "_burners",
+          type: "address[]",
+          internalType: "address[]",
+        },
+        {
+          name: "_operators",
+          type: "address[]",
+          internalType: "address[]",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "initializeV3",
+      inputs: [
+        {
+          name: "_minters",
+          type: "address[]",
+          internalType: "address[]",
+        },
+        {
+          name: "_burners",
+          type: "address[]",
+          internalType: "address[]",
+        },
+        {
+          name: "_operators",
           type: "address[]",
           internalType: "address[]",
         },
@@ -236,6 +411,25 @@ export const GBPm = {
     {
       type: "function",
       name: "isMinter",
+      inputs: [
+        {
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
+      ],
+      outputs: [
+        {
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "isOperator",
       inputs: [
         {
           name: "",
@@ -373,6 +567,52 @@ export const GBPm = {
     },
     {
       type: "function",
+      name: "returnFromPool",
+      inputs: [
+        {
+          name: "_poolAddress",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "_receiver",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "sendToPool",
+      inputs: [
+        {
+          name: "_sender",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "_poolAddress",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "_amount",
+          type: "uint256",
+          internalType: "uint256",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
       name: "setBurner",
       inputs: [
         {
@@ -400,6 +640,24 @@ export const GBPm = {
         },
         {
           name: "_isMinter",
+          type: "bool",
+          internalType: "bool",
+        },
+      ],
+      outputs: [],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "setOperator",
+      inputs: [
+        {
+          name: "_operator",
+          type: "address",
+          internalType: "address",
+        },
+        {
+          name: "_isOperator",
           type: "bool",
           internalType: "bool",
         },
@@ -577,6 +835,25 @@ export const GBPm = {
     },
     {
       type: "event",
+      name: "OperatorUpdated",
+      inputs: [
+        {
+          name: "operator",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
+        {
+          name: "isOperator",
+          type: "bool",
+          indexed: false,
+          internalType: "bool",
+        },
+      ],
+      anonymous: false,
+    },
+    {
+      type: "event",
       name: "OwnershipTransferred",
       inputs: [
         {
@@ -621,8 +898,6 @@ export const GBPm = {
     },
   ] as const,
   address: {
-    143: "0x39bb4E0a204412bB98e821d25e7d955e69d40Fd1",
-    10143: "0x04de554E875c9797dC4ceBd834A9e99fa8fD5Df9",
     42220: "0xCCF663b1fF11028f0b19058d0f7B674004a40746",
     11142220: "0x85F5181Abdbf0e1814Fc4358582Ae07b8eBA3aF3",
   } as Partial<Record<number, `0x${string}`>>,

@@ -1,159 +1,159 @@
 export const ProxyAdmin = {
   abi: [
     {
-      "type": "function",
-      "name": "changeProxyAdmin",
-      "inputs": [
+      type: "function",
+      name: "changeProxyAdmin",
+      inputs: [
         {
-          "name": "proxy",
-          "type": "address",
-          "internalType": "contract ITransparentUpgradeableProxy"
+          name: "proxy",
+          type: "address",
+          internalType: "contract ITransparentUpgradeableProxy",
         },
         {
-          "name": "newAdmin",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newAdmin",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "getProxyAdmin",
-      "inputs": [
+      type: "function",
+      name: "getProxyAdmin",
+      inputs: [
         {
-          "name": "proxy",
-          "type": "address",
-          "internalType": "contract ITransparentUpgradeableProxy"
-        }
+          name: "proxy",
+          type: "address",
+          internalType: "contract ITransparentUpgradeableProxy",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getProxyImplementation",
-      "inputs": [
+      type: "function",
+      name: "getProxyImplementation",
+      inputs: [
         {
-          "name": "proxy",
-          "type": "address",
-          "internalType": "contract ITransparentUpgradeableProxy"
-        }
+          name: "proxy",
+          type: "address",
+          internalType: "contract ITransparentUpgradeableProxy",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "renounceOwnership",
-      "inputs": [],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      type: "function",
+      name: "renounceOwnership",
+      inputs: [],
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "transferOwnership",
-      "inputs": [
+      type: "function",
+      name: "transferOwnership",
+      inputs: [
         {
-          "name": "newOwner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "upgrade",
-      "inputs": [
+      type: "function",
+      name: "upgrade",
+      inputs: [
         {
-          "name": "proxy",
-          "type": "address",
-          "internalType": "contract ITransparentUpgradeableProxy"
+          name: "proxy",
+          type: "address",
+          internalType: "contract ITransparentUpgradeableProxy",
         },
         {
-          "name": "implementation",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "implementation",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "upgradeAndCall",
-      "inputs": [
+      type: "function",
+      name: "upgradeAndCall",
+      inputs: [
         {
-          "name": "proxy",
-          "type": "address",
-          "internalType": "contract ITransparentUpgradeableProxy"
+          name: "proxy",
+          type: "address",
+          internalType: "contract ITransparentUpgradeableProxy",
         },
         {
-          "name": "implementation",
-          "type": "address",
-          "internalType": "address"
+          name: "implementation",
+          type: "address",
+          internalType: "address",
         },
         {
-          "name": "data",
-          "type": "bytes",
-          "internalType": "bytes"
-        }
+          name: "data",
+          type: "bytes",
+          internalType: "bytes",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "payable"
+      outputs: [],
+      stateMutability: "payable",
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    143: '0xf759073E3a6125fFF215427AeB313A49799FECCf',
-    10143: '0xaad8b67551086609D132178dfF1dBE31b3c1C9C2',
-    42220: '0x70d8DC60f9701c46D4CE9AC141E154f6804e1dC3',
-    11142220: '0x01bd47aa7B13a75c24E3dA760f8A503c435BB4Df',
+    143: "0xf759073E3a6125fFF215427AeB313A49799FECCf",
+    10143: "0xaad8b67551086609D132178dfF1dBE31b3c1C9C2",
+    42220: "0x70d8DC60f9701c46D4CE9AC141E154f6804e1dC3",
+    11142220: "0x01bd47aa7B13a75c24E3dA760f8A503c435BB4Df",
   } as Partial<Record<number, `0x${string}`>>,
 };

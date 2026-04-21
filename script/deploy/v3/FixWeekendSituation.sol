@@ -14,7 +14,7 @@ import {IMentoConfig} from "script/config/IMentoConfig.sol";
 import {Config} from "script/config/Config.sol";
 import {
     ITransparentUpgradeableProxy
-} from "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+} from "lib/mento-core/lib/openzeppelin-contracts-next/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 import {LiquidityStrategy} from "lib/mento-core/contracts/liquidityStrategies/LiquidityStrategy.sol";
 import {console} from "forge-std/console.sol";
 

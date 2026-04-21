@@ -1,668 +1,668 @@
 export const AddressesRegistry = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_owner",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "_owner",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "activePool",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "activePool",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IActivePool"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IActivePool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "boldToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "boldToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IBoldToken"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IBoldToken",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "borrowerOperations",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "borrowerOperations",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IBorrowerOperations"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IBorrowerOperations",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collSurplusPool",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collSurplusPool",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ICollSurplusPool"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ICollSurplusPool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IERC20Metadata"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IERC20Metadata",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "collateralRegistry",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "collateralRegistry",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ICollateralRegistry"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ICollateralRegistry",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "defaultPool",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "defaultPool",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IDefaultPool"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IDefaultPool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "gasPoolAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "gasPoolAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "gasToken",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "gasToken",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IERC20Metadata"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IERC20Metadata",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "hintHelpers",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "hintHelpers",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IHintHelpers"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IHintHelpers",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "interestRouter",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "interestRouter",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IInterestRouter"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IInterestRouter",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isOwner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isOwner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "liquidityStrategy",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "liquidityStrategy",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "metadataNFT",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "metadataNFT",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IMetadataNFT"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IMetadataNFT",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "multiTroveGetter",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "multiTroveGetter",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IMultiTroveGetter"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IMultiTroveGetter",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "owner",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "owner",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "priceFeed",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "priceFeed",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IPriceFeed"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IPriceFeed",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "setAddresses",
-      "inputs": [
+      type: "function",
+      name: "setAddresses",
+      inputs: [
         {
-          "name": "_vars",
-          "type": "tuple",
-          "internalType": "struct IAddressesRegistry.AddressVars",
-          "components": [
+          name: "_vars",
+          type: "tuple",
+          internalType: "struct IAddressesRegistry.AddressVars",
+          components: [
             {
-              "name": "collToken",
-              "type": "address",
-              "internalType": "contract IERC20Metadata"
+              name: "collToken",
+              type: "address",
+              internalType: "contract IERC20Metadata",
             },
             {
-              "name": "borrowerOperations",
-              "type": "address",
-              "internalType": "contract IBorrowerOperations"
+              name: "borrowerOperations",
+              type: "address",
+              internalType: "contract IBorrowerOperations",
             },
             {
-              "name": "troveManager",
-              "type": "address",
-              "internalType": "contract ITroveManager"
+              name: "troveManager",
+              type: "address",
+              internalType: "contract ITroveManager",
             },
             {
-              "name": "troveNFT",
-              "type": "address",
-              "internalType": "contract ITroveNFT"
+              name: "troveNFT",
+              type: "address",
+              internalType: "contract ITroveNFT",
             },
             {
-              "name": "metadataNFT",
-              "type": "address",
-              "internalType": "contract IMetadataNFT"
+              name: "metadataNFT",
+              type: "address",
+              internalType: "contract IMetadataNFT",
             },
             {
-              "name": "stabilityPool",
-              "type": "address",
-              "internalType": "contract IStabilityPool"
+              name: "stabilityPool",
+              type: "address",
+              internalType: "contract IStabilityPool",
             },
             {
-              "name": "priceFeed",
-              "type": "address",
-              "internalType": "contract IPriceFeed"
+              name: "priceFeed",
+              type: "address",
+              internalType: "contract IPriceFeed",
             },
             {
-              "name": "activePool",
-              "type": "address",
-              "internalType": "contract IActivePool"
+              name: "activePool",
+              type: "address",
+              internalType: "contract IActivePool",
             },
             {
-              "name": "defaultPool",
-              "type": "address",
-              "internalType": "contract IDefaultPool"
+              name: "defaultPool",
+              type: "address",
+              internalType: "contract IDefaultPool",
             },
             {
-              "name": "gasPoolAddress",
-              "type": "address",
-              "internalType": "address"
+              name: "gasPoolAddress",
+              type: "address",
+              internalType: "address",
             },
             {
-              "name": "collSurplusPool",
-              "type": "address",
-              "internalType": "contract ICollSurplusPool"
+              name: "collSurplusPool",
+              type: "address",
+              internalType: "contract ICollSurplusPool",
             },
             {
-              "name": "sortedTroves",
-              "type": "address",
-              "internalType": "contract ISortedTroves"
+              name: "sortedTroves",
+              type: "address",
+              internalType: "contract ISortedTroves",
             },
             {
-              "name": "interestRouter",
-              "type": "address",
-              "internalType": "contract IInterestRouter"
+              name: "interestRouter",
+              type: "address",
+              internalType: "contract IInterestRouter",
             },
             {
-              "name": "hintHelpers",
-              "type": "address",
-              "internalType": "contract IHintHelpers"
+              name: "hintHelpers",
+              type: "address",
+              internalType: "contract IHintHelpers",
             },
             {
-              "name": "multiTroveGetter",
-              "type": "address",
-              "internalType": "contract IMultiTroveGetter"
+              name: "multiTroveGetter",
+              type: "address",
+              internalType: "contract IMultiTroveGetter",
             },
             {
-              "name": "collateralRegistry",
-              "type": "address",
-              "internalType": "contract ICollateralRegistry"
+              name: "collateralRegistry",
+              type: "address",
+              internalType: "contract ICollateralRegistry",
             },
             {
-              "name": "boldToken",
-              "type": "address",
-              "internalType": "contract IBoldToken"
+              name: "boldToken",
+              type: "address",
+              internalType: "contract IBoldToken",
             },
             {
-              "name": "gasToken",
-              "type": "address",
-              "internalType": "contract IERC20Metadata"
+              name: "gasToken",
+              type: "address",
+              internalType: "contract IERC20Metadata",
             },
             {
-              "name": "liquidityStrategy",
-              "type": "address",
-              "internalType": "address"
-            }
-          ]
-        }
+              name: "liquidityStrategy",
+              type: "address",
+              internalType: "address",
+            },
+          ],
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "sortedTroves",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "sortedTroves",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ISortedTroves"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ISortedTroves",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "stabilityPool",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "stabilityPool",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract IStabilityPool"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract IStabilityPool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "troveManager",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "troveManager",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ITroveManager"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ITroveManager",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "troveNFT",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "troveNFT",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ITroveNFT"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ITroveNFT",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "event",
-      "name": "ActivePoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "ActivePoolAddressChanged",
+      inputs: [
         {
-          "name": "_activePoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_activePoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BoldTokenAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "BoldTokenAddressChanged",
+      inputs: [
         {
-          "name": "_boldTokenAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_boldTokenAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "BorrowerOperationsAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "BorrowerOperationsAddressChanged",
+      inputs: [
         {
-          "name": "_borrowerOperationsAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_borrowerOperationsAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollSurplusPoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "CollSurplusPoolAddressChanged",
+      inputs: [
         {
-          "name": "_collSurplusPoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_collSurplusPoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollTokenAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "CollTokenAddressChanged",
+      inputs: [
         {
-          "name": "_collTokenAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_collTokenAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "CollateralRegistryAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "CollateralRegistryAddressChanged",
+      inputs: [
         {
-          "name": "_collateralRegistryAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_collateralRegistryAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "DefaultPoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "DefaultPoolAddressChanged",
+      inputs: [
         {
-          "name": "_defaultPoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_defaultPoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "GasPoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "GasPoolAddressChanged",
+      inputs: [
         {
-          "name": "_gasPoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_gasPoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "GasTokenAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "GasTokenAddressChanged",
+      inputs: [
         {
-          "name": "_gasTokenAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_gasTokenAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "HintHelpersAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "HintHelpersAddressChanged",
+      inputs: [
         {
-          "name": "_hintHelpersAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_hintHelpersAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "InterestRouterAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "InterestRouterAddressChanged",
+      inputs: [
         {
-          "name": "_interestRouterAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_interestRouterAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "LiquidityStrategyAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "LiquidityStrategyAddressChanged",
+      inputs: [
         {
-          "name": "_liquidityStrategyAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_liquidityStrategyAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "MetadataNFTAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "MetadataNFTAddressChanged",
+      inputs: [
         {
-          "name": "_metadataNFTAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_metadataNFTAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "MultiTroveGetterAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "MultiTroveGetterAddressChanged",
+      inputs: [
         {
-          "name": "_multiTroveGetterAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_multiTroveGetterAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "OwnershipTransferred",
-      "inputs": [
+      type: "event",
+      name: "OwnershipTransferred",
+      inputs: [
         {
-          "name": "previousOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
+          name: "previousOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
         },
         {
-          "name": "newOwner",
-          "type": "address",
-          "indexed": true,
-          "internalType": "address"
-        }
+          name: "newOwner",
+          type: "address",
+          indexed: true,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "PriceFeedAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "PriceFeedAddressChanged",
+      inputs: [
         {
-          "name": "_priceFeedAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_priceFeedAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "SortedTrovesAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "SortedTrovesAddressChanged",
+      inputs: [
         {
-          "name": "_sortedTrovesAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_sortedTrovesAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "StabilityPoolAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "StabilityPoolAddressChanged",
+      inputs: [
         {
-          "name": "_stabilityPoolAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_stabilityPoolAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TroveManagerAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "TroveManagerAddressChanged",
+      inputs: [
         {
-          "name": "_troveManagerAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_troveManagerAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TroveNFTAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "TroveNFTAddressChanged",
+      inputs: [
         {
-          "name": "_troveNFTAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_troveNFTAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    42220: '0xB3136DBadB14Ab587FFa91545538126938Fe0C6E',
-    11142220: '0x8b33D626E8d79388889d404fBC515Ed131c9508e',
+    42220: "0xB3136DBadB14Ab587FFa91545538126938Fe0C6E",
+    11142220: "0x8b33D626E8d79388889d404fBC515Ed131c9508e",
   } as Partial<Record<number, `0x${string}`>>,
 };

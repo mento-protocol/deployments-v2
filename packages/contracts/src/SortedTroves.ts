@@ -1,508 +1,508 @@
 export const SortedTroves = {
   abi: [
     {
-      "type": "constructor",
-      "inputs": [
+      type: "constructor",
+      inputs: [
         {
-          "name": "_addressesRegistry",
-          "type": "address",
-          "internalType": "contract IAddressesRegistry"
-        }
+          name: "_addressesRegistry",
+          type: "address",
+          internalType: "contract IAddressesRegistry",
+        },
       ],
-      "stateMutability": "nonpayable"
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "NAME",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "NAME",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "string",
-          "internalType": "string"
-        }
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "batches",
-      "inputs": [
+      type: "function",
+      name: "batches",
+      inputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "BatchId"
-        }
+          name: "",
+          type: "address",
+          internalType: "BatchId",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "head",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "head",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "tail",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "tail",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "borrowerOperationsAddress",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "borrowerOperationsAddress",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "address"
-        }
+          name: "",
+          type: "address",
+          internalType: "address",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "contains",
-      "inputs": [
+      type: "function",
+      name: "contains",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "findInsertPosition",
-      "inputs": [
+      type: "function",
+      name: "findInsertPosition",
+      inputs: [
         {
-          "name": "_annualInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_annualInterestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_nextId",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_nextId",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getFirst",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getFirst",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getLast",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getLast",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getNext",
-      "inputs": [
+      type: "function",
+      name: "getNext",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getPrev",
-      "inputs": [
+      type: "function",
+      name: "getPrev",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "getSize",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "getSize",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "insert",
-      "inputs": [
+      type: "function",
+      name: "insert",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_annualInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_annualInterestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_nextId",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_nextId",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "insertIntoBatch",
-      "inputs": [
+      type: "function",
+      name: "insertIntoBatch",
+      inputs: [
         {
-          "name": "_troveId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_troveId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_batchId",
-          "type": "address",
-          "internalType": "BatchId"
+          name: "_batchId",
+          type: "address",
+          internalType: "BatchId",
         },
         {
-          "name": "_annualInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_annualInterestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_nextId",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_nextId",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "isBatchedNode",
-      "inputs": [
+      type: "function",
+      name: "isBatchedNode",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isEmpty",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "isEmpty",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "isEmptyBatch",
-      "inputs": [
+      type: "function",
+      name: "isEmptyBatch",
+      inputs: [
         {
-          "name": "_id",
-          "type": "address",
-          "internalType": "BatchId"
-        }
+          name: "_id",
+          type: "address",
+          internalType: "BatchId",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "nodes",
-      "inputs": [
+      type: "function",
+      name: "nodes",
+      inputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "nextId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "nextId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "batchId",
-          "type": "address",
-          "internalType": "BatchId"
+          name: "batchId",
+          type: "address",
+          internalType: "BatchId",
         },
         {
-          "name": "exists",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "exists",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "reInsert",
-      "inputs": [
+      type: "function",
+      name: "reInsert",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_newAnnualInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_newAnnualInterestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_nextId",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_nextId",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "reInsertBatch",
-      "inputs": [
+      type: "function",
+      name: "reInsertBatch",
+      inputs: [
         {
-          "name": "_id",
-          "type": "address",
-          "internalType": "BatchId"
+          name: "_id",
+          type: "address",
+          internalType: "BatchId",
         },
         {
-          "name": "_newAnnualInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_newAnnualInterestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_nextId",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_nextId",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "remove",
-      "inputs": [
+      type: "function",
+      name: "remove",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "removeFromBatch",
-      "inputs": [
+      type: "function",
+      name: "removeFromBatch",
+      inputs: [
         {
-          "name": "_id",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_id",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [],
-      "stateMutability": "nonpayable"
+      outputs: [],
+      stateMutability: "nonpayable",
     },
     {
-      "type": "function",
-      "name": "size",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "size",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "troveManager",
-      "inputs": [],
-      "outputs": [
+      type: "function",
+      name: "troveManager",
+      inputs: [],
+      outputs: [
         {
-          "name": "",
-          "type": "address",
-          "internalType": "contract ITroveManager"
-        }
+          name: "",
+          type: "address",
+          internalType: "contract ITroveManager",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "function",
-      "name": "validInsertPosition",
-      "inputs": [
+      type: "function",
+      name: "validInsertPosition",
+      inputs: [
         {
-          "name": "_annualInterestRate",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_annualInterestRate",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_prevId",
-          "type": "uint256",
-          "internalType": "uint256"
+          name: "_prevId",
+          type: "uint256",
+          internalType: "uint256",
         },
         {
-          "name": "_nextId",
-          "type": "uint256",
-          "internalType": "uint256"
-        }
+          name: "_nextId",
+          type: "uint256",
+          internalType: "uint256",
+        },
       ],
-      "outputs": [
+      outputs: [
         {
-          "name": "",
-          "type": "bool",
-          "internalType": "bool"
-        }
+          name: "",
+          type: "bool",
+          internalType: "bool",
+        },
       ],
-      "stateMutability": "view"
+      stateMutability: "view",
     },
     {
-      "type": "event",
-      "name": "BorrowerOperationsAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "BorrowerOperationsAddressChanged",
+      inputs: [
         {
-          "name": "_borrowerOperationsAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_borrowerOperationsAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
+      anonymous: false,
     },
     {
-      "type": "event",
-      "name": "TroveManagerAddressChanged",
-      "inputs": [
+      type: "event",
+      name: "TroveManagerAddressChanged",
+      inputs: [
         {
-          "name": "_troveManagerAddress",
-          "type": "address",
-          "indexed": false,
-          "internalType": "address"
-        }
+          name: "_troveManagerAddress",
+          type: "address",
+          indexed: false,
+          internalType: "address",
+        },
       ],
-      "anonymous": false
-    }
+      anonymous: false,
+    },
   ] as const,
   address: {
-    42220: '0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b',
-    11142220: '0x714CBd00Be7B39A9319a434a670d51C86F994E3d',
+    42220: "0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b",
+    11142220: "0x714CBd00Be7B39A9319a434a670d51C86F994E3d",
   } as Partial<Record<number, `0x${string}`>>,
 };

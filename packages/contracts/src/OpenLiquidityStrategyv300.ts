@@ -696,5 +696,6 @@ export const OpenLiquidityStrategyv300 = {
   ] as const,
   address: {
     143: "0x2aEF5E7fF1a66b03198041FBe7C2930dE57C0CF8",
+    10143: "0x0d7faA2b2743Ab4124aEFe5B30AA7e20dd7a8005",
   } as Partial<Record<number, `0x${string}`>>,
 };
