@@ -1,0 +1,35 @@
+group: Mento V3.3 (CHF/JPY)
+components:
+  UpgradeStableTokenV3_CHFm:
+    script: UpgradeStableTokenV3
+    env:
+      TOKEN_SYMBOL: CHFm
+  UpgradeStableTokenV3_JPYm:
+    script: UpgradeStableTokenV3
+    env:
+      TOKEN_SYMBOL: JPYm
+  CreateFPMMs:
+    script: CreateFPMM
+    deps:
+      - UpgradeStableTokenV3_CHFm
+      - UpgradeStableTokenV3_JPYm
+  DeployLiquityV2_CHFm:
+    script: DeployLiquityV2
+    env:
+      token: CHFm
+    deps: [ 'CreateFPMMs' ]
+  DeployLiquityV2_JPYm:
+    script: DeployLiquityV2
+    env:
+      token: JPYm
+    deps: [ 'CreateFPMMs' ]
+  MigrateStableToCDP_CHFm:
+    script: MigrateStableToCDP
+    env:
+      token: CHFm
+    deps: [ 'DeployLiquityV2_CHFm' ]
+  MigrateStableToCDP_JPYm:
+    script: MigrateStableToCDP
+    env:
+      token: JPYm
+    deps: [ 'DeployLiquityV2_JPYm' ]
