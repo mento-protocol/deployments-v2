@@ -1,0 +1,12 @@
+group: Mento V3.2 Monad Testnet EURm and USDT deployments
+components:
+  RateFeeds:
+    script: AddRateFeed
+  Relay:
+    script: Relay
+    deps:
+      - RateFeeds
+  CreateFPMMs:
+    script: CreateFPMM
+    deps:
+      - Relay
