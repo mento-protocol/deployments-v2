@@ -36,12 +36,12 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({
             usdcUsd: _mockAggregator("USDC/USD", "USDC/USD", _coreAggs.usdcUsd),
-            usdtUsd: _mockAggregator("USDT/USD", "USDT/USD", _coreAggs.usdtUsd),
+            usdtUsd: _mockAggregator("USDT/USD", "USDT/USD", _coreAggs.usdtUsd)
         });
 
         // Wrap FX aggregators in mocks
         _fxAggs = FxAggregators({
-            eur: _mockAggregator("EUR/USD", "EUR/USD", _fxAggs.eur),
+            eur: _mockAggregator("EUR/USD", "EUR/USD", _fxAggs.eur)
         });
     }
 }

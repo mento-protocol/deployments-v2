@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import {console} from "forge-std/console.sol";
+import {console2 as console} from "forge-std/console2.sol";
 import {TrebScript} from "treb-sol/src/TrebScript.sol";
 import {Senders} from "treb-sol/src/internal/sender/Senders.sol";
 import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
@@ -10,6 +10,7 @@ import {IBreakerBox} from "lib/mento-core/contracts/interfaces/IBreakerBox.sol";
 import {ISortedOracles} from "lib/mento-core/contracts/interfaces/ISortedOracles.sol";
 import {IMedianDeltaBreaker} from "lib/mento-core/contracts/interfaces/IMedianDeltaBreaker.sol";
 import {IValueDeltaBreaker} from "lib/mento-core/contracts/interfaces/IValueDeltaBreaker.sol";
+import {IOwnable} from "mento-core/interfaces/IOwnable.sol";
 
 import {ProxyHelper} from "script/helpers/ProxyHelper.sol";
 import {ConfigHelper} from "script/helpers/ConfigHelper.sol";
@@ -59,6 +60,18 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
             if (deps.length > 0) {
                 breakerBox.setRateFeedDependencies(rateFeeds[i], deps);
             }
+        }
+
+
+        // ============== Verify contract ownership =================
+        address migrationMultisig = lookupOrFail("MigrationMultisig");
+
+        require(IOwnable(breakerBoxAddy).owner() == migrationMultisig);
+        console.log(unicode"Breakerbox owned by migration multisig ✅");
+
+        for (uint256 i = 0; i < breakers.length; i++) {
+            require(IOwnable(breakers[i]).owner() == migrationMultisig);
+            console.log(unicode"Breaker %s owned by migration multisig ✅", breakers[i]);
         }
     }
 
@@ -118,7 +131,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
                     breakerConfig.rateFeedIds,
                     breakerConfig.thresholds,
                     breakerConfig.cooldownTimes,
-                    deployer.account
+                    migrationOwner.account
                 )
             );
 

@@ -28,11 +28,28 @@ contract MentoConfig_polygon is MentoConfig {
     function _configureParams() internal virtual {
         _coreAggs = CoreAggregators({
             usdcUsd: 0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7,
-            usdtUsd: 0x0A6513e40db6EB1b165753AD52E80663aeA50545
+            usdtUsd: 0x0A6513e40db6EB1b165753AD52E80663aeA50545,
+            eurcUsd: address(0),
+            ausdUsd: address(0),
+            celoUsd: address(0),
+            ethUsd: address(0)
         });
 
         _fxAggs = FxAggregators({
             eur: 0x73366Fe0AA0Ded304479862808e02506FE556a98,
+            brl: address(0),
+            xof: address(0),
+            kes: address(0),
+            php: address(0),
+            cop: address(0),
+            ghs: address(0),
+            gbp: address(0),
+            zar: address(0),
+            cad: address(0),
+            aud: address(0),
+            chf: address(0),
+            jpy: address(0),
+            ngn: address(0)
         });
     }
 

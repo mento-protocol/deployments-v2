@@ -30,6 +30,11 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
 
         ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
         sortedOracles.initialize(config.getOracleConfig().reportExpirySeconds);
-        IOwnable(address(sortedOracles)).transferOwnership(migrationOwner.account);
+
+        // ============== Verify contract ownership =================
+        address migrationMultisig = lookupOrFail("MigrationMultisig");
+
+        require(IOwnable(sortedOraclesProxy).owner() == migrationMultisig);
+        console.log(unicode"SortedOracles owned by migration multisig ✅");
     }
 }
