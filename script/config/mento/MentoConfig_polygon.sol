@@ -75,6 +75,16 @@ contract MentoConfig_polygon is MentoConfig {
     /// FPMMs
     /// ===================================================================
     function _initFPMMs() internal virtual {
+        _defaultFPMMParams = IFPMM.FPMMParams({
+            lpFee: 3,
+            protocolFee: 2,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            feeSetter: lookupOrFail("FeeSetter"),
+            rebalanceIncentive: 1,
+            rebalanceThresholdAbove: 5000,
+            rebalanceThresholdBelow: 3333
+        });
+
         // TODO: CHECK UPDATE
         // Liquidity strategy params for USD collateral pools
         LiquidityStrategyPoolConfig memory usdCollateralPoolsLsConfig = LiquidityStrategyPoolConfig({

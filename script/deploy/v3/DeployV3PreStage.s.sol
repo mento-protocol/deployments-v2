@@ -35,8 +35,10 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     address fpmmFactoryImpl;
     address fpmmFactory;
     address marketHoursBreaker;
+    address marketHoursBreakerToggleable;
     address oracleAdapterImpl;
     address oracleAdapter;
+    address oracleAdapterCollateral;
     address proxyAdmin;
     address factoryRegistryImpl;
     address factoryRegistry;
@@ -71,7 +73,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
 
         fpmmFactoryImpl = deployer.create3("FPMMFactory").setLabel(label).deploy(abi.encode(true));
 
-        marketHoursBreaker = _deployMarketHoursBreaker(deployer);
+        marketHoursBreaker = deployer.create3("MarketHoursBreaker").setLabel(label).deploy();
+        marketHoursBreakerToggleable = deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(deployer.account));
 
         oracleAdapterImpl = deployer.create3("OracleAdapter").setLabel(label).deploy(abi.encode(true));
 
@@ -89,6 +92,21 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             )
         );
         transferProxyAdminOwnership(deployer, oracleAdapter, owner);
+
+        oracleAdapterCollateral = deployProxy(
+            deployer,
+            "OracleAdapterCollateral",
+            oracleAdapterImpl,
+            abi.encodeWithSelector(
+                IOracleAdapter.initialize.selector,
+                sortedOracles,
+                breakerBox,
+                marketHoursBreakerToggleable,
+                l2SequencerUptimeFeed,
+                owner
+            )
+        );
+        transferProxyAdminOwnership(deployer, oracleAdapterCollateral, owner);
 
         IFPMM.FPMMParams memory params = config.getDefaultFPMMParams();
         require(params.lpFee > 0 || params.protocolFee > 0, "fees not set for default FPMM params");
@@ -149,6 +167,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
 
     function postChecks() internal view {
         IOracleAdapter oracleAdapterContract = IOracleAdapter(oracleAdapter);
+        IOracleAdapter oracleAdapterCollateralContract = IOracleAdapter(oracleAdapterCollateral);
         IFPMMFactory fpmmFactoryContract = IFPMMFactory(fpmmFactory);
         IRouter routerContract = IRouter(router);
         IFactoryRegistry factoryRegistryContract = IFactoryRegistry(factoryRegistry);
@@ -157,6 +176,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         // Proxy Implementation Checks
         // Verifies that proxies point to their implementations
         verifyProxyImpl("OracleAdapter", oracleAdapter, oracleAdapterImpl);
+        verifyProxyImpl("OracleAdapterCollateral", oracleAdapterCollateral, oracleAdapterImpl);
         verifyProxyImpl("FPMMFactory", fpmmFactory, fpmmFactoryImpl);
         verifyProxyImpl("FactoryRegistry", factoryRegistry, factoryRegistryImpl);
         verifyProxyImpl("reserveV2", reserveV2, reserveV2Impl);
@@ -165,6 +185,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         // Ownership Checks
         // Verifies that contract owners are set to multisig.
         verifyOwnership("OracleAdapter", oracleAdapter, owner);
+        verifyOwnership("OracleAdapterCollateral", oracleAdapterCollateral, owner);
         verifyOwnership("FPMMFactory", fpmmFactory, owner);
         verifyOwnership("FactoryRegistry", factoryRegistry, owner);
         verifyOwnership("ReserveV2", reserveV2, owner);
@@ -173,6 +194,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         // ProxyAdmin Ownership Checks
         // Verifies that ProxyAdmin owners are set to multisig.
         verifyProxyAdminOwnership("OracleAdapter", oracleAdapter, owner);
+        verifyProxyAdminOwnership("OracleAdapterCollateral", oracleAdapterCollateral, owner);
         verifyProxyAdminOwnership("FPMMFactory", fpmmFactory, owner);
         verifyProxyAdminOwnership("FactoryRegistry", factoryRegistry, owner);
         verifyProxyAdminOwnership("ReserveV2", reserveV2, owner);
@@ -188,29 +210,34 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         verifyInitDisabled("StableTokenV3Impl", stableTokenV3Impl);
         verifyInitDisabled("ReserveLiquidityStrategy", reserveLiquidityStrategyImpl);
 
-        // OracleAdapter Initialization
-        // Verifies that OracleAdapter is initialized with correct addresses.
+        // OracleAdapter & OracleAdapterCollateral Initialization
+        // Verifies that OracleAdapter contracts are initialized with correct addresses.
         require(
-            address(oracleAdapterContract.sortedOracles()) == sortedOracles,
-            "SortedOracles initialized with mismatched address"
+            address(oracleAdapterContract.sortedOracles()) == sortedOracles &&
+            address(oracleAdapterCollateralContract.sortedOracles()) == sortedOracles,
+            "OracleAdapter: wrong sorted oracles address"
         );
         require(
-            address(oracleAdapterContract.breakerBox()) == breakerBox, "BreakerBox initialized with mismatched address"
+            address(oracleAdapterContract.breakerBox()) == breakerBox &&
+            address(oracleAdapterCollateralContract.breakerBox()) == breakerBox,
+            "OracleAdapter: wrong breaker box address"
         );
         require(
-            address(oracleAdapterContract.marketHoursBreaker()) == marketHoursBreaker,
-            "MarketHoursBreaker initialized with mismatched address"
+            address(oracleAdapterContract.marketHoursBreaker()) == marketHoursBreaker &&
+            address(oracleAdapterCollateralContract.marketHoursBreaker()) == marketHoursBreakerToggleable,
+            "OracleAdapter: wrong market hours breaker address"
         );
         require(
-            address(oracleAdapterContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed,
-            "L2SequencerUptimeFeed initialized with mismatched address"
+            address(oracleAdapterContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed &&
+            address(oracleAdapterCollateralContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed,
+            "OracleAdapter: wrong L2SequencerUptimeFeed address"
         );
 
         // FPMMFactory Initialization
         // Verifies that FPMMFactory is initialized with the correct addresses.
         require(
             address(fpmmFactoryContract.oracleAdapter()) == oracleAdapter,
-            "OracleAdapter initialized with mismatched address"
+            "FPMMFactory: wrong oracle adapter address"
         );
         require(
             address(fpmmFactoryContract.proxyAdmin()) == proxyAdmin, "ProxyAdmin initialized with mismatched address"
@@ -268,13 +295,5 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
             address(reserveLiquidityStrategyContract.reserve()) == reserveV2,
             "ReserveLiquidityStrategy.reserve does not equal to Reserve proxy address"
         );
-    }
-
-    function _deployMarketHoursBreaker(Senders.Sender storage deployer) internal returns (address) {
-        bool toggleable = vm.envOr("MARKET_HOURS_BREAKER_TOGGLEABLE", false);
-        if (toggleable) {
-            return deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(deployer.account));
-        }
-        return deployer.create3("MarketHoursBreaker").setLabel(label).deploy();
     }
 }
