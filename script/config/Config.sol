@@ -14,6 +14,10 @@ import "./mento/MentoConfig_polygon.sol";
 import "./mento/MentoConfig_polygon_testnet.sol";
 import "./liquity/LiquityConfig_GBPm_celo.sol";
 import "./liquity/LiquityConfig_GBPm_celo_sepolia.sol";
+import "./liquity/LiquityConfig_CHFm_celo.sol";
+import "./liquity/LiquityConfig_CHFm_celo_sepolia.sol";
+import "./liquity/LiquityConfig_JPYm_celo.sol";
+import "./liquity/LiquityConfig_JPYm_celo_sepolia.sol";
 
 library Config {
     address private constant VM_ADDRESS = address(uint160(uint256(keccak256("hevm cheat code"))));

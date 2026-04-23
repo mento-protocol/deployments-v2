@@ -15,6 +15,7 @@ import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
+import {IVirtualPoolFactory} from "mento-core/interfaces/IVirtualPoolFactory.sol";
 import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
@@ -74,6 +75,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         } else {
             console.log("  > No liquidity strategy configured for FPMM");
         }
+
+        _deprecateVirtualPool(cfg.token0, cfg.token1);
+        _verifyNoActiveVirtualPool(cfg.token0, cfg.token1);
     }
 
     function _createFPMM(IMentoConfig.FPMMConfig memory cfg) internal returns (address) {
@@ -305,6 +309,30 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("\n");
     }
 
+    function _deprecateVirtualPool(address token0, address token1) internal {
+        address virtualPoolFactory = lookup("VirtualPoolFactory:v3.0.0");
+        if (virtualPoolFactory == address(0)) {
+            return;
+        }
+
+        address virtualPool = IVirtualPoolFactory(virtualPoolFactory).getPool(token0, token1);
+        if (virtualPool == address(0)) {
+            console.log(
+                "  > No virtual pool found for pair:", IERC20Metadata(token0).symbol(), IERC20Metadata(token1).symbol()
+            );
+            return;
+        }
+
+        if (IVirtualPoolFactory(virtualPoolFactory).isPoolDeprecated(virtualPool)) {
+            console.log("  > Virtual pool for pair already deprecated:", virtualPool);
+            return;
+        }
+
+        IVirtualPoolFactory(owner.harness(virtualPoolFactory)).deprecatePool(virtualPool);
+        console.log("  > Deprecated virtual pool for pair:", virtualPool);
+        console.log("    > token0:", IERC20Metadata(token0).symbol(), "token1:", IERC20Metadata(token1).symbol());
+    }
+
     // ========== Verification ==========
 
     function _verifyFPMM(address proxy, IMentoConfig.FPMMConfig memory cfg) internal view {
@@ -500,7 +528,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
     function _doLargeSwap(address fpmmProxy, IFPMM fpmm) internal {
         address token0 = fpmm.token0();
-        uint256 largeSwapAmount = 5_000 * (10 ** IERC20Metadata(token0).decimals());
+        (uint256 reserve0,,) = fpmm.getReserves();
+        uint256 largeSwapAmount = reserve0 / 4;
 
         _deal(token0, SWAP_TEST_ACCOUNT, largeSwapAmount);
         uint256 amountOut = fpmm.getAmountOut(largeSwapAmount, token0);
@@ -564,6 +593,23 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         (,,,,,, uint256 newPriceDifference) = fpmm.getRebalancingState();
         console.log("  > newPriceDifference (bps):", newPriceDifference);
         require(newPriceDifference < priceDifference, "Verify: rebalance did not improve price difference");
+    }
+
+    function _verifyNoActiveVirtualPool(address token0, address token1) internal view {
+        address virtualPoolFactory = lookup("VirtualPoolFactory:v3.0.0");
+        if (virtualPoolFactory == address(0)) {
+            return;
+        }
+
+        address virtualPool = IVirtualPoolFactory(virtualPoolFactory).getPool(token0, token1);
+        if (virtualPool == address(0)) {
+            return;
+        }
+
+        require(
+            !IVirtualPoolFactory(virtualPoolFactory).isPool(virtualPool),
+            "Verify: active virtual pool still exists for FPMM pair"
+        );
     }
 
     function _provideLargerLiquidity(address fpmmProxy, IMentoConfig.FPMMConfig memory c) internal {
