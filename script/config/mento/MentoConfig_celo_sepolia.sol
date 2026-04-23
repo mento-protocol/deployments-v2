@@ -235,15 +235,6 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
             createVirtual: true
         });
         _addFxExchange({
-            currency: "CHF", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(0.8 * 1e3), createVirtual: true
-        });
-        _addFxExchange({
-            currency: "JPY",
-            spread: 0.003 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(149.0 * 1e3),
-            createVirtual: true
-        });
-        _addFxExchange({
             currency: "COP",
             spread: 0.003 * 1e24,
             tradingLimits: _tier2FxTradingLimits(4015.0 * 1e3),
