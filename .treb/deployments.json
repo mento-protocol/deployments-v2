@@ -22357,6 +22357,33 @@
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
   },
+  "testnet-v2-rc5/11142220/AddressesRegistry:v3.0.0-JPYm": {
+    "id": "testnet-v2-rc5/11142220/AddressesRegistry:v3.0.0-JPYm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "AddressesRegistry:v3.0.0-JPYm",
+    "label": "",
+    "address": "0x812e5ccec5e55b81f4270898fdf1c916e3a284fb",
+    "type": "SINGLETON",
+    "transactionId": "tx-0x6aa45d2b88d4e4c8de42edd98eb25c63cfec0bd753bab655ff70ad3a00c8b431",
+    "deploymentStrategy": {
+      "method": "CREATE"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "",
+      "compilerVersion": "",
+      "bytecodeHash": "",
+      "scriptPath": "",
+      "gitCommit": ""
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": [],
+    "createdAt": "2026-04-23T17:09:35.150293+02:00",
+    "updatedAt": "2026-04-23T17:09:35.150295+02:00"
+  },
   "testnet-v2-rc5/11142220/BiPoolManager:v2.6.5": {
     "id": "testnet-v2-rc5/11142220/BiPoolManager:v2.6.5",
     "namespace": "testnet-v2-rc5",

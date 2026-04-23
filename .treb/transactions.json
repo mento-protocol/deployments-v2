@@ -8636,6 +8636,30 @@
     "environment": "testnet-v2-rc5",
     "createdAt": "2025-09-12T08:03:03.2007+02:00"
   },
+  "tx-0x6aa45d2b88d4e4c8de42edd98eb25c63cfec0bd753bab655ff70ad3a00c8b431": {
+    "id": "tx-0x6aa45d2b88d4e4c8de42edd98eb25c63cfec0bd753bab655ff70ad3a00c8b431",
+    "chainId": 11142220,
+    "hash": "0x6aa45d2b88d4e4c8de42edd98eb25c63cfec0bd753bab655ff70ad3a00c8b431",
+    "status": "EXECUTED",
+    "blockNumber": 23671357,
+    "sender": "0x2738f38fde510743e0c589415e0598c4cee6eaa7",
+    "nonce": 666,
+    "deployments": [
+      "testnet-v2-rc5/11142220/AddressesRegistry:v3.0.0-JPYm"
+    ],
+    "operations": [
+      {
+        "type": "DEPLOY",
+        "target": "0x812e5ccec5e55b81f4270898fdf1c916e3a284fb",
+        "method": "",
+        "result": {
+          "address": "0x812e5ccec5e55b81f4270898fdf1c916e3a284fb"
+        }
+      }
+    ],
+    "environment": "testnet-v2-rc5",
+    "createdAt": "2026-04-23T17:09:35.186971+02:00"
+  },
   "tx-0x6abc34c6654fe171920c0deb036d36657931e7811c5d7dcfe7ff6b1393d9a5fb": {
     "id": "tx-0x6abc34c6654fe171920c0deb036d36657931e7811c5d7dcfe7ff6b1393d9a5fb",
     "chainId": 11142220,
