@@ -710,8 +710,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
     function _doLargeSwap(address fpmmProxy, IFPMM fpmm) internal {
         address token0 = fpmm.token0();
-        uint256 largeSwapAmount = 5_000 *
-            (10 ** IERC20Metadata(token0).decimals());
+        (uint256 reserve0, , ) = fpmm.getReserves();
+        uint256 largeSwapAmount = reserve0 / 4;
 
         _deal(token0, SWAP_TEST_ACCOUNT, largeSwapAmount);
         uint256 amountOut = fpmm.getAmountOut(largeSwapAmount, token0);

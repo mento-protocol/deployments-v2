@@ -44,6 +44,8 @@ library NTTConfig {
     uint256 internal constant USDm_RATE_LIMIT = 500_000e18;
     uint256 internal constant GBPm_RATE_LIMIT = 500_000e18;
     uint256 internal constant EURm_RATE_LIMIT = 500_000e18;
+    uint256 internal constant JPYm_RATE_LIMIT = 40_000_000e18;
+    uint256 internal constant CHFm_RATE_LIMIT = 200_000e18;
 
     // ── Token config getters ─────────────────────────────────────────────
 
@@ -135,5 +137,65 @@ library NTTConfig {
         config.inboundLimits = new NTTInboundLimit[](2);
         config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: EURm_RATE_LIMIT});
         config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: EURm_RATE_LIMIT});
+    }
+
+    /// @notice Returns the full NTT bridge topology for JPYm.
+    ///         JPYm is burn-mint on BOTH Celo and Monad.
+    function getJPYmConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "JPYm";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "migrationOwner";
+
+        config.chains = new NTTChainConfig[](2);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "JPYm",
+            isBurning: true,
+            outboundLimit: JPYm_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "JPYm",
+            isBurning: true,
+            outboundLimit: JPYm_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: JPYm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: JPYm_RATE_LIMIT});
+    }
+
+    /// @notice Returns the full NTT bridge topology for CHFm.
+    ///         CHFm is burn-mint on BOTH Celo and Monad.
+    function getCHFmConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "CHFm";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "migrationOwner";
+
+        config.chains = new NTTChainConfig[](2);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "CHFm",
+            isBurning: true,
+            outboundLimit: CHFm_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "CHFm",
+            isBurning: true,
+            outboundLimit: CHFm_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: CHFm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: CHFm_RATE_LIMIT});
     }
 }

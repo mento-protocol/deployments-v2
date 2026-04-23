@@ -221,7 +221,7 @@ contract MentoConfig_monad is MentoConfig {
         // ── USDm / JPYm ────────────────────────────────────────────────
         LiquidityStrategyPoolConfig memory openLsConfigJPY = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
-            debtToken: _lookupTokenAddress("USDm"),
+            debtToken: _lookupTokenAddress("JPYm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
             liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
@@ -251,7 +251,7 @@ contract MentoConfig_monad is MentoConfig {
         // ── USDm / CHFm ────────────────────────────────────────────────
         LiquidityStrategyPoolConfig memory openLsConfigCHF = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
-            debtToken: _lookupTokenAddress("USDm"),
+            debtToken: _lookupTokenAddress("CHFm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
             liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
