@@ -152,7 +152,7 @@ library NTTConfig {
             evmChainId: CELO_EVM_CHAIN_ID,
             wormholeChainId: CELO_WH_CHAIN_ID,
             tokenLabel: "JPYm",
-            isBurning: true,
+            isBurning: false,
             outboundLimit: JPYm_RATE_LIMIT
         });
         config.chains[1] = NTTChainConfig({
@@ -182,7 +182,7 @@ library NTTConfig {
             evmChainId: CELO_EVM_CHAIN_ID,
             wormholeChainId: CELO_WH_CHAIN_ID,
             tokenLabel: "CHFm",
-            isBurning: true,
+            isBurning: false,
             outboundLimit: CHFm_RATE_LIMIT
         });
         config.chains[1] = NTTChainConfig({
