@@ -4,20 +4,20 @@ pragma solidity ^0.8.0;
 import {ILiquityConfig} from "../ILiquityConfig.sol";
 
 /**
- * @notice Liquity GBPm/USDm instance config for Celo.
+ * @notice Liquity CHFm/USDm instance config for Celo.
  */
-contract LiquityConfig_GBPm_celo_sepolia is ILiquityConfig {
+contract LiquityConfig_CHFm_celo_sepolia is ILiquityConfig {
     function get() external pure override returns (ILiquityConfig.LiquityInstanceConfig memory) {
         return ILiquityConfig.LiquityInstanceConfig({
-            proxyLabel: "GBPm",
-            singletonLabel: "v3.0.0-GBPm",
+            proxyLabel: "CHFm",
+            singletonLabel: "v3.0.0-CHFm",
             // ── Registry lookup keys ────────────────────────────────
-            debtTokenLabel: "GBPm",
+            debtTokenLabel: "CHFm",
             collateralTokenLabel: "USDm",
             // ── Addresses ──────────────────────────────────────────
-            rateFeedID: 0xAe5eEe6815b8529847955d19522858806Bca8217, // GBP/USD
+            rateFeedID: 0x4F2746E21A13Ea9A8A832D929CDBf32ffC113A2C, // CHF/USD
             // ── FXPriceFeed ────────────────────────────────────────
-            invertRateFeed: true, // SortedOracles: GBP/USD is inverted as (USD/GBP)
+            invertRateFeed: true, // SortedOracles: CHF/USD is inverted as (USD/CHF)
             l2SequencerGracePeriod: 1200, // 20 minutes
             // ── Collateral params ──────────────────────────────────
             CCR: 1e18 * 1.35, // 135%
@@ -27,7 +27,7 @@ contract LiquityConfig_GBPm_celo_sepolia is ILiquityConfig {
             liquidationPenaltySP: 1e18 * 0.05, // 5%
             liquidationPenaltyRedistribution: 1e18 * 0.1, // 10%
             // ── SystemParams: debt ─────────────────────────────────
-            minDebt: 1_000e18, // 1,000 GBPm
+            minDebt: 1_000e18, // 1,000 CHFm
             // ── SystemParams: gas compensation ─────────────────────
             collGasCompensationDivisor: 200,
             collGasCompensationCap: 10e18, // 10 USDm
@@ -41,11 +41,11 @@ contract LiquityConfig_GBPm_celo_sepolia is ILiquityConfig {
             redemptionBeta: 1,
             // ── SystemParams: stability pool ───────────────────────
             spYieldSplit: 1e18 * 0.75, // 75%
-            minBoldInSP: 1e18, // 1 GBPm
-            minBoldAfterRebalance: 5_000e18, // 5_000 GBPm
+            minBoldInSP: 1e18, // 1 CHFm
+            minBoldAfterRebalance: 5_000e18, // 5_000 CHFm
             // ── NFT Metadata assets ───────────────────────────────
             metadataAssetsBasePath: "script/config/liquity/assets/",
-            debtTokenLogoFile: "GBPm.svg",
+            debtTokenLogoFile: "CHFm.svg",
             collateralTokenLogoFile: "USDm.svg",
             collateralTokenSymbol: "USDm",
             fontFile: "geist.txt"

@@ -1,0 +1,20 @@
+group: Mento V3.3 (CHF)
+components:
+  UpgradeStableTokenV3_CHFm:
+    script: UpgradeStableTokenV3
+    env:
+      TOKEN_SYMBOL: CHFm
+  CreateFPMMs:
+    script: CreateFPMM
+    deps:
+      - UpgradeStableTokenV3_CHFm
+  DeployLiquityV2_CHFm:
+    script: DeployLiquityV2
+    env:
+      token: CHFm
+    deps: [CreateFPMMs]
+  MigrateStableToCDP_CHFm:
+    script: MigrateStableToCDP
+    env:
+      token: CHFm
+    deps: [DeployLiquityV2_CHFm]

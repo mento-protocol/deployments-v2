@@ -16,6 +16,8 @@ contract MentoConfig_celo is MentoConfig {
     string internal _rateFeedPrefix;
     address internal _gbpUsdRateFeedId;
     address internal _eurUsdRateFeedId;
+    address internal _jpyUsdRateFeedId;
+    address internal _chfUsdRateFeedId;
     bool internal _useLegacyRateFeedIds; // true on mainnet where CELO cross-pair IDs are old stable token proxies
     CoreAggregators internal _coreAggs;
     FxAggregators internal _fxAggs;
@@ -51,6 +53,8 @@ contract MentoConfig_celo is MentoConfig {
         _redemptionShortfallTolerance = 1e12;
         _gbpUsdRateFeedId = getRateFeedIdFromString("relayed:GBPUSD");
         _eurUsdRateFeedId = getRateFeedIdFromString("relayed:EURUSD");
+        _jpyUsdRateFeedId = getRateFeedIdFromString("relayed:JPYUSD");
+        _chfUsdRateFeedId = getRateFeedIdFromString("relayed:CHFUSD");
         _useLegacyRateFeedIds = true;
 
         // Oracle/relayer defaults (mainnet values)
@@ -297,6 +301,45 @@ contract MentoConfig_celo is MentoConfig {
             TokenLimits({limit0: 250_000, limit1: 1_000_000}),
             openLsConfigEUR
         );
+
+        // ── JPYm / USDm ────────────────────────────────────────────────
+
+        _addFPMM(
+            "JPYm",
+            "USDm",
+            _jpyUsdRateFeedId,
+            IFPMM.FPMMParams({
+                lpFee: 20,
+                protocolFee: 10,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 15_400_000, limit1: 77_000_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            emptyLsConfig
+        );
+
+        // ── CHFm / USDm ────────────────────────────────────────────────
+        _addFPMM(
+            "CHFm",
+            "USDm",
+            _chfUsdRateFeedId,
+            IFPMM.FPMMParams({
+                lpFee: 20,
+                protocolFee: 10,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 6,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 77_000, limit1: 385_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            emptyLsConfig
+        );
     }
 
     /// ===================================================================
@@ -314,6 +357,32 @@ contract MentoConfig_celo is MentoConfig {
             liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
             protocolIncentiveContraction: 0,
             rateFeedID: _gbpUsdRateFeedId
+        });
+
+        _cdpMigrationConfig["JPYm"] = CDPMigrationConfig({
+            collateralizationRatio: 1.6e18, // 160%
+            interestRate: 0.03e18, // 3%
+            stabilityPoolPercentage: 2000, // 20% in bps
+            maxIterations: 500,
+            cooldown: 5 minutes,
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0,
+            rateFeedID: _jpyUsdRateFeedId
+        });
+
+        _cdpMigrationConfig["CHFm"] = CDPMigrationConfig({
+            collateralizationRatio: 1.6e18, // 160%
+            interestRate: 0.03e18, // 3%
+            stabilityPoolPercentage: 2000, // 20% in bps
+            maxIterations: 500,
+            cooldown: 5 minutes,
+            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            protocolIncentiveContraction: 0,
+            rateFeedID: _chfUsdRateFeedId
         });
     }
 
