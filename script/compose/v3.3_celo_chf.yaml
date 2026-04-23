@@ -12,9 +12,9 @@ components:
     script: DeployLiquityV2
     env:
       token: CHFm
-    deps: [ 'CreateFPMMs' ]
+    deps: [CreateFPMMs]
   MigrateStableToCDP_CHFm:
     script: MigrateStableToCDP
     env:
       token: CHFm
-    deps: [ 'DeployLiquityV2_CHFm' ]
+    deps: [DeployLiquityV2_CHFm]

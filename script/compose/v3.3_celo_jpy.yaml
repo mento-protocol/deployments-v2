@@ -12,9 +12,9 @@ components:
     script: DeployLiquityV2
     env:
       token: JPYm
-    deps: [ 'CreateFPMMs' ]
+    deps: [CreateFPMMs]
   MigrateStableToCDP_JPYm:
     script: MigrateStableToCDP
     env:
       token: JPYm
-    deps: [ 'DeployLiquityV2_JPYm' ]
+    deps: [DeployLiquityV2_JPYm]
