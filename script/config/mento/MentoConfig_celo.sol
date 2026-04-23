@@ -322,7 +322,7 @@ contract MentoConfig_celo is MentoConfig {
             emptyLsConfig
         );
 
-        // ── CHFm / USDm ──────────────────────────────────────────────── 
+        // ── CHFm / USDm ────────────────────────────────────────────────
         _addFPMM(
             "CHFm",
             "USDm",

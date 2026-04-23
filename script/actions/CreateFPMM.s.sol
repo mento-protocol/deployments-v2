@@ -9,25 +9,15 @@ import {Deployer} from "treb-sol/src/internal/sender/Deployer.sol";
 
 import {IFPMMFactory} from "mento-core/interfaces/IFPMMFactory.sol";
 import {IFPMM} from "mento-core/interfaces/IFPMM.sol";
-import {
-    IReserveLiquidityStrategy
-} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
-import {
-    IOpenLiquidityStrategy
-} from "mento-core/interfaces/IOpenLiquidityStrategy.sol";
+import {IReserveLiquidityStrategy} from "mento-core/interfaces/IReserveLiquidityStrategy.sol";
+import {IOpenLiquidityStrategy} from "mento-core/interfaces/IOpenLiquidityStrategy.sol";
 import {ILiquidityStrategy} from "mento-core/interfaces/ILiquidityStrategy.sol";
 import {IStableTokenV3} from "mento-core/interfaces/IStableTokenV3.sol";
 import {IReserveV2} from "mento-core/interfaces/IReserveV2.sol";
 import {IOracleAdapter} from "mento-core/interfaces/IOracleAdapter.sol";
-import {
-    IVirtualPoolFactory
-} from "mento-core/interfaces/IVirtualPoolFactory.sol";
-import {
-    IERC20
-} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
-import {
-    IERC20Metadata
-} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {IVirtualPoolFactory} from "mento-core/interfaces/IVirtualPoolFactory.sol";
+import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import {IERC20Metadata} from "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 import {Config, IMentoConfig} from "../config/Config.sol";
 import {ProxyHelper} from "../helpers/ProxyHelper.sol";
@@ -56,10 +46,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         factoryHarness = IFPMMFactory(owner.harness(factoryAddy));
         factory = IFPMMFactory(factoryAddy);
 
-        OracleHelper.refreshOracleRatesIfFork(
-            lookupProxyOrFail("SortedOracles"),
-            config
-        );
+        OracleHelper.refreshOracleRatesIfFork(lookupProxyOrFail("SortedOracles"), config);
 
         IMentoConfig.FPMMConfig[] memory fpmmConfigs = config.getFPMMConfigs();
 
@@ -74,11 +61,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         if (fpmmProxy != address(0)) {
             string memory token0Symbol = IERC20Metadata(cfg.token0).symbol();
             string memory token1Symbol = IERC20Metadata(cfg.token1).symbol();
-            console.log(
-                "  > fpmm already exists for (%s, %s)",
-                token0Symbol,
-                token1Symbol
-            );
+            console.log("  > fpmm already exists for (%s, %s)", token0Symbol, token1Symbol);
             return;
         }
 
@@ -86,8 +69,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _configureTradingLimits(fpmmProxy, cfg);
         _verifySwap(fpmmProxy, cfg);
 
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg = cfg
-            .liquidityStrategyConfig;
+        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg = cfg.liquidityStrategyConfig;
         if (lsCfg.liquidityStrategy != address(0)) {
             _setupLiquidityStrategy(fpmmProxy, cfg.token0, cfg.token1, lsCfg);
         } else {
@@ -98,9 +80,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _verifyNoActiveVirtualPool(cfg.token0, cfg.token1);
     }
 
-    function _createFPMM(
-        IMentoConfig.FPMMConfig memory cfg
-    ) internal returns (address) {
+    function _createFPMM(IMentoConfig.FPMMConfig memory cfg) internal returns (address) {
         address proxy = factoryHarness.deployFPMM(
             cfg.fpmmImplementation,
             cfg.oracleAdapter,
@@ -132,41 +112,22 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         return proxy;
     }
 
-    function _configureTradingLimits(
-        address fpmmProxy,
-        IMentoConfig.FPMMConfig memory cfg
-    ) internal {
+    function _configureTradingLimits(address fpmmProxy, IMentoConfig.FPMMConfig memory cfg) internal {
         IMentoConfig.FPMMTradingLimitsConfig memory limits = cfg.tradingLimits;
 
-        bool hasToken0Limits = limits.token0Limit0 > 0 ||
-            limits.token0Limit1 > 0;
-        bool hasToken1Limits = limits.token1Limit0 > 0 ||
-            limits.token1Limit1 > 0;
+        bool hasToken0Limits = limits.token0Limit0 > 0 || limits.token0Limit1 > 0;
+        bool hasToken1Limits = limits.token1Limit0 > 0 || limits.token1Limit1 > 0;
 
         if (hasToken0Limits) {
-            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(
-                cfg.token0,
-                limits.token0Limit0,
-                limits.token0Limit1
-            );
-            console.log(
-                "  > Configured trading limits for token0 (%s)",
-                IERC20Metadata(cfg.token0).symbol()
-            );
+            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(cfg.token0, limits.token0Limit0, limits.token0Limit1);
+            console.log("  > Configured trading limits for token0 (%s)", IERC20Metadata(cfg.token0).symbol());
             console.log("    > limit0:", limits.token0Limit0);
             console.log("    > limit1:", limits.token0Limit1);
         }
 
         if (hasToken1Limits) {
-            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(
-                cfg.token1,
-                limits.token1Limit0,
-                limits.token1Limit1
-            );
-            console.log(
-                "  > Configured trading limits for token1 (%s)",
-                IERC20Metadata(cfg.token1).symbol()
-            );
+            IFPMM(owner.harness(fpmmProxy)).configureTradingLimit(cfg.token1, limits.token1Limit0, limits.token1Limit1);
+            console.log("  > Configured trading limits for token1 (%s)", IERC20Metadata(cfg.token1).symbol());
             console.log("    > limit0:", limits.token1Limit0);
             console.log("    > limit1:", limits.token1Limit1);
         }
@@ -193,12 +154,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         }
     }
 
-    function _isReserveLiquidityStrategy(
-        address strategyAddy
-    ) internal view returns (bool) {
-        try IReserveLiquidityStrategy(strategyAddy).reserve() returns (
-            IReserveV2
-        ) {
+    function _isReserveLiquidityStrategy(address strategyAddy) internal view returns (bool) {
+        try IReserveLiquidityStrategy(strategyAddy).reserve() returns (IReserveV2) {
             return true;
         } catch {
             return false;
@@ -215,27 +172,16 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         address collateralToken = lsCfg.debtToken == token0 ? token1 : token0;
 
         // 1. Register assets and strategy spender on ReserveV2 if not yet registered
-        IReserveV2 reserveV2 = IReserveLiquidityStrategy(strategyAddy)
-            .reserve();
+        IReserveV2 reserveV2 = IReserveLiquidityStrategy(strategyAddy).reserve();
         console.log("  Registering assets and strategy spender on ReserveV2");
-        _registerReserveAssets(
-            reserveV2,
-            lsCfg.debtToken,
-            collateralToken,
-            strategyAddy
-        );
+        _registerReserveAssets(reserveV2, lsCfg.debtToken, collateralToken, strategyAddy);
 
         // 2. Set strategy on the FPMM
-        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(
-            strategyAddy,
-            true
-        );
+        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(strategyAddy, true);
         console.log("  > Set liquidity strategy on FPMM:", strategyAddy);
 
         // 3. Configure the FPMM as a pool on the strategy
-        IReserveLiquidityStrategy(owner.harness(strategyAddy)).addPool(
-            _buildAddPoolParams(fpmmProxy, lsCfg)
-        );
+        IReserveLiquidityStrategy(owner.harness(strategyAddy)).addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
         console.log("  > Added pool to ReserveLiquidityStrategy");
 
         // 4. Grant minting and burning rights to the strategy on the debt token
@@ -248,23 +194,17 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _verifyRebalance(fpmmProxy, lsCfg);
     }
 
-    function _setupOpenLiquidityStrategy(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal {
+    function _setupOpenLiquidityStrategy(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
+        internal
+    {
         address strategyAddy = lsCfg.liquidityStrategy;
 
         // 1. Set strategy on the FPMM
-        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(
-            strategyAddy,
-            true
-        );
+        IFPMM(owner.harness(fpmmProxy)).setLiquidityStrategy(strategyAddy, true);
         console.log("  > Set liquidity strategy on FPMM:", strategyAddy);
 
         // 2. Configure the FPMM as a pool on the strategy
-        IOpenLiquidityStrategy(owner.harness(strategyAddy)).addPool(
-            _buildAddPoolParams(fpmmProxy, lsCfg)
-        );
+        IOpenLiquidityStrategy(owner.harness(strategyAddy)).addPool(_buildAddPoolParams(fpmmProxy, lsCfg));
         console.log("  > Added pool to OpenLiquidityStrategy");
 
         console.log("\n");
@@ -274,49 +214,32 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         _verifyOpenRebalance(fpmmProxy, lsCfg);
     }
 
-    function _buildAddPoolParams(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal pure returns (ILiquidityStrategy.AddPoolParams memory) {
-        return
-            ILiquidityStrategy.AddPoolParams({
-                pool: fpmmProxy,
-                debtToken: lsCfg.debtToken,
-                cooldown: lsCfg.cooldown,
-                protocolFeeRecipient: lsCfg.protocolFeeRecipient,
-                liquiditySourceIncentiveExpansion: lsCfg
-                    .liquiditySourceIncentiveExpansion,
-                protocolIncentiveExpansion: lsCfg.protocolIncentiveExpansion,
-                liquiditySourceIncentiveContraction: lsCfg
-                    .liquiditySourceIncentiveContraction,
-                protocolIncentiveContraction: lsCfg.protocolIncentiveContraction
-            });
+    function _buildAddPoolParams(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
+        internal
+        pure
+        returns (ILiquidityStrategy.AddPoolParams memory)
+    {
+        return ILiquidityStrategy.AddPoolParams({
+            pool: fpmmProxy,
+            debtToken: lsCfg.debtToken,
+            cooldown: lsCfg.cooldown,
+            protocolFeeRecipient: lsCfg.protocolFeeRecipient,
+            liquiditySourceIncentiveExpansion: lsCfg.liquiditySourceIncentiveExpansion,
+            protocolIncentiveExpansion: lsCfg.protocolIncentiveExpansion,
+            liquiditySourceIncentiveContraction: lsCfg.liquiditySourceIncentiveContraction,
+            protocolIncentiveContraction: lsCfg.protocolIncentiveContraction
+        });
     }
 
-    function _grantMinterBurner(
-        address debtTokenAddy,
-        address strategyAddy
-    ) internal {
+    function _grantMinterBurner(address debtTokenAddy, address strategyAddy) internal {
         IStableTokenV3 debtToken = IStableTokenV3(debtTokenAddy);
         if (!debtToken.isMinter(strategyAddy)) {
-            IStableTokenV3(owner.harness(debtTokenAddy)).setMinter(
-                strategyAddy,
-                true
-            );
-            console.log(
-                "  > Granted minter to strategy on:",
-                tokenSymbol(debtTokenAddy)
-            );
+            IStableTokenV3(owner.harness(debtTokenAddy)).setMinter(strategyAddy, true);
+            console.log("  > Granted minter to strategy on:", tokenSymbol(debtTokenAddy));
         }
         if (!debtToken.isBurner(strategyAddy)) {
-            IStableTokenV3(owner.harness(debtTokenAddy)).setBurner(
-                strategyAddy,
-                true
-            );
-            console.log(
-                "  > Granted burner to strategy on:",
-                tokenSymbol(debtTokenAddy)
-            );
+            IStableTokenV3(owner.harness(debtTokenAddy)).setBurner(strategyAddy, true);
+            console.log("  > Granted burner to strategy on:", tokenSymbol(debtTokenAddy));
         }
     }
 
@@ -329,47 +252,29 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         address reserveAddy = address(reserveV2);
 
         if (!reserveV2.isStableAsset(debtToken)) {
-            IReserveV2(owner.harness(reserveAddy)).registerStableAsset(
-                debtToken
-            );
-            console.log(
-                "  > Registered stable asset on ReserveV2:",
-                tokenSymbol(debtToken)
-            );
+            IReserveV2(owner.harness(reserveAddy)).registerStableAsset(debtToken);
+            console.log("  > Registered stable asset on ReserveV2:", tokenSymbol(debtToken));
         }
 
         if (!reserveV2.isCollateralAsset(collateralToken)) {
-            IReserveV2(owner.harness(reserveAddy)).registerCollateralAsset(
-                collateralToken
-            );
-            console.log(
-                "  > Registered collateral asset on ReserveV2:",
-                tokenSymbol(collateralToken)
-            );
+            IReserveV2(owner.harness(reserveAddy)).registerCollateralAsset(collateralToken);
+            console.log("  > Registered collateral asset on ReserveV2:", tokenSymbol(collateralToken));
         }
 
         if (!reserveV2.isLiquidityStrategySpender(strategyAddy)) {
-            IReserveV2(owner.harness(reserveAddy))
-                .registerLiquidityStrategySpender(strategyAddy);
-            console.log(
-                "  > Registered strategy as spender on ReserveV2:",
-                strategyAddy
-            );
+            IReserveV2(owner.harness(reserveAddy)).registerLiquidityStrategySpender(strategyAddy);
+            console.log("  > Registered strategy as spender on ReserveV2:", strategyAddy);
         }
     }
 
-    function _mintInitialLiquidity(
-        address fpmmProxy,
-        IMentoConfig.FPMMConfig memory cfg
-    ) internal {
+    function _mintInitialLiquidity(address fpmmProxy, IMentoConfig.FPMMConfig memory cfg) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
         address token0 = fpmm.token0();
         address token1 = fpmm.token1();
 
         // Get the oracle rate (token0/token1 after invertRateFeed)
         IOracleAdapter oracle = fpmm.oracleAdapter();
-        (uint256 rateNumerator, uint256 rateDenominator) = oracle
-            .getFXRateIfValid(cfg.referenceRateFeedID);
+        (uint256 rateNumerator, uint256 rateDenominator) = oracle.getFXRateIfValid(cfg.referenceRateFeedID);
         if (cfg.invertRateFeed) {
             (rateNumerator, rateDenominator) = (rateDenominator, rateNumerator);
         }
@@ -381,8 +286,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         uint256 amount1 = decimals1;
         // Convert to value-equivalent amount of token0 using oracle rate
         // rate = token0_price / token1_price, so amount0 = amount1 * rateDenominator * decimals0 / (rateNumerator * decimals1)
-        uint256 amount0 = (amount1 * rateDenominator * decimals0) /
-            (rateNumerator * decimals1);
+        uint256 amount0 = (amount1 * rateDenominator * decimals0) / (rateNumerator * decimals1);
 
         require(
             IERC20(token0).balanceOf(owner.account) >= amount0,
@@ -411,101 +315,48 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
             return;
         }
 
-        address virtualPool = IVirtualPoolFactory(virtualPoolFactory).getPool(
-            token0,
-            token1
-        );
+        address virtualPool = IVirtualPoolFactory(virtualPoolFactory).getPool(token0, token1);
         if (virtualPool == address(0)) {
             console.log(
-                "  > No virtual pool found for pair:",
-                IERC20Metadata(token0).symbol(),
-                IERC20Metadata(token1).symbol()
+                "  > No virtual pool found for pair:", IERC20Metadata(token0).symbol(), IERC20Metadata(token1).symbol()
             );
             return;
         }
 
-        if (
-            IVirtualPoolFactory(virtualPoolFactory).isPoolDeprecated(
-                virtualPool
-            )
-        ) {
-            console.log(
-                "  > Virtual pool for pair already deprecated:",
-                virtualPool
-            );
+        if (IVirtualPoolFactory(virtualPoolFactory).isPoolDeprecated(virtualPool)) {
+            console.log("  > Virtual pool for pair already deprecated:", virtualPool);
             return;
         }
 
-        IVirtualPoolFactory(owner.harness(virtualPoolFactory)).deprecatePool(
-            virtualPool
-        );
+        IVirtualPoolFactory(owner.harness(virtualPoolFactory)).deprecatePool(virtualPool);
         console.log("  > Deprecated virtual pool for pair:", virtualPool);
-        console.log(
-            "    > token0:",
-            IERC20Metadata(token0).symbol(),
-            "token1:",
-            IERC20Metadata(token1).symbol()
-        );
+        console.log("    > token0:", IERC20Metadata(token0).symbol(), "token1:", IERC20Metadata(token1).symbol());
     }
 
     // ========== Verification ==========
 
-    function _verifyFPMM(
-        address proxy,
-        IMentoConfig.FPMMConfig memory cfg
-    ) internal view {
-        require(
-            factory.isPool(proxy),
-            "Verify: factory does not report pool as deployed"
-        );
+    function _verifyFPMM(address proxy, IMentoConfig.FPMMConfig memory cfg) internal view {
+        require(factory.isPool(proxy), "Verify: factory does not report pool as deployed");
 
         IFPMM fpmm = IFPMM(proxy);
-        require(
-            fpmm.token0() == cfg.token0 && fpmm.token1() == cfg.token1,
-            "Verify: FPMM token addresses mismatch"
-        );
+        require(fpmm.token0() == cfg.token0 && fpmm.token1() == cfg.token1, "Verify: FPMM token addresses mismatch");
 
-        require(
-            fpmm.referenceRateFeedID() == cfg.referenceRateFeedID,
-            "Verify: FPMM referenceRateFeedID mismatch"
-        );
-        require(
-            fpmm.invertRateFeed() == cfg.invertRateFeed,
-            "Verify: FPMM invertRateFeed mismatch"
-        );
-        require(
-            address(fpmm.oracleAdapter()) == cfg.oracleAdapter,
-            "Verify: FPMM oracleAdapter mismatch"
-        );
-        require(
-            getProxyAdmin(proxy) == cfg.proxyAdmin,
-            "Verify: FPMM proxyAdmin mismatch"
-        );
+        require(fpmm.referenceRateFeedID() == cfg.referenceRateFeedID, "Verify: FPMM referenceRateFeedID mismatch");
+        require(fpmm.invertRateFeed() == cfg.invertRateFeed, "Verify: FPMM invertRateFeed mismatch");
+        require(address(fpmm.oracleAdapter()) == cfg.oracleAdapter, "Verify: FPMM oracleAdapter mismatch");
+        require(getProxyAdmin(proxy) == cfg.proxyAdmin, "Verify: FPMM proxyAdmin mismatch");
 
         _verifyFPMMParams(fpmm, cfg.params);
     }
 
-    function _verifyFPMMParams(
-        IFPMM fpmm,
-        IFPMM.FPMMParams memory params
-    ) internal view {
+    function _verifyFPMMParams(IFPMM fpmm, IFPMM.FPMMParams memory params) internal view {
         require(fpmm.lpFee() == params.lpFee, "Verify: FPMM lpFee mismatch");
+        require(fpmm.protocolFee() == params.protocolFee, "Verify: FPMM protocolFee mismatch");
         require(
-            fpmm.protocolFee() == params.protocolFee,
-            "Verify: FPMM protocolFee mismatch"
+            fpmm.protocolFeeRecipient() == params.protocolFeeRecipient, "Verify: FPMM protocolFeeRecipient mismatch"
         );
-        require(
-            fpmm.protocolFeeRecipient() == params.protocolFeeRecipient,
-            "Verify: FPMM protocolFeeRecipient mismatch"
-        );
-        require(
-            fpmm.feeSetter() == params.feeSetter,
-            "Verify: FPMM feeSetter mismatch"
-        );
-        require(
-            fpmm.rebalanceIncentive() == params.rebalanceIncentive,
-            "Verify: FPMM rebalanceIncentive mismatch"
-        );
+        require(fpmm.feeSetter() == params.feeSetter, "Verify: FPMM feeSetter mismatch");
+        require(fpmm.rebalanceIncentive() == params.rebalanceIncentive, "Verify: FPMM rebalanceIncentive mismatch");
         require(
             fpmm.rebalanceThresholdAbove() == params.rebalanceThresholdAbove,
             "Verify: FPMM rebalanceThresholdAbove mismatch"
@@ -527,8 +378,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         // Verify strategy is set on the FPMM
         require(
-            IFPMM(fpmmProxy).liquidityStrategy(strategyAddy),
-            "Verify: strategy not set as liquidity strategy on FPMM"
+            IFPMM(fpmmProxy).liquidityStrategy(strategyAddy), "Verify: strategy not set as liquidity strategy on FPMM"
         );
 
         // Verify pool is registered on the strategy
@@ -538,11 +388,9 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         );
 
         // Verify ReserveV2 asset registration
-        IReserveV2 reserveV2 = IReserveLiquidityStrategy(strategyAddy)
-            .reserve();
+        IReserveV2 reserveV2 = IReserveLiquidityStrategy(strategyAddy).reserve();
         require(
-            reserveV2.isStableAsset(lsCfg.debtToken),
-            "Verify: debtToken not registered as stable asset on ReserveV2"
+            reserveV2.isStableAsset(lsCfg.debtToken), "Verify: debtToken not registered as stable asset on ReserveV2"
         );
         require(
             reserveV2.isCollateralAsset(collateralToken),
@@ -557,26 +405,19 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         // Verify minter and burner rights
         IStableTokenV3 debtToken = IStableTokenV3(lsCfg.debtToken);
-        require(
-            debtToken.isMinter(strategyAddy),
-            "Verify: strategy not set as minter on debtToken"
-        );
-        require(
-            debtToken.isBurner(strategyAddy),
-            "Verify: strategy not set as burner on debtToken"
-        );
+        require(debtToken.isMinter(strategyAddy), "Verify: strategy not set as minter on debtToken");
+        require(debtToken.isBurner(strategyAddy), "Verify: strategy not set as burner on debtToken");
     }
 
-    function _verifyOpenLiquidityStrategy(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal view {
+    function _verifyOpenLiquidityStrategy(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg)
+        internal
+        view
+    {
         address strategyAddy = lsCfg.liquidityStrategy;
 
         // Verify strategy is set on the FPMM
         require(
-            IFPMM(fpmmProxy).liquidityStrategy(strategyAddy),
-            "Verify: strategy not set as liquidity strategy on FPMM"
+            IFPMM(fpmmProxy).liquidityStrategy(strategyAddy), "Verify: strategy not set as liquidity strategy on FPMM"
         );
 
         // Verify pool is registered on the strategy
@@ -590,28 +431,19 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         IFPMM fpmm = IFPMM(fpmmProxy);
 
         // Verify reserves are non-zero
-        (uint256 r0, uint256 r1, ) = fpmm.getReserves();
+        (uint256 r0, uint256 r1,) = fpmm.getReserves();
         require(r0 > 0, "Verify: FPMM reserve0 is zero after mint");
         require(r1 > 0, "Verify: FPMM reserve1 is zero after mint");
 
         // Verify LP total supply is non-zero and owner received LP tokens
         IERC20 lpToken = IERC20(fpmmProxy);
-        require(
-            lpToken.totalSupply() > 0,
-            "Verify: FPMM totalSupply is zero after mint"
-        );
-        require(
-            lpToken.balanceOf(owner.account) > 0,
-            "Verify: owner received no LP tokens"
-        );
+        require(lpToken.totalSupply() > 0, "Verify: FPMM totalSupply is zero after mint");
+        require(lpToken.balanceOf(owner.account) > 0, "Verify: owner received no LP tokens");
     }
 
     // ======= Test helpers =======
 
-    function _verifySwap(
-        address fpmmProxy,
-        IMentoConfig.FPMMConfig memory c
-    ) internal {
+    function _verifySwap(address fpmmProxy, IMentoConfig.FPMMConfig memory c) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
 
         // Provide larger liquidity so we can swap meaningfully
@@ -652,10 +484,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         deal(token, to, amount);
     }
 
-    function _verifyRebalance(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal {
+    function _verifyRebalance(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
 
         address sorted0 = fpmm.token0();
@@ -674,15 +503,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         // 2. Log rebalancing state before rebalance
         uint256 priceDifference;
         {
-            (
-                uint256 oPN,
-                uint256 oPD,
-                uint256 rPN,
-                uint256 rPD,
-                bool above,
-                ,
-                uint256 pd
-            ) = fpmm.getRebalancingState();
+            (uint256 oPN, uint256 oPD, uint256 rPN, uint256 rPD, bool above,, uint256 pd) = fpmm.getRebalancingState();
             priceDifference = pd;
             console.log("  > oraclePrice:", oPN, "/", oPD);
             console.log("  > reservePrice:", rPN, "/", rPD);
@@ -692,25 +513,22 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         // 3. Trigger rebalance through the liquidity strategy
         {
-            (uint256 r0Before, uint256 r1Before, ) = fpmm.getReserves();
+            (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
             ILiquidityStrategy(lsCfg.liquidityStrategy).rebalance(fpmmProxy);
-            (uint256 r0After, uint256 r1After, ) = fpmm.getReserves();
+            (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
             console.log("  > reserve0 before:", r0Before, "-> after:", r0After);
             console.log("  > reserve1 before:", r1Before, "-> after:", r1After);
         }
 
         // 4. Verify price difference improved
-        (, , , , , , uint256 newPriceDifference) = fpmm.getRebalancingState();
+        (,,,,,, uint256 newPriceDifference) = fpmm.getRebalancingState();
         console.log("  > newPriceDifference (bps):", newPriceDifference);
-        require(
-            newPriceDifference < priceDifference,
-            "Verify: rebalance did not improve price difference"
-        );
+        require(newPriceDifference < priceDifference, "Verify: rebalance did not improve price difference");
     }
 
     function _doLargeSwap(address fpmmProxy, IFPMM fpmm) internal {
         address token0 = fpmm.token0();
-        (uint256 reserve0, , ) = fpmm.getReserves();
+        (uint256 reserve0,,) = fpmm.getReserves();
         uint256 largeSwapAmount = reserve0 / 4;
 
         _deal(token0, SWAP_TEST_ACCOUNT, largeSwapAmount);
@@ -727,10 +545,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         console.log("    > swapOut:", amountOut);
     }
 
-    function _verifyOpenRebalance(
-        address fpmmProxy,
-        IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg
-    ) internal {
+    function _verifyOpenRebalance(address fpmmProxy, IMentoConfig.LiquidityStrategyPoolConfig memory lsCfg) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
 
         address sorted0 = fpmm.token0();
@@ -756,15 +571,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         // 2. Log rebalancing state before rebalance
         uint256 priceDifference;
         {
-            (
-                uint256 oPN,
-                uint256 oPD,
-                uint256 rPN,
-                uint256 rPD,
-                bool above,
-                ,
-                uint256 pd
-            ) = fpmm.getRebalancingState();
+            (uint256 oPN, uint256 oPD, uint256 rPN, uint256 rPD, bool above,, uint256 pd) = fpmm.getRebalancingState();
             priceDifference = pd;
             console.log("  > oraclePrice:", oPN, "/", oPD);
             console.log("  > reservePrice:", rPN, "/", rPD);
@@ -774,36 +581,27 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         // 3. Trigger rebalance from the funded rebalancer account
         {
-            (uint256 r0Before, uint256 r1Before, ) = fpmm.getReserves();
+            (uint256 r0Before, uint256 r1Before,) = fpmm.getReserves();
             vm.prank(rebalancer);
             ILiquidityStrategy(lsCfg.liquidityStrategy).rebalance(fpmmProxy);
-            (uint256 r0After, uint256 r1After, ) = fpmm.getReserves();
+            (uint256 r0After, uint256 r1After,) = fpmm.getReserves();
             console.log("  > reserve0 before:", r0Before, "-> after:", r0After);
             console.log("  > reserve1 before:", r1Before, "-> after:", r1After);
         }
 
         // 4. Verify price difference improved
-        (, , , , , , uint256 newPriceDifference) = fpmm.getRebalancingState();
+        (,,,,,, uint256 newPriceDifference) = fpmm.getRebalancingState();
         console.log("  > newPriceDifference (bps):", newPriceDifference);
-        require(
-            newPriceDifference < priceDifference,
-            "Verify: rebalance did not improve price difference"
-        );
+        require(newPriceDifference < priceDifference, "Verify: rebalance did not improve price difference");
     }
 
-    function _verifyNoActiveVirtualPool(
-        address token0,
-        address token1
-    ) internal view {
+    function _verifyNoActiveVirtualPool(address token0, address token1) internal view {
         address virtualPoolFactory = lookup("VirtualPoolFactory:v3.0.0");
         if (virtualPoolFactory == address(0)) {
             return;
         }
 
-        address virtualPool = IVirtualPoolFactory(virtualPoolFactory).getPool(
-            token0,
-            token1
-        );
+        address virtualPool = IVirtualPoolFactory(virtualPoolFactory).getPool(token0, token1);
         if (virtualPool == address(0)) {
             return;
         }
@@ -814,17 +612,13 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         );
     }
 
-    function _provideLargerLiquidity(
-        address fpmmProxy,
-        IMentoConfig.FPMMConfig memory c
-    ) internal {
+    function _provideLargerLiquidity(address fpmmProxy, IMentoConfig.FPMMConfig memory c) internal {
         IFPMM fpmm = IFPMM(fpmmProxy);
         address token0 = c.token0;
         address token1 = c.token1;
 
         IOracleAdapter oracle = fpmm.oracleAdapter();
-        (uint256 rateNumerator, uint256 rateDenominator) = oracle
-            .getFXRateIfValid(c.referenceRateFeedID);
+        (uint256 rateNumerator, uint256 rateDenominator) = oracle.getFXRateIfValid(c.referenceRateFeedID);
         if (c.invertRateFeed) {
             (rateNumerator, rateDenominator) = (rateDenominator, rateNumerator);
         }
@@ -834,8 +628,7 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
 
         // Provide 10_000 units of token1 worth of liquidity
         uint256 amount1 = 10_000 * decimals1;
-        uint256 amount0 = (amount1 * rateDenominator * decimals0) /
-            (rateNumerator * decimals1);
+        uint256 amount0 = (amount1 * rateDenominator * decimals0) / (rateNumerator * decimals1);
 
         // Mint tokens for liquidity
         _deal(c.token0, SWAP_TEST_ACCOUNT, amount0);
