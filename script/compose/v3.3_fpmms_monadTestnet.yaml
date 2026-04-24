@@ -1,0 +1,17 @@
+group: Mento V3.3 Monad Testnet FPMM deployments
+components:
+  # Assumes Spoke tokens have already been deployed and the deployer has minted some tokens to themselves
+  RateFeeds:
+    script: AddRateFeed
+  DeployMockAggregators:
+    script: DeployMockAggregators
+  Relay:
+    script: Relay
+    deps:
+      - RateFeeds
+  CreateFPMMs:
+    script: CreateFPMM
+    deps:
+      - Relay
+      - JPYm_mint
+      - CHFm_mint

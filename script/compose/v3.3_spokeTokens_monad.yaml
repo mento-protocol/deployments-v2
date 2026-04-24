@@ -6,23 +6,24 @@ components:
       SPOKE_LABEL: "JPYm"
       SPOKE_TOKEN_NAME: "Mento Japanese Yen"
       SPOKE_TOKEN_SYMBOL: "JPYm"
+  JPYm_mint:
+    script: MintTestnetStable
+    env:
+      token: "JPYm"
+      balance: "1000000"
+    deps:
+      - JPYm
+
   CHFm:
     script: DeployStableTokenSpoke
     env:
       SPOKE_LABEL: "CHFm"
       SPOKE_TOKEN_NAME: "Mento Swiss Franc"
       SPOKE_TOKEN_SYMBOL: "CHFm"
-  RateFeeds:
-    script: AddRateFeed
-  DeployMockAggregators:
-    script: DeployMockAggregators
-  Relay:
-    script: Relay
+  CHFm_mint:
+    script: MintTestnetStable
+    env:
+      token: "CHFm"
+      balance: "1000000"
     deps:
-      - RateFeeds
-  CreateFPMMs:
-    script: CreateFPMM
-    deps:
-      - Relay
-      - JPYm
       - CHFm
