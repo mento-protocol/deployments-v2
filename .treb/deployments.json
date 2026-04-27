@@ -21868,6 +21868,37 @@
     "createdAt": "2026-03-10T16:32:27.414033724Z",
     "updatedAt": "2026-03-12T17:58:56.180547715Z"
   },
+  "testnet-v2-rc5/10143/ChainlinkRelayerV1:CHF/USD": {
+    "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:CHF/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "CHF/USD",
+    "address": "0x09652Ff5ef90eD8fbCb7195298eF0Cf6E64F9149",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x2be07930ae15f660ad240f61174c02fba04a0eb82297e31f1b730ac269c12a96",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002ee56be22d6af8c1b0ac97149b6f42d3b0bfb8c20000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074348462f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000820f0060292590ebfb63468aae6fecfc5cc197620000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xad0c23f9f82a6fe9ff8a9581157453cb510fe1b731bea124eada4139c7be8b01",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "41cebbe453db55a4216a4e248ef7f51fa4d3b091"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-27T16:56:30.491359+02:00",
+    "updatedAt": "2026-04-27T16:56:30.501934+02:00"
+  },
   "testnet-v2-rc5/10143/ChainlinkRelayerV1:EUR/USD": {
     "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:EUR/USD",
     "namespace": "testnet-v2-rc5",
@@ -21946,6 +21977,37 @@
     "tags": null,
     "createdAt": "2026-03-10T16:32:27.414033724Z",
     "updatedAt": "2026-03-12T17:59:13.323680276Z"
+  },
+  "testnet-v2-rc5/10143/ChainlinkRelayerV1:JPY/USD": {
+    "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:JPY/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "JPY/USD",
+    "address": "0x42FD8a60a094645dc50C7250d5999Cdd62d014E0",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x8b7f236f5c9a7a0a0c4480743bf0fbc7e1aa56b2eedff2f6fd58dc5e84a41d0d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000b9addcd1d1ce7d49dbb540e2677f1c572bc8d1950000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074a50592f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000006da50e1edd6ee28fdb1cbf2fd4d1102f93644da40000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xad0c23f9f82a6fe9ff8a9581157453cb510fe1b731bea124eada4139c7be8b01",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "41cebbe453db55a4216a4e248ef7f51fa4d3b091"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-27T16:56:30.491359+02:00",
+    "updatedAt": "2026-04-27T16:56:30.501934+02:00"
   },
   "testnet-v2-rc5/10143/ChainlinkRelayerV1:USDC/USD": {
     "id": "testnet-v2-rc5/10143/ChainlinkRelayerV1:USDC/USD",
@@ -22380,6 +22442,38 @@
     "createdAt": "2026-03-10T16:31:48.691710324Z",
     "updatedAt": "2026-03-12T17:53:21.349395507Z"
   },
+  "testnet-v2-rc5/10143/MockChainlinkAggregator:CHF/USD": {
+    "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:CHF/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "CHF/USD",
+    "address": "0x820f0060292590EBFb63468aAe6FEcfc5Cc19762",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa70062b422d772813c6a0c6503",
+      "initCodeHash": "0x0d978199651ae0b0b5f8470aaf171643bec0ed5fb8c354b388c11fd2d623443b",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000120000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000074348462f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockChainlinkAggregator:CHF/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x022e49d289a2dbafaa90f66e1cf35405141cceeabe819831475bded72119d094",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregators.s.sol",
+      "gitCommit": "41cebbe453db55a4216a4e248ef7f51fa4d3b091"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-27T16:55:48.287857+02:00",
+    "updatedAt": "2026-04-27T16:55:48.299497+02:00"
+  },
   "testnet-v2-rc5/10143/MockChainlinkAggregator:EUR/USD": {
     "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:EUR/USD",
     "namespace": "testnet-v2-rc5",
@@ -22458,6 +22552,38 @@
     "tags": null,
     "createdAt": "2026-03-10T16:31:48.691710324Z",
     "updatedAt": "2026-03-12T17:53:36.92881185Z"
+  },
+  "testnet-v2-rc5/10143/MockChainlinkAggregator:JPY/USD": {
+    "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:JPY/USD",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 10143,
+    "contractName": "MockChainlinkAggregator",
+    "label": "JPY/USD",
+    "address": "0x6dA50E1eDD6eE28fDB1Cbf2fd4d1102f93644dA4",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7007a3b881af69d09dccac02e",
+      "initCodeHash": "0x46d98b0306b6d4bb0eec11f6325a0b9d4075a35abf7fd723564c1602a8926afc",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000120000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000074a50592f55534400000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockChainlinkAggregator:JPY/USD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockChainlinkAggregator.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x022e49d289a2dbafaa90f66e1cf35405141cceeabe819831475bded72119d094",
+      "scriptPath": "script/deploy/oracles/DeployMockAggregators.s.sol",
+      "gitCommit": "41cebbe453db55a4216a4e248ef7f51fa4d3b091"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-27T16:55:48.287857+02:00",
+    "updatedAt": "2026-04-27T16:55:48.299497+02:00"
   },
   "testnet-v2-rc5/10143/MockChainlinkAggregator:USDC/USD": {
     "id": "testnet-v2-rc5/10143/MockChainlinkAggregator:USDC/USD",

@@ -13,5 +13,3 @@ components:
     script: CreateFPMM
     deps:
       - Relay
-      - JPYm_mint
-      - CHFm_mint
