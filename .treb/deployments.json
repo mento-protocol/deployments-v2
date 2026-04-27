@@ -194,6 +194,37 @@
     "createdAt": "2026-03-11T14:03:35.660747244Z",
     "updatedAt": "2026-03-12T14:07:44.82375398Z"
   },
+  "mainnet/143/ChainlinkRelayerV1:CHF/USD": {
+    "id": "mainnet/143/ChainlinkRelayerV1:CHF/USD",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "CHF/USD",
+    "address": "0xf091F44a7b8CB8C57747275496FdB9957B3d0909",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xfdedc352dd8daf2627a790c7f07483b8c6c2c23deac9532e040f07235f7be23b",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000002ee56be22d6af8c1b0ac97149b6f42d3b0bfb8c20000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074348462f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000006dba7f3a7b5b7c1079337104cad14d19150f6b8d0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x3cfe15eb7994cf4a902c8816e8a3eb1670592b6a3638163ab88ff83af7b43d75",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "cddef968651c01e77519754acd6fa62ac9775cf9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-27T17:12:26.595111+02:00",
+    "updatedAt": "2026-04-27T17:12:26.614945+02:00"
+  },
   "mainnet/143/ChainlinkRelayerV1:EUR/USD": {
     "id": "mainnet/143/ChainlinkRelayerV1:EUR/USD",
     "namespace": "mainnet",
@@ -272,6 +303,37 @@
     "tags": null,
     "createdAt": "2026-03-11T14:03:35.660747244Z",
     "updatedAt": "2026-03-12T14:08:19.151150027Z"
+  },
+  "mainnet/143/ChainlinkRelayerV1:JPY/USD": {
+    "id": "mainnet/143/ChainlinkRelayerV1:JPY/USD",
+    "namespace": "mainnet",
+    "chainId": 143,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "JPY/USD",
+    "address": "0x30fA361Bd8315926E6eF4CEB88A353fAB5A11F86",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xf9e832ec090d16f477d53245dc87ceb72d77a894ba6d77ce039e9bc1c241b616",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000b9addcd1d1ce7d49dbb540e2677f1c572bc8d1950000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074a50592f555344000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000f64664ea54ce47ecc7a1816c49d1bc6def8289270000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x3cfe15eb7994cf4a902c8816e8a3eb1670592b6a3638163ab88ff83af7b43d75",
+      "scriptPath": "script/deploy/oracles/AddRateFeed.s.sol",
+      "gitCommit": "cddef968651c01e77519754acd6fa62ac9775cf9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-27T17:12:26.595111+02:00",
+    "updatedAt": "2026-04-27T17:12:26.614945+02:00"
   },
   "mainnet/143/ChainlinkRelayerV1:USDC/USD": {
     "id": "mainnet/143/ChainlinkRelayerV1:USDC/USD",
