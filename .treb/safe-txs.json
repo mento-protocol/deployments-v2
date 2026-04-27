@@ -2190,6 +2190,18 @@
     "confirmations": [],
     "executionTxHash": "0x84f7918e8a3bece5bb5889ba3b6e01b73ae03286413b6f5fd9f2aa655807af6d"
   },
+  "0xd257c229b08a3408fb9332ef4a3e0febb7290ee5200572dc39cec3f0ffd4da27": {
+    "safeTxHash": "0xd257c229b08a3408fb9332ef4a3e0febb7290ee5200572dc39cec3f0ffd4da27",
+    "safeAddress": "0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458",
+    "chainId": 42220,
+    "status": "QUEUED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-04-27T12:27:16.736492+02:00",
+    "confirmations": []
+  },
   "0xd265a1a93b3ae110755be87efd7db2f05a00026c728d12659d986e870c0ef2cd": {
     "safeTxHash": "0xd265a1a93b3ae110755be87efd7db2f05a00026c728d12659d986e870c0ef2cd",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
