@@ -1,0 +1,14 @@
+group: Mento V3.3 Monad Testnet JPYm and CHFm deployments
+components:
+  JPYm:
+    script: DeployStableTokenSpoke
+    env:
+      SPOKE_LABEL: JPYm
+      SPOKE_TOKEN_NAME: Mento Japanese Yen
+      SPOKE_TOKEN_SYMBOL: JPYm
+  CHFm:
+    script: DeployStableTokenSpoke
+    env:
+      SPOKE_LABEL: CHFm
+      SPOKE_TOKEN_NAME: Mento Swiss Franc
+      SPOKE_TOKEN_SYMBOL: CHFm

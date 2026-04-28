@@ -759,15 +759,6 @@ contract MentoConfig_celo is MentoConfig {
             createVirtual: true
         });
         _addFxExchange({
-            currency: "CHF", spread: 0.003 * 1e24, tradingLimits: _tier1FxTradingLimits(0.83 * 1e3), createVirtual: true
-        });
-        _addFxExchange({
-            currency: "JPY",
-            spread: 0.003 * 1e24,
-            tradingLimits: _tier1FxTradingLimits(142.0 * 1e3),
-            createVirtual: true
-        });
-        _addFxExchange({
             currency: "COP",
             spread: 0.003 * 1e24,
             tradingLimits: _tier2FxTradingLimits(4211.0 * 1e3),
