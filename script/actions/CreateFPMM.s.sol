@@ -626,9 +626,8 @@ contract CreateFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCheats {
         uint256 decimals0 = 10 ** IERC20Metadata(token0).decimals();
         uint256 decimals1 = 10 ** IERC20Metadata(token1).decimals();
 
-        // Provide 10_000 units of token1 worth of liquidity
-        uint256 amount1 = 10_000 * decimals1;
-        uint256 amount0 = (amount1 * rateDenominator * decimals0) / (rateNumerator * decimals1);
+        uint256 amount0 = 10_000 * decimals0;
+        uint256 amount1 = (amount0 * rateNumerator * decimals1) / (rateDenominator * decimals0);
 
         // Mint tokens for liquidity
         _deal(c.token0, SWAP_TEST_ACCOUNT, amount0);

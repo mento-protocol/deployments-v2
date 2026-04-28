@@ -169,6 +169,7 @@ contract CDPOperations is V3IntegrationBase {
     // ========== Interest Accrual ==========
 
     function test_interestAccrual() public {
+        // Fix this: 30 days jump can hit a Weekend here also needs an oracleRefresh
         for (uint256 p = 0; p < cdpPools.length; p++) {
             PoolContracts memory c = _getPoolContracts(cdpPools[p]);
             string memory idx = vm.toString(p);
