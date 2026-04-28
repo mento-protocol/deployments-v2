@@ -41,11 +41,7 @@ contract UpdateFees is TrebScript, ProxyHelper, ConfigHelper {
 
         console.log("\n===== Checking v2 BiPoolManager spreads =====");
 
-        // Collect exchanges that need updating
-        bytes32[] memory toRecreate = new bytes32[](onChainExchanges.length);
-        IBiPoolManager.PoolExchange[] memory toRecreatePools =
-            new IBiPoolManager.PoolExchange[](onChainExchanges.length);
-        uint256 recreateCount = 0;
+        bool anyUpdated = false;
 
         for (uint256 i = 0; i < onChainExchanges.length; i++) {
             bytes32 exchangeId = onChainExchanges[i].exchangeId;
@@ -66,46 +62,20 @@ contract UpdateFees is TrebScript, ProxyHelper, ConfigHelper {
             uint256 onChainSpread = onChainPool.config.spread.value;
 
             if (configSpread != onChainSpread) {
-                console.log("  Will recreate %s/%s:", symbol0, symbol1);
-                console.log("    old exchangeId:", uint256(exchangeId));
+                console.log("  Updating spread for %s/%s:", symbol0, symbol1);
+                console.log("    exchangeId:", uint256(exchangeId));
                 console.log("    old spread:", onChainSpread);
                 console.log("    new spread:", configSpread);
 
-                // Use on-chain pool but update the spread and reset the bucket update time to now
-                onChainPool.config.spread = configExchange.pool.config.spread;
-                onChainPool.lastBucketUpdate = 0;
-                toRecreate[recreateCount] = exchangeId;
-                toRecreatePools[recreateCount] = onChainPool;
-                recreateCount++;
+                biPoolManager.setSpread(exchangeId, configSpread);
+                anyUpdated = true;
             } else {
                 console.log("  Spread unchanged for %s/%s", symbol0, symbol1);
             }
         }
 
-        if (recreateCount == 0) {
+        if (!anyUpdated) {
             console.log("  No v2 exchanges need updating");
-            return;
-        }
-
-        // Phase 1: Destroy exchanges that need updating (reverse order to preserve indices)
-        onChainExchanges = biPoolManagerRead.getExchanges();
-        for (uint256 i = onChainExchanges.length; i > 0; i--) {
-            bytes32 exchangeId = onChainExchanges[i - 1].exchangeId;
-            if (_isInSet(toRecreate, recreateCount, exchangeId)) {
-                biPoolManager.destroyExchange(exchangeId, i - 1);
-                console.log("  Destroyed exchange:", uint256(exchangeId));
-            }
-        }
-
-        // Phase 2: Recreate with on-chain pool data + updated spread
-        for (uint256 i = 0; i < recreateCount; i++) {
-            IBiPoolManager.PoolExchange memory pool = toRecreatePools[i];
-            bytes32 exchangeId = biPoolManager.createExchange(pool);
-
-            string memory symbol0 = IERC20Metadata(pool.asset0).symbol();
-            string memory symbol1 = IERC20Metadata(pool.asset1).symbol();
-            console.log("  Recreated %s/%s with new spread", symbol0, symbol1);
-            console.log("    new exchangeId:", uint256(exchangeId));
         }
     }
 
@@ -244,10 +214,4 @@ contract UpdateFees is TrebScript, ProxyHelper, ConfigHelper {
         return (empty, false);
     }
 
-    function _isInSet(bytes32[] memory set, uint256 length, bytes32 value) internal pure returns (bool) {
-        for (uint256 i = 0; i < length; i++) {
-            if (set[i] == value) return true;
-        }
-        return false;
-    }
 }
