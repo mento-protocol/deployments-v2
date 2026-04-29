@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-04-29
+
 This entry is hand-written — `diffContracts` only catches address/type/decimal changes in `contracts.json`, not typed-export-shape refactors like the one below, so the auto-changelog skipped it. Tracked as a follow-up to extend the diff to detect export-set changes.
 
 ### Added
