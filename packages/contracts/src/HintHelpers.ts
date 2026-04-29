@@ -332,8 +332,17 @@ export const HintHelpers = {
       stateMutability: "view",
     },
   ] as const,
-  address: {
-    42220: "0xAfd741674bc4aa965a788dACe5b0434FD4374D82",
-    11142220: "0x5A54DD5d7AD1b782b43bB08d0A40CA947a315556",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x554Bb718414B794E7D28Fe744A468202d119944e",
+      11142220: "0x911755E5ac7Ab75e7cb32e00cE91E55Aae3cD0A0",
+    },
+    GBPm: {
+      42220: "0xAfd741674bc4aa965a788dACe5b0434FD4374D82",
+      11142220: "0x5A54DD5d7AD1b782b43bB08d0A40CA947a315556",
+    },
+    JPYm: {
+      42220: "0x461D5B4D1Cd6Fecb4F3699b15d241fe28611084d",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

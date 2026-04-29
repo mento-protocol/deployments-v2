@@ -399,8 +399,18 @@ export const TroveNFT = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0x46273A5792013973b64a42E760E6F81d0472C6b6",
-    11142220: "0x25B721CA74E6D0c2e3b9FD755cd2148A35CF1E84",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0xBadB30028F9F5043Efd32b1C00E3B367E874a39E",
+      11142220: "0x14Cb2385825F2E9329DB9A72BFB41f5d85185E6E",
+    },
+    GBPm: {
+      42220: "0x46273A5792013973b64a42E760E6F81d0472C6b6",
+      11142220: "0x25B721CA74E6D0c2e3b9FD755cd2148A35CF1E84",
+    },
+    JPYm: {
+      42220: "0x411DB4F90088101c76A51413F2D668FC409cbDCF",
+      11142220: "0x051185EF61089606CbBe693Eba4671245d381EC3",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

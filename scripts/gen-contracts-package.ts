@@ -71,6 +71,125 @@ const srcDir = join(packagesDir, "src");
 const pkgJsonPath = join(packagesDir, "package.json");
 const changelogPath = join(packagesDir, "CHANGELOG.md");
 
+// ─── Instance groups ──────────────────────────────────────────────────────────
+// Many contracts get deployed once per stable token (CHFm, GBPm, JPYm, …) but
+// share a single ABI. Publishing them as N near-identical typed exports is
+// almost all duplication — instead, fold all members of a group into a single
+// `<Base>.instances.<Token>[chainId]` map (the same shape ChainlinkRelayerV1
+// already uses for its per-pair deployments).
+//
+// Each pattern's first capture group is the discriminator. Each pattern carries
+// an explicit `kind` so the address-precedence semantics survive future array
+// reorders: when two patterns in a group both match the same (discriminator,
+// chainId), the higher-precedence kind wins. Order from most to least preferred:
+//   proxy   — user-facing, the address consumers should call
+//   primary — direct deployment (no proxy/impl distinction)
+//   impl    — implementation behind a proxy
+//   legacy  — older unversioned deployment, kept only when no newer match exists
+
+export type PatternKind = "proxy" | "primary" | "impl" | "legacy";
+export const KIND_PRECEDENCE: Record<PatternKind, number> = {
+  proxy: 0,
+  primary: 0,
+  impl: 1,
+  legacy: 2,
+};
+
+export interface InstanceGroup {
+  base: string;
+  patterns: { regex: RegExp; kind: PatternKind }[];
+}
+
+// Allowlist of stablecoin tokens used as discriminators. Tightened from the
+// previous `[A-Z]{2,5}m` regex (which would silently accept any contract whose
+// name happened to end in 2-5 uppercase letters + 'm', e.g. an attacker-named
+// `EVILm`). Add new tokens here when they're deployed.
+export const TOKENS = [
+  "USDm",
+  "EURm",
+  "GBPm",
+  "CHFm",
+  "JPYm",
+  "AUDm",
+  "BRLm",
+  "CADm",
+  "COPm",
+  "GHSm",
+  "KESm",
+  "NGNm",
+  "PHPm",
+  "XOFm",
+  "ZARm",
+] as const;
+export const TOKEN = `(${TOKENS.join("|")})`;
+
+const cdpPrimary = (base: string) => ({
+  base,
+  patterns: [
+    {
+      // trunk-ignore(semgrep/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp): `base` is a hardcoded string literal from INSTANCE_GROUPS below, not user input.
+      regex: new RegExp(`^${base}v300${TOKEN}$`),
+      kind: "primary" as const,
+    },
+  ],
+});
+
+export const INSTANCE_GROUPS: InstanceGroup[] = [
+  // Per-pair Chainlink relayers — every ChainlinkRelayerV1<Pair> shares the
+  // same ABI. Pair is uppercase letters only (e.g. EURUSD, JPYUSD); narrowing
+  // to `[A-Z]+` prevents accidental absorption of e.g. ChainlinkRelayerV1Factory.
+  {
+    base: "ChainlinkRelayerV1",
+    patterns: [{ regex: /^ChainlinkRelayerV1([A-Z]+)$/, kind: "primary" }],
+  },
+  // CDP per-token contracts — direct CREATE3 deployments, no proxy.
+  cdpPrimary("ActivePool"),
+  cdpPrimary("AddressesRegistry"),
+  cdpPrimary("BorrowerOperations"),
+  cdpPrimary("CollateralRegistry"),
+  cdpPrimary("CollSurplusPool"),
+  cdpPrimary("DefaultPool"),
+  cdpPrimary("GasPool"),
+  cdpPrimary("HintHelpers"),
+  cdpPrimary("MultiTroveGetter"),
+  cdpPrimary("SortedTroves"),
+  cdpPrimary("TroveManager"),
+  cdpPrimary("TroveNFT"),
+  cdpPrimary("MetadataNFT"),
+  cdpPrimary("FixedAssetReader"),
+  cdpPrimary("SSTORE2DataPointer"),
+  // Proxy/impl pairs — proxy is user-facing, impl shares the same ABI.
+  {
+    base: "FXPriceFeed",
+    patterns: [
+      { regex: new RegExp(`^FXPriceFeedProxy${TOKEN}$`), kind: "proxy" },
+      { regex: new RegExp(`^FXPriceFeedv300${TOKEN}$`), kind: "impl" },
+    ],
+  },
+  {
+    base: "SystemParams",
+    patterns: [
+      { regex: new RegExp(`^SystemParamsProxy${TOKEN}$`), kind: "proxy" },
+      { regex: new RegExp(`^SystemParamsv300${TOKEN}$`), kind: "impl" },
+    ],
+  },
+  // StabilityPool: v300 (newer CDP deploy) wins over unversioned legacy.
+  {
+    base: "StabilityPool",
+    patterns: [
+      { regex: new RegExp(`^StabilityPoolv300${TOKEN}$`), kind: "primary" },
+      { regex: new RegExp(`^StabilityPool${TOKEN}$`), kind: "legacy" },
+    ],
+  },
+  // NTT helpers — one library deployed per stable token, identical ABI.
+  {
+    base: "NttDeployHelper",
+    patterns: [
+      { regex: new RegExp(`^NttDeployHelper${TOKEN}$`), kind: "primary" },
+    ],
+  },
+];
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function prompt(question: string): Promise<string> {
@@ -83,7 +202,7 @@ function prompt(question: string): Promise<string> {
   });
 }
 
-function sanitizeName(name: string): string {
+export function sanitizeName(name: string): string {
   // Strip characters that aren't valid in JS identifiers or that would
   // create nested paths: dots, colons, slashes, and dashes
   // (e.g. "AUSD/USD" → "AUSDUSD", "ActivePool:v3.0.0-CHFm" → "ActivePoolv300CHFm").
@@ -1392,54 +1511,126 @@ async function main() {
     );
   }
 
-  // Collapse ChainlinkRelayerV1* per-pair instances into a single typed export.
-  // Every ChainlinkRelayerV1<Pair> shares the same implementation contract and
-  // therefore the same ABI — publishing N typed modules is 99% duplication. We
-  // emit one `ChainlinkRelayerV1` export with an `instances` map keyed by the
-  // pair suffix (e.g. "EURUSD") so consumers do:
-  //   new Contract(ChainlinkRelayerV1.instances.EURUSD[chainId], ChainlinkRelayerV1.abi, signer)
-  // Per-pair entries still live in contracts.json for registry lookups.
-  const CLR_PREFIX = "ChainlinkRelayerV1";
-  const clrInstances = new Map<string, Record<string, string>>();
-  let clrAbi: unknown[] | undefined;
-  // If the previous run already consolidated into abis/ChainlinkRelayerV1.json,
-  // reuse that ABI. Otherwise we fall through to reading it from a per-pair
-  // file below (which is the first-ever-consolidation case).
-  const consolidatedAbiPath = join(abisDir, `${CLR_PREFIX}.json`);
-  if (existsSync(consolidatedAbiPath)) {
-    clrAbi = JSON.parse(readFileSync(consolidatedAbiPath, "utf8")) as unknown[];
-  }
-  for (const name of [...allExportNames]) {
-    if (!name.startsWith(CLR_PREFIX) || name === CLR_PREFIX) continue;
-    const pair = name.slice(CLR_PREFIX.length);
-    if (!pair) continue;
-    const abiPath = join(abisDir, `${name}.json`);
-    if (existsSync(abiPath)) {
-      if (!clrAbi) {
-        clrAbi = JSON.parse(readFileSync(abiPath, "utf8")) as unknown[];
+  // Collapse instance groups (see INSTANCE_GROUPS at top of file). Each group
+  // folds its per-token / per-pair member exports into a single typed export
+  // with an `instances` map. Per-member entries still live in contracts.json
+  // for registry lookups; only the typed-export surface is consolidated.
+  const collapsedExports = new Set<string>();
+  for (const group of INSTANCE_GROUPS) {
+    const memberAddresses = new Map<string, Record<string, string>>();
+    const memberNames = new Set<string>();
+    // Per-(discriminator, chainId) precedence — tracks which kind currently
+    // owns each cell so a higher-precedence pattern can overwrite a lower one
+    // regardless of array iteration order. Lower number = higher precedence.
+    const cellKind = new Map<string, number>();
+
+    for (const pattern of group.patterns) {
+      const kindPrec = KIND_PRECEDENCE[pattern.kind];
+      for (const name of [...allExportNames]) {
+        if (name === group.base) continue;
+        const m = name.match(pattern.regex);
+        if (!m) continue;
+        const discriminator = m[1];
+        if (!discriminator) continue;
+        memberNames.add(name);
+        const merged = memberAddresses.get(discriminator) ?? {};
+        for (const [chainId, addr] of Object.entries(
+          addressesByName.get(name) ?? {},
+        )) {
+          const cellKey = `${discriminator}:${chainId}`;
+          const currentPrec = cellKind.get(cellKey);
+          if (currentPrec === undefined || kindPrec < currentPrec) {
+            merged[chainId] = addr;
+            cellKind.set(cellKey, kindPrec);
+          }
+        }
+        memberAddresses.set(discriminator, merged);
       }
-      unlinkSync(abiPath);
     }
-    const srcPath = join(srcDir, `${name}.ts`);
-    if (existsSync(srcPath)) unlinkSync(srcPath);
-    clrInstances.set(pair, addressesByName.get(name) ?? {});
-    allExportNames.delete(name);
-  }
-  let clrExportWritten = false;
-  if (clrAbi && clrInstances.size > 0) {
-    const abiPath = join(abisDir, `${CLR_PREFIX}.json`);
+    if (memberNames.size === 0) continue;
+
+    // Resolve ABI: prefer abis/<base>.json (already-consolidated form or the
+    // legacy base export's ABI). Fall back to any member's ABI on first
+    // consolidation. Verify all member ABIs match — throw if they diverge so
+    // we don't silently mismatch ABI to addresses (caught by main()'s catch
+    // and exits non-zero, never ships a half-collapsed package).
+    const baseAbiPath = join(abisDir, `${group.base}.json`);
+    let groupAbi: unknown[] | null = null;
+    let groupAbiSource = "";
+    if (existsSync(baseAbiPath)) {
+      groupAbi = JSON.parse(readFileSync(baseAbiPath, "utf8")) as unknown[];
+      groupAbiSource = group.base;
+    }
+    for (const name of memberNames) {
+      const memberAbiPath = join(abisDir, `${name}.json`);
+      if (!existsSync(memberAbiPath)) continue;
+      const memberAbi = JSON.parse(
+        readFileSync(memberAbiPath, "utf8"),
+      ) as unknown[];
+      if (!groupAbi) {
+        groupAbi = memberAbi;
+        groupAbiSource = name;
+        continue;
+      }
+      if (JSON.stringify(memberAbi) !== JSON.stringify(groupAbi)) {
+        throw new Error(
+          `Cannot collapse "${name}" into "${group.base}.instances": ABI differs from "${groupAbiSource}". ` +
+            `Either remove "${name}" from INSTANCE_GROUPS["${group.base}"] or fix the source so the ABIs match.`,
+        );
+      }
+    }
+    if (!groupAbi) continue;
+
+    // Migrate the existing base export's address (if any) into instances by
+    // matching against per-token addresses. Unmatched legacy addresses get
+    // dropped from the typed export but stay in contracts.json — usually
+    // these are pre-per-token impl addresses recorded under the unsuffixed
+    // name (e.g. early FXPriceFeed:v3.0.0-GBPm registered as just FXPriceFeed).
+    // The address is preserved in the registry; the typed export just
+    // surfaces the proxy via instances.<token> instead.
+    const baseAddrs = addressesByName.get(group.base);
+    if (baseAddrs) {
+      for (const [chainId, addr] of Object.entries(baseAddrs)) {
+        let matched = false;
+        for (const tokenAddrs of memberAddresses.values()) {
+          if (tokenAddrs[chainId] === addr) {
+            matched = true;
+            break;
+          }
+        }
+        if (!matched) {
+          console.warn(
+            `⚠  ${group.base}.address[${chainId}]=${addr} doesn't match any per-token entry — likely a pre-per-token impl address. Dropping from typed export; still in contracts.json.`,
+          );
+        }
+      }
+      addressesByName.delete(group.base);
+      allExportNames.delete(group.base);
+    }
+
+    // Remove member typed exports — both the per-export ABI file and the
+    // src/<name>.ts module, and pull them out of allExportNames so the
+    // per-export write loop below skips them.
+    for (const name of memberNames) {
+      const memberAbiPath = join(abisDir, `${name}.json`);
+      if (existsSync(memberAbiPath)) unlinkSync(memberAbiPath);
+      const memberSrcPath = join(srcDir, `${name}.ts`);
+      if (existsSync(memberSrcPath)) unlinkSync(memberSrcPath);
+      allExportNames.delete(name);
+    }
+
+    // Write the consolidated typed export.
     safeWriteFile(
-      abiPath,
-      JSON.stringify(clrAbi, null, 2) + "\n",
-      `ABI for ${CLR_PREFIX}`,
+      baseAbiPath,
+      JSON.stringify(groupAbi, null, 2) + "\n",
+      `ABI for ${group.base}`,
     );
-    const srcPath = join(srcDir, `${CLR_PREFIX}.ts`);
     safeWriteFile(
-      srcPath,
-      generateInstancesTsModule(CLR_PREFIX, clrAbi, clrInstances),
-      `TS module for ${CLR_PREFIX}`,
+      join(srcDir, `${group.base}.ts`),
+      generateInstancesTsModule(group.base, groupAbi, memberAddresses),
+      `TS module for ${group.base}`,
     );
-    clrExportWritten = true;
+    collapsedExports.add(group.base);
   }
 
   // Regenerate ALL TS modules from the complete state so that address maps
@@ -1464,8 +1655,7 @@ async function main() {
     if (existsSync(srcPath)) unlinkSync(srcPath);
   }
 
-  const typedExportNames = new Set<string>();
-  if (clrExportWritten) typedExportNames.add(CLR_PREFIX);
+  const typedExportNames = new Set<string>(collapsedExports);
   for (const name of allExportNames) {
     // Mock* contracts are testnet-only scaffolding — registry only, no typed
     // export. Any stale Mock*.ts/json on disk is cleaned up by the orphan
@@ -1539,7 +1729,13 @@ async function main() {
       };
 
   // Always enforce these fields so they survive incremental updates.
-  pkgJsonTemplate.files = ["dist", "abis", "contracts.json", "README.md"];
+  pkgJsonTemplate.files = [
+    "dist",
+    "abis",
+    "contracts.json",
+    "README.md",
+    "CHANGELOG.md",
+  ];
   pkgJsonTemplate.sideEffects = false;
 
   const exportsMap: Record<string, unknown> = {
@@ -1646,7 +1842,13 @@ async function main() {
 `);
 }
 
-main().catch((err: unknown) => {
-  console.error(err);
-  process.exit(1);
-});
+// Only run main() when invoked directly via `tsx scripts/gen-contracts-package.ts`.
+// Guards against side effects when the module is imported (e.g. by tests).
+const invokedDirectly =
+  process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+if (invokedDirectly) {
+  main().catch((err: unknown) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

@@ -846,8 +846,18 @@ export const StabilityPool = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5",
-    11142220: "0x1c424be1BE055a6C91ED9839a0E440E26814D1fC",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x8a68CBB2fFF99Ea400FF330DBD1a7904775B4b44",
+      11142220: "0x04D622Fc831B1d8146796FD58Ab3d163679f9403",
+    },
+    GBPm: {
+      42220: "0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5",
+      11142220: "0x1c424be1BE055a6C91ED9839a0E440E26814D1fC",
+    },
+    JPYm: {
+      42220: "0x107eCcE37c1FE3C8154B67F9ddD3d5A1446f084B",
+      11142220: "0xA3892165bC55C6Dc46527c8037BA05491f710b23",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

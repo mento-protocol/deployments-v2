@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/contracts",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Mento protocol contract ABIs and addresses",
   "type": "module",
   "main": "./dist/index.js",
@@ -20,6 +20,82 @@
     "./ChainlinkRelayerV1": {
       "types": "./dist/ChainlinkRelayerV1.d.ts",
       "import": "./dist/ChainlinkRelayerV1.js"
+    },
+    "./ActivePool": {
+      "types": "./dist/ActivePool.d.ts",
+      "import": "./dist/ActivePool.js"
+    },
+    "./AddressesRegistry": {
+      "types": "./dist/AddressesRegistry.d.ts",
+      "import": "./dist/AddressesRegistry.js"
+    },
+    "./BorrowerOperations": {
+      "types": "./dist/BorrowerOperations.d.ts",
+      "import": "./dist/BorrowerOperations.js"
+    },
+    "./CollateralRegistry": {
+      "types": "./dist/CollateralRegistry.d.ts",
+      "import": "./dist/CollateralRegistry.js"
+    },
+    "./CollSurplusPool": {
+      "types": "./dist/CollSurplusPool.d.ts",
+      "import": "./dist/CollSurplusPool.js"
+    },
+    "./DefaultPool": {
+      "types": "./dist/DefaultPool.d.ts",
+      "import": "./dist/DefaultPool.js"
+    },
+    "./GasPool": {
+      "types": "./dist/GasPool.d.ts",
+      "import": "./dist/GasPool.js"
+    },
+    "./HintHelpers": {
+      "types": "./dist/HintHelpers.d.ts",
+      "import": "./dist/HintHelpers.js"
+    },
+    "./MultiTroveGetter": {
+      "types": "./dist/MultiTroveGetter.d.ts",
+      "import": "./dist/MultiTroveGetter.js"
+    },
+    "./SortedTroves": {
+      "types": "./dist/SortedTroves.d.ts",
+      "import": "./dist/SortedTroves.js"
+    },
+    "./TroveManager": {
+      "types": "./dist/TroveManager.d.ts",
+      "import": "./dist/TroveManager.js"
+    },
+    "./TroveNFT": {
+      "types": "./dist/TroveNFT.d.ts",
+      "import": "./dist/TroveNFT.js"
+    },
+    "./MetadataNFT": {
+      "types": "./dist/MetadataNFT.d.ts",
+      "import": "./dist/MetadataNFT.js"
+    },
+    "./FixedAssetReader": {
+      "types": "./dist/FixedAssetReader.d.ts",
+      "import": "./dist/FixedAssetReader.js"
+    },
+    "./SSTORE2DataPointer": {
+      "types": "./dist/SSTORE2DataPointer.d.ts",
+      "import": "./dist/SSTORE2DataPointer.js"
+    },
+    "./FXPriceFeed": {
+      "types": "./dist/FXPriceFeed.d.ts",
+      "import": "./dist/FXPriceFeed.js"
+    },
+    "./SystemParams": {
+      "types": "./dist/SystemParams.d.ts",
+      "import": "./dist/SystemParams.js"
+    },
+    "./StabilityPool": {
+      "types": "./dist/StabilityPool.d.ts",
+      "import": "./dist/StabilityPool.js"
+    },
+    "./NttDeployHelper": {
+      "types": "./dist/NttDeployHelper.d.ts",
+      "import": "./dist/NttDeployHelper.js"
     },
     "./AddressSortedLinkedListWithMedian": {
       "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
@@ -80,26 +156,6 @@
     "./MedianDeltaBreaker": {
       "types": "./dist/MedianDeltaBreaker.d.ts",
       "import": "./dist/MedianDeltaBreaker.js"
-    },
-    "./NttDeployHelperCHFm": {
-      "types": "./dist/NttDeployHelperCHFm.d.ts",
-      "import": "./dist/NttDeployHelperCHFm.js"
-    },
-    "./NttDeployHelperEURm": {
-      "types": "./dist/NttDeployHelperEURm.d.ts",
-      "import": "./dist/NttDeployHelperEURm.js"
-    },
-    "./NttDeployHelperGBPm": {
-      "types": "./dist/NttDeployHelperGBPm.d.ts",
-      "import": "./dist/NttDeployHelperGBPm.js"
-    },
-    "./NttDeployHelperJPYm": {
-      "types": "./dist/NttDeployHelperJPYm.d.ts",
-      "import": "./dist/NttDeployHelperJPYm.js"
-    },
-    "./NttDeployHelperUSDm": {
-      "types": "./dist/NttDeployHelperUSDm.d.ts",
-      "import": "./dist/NttDeployHelperUSDm.js"
     },
     "./OpenLiquidityStrategy": {
       "types": "./dist/OpenLiquidityStrategy.d.ts",
@@ -197,38 +253,6 @@
       "types": "./dist/AUDm.d.ts",
       "import": "./dist/AUDm.js"
     },
-    "./ActivePool": {
-      "types": "./dist/ActivePool.d.ts",
-      "import": "./dist/ActivePool.js"
-    },
-    "./ActivePoolv300CHFm": {
-      "types": "./dist/ActivePoolv300CHFm.d.ts",
-      "import": "./dist/ActivePoolv300CHFm.js"
-    },
-    "./ActivePoolv300GBPm": {
-      "types": "./dist/ActivePoolv300GBPm.d.ts",
-      "import": "./dist/ActivePoolv300GBPm.js"
-    },
-    "./ActivePoolv300JPYm": {
-      "types": "./dist/ActivePoolv300JPYm.d.ts",
-      "import": "./dist/ActivePoolv300JPYm.js"
-    },
-    "./AddressesRegistry": {
-      "types": "./dist/AddressesRegistry.d.ts",
-      "import": "./dist/AddressesRegistry.js"
-    },
-    "./AddressesRegistryv300CHFm": {
-      "types": "./dist/AddressesRegistryv300CHFm.d.ts",
-      "import": "./dist/AddressesRegistryv300CHFm.js"
-    },
-    "./AddressesRegistryv300GBPm": {
-      "types": "./dist/AddressesRegistryv300GBPm.d.ts",
-      "import": "./dist/AddressesRegistryv300GBPm.js"
-    },
-    "./AddressesRegistryv300JPYm": {
-      "types": "./dist/AddressesRegistryv300JPYm.d.ts",
-      "import": "./dist/AddressesRegistryv300JPYm.js"
-    },
     "./BRLm": {
       "types": "./dist/BRLm.d.ts",
       "import": "./dist/BRLm.js"
@@ -236,22 +260,6 @@
     "./BiPoolManager": {
       "types": "./dist/BiPoolManager.d.ts",
       "import": "./dist/BiPoolManager.js"
-    },
-    "./BorrowerOperations": {
-      "types": "./dist/BorrowerOperations.d.ts",
-      "import": "./dist/BorrowerOperations.js"
-    },
-    "./BorrowerOperationsv300CHFm": {
-      "types": "./dist/BorrowerOperationsv300CHFm.d.ts",
-      "import": "./dist/BorrowerOperationsv300CHFm.js"
-    },
-    "./BorrowerOperationsv300GBPm": {
-      "types": "./dist/BorrowerOperationsv300GBPm.d.ts",
-      "import": "./dist/BorrowerOperationsv300GBPm.js"
-    },
-    "./BorrowerOperationsv300JPYm": {
-      "types": "./dist/BorrowerOperationsv300JPYm.d.ts",
-      "import": "./dist/BorrowerOperationsv300JPYm.js"
     },
     "./Broker": {
       "types": "./dist/Broker.d.ts",
@@ -273,38 +281,6 @@
       "types": "./dist/COPm.d.ts",
       "import": "./dist/COPm.js"
     },
-    "./CollSurplusPool": {
-      "types": "./dist/CollSurplusPool.d.ts",
-      "import": "./dist/CollSurplusPool.js"
-    },
-    "./CollSurplusPoolv300CHFm": {
-      "types": "./dist/CollSurplusPoolv300CHFm.d.ts",
-      "import": "./dist/CollSurplusPoolv300CHFm.js"
-    },
-    "./CollSurplusPoolv300GBPm": {
-      "types": "./dist/CollSurplusPoolv300GBPm.d.ts",
-      "import": "./dist/CollSurplusPoolv300GBPm.js"
-    },
-    "./CollSurplusPoolv300JPYm": {
-      "types": "./dist/CollSurplusPoolv300JPYm.d.ts",
-      "import": "./dist/CollSurplusPoolv300JPYm.js"
-    },
-    "./CollateralRegistry": {
-      "types": "./dist/CollateralRegistry.d.ts",
-      "import": "./dist/CollateralRegistry.js"
-    },
-    "./CollateralRegistryv300CHFm": {
-      "types": "./dist/CollateralRegistryv300CHFm.d.ts",
-      "import": "./dist/CollateralRegistryv300CHFm.js"
-    },
-    "./CollateralRegistryv300GBPm": {
-      "types": "./dist/CollateralRegistryv300GBPm.d.ts",
-      "import": "./dist/CollateralRegistryv300GBPm.js"
-    },
-    "./CollateralRegistryv300JPYm": {
-      "types": "./dist/CollateralRegistryv300JPYm.d.ts",
-      "import": "./dist/CollateralRegistryv300JPYm.js"
-    },
     "./ConstantProductPricingModule": {
       "types": "./dist/ConstantProductPricingModule.d.ts",
       "import": "./dist/ConstantProductPricingModule.js"
@@ -312,22 +288,6 @@
     "./ConstantSumPricingModule": {
       "types": "./dist/ConstantSumPricingModule.d.ts",
       "import": "./dist/ConstantSumPricingModule.js"
-    },
-    "./DefaultPool": {
-      "types": "./dist/DefaultPool.d.ts",
-      "import": "./dist/DefaultPool.js"
-    },
-    "./DefaultPoolv300CHFm": {
-      "types": "./dist/DefaultPoolv300CHFm.d.ts",
-      "import": "./dist/DefaultPoolv300CHFm.js"
-    },
-    "./DefaultPoolv300GBPm": {
-      "types": "./dist/DefaultPoolv300GBPm.d.ts",
-      "import": "./dist/DefaultPoolv300GBPm.js"
-    },
-    "./DefaultPoolv300JPYm": {
-      "types": "./dist/DefaultPoolv300JPYm.d.ts",
-      "import": "./dist/DefaultPoolv300JPYm.js"
     },
     "./EURm": {
       "types": "./dist/EURm.d.ts",
@@ -337,42 +297,6 @@
       "types": "./dist/FPMM.d.ts",
       "import": "./dist/FPMM.js"
     },
-    "./FXPriceFeedProxyCHFm": {
-      "types": "./dist/FXPriceFeedProxyCHFm.d.ts",
-      "import": "./dist/FXPriceFeedProxyCHFm.js"
-    },
-    "./FXPriceFeedProxyGBPm": {
-      "types": "./dist/FXPriceFeedProxyGBPm.d.ts",
-      "import": "./dist/FXPriceFeedProxyGBPm.js"
-    },
-    "./FXPriceFeedProxyJPYm": {
-      "types": "./dist/FXPriceFeedProxyJPYm.d.ts",
-      "import": "./dist/FXPriceFeedProxyJPYm.js"
-    },
-    "./FXPriceFeedv300CHFm": {
-      "types": "./dist/FXPriceFeedv300CHFm.d.ts",
-      "import": "./dist/FXPriceFeedv300CHFm.js"
-    },
-    "./FXPriceFeedv300GBPm": {
-      "types": "./dist/FXPriceFeedv300GBPm.d.ts",
-      "import": "./dist/FXPriceFeedv300GBPm.js"
-    },
-    "./FXPriceFeedv300JPYm": {
-      "types": "./dist/FXPriceFeedv300JPYm.d.ts",
-      "import": "./dist/FXPriceFeedv300JPYm.js"
-    },
-    "./FixedAssetReaderv300CHFm": {
-      "types": "./dist/FixedAssetReaderv300CHFm.d.ts",
-      "import": "./dist/FixedAssetReaderv300CHFm.js"
-    },
-    "./FixedAssetReaderv300GBPm": {
-      "types": "./dist/FixedAssetReaderv300GBPm.d.ts",
-      "import": "./dist/FixedAssetReaderv300GBPm.js"
-    },
-    "./FixedAssetReaderv300JPYm": {
-      "types": "./dist/FixedAssetReaderv300JPYm.d.ts",
-      "import": "./dist/FixedAssetReaderv300JPYm.js"
-    },
     "./GBPm": {
       "types": "./dist/GBPm.d.ts",
       "import": "./dist/GBPm.js"
@@ -380,38 +304,6 @@
     "./GHSm": {
       "types": "./dist/GHSm.d.ts",
       "import": "./dist/GHSm.js"
-    },
-    "./GasPool": {
-      "types": "./dist/GasPool.d.ts",
-      "import": "./dist/GasPool.js"
-    },
-    "./GasPoolv300CHFm": {
-      "types": "./dist/GasPoolv300CHFm.d.ts",
-      "import": "./dist/GasPoolv300CHFm.js"
-    },
-    "./GasPoolv300GBPm": {
-      "types": "./dist/GasPoolv300GBPm.d.ts",
-      "import": "./dist/GasPoolv300GBPm.js"
-    },
-    "./GasPoolv300JPYm": {
-      "types": "./dist/GasPoolv300JPYm.d.ts",
-      "import": "./dist/GasPoolv300JPYm.js"
-    },
-    "./HintHelpers": {
-      "types": "./dist/HintHelpers.d.ts",
-      "import": "./dist/HintHelpers.js"
-    },
-    "./HintHelpersv300CHFm": {
-      "types": "./dist/HintHelpersv300CHFm.d.ts",
-      "import": "./dist/HintHelpersv300CHFm.js"
-    },
-    "./HintHelpersv300GBPm": {
-      "types": "./dist/HintHelpersv300GBPm.d.ts",
-      "import": "./dist/HintHelpersv300GBPm.js"
-    },
-    "./HintHelpersv300JPYm": {
-      "types": "./dist/HintHelpersv300JPYm.d.ts",
-      "import": "./dist/HintHelpersv300JPYm.js"
     },
     "./JPYm": {
       "types": "./dist/JPYm.d.ts",
@@ -433,34 +325,6 @@
       "types": "./dist/MentoGovernor.d.ts",
       "import": "./dist/MentoGovernor.js"
     },
-    "./MetadataNFTv300CHFm": {
-      "types": "./dist/MetadataNFTv300CHFm.d.ts",
-      "import": "./dist/MetadataNFTv300CHFm.js"
-    },
-    "./MetadataNFTv300GBPm": {
-      "types": "./dist/MetadataNFTv300GBPm.d.ts",
-      "import": "./dist/MetadataNFTv300GBPm.js"
-    },
-    "./MetadataNFTv300JPYm": {
-      "types": "./dist/MetadataNFTv300JPYm.d.ts",
-      "import": "./dist/MetadataNFTv300JPYm.js"
-    },
-    "./MultiTroveGetter": {
-      "types": "./dist/MultiTroveGetter.d.ts",
-      "import": "./dist/MultiTroveGetter.js"
-    },
-    "./MultiTroveGetterv300CHFm": {
-      "types": "./dist/MultiTroveGetterv300CHFm.d.ts",
-      "import": "./dist/MultiTroveGetterv300CHFm.js"
-    },
-    "./MultiTroveGetterv300GBPm": {
-      "types": "./dist/MultiTroveGetterv300GBPm.d.ts",
-      "import": "./dist/MultiTroveGetterv300GBPm.js"
-    },
-    "./MultiTroveGetterv300JPYm": {
-      "types": "./dist/MultiTroveGetterv300JPYm.d.ts",
-      "import": "./dist/MultiTroveGetterv300JPYm.js"
-    },
     "./NGNm": {
       "types": "./dist/NGNm.d.ts",
       "import": "./dist/NGNm.js"
@@ -481,62 +345,6 @@
       "types": "./dist/Router.d.ts",
       "import": "./dist/Router.js"
     },
-    "./SSTORE2DataPointerv300CHFm": {
-      "types": "./dist/SSTORE2DataPointerv300CHFm.d.ts",
-      "import": "./dist/SSTORE2DataPointerv300CHFm.js"
-    },
-    "./SSTORE2DataPointerv300GBPm": {
-      "types": "./dist/SSTORE2DataPointerv300GBPm.d.ts",
-      "import": "./dist/SSTORE2DataPointerv300GBPm.js"
-    },
-    "./SSTORE2DataPointerv300JPYm": {
-      "types": "./dist/SSTORE2DataPointerv300JPYm.d.ts",
-      "import": "./dist/SSTORE2DataPointerv300JPYm.js"
-    },
-    "./SortedTroves": {
-      "types": "./dist/SortedTroves.d.ts",
-      "import": "./dist/SortedTroves.js"
-    },
-    "./SortedTrovesv300CHFm": {
-      "types": "./dist/SortedTrovesv300CHFm.d.ts",
-      "import": "./dist/SortedTrovesv300CHFm.js"
-    },
-    "./SortedTrovesv300GBPm": {
-      "types": "./dist/SortedTrovesv300GBPm.d.ts",
-      "import": "./dist/SortedTrovesv300GBPm.js"
-    },
-    "./SortedTrovesv300JPYm": {
-      "types": "./dist/SortedTrovesv300JPYm.d.ts",
-      "import": "./dist/SortedTrovesv300JPYm.js"
-    },
-    "./StabilityPool": {
-      "types": "./dist/StabilityPool.d.ts",
-      "import": "./dist/StabilityPool.js"
-    },
-    "./StabilityPoolCHFm": {
-      "types": "./dist/StabilityPoolCHFm.d.ts",
-      "import": "./dist/StabilityPoolCHFm.js"
-    },
-    "./StabilityPoolGBPm": {
-      "types": "./dist/StabilityPoolGBPm.d.ts",
-      "import": "./dist/StabilityPoolGBPm.js"
-    },
-    "./StabilityPoolJPYm": {
-      "types": "./dist/StabilityPoolJPYm.d.ts",
-      "import": "./dist/StabilityPoolJPYm.js"
-    },
-    "./StabilityPoolv300CHFm": {
-      "types": "./dist/StabilityPoolv300CHFm.d.ts",
-      "import": "./dist/StabilityPoolv300CHFm.js"
-    },
-    "./StabilityPoolv300GBPm": {
-      "types": "./dist/StabilityPoolv300GBPm.d.ts",
-      "import": "./dist/StabilityPoolv300GBPm.js"
-    },
-    "./StabilityPoolv300JPYm": {
-      "types": "./dist/StabilityPoolv300JPYm.d.ts",
-      "import": "./dist/StabilityPoolv300JPYm.js"
-    },
     "./StableTokenV2": {
       "types": "./dist/StableTokenV2.d.ts",
       "import": "./dist/StableTokenV2.js"
@@ -545,69 +353,9 @@
       "types": "./dist/StableTokenV3v301.d.ts",
       "import": "./dist/StableTokenV3v301.js"
     },
-    "./SystemParams": {
-      "types": "./dist/SystemParams.d.ts",
-      "import": "./dist/SystemParams.js"
-    },
-    "./SystemParamsProxyCHFm": {
-      "types": "./dist/SystemParamsProxyCHFm.d.ts",
-      "import": "./dist/SystemParamsProxyCHFm.js"
-    },
-    "./SystemParamsProxyGBPm": {
-      "types": "./dist/SystemParamsProxyGBPm.d.ts",
-      "import": "./dist/SystemParamsProxyGBPm.js"
-    },
-    "./SystemParamsProxyJPYm": {
-      "types": "./dist/SystemParamsProxyJPYm.d.ts",
-      "import": "./dist/SystemParamsProxyJPYm.js"
-    },
-    "./SystemParamsv300CHFm": {
-      "types": "./dist/SystemParamsv300CHFm.d.ts",
-      "import": "./dist/SystemParamsv300CHFm.js"
-    },
-    "./SystemParamsv300GBPm": {
-      "types": "./dist/SystemParamsv300GBPm.d.ts",
-      "import": "./dist/SystemParamsv300GBPm.js"
-    },
-    "./SystemParamsv300JPYm": {
-      "types": "./dist/SystemParamsv300JPYm.d.ts",
-      "import": "./dist/SystemParamsv300JPYm.js"
-    },
     "./TimelockController": {
       "types": "./dist/TimelockController.d.ts",
       "import": "./dist/TimelockController.js"
-    },
-    "./TroveManager": {
-      "types": "./dist/TroveManager.d.ts",
-      "import": "./dist/TroveManager.js"
-    },
-    "./TroveManagerv300CHFm": {
-      "types": "./dist/TroveManagerv300CHFm.d.ts",
-      "import": "./dist/TroveManagerv300CHFm.js"
-    },
-    "./TroveManagerv300GBPm": {
-      "types": "./dist/TroveManagerv300GBPm.d.ts",
-      "import": "./dist/TroveManagerv300GBPm.js"
-    },
-    "./TroveManagerv300JPYm": {
-      "types": "./dist/TroveManagerv300JPYm.d.ts",
-      "import": "./dist/TroveManagerv300JPYm.js"
-    },
-    "./TroveNFT": {
-      "types": "./dist/TroveNFT.d.ts",
-      "import": "./dist/TroveNFT.js"
-    },
-    "./TroveNFTv300CHFm": {
-      "types": "./dist/TroveNFTv300CHFm.d.ts",
-      "import": "./dist/TroveNFTv300CHFm.js"
-    },
-    "./TroveNFTv300GBPm": {
-      "types": "./dist/TroveNFTv300GBPm.d.ts",
-      "import": "./dist/TroveNFTv300GBPm.js"
-    },
-    "./TroveNFTv300JPYm": {
-      "types": "./dist/TroveNFTv300JPYm.d.ts",
-      "import": "./dist/TroveNFTv300JPYm.js"
     },
     "./USDm": {
       "types": "./dist/USDm.d.ts",
@@ -625,10 +373,6 @@
       "types": "./dist/ZARm.d.ts",
       "import": "./dist/ZARm.js"
     },
-    "./MentoToken": {
-      "types": "./dist/MentoToken.d.ts",
-      "import": "./dist/MentoToken.js"
-    },
     "./Emission": {
       "types": "./dist/Emission.d.ts",
       "import": "./dist/Emission.js"
@@ -640,6 +384,10 @@
     "./MentoRouter": {
       "types": "./dist/MentoRouter.d.ts",
       "import": "./dist/MentoRouter.js"
+    },
+    "./MentoToken": {
+      "types": "./dist/MentoToken.d.ts",
+      "import": "./dist/MentoToken.js"
     },
     "./ReserveLiquidityStrategyv300": {
       "types": "./dist/ReserveLiquidityStrategyv300.d.ts",

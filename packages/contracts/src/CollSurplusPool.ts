@@ -191,8 +191,18 @@ export const CollSurplusPool = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0xfFF48ee3bd2D534E35b54D538de30a9d7709d4B6",
-    11142220: "0x4b8FD6eFe77B56a27c90eb46586c8903E8D0A63a",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0xC45a4781609fA9BA1ad6D904630A2F92425715d4",
+      11142220: "0x7Ec5998cEF615949202f3314161Fa4d431e5183a",
+    },
+    GBPm: {
+      42220: "0xfFF48ee3bd2D534E35b54D538de30a9d7709d4B6",
+      11142220: "0x4b8FD6eFe77B56a27c90eb46586c8903E8D0A63a",
+    },
+    JPYm: {
+      42220: "0x52f659C562f5bA9668Ac71DB2ac860aF10040b15",
+      11142220: "0xCBBcfFdC94c7f9A95c5F7489F6D1d988f4AD0576",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

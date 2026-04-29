@@ -187,8 +187,17 @@ export const MultiTroveGetter = {
       stateMutability: "view",
     },
   ] as const,
-  address: {
-    42220: "0x78fd33d2bCe0389cF41e15947B0EB0cE9dF8327F",
-    11142220: "0xED59EDfB9fCD06bb13d568ab548eC101fBb77a54",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0xD1A70D2179828bB85c22707BBC86F01649B0951C",
+      11142220: "0xC86e4ffc47BAAf0e0D064df4d7b8ae2158C92A77",
+    },
+    GBPm: {
+      42220: "0x78fd33d2bCe0389cF41e15947B0EB0cE9dF8327F",
+      11142220: "0xED59EDfB9fCD06bb13d568ab548eC101fBb77a54",
+    },
+    JPYm: {
+      42220: "0xc20470FaD503810E883e00349f6fCe1853e43B23",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

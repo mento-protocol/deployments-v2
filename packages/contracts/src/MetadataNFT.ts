@@ -1,4 +1,4 @@
-export const MetadataNFTv300JPYm = {
+export const MetadataNFT = {
   abi: [
     {
       type: "constructor",
@@ -208,8 +208,18 @@ export const MetadataNFTv300JPYm = {
       stateMutability: "view",
     },
   ] as const,
-  address: {
-    42220: "0x5D074Bad0d17a7CB2C1AE36ab6E25f811Bc0903f",
-    11142220: "0x7981c46BF9aDb022218974eAdCdE161F1c9b15ba",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x293b542Aca2A28Bb658660eb139E551214A54c2c",
+      11142220: "0x8B60108fB99942eEdF7faa9202FD09aFc8A310F9",
+    },
+    GBPm: {
+      42220: "0x5e06ADD8bD01dCBEF0C20d6fC25A8C96166B86A4",
+      11142220: "0x549d09E8104ad88d53BA82fe45090e121725586C",
+    },
+    JPYm: {
+      42220: "0x5D074Bad0d17a7CB2C1AE36ab6E25f811Bc0903f",
+      11142220: "0x7981c46BF9aDb022218974eAdCdE161F1c9b15ba",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

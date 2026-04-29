@@ -1,2 +1,7 @@
 # Prettier friendly markdownlint config (all formatting rules disabled)
 extends: markdownlint/style/prettier
+
+# Keep a Changelog format repeats `### Added/Changed/Removed` under each
+# release heading; that's by design, not a duplicate-content bug.
+MD024:
+  siblings_only: true

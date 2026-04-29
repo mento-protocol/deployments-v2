@@ -38,17 +38,42 @@ const gbpm = new Contract(GBPm.address[chainId], GBPm.abi, signer);
 
 Each named export is `{ abi: [...] as const, address: Partial<Record<number, `0x${string}`>> }`. The `abi` is a fully typed const tuple (enabling viem type inference); `address` accepts any numeric chain ID so `client.chain.id` works without casting.
 
-One exception: `ChainlinkRelayerV1` is a single export that covers all rate-feed instances. Every `ChainlinkRelayerV1<Pair>` deployment shares the same ABI, so instead of publishing 30+ near-identical modules, the package exposes the ABI once and the per-pair addresses under `instances` keyed by the pair suffix:
+### Per-token / per-pair contracts use `instances`
+
+Some contracts get deployed once per stable token (e.g. `ActivePool` on Celo Mainnet has separate `CHFm`, `GBPm`, `JPYm` instances) or once per rate feed pair (`ChainlinkRelayerV1` has `EURUSD`, `JPYUSD`, etc.). All instances share the same ABI, so they're folded into a single typed export with an `instances` map keyed by the discriminator:
 
 ```typescript
-import { ChainlinkRelayerV1 } from "@mento-protocol/contracts";
+import {
+  ActivePool,
+  ChainlinkRelayerV1,
+  NttDeployHelper,
+} from "@mento-protocol/contracts";
 
+// Per-token CDP contracts
+const activePool = new Contract(
+  ActivePool.instances.CHFm[42220],
+  ActivePool.abi,
+  signer,
+);
+
+// Per-pair rate-feed relayers
 const relayer = new Contract(
   ChainlinkRelayerV1.instances.EURUSD[chainId],
   ChainlinkRelayerV1.abi,
   signer,
 );
+
+// Per-token NTT helpers
+const helper = new Contract(
+  NttDeployHelper.instances.USDm[143],
+  NttDeployHelper.abi,
+  signer,
+);
 ```
+
+Exports that use `instances`: `ChainlinkRelayerV1` (per pair), `NttDeployHelper`, and the v3.0.0 CDP family — `ActivePool`, `AddressesRegistry`, `BorrowerOperations`, `CollateralRegistry`, `CollSurplusPool`, `DefaultPool`, `FixedAssetReader`, `FXPriceFeed`, `GasPool`, `HintHelpers`, `MetadataNFT`, `MultiTroveGetter`, `SortedTroves`, `SSTORE2DataPointer`, `StabilityPool`, `SystemParams`, `TroveManager`, `TroveNFT` (all per token: `CHFm` / `GBPm` / `JPYm`).
+
+For `FXPriceFeed` and `SystemParams`, `instances.<token>` is the **proxy** address (what you call). The implementation address remains in `contracts.json` as `<base>v300<token>` if you need it for tooling.
 
 ### Import the address registry
 
