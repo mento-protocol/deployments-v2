@@ -87,15 +87,15 @@ const changelogPath = join(packagesDir, "CHANGELOG.md");
 //   impl    — implementation behind a proxy
 //   legacy  — older unversioned deployment, kept only when no newer match exists
 
-type PatternKind = "proxy" | "primary" | "impl" | "legacy";
-const KIND_PRECEDENCE: Record<PatternKind, number> = {
+export type PatternKind = "proxy" | "primary" | "impl" | "legacy";
+export const KIND_PRECEDENCE: Record<PatternKind, number> = {
   proxy: 0,
   primary: 0,
   impl: 1,
   legacy: 2,
 };
 
-interface InstanceGroup {
+export interface InstanceGroup {
   base: string;
   patterns: { regex: RegExp; kind: PatternKind }[];
 }
@@ -104,7 +104,7 @@ interface InstanceGroup {
 // previous `[A-Z]{2,5}m` regex (which would silently accept any contract whose
 // name happened to end in 2-5 uppercase letters + 'm', e.g. an attacker-named
 // `EVILm`). Add new tokens here when they're deployed.
-const TOKENS = [
+export const TOKENS = [
   "USDm",
   "EURm",
   "GBPm",
@@ -121,7 +121,7 @@ const TOKENS = [
   "XOFm",
   "ZARm",
 ] as const;
-const TOKEN = `(${TOKENS.join("|")})`;
+export const TOKEN = `(${TOKENS.join("|")})`;
 
 const cdpPrimary = (base: string) => ({
   base,
@@ -130,7 +130,7 @@ const cdpPrimary = (base: string) => ({
   ],
 });
 
-const INSTANCE_GROUPS: InstanceGroup[] = [
+export const INSTANCE_GROUPS: InstanceGroup[] = [
   // Per-pair Chainlink relayers — every ChainlinkRelayerV1<Pair> shares the
   // same ABI. Pair is uppercase letters only (e.g. EURUSD, JPYUSD); narrowing
   // to `[A-Z]+` prevents accidental absorption of e.g. ChainlinkRelayerV1Factory.
@@ -198,7 +198,7 @@ function prompt(question: string): Promise<string> {
   });
 }
 
-function sanitizeName(name: string): string {
+export function sanitizeName(name: string): string {
   // Strip characters that aren't valid in JS identifiers or that would
   // create nested paths: dots, colons, slashes, and dashes
   // (e.g. "AUSD/USD" → "AUSDUSD", "ActivePool:v3.0.0-CHFm" → "ActivePoolv300CHFm").
@@ -1832,7 +1832,13 @@ async function main() {
 `);
 }
 
-main().catch((err: unknown) => {
-  console.error(err);
-  process.exit(1);
-});
+// Only run main() when invoked directly via `tsx scripts/gen-contracts-package.ts`.
+// Guards against side effects when the module is imported (e.g. by tests).
+const invokedDirectly =
+  process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
+if (invokedDirectly) {
+  main().catch((err: unknown) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
