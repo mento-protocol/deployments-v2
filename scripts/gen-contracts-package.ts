@@ -78,92 +78,111 @@ const changelogPath = join(packagesDir, "CHANGELOG.md");
 // `<Base>.instances.<Token>[chainId]` map (the same shape ChainlinkRelayerV1
 // already uses for its per-pair deployments).
 //
-// Each pattern's first capture group is the discriminator. Patterns within a
-// group are tried in order: an earlier pattern's address wins on conflict, so
-// list proxy patterns before their impl counterparts to surface the proxy
-// (user-facing) address in `instances`.
+// Each pattern's first capture group is the discriminator. Each pattern carries
+// an explicit `kind` so the address-precedence semantics survive future array
+// reorders: when two patterns in a group both match the same (discriminator,
+// chainId), the higher-precedence kind wins. Order from most to least preferred:
+//   proxy   — user-facing, the address consumers should call
+//   primary — direct deployment (no proxy/impl distinction)
+//   impl    — implementation behind a proxy
+//   legacy  — older unversioned deployment, kept only when no newer match exists
+
+type PatternKind = "proxy" | "primary" | "impl" | "legacy";
+const KIND_PRECEDENCE: Record<PatternKind, number> = {
+  proxy: 0,
+  primary: 0,
+  impl: 1,
+  legacy: 2,
+};
 
 interface InstanceGroup {
   base: string;
-  patterns: RegExp[];
+  patterns: { regex: RegExp; kind: PatternKind }[];
 }
 
-const TOKEN = "([A-Z]{2,5}m)";
+// Allowlist of stablecoin tokens used as discriminators. Tightened from the
+// previous `[A-Z]{2,5}m` regex (which would silently accept any contract whose
+// name happened to end in 2-5 uppercase letters + 'm', e.g. an attacker-named
+// `EVILm`). Add new tokens here when they're deployed.
+const TOKENS = [
+  "USDm",
+  "EURm",
+  "GBPm",
+  "CHFm",
+  "JPYm",
+  "AUDm",
+  "BRLm",
+  "CADm",
+  "COPm",
+  "GHSm",
+  "KESm",
+  "NGNm",
+  "PHPm",
+  "XOFm",
+  "ZARm",
+] as const;
+const TOKEN = `(${TOKENS.join("|")})`;
+
+const cdpPrimary = (base: string) => ({
+  base,
+  patterns: [
+    { regex: new RegExp(`^${base}v300${TOKEN}$`), kind: "primary" as const },
+  ],
+});
+
 const INSTANCE_GROUPS: InstanceGroup[] = [
-  { base: "ChainlinkRelayerV1", patterns: [/^ChainlinkRelayerV1(.+)$/] },
+  // Per-pair Chainlink relayers — every ChainlinkRelayerV1<Pair> shares the
+  // same ABI. Pair is uppercase letters only (e.g. EURUSD, JPYUSD); narrowing
+  // to `[A-Z]+` prevents accidental absorption of e.g. ChainlinkRelayerV1Factory.
+  {
+    base: "ChainlinkRelayerV1",
+    patterns: [{ regex: /^ChainlinkRelayerV1([A-Z]+)$/, kind: "primary" }],
+  },
   // CDP per-token contracts — direct CREATE3 deployments, no proxy.
-  { base: "ActivePool", patterns: [new RegExp(`^ActivePoolv300${TOKEN}$`)] },
-  {
-    base: "AddressesRegistry",
-    patterns: [new RegExp(`^AddressesRegistryv300${TOKEN}$`)],
-  },
-  {
-    base: "BorrowerOperations",
-    patterns: [new RegExp(`^BorrowerOperationsv300${TOKEN}$`)],
-  },
-  {
-    base: "CollateralRegistry",
-    patterns: [new RegExp(`^CollateralRegistryv300${TOKEN}$`)],
-  },
-  {
-    base: "CollSurplusPool",
-    patterns: [new RegExp(`^CollSurplusPoolv300${TOKEN}$`)],
-  },
-  { base: "DefaultPool", patterns: [new RegExp(`^DefaultPoolv300${TOKEN}$`)] },
-  { base: "GasPool", patterns: [new RegExp(`^GasPoolv300${TOKEN}$`)] },
-  { base: "HintHelpers", patterns: [new RegExp(`^HintHelpersv300${TOKEN}$`)] },
-  {
-    base: "MultiTroveGetter",
-    patterns: [new RegExp(`^MultiTroveGetterv300${TOKEN}$`)],
-  },
-  {
-    base: "SortedTroves",
-    patterns: [new RegExp(`^SortedTrovesv300${TOKEN}$`)],
-  },
-  {
-    base: "TroveManager",
-    patterns: [new RegExp(`^TroveManagerv300${TOKEN}$`)],
-  },
-  { base: "TroveNFT", patterns: [new RegExp(`^TroveNFTv300${TOKEN}$`)] },
-  { base: "MetadataNFT", patterns: [new RegExp(`^MetadataNFTv300${TOKEN}$`)] },
-  {
-    base: "FixedAssetReader",
-    patterns: [new RegExp(`^FixedAssetReaderv300${TOKEN}$`)],
-  },
-  {
-    base: "SSTORE2DataPointer",
-    patterns: [new RegExp(`^SSTORE2DataPointerv300${TOKEN}$`)],
-  },
-  // CDP support contracts where the proxy is user-facing; both proxy and impl
-  // share the same ABI so we can collapse them under one base. Proxy first
-  // so its address wins.
+  cdpPrimary("ActivePool"),
+  cdpPrimary("AddressesRegistry"),
+  cdpPrimary("BorrowerOperations"),
+  cdpPrimary("CollateralRegistry"),
+  cdpPrimary("CollSurplusPool"),
+  cdpPrimary("DefaultPool"),
+  cdpPrimary("GasPool"),
+  cdpPrimary("HintHelpers"),
+  cdpPrimary("MultiTroveGetter"),
+  cdpPrimary("SortedTroves"),
+  cdpPrimary("TroveManager"),
+  cdpPrimary("TroveNFT"),
+  cdpPrimary("MetadataNFT"),
+  cdpPrimary("FixedAssetReader"),
+  cdpPrimary("SSTORE2DataPointer"),
+  // Proxy/impl pairs — proxy is user-facing, impl shares the same ABI.
   {
     base: "FXPriceFeed",
     patterns: [
-      new RegExp(`^FXPriceFeedProxy${TOKEN}$`),
-      new RegExp(`^FXPriceFeedv300${TOKEN}$`),
+      { regex: new RegExp(`^FXPriceFeedProxy${TOKEN}$`), kind: "proxy" },
+      { regex: new RegExp(`^FXPriceFeedv300${TOKEN}$`), kind: "impl" },
     ],
   },
   {
     base: "SystemParams",
     patterns: [
-      new RegExp(`^SystemParamsProxy${TOKEN}$`),
-      new RegExp(`^SystemParamsv300${TOKEN}$`),
+      { regex: new RegExp(`^SystemParamsProxy${TOKEN}$`), kind: "proxy" },
+      { regex: new RegExp(`^SystemParamsv300${TOKEN}$`), kind: "impl" },
     ],
   },
-  // StabilityPool: both v300 and unversioned per-token entries exist; v300
-  // first so newer CDP-deploy addresses win.
+  // StabilityPool: v300 (newer CDP deploy) wins over unversioned legacy.
   {
     base: "StabilityPool",
     patterns: [
-      new RegExp(`^StabilityPoolv300${TOKEN}$`),
-      new RegExp(`^StabilityPool${TOKEN}$`),
+      { regex: new RegExp(`^StabilityPoolv300${TOKEN}$`), kind: "primary" },
+      { regex: new RegExp(`^StabilityPool${TOKEN}$`), kind: "legacy" },
     ],
   },
   // NTT helpers — one library deployed per stable token, identical ABI.
   {
     base: "NttDeployHelper",
-    patterns: [new RegExp(`^NttDeployHelper${TOKEN}$`)],
+    patterns: [
+      { regex: new RegExp(`^NttDeployHelper${TOKEN}$`), kind: "primary" },
+    ],
   },
 ];
 
@@ -1496,14 +1515,16 @@ async function main() {
   for (const group of INSTANCE_GROUPS) {
     const memberAddresses = new Map<string, Record<string, string>>();
     const memberNames = new Set<string>();
+    // Per-(discriminator, chainId) precedence — tracks which kind currently
+    // owns each cell so a higher-precedence pattern can overwrite a lower one
+    // regardless of array iteration order. Lower number = higher precedence.
+    const cellKind = new Map<string, number>();
 
-    // Iterate patterns in order — addresses from earlier patterns win on
-    // (discriminator, chainId) conflict, so listing proxy patterns before
-    // their impl counterparts surfaces the proxy address.
     for (const pattern of group.patterns) {
+      const kindPrec = KIND_PRECEDENCE[pattern.kind];
       for (const name of [...allExportNames]) {
         if (name === group.base) continue;
-        const m = name.match(pattern);
+        const m = name.match(pattern.regex);
         if (!m) continue;
         const discriminator = m[1];
         if (!discriminator) continue;
@@ -1512,7 +1533,12 @@ async function main() {
         for (const [chainId, addr] of Object.entries(
           addressesByName.get(name) ?? {},
         )) {
-          if (merged[chainId] === undefined) merged[chainId] = addr;
+          const cellKey = `${discriminator}:${chainId}`;
+          const currentPrec = cellKind.get(cellKey);
+          if (currentPrec === undefined || kindPrec < currentPrec) {
+            merged[chainId] = addr;
+            cellKind.set(cellKey, kindPrec);
+          }
         }
         memberAddresses.set(discriminator, merged);
       }
@@ -1521,8 +1547,9 @@ async function main() {
 
     // Resolve ABI: prefer abis/<base>.json (already-consolidated form or the
     // legacy base export's ABI). Fall back to any member's ABI on first
-    // consolidation. Verify all member ABIs match — bail with an error if
-    // they diverge so we don't silently mismatch ABI to addresses.
+    // consolidation. Verify all member ABIs match — throw if they diverge so
+    // we don't silently mismatch ABI to addresses (caught by main()'s catch
+    // and exits non-zero, never ships a half-collapsed package).
     const baseAbiPath = join(abisDir, `${group.base}.json`);
     let groupAbi: unknown[] | null = null;
     let groupAbiSource = "";
@@ -1542,19 +1569,21 @@ async function main() {
         continue;
       }
       if (JSON.stringify(memberAbi) !== JSON.stringify(groupAbi)) {
-        console.error(
-          `✖  Cannot collapse "${name}" into "${group.base}.instances": ABI differs from "${groupAbiSource}".`,
+        throw new Error(
+          `Cannot collapse "${name}" into "${group.base}.instances": ABI differs from "${groupAbiSource}". ` +
+            `Either remove "${name}" from INSTANCE_GROUPS["${group.base}"] or fix the source so the ABIs match.`,
         );
-        groupAbi = null;
-        break;
       }
     }
     if (!groupAbi) continue;
 
     // Migrate the existing base export's address (if any) into instances by
     // matching against per-token addresses. Unmatched legacy addresses get
-    // dropped from the typed export but stay in contracts.json — log a
-    // warning so we don't lose track silently.
+    // dropped from the typed export but stay in contracts.json — usually
+    // these are pre-per-token impl addresses recorded under the unsuffixed
+    // name (e.g. early FXPriceFeed:v3.0.0-GBPm registered as just FXPriceFeed).
+    // The address is preserved in the registry; the typed export just
+    // surfaces the proxy via instances.<token> instead.
     const baseAddrs = addressesByName.get(group.base);
     if (baseAddrs) {
       for (const [chainId, addr] of Object.entries(baseAddrs)) {
@@ -1567,7 +1596,7 @@ async function main() {
         }
         if (!matched) {
           console.warn(
-            `⚠  ${group.base}.address[${chainId}]=${addr} doesn't match any per-token entry — dropping from typed export (still in contracts.json).`,
+            `⚠  ${group.base}.address[${chainId}]=${addr} doesn't match any per-token entry — likely a pre-per-token impl address. Dropping from typed export; still in contracts.json.`,
           );
         }
       }
