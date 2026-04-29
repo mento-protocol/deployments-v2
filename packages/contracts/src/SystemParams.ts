@@ -475,8 +475,17 @@ export const SystemParams = {
       inputs: [],
     },
   ] as const,
-  address: {
-    42220: "0x064D8bCC79711cF51dF7Ca0a7fe531A271Cd74E9",
-    11142220: "0xdf1E9330f328Ea8Fd3E974b1a2510A9791712318",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0xe604507642469bE4699FeBDf4A701D9A104dd173",
+      11142220: "0x511a6b540Bf480c65e212ad14a3d272C37ad4FE1",
+    },
+    GBPm: {
+      42220: "0x70536e44d1D9238BA8E35Ffe63Bb388a63F0DE51",
+      11142220: "0x70855d7826d3Ae92b2B3ae154eE6945754dD4Fe5",
+    },
+    JPYm: {
+      42220: "0xC7829C5D1701aB366D248ca384C4caefD87EcDF1",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

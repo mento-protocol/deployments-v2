@@ -2132,8 +2132,18 @@ export const TroveManager = {
       inputs: [],
     },
   ] as const,
-  address: {
-    42220: "0xb38aEf2bF4e34B997330D626EBCd7629De3885C9",
-    11142220: "0x3ADFF16949513480E051F451748Ee8B801731c46",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x4E105FEF015db26320C077427BD605AceAd9262E",
+      11142220: "0xC21dC07Ec1707D315A7eFF31A6556E628E43a3F8",
+    },
+    GBPm: {
+      42220: "0xb38aEf2bF4e34B997330D626EBCd7629De3885C9",
+      11142220: "0x3ADFF16949513480E051F451748Ee8B801731c46",
+    },
+    JPYm: {
+      42220: "0xD2E65Af47d927D5e84F384ae6bAC4F97C3dA65Df",
+      11142220: "0xED54259166ebBfE72083fc37Ee2a00e922fBa84d",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

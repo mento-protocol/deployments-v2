@@ -316,8 +316,17 @@ export const CollateralRegistry = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0x1bEDD4334335522B0a0e8e610d326B16B0a605Fb",
-    11142220: "0xc674b6562eaf4E40056aad628E398F58cA0b2B91",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x8530ee22A4AdC37B02d1Cd37fC120508663fEdf8",
+      11142220: "0xfCCC67DD7F46d0f9B94f564137bB1a85a9999874",
+    },
+    GBPm: {
+      42220: "0x1bEDD4334335522B0a0e8e610d326B16B0a605Fb",
+      11142220: "0xc674b6562eaf4E40056aad628E398F58cA0b2B91",
+    },
+    JPYm: {
+      42220: "0x343815Db498D60a04ecf666F2FF9E5d6A2AC6d0E",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

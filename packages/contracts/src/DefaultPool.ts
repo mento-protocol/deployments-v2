@@ -207,8 +207,18 @@ export const DefaultPool = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0x95191e52d01eC060cEA753CDADfEEB07b78D0047",
-    11142220: "0x8f0E218fE0EB3Ef1dAF3eEAF1Cbf4Ec6d29b6fe4",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x542191E79732A4498f263e793Cc47942956f33f7",
+      11142220: "0xfaad27924d950848B5c8BB47B5ADA5E3e2909277",
+    },
+    GBPm: {
+      42220: "0x95191e52d01eC060cEA753CDADfEEB07b78D0047",
+      11142220: "0x8f0E218fE0EB3Ef1dAF3eEAF1Cbf4Ec6d29b6fe4",
+    },
+    JPYm: {
+      42220: "0x094C0cD42f21289AD7279285dD3793CD8C998916",
+      11142220: "0x2793853b7297fc3a979BddB614b4E2Cef09B063e",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

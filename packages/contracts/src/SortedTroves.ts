@@ -501,8 +501,18 @@ export const SortedTroves = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b",
-    11142220: "0x714CBd00Be7B39A9319a434a670d51C86F994E3d",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x06D9ac9912546E773884F4D965f6322278Bbd391",
+      11142220: "0x93BAdeF46DC6a244daA1CA9e73E5c97643B0BC61",
+    },
+    GBPm: {
+      42220: "0x46D0C9e51e05D6ff38B2a19D6310488f3112Bf9b",
+      11142220: "0x714CBd00Be7B39A9319a434a670d51C86F994E3d",
+    },
+    JPYm: {
+      42220: "0xf024701eDbE5d8A9869eFC8e01d7f95D3ef29A77",
+      11142220: "0x11cffE0d72f79214495D738af7CB076bcc5516E1",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

@@ -1,4 +1,4 @@
-export const FXPriceFeedProxyJPYm = {
+export const FXPriceFeed = {
   abi: [
     {
       type: "constructor",
@@ -443,7 +443,17 @@ export const FXPriceFeedProxyJPYm = {
       inputs: [],
     },
   ] as const,
-  address: {
-    42220: "0x8409587c8BA4f6850AEE09A32B86022C3E88AD33",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x8a94073809E9Ae55626c2FD413826bF93f755a73",
+      11142220: "0xf3218ddb3F1A61CcCdFC5C0e0aCfED0C09C61F0B",
+    },
+    GBPm: {
+      42220: "0xBBB144A67f4403112b4C895Cc85d5EE4F90013DE",
+      11142220: "0x78eE16e1b0E6103b4A00db42178a99A6D681d539",
+    },
+    JPYm: {
+      42220: "0x8409587c8BA4f6850AEE09A32B86022C3E88AD33",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

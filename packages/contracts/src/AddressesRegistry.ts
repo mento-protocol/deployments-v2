@@ -661,8 +661,18 @@ export const AddressesRegistry = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0xB3136DBadB14Ab587FFa91545538126938Fe0C6E",
-    11142220: "0x8b33D626E8d79388889d404fBC515Ed131c9508e",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0xCa70801D91576d069190d1D4CFDDEbdc237A4537",
+      11142220: "0x1e3CCCC62cEBd9Bf2a26Ba512E3abee086816c58",
+    },
+    GBPm: {
+      42220: "0xB3136DBadB14Ab587FFa91545538126938Fe0C6E",
+      11142220: "0x8b33D626E8d79388889d404fBC515Ed131c9508e",
+    },
+    JPYm: {
+      42220: "0x8f99Aac2FE09A1390617D4AcDD1519f775eE931A",
+      11142220: "0x812e5ccec5e55b81f4270898fdf1c916e3a284fb",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

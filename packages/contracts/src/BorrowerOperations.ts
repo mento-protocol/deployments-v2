@@ -1401,8 +1401,18 @@ export const BorrowerOperations = {
       inputs: [],
     },
   ] as const,
-  address: {
-    42220: "0x8ec9A81871F816F1EF007a82293703057A943B8A",
-    11142220: "0x7fCd2F75Ed661E76f969E6D0347a93028a099d6D",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x7Fe90CF5A41473179fCE89Df55bc9afcd1c5c0be",
+      11142220: "0x4f21869fcd5813184d324872cb732f4Eb8e9F5aB",
+    },
+    GBPm: {
+      42220: "0x8ec9A81871F816F1EF007a82293703057A943B8A",
+      11142220: "0x7fCd2F75Ed661E76f969E6D0347a93028a099d6D",
+    },
+    JPYm: {
+      42220: "0x4944Fc84D675a0Cc4758A8098C1619A2E4724a7F",
+      11142220: "0x6EECDE8082e2C6039fEa88a66fb71145C216BbFD",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

@@ -706,8 +706,18 @@ export const ActivePool = {
       anonymous: false,
     },
   ] as const,
-  address: {
-    42220: "0xa7873F4Bf2A1ea2EB20B1e8A992C4748e78473b2",
-    11142220: "0x50651599c8A778732C34d1C181EEB05Ff2Ef9d73",
-  } as Partial<Record<number, `0x${string}`>>,
+  instances: {
+    CHFm: {
+      42220: "0x9947CEe121586fC31b0b0a162A40D6516979E7cB",
+      11142220: "0x69B32DA57d04c23f7e58a9D8caA22095C9671954",
+    },
+    GBPm: {
+      42220: "0xa7873F4Bf2A1ea2EB20B1e8A992C4748e78473b2",
+      11142220: "0x50651599c8A778732C34d1C181EEB05Ff2Ef9d73",
+    },
+    JPYm: {
+      42220: "0x90b8A5Ad63bDB2a3DC636DA926aB5c039EA426a4",
+      11142220: "0xC2839d42690cF4eBcB31A77F874Ecc3eaFCe1d82",
+    },
+  } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };
