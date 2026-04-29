@@ -69,6 +69,7 @@ const contractsJsonPath = join(packagesDir, "contracts.json");
 const abisDir = join(packagesDir, "abis");
 const srcDir = join(packagesDir, "src");
 const pkgJsonPath = join(packagesDir, "package.json");
+const changelogPath = join(packagesDir, "CHANGELOG.md");
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -404,6 +405,105 @@ function diffContracts(
   }
 
   return { added, removed, changed };
+}
+
+// ─── CHANGELOG ────────────────────────────────────────────────────────────────
+
+const CHANGELOG_HEADER = `# Changelog
+
+All notable changes to \`@mento-protocol/contracts\` are documented here.
+Auto-generated from \`mento-deployments-v2\` by \`scripts/gen-contracts-package.ts\`.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+`;
+
+const UNRELEASED_HEADING = "## [Unreleased]";
+
+interface ChangelogEntries {
+  added: string[];
+  removed: string[];
+  changed: string[];
+}
+
+function parseUnreleased(body: string): {
+  before: string;
+  unreleased: ChangelogEntries;
+  after: string;
+} {
+  const empty: ChangelogEntries = { added: [], removed: [], changed: [] };
+  const idx = body.indexOf(UNRELEASED_HEADING);
+  if (idx === -1) return { before: body, unreleased: empty, after: "" };
+
+  const after = body.slice(idx + UNRELEASED_HEADING.length);
+  // Section ends at the next "## " heading (a real release) or EOF.
+  const nextSectionMatch = after.match(/\n## \[/);
+  const sectionBody = nextSectionMatch
+    ? after.slice(0, nextSectionMatch.index)
+    : after;
+  const tail = nextSectionMatch ? after.slice(nextSectionMatch.index) : "";
+
+  const buckets: ChangelogEntries = { added: [], removed: [], changed: [] };
+  let current: keyof ChangelogEntries | null = null;
+  for (const line of sectionBody.split("\n")) {
+    if (line.startsWith("### Added")) current = "added";
+    else if (line.startsWith("### Removed")) current = "removed";
+    else if (line.startsWith("### Changed")) current = "changed";
+    else if (line.startsWith("## ")) current = null;
+    else if (current && line.startsWith("- ")) {
+      buckets[current].push(line.slice(2));
+    }
+  }
+
+  return { before: body.slice(0, idx), unreleased: buckets, after: tail };
+}
+
+function renderUnreleased(entries: ChangelogEntries): string {
+  const sections: string[] = [UNRELEASED_HEADING, ""];
+  const labels: [keyof ChangelogEntries, string][] = [
+    ["added", "Added"],
+    ["changed", "Changed"],
+    ["removed", "Removed"],
+  ];
+  for (const [key, label] of labels) {
+    if (entries[key].length === 0) continue;
+    sections.push(`### ${label}`, "");
+    for (const item of entries[key]) sections.push(`- ${item}`);
+    sections.push("");
+  }
+  return sections.join("\n");
+}
+
+function updateChangelog(
+  changelogPath: string,
+  added: string[],
+  removed: string[],
+  changed: string[],
+): void {
+  const existing = existsSync(changelogPath)
+    ? readFileSync(changelogPath, "utf8")
+    : `${CHANGELOG_HEADER}\n${UNRELEASED_HEADING}\n`;
+
+  const parsed = parseUnreleased(existing);
+  const merged: ChangelogEntries = {
+    added: [
+      ...new Set([...parsed.unreleased.added, ...added.map((s) => `\`${s}\``)]),
+    ].sort(),
+    removed: [
+      ...new Set([
+        ...parsed.unreleased.removed,
+        ...removed.map((s) => `\`${s}\``),
+      ]),
+    ].sort(),
+    changed: [...new Set([...parsed.unreleased.changed, ...changed])].sort(),
+  };
+
+  const before =
+    parsed.before.length > 0 ? parsed.before : `${CHANGELOG_HEADER}\n`;
+  const after = parsed.after;
+  safeWriteFile(
+    changelogPath,
+    `${before.replace(/\n+$/, "\n\n")}${renderUnreleased(merged)}${after}`,
+    "CHANGELOG.md",
+  );
 }
 
 function sortContractsByNamespace(contracts: ContractsJson): ContractsJson {
@@ -1331,6 +1431,9 @@ async function main() {
     console.log("\n✓ No changes detected — no new release required.");
     return;
   }
+
+  updateChangelog(changelogPath, added, removed, changed);
+  console.log(`✓ Updated CHANGELOG.md [Unreleased] section`);
 
   console.log(
     "\n─── Changes ──────────────────────────────────────────────────",

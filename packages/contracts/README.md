@@ -148,7 +148,7 @@ npm run contracts:update -- --namespace=monad-mainnet
 npm run contracts:update -- --namespace=testnet-v2-rc5
 ```
 
-The script merges results into a single `contracts.json` and regenerates `abis/` and `src/`. It is safe to run multiple times — if nothing changed it prints "No changes detected" and exits without modifying any files.
+The script merges results into a single `contracts.json` and regenerates `abis/` and `src/`. When the regen produces a non-empty diff, the Added/Removed/Changed entries are also appended to the `## [Unreleased]` section of `CHANGELOG.md`. It is safe to run multiple times — if nothing changed it prints "No changes detected" and exits without modifying any files.
 
 If `out/` is missing, the script will prompt you to run `forge build` first (needed to read ABIs from compiled Foundry artifacts).
 
@@ -184,6 +184,8 @@ git push && git push --tags
 ```
 
 `prepublishOnly` runs `tsc` automatically before every publish, so `dist/` is always built from the current `src/`. You never need to run `npm run build` manually before publishing.
+
+The `version` lifecycle hook renames `## [Unreleased]` in `CHANGELOG.md` to `## [<new-version>] - <today>` and stages it, so the version commit always carries the matching changelog entry. If you ran `npm run contracts:update` between regen and bump, those entries are exactly what gets released.
 
 ### Naming rules
 

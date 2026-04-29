@@ -7,7 +7,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "version": "node ../../scripts/release-changelog.mjs $npm_package_version && git add CHANGELOG.md"
   },
   "exports": {
     ".": {
@@ -360,6 +361,10 @@
       "types": "./dist/ZARm.d.ts",
       "import": "./dist/ZARm.js"
     },
+    "./MentoToken": {
+      "types": "./dist/MentoToken.d.ts",
+      "import": "./dist/MentoToken.js"
+    },
     "./Emission": {
       "types": "./dist/Emission.d.ts",
       "import": "./dist/Emission.js"
@@ -371,10 +376,6 @@
     "./MentoRouter": {
       "types": "./dist/MentoRouter.d.ts",
       "import": "./dist/MentoRouter.js"
-    },
-    "./MentoToken": {
-      "types": "./dist/MentoToken.d.ts",
-      "import": "./dist/MentoToken.js"
     },
     "./ReserveLiquidityStrategyv300": {
       "types": "./dist/ReserveLiquidityStrategyv300.d.ts",
