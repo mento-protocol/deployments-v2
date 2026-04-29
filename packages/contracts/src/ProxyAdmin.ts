@@ -1,57 +1,25 @@
 export const ProxyAdmin = {
   abi: [
     {
-      type: "function",
-      name: "changeProxyAdmin",
+      type: "constructor",
       inputs: [
         {
-          name: "proxy",
-          type: "address",
-          internalType: "contract ITransparentUpgradeableProxy",
-        },
-        {
-          name: "newAdmin",
+          name: "initialOwner",
           type: "address",
           internalType: "address",
         },
       ],
-      outputs: [],
       stateMutability: "nonpayable",
     },
     {
       type: "function",
-      name: "getProxyAdmin",
-      inputs: [
-        {
-          name: "proxy",
-          type: "address",
-          internalType: "contract ITransparentUpgradeableProxy",
-        },
-      ],
+      name: "UPGRADE_INTERFACE_VERSION",
+      inputs: [],
       outputs: [
         {
           name: "",
-          type: "address",
-          internalType: "address",
-        },
-      ],
-      stateMutability: "view",
-    },
-    {
-      type: "function",
-      name: "getProxyImplementation",
-      inputs: [
-        {
-          name: "proxy",
-          type: "address",
-          internalType: "contract ITransparentUpgradeableProxy",
-        },
-      ],
-      outputs: [
-        {
-          name: "",
-          type: "address",
-          internalType: "address",
+          type: "string",
+          internalType: "string",
         },
       ],
       stateMutability: "view",
@@ -82,24 +50,6 @@ export const ProxyAdmin = {
       inputs: [
         {
           name: "newOwner",
-          type: "address",
-          internalType: "address",
-        },
-      ],
-      outputs: [],
-      stateMutability: "nonpayable",
-    },
-    {
-      type: "function",
-      name: "upgrade",
-      inputs: [
-        {
-          name: "proxy",
-          type: "address",
-          internalType: "contract ITransparentUpgradeableProxy",
-        },
-        {
-          name: "implementation",
           type: "address",
           internalType: "address",
         },
@@ -148,6 +98,28 @@ export const ProxyAdmin = {
         },
       ],
       anonymous: false,
+    },
+    {
+      type: "error",
+      name: "OwnableInvalidOwner",
+      inputs: [
+        {
+          name: "owner",
+          type: "address",
+          internalType: "address",
+        },
+      ],
+    },
+    {
+      type: "error",
+      name: "OwnableUnauthorizedAccount",
+      inputs: [
+        {
+          name: "account",
+          type: "address",
+          internalType: "address",
+        },
+      ],
     },
   ] as const,
   address: {

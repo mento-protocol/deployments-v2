@@ -83,9 +83,10 @@ function prompt(question: string): Promise<string> {
 }
 
 function sanitizeName(name: string): string {
-  // Remove dots, colons, and slashes that would make invalid JS identifiers or
-  // create nested paths (e.g. "AUSD/USD" → "AUSDUSD")
-  return name.replace(/\./g, "").replace(/:/g, "").replace(/\//g, "");
+  // Strip characters that aren't valid in JS identifiers or that would
+  // create nested paths: dots, colons, slashes, and dashes
+  // (e.g. "AUSD/USD" → "AUSDUSD", "ActivePool:v3.0.0-CHFm" → "ActivePoolv300CHFm").
+  return name.replace(/[.:/-]/g, "");
 }
 
 function ensureDirFor(path: string): void {
@@ -185,15 +186,66 @@ function resolveAbiPath(
   };
 }
 
-function readAbi(solFile: string, contractName: string): unknown[] | null {
-  const artifactPath = join(outDir, solFile, `${contractName}.json`);
-  if (!existsSync(artifactPath)) {
-    return null;
+// When `additional_compiler_profiles` is configured in foundry.toml, Foundry
+// emits per-profile artifacts (`<Name>.default.json`, `<Name>.no-opt.json`,
+// etc.) instead of the plain `<Name>.json`. ABIs are identical across
+// profiles, so any variant is a valid source.
+// Order matters: check the more specific suffixes first because `.json` is a
+// suffix of all of them and would otherwise win the `endsWith` race.
+const ARTIFACT_FILENAME_VARIANTS = [".default.json", ".no-opt.json", ".json"];
+
+// Lazy-built map of contractName → relative artifact path under out/, used to
+// recover the ABI when the registry's (solFile, contractName) pair doesn't
+// exist on disk (e.g. FixedAssetReader lives in FixedAssets.sol/, not
+// FixedAssetReader.sol/).
+let artifactIndex: Map<string, string> | null = null;
+function buildArtifactIndex(): Map<string, string> {
+  if (artifactIndex) return artifactIndex;
+  artifactIndex = new Map();
+  if (!existsSync(outDir)) return artifactIndex;
+  for (const solDir of readdirSync(outDir)) {
+    const solDirPath = join(outDir, solDir);
+    let entries: string[];
+    try {
+      entries = readdirSync(solDirPath);
+    } catch {
+      continue;
+    }
+    for (const file of entries) {
+      if (!file.endsWith(".json")) continue;
+      const variant = ARTIFACT_FILENAME_VARIANTS.find((v) => file.endsWith(v));
+      if (!variant) continue;
+      const contractName = file.slice(0, -variant.length);
+      // First match wins so plain .json beats .default.json beats .no-opt.json.
+      if (!artifactIndex.has(contractName)) {
+        artifactIndex.set(contractName, join(solDir, file));
+      }
+    }
   }
-  const artifact = JSON.parse(readFileSync(artifactPath, "utf8")) as {
-    abi: unknown[];
-  };
-  return artifact.abi ?? null;
+  return artifactIndex;
+}
+
+function readAbi(solFile: string, contractName: string): unknown[] | null {
+  for (const variant of ARTIFACT_FILENAME_VARIANTS) {
+    const artifactPath = join(outDir, solFile, `${contractName}${variant}`);
+    if (existsSync(artifactPath)) {
+      const artifact = JSON.parse(readFileSync(artifactPath, "utf8")) as {
+        abi: unknown[];
+      };
+      return artifact.abi ?? null;
+    }
+  }
+  // Fallback: contract lives in a differently-named .sol file (e.g.
+  // FixedAssetReader is defined in FixedAssets.sol). Scan the out/ index by
+  // contract name to recover the ABI.
+  const indexedPath = buildArtifactIndex().get(contractName);
+  if (indexedPath) {
+    const artifact = JSON.parse(
+      readFileSync(join(outDir, indexedPath), "utf8"),
+    ) as { abi: unknown[] };
+    return artifact.abi ?? null;
+  }
+  return null;
 }
 
 /**

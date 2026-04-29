@@ -16,5 +16,7 @@
   "Proxy:PUSO": "PHPm",
   "TransparentUpgradeableProxy:USDm": "USDmSpoke",
   "TransparentUpgradeableProxy:EURm": "EURmSpoke",
-  "TransparentUpgradeableProxy:GBPm": "GBPmSpoke"
+  "TransparentUpgradeableProxy:GBPm": "GBPmSpoke",
+  "TransparentUpgradeableProxy:CHFm": "CHFmSpoke",
+  "TransparentUpgradeableProxy:JPYm": "JPYmSpoke"
 }

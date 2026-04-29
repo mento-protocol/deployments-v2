@@ -1,0 +1,215 @@
+export const MetadataNFTv300JPYm = {
+  abi: [
+    {
+      type: "constructor",
+      inputs: [
+        {
+          name: "_assetReader",
+          type: "address",
+          internalType: "contract FixedAssetReader",
+        },
+      ],
+      stateMutability: "nonpayable",
+    },
+    {
+      type: "function",
+      name: "assetReader",
+      inputs: [],
+      outputs: [
+        {
+          name: "",
+          type: "address",
+          internalType: "contract FixedAssetReader",
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "attributes",
+      inputs: [
+        {
+          name: "_troveData",
+          type: "tuple",
+          internalType: "struct IMetadataNFT.TroveData",
+          components: [
+            {
+              name: "_tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_owner",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_collToken",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_boldToken",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_collAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_debtAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_interestRate",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_status",
+              type: "uint8",
+              internalType: "enum ITroveManager.Status",
+            },
+          ],
+        },
+      ],
+      outputs: [
+        {
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
+      ],
+      stateMutability: "pure",
+    },
+    {
+      type: "function",
+      name: "dynamicTextComponents",
+      inputs: [
+        {
+          name: "_troveData",
+          type: "tuple",
+          internalType: "struct IMetadataNFT.TroveData",
+          components: [
+            {
+              name: "_tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_owner",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_collToken",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_boldToken",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_collAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_debtAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_interestRate",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_status",
+              type: "uint8",
+              internalType: "enum ITroveManager.Status",
+            },
+          ],
+        },
+      ],
+      outputs: [
+        {
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
+      ],
+      stateMutability: "view",
+    },
+    {
+      type: "function",
+      name: "uri",
+      inputs: [
+        {
+          name: "_troveData",
+          type: "tuple",
+          internalType: "struct IMetadataNFT.TroveData",
+          components: [
+            {
+              name: "_tokenId",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_owner",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_collToken",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_boldToken",
+              type: "address",
+              internalType: "address",
+            },
+            {
+              name: "_collAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_debtAmount",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_interestRate",
+              type: "uint256",
+              internalType: "uint256",
+            },
+            {
+              name: "_status",
+              type: "uint8",
+              internalType: "enum ITroveManager.Status",
+            },
+          ],
+        },
+      ],
+      outputs: [
+        {
+          name: "",
+          type: "string",
+          internalType: "string",
+        },
+      ],
+      stateMutability: "view",
+    },
+  ] as const,
+  address: {
+    42220: "0x5D074Bad0d17a7CB2C1AE36ab6E25f811Bc0903f",
+    11142220: "0x7981c46BF9aDb022218974eAdCdE161F1c9b15ba",
+  } as Partial<Record<number, `0x${string}`>>,
+};
