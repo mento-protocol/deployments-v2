@@ -151,7 +151,7 @@ function deriveExportName(
 function resolveAbiPath(
   entry: DeploymentEntry,
   allEntries: Record<string, DeploymentEntry>,
-): { solFile: string; contractName: string } | null {
+): { solFile: string; contractName: string; sourcePath?: string } | null {
   let target = entry;
 
   // For proxies, follow to the implementation to get the right ABI
@@ -171,7 +171,11 @@ function resolveAbiPath(
   if (artifactPath) {
     // e.g. "lib/mento-core/contracts/swap/FPMMFactory.sol"
     const solFile = basename(artifactPath); // "FPMMFactory.sol"
-    return { solFile, contractName: target.contractName };
+    return {
+      solFile,
+      contractName: target.contractName,
+      sourcePath: artifactPath,
+    };
   }
 
   // Fallback: assume <ContractName>.sol/<ContractName>.json. Strip any
@@ -225,15 +229,102 @@ function buildArtifactIndex(): Map<string, string> {
   return artifactIndex;
 }
 
-function readAbi(solFile: string, contractName: string): unknown[] | null {
+// Find an artifact in `out/` whose `compilationTarget` matches the given
+// source path. Uses `metadata.settings.compilationTarget` (canonical "this
+// artifact was compiled from this source") rather than `metadata.sources`
+// (the full import graph — many artifacts include any given .sol just
+// because they transitively import it).
+function findArtifactByCompilationTarget(sourcePath: string): string | null {
+  if (!existsSync(outDir)) return null;
+  for (const solDir of readdirSync(outDir)) {
+    const solDirPath = join(outDir, solDir);
+    let entries: string[];
+    try {
+      entries = readdirSync(solDirPath);
+    } catch {
+      continue;
+    }
+    for (const file of entries) {
+      if (!file.endsWith(".json")) continue;
+      const variant = ARTIFACT_FILENAME_VARIANTS.find((v) => file.endsWith(v));
+      if (!variant) continue;
+      let artifact: {
+        metadata?: {
+          settings?: { compilationTarget?: Record<string, string> };
+        };
+      };
+      try {
+        artifact = JSON.parse(readFileSync(join(solDirPath, file), "utf8"));
+      } catch {
+        continue;
+      }
+      const target = artifact.metadata?.settings?.compilationTarget ?? {};
+      if (Object.prototype.hasOwnProperty.call(target, sourcePath)) {
+        return join(solDir, file);
+      }
+    }
+  }
+  return null;
+}
+
+// Read an artifact's `compilationTarget` to verify it was compiled from the
+// expected source path. Returns true if compilationTarget includes
+// `sourcePath`, or null if the file can't be read / has no metadata.
+function artifactMatchesSource(
+  artifactPath: string,
+  sourcePath: string,
+): boolean | null {
+  let artifact: {
+    metadata?: {
+      settings?: { compilationTarget?: Record<string, string> };
+    };
+  };
+  try {
+    artifact = JSON.parse(readFileSync(artifactPath, "utf8"));
+  } catch {
+    return null;
+  }
+  const target = artifact.metadata?.settings?.compilationTarget;
+  if (!target) return null;
+  return Object.prototype.hasOwnProperty.call(target, sourcePath);
+}
+
+function readAbi(
+  solFile: string,
+  contractName: string,
+  registrySource?: string,
+): unknown[] | null {
   for (const variant of ARTIFACT_FILENAME_VARIANTS) {
     const artifactPath = join(outDir, solFile, `${contractName}${variant}`);
-    if (existsSync(artifactPath)) {
-      const artifact = JSON.parse(readFileSync(artifactPath, "utf8")) as {
-        abi: unknown[];
-      };
-      return artifact.abi ?? null;
+    if (!existsSync(artifactPath)) continue;
+    // If the registry told us the source path, verify the artifact at the
+    // basename-derived location was actually compiled from it. Foundry can
+    // place multiple artifacts of the same name at different out/ depths
+    // (e.g. `out/ProxyAdmin.sol/` vs `out/transparent/ProxyAdmin.sol/`) and
+    // the basename-only lookup picks one arbitrarily. When we have the
+    // expected source path, fall back to a compilationTarget search if the
+    // candidate doesn't match.
+    if (registrySource) {
+      const matches = artifactMatchesSource(artifactPath, registrySource);
+      if (matches === false) {
+        const corrected = findArtifactByCompilationTarget(registrySource);
+        if (corrected) {
+          const artifact = JSON.parse(
+            readFileSync(join(outDir, corrected), "utf8"),
+          ) as { abi: unknown[] };
+          return artifact.abi ?? null;
+        }
+        // Couldn't find a better match — fall through and use what we have,
+        // logging so basename ambiguities surface in CI output.
+        console.warn(
+          `⚠  Artifact at "${artifactPath}" was not compiled from "${registrySource}" — no better match found in out/. Shipping ABI from the basename-derived path anyway.`,
+        );
+      }
     }
+    const artifact = JSON.parse(readFileSync(artifactPath, "utf8")) as {
+      abi: unknown[];
+    };
+    return artifact.abi ?? null;
   }
   // Fallback: contract lives in a differently-named .sol file (e.g.
   // FixedAssetReader is defined in FixedAssets.sol). Scan the out/ index by
@@ -803,7 +894,11 @@ async function main() {
       chainId: entry.chainId,
     });
 
-    const abi = readAbi(abiTarget.solFile, abiTarget.contractName);
+    const abi = readAbi(
+      abiTarget.solFile,
+      abiTarget.contractName,
+      abiTarget.sourcePath,
+    );
     if (!abi) {
       missingAbi.push({
         trebKey,
