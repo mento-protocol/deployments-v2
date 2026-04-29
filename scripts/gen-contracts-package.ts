@@ -69,6 +69,7 @@ const contractsJsonPath = join(packagesDir, "contracts.json");
 const abisDir = join(packagesDir, "abis");
 const srcDir = join(packagesDir, "src");
 const pkgJsonPath = join(packagesDir, "package.json");
+const changelogPath = join(packagesDir, "CHANGELOG.md");
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -404,6 +405,126 @@ function diffContracts(
   }
 
   return { added, removed, changed };
+}
+
+// ─── CHANGELOG ────────────────────────────────────────────────────────────────
+
+const CHANGELOG_HEADER = `# Changelog
+
+All notable changes to \`@mento-protocol/contracts\` are documented here.
+Auto-generated from \`mento-deployments-v2\` by \`scripts/gen-contracts-package.ts\`.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+`;
+
+const UNRELEASED_HEADING = "## [Unreleased]";
+
+interface ChangelogEntries {
+  added: string[];
+  removed: string[];
+  changed: string[];
+}
+
+// `changed` bullet format from diffContracts: "<chainId>/<ns>/<name>: ...".
+// Returns the prefix up to (but not including) the colon — the natural dedup
+// key when multiple regens touch the same contract.
+function extractChangedKey(line: string): string {
+  const colon = line.indexOf(":");
+  return colon === -1 ? line : line.slice(0, colon);
+}
+
+function parseUnreleased(body: string): {
+  before: string;
+  unreleased: ChangelogEntries;
+  after: string;
+} {
+  const empty: ChangelogEntries = { added: [], removed: [], changed: [] };
+  const idx = body.indexOf(UNRELEASED_HEADING);
+  if (idx === -1) return { before: body, unreleased: empty, after: "" };
+
+  const after = body.slice(idx + UNRELEASED_HEADING.length);
+  // Section ends at the next "## " heading (a real release) or EOF.
+  const nextSectionMatch = after.match(/\n## \[/);
+  const sectionBody = nextSectionMatch
+    ? after.slice(0, nextSectionMatch.index)
+    : after;
+  const tail = nextSectionMatch ? after.slice(nextSectionMatch.index) : "";
+
+  const buckets: ChangelogEntries = { added: [], removed: [], changed: [] };
+  let current: keyof ChangelogEntries | null = null;
+  for (const line of sectionBody.split("\n")) {
+    if (line.startsWith("### Added")) current = "added";
+    else if (line.startsWith("### Removed")) current = "removed";
+    else if (line.startsWith("### Changed")) current = "changed";
+    else if (line.startsWith("## ")) current = null;
+    else if (current && line.startsWith("- ")) {
+      buckets[current].push(line.slice(2));
+    }
+  }
+
+  return { before: body.slice(0, idx), unreleased: buckets, after: tail };
+}
+
+function renderUnreleased(entries: ChangelogEntries): string {
+  const sections: string[] = [UNRELEASED_HEADING, ""];
+  const labels: [keyof ChangelogEntries, string][] = [
+    ["added", "Added"],
+    ["changed", "Changed"],
+    ["removed", "Removed"],
+  ];
+  for (const [key, label] of labels) {
+    if (entries[key].length === 0) continue;
+    sections.push(`### ${label}`, "");
+    for (const item of entries[key]) sections.push(`- ${item}`);
+    sections.push("");
+  }
+  return sections.join("\n");
+}
+
+function updateChangelog(
+  changelogPath: string,
+  added: string[],
+  removed: string[],
+  changed: string[],
+): void {
+  const existing = existsSync(changelogPath)
+    ? readFileSync(changelogPath, "utf8")
+    : `${CHANGELOG_HEADER}\n${UNRELEASED_HEADING}\n`;
+
+  const parsed = parseUnreleased(existing);
+  // Dedup added/removed by full string identity (the bullet is just a contract
+  // identifier so byte equality is the right key).
+  const dedupSimple = (existing: string[], next: string[]): string[] =>
+    [...new Set([...existing, ...next])].sort();
+  // Dedup changed by the "<chainId>/<namespace>/<name>:" prefix so a second
+  // regen that bumps the same contract again (0xA→0xB then later 0xB→0xC)
+  // collapses to one line keyed on the latest state, instead of leaving a
+  // stale arrow chain. Newer entries (passed in `changed`) win.
+  const dedupChanged = (existing: string[], next: string[]): string[] => {
+    const byKey = new Map<string, string>();
+    for (const line of existing) byKey.set(extractChangedKey(line), line);
+    for (const line of next) byKey.set(extractChangedKey(line), line);
+    return [...byKey.values()].sort();
+  };
+  const merged: ChangelogEntries = {
+    added: dedupSimple(
+      parsed.unreleased.added,
+      added.map((s) => `\`${s}\``),
+    ),
+    removed: dedupSimple(
+      parsed.unreleased.removed,
+      removed.map((s) => `\`${s}\``),
+    ),
+    changed: dedupChanged(parsed.unreleased.changed, changed),
+  };
+
+  const before =
+    parsed.before.length > 0 ? parsed.before : `${CHANGELOG_HEADER}\n`;
+  const after = parsed.after;
+  safeWriteFile(
+    changelogPath,
+    `${before.replace(/\n+$/, "\n\n")}${renderUnreleased(merged)}${after}`,
+    "CHANGELOG.md",
+  );
 }
 
 function sortContractsByNamespace(contracts: ContractsJson): ContractsJson {
@@ -1331,6 +1452,9 @@ async function main() {
     console.log("\n✓ No changes detected — no new release required.");
     return;
   }
+
+  updateChangelog(changelogPath, added, removed, changed);
+  console.log(`✓ Updated CHANGELOG.md [Unreleased] section`);
 
   console.log(
     "\n─── Changes ──────────────────────────────────────────────────",

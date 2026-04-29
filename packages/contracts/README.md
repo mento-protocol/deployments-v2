@@ -148,7 +148,7 @@ npm run contracts:update -- --namespace=monad-mainnet
 npm run contracts:update -- --namespace=testnet-v2-rc5
 ```
 
-The script merges results into a single `contracts.json` and regenerates `abis/` and `src/`. It is safe to run multiple times — if nothing changed it prints "No changes detected" and exits without modifying any files.
+The script merges results into a single `contracts.json` and regenerates `abis/` and `src/`. When the regen produces a non-empty diff, the Added/Removed/Changed entries are also appended to the `## [Unreleased]` section of `CHANGELOG.md`. It is safe to run multiple times — if nothing changed it prints "No changes detected" and exits without modifying any files.
 
 If `out/` is missing, the script will prompt you to run `forge build` first (needed to read ABIs from compiled Foundry artifacts).
 
@@ -184,6 +184,15 @@ git push && git push --tags
 ```
 
 `prepublishOnly` runs `tsc` automatically before every publish, so `dist/` is always built from the current `src/`. You never need to run `npm run build` manually before publishing.
+
+The `version` lifecycle hook renames `## [Unreleased]` in `CHANGELOG.md` to `## [<new-version>] - <today>` and stages it, so the version commit always carries the matching changelog entry. If you ran `npm run contracts:update` between regen and bump, those entries are exactly what gets released.
+
+The hook **fails the version bump** if `[Unreleased]` is empty, or if the new version heading already exists in `CHANGELOG.md`. To override either guard (e.g. for a metadata-only release), invoke the rename script directly with `--allow-empty`: `node ../../scripts/release-changelog.mjs <version> --allow-empty`.
+
+Dedup notes for entries appended by `npm run contracts:update`:
+
+- `### Added` and `### Removed` are deduped by full-string match on the contract identifier.
+- `### Changed` is deduped by `<chainId>/<ns>/<name>` prefix — a follow-up regen that bumps the same contract again collapses to a single line keyed on the latest state, instead of leaving a stale arrow chain.
 
 ### Naming rules
 

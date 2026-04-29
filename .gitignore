@@ -19,3 +19,4 @@ docs/
 node_modules
 .treb/priv/
 .treb/*.lock
+.reviews/
