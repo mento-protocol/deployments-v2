@@ -126,7 +126,11 @@ export const TOKEN = `(${TOKENS.join("|")})`;
 const cdpPrimary = (base: string) => ({
   base,
   patterns: [
-    { regex: new RegExp(`^${base}v300${TOKEN}$`), kind: "primary" as const },
+    {
+      // trunk-ignore(semgrep/javascript.lang.security.audit.detect-non-literal-regexp.detect-non-literal-regexp): `base` is a hardcoded string literal from INSTANCE_GROUPS below, not user input.
+      regex: new RegExp(`^${base}v300${TOKEN}$`),
+      kind: "primary" as const,
+    },
   ],
 });
 
@@ -1725,7 +1729,13 @@ async function main() {
       };
 
   // Always enforce these fields so they survive incremental updates.
-  pkgJsonTemplate.files = ["dist", "abis", "contracts.json", "README.md"];
+  pkgJsonTemplate.files = [
+    "dist",
+    "abis",
+    "contracts.json",
+    "README.md",
+    "CHANGELOG.md",
+  ];
   pkgJsonTemplate.sideEffects = false;
 
   const exportsMap: Record<string, unknown> = {

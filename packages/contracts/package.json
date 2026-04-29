@@ -373,10 +373,6 @@
       "types": "./dist/ZARm.d.ts",
       "import": "./dist/ZARm.js"
     },
-    "./MentoToken": {
-      "types": "./dist/MentoToken.d.ts",
-      "import": "./dist/MentoToken.js"
-    },
     "./Emission": {
       "types": "./dist/Emission.d.ts",
       "import": "./dist/Emission.js"
@@ -388,6 +384,10 @@
     "./MentoRouter": {
       "types": "./dist/MentoRouter.d.ts",
       "import": "./dist/MentoRouter.js"
+    },
+    "./MentoToken": {
+      "types": "./dist/MentoToken.d.ts",
+      "import": "./dist/MentoToken.js"
     },
     "./ReserveLiquidityStrategyv300": {
       "types": "./dist/ReserveLiquidityStrategyv300.d.ts",
