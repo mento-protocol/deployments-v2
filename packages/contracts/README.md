@@ -187,6 +187,13 @@ git push && git push --tags
 
 The `version` lifecycle hook renames `## [Unreleased]` in `CHANGELOG.md` to `## [<new-version>] - <today>` and stages it, so the version commit always carries the matching changelog entry. If you ran `npm run contracts:update` between regen and bump, those entries are exactly what gets released.
 
+The hook **fails the version bump** if `[Unreleased]` is empty, or if the new version heading already exists in `CHANGELOG.md`. To override either guard (e.g. for a metadata-only release), invoke the rename script directly with `--allow-empty`: `node ../../scripts/release-changelog.mjs <version> --allow-empty`.
+
+Dedup notes for entries appended by `npm run contracts:update`:
+
+- `### Added` and `### Removed` are deduped by full-string match on the contract identifier.
+- `### Changed` is deduped by `<chainId>/<ns>/<name>` prefix — a follow-up regen that bumps the same contract again collapses to a single line keyed on the latest state, instead of leaving a stale arrow chain.
+
 ### Naming rules
 
 The script derives a canonical export name from each entry in the treb registry using these rules (in priority order):

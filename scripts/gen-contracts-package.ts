@@ -424,6 +424,14 @@ interface ChangelogEntries {
   changed: string[];
 }
 
+// `changed` bullet format from diffContracts: "<chainId>/<ns>/<name>: ...".
+// Returns the prefix up to (but not including) the colon — the natural dedup
+// key when multiple regens touch the same contract.
+function extractChangedKey(line: string): string {
+  const colon = line.indexOf(":");
+  return colon === -1 ? line : line.slice(0, colon);
+}
+
 function parseUnreleased(body: string): {
   before: string;
   unreleased: ChangelogEntries;
@@ -483,17 +491,30 @@ function updateChangelog(
     : `${CHANGELOG_HEADER}\n${UNRELEASED_HEADING}\n`;
 
   const parsed = parseUnreleased(existing);
+  // Dedup added/removed by full string identity (the bullet is just a contract
+  // identifier so byte equality is the right key).
+  const dedupSimple = (existing: string[], next: string[]): string[] =>
+    [...new Set([...existing, ...next])].sort();
+  // Dedup changed by the "<chainId>/<namespace>/<name>:" prefix so a second
+  // regen that bumps the same contract again (0xA→0xB then later 0xB→0xC)
+  // collapses to one line keyed on the latest state, instead of leaving a
+  // stale arrow chain. Newer entries (passed in `changed`) win.
+  const dedupChanged = (existing: string[], next: string[]): string[] => {
+    const byKey = new Map<string, string>();
+    for (const line of existing) byKey.set(extractChangedKey(line), line);
+    for (const line of next) byKey.set(extractChangedKey(line), line);
+    return [...byKey.values()].sort();
+  };
   const merged: ChangelogEntries = {
-    added: [
-      ...new Set([...parsed.unreleased.added, ...added.map((s) => `\`${s}\``)]),
-    ].sort(),
-    removed: [
-      ...new Set([
-        ...parsed.unreleased.removed,
-        ...removed.map((s) => `\`${s}\``),
-      ]),
-    ].sort(),
-    changed: [...new Set([...parsed.unreleased.changed, ...changed])].sort(),
+    added: dedupSimple(
+      parsed.unreleased.added,
+      added.map((s) => `\`${s}\``),
+    ),
+    removed: dedupSimple(
+      parsed.unreleased.removed,
+      removed.map((s) => `\`${s}\``),
+    ),
+    changed: dedupChanged(parsed.unreleased.changed, changed),
   };
 
   const before =
