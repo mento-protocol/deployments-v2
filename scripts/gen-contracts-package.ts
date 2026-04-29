@@ -289,13 +289,28 @@ function artifactMatchesSource(
   return Object.prototype.hasOwnProperty.call(target, sourcePath);
 }
 
+// Join a path relative to outDir, asserting the resolved location stays
+// inside outDir. Closes the path-traversal class semgrep flags on every raw
+// join(outDir, ...) — these inputs come from the treb registry (operator
+// controlled, not user input) and from readdirSync(outDir) (filesystem we
+// trust), but a defensive check costs nothing and makes the safety obvious.
+function joinUnderOut(...parts: string[]): string {
+  const resolved = join(outDir, ...parts);
+  if (resolved !== outDir && !resolved.startsWith(outDir + "/")) {
+    throw new Error(
+      `Refusing to read outside out/: ${parts.join("/")} → ${resolved}`,
+    );
+  }
+  return resolved;
+}
+
 function readAbi(
   solFile: string,
   contractName: string,
   registrySource?: string,
 ): unknown[] | null {
   for (const variant of ARTIFACT_FILENAME_VARIANTS) {
-    const artifactPath = join(outDir, solFile, `${contractName}${variant}`);
+    const artifactPath = joinUnderOut(solFile, `${contractName}${variant}`);
     if (!existsSync(artifactPath)) continue;
     // If the registry told us the source path, verify the artifact at the
     // basename-derived location was actually compiled from it. Foundry can
@@ -310,7 +325,7 @@ function readAbi(
         const corrected = findArtifactByCompilationTarget(registrySource);
         if (corrected) {
           const artifact = JSON.parse(
-            readFileSync(join(outDir, corrected), "utf8"),
+            readFileSync(joinUnderOut(corrected), "utf8"),
           ) as { abi: unknown[] };
           return artifact.abi ?? null;
         }
@@ -332,7 +347,7 @@ function readAbi(
   const indexedPath = buildArtifactIndex().get(contractName);
   if (indexedPath) {
     const artifact = JSON.parse(
-      readFileSync(join(outDir, indexedPath), "utf8"),
+      readFileSync(joinUnderOut(indexedPath), "utf8"),
     ) as { abi: unknown[] };
     return artifact.abi ?? null;
   }
