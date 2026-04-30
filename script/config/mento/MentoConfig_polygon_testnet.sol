@@ -16,10 +16,7 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
     function _initCollateral() internal override {
         // _addCollateral("USDC", lookup("USDC")); // do we need this?
         _registerMockCollateral("USDC", 6);
-        _registerMockCollateral("USDT0", 6);
-
         _addReserveV2Collateral("USDC");
-        _addReserveV2Collateral("USDT0");
     }
 
     // ===================================================================
@@ -32,13 +29,12 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("polygon");
         _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
-        _setRateFeedExpirySeconds("USDT/USD", 1 weeks);
         _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
 
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({
             usdcUsd: _mockAggregator("USDC/USD", "USDC/USD", _coreAggs.usdcUsd),
-            usdtUsd: _mockAggregator("USDT/USD", "USDT/USD", _coreAggs.usdtUsd),
+            usdtUsd: address(0),
             eurcUsd: address(0),
             ausdUsd: address(0),
             celoUsd: address(0),

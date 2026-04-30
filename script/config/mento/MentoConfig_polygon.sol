@@ -28,7 +28,7 @@ contract MentoConfig_polygon is MentoConfig {
     function _configureParams() internal virtual {
         _coreAggs = CoreAggregators({
             usdcUsd: 0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7,
-            usdtUsd: 0x0A6513e40db6EB1b165753AD52E80663aeA50545,
+            usdtUsd: address(0),
             eurcUsd: address(0),
             ausdUsd: address(0),
             celoUsd: address(0),
@@ -66,9 +66,7 @@ contract MentoConfig_polygon is MentoConfig {
     /// ===================================================================
     function _initCollateral() internal virtual {
         _addCollateral("USDC", lookup("USDC"));
-        _addCollateral("USDT0", lookup("USDT0"));
         _addReserveV2Collateral("USDC");
-        _addReserveV2Collateral("USDT0");
     }
 
     /// ===================================================================
@@ -154,12 +152,12 @@ contract MentoConfig_polygon is MentoConfig {
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
     function _initOracles() internal virtual {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 1 minutes});
+        _oracleConfig = OracleConfig({reportExpirySeconds: 150 seconds);
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
         _addRateFeed("USDC/USD");
-        _setRateFeedExpirySeconds("USDC/USD", 1 minutes); // heartbeat is 27 seconds. Should we make it lower?
+        _setRateFeedExpirySeconds("USDC/USD", 150 seconds);
         _addToBreaker({
             breakerId: valueBreakerId,
             rateFeed: "USDC/USD",
@@ -172,22 +170,8 @@ contract MentoConfig_polygon is MentoConfig {
             rateFeed: "USDC/USD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
         });
 
-        _addRateFeed("USDT/USD");
-        _setRateFeedExpirySeconds("USDT/USD", 1 minutes); // heartbeat is 27 seconds. Should we make it lower?
-        _addToBreaker({
-            breakerId: valueBreakerId,
-            rateFeed: "USDT/USD",
-            cooldown: 1,
-            threshold: 0.0015 * 1e24,
-            smoothingFactor: 0,
-            referenceValue: 1 * 1e24
-        });
-        _addChainlinkRelayer({
-            rateFeed: "USDT/USD", description: "USDT/USD", aggregator0: _coreAggs.usdtUsd, invert0: false
-        });
-
         _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
-        _setRateFeedExpirySeconds("EUR/USD", 1 minutes); // heartbeat is 27 seconds. Should we make it lower?
+        _setRateFeedExpirySeconds("EUR/USD", 150 seconds);
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
