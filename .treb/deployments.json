@@ -31663,6 +31663,38 @@
     "createdAt": "2026-04-30T16:38:47.272577+02:00",
     "updatedAt": "2026-04-30T16:38:47.30304+02:00"
   },
+  "testnet-v2-rc5/80002/OpenLiquidityStrategy:v3.0.1": {
+    "id": "testnet-v2-rc5/80002/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 80002,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa70073f992c48fbad8f88ecf01",
+      "initCodeHash": "0xb3a2b7a34ccffa8ef3daf78d5d5fd4a0dba05c4499254186d9b85514136d93e7",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xd075803d87cfdbea970cd1321c542759f6a235e042d77e0dd19fa4c9de8bf3dc",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "c8bbd601ec0900c0d6fb4448888f61ade70ca3e1"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-30T16:43:25.797836+02:00",
+    "updatedAt": "2026-04-30T16:43:25.822435+02:00"
+  },
   "testnet-v2-rc5/80002/OracleAdapter:v3.0.0": {
     "id": "testnet-v2-rc5/80002/OracleAdapter:v3.0.0",
     "namespace": "testnet-v2-rc5",
@@ -32062,6 +32094,42 @@
     "tags": null,
     "createdAt": "2026-04-30T16:42:17.694287+02:00",
     "updatedAt": "2026-04-30T16:42:17.711918+02:00"
+  },
+  "testnet-v2-rc5/80002/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
+    "id": "testnet-v2-rc5/80002/TransparentUpgradeableProxy:OpenLiquidityStrategy",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 80002,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OpenLiquidityStrategy",
+    "address": "0xCCd2aD0603a08EBc14D223a983171ef18192e8c9",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7005f102e27afaf66bf868dde",
+      "initCodeHash": "0xb41cc24a20e6d5a375f149eeff8098d5dc582b6855a22376ce3e8aac1cdb9cdc",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000e1221f38de0a17ef170602de724db0e73e3856fb0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OpenLiquidityStrategy"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xe1221f38De0A17eF170602DE724dB0e73e3856Fb",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x7d82d188cb4e974fd8e197ddbe70d9184c6512daed7ccd43fafc81b2207ad5c4",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "c8bbd601ec0900c0d6fb4448888f61ade70ca3e1"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-30T16:43:25.797836+02:00",
+    "updatedAt": "2026-04-30T16:43:25.822435+02:00"
   },
   "testnet-v2-rc5/80002/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "testnet-v2-rc5/80002/TransparentUpgradeableProxy:OracleAdapter",
