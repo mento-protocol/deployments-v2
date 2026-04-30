@@ -14,11 +14,11 @@ contract MentoConfig_polygon is MentoConfig {
     FxAggregators internal _fxAggs;
 
     function _initialize() internal virtual override {
-        _configureParams();
         _initStables();
         _initCollateral();
         _initFPMMs();
         _initOracles();
+        _configureParams();
     }
 
     // ===================================================================
@@ -85,7 +85,6 @@ contract MentoConfig_polygon is MentoConfig {
             rebalanceThresholdBelow: 3333
         });
 
-        // TODO: CHECK UPDATE
         // Liquidity strategy params for USD collateral pools
         LiquidityStrategyPoolConfig memory usdCollateralPoolsLsConfig = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
@@ -112,27 +111,8 @@ contract MentoConfig_polygon is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
-            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
-            usdCollateralPoolsLsConfig
-        );
-
-        // ── USDm / USDT0 ────────────────────────────────────────────────
-        _addFPMM(
-            "USDm",
-            "USDT0",
-            getRateFeedIdFromString("USDT/USD"),
-            IFPMM.FPMMParams({
-                lpFee: 3,
-                protocolFee: 2,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                feeSetter: lookupOrFail("FeeSetter"),
-                rebalanceIncentive: 1,
-                rebalanceThresholdAbove: 5000,
-                rebalanceThresholdBelow: 3333
-            }),
-            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
-            TokenLimits({limit0: 2_500_000, limit1: 5_000_000}),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
+            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
             usdCollateralPoolsLsConfig
         );
 
@@ -142,9 +122,9 @@ contract MentoConfig_polygon is MentoConfig {
             debtToken: _lookupTokenAddress("USDm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-            liquiditySourceIncentiveExpansion: 0.0005e18, // 0.05%
+            liquiditySourceIncentiveExpansion: 0.0002e18, // 2bps / 0.02%
             protocolIncentiveExpansion: 0, // 0%
-            liquiditySourceIncentiveContraction: 0.0005e18, // 0.05%
+            liquiditySourceIncentiveContraction: 0.0002e18, // 2bps / 0.02%
             protocolIncentiveContraction: 0 // 0%
         });
 
@@ -153,16 +133,16 @@ contract MentoConfig_polygon is MentoConfig {
             "USDm",
             getRateFeedIdFromString("EUR/USD"),
             IFPMM.FPMMParams({
-                lpFee: 10,
-                protocolFee: 5,
+                lpFee: 3,
+                protocolFee: 2,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
-                rebalanceIncentive: 6,
+                rebalanceIncentive: 3,
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({limit0: 215_000, limit1: 860_000}), // TODO: CHECK UPDATE
-            TokenLimits({limit0: 250_000, limit1: 1_000_000}), // TODO: CHECK UPDATE
+            TokenLimits({limit0: 215_000, limit1: 860_000}),
+            TokenLimits({limit0: 250_000, limit1: 1_000_000),
             openLsConfigEUR
         );
     }
@@ -174,7 +154,7 @@ contract MentoConfig_polygon is MentoConfig {
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
     function _initOracles() internal virtual {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
+        _oracleConfig = OracleConfig({reportExpirySeconds: 1 minutes});
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 

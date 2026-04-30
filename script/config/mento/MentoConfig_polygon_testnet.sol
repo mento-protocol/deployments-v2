@@ -29,9 +29,11 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
         super._configureParams();
 
         // Oracle infrastructure
-        // _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes}); // do we need this?
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("polygon");
+        _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
+        _setRateFeedExpirySeconds("USDT/USD", 1 weeks);
+        _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
 
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({

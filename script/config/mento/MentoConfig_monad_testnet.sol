@@ -33,6 +33,13 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
         _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("monad");
+        _setRateFeedExpirySeconds("USDC/USD", 1 days);
+        _setRateFeedExpirySeconds("AUSD/USD", 1 days);
+        _setRateFeedExpirySeconds("USDT/USD", 1 days);
+        _setRateFeedExpirySeconds("EUR/USD", 1 days);
+        _setRateFeedExpirySeconds("GBP/USD", 1 days);
+        _setRateFeedExpirySeconds("JPY/USD", 1 days);
+        _setRateFeedExpirySeconds("CHF/USD", 1 days);
 
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({
