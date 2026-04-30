@@ -872,8 +872,11 @@
       "MockChainlinkAggregator:USDC/USD": "0xB1D1D3382D0F26493063cB7188Eb479d45A44cdF",
       "ProxyAdmin": "0xaad8b67551086609D132178dfF1dBE31b3c1C9C2",
       "SortedOracles:v2.6.5": "0x437aDC949AaC8f4971728ff0a7AC7C2290E555de",
+      "StableTokenSpoke:v3.0.0": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
       "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x438F17F0bE93db19F210E91663Cf6Cf4eaD93B4e",
+      "TransparentUpgradeableProxy:EURm": "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
       "TransparentUpgradeableProxy:SortedOracles": "0x85ed9ac57827132B8F60938F3165BC139E1F53cd",
+      "TransparentUpgradeableProxy:USDm": "0x5eCc03111ad2A78F981A108759bc73BAE2AB31bc",
       "ValueDeltaBreaker:v2.6.5": "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf"
     }
   },
