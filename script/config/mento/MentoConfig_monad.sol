@@ -14,11 +14,11 @@ contract MentoConfig_monad is MentoConfig {
     FxAggregators internal _fxAggs;
 
     function _initialize() internal virtual override {
+        _configureParams(); // TODO: having is at the top makes the reportExpiry overrides on testnets not work. Find a way to fix this
         _initStables();
         _initCollateral();
         _initFPMMs();
         _initOracles();
-        _configureParams();
     }
 
     // ===================================================================
