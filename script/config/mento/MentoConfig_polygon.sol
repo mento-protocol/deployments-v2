@@ -152,7 +152,7 @@ contract MentoConfig_polygon is MentoConfig {
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
     function _initOracles() internal virtual {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 150 seconds);
+        _oracleConfig = OracleConfig({reportExpirySeconds: 150 seconds});
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
