@@ -74,7 +74,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         fpmmFactoryImpl = deployer.create3("FPMMFactory").setLabel(label).deploy(abi.encode(true));
 
         marketHoursBreaker = deployer.create3("MarketHoursBreaker").setLabel(label).deploy();
-        marketHoursBreakerToggleable = deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(deployer.account));
+        marketHoursBreakerToggleable = deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(owner));
 
         oracleAdapterImpl = deployer.create3("OracleAdapter").setLabel(label).deploy(abi.encode(true));
 
@@ -186,6 +186,7 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         // Verifies that contract owners are set to multisig.
         verifyOwnership("OracleAdapter", oracleAdapter, owner);
         verifyOwnership("OracleAdapterCollateral", oracleAdapterCollateral, owner);
+        verifyOwnership("MarketHoursBreakerToggleable", marketHoursBreakerToggleable, owner);
         verifyOwnership("FPMMFactory", fpmmFactory, owner);
         verifyOwnership("FactoryRegistry", factoryRegistry, owner);
         verifyOwnership("ReserveV2", reserveV2, owner);
