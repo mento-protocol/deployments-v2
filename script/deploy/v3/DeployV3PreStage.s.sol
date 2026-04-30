@@ -74,7 +74,8 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         fpmmFactoryImpl = deployer.create3("FPMMFactory").setLabel(label).deploy(abi.encode(true));
 
         marketHoursBreaker = deployer.create3("MarketHoursBreaker").setLabel(label).deploy();
-        marketHoursBreakerToggleable = deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(owner));
+        marketHoursBreakerToggleable =
+            deployer.create3("MarketHoursBreakerToggleable").setLabel(label).deploy(abi.encode(owner));
 
         oracleAdapterImpl = deployer.create3("OracleAdapter").setLabel(label).deploy(abi.encode(true));
 
@@ -214,31 +215,30 @@ contract DeployV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         // OracleAdapter & OracleAdapterCollateral Initialization
         // Verifies that OracleAdapter contracts are initialized with correct addresses.
         require(
-            address(oracleAdapterContract.sortedOracles()) == sortedOracles &&
-            address(oracleAdapterCollateralContract.sortedOracles()) == sortedOracles,
+            address(oracleAdapterContract.sortedOracles()) == sortedOracles
+                && address(oracleAdapterCollateralContract.sortedOracles()) == sortedOracles,
             "OracleAdapter: wrong sorted oracles address"
         );
         require(
-            address(oracleAdapterContract.breakerBox()) == breakerBox &&
-            address(oracleAdapterCollateralContract.breakerBox()) == breakerBox,
+            address(oracleAdapterContract.breakerBox()) == breakerBox
+                && address(oracleAdapterCollateralContract.breakerBox()) == breakerBox,
             "OracleAdapter: wrong breaker box address"
         );
         require(
-            address(oracleAdapterContract.marketHoursBreaker()) == marketHoursBreaker &&
-            address(oracleAdapterCollateralContract.marketHoursBreaker()) == marketHoursBreakerToggleable,
+            address(oracleAdapterContract.marketHoursBreaker()) == marketHoursBreaker
+                && address(oracleAdapterCollateralContract.marketHoursBreaker()) == marketHoursBreakerToggleable,
             "OracleAdapter: wrong market hours breaker address"
         );
         require(
-            address(oracleAdapterContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed &&
-            address(oracleAdapterCollateralContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed,
+            address(oracleAdapterContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed
+                && address(oracleAdapterCollateralContract.l2SequencerUptimeFeed()) == l2SequencerUptimeFeed,
             "OracleAdapter: wrong L2SequencerUptimeFeed address"
         );
 
         // FPMMFactory Initialization
         // Verifies that FPMMFactory is initialized with the correct addresses.
         require(
-            address(fpmmFactoryContract.oracleAdapter()) == oracleAdapter,
-            "FPMMFactory: wrong oracle adapter address"
+            address(fpmmFactoryContract.oracleAdapter()) == oracleAdapter, "FPMMFactory: wrong oracle adapter address"
         );
         require(
             address(fpmmFactoryContract.proxyAdmin()) == proxyAdmin, "ProxyAdmin initialized with mismatched address"

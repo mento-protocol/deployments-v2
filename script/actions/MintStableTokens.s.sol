@@ -27,9 +27,8 @@ contract MintStableTokens is TrebScript, ProxyHelper {
     /// @custom:env {string} token - Symbol of the token to mint (e.g. "USDm")
     function run() public broadcast {
         require(
-            block.chainid == CELO_SEPOLIA_CHAIN_ID ||
-            block.chainid == MONAD_TESTNET_CHAIN_ID ||
-            block.chainid == POLYGON_TESTNET_CHAIN_ID,
+            block.chainid == CELO_SEPOLIA_CHAIN_ID || block.chainid == MONAD_TESTNET_CHAIN_ID
+                || block.chainid == POLYGON_TESTNET_CHAIN_ID,
             "MintStableTokens: only allowed to run on testnets"
         );
 

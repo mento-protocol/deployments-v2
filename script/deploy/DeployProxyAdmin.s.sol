@@ -28,6 +28,5 @@ contract DeployProxyAdmin is TrebScript, ProxyHelper {
 
         require(IOwnable(proxyAdmin).owner() == migrationMultisig);
         console.log(unicode"ProxyAdmin owned by migration multisig ✅");
-
     }
 }

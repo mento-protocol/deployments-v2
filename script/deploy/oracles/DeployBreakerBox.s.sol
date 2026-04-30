@@ -62,7 +62,6 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
             }
         }
 
-
         // ============== Verify contract ownership =================
         address migrationMultisig = lookupOrFail("MigrationMultisig");
 
