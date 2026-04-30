@@ -140,7 +140,7 @@ contract MentoConfig_polygon is MentoConfig {
                 rebalanceThresholdBelow: 3333
             }),
             TokenLimits({limit0: 215_000, limit1: 860_000}),
-            TokenLimits({limit0: 250_000, limit1: 1_000_000),
+            TokenLimits({limit0: 250_000, limit1: 1_000_000}),
             openLsConfigEUR
         );
     }
