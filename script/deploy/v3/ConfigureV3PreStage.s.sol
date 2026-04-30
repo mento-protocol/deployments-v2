@@ -30,7 +30,7 @@ contract ConfigureV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
     function setUp() public {
         config = Config.get();
         breakerBox = lookupOrFail("BreakerBox:v2.6.5");
-        marketHoursBreaker = _lookupMarketHoursBreaker();
+        marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
         reserveV2 = lookupProxyOrFail("ReserveV2");
         reserveLiquidityStrategy = lookupProxyOrFail("ReserveLiquidityStrategy");
         fxFeedIds = config.getFxRateFeedIds();
@@ -46,11 +46,13 @@ contract ConfigureV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         IBreakerBox bbRead = IBreakerBox(breakerBox);
 
         if (!bbRead.isBreaker(marketHoursBreaker)) {
+            console.log("Adding MarketHoursBreaker to BreakerBox");
             bbWrite.addBreaker(marketHoursBreaker, 3);
         }
 
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
             if (!bbRead.isBreakerEnabled(marketHoursBreaker, fxFeedIds[i])) {
+                console.log("Enabling MarketHoursBreaker on FX feed", fxFeedIds[i]);
                 bbWrite.toggleBreaker(marketHoursBreaker, fxFeedIds[i], true);
             }
         }
@@ -60,24 +62,19 @@ contract ConfigureV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
         if (!rvRead.isOtherReserveAddress(reserveSafe)) {
+            console.log("Registering ReserveSafe as other reserve address");
             rvWrite.registerOtherReserveAddress(reserveSafe);
         }
         if (!rvRead.isReserveManagerSpender(reserveSafe)) {
+            console.log("Registering ReserveSafe as reserve manager spender");
             rvWrite.registerReserveManagerSpender(reserveSafe);
         }
         if (!rvRead.isLiquidityStrategySpender(reserveLiquidityStrategy)) {
+            console.log("Registering ReserveLiquidityStrategy as liquidity strategy spender");
             rvWrite.registerLiquidityStrategySpender(reserveLiquidityStrategy);
         }
 
         postChecks();
-    }
-
-    function _lookupMarketHoursBreaker() internal view returns (address) {
-        bool toggleable = vm.envOr("MARKET_HOURS_BREAKER_TOGGLEABLE", false);
-        if (toggleable) {
-            return lookupOrFail("MarketHoursBreakerToggleable:v3.0.0");
-        }
-        return lookupOrFail("MarketHoursBreaker:v3.0.0");
     }
 
     function postChecks() internal view {
