@@ -859,6 +859,24 @@
       "TransparentUpgradeableProxy:Reserve": "0xda32fdC10c742dF94012Ae0076B7316d8b63F76B"
     }
   },
+  "80002": {
+    "testnet-v2-rc5": {
+      "AddressSortedLinkedListWithMedian": "0xBb0217B412C979C15375524D491b3d18c5277B40",
+      "BreakerBox:v2.6.5": "0x88869E30609D2C0E4032463D713328C6f541878e",
+      "ChainlinkRelayerFactory:v2.6.5": "0xBbDC14Ae898E7d8c11cca75bb157b55C35709479",
+      "ChainlinkRelayerV1:EUR/USD": "0x5Aae954cD08d432DbfCF81964dE1C84E3D7aF910",
+      "ChainlinkRelayerV1:USDC/USD": "0x84521737Ccd1068b0093e7Ce477d1cde3E0c7BD0",
+      "MedianDeltaBreaker:v2.6.5": "0xf923C884F319b8866F67C5719A80E5cB4D0FAF2c",
+      "MockAggregatorBatchReporter:v3.0.0": "0xbF111982C39b661D1Cbc1621EB1450694Fae1D3f",
+      "MockChainlinkAggregator:EUR/USD": "0x904Bc5586697EF66b8B3c3189A8f059a4BD4f071",
+      "MockChainlinkAggregator:USDC/USD": "0xB1D1D3382D0F26493063cB7188Eb479d45A44cdF",
+      "ProxyAdmin": "0xaad8b67551086609D132178dfF1dBE31b3c1C9C2",
+      "SortedOracles:v2.6.5": "0x437aDC949AaC8f4971728ff0a7AC7C2290E555de",
+      "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x438F17F0bE93db19F210E91663Cf6Cf4eaD93B4e",
+      "TransparentUpgradeableProxy:SortedOracles": "0x85ed9ac57827132B8F60938F3165BC139E1F53cd",
+      "ValueDeltaBreaker:v2.6.5": "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf"
+    }
+  },
   "8453": {
     "virtual": {
       "AddressSortedLinkedListWithMedian": "0x498FB531985aD936f1A98813F92625084a67d02F",
