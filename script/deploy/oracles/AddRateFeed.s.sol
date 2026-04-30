@@ -123,7 +123,7 @@ contract AddRateFeed is TrebScript, ProxyHelper {
                 console.log("Current expiry for", relayerConfigs[i].rateFeed, currentExpiry);
                 if (currentExpiry != expiry) {
                     sortedOracles.setTokenReportExpiry(rateFeedId, expiry);
-                    console.log(string.concat("Set report expiry for ", relayerConfigs[i].rateFeed), expiry);
+                    console.log(string.concat(" > Set report expiry for ", relayerConfigs[i].rateFeed), expiry);
                 }
             }
         }

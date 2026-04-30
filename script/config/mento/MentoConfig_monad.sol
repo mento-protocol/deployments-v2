@@ -14,7 +14,7 @@ contract MentoConfig_monad is MentoConfig {
     FxAggregators internal _fxAggs;
 
     function _initialize() internal virtual override {
-        _configureParams();
+        _configureParams(); // TODO: having is at the top makes the reportExpiry overrides on testnets not work. Find a way to fix this
         _initStables();
         _initCollateral();
         _initFPMMs();
@@ -332,6 +332,7 @@ contract MentoConfig_monad is MentoConfig {
             rateFeed: "USDT/USD", description: "USDT/USD", aggregator0: _coreAggs.usdtUsd, invert0: false
         });
 
+        // FX Feeds will use the default reportExpirySeconds from _oracleConfig of 6 minutes
         _configureDefaultFxRateFeed("GBP/USD", _fxAggs.gbp);
         _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
         _configureDefaultFxRateFeed("JPY/USD", _fxAggs.jpy);

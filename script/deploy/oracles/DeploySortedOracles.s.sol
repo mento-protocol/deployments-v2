@@ -20,7 +20,7 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
     /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         Senders.Sender storage deployer = sender("deployer");
-        Senders.Sender storage migrationOwner = sender("migrationOwner");
+        address owner = sender("migrationOwner").account;
 
         IMentoConfig config = Config.get();
 
@@ -30,6 +30,12 @@ contract DeploySortedOracles is TrebScript, ProxyHelper {
 
         ISortedOracles sortedOracles = ISortedOracles(deployer.harness(sortedOraclesProxy));
         sortedOracles.initialize(config.getOracleConfig().reportExpirySeconds);
-        IOwnable(address(sortedOracles)).transferOwnership(migrationOwner.account);
+        IOwnable(sortedOraclesProxy).transferOwnership(owner);
+
+        // ============== Verify contract ownership =================
+        address migrationMultisig = lookupOrFail("MigrationMultisig");
+
+        require(IOwnable(sortedOraclesProxy).owner() == migrationMultisig);
+        console.log(unicode"SortedOracles owned by migration multisig ✅");
     }
 }
