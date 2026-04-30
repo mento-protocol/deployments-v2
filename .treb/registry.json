@@ -870,6 +870,7 @@
       "MockAggregatorBatchReporter:v3.0.0": "0xbF111982C39b661D1Cbc1621EB1450694Fae1D3f",
       "MockChainlinkAggregator:EUR/USD": "0x904Bc5586697EF66b8B3c3189A8f059a4BD4f071",
       "MockChainlinkAggregator:USDC/USD": "0xB1D1D3382D0F26493063cB7188Eb479d45A44cdF",
+      "MockERC20:USDC": "0xfbD2d6a7C3Cb4491647173D6eCb2a4473521cd66",
       "ProxyAdmin": "0xaad8b67551086609D132178dfF1dBE31b3c1C9C2",
       "SortedOracles:v2.6.5": "0x437aDC949AaC8f4971728ff0a7AC7C2290E555de",
       "StableTokenSpoke:v3.0.0": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
