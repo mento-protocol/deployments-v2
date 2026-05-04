@@ -34,6 +34,7 @@ polygon = "${POLYGON_RPC_URL}"
 base = "${BASE_RPC_URL}"
 monad_testnet = "${MONAD_TESTNET_RPC_URL}"
 polygon_testnet = "${POLYGON_TESTNET_RPC_URL}"
+base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
 
 [etherscan]
 # vbase = { key = "${TENDERLY_ACCESS_TOKEN}", chain = 8453, url = "${TENDERLY_VBASE_RPC_URL}/verify/etherscan" }
