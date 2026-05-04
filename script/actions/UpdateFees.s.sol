@@ -213,5 +213,4 @@ contract UpdateFees is TrebScript, ProxyHelper, ConfigHelper {
         IMentoConfig.ExchangeConfig memory empty;
         return (empty, false);
     }
-
 }
