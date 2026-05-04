@@ -12,6 +12,7 @@ import "./mento/MentoConfig_monad.sol";
 import "./mento/MentoConfig_monad_testnet.sol";
 import "./mento/MentoConfig_polygon.sol";
 import "./mento/MentoConfig_polygon_testnet.sol";
+import "./mento/MentoConfig_base.sol";
 import "./liquity/LiquityConfig_GBPm_celo.sol";
 import "./liquity/LiquityConfig_GBPm_celo_sepolia.sol";
 import "./liquity/LiquityConfig_CHFm_celo.sol";
