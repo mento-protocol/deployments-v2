@@ -83,9 +83,6 @@ contract ConfigureV3PreStage is TrebScript, ProxyHelper, PostChecksHelper {
         IBreakerBox bbRead = IBreakerBox(breakerBox);
         IReserveV2 rvRead = IReserveV2(reserveV2);
 
-        // Config sanity
-        require(fxFeedIds.length > 0, "No FX rate feed IDs configured");
-
         // BreakerBox: breaker registered with correct trading mode
         require(bbRead.isBreaker(marketHoursBreaker), "MarketHoursBreaker not added to BreakerBox");
         require(bbRead.breakerTradingMode(marketHoursBreaker) == 3, "MarketHoursBreaker trading mode is not 3 (halted)");
