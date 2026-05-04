@@ -28,8 +28,6 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
         // Oracle infrastructure
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("polygon");
-        _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
-        _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
 
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({
@@ -58,5 +56,18 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
             jpy: address(0),
             ngn: address(0)
         });
+    }
+
+    /// ===================================================================
+    /// ORACLES
+    /// ===================================================================
+    /// @dev Override the parent's expiries to 1 week on testnet. Must run
+    /// after super._initOracles() so the parent's tighter mainnet values
+    /// don't overwrite ours.
+    function _initOracles() internal override {
+        super._initOracles();
+        _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks});
+        _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
+        _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
     }
 }
