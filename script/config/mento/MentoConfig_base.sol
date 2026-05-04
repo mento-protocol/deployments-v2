@@ -64,7 +64,7 @@ contract MentoConfig_base is MentoConfig {
     /// COLLATERAL
     /// ===================================================================
     function _initCollateral() internal virtual {
-        _addCollateral("EURC", lookup("EURC"));
+        _addCollateral("EURC", lookupOrFail("EURC"));
         _addReserveV2Collateral("EURC");
     }
 

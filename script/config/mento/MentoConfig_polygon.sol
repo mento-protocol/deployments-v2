@@ -65,7 +65,7 @@ contract MentoConfig_polygon is MentoConfig {
     /// COLLATERAL
     /// ===================================================================
     function _initCollateral() internal virtual {
-        _addCollateral("USDC", lookup("USDC"));
+        _addCollateral("USDC", lookupOrFail("USDC"));
         _addReserveV2Collateral("USDC");
     }
 
