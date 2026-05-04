@@ -119,13 +119,13 @@ contract MentoConfig_base is MentoConfig {
     /// ===================================================================
     /// @notice Configure oracle ratefeeds and circuit breaker
     function _initOracles() internal virtual {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 108_000});
+        _oracleConfig = OracleConfig({reportExpirySeconds: 108_000}); // todo: what should this be?
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
         // EURC/EUR is derived from EURC/USD * USD/EUR (EUR/USD inverted).
         _addRateFeed("EURC/EUR");
-        _setRateFeedExpirySeconds("EURC/EUR", 108_000);
+        _setRateFeedExpirySeconds("EURC/EUR", 108_000); // should be 1 hour? EUR/USD updates once per hour, and EURC/USD once per day, so we should be using the min of the two
         _addToBreaker({
             breakerId: valueBreakerId,
             rateFeed: "EURC/EUR",

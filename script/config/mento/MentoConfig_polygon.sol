@@ -152,13 +152,13 @@ contract MentoConfig_polygon is MentoConfig {
     /// @dev On testnets we can use _addMockAggregator to define chainlink
     /// aggregators.
     function _initOracles() internal virtual {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks});
+        _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks}); // todo: change this back to 150 seconds, but need to make the override work on testnests first
         // _oracleConfig = OracleConfig({reportExpirySeconds: 150 seconds});
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
         _addRateFeed("USDC/USD");
-        _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
+        _setRateFeedExpirySeconds("USDC/USD", 1 weeks); // todo: change this back to 150 seconds, but need to make the override work on testnests first
         // _setRateFeedExpirySeconds("USDC/USD", 150 seconds);
         _addToBreaker({
             breakerId: valueBreakerId,
@@ -173,7 +173,7 @@ contract MentoConfig_polygon is MentoConfig {
         });
 
         _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
-        _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
+        _setRateFeedExpirySeconds("EUR/USD", 1 weeks); // todo: change this back to 150 seconds, but need to make the override work on testnests first
         // _setRateFeedExpirySeconds("EUR/USD", 150 seconds);
     }
 

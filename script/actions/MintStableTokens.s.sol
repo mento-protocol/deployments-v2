@@ -21,6 +21,7 @@ contract MintStableTokens is TrebScript, ProxyHelper {
     uint256 constant CELO_SEPOLIA_CHAIN_ID = 11142220;
     uint256 constant MONAD_TESTNET_CHAIN_ID = 10143;
     uint256 constant POLYGON_TESTNET_CHAIN_ID = 80002;
+    uint256 constant BASE_SEPOLIA_CHAIN_ID = 84532;
     uint256 constant MINT_AMOUNT = 1_000_000;
 
     /// @custom:senders deployer, migrationOwner
@@ -28,7 +29,7 @@ contract MintStableTokens is TrebScript, ProxyHelper {
     function run() public broadcast {
         require(
             block.chainid == CELO_SEPOLIA_CHAIN_ID || block.chainid == MONAD_TESTNET_CHAIN_ID
-                || block.chainid == POLYGON_TESTNET_CHAIN_ID,
+                || block.chainid == POLYGON_TESTNET_CHAIN_ID || block.chainid == BASE_SEPOLIA_CHAIN_ID,
             "MintStableTokens: only allowed to run on testnets"
         );
 

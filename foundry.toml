@@ -41,6 +41,7 @@ base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
 monad = { key = "${ETHERSCAN_API_KEY}", chain = 143, url = "https://api.etherscan.io/v2/api?chainid=143" }
 polygon = { key = "${ETHERSCAN_API_KEY}", chain = 137, url = "https://api.etherscan.io/v2/api?chainid=137" }
 base = { key = "${ETHERSCAN_API_KEY}", chain = 8453, url = "https://api.etherscan.io/v2/api?chainid=8453" }
+base_sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 84532, url = "https://api.etherscan.io/v2/api?chainid=84532" }
 celo = { key = "${ETHERSCAN_API_KEY}", chain = 42220, url = "https://api.etherscan.io/v2/api?chainid=42220" }
 # chain-11142220 = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
 # celo_sepolia = { key = "${ETHERSCAN_API_KEY}", chain = 11142220, url = "https://api.etherscan.io/v2/api?chainid=11142220" }
