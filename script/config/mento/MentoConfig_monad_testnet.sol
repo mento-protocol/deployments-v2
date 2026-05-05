@@ -29,6 +29,8 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
     function _configureParams() internal override {
         super._configureParams();
 
+        _setMockAggregatorSource("monad");
+
         // Oracle infrastructure
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
 
