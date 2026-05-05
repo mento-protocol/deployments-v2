@@ -32698,6 +32698,38 @@
     "createdAt": "2026-05-05T16:43:00.771248+02:00",
     "updatedAt": "2026-05-05T16:43:00.796225+02:00"
   },
+  "testnet-v2-rc5/84532/StableTokenSpoke:v3.0.0": {
+    "id": "testnet-v2-rc5/84532/StableTokenSpoke:v3.0.0",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 84532,
+    "contractName": "StableTokenSpoke",
+    "label": "v3.0.0",
+    "address": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7002327431eb5e183cf35961c",
+      "initCodeHash": "0x0f9355b2385fc79d8566fae7b3de92a2dd86e9ae93176a837229b0ede60d32b4",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/StableTokenSpoke:v3.0.0"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/tokens/StableTokenSpoke.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xfb30279844b9b3c94b3de0bedcfb8905258c0713769f8bebcaaa341cf45f853c",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "0be9c3cdc5eb5fd6a1fd7e07d05937a8acc13a4b"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-05T16:51:10.486277+02:00",
+    "updatedAt": "2026-05-05T16:51:10.505895+02:00"
+  },
   "testnet-v2-rc5/84532/TransparentUpgradeableProxy:ChainlinkRelayerFactory": {
     "id": "testnet-v2-rc5/84532/TransparentUpgradeableProxy:ChainlinkRelayerFactory",
     "namespace": "testnet-v2-rc5",
@@ -32733,6 +32765,42 @@
     "tags": null,
     "createdAt": "2026-05-05T16:43:10.359344+02:00",
     "updatedAt": "2026-05-05T16:43:10.388223+02:00"
+  },
+  "testnet-v2-rc5/84532/TransparentUpgradeableProxy:EURm": {
+    "id": "testnet-v2-rc5/84532/TransparentUpgradeableProxy:EURm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 84532,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "EURm",
+    "address": "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700f6aab8f336586b089b8e98",
+      "initCodeHash": "0xd713ccc27aaf955a86fb4108ca75060519b4b77a695391d126424bdbb8a11c92",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000b68f2d09241fdb5590bb7f865ae5fa6cc40bf24c0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000001e407b0020a00000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000001200000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa70000000000000000000000000000000000000000000000000000000000000160000000000000000000000000000000000000000000000000000000000000018000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000000000000000000000000000000000000000001c0000000000000000000000000000000000000000000000000000000000000000a4d656e746f204575726f0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044555526d00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:EURm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xb68F2d09241fdb5590bB7F865Ae5fA6CC40bF24c",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0x7d82d188cb4e974fd8e197ddbe70d9184c6512daed7ccd43fafc81b2207ad5c4",
+      "scriptPath": "script/deploy/v3/DeployStableTokenSpoke.s.sol",
+      "gitCommit": "0be9c3cdc5eb5fd6a1fd7e07d05937a8acc13a4b"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-05T16:51:10.486277+02:00",
+    "updatedAt": "2026-05-05T16:51:10.505895+02:00"
   },
   "testnet-v2-rc5/84532/TransparentUpgradeableProxy:SortedOracles": {
     "id": "testnet-v2-rc5/84532/TransparentUpgradeableProxy:SortedOracles",
