@@ -98,14 +98,11 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             sortedOracles.setReportExpiry(desired);
             console.log(
                 string.concat(
-                    unicode"  ⏰ Global expiry updated  ",
-                    vm.toString(current), "s -> ", vm.toString(desired), "s"
+                    unicode"  ⏰ Global expiry updated  ", vm.toString(current), "s -> ", vm.toString(desired), "s"
                 )
             );
         } else {
-            console.log(
-                string.concat(unicode"  ✓ Global expiry unchanged  ", vm.toString(current), "s")
-            );
+            console.log(string.concat(unicode"  ✓ Global expiry unchanged  ", vm.toString(current), "s"));
         }
     }
 
@@ -162,15 +159,23 @@ contract AddRateFeed is TrebScript, ProxyHelper {
                     sortedOracles.setTokenReportExpiry(rateFeedId, expiry);
                     console.log(
                         string.concat(
-                            unicode"  ⏰ Expiry updated  [", relayerConfigs[i].rateFeed, "]  ",
-                            vm.toString(currentExpiry), "s -> ", vm.toString(expiry), "s"
+                            unicode"  ⏰ Expiry updated  [",
+                            relayerConfigs[i].rateFeed,
+                            "]  ",
+                            vm.toString(currentExpiry),
+                            "s -> ",
+                            vm.toString(expiry),
+                            "s"
                         )
                     );
                 } else {
                     console.log(
                         string.concat(
-                            unicode"  ✓ Expiry unchanged [", relayerConfigs[i].rateFeed, "]  ",
-                            vm.toString(currentExpiry), "s"
+                            unicode"  ✓ Expiry unchanged [",
+                            relayerConfigs[i].rateFeed,
+                            "]  ",
+                            vm.toString(currentExpiry),
+                            "s"
                         )
                     );
                 }
