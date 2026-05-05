@@ -93,10 +93,19 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             return;
         }
         uint256 current = sortedOraclesRead.reportExpirySeconds();
-        console.log("Current global reportExpirySeconds", current);
+        console.log(unicode"\n=== 🌐 SortedOracles global reportExpirySeconds ===");
         if (current != desired) {
             sortedOracles.setReportExpiry(desired);
-            console.log(" > Set global reportExpirySeconds", desired);
+            console.log(
+                string.concat(
+                    unicode"  ⏰ Global expiry updated  ",
+                    vm.toString(current), "s -> ", vm.toString(desired), "s"
+                )
+            );
+        } else {
+            console.log(
+                string.concat(unicode"  ✓ Global expiry unchanged  ", vm.toString(current), "s")
+            );
         }
     }
 
@@ -115,6 +124,7 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             return;
         }
 
+        console.log(unicode"\n=== ⏰ Per-feed report expiry ===");
         for (uint256 i = 0; i < relayerConfigs.length; i++) {
             address rateFeedId = relayerConfigs[i].rateFeedId;
             address existingRelayer = factoryRead.getRelayer(rateFeedId);
@@ -148,10 +158,21 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             uint256 expiry = config.getRateFeedExpirySeconds(relayerConfigs[i].rateFeed);
             if (expiry > 0) {
                 uint256 currentExpiry = sortedOraclesRead.getTokenReportExpirySeconds(rateFeedId);
-                console.log("Current expiry for", relayerConfigs[i].rateFeed, currentExpiry);
                 if (currentExpiry != expiry) {
                     sortedOracles.setTokenReportExpiry(rateFeedId, expiry);
-                    console.log(string.concat(" > Set report expiry for ", relayerConfigs[i].rateFeed), expiry);
+                    console.log(
+                        string.concat(
+                            unicode"  ⏰ Expiry updated  [", relayerConfigs[i].rateFeed, "]  ",
+                            vm.toString(currentExpiry), "s -> ", vm.toString(expiry), "s"
+                        )
+                    );
+                } else {
+                    console.log(
+                        string.concat(
+                            unicode"  ✓ Expiry unchanged [", relayerConfigs[i].rateFeed, "]  ",
+                            vm.toString(currentExpiry), "s"
+                        )
+                    );
                 }
             }
         }
