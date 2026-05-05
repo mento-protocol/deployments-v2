@@ -20,6 +20,7 @@ import {ProxyHelper, ProxyType} from "script/helpers/ProxyHelper.sol";
 
 interface ISortedOraclesSetter is ISortedOracles {
     function setTokenReportExpiry(address rateFeedId, uint256 expiry) external;
+    function setReportExpiry(uint256 expiry) external;
 }
 
 /// @dev The upstream IValueDeltaBreaker/IMedianDeltaBreaker interfaces declare
@@ -70,6 +71,33 @@ contract AddRateFeed is TrebScript, ProxyHelper {
 
         // ── Step 3: Add rate feeds to BreakerBox and enable breakers ────────
         _configureBreakerBox(config, breakerBox, breakerBoxRead, migrationOwner);
+
+        // ── Step 4: Sync SortedOracles global report expiry ─────────────────
+        _updateGlobalReportExpiry(config, sortedOracles, sortedOraclesRead);
+    }
+
+    /// @dev Sync SortedOracles' global `reportExpirySeconds` with the value in
+    /// config. The per-feed expiry is handled inline in
+    /// `_deployRelayersAndAddOracles`, but the global fallback was previously
+    /// not updated by any script.
+    /// TODO: this lives here temporarily because expiry-related updates already
+    /// happen in this script; consider moving it to a dedicated SortedOracles
+    /// configuration script later.
+    function _updateGlobalReportExpiry(
+        IMentoConfig config,
+        ISortedOraclesSetter sortedOracles,
+        ISortedOracles sortedOraclesRead
+    ) internal {
+        uint256 desired = config.getOracleConfig().reportExpirySeconds;
+        if (desired == 0) {
+            return;
+        }
+        uint256 current = sortedOraclesRead.reportExpirySeconds();
+        console.log("Current global reportExpirySeconds", current);
+        if (current != desired) {
+            sortedOracles.setReportExpiry(desired);
+            console.log(" > Set global reportExpirySeconds", desired);
+        }
     }
 
     function _deployRelayersAndAddOracles(
