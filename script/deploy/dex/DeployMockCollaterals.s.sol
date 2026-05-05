@@ -26,16 +26,17 @@ contract DeployMockCollaterals is TrebScript {
 
         for (uint256 i = 0; i < mocks.length; i++) {
             string memory symbol = mocks[i];
-            console.log("Symbol", symbol);
             address addy = deployer.create3("MockERC20").setLabel(symbol)
                 .deploy(
                     abi.encode(
                         string.concat("Mento Mock ", symbol), symbol, config.getTokenDecimals(symbol), deployer.account
                     )
                 );
+
             MockERC20 coll = MockERC20(deployer.harness(addy));
             coll.mint(deployer.account, 1000000e18);
             IOwnable(address(coll)).transferOwnership(address(migrationOwner.account));
+            console.log("Deployed MockERC20 (%s) at %s", symbol, addy);
         }
     }
 }

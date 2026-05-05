@@ -32634,6 +32634,38 @@
     "createdAt": "2026-05-05T16:41:52.706099+02:00",
     "updatedAt": "2026-05-05T16:41:52.724663+02:00"
   },
+  "testnet-v2-rc5/84532/MockERC20:EURC": {
+    "id": "testnet-v2-rc5/84532/MockERC20:EURC",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 84532,
+    "contractName": "MockERC20",
+    "label": "EURC",
+    "address": "0xe36C65cF840C16F45A0bd89628B89a9414DFda82",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7008b0fc289e6b8ccfb0f8c63",
+      "initCodeHash": "0x4f0a39f8a071a27ef296a022d93c8f591b3fa30f3f1463b97161741b54f7872f",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000060000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000000f4d656e746f204d6f636b2045555243000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000044555524300000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockERC20:EURC"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockERC20.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x3214fe415269d585d2457a379afa1485632b7effd01de4746de90508b3633f4f",
+      "scriptPath": "script/deploy/dex/DeployMockCollaterals.s.sol",
+      "gitCommit": "f604a9e841a4b4d4b2d09cbb44a41df8e56c16bf"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-05T16:56:01.629227+02:00",
+    "updatedAt": "2026-05-05T16:56:01.649295+02:00"
+  },
   "testnet-v2-rc5/84532/ProxyAdmin": {
     "id": "testnet-v2-rc5/84532/ProxyAdmin",
     "namespace": "testnet-v2-rc5",
