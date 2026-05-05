@@ -61,9 +61,7 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
     /// ===================================================================
     /// ORACLES
     /// ===================================================================
-    /// @dev Override the parent's expiries to 1 week on testnet. Must run
-    /// after super._initOracles() so the parent's tighter mainnet values
-    /// don't overwrite ours.
+    /// @dev Override the parent's expiries to 1 week on testnet.
     function _initOracles() internal override {
         super._initOracles();
         _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks});
