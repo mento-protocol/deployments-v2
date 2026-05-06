@@ -20,6 +20,7 @@ import {ProxyHelper, ProxyType} from "script/helpers/ProxyHelper.sol";
 
 interface ISortedOraclesSetter is ISortedOracles {
     function setTokenReportExpiry(address rateFeedId, uint256 expiry) external;
+    function setReportExpiry(uint256 expiry) external;
 }
 
 /// @dev The upstream IValueDeltaBreaker/IMedianDeltaBreaker interfaces declare
@@ -70,6 +71,39 @@ contract AddRateFeed is TrebScript, ProxyHelper {
 
         // ── Step 3: Add rate feeds to BreakerBox and enable breakers ────────
         _configureBreakerBox(config, breakerBox, breakerBoxRead, migrationOwner);
+
+        // ── Step 4: Sync SortedOracles global report expiry ─────────────────
+        _updateGlobalReportExpiry(config, sortedOracles, sortedOraclesRead);
+    }
+
+    /// @dev Sync SortedOracles' global `reportExpirySeconds` with the value in
+    /// config. The per-feed expiry is handled inline in
+    /// `_deployRelayersAndAddOracles`, but the global fallback was previously
+    /// not updated by any script.
+    /// TODO: this lives here temporarily because expiry-related updates already
+    /// happen in this script; consider moving it to a dedicated SortedOracles
+    /// configuration script later.
+    function _updateGlobalReportExpiry(
+        IMentoConfig config,
+        ISortedOraclesSetter sortedOracles,
+        ISortedOracles sortedOraclesRead
+    ) internal {
+        uint256 desired = config.getOracleConfig().reportExpirySeconds;
+        if (desired == 0) {
+            return;
+        }
+        uint256 current = sortedOraclesRead.reportExpirySeconds();
+        console.log(unicode"\n=== 🌐 SortedOracles global reportExpirySeconds ===");
+        if (current != desired) {
+            sortedOracles.setReportExpiry(desired);
+            console.log(
+                string.concat(
+                    unicode"  ⏰ Global expiry updated  ", vm.toString(current), "s -> ", vm.toString(desired), "s"
+                )
+            );
+        } else {
+            console.log(string.concat(unicode"  ✓ Global expiry unchanged  ", vm.toString(current), "s"));
+        }
     }
 
     function _deployRelayersAndAddOracles(
@@ -87,6 +121,7 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             return;
         }
 
+        console.log(unicode"\n=== ⏰ Per-feed report expiry ===");
         for (uint256 i = 0; i < relayerConfigs.length; i++) {
             address rateFeedId = relayerConfigs[i].rateFeedId;
             address existingRelayer = factoryRead.getRelayer(rateFeedId);
@@ -120,10 +155,29 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             uint256 expiry = config.getRateFeedExpirySeconds(relayerConfigs[i].rateFeed);
             if (expiry > 0) {
                 uint256 currentExpiry = sortedOraclesRead.getTokenReportExpirySeconds(rateFeedId);
-                console.log("Current expiry for", relayerConfigs[i].rateFeed, currentExpiry);
                 if (currentExpiry != expiry) {
                     sortedOracles.setTokenReportExpiry(rateFeedId, expiry);
-                    console.log(string.concat(" > Set report expiry for ", relayerConfigs[i].rateFeed), expiry);
+                    console.log(
+                        string.concat(
+                            unicode"  ⏰ Expiry updated  [",
+                            relayerConfigs[i].rateFeed,
+                            "]  ",
+                            vm.toString(currentExpiry),
+                            "s -> ",
+                            vm.toString(expiry),
+                            "s"
+                        )
+                    );
+                } else {
+                    console.log(
+                        string.concat(
+                            unicode"  ✓ Expiry unchanged [",
+                            relayerConfigs[i].rateFeed,
+                            "]  ",
+                            vm.toString(currentExpiry),
+                            "s"
+                        )
+                    );
                 }
             }
         }

@@ -29,17 +29,10 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
     function _configureParams() internal override {
         super._configureParams();
 
-        // Oracle infrastructure
-        _oracleConfig = OracleConfig({reportExpirySeconds: 6 minutes});
-        mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("monad");
-        _setRateFeedExpirySeconds("USDC/USD", 1 days);
-        _setRateFeedExpirySeconds("AUSD/USD", 1 days);
-        _setRateFeedExpirySeconds("USDT/USD", 1 days);
-        _setRateFeedExpirySeconds("EUR/USD", 1 days);
-        _setRateFeedExpirySeconds("GBP/USD", 1 days);
-        _setRateFeedExpirySeconds("JPY/USD", 1 days);
-        _setRateFeedExpirySeconds("CHF/USD", 1 days);
+
+        // Oracle infrastructure
+        mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
 
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({
@@ -68,5 +61,21 @@ contract MentoConfig_monad_testnet is MentoConfig_monad {
             jpy: _mockAggregator("JPY/USD", "JPY/USD", _fxAggs.jpy),
             ngn: address(0)
         });
+    }
+
+    /// ===================================================================
+    /// ORACLES
+    /// ===================================================================
+    /// @notice Override the mainnet expiries to 1 week on testnet.
+    function _initOracles() internal override {
+        super._initOracles();
+        _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks});
+        _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
+        _setRateFeedExpirySeconds("AUSD/USD", 1 weeks);
+        _setRateFeedExpirySeconds("USDT/USD", 1 weeks);
+        _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
+        _setRateFeedExpirySeconds("GBP/USD", 1 weeks);
+        _setRateFeedExpirySeconds("JPY/USD", 1 weeks);
+        _setRateFeedExpirySeconds("CHF/USD", 1 weeks);
     }
 }

@@ -3,20 +3,19 @@ pragma solidity ^0.8.0;
 
 import {console} from "forge-std/console.sol";
 import {ITradingLimits, BreakerType, CoreAggregators, FxAggregators} from "./MentoConfig.sol";
-import {MentoConfig_polygon} from "./MentoConfig_polygon.sol";
+import {MentoConfig_base} from "./MentoConfig_base.sol";
 import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkRelayer.sol";
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 
 import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
 
-contract MentoConfig_polygon_testnet is MentoConfig_polygon {
+contract MentoConfig_base_sepolia is MentoConfig_base {
     /// ===================================================================
     /// COLLATERAL
     /// ===================================================================
     function _initCollateral() internal override {
-        // _addCollateral("USDC", lookup("USDC")); // do we need this?
-        _registerMockCollateral("USDC", 6);
-        _addReserveV2Collateral("USDC");
+        _registerMockCollateral("EURC", 6);
+        _addReserveV2Collateral("EURC");
     }
 
     // ===================================================================
@@ -27,13 +26,13 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
 
         // Oracle infrastructure
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
-        _setMockAggregatorSource("polygon");
+        _setMockAggregatorSource("base");
 
         // Wrap core aggregators in mocks
         _coreAggs = CoreAggregators({
-            usdcUsd: _mockAggregator("USDC/USD", "USDC/USD", _coreAggs.usdcUsd),
+            usdcUsd: address(0),
             usdtUsd: address(0),
-            eurcUsd: address(0),
+            eurcUsd: _mockAggregator("EURC/USD", "EURC/USD", _coreAggs.eurcUsd),
             ausdUsd: address(0),
             celoUsd: address(0),
             ethUsd: address(0)
@@ -61,11 +60,12 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
     /// ===================================================================
     /// ORACLES
     /// ===================================================================
-    /// @dev Override the parent's expiries to 1 week on testnet.
+    /// @dev Override the parent's expiries to 1 week on testnet. Must run
+    /// after super._initOracles() so the parent's tighter mainnet values
+    /// don't overwrite ours.
     function _initOracles() internal override {
         super._initOracles();
         _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks});
-        _setRateFeedExpirySeconds("USDC/USD", 1 weeks);
-        _setRateFeedExpirySeconds("EUR/USD", 1 weeks);
+        _setRateFeedExpirySeconds("EURC/EUR", 1 weeks);
     }
 }

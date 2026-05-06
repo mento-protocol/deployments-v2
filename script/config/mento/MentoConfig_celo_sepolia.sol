@@ -303,4 +303,47 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
             watchdog: 0x56fD3F2bEE130e9867942D0F463a16fBE49B8d81
         });
     }
+
+    /// ===================================================================
+    /// ORACLES
+    /// ===================================================================
+    /// @dev Override the parent's expiries to 1 week on testnet.
+    function _initOracles() internal override {
+        super._initOracles();
+        _oracleConfig = OracleConfig({reportExpirySeconds: 1 weeks});
+        _setRateFeedExpirySeconds("USDCUSD", 1 weeks);
+        _setRateFeedExpirySeconds("USDTUSD", 1 weeks);
+        _setRateFeedExpirySeconds("EUROCEUR", 1 weeks);
+        _setRateFeedExpirySeconds("CELOUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOETH", 1 weeks);
+        _setRateFeedExpirySeconds("EURXOF", 1 weeks);
+        _setRateFeedExpirySeconds("EURUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOEUR", 1 weeks);
+        _setRateFeedExpirySeconds("BRLUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOBRL", 1 weeks);
+        _setRateFeedExpirySeconds("XOFUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOXOF", 1 weeks);
+        _setRateFeedExpirySeconds("KESUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOKES", 1 weeks);
+        _setRateFeedExpirySeconds("PHPUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOPHP", 1 weeks);
+        _setRateFeedExpirySeconds("COPUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOCOP", 1 weeks);
+        _setRateFeedExpirySeconds("GHSUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOGHS", 1 weeks);
+        _setRateFeedExpirySeconds("GBPUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOGBP", 1 weeks);
+        _setRateFeedExpirySeconds("ZARUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOZAR", 1 weeks);
+        _setRateFeedExpirySeconds("CADUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOCAD", 1 weeks);
+        _setRateFeedExpirySeconds("AUDUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOAUD", 1 weeks);
+        _setRateFeedExpirySeconds("CHFUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOCHF", 1 weeks);
+        _setRateFeedExpirySeconds("JPYUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELOJPY", 1 weeks);
+        _setRateFeedExpirySeconds("NGNUSD", 1 weeks);
+        _setRateFeedExpirySeconds("CELONGN", 1 weeks);
+    }
 }

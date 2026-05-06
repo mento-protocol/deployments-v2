@@ -390,7 +390,7 @@ contract MentoConfig_celo is MentoConfig {
     /// ORACLES
     /// ===================================================================
     /// @notice Configure oracle ratefeeds and circuit breaker
-    function _initOracles() internal {
+    function _initOracles() internal virtual {
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 

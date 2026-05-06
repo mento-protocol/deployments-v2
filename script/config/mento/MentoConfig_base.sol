@@ -7,7 +7,7 @@ import {IChainlinkRelayer} from "lib/mento-core/contracts/interfaces/IChainlinkR
 import {bytes32s, uints, bytesList} from "lib/mento-std/src/Array.sol";
 import {IFPMM} from "lib/mento-core/contracts/interfaces/IFPMM.sol";
 
-contract MentoConfig_polygon is MentoConfig {
+contract MentoConfig_base is MentoConfig {
     bytes32 internal valueBreakerId;
     bytes32 internal medianBreakerId;
     CoreAggregators internal _coreAggs;
@@ -27,16 +27,16 @@ contract MentoConfig_polygon is MentoConfig {
     /// @notice Set network-specific parameters. Override in subclasses.
     function _configureParams() internal virtual {
         _coreAggs = CoreAggregators({
-            usdcUsd: 0xfE4A8cc5b5B2366C1B58Bea3858e81843581b2F7,
+            usdcUsd: address(0),
             usdtUsd: address(0),
-            eurcUsd: address(0),
+            eurcUsd: 0xDAe398520e2B67cd3f27aeF9Cf14D93D927f8250,
             ausdUsd: address(0),
             celoUsd: address(0),
             ethUsd: address(0)
         });
 
         _fxAggs = FxAggregators({
-            eur: 0x73366Fe0AA0Ded304479862808e02506FE556a98,
+            eur: 0xc91D87E81faB8f93699ECf7Ee9B44D11e1D53F0F,
             brl: address(0),
             xof: address(0),
             kes: address(0),
@@ -57,7 +57,6 @@ contract MentoConfig_polygon is MentoConfig {
     /// STABLE TOKENS
     /// ===================================================================
     function _initStables() internal virtual {
-        _addStableToken("USD", "USDm", "Mento Dollar");
         _addStableToken("EUR", "EURm", "Mento Euro");
     }
 
@@ -65,8 +64,8 @@ contract MentoConfig_polygon is MentoConfig {
     /// COLLATERAL
     /// ===================================================================
     function _initCollateral() internal virtual {
-        _addCollateral("USDC", lookupOrFail("USDC"));
-        _addReserveV2Collateral("USDC");
+        _addCollateral("EURC", lookupOrFail("EURC"));
+        _addReserveV2Collateral("EURC");
     }
 
     /// ===================================================================
@@ -74,8 +73,8 @@ contract MentoConfig_polygon is MentoConfig {
     /// ===================================================================
     function _initFPMMs() internal virtual {
         _defaultFPMMParams = IFPMM.FPMMParams({
-            lpFee: 3,
-            protocolFee: 2,
+            lpFee: 24,
+            protocolFee: 16,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
             feeSetter: lookupOrFail("FeeSetter"),
             rebalanceIncentive: 1,
@@ -83,10 +82,11 @@ contract MentoConfig_polygon is MentoConfig {
             rebalanceThresholdBelow: 3333
         });
 
-        // Liquidity strategy params for USD collateral pools
-        LiquidityStrategyPoolConfig memory usdCollateralPoolsLsConfig = LiquidityStrategyPoolConfig({
+        // ── EURm / EURC ──────────────────────────────────────────────
+        // ReserveLiquidity strategy params for EUR collateral pools
+        LiquidityStrategyPoolConfig memory eurCollateralPoolsRlsConfig = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
-            debtToken: _lookupTokenAddress("USDm"),
+            debtToken: _lookupTokenAddress("EURm"),
             cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
             liquiditySourceIncentiveExpansion: 0,
@@ -95,53 +95,22 @@ contract MentoConfig_polygon is MentoConfig {
             protocolIncentiveContraction: 0
         });
 
-        // ── USDm / USDC ────────────────────────────────────────────────
         _addFPMM(
-            "USDm",
-            "USDC",
-            getRateFeedIdFromString("USDC/USD"),
+            "EURm",
+            "EURC",
+            getRateFeedIdFromString("EURC/EUR"),
             IFPMM.FPMMParams({
-                lpFee: 3,
-                protocolFee: 2,
+                lpFee: 24,
+                protocolFee: 16,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
                 rebalanceIncentive: 1,
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            TokenLimits({limit0: 500_000, limit1: 1_000_000}),
-            usdCollateralPoolsLsConfig
-        );
-
-        // ── USDm / EURm ────────────────────────────────────────────────
-        LiquidityStrategyPoolConfig memory openLsConfigEUR = LiquidityStrategyPoolConfig({
-            liquidityStrategy: lookupProxy("OpenLiquidityStrategy"),
-            debtToken: _lookupTokenAddress("USDm"),
-            cooldown: 300,
-            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-            liquiditySourceIncentiveExpansion: 0.0002e18, // 2bps / 0.02%
-            protocolIncentiveExpansion: 0, // 0%
-            liquiditySourceIncentiveContraction: 0.0002e18, // 2bps / 0.02%
-            protocolIncentiveContraction: 0 // 0%
-        });
-
-        _addFPMM(
-            "EURm",
-            "USDm",
-            getRateFeedIdFromString("EUR/USD"),
-            IFPMM.FPMMParams({
-                lpFee: 3,
-                protocolFee: 2,
-                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-                feeSetter: lookupOrFail("FeeSetter"),
-                rebalanceIncentive: 3,
-                rebalanceThresholdAbove: 5000,
-                rebalanceThresholdBelow: 3333
-            }),
-            TokenLimits({limit0: 215_000, limit1: 860_000}),
-            TokenLimits({limit0: 250_000, limit1: 1_000_000}),
-            openLsConfigEUR
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            TokenLimits({limit0: 100_000, limit1: 500_000}),
+            eurCollateralPoolsRlsConfig
         );
     }
 
@@ -149,44 +118,30 @@ contract MentoConfig_polygon is MentoConfig {
     /// ORACLES
     /// ===================================================================
     /// @notice Configure oracle ratefeeds and circuit breaker
-    /// @dev On testnets we can use _addMockAggregator to define chainlink
-    /// aggregators.
     function _initOracles() internal virtual {
-        _oracleConfig = OracleConfig({reportExpirySeconds: 150 seconds}); // TODO: find a place where to detect updates made to this value other than AddRateFeeds.s.sol
+        _oracleConfig = OracleConfig({reportExpirySeconds: 1 hours + 2 minutes});
         valueBreakerId = _addBreaker({breakerType: BreakerType.Value, defaultCooldownTime: 0, defaultThreshold: 0});
         medianBreakerId = _addBreaker({breakerType: BreakerType.Median, defaultCooldownTime: 0, defaultThreshold: 0});
 
-        _addRateFeed("USDC/USD");
-        _setRateFeedExpirySeconds("USDC/USD", 150 seconds);
+        // EURC/EUR is derived from EURC/USD * USD/EUR (EUR/USD inverted).
+        _addRateFeed("EURC/EUR");
+        _setRateFeedExpirySeconds("EURC/EUR", 1 hours + 2 minutes);
         _addToBreaker({
             breakerId: valueBreakerId,
-            rateFeed: "USDC/USD",
+            rateFeed: "EURC/EUR",
             cooldown: 1,
-            threshold: 0.0015 * 1e24,
+            threshold: 0.005 * 1e24,
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
         _addChainlinkRelayer({
-            rateFeed: "USDC/USD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
+            rateFeed: "EURC/EUR",
+            description: "EURC/EUR (EURC/USD:USD/EUR)",
+            maxTimestampSpread: 1 days,
+            aggregator0: _coreAggs.eurcUsd,
+            invert0: false,
+            aggregator1: _fxAggs.eur,
+            invert1: true
         });
-
-        _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
-        _setRateFeedExpirySeconds("EUR/USD", 150 seconds);
-    }
-
-    /// @notice Helper function to configure an FX rate feed, they have
-    /// the same breaker configuration.
-    function _configureDefaultFxRateFeed(string memory rateFeed, address source) internal virtual {
-        _addRateFeed(rateFeed);
-        _fxRateFeedIds.push(_getRateFeedId(rateFeed));
-        _addToBreaker({
-            breakerId: medianBreakerId,
-            rateFeed: rateFeed,
-            cooldown: 15 minutes,
-            threshold: 0.04 * 1e24,
-            smoothingFactor: 0.005 * 1e24,
-            referenceValue: 0
-        });
-        _addChainlinkRelayer({rateFeed: rateFeed, description: rateFeed, aggregator0: source, invert0: false});
     }
 }
