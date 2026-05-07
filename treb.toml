@@ -55,6 +55,10 @@ governor = "mento-gov-celo-sepolia"
 migrationOwner = "dev-pk"
 reporter = "reporter-pk"
 
+[namespace.test-wormhole-mainnet.senders]
+deployer = "dev-pk"
+migrationOwner = "dev-pk"
+
 [namespace.throwaway.senders]
 deployer = "dev-pk"
 

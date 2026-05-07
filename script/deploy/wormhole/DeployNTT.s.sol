@@ -29,8 +29,8 @@ contract DeployNTT is NTTScriptBase {
     using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
 
-    /// @dev Default consistency level for WormholeTransceiver (202 = finalized).
-    uint8 constant CONSISTENCY_LEVEL = 202;
+    /// @dev Default consistency level for WormholeTransceiver (200 = instant finality).
+    uint8 constant CONSISTENCY_LEVEL = 200; // INSTANT FINALITY, FOR TESTNET ONLY
 
     /// @custom:env {string} token - Token name (e.g. "USDm", "GBPm")
     /// @custom:senders deployer, migrationOwner

@@ -229,4 +229,85 @@ library NTTConfig {
         config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: CHFm_RATE_LIMIT});
         config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: CHFm_RATE_LIMIT});
     }
+
+    /// ================================================================
+    /// ================================================================
+    /// ================================================================
+
+    /// ========= Testing configs for Wormhole mainnet testing =========
+    function getWormholeTestUSDConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "WormholeTestUSD";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "migrationOwner";
+
+        config.chains = new NTTChainConfig[](3);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "WormholeTestUSD",
+            isBurning: true,
+            outboundLimit: USDm_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "WormholeTestUSD",
+            isBurning: true,
+            outboundLimit: USDm_RATE_LIMIT
+        });
+        config.chains[2] = NTTChainConfig({
+            chainName: "polygon",
+            evmChainId: POLYGON_EVM_CHAIN_ID,
+            wormholeChainId: POLYGON_WH_CHAIN_ID,
+            tokenLabel: "WormholeTestUSD",
+            isBurning: true,
+            outboundLimit: USDm_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](3);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: USDm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: USDm_RATE_LIMIT});
+        config.inboundLimits[2] = NTTInboundLimit({fromChainName: "polygon", limit: USDm_RATE_LIMIT});
+    }
+
+    function getWormholeTestGBPConfig() internal pure returns (NTTTokenConfig memory config) {
+        config.tokenName = "WormholeTestGBP";
+        config.tokenDecimals = 18;
+        config.ownerLabel = "migrationOwner";
+
+        config.chains = new NTTChainConfig[](3);
+        config.chains[0] = NTTChainConfig({
+            chainName: "celo",
+            evmChainId: CELO_EVM_CHAIN_ID,
+            wormholeChainId: CELO_WH_CHAIN_ID,
+            tokenLabel: "WormholeTestGBP",
+            isBurning: false,
+            outboundLimit: GBPm_RATE_LIMIT
+        });
+        config.chains[1] = NTTChainConfig({
+            chainName: "monad",
+            evmChainId: MONAD_EVM_CHAIN_ID,
+            wormholeChainId: MONAD_WH_CHAIN_ID,
+            tokenLabel: "WormholeTestGBP",
+            isBurning: true,
+            outboundLimit: GBPm_RATE_LIMIT
+        });
+        config.chains[2] = NTTChainConfig({
+            chainName: "polygon",
+            evmChainId: POLYGON_EVM_CHAIN_ID,
+            wormholeChainId: POLYGON_WH_CHAIN_ID,
+            tokenLabel: "WormholeTestGBP",
+            isBurning: true,
+            outboundLimit: GBPm_RATE_LIMIT
+        });
+
+        config.inboundLimits = new NTTInboundLimit[](3);
+        config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: GBPm_RATE_LIMIT});
+        config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: GBPm_RATE_LIMIT});
+        config.inboundLimits[2] = NTTInboundLimit({fromChainName: "polygon", limit: GBPm_RATE_LIMIT});
+    }
+
+
 }
