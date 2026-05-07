@@ -18,7 +18,7 @@ runtimes:
 # This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
 lint:
   ignore:
-    - linters: [gitleaks, trufflehog]
+    - linters: [gitleaks, trufflehog, checkov]
       paths:
         - .treb/*.json # Blockchain contract addresses, not secrets
         - broadcast/**/*.json # Forge deployment transaction logs
