@@ -629,6 +629,7 @@
   "137": {
     "test-wormhole-mainnet": {
       "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
+      "TransceiverStructs": "0x05bD282ecFC1f63a761962bb8973b1D43DD2a9De",
       "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
       "TransparentUpgradeableProxy:WormholeTestUSD": "0xd7CeC29119b8aA3B8718bD07Eb334d3a0c6f5d75"
     }
@@ -690,6 +691,7 @@
     },
     "test-wormhole-mainnet": {
       "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
+      "TransceiverStructs": "0x05bD282ecFC1f63a761962bb8973b1D43DD2a9De",
       "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
       "TransparentUpgradeableProxy:WormholeTestUSD": "0xd7CeC29119b8aA3B8718bD07Eb334d3a0c6f5d75"
     }
@@ -791,6 +793,7 @@
     },
     "test-wormhole-mainnet": {
       "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
+      "TransceiverStructs": "0x05bD282ecFC1f63a761962bb8973b1D43DD2a9De",
       "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
       "TransparentUpgradeableProxy:WormholeTestUSD": "0xd7CeC29119b8aA3B8718bD07Eb334d3a0c6f5d75"
     },
