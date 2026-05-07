@@ -44,7 +44,6 @@ library NTTConfig {
     uint256 internal constant BASE_EVM_CHAIN_ID = 8453;
     uint16 internal constant BASE_WH_CHAIN_ID = 30;
 
-
     // ── Rate limit constants ────────────────────────────────────────────
     uint256 internal constant USDm_RATE_LIMIT = 500_000e18;
     uint256 internal constant GBPm_RATE_LIMIT = 500_000e18;

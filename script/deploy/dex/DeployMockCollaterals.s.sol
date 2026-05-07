@@ -29,11 +29,7 @@ contract DeployMockCollaterals is TrebScript {
             uint256 decimals = config.getTokenDecimals(symbol);
 
             address addy = deployer.create3("MockERC20").setLabel(symbol)
-                .deploy(
-                    abi.encode(
-                        string.concat("Mento Mock ", symbol), symbol, decimals, deployer.account
-                    )
-                );
+                .deploy(abi.encode(string.concat("Mento Mock ", symbol), symbol, decimals, deployer.account));
 
             MockERC20 coll = MockERC20(deployer.harness(addy));
             coll.mint(deployer.account, 1_000_000 * 10 ** decimals);
