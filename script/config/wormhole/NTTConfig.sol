@@ -61,7 +61,7 @@ library NTTConfig {
         config.tokenDecimals = 18;
         config.ownerLabel = "migrationOwner";
 
-        config.chains = new NTTChainConfig[](2);
+        config.chains = new NTTChainConfig[](3);
         config.chains[0] = NTTChainConfig({
             chainName: "celo",
             evmChainId: CELO_EVM_CHAIN_ID,
@@ -87,7 +87,7 @@ library NTTConfig {
             outboundLimit: USDm_RATE_LIMIT
         });
 
-        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits = new NTTInboundLimit[](3);
         config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: USDm_RATE_LIMIT});
         config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: USDm_RATE_LIMIT});
         config.inboundLimits[2] = NTTInboundLimit({fromChainName: "polygon", limit: USDm_RATE_LIMIT});
@@ -164,7 +164,7 @@ library NTTConfig {
             outboundLimit: EURm_RATE_LIMIT
         });
 
-        config.inboundLimits = new NTTInboundLimit[](2);
+        config.inboundLimits = new NTTInboundLimit[](4);
         config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: EURm_RATE_LIMIT});
         config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: EURm_RATE_LIMIT});
         config.inboundLimits[2] = NTTInboundLimit({fromChainName: "polygon", limit: EURm_RATE_LIMIT});
