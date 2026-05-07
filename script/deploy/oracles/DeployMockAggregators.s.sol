@@ -21,6 +21,12 @@ contract DeployMockAggregators is TrebScript {
         IMentoConfig config = Config.get();
         Senders.Sender storage deployer = sender("deployer");
 
+        IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
+        if (aggConfigs.length == 0) {
+            console.log("No mock aggregators configured to deploy, skipping");
+            return;
+        }
+
         address reporterContract = lookup("MockAggregatorBatchReporter:v3.0.0");
         if (reporterContract == address(0)) {
             address reporterEOA = config.mockAggregatorReporter();
@@ -29,14 +35,14 @@ contract DeployMockAggregators is TrebScript {
             console.log("MockAggregatorBatchReporter deployed at:", reporterContract);
         }
 
-        IMentoConfig.MockAggregatorConfig[] memory aggConfigs = config.getMockAggregatorConfigs();
-
         for (uint256 i = 0; i < aggConfigs.length; i++) {
             address aggAddy = deployer.create3("MockChainlinkAggregator").setLabel(aggConfigs[i].label)
                 .deploy(abi.encode(aggConfigs[i].description, aggConfigs[i].decimals, deployer.account));
             MockChainlinkAggregator agg = MockChainlinkAggregator(deployer.harness(aggAddy));
             agg.setExternalProvider(reporterContract);
             agg.report(aggConfigs[i].initialReport, block.timestamp);
+
+            console.log("MockChainlinkAggregator %s deployed at %s", aggConfigs[i].label, aggAddy);
         }
     }
 }
