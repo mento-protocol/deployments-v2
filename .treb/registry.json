@@ -628,6 +628,8 @@
   },
   "137": {
     "test-wormhole-mainnet": {
+      "NttDeployHelper:WormholeTestGBP": "0x2198594c5D41e943A491B7d40Df3E83927EFFD43",
+      "NttDeployHelper:WormholeTestUSD": "0xdA8AE9730de2D26956ecdEe293B3A1703E98c13B",
       "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
       "TransceiverStructs": "0x05bD282ecFC1f63a761962bb8973b1D43DD2a9De",
       "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
@@ -690,6 +692,8 @@
       "TransparentUpgradeableProxy:USDm": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88"
     },
     "test-wormhole-mainnet": {
+      "NttDeployHelper:WormholeTestGBP": "0x2198594c5D41e943A491B7d40Df3E83927EFFD43",
+      "NttDeployHelper:WormholeTestUSD": "0xdA8AE9730de2D26956ecdEe293B3A1703E98c13B",
       "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
       "TransceiverStructs": "0x05bD282ecFC1f63a761962bb8973b1D43DD2a9De",
       "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
@@ -792,6 +796,8 @@
       "VirtualPoolFactory:v3.0.0": "0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3"
     },
     "test-wormhole-mainnet": {
+      "NttDeployHelper:WormholeTestGBP": "0x2198594c5D41e943A491B7d40Df3E83927EFFD43",
+      "NttDeployHelper:WormholeTestUSD": "0xdA8AE9730de2D26956ecdEe293B3A1703E98c13B",
       "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
       "TransceiverStructs": "0x05bD282ecFC1f63a761962bb8973b1D43DD2a9De",
       "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",

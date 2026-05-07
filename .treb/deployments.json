@@ -8299,6 +8299,70 @@
     "createdAt": "2025-09-08T09:55:43.984987Z",
     "updatedAt": "2025-09-09T10:01:59.497684Z"
   },
+  "test-wormhole-mainnet/137/NttDeployHelper:WormholeTestGBP": {
+    "id": "test-wormhole-mainnet/137/NttDeployHelper:WormholeTestGBP",
+    "namespace": "test-wormhole-mainnet",
+    "chainId": 137,
+    "contractName": "NttDeployHelper",
+    "label": "WormholeTestGBP",
+    "address": "0x2198594c5D41e943A491B7d40Df3E83927EFFD43",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700c038663ef271a327d06c66",
+      "initCodeHash": "0xeb93b3f7ad6defdf66a5752721bdf9e1c3b6625e0b0690c692354b68f5c502d1",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000008c4e9828eb5a796be7c1ebcbc20fc7554facb9d7000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000050000000000000000000000007a4b5a56256163f07b2c80a7ca55abe66c4ec4d700000000000000000000000000000000000000000000000000000000000000c80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "test-wormhole-mainnet/NttDeployHelper:WormholeTestGBP"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x65901f8c4465fcf3b2abdddbcaa62e4c9cfa81e4ecc29962a1101b8f2aeba4c2",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "b455f9fbe72f9b26400e945282926032853c6872"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-07T15:12:46.628541+02:00",
+    "updatedAt": "2026-05-07T15:12:46.65344+02:00"
+  },
+  "test-wormhole-mainnet/137/NttDeployHelper:WormholeTestUSD": {
+    "id": "test-wormhole-mainnet/137/NttDeployHelper:WormholeTestUSD",
+    "namespace": "test-wormhole-mainnet",
+    "chainId": 137,
+    "contractName": "NttDeployHelper",
+    "label": "WormholeTestUSD",
+    "address": "0xdA8AE9730de2D26956ecdEe293B3A1703E98c13B",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700f8e3957b6f76b62821ccd7",
+      "initCodeHash": "0xd696f154dd7aeafa20c1c2261fea1bd136aa214fe93414f229f65a4aade40d08",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000d7cec29119b8aa3b8718bd07eb334d3a0c6f5d75000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000050000000000000000000000007a4b5a56256163f07b2c80a7ca55abe66c4ec4d700000000000000000000000000000000000000000000000000000000000000c80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "test-wormhole-mainnet/NttDeployHelper:WormholeTestUSD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x65901f8c4465fcf3b2abdddbcaa62e4c9cfa81e4ecc29962a1101b8f2aeba4c2",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "b455f9fbe72f9b26400e945282926032853c6872"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-07T15:12:33.289779+02:00",
+    "updatedAt": "2026-05-07T15:12:33.308559+02:00"
+  },
   "test-wormhole-mainnet/137/StableTokenSpoke:v3.0.0": {
     "id": "test-wormhole-mainnet/137/StableTokenSpoke:v3.0.0",
     "namespace": "test-wormhole-mainnet",
@@ -8435,6 +8499,70 @@
     "createdAt": "2026-05-07T15:04:07.74737+02:00",
     "updatedAt": "2026-05-07T15:04:07.765092+02:00"
   },
+  "test-wormhole-mainnet/143/NttDeployHelper:WormholeTestGBP": {
+    "id": "test-wormhole-mainnet/143/NttDeployHelper:WormholeTestGBP",
+    "namespace": "test-wormhole-mainnet",
+    "chainId": 143,
+    "contractName": "NttDeployHelper",
+    "label": "WormholeTestGBP",
+    "address": "0x2198594c5D41e943A491B7d40Df3E83927EFFD43",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700c038663ef271a327d06c66",
+      "initCodeHash": "0x5db14b1747cecd87f06ab2a345c7c8e5757b7a1b82e30088a759f424acb0096b",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000008c4e9828eb5a796be7c1ebcbc20fc7554facb9d700000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000030000000000000000000000000194b123c5e96b9b2e49763619985790dc241cac000000000000000000000000000000000000000000000000000000000000000c80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "test-wormhole-mainnet/NttDeployHelper:WormholeTestGBP"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x65901f8c4465fcf3b2abdddbcaa62e4c9cfa81e4ecc29962a1101b8f2aeba4c2",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "951e050961e7b218e8df56cf01e94dc06d06ee2c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-07T15:12:05.391033+02:00",
+    "updatedAt": "2026-05-07T15:12:05.418941+02:00"
+  },
+  "test-wormhole-mainnet/143/NttDeployHelper:WormholeTestUSD": {
+    "id": "test-wormhole-mainnet/143/NttDeployHelper:WormholeTestUSD",
+    "namespace": "test-wormhole-mainnet",
+    "chainId": 143,
+    "contractName": "NttDeployHelper",
+    "label": "WormholeTestUSD",
+    "address": "0xdA8AE9730de2D26956ecdEe293B3A1703E98c13B",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700f8e3957b6f76b62821ccd7",
+      "initCodeHash": "0x0cde4c5eb55d4abeb51bcae887529195f1cedfd08a64cca448152be88a7f17e3",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000d7cec29119b8aa3b8718bd07eb334d3a0c6f5d7500000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000030000000000000000000000000194b123c5e96b9b2e49763619985790dc241cac000000000000000000000000000000000000000000000000000000000000000c80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "test-wormhole-mainnet/NttDeployHelper:WormholeTestUSD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x65901f8c4465fcf3b2abdddbcaa62e4c9cfa81e4ecc29962a1101b8f2aeba4c2",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "951e050961e7b218e8df56cf01e94dc06d06ee2c"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-07T15:11:56.478099+02:00",
+    "updatedAt": "2026-05-07T15:11:56.494392+02:00"
+  },
   "test-wormhole-mainnet/143/StableTokenSpoke:v3.0.0": {
     "id": "test-wormhole-mainnet/143/StableTokenSpoke:v3.0.0",
     "namespace": "test-wormhole-mainnet",
@@ -8570,6 +8698,70 @@
     "tags": null,
     "createdAt": "2026-05-07T15:03:54.838333+02:00",
     "updatedAt": "2026-05-07T15:03:54.858469+02:00"
+  },
+  "test-wormhole-mainnet/42220/NttDeployHelper:WormholeTestGBP": {
+    "id": "test-wormhole-mainnet/42220/NttDeployHelper:WormholeTestGBP",
+    "namespace": "test-wormhole-mainnet",
+    "chainId": 42220,
+    "contractName": "NttDeployHelper",
+    "label": "WormholeTestGBP",
+    "address": "0x2198594c5D41e943A491B7d40Df3E83927EFFD43",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700c038663ef271a327d06c66",
+      "initCodeHash": "0x89faaac35f400e917abb7959b8c9e72e2c58117c6c8bb405eaf25d52cf24c86d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000008c4e9828eb5a796be7c1ebcbc20fc7554facb9d70000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000a321448d90d4e5b0a732867c18ea198e75cac48e00000000000000000000000000000000000000000000000000000000000000c80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "test-wormhole-mainnet/NttDeployHelper:WormholeTestGBP"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x65901f8c4465fcf3b2abdddbcaa62e4c9cfa81e4ecc29962a1101b8f2aeba4c2",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "309593529b68b2451b8cd77352e3259d26f2e9a9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-07T15:11:08.66662+02:00",
+    "updatedAt": "2026-05-07T15:11:08.685779+02:00"
+  },
+  "test-wormhole-mainnet/42220/NttDeployHelper:WormholeTestUSD": {
+    "id": "test-wormhole-mainnet/42220/NttDeployHelper:WormholeTestUSD",
+    "namespace": "test-wormhole-mainnet",
+    "chainId": 42220,
+    "contractName": "NttDeployHelper",
+    "label": "WormholeTestUSD",
+    "address": "0xdA8AE9730de2D26956ecdEe293B3A1703E98c13B",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700f8e3957b6f76b62821ccd7",
+      "initCodeHash": "0x7f5be412699c1bbbe33b1e222fdb7e39320ea923b61125d04b496d1bc696da9d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000d7cec29119b8aa3b8718bd07eb334d3a0c6f5d750000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000a321448d90d4e5b0a732867c18ea198e75cac48e00000000000000000000000000000000000000000000000000000000000000c80000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7",
+      "entropy": "test-wormhole-mainnet/NttDeployHelper:WormholeTestUSD"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "script/deploy/wormhole/NttDeployHelper.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x65901f8c4465fcf3b2abdddbcaa62e4c9cfa81e4ecc29962a1101b8f2aeba4c2",
+      "scriptPath": "script/deploy/wormhole/DeployNTT.s.sol",
+      "gitCommit": "309593529b68b2451b8cd77352e3259d26f2e9a9"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-05-07T15:10:53.351934+02:00",
+    "updatedAt": "2026-05-07T15:10:53.370582+02:00"
   },
   "test-wormhole-mainnet/42220/StableTokenSpoke:v3.0.0": {
     "id": "test-wormhole-mainnet/42220/StableTokenSpoke:v3.0.0",
