@@ -626,6 +626,13 @@
       "VirtualPoolFactory:v3.0.0": "0x887955f28723B0e9Bddc358448CB5B1FDe692da4"
     }
   },
+  "137": {
+    "test-wormhole-mainnet": {
+      "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
+      "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
+      "TransparentUpgradeableProxy:WormholeTestUSD": "0xd7CeC29119b8aA3B8718bD07Eb334d3a0c6f5d75"
+    }
+  },
   "143": {
     "mainnet": {
       "AddressSortedLinkedListWithMedian": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
@@ -680,6 +687,11 @@
       "StableTokenSpoke:v3.0.0": "0xa8caCd5d58F98Ee303fb54EF101AA4e277777E91",
       "TransparentUpgradeableProxy:GBPm": "0xddF082068Caa5B941ED8c603ADf0cecBdBb59f8E",
       "TransparentUpgradeableProxy:USDm": "0x866a7e4611C127DCe1a14C6841D2eA962A68dc88"
+    },
+    "test-wormhole-mainnet": {
+      "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
+      "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
+      "TransparentUpgradeableProxy:WormholeTestUSD": "0xd7CeC29119b8aA3B8718bD07Eb334d3a0c6f5d75"
     }
   },
   "42220": {
@@ -776,6 +788,11 @@
       "TroveNFT:v3.0.0-GBPm": "0x46273A5792013973b64a42E760E6F81d0472C6b6",
       "TroveNFT:v3.0.0-JPYm": "0x411DB4F90088101c76A51413F2D668FC409cbDCF",
       "VirtualPoolFactory:v3.0.0": "0x22abd4ADF6aab38aC1022352d496A07Acee5aCB3"
+    },
+    "test-wormhole-mainnet": {
+      "StableTokenSpoke:v3.0.0": "0x438501Cb63d7f8847e1fcC8C862Ae6d7b56128cF",
+      "TransparentUpgradeableProxy:WormholeTestGBP": "0x8c4E9828eb5a796Be7C1eBCBc20fC7554FAcB9d7",
+      "TransparentUpgradeableProxy:WormholeTestUSD": "0xd7CeC29119b8aA3B8718bD07Eb334d3a0c6f5d75"
     },
     "virtual": {
       "AddressSortedLinkedListWithMedian": "0x498FB531985aD936f1A98813F92625084a67d02F",
