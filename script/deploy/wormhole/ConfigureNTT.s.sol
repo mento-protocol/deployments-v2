@@ -146,7 +146,7 @@ contract ConfigureNTT is NTTScriptBase {
         console.log("    Remote chain:        %s (wormhole id %d)", peer.chainName, uint256(peer.wormholeChainId));
         console.log("    Remote NttManager:   %s", remoteManager);
         console.log("    Remote Transceiver:  %s", remoteXceiver);
-        console.log("    Inbound limit:       %d", inboundLimit / 1e18);
+        console.log("    Inbound limit:       %d %s", inboundLimit / 1e18, tokenName);
         console.log("");
 
         // NTT Manager peer
@@ -163,10 +163,10 @@ contract ConfigureNTT is NTTScriptBase {
             uint256 currentInbound =
                 _untrim(INTTManager(localNttManager).getInboundLimitParams(peer.wormholeChainId).limit);
             if (currentInbound != inboundLimit) {
-                console.log("        Updating inbound limit from %d to %d...", currentInbound / 1e18, inboundLimit / 1e18);
+                console.log("        Updating inbound limit from %d to %d %s...", currentInbound / 1e18, inboundLimit / 1e18, tokenName);
                 INTTManager(migrationOwner.harness(localNttManager)).setInboundLimit(inboundLimit, peer.wormholeChainId);
             } else {
-                console.log("        Inbound limit already correct (%d), skipping", inboundLimit / 1e18);
+                console.log("        Inbound limit already correct (%d %s), skipping", inboundLimit / 1e18, tokenName);
             }
         }
 
@@ -189,10 +189,10 @@ contract ConfigureNTT is NTTScriptBase {
         console.log("  ------------------------------------------------------------");
         uint256 currentOutbound = _untrim(INTTManager(localNttManager).getOutboundLimitParams().limit);
         if (currentOutbound != myChain.outboundLimit) {
-            console.log("    [+] Setting outbound limit: %d -> %d", currentOutbound / 1e18, myChain.outboundLimit / 1e18);
+            console.log("    [+] Setting outbound limit: %d -> %d %s", currentOutbound / 1e18, myChain.outboundLimit / 1e18, tokenName);
             INTTManager(migrationOwner.harness(localNttManager)).setOutboundLimit(myChain.outboundLimit);
         } else {
-            console.log("    [=] Outbound limit already %d, skipping", myChain.outboundLimit / 1e18);
+            console.log("    [=] Outbound limit already %d %s, skipping", myChain.outboundLimit / 1e18, tokenName);
         }
     }
 
