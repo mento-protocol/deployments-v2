@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD036 MD041 -->
+
 ## TL;DR
 
 We propose upgrading the BiPoolManager implementation to a new version that adds a `setSpread` function. The currently deployed implementation requires destroying and recreating a pool to change its fee, making fee adjustments operationally expensive. This upgrade enables the contract owner to adjust spread fees directly, starting with a reduction from 5bps to 2bps on select USDm pairs.
@@ -45,7 +47,7 @@ Upgrade the BiPoolManager proxy to the new implementation that adds the `setSpre
 
 - Call `_setImplementation(address)` on the BiPoolManager proxy
 
-| Contract      | Address                                    |
-| ------------- | ------------------------------------------ |
+| Contract              | Address                                    |
+| --------------------- | ------------------------------------------ |
 | BiPoolManager (proxy) | 0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901 |
 | New Implementation    | 0xC016174B60519Bdc24433d4ed2cFf6c1efaC7881 |

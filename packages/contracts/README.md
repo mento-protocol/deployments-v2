@@ -36,7 +36,13 @@ const broker = new Contract(Broker.address[CELO_SEPOLIA], Broker.abi, signer);
 const gbpm = new Contract(GBPm.address[chainId], GBPm.abi, signer);
 ```
 
-Each named export is `{ abi: [...] as const, address: Partial<Record<number, `0x${string}`>> }`. The `abi` is a fully typed const tuple (enabling viem type inference); `address` accepts any numeric chain ID so `client.chain.id` works without casting.
+Each named export has the shape:
+
+```typescript
+{ abi: [...] as const, address: Partial<Record<number, `0x${string}`>> }
+```
+
+The `abi` is a fully typed const tuple (enabling viem type inference); `address` accepts any numeric chain ID so `client.chain.id` works without casting.
 
 ### Per-token / per-pair contracts use `instances`
 
@@ -241,7 +247,7 @@ Proxies always take precedence over their implementation singletons when both wo
 
 ## Structure
 
-```
+```text
 packages/contracts/
 ├── abis/              # Raw ABI JSON files (one per contract)
 ├── src/               # TypeScript modules (auto-generated, do not edit)
