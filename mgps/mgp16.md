@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD036 MD041 -->
+
 ## TL;DR
 
 Following the successful Mento V3 deployment and the migration of GBPm to the CDP model, we propose for CHFm and JPYm to be the next stable tokens to be migrated. We ask governance to temporarily transfer the `owner` role for CHFm and JPYm to the 4/7 Mento Labs Dev Multisig to execute this migration.

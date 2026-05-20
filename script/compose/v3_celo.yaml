@@ -4,39 +4,43 @@ components:
     script: DeployV3PreStage
   ConfigureV3PreStage:
     script: ConfigureV3PreStage
-    deps: [ 'DeployV3PreStage' ]
+    deps: [DeployV3PreStage]
   UpgradeStableTokenV3_USDm:
     script: UpgradeStableTokenV3
-    deps: [ 'ConfigureV3PreStage' ]
+    deps: [ConfigureV3PreStage]
     env:
       TOKEN_SYMBOL: USDm
   UpgradeStableTokenV3_GBPm:
     script: UpgradeStableTokenV3
-    deps: [ 'ConfigureV3PreStage' ]
+    deps: [ConfigureV3PreStage]
     env:
       TOKEN_SYMBOL: GBPm
   UpgradeStableTokenV3_EURm:
     script: UpgradeStableTokenV3
-    deps: [ 'ConfigureV3PreStage' ]
+    deps: [ConfigureV3PreStage]
     env:
       TOKEN_SYMBOL: EURm
   CreateFPMM:
     script: CreateFPMM
-    deps: [ 'UpgradeStableTokenV3_USDm', 'UpgradeStableTokenV3_GBPm', 'UpgradeStableTokenV3_EURm' ]
+    deps:
+      [
+        UpgradeStableTokenV3_USDm,
+        UpgradeStableTokenV3_GBPm,
+        UpgradeStableTokenV3_EURm,
+      ]
   DeployVirtualPools:
     script: DeployVirtualPools
-    deps: [ 'SetupLocalFork'] 
+    deps: [SetupLocalFork]
   DeployCDPLiquidityStrategy:
     script: DeployCDPLiquidityStrategy
-    deps: [ 'CreateFPMM'] 
+    deps: [CreateFPMM]
   DeployLiquityV2:
     script: DeployLiquityV2
     env:
       token: GBPm
-    deps: ['DeployCDPLiquidityStrategy']
+    deps: [DeployCDPLiquidityStrategy]
   MigrateStableToCDP:
     script: MigrateStableToCDP
     env:
       token: GBPm
-    deps: ['DeployLiquityV2']
-
+    deps: [DeployLiquityV2]

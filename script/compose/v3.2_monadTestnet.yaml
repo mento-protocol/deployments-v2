@@ -3,9 +3,9 @@ components:
   EURm:
     script: DeployStableTokenSpoke
     env:
-      SPOKE_LABEL: "EURm"
-      SPOKE_TOKEN_NAME: "Mento Euro"
-      SPOKE_TOKEN_SYMBOL: "EURm"
+      SPOKE_LABEL: EURm
+      SPOKE_TOKEN_NAME: Mento Euro
+      SPOKE_TOKEN_SYMBOL: EURm
   USDT:
     script: DeployMockCollaterals
   RateFeeds:

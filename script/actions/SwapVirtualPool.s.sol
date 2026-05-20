@@ -51,6 +51,7 @@ contract SwapVirtualPool is TrebScript, ProxyHelper {
         IRouter.Route[] memory routes = new IRouter.Route[](1);
         routes[0] = IRouter.Route({from: fromAddy, to: toAddy, factory: virtualPoolFactory});
 
+        // trunk-ignore(semgrep/solidity.security.no-slippage-check.no-slippage-check): deploy script swap, no end-user funds; slippage protection is intentionally omitted.
         IRouter(deployer.harness(routerAddy))
             .swapExactTokensForTokens(amountIn, 0, routes, deployer.account, block.timestamp);
 

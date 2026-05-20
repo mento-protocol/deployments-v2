@@ -6,17 +6,14 @@ components:
     script: DeployVirtualPools
   DeployCDPLiquidityStrategy:
     script: DeployCDPLiquidityStrategy
-    deps: [ 'CreateFPMM'] 
+    deps: [CreateFPMM]
   DeployLiquityV2:
     script: DeployLiquityV2
     env:
       token: GBPm
-    deps: ['DeployCDPLiquidityStrategy']
+    deps: [DeployCDPLiquidityStrategy]
   MigrateStableToCDP:
     script: MigrateStableToCDP
     env:
       token: GBPm
-    deps: ['DeployLiquityV2']
-
-
-
+    deps: [DeployLiquityV2]

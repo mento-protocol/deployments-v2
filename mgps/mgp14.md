@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD036 MD041 -->
+
 ## TL;DR
 
 Mento Labs is excited to begin deploying Mento V3 on Celo and Monad 🎉. In order to support the outlined flows, we ask the following of governance:

@@ -10,12 +10,13 @@ Wormhole NTT enables cross-chain token transfers using two modes:
 - **Locking (hub)**: Tokens are locked on the source chain and minted on the destination. Used when the source chain holds the canonical supply (e.g., GBPm on Celo).
 
 Each bridge consists of two contracts per chain:
+
 - **NTT Manager** — handles peer registration, rate limits, and token locking/burning
 - **Wormhole Transceiver** — handles cross-chain message transport via Wormhole
 
 ## Architecture
 
-```
+```text
 Solidity config library          Treb-native scripts
 ┌──────────────────────────┐    ┌────────────────────────────────┐
 │  config/wormhole/        │    │  deploy/wormhole/              │
@@ -48,11 +49,11 @@ Each config includes chain names, EVM/Wormhole chain IDs, token addressbook labe
 
 ### Token Modes
 
-| Token | Celo | Monad | Notes |
-|-------|------|-------|-------|
-| USDm  | Burning | Burning | Native stablecoin, can be minted on all chains |
-| EURm  | Burning | Burning | Native stablecoin, can be minted on all chains |
-| GBPm  | Locking (hub) | Burning (spoke) | Canonical supply on Celo, spokes burn/mint |
+| Token | Celo          | Monad           | Notes                                          |
+| ----- | ------------- | --------------- | ---------------------------------------------- |
+| USDm  | Burning       | Burning         | Native stablecoin, can be minted on all chains |
+| EURm  | Burning       | Burning         | Native stablecoin, can be minted on all chains |
+| GBPm  | Locking (hub) | Burning (spoke) | Canonical supply on Celo, spokes burn/mint     |
 
 ## Deployment (New Token)
 
@@ -73,6 +74,7 @@ treb run ConfigureNTT -e token=USDm --network monad --debug
 ```
 
 `ConfigureNTT` performs all post-deployment setup:
+
 1. Registers peer NTT Managers and Transceivers (cross-chain)
 2. Sets outbound and inbound rate limits
 3. Grants minter/burner permissions (if burning mode)
@@ -153,13 +155,17 @@ treb run PauseNTT -e token=USDm -e PAUSE=false --network celo --debug
 ## Troubleshooting
 
 ### "Current chain not found in NTT config"
+
 The script's `--network` flag doesn't match any `evmChainId` in the token's config. Check that the RPC URL points to the correct chain.
 
 ### "Transceiver peer address mismatch" after adding a spoke
+
 `setWormholePeer` is irreversible. If set to the wrong address, you need to deploy a new Transceiver.
 
 ### Rate limit verification fails
+
 Rate limits are stored on-chain as TrimmedAmounts (8 decimal precision for 18-decimal tokens). The scripts handle this conversion automatically.
 
 ### Ownership already transferred
+
 If NTT contract ownership has been transferred to a multisig, further changes must go through governance action scripts with the appropriate sender profile.

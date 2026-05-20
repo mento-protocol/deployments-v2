@@ -11,7 +11,7 @@ components:
       - ProxyAdmin
   BreakerBox:
     script: DeployBreakerBox
-    deps: 
+    deps:
       - ChainlinkRelayers
       - SortedOracles
   Broker:
@@ -26,14 +26,14 @@ components:
     script: DeployMockCollaterals
   Reserve:
     script: DeployReserve
-    deps: 
+    deps:
       - ProxyAdmin
       - MockCollaterals
   PricingModules:
     script: DeployPricingModules
   Tokens:
     script: DeployTokens
-    deps: 
+    deps:
       - ProxyAdmin
       - Broker
   BiPoolManager:
