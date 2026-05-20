@@ -1033,10 +1033,6 @@
         "address": "0xf024701eDbE5d8A9869eFC8e01d7f95D3ef29A77",
         "type": "contract"
       },
-      "StabilityPool": {
-        "address": "0x2d5d7E2767c5493610caE84E0AB7F9D2CCE8C1A5",
-        "type": "contract"
-      },
       "StabilityPoolCHFm": {
         "address": "0xc415cA43aB6Ab246E64559696b8DCAcdd08A39e8",
         "type": "contract"
@@ -1908,10 +1904,6 @@
       },
       "SortedTrovesv300JPYm": {
         "address": "0x11cffE0d72f79214495D738af7CB076bcc5516E1",
-        "type": "contract"
-      },
-      "StabilityPool": {
-        "address": "0x1c424be1BE055a6C91ED9839a0E440E26814D1fC",
         "type": "contract"
       },
       "StabilityPoolCHFm": {
