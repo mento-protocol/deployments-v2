@@ -18,5 +18,5 @@ components:
       - ConfigureV3PreStage
   CreateFPMM:
     script: CreateFPMM
-    deps: 
+    deps:
       - Relay

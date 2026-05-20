@@ -23,7 +23,7 @@ forge install
 echo "Installing pnpm dependencies..."
 pnpm install
 
-if [ -d "lib/mento-core" ]; then
+if [[ -d "lib/mento-core" ]]; then
   echo "Installing mento-core node_modules..."
   (cd lib/mento-core && npm install)
 

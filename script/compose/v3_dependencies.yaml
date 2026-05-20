@@ -11,7 +11,7 @@ components:
       - ProxyAdmin
   BreakerBox:
     script: DeployBreakerBox
-    deps: 
+    deps:
       - ChainlinkRelayers
       - SortedOracles
   MockChainlinkAggregators:
