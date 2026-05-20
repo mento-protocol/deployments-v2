@@ -6,6 +6,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-05-20
+
 ### Fixed
 
 - `StabilityPool.instances.<Token>[chainId]` now resolves to the
