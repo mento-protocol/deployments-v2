@@ -6,6 +6,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `StabilityPool.instances.<Token>[chainId]` now resolves to the
+  TransparentUpgradeableProxy address (what `AddressesRegistry.stabilityPool()`
+  returns on-chain), not the implementation singleton it
+  `delegatecall`s into. Affects Celo mainnet (42220) and testnet-v2-rc5
+  (11142220) for GBPm, CHFm, JPYm. Same shape as `SystemParams.instances`
+  and `FXPriceFeed.instances`. The 0.8.0 CHANGELOG note "v300 deploy
+  preferred over the older unversioned address" describes the previous (wrong)
+  precedence — it should have read "the unversioned proxy is preferred over
+  the v300 implementation singleton." Underlying generator config:
+  `StabilityPool` group flipped from `primary`/`legacy` to `proxy`/`impl`.
+- Removed orphan chain-level `StabilityPool` key (no token suffix) from Celo
+  mainnet and testnet-v2-rc5 `contracts.json` — a leftover from an earlier
+  generator run before the per-token split that was already being dropped
+  from typed exports.
+- All address entries remain in `contracts.json` under their original keys
+  (`StabilityPool<Token>` proxy + `StabilityPoolv300<Token>` impl).
+
 ## [0.8.0] - 2026-04-29
 
 This entry is hand-written — `diffContracts` only catches address/type/decimal changes in `contracts.json`, not typed-export-shape refactors like the one below, so the auto-changelog skipped it. Tracked as a follow-up to extend the diff to detect export-set changes.

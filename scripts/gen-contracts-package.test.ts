@@ -100,7 +100,7 @@ describe("INSTANCE_GROUPS", () => {
       SSTORE2DataPointer: "SSTORE2DataPointerv300CHFm",
       FXPriceFeed: "FXPriceFeedProxyCHFm",
       SystemParams: "SystemParamsProxyCHFm",
-      StabilityPool: "StabilityPoolv300CHFm",
+      StabilityPool: "StabilityPoolCHFm",
       NttDeployHelper: "NttDeployHelperUSDm",
     };
     for (const group of INSTANCE_GROUPS) {
@@ -142,21 +142,21 @@ describe("INSTANCE_GROUPS", () => {
     expect(kinds).toEqual(["impl", "proxy"]);
   });
 
-  it("StabilityPool has primary + legacy with the right precedence", () => {
+  it("StabilityPool has both proxy and impl patterns with the right kinds", () => {
     const group = INSTANCE_GROUPS.find((g) => g.base === "StabilityPool")!;
     expect(group.patterns).toHaveLength(2);
-    const primary = group.patterns.find((p) => p.kind === "primary");
-    const legacy = group.patterns.find((p) => p.kind === "legacy");
-    expect(primary).toBeDefined();
-    expect(legacy).toBeDefined();
-    expect(KIND_PRECEDENCE[primary!.kind]).toBeLessThan(
-      KIND_PRECEDENCE[legacy!.kind],
+    const kinds = group.patterns.map((p) => p.kind).sort();
+    expect(kinds).toEqual(["impl", "proxy"]);
+    const proxy = group.patterns.find((p) => p.kind === "proxy");
+    const impl = group.patterns.find((p) => p.kind === "impl");
+    expect(KIND_PRECEDENCE[proxy!.kind]).toBeLessThan(
+      KIND_PRECEDENCE[impl!.kind],
     );
-    // Sanity: primary matches v300 names, legacy matches unversioned.
-    expect(primary!.regex.test("StabilityPoolv300CHFm")).toBe(true);
-    expect(primary!.regex.test("StabilityPoolCHFm")).toBe(false);
-    expect(legacy!.regex.test("StabilityPoolCHFm")).toBe(true);
-    expect(legacy!.regex.test("StabilityPoolv300CHFm")).toBe(false);
+    // Sanity: proxy matches unversioned (user-facing), impl matches v300.
+    expect(proxy!.regex.test("StabilityPoolCHFm")).toBe(true);
+    expect(proxy!.regex.test("StabilityPoolv300CHFm")).toBe(false);
+    expect(impl!.regex.test("StabilityPoolv300CHFm")).toBe(true);
+    expect(impl!.regex.test("StabilityPoolCHFm")).toBe(false);
   });
 
   it("base names are unique across groups", () => {

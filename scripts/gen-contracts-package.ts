@@ -173,12 +173,20 @@ export const INSTANCE_GROUPS: InstanceGroup[] = [
       { regex: new RegExp(`^SystemParamsv300${TOKEN}$`), kind: "impl" },
     ],
   },
-  // StabilityPool: v300 (newer CDP deploy) wins over unversioned legacy.
+  // StabilityPool: proxy/impl pair. The TransparentUpgradeableProxy entries
+  // (label `StabilityPool:<Token>`, sanitized to `StabilityPool<Token>`) are
+  // the user-facing addresses — `AddressesRegistry.stabilityPool()` returns
+  // these. The v300 entries (label `v3.0.0-<Token>`, sanitized to
+  // `StabilityPoolv300<Token>`) are the UUPS implementation singletons the
+  // proxies `delegatecall` into. Verified on-chain (Celo 42220) for GBPm,
+  // CHFm, JPYm: each registry's `stabilityPool()` matches the no-suffix
+  // contracts.json entry, not the v300 one. Same shape as SystemParams /
+  // FXPriceFeed above.
   {
     base: "StabilityPool",
     patterns: [
-      { regex: new RegExp(`^StabilityPoolv300${TOKEN}$`), kind: "primary" },
-      { regex: new RegExp(`^StabilityPool${TOKEN}$`), kind: "legacy" },
+      { regex: new RegExp(`^StabilityPool${TOKEN}$`), kind: "proxy" },
+      { regex: new RegExp(`^StabilityPoolv300${TOKEN}$`), kind: "impl" },
     ],
   },
   // NTT helpers — one library deployed per stable token, identical ABI.
