@@ -26,9 +26,7 @@ contract MentoConfig_celo is MentoConfig {
     uint256 internal _eurocEurBreakerThreshold;
     uint256 internal _celoEthRelayerMaxTimestampSpread;
     string internal _celoEthRelayerDescription;
-    bool internal _includeCollateralRelayers;
     bool internal _useLongCrossPairDesc; // true=mainnet: "A/B (A/USD:USD/B)" + 5min spread, false=sepolia: "A/B" + 1day spread
-    bool internal _includeCeloUsdRelayer; // false=mainnet (not deployed via factory), true=sepolia
 
     function _initialize() internal override {
         _configureParams();
@@ -61,9 +59,7 @@ contract MentoConfig_celo is MentoConfig {
         _eurocEurBreakerThreshold = 0.005 * 1e24;
         _celoEthRelayerMaxTimestampSpread = 1 days;
         _celoEthRelayerDescription = "CELO/ETH (CELO/USD:USD/ETH)";
-        _includeCollateralRelayers = true; // enables USDC/USD and EUROC/EUR Chainlink relayers
         _useLongCrossPairDesc = true;
-        _includeCeloUsdRelayer = true; // enables CELO/USD Chainlink relayer
 
         _coreAggs = CoreAggregators({
             celoUsd: 0x0568fD19986748cEfF3301e55c0eb1E729E0Ab7e,
@@ -403,11 +399,9 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
-        if (_includeCollateralRelayers) {
-            _addChainlinkRelayer({
-                rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
-            });
-        }
+        _addChainlinkRelayer({
+            rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
+        });
 
         _addRateFeed("USDTUSD");
         _addToBreaker({
@@ -431,17 +425,15 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
-        if (_includeCollateralRelayers) {
-            _addChainlinkRelayer({
-                rateFeed: "EUROCEUR",
-                description: _useLongCrossPairDesc ? "EUROC/EUR (EUROC/USD:USD/EUR)" : "EUROC/EUR",
-                maxTimestampSpread: 5 minutes,
-                aggregator0: _coreAggs.eurcUsd,
-                invert0: false,
-                aggregator1: _fxAggs.eur,
-                invert1: true
-            });
-        }
+        _addChainlinkRelayer({
+            rateFeed: "EUROCEUR",
+            description: _useLongCrossPairDesc ? "EUROC/EUR (EUROC/USD:USD/EUR)" : "EUROC/EUR",
+            maxTimestampSpread: 5 minutes,
+            aggregator0: _coreAggs.eurcUsd,
+            invert0: false,
+            aggregator1: _fxAggs.eur,
+            invert1: true
+        });
 
         if (_useLegacyRateFeedIds) {
             _addRateFeed("CELOUSD", _lookupTokenAddress("USDm"));
@@ -456,11 +448,9 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 1e24,
             referenceValue: 0
         });
-        if (_includeCeloUsdRelayer) {
-            _addChainlinkRelayer({
-                rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
-            });
-        }
+        _addChainlinkRelayer({
+            rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
+        });
 
         string memory celoEthFeed = string.concat(_rateFeedPrefix, "CELOETH");
         _addRateFeed(celoEthFeed);
