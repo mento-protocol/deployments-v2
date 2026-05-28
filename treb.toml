@@ -13,6 +13,10 @@ private_key = "${DEPLOYER_PRIVATE_KEY}"
 type = "private_key"
 private_key = "${REPORTER_PRIVATE_KEY}"
 
+[accounts.chainlink-relayer-factory-owner-pk]
+type = "private_key"
+private_key = "${CHAINLINK_RELAYER_FACTORY_OWNER_PRIVATE_KEY}"
+
 [accounts.local-signer]
 type = "ledger"
 address = "${LOCAL_SIGNER}"
@@ -48,12 +52,14 @@ signer = "dev-pk"
 deployer = "deployer-safe"
 governor = "mento-gov-celo"
 migrationOwner = "migration-safe"
+chainlinkRelayerFactoryOwner = "chainlink-relayer-factory-owner-pk"
 
 [namespace.testnet-v2-rc5.senders]
 deployer = "dev-pk"
 governor = "mento-gov-celo-sepolia"
 migrationOwner = "dev-pk"
 reporter = "reporter-pk"
+chainlinkRelayerFactoryOwner = "chainlink-relayer-factory-owner-pk"
 
 [namespace.throwaway.senders]
 deployer = "dev-pk"
