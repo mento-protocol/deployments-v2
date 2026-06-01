@@ -39,11 +39,18 @@ contract PrintRelayers is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < relayers.length; i++) {
             IChainlinkRelayer relayer = IChainlinkRelayer(relayers[i]);
             address rateFeedId = relayer.rateFeedId();
+            IChainlinkRelayer.ChainlinkAggregator[] memory aggs = relayer.getAggregators();
 
             console.log("\n  [%s] %s", i, relayer.rateFeedDescription());
             console.log("    relayer:           ", relayers[i]);
             console.log("    rateFeedId:        ", rateFeedId);
+            console.log("    sortedOracles:     ", relayer.sortedOracles());
             console.log("    maxTimestampSpread:", relayer.maxTimestampSpread());
+            console.log("    aggregator count:  ", aggs.length);
+            for (uint256 j = 0; j < aggs.length; j++) {
+                console.log("      [%s] aggregator:", j, aggs[j].aggregator);
+                console.log("          invert:    ", aggs[j].invert);
+            }
 
             uint256 numRates = oracles.numRates(rateFeedId);
             if (numRates == 0) {
