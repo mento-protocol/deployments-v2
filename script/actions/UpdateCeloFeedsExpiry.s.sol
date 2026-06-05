@@ -15,14 +15,15 @@ interface ISortedOraclesExpiry {
     function setTokenReportExpiry(address token, uint256 expirySeconds) external;
 }
 
-/// @notice Updates the report expiry of all CELO/* rate feeds on Celo mainnet to 1 day,
+/// @notice Updates the report expiry of all CELO/* rate feeds on Celo mainnet to 1 day + 5
+///         minutes (the extra 5 minutes gives enough headroom for the report to be relayed),
 ///         excluding CELO/USD which intentionally stays at its existing (6 min) expiry.
 /// @dev SortedOracles is owned by the MigrationMultisig, so calls are routed through the
 ///      `migrationOwner` sender, which queues them into a Safe transaction batch.
 contract UpdateCeloFeedsExpiry is TrebScript, ProxyHelper {
     using Senders for Senders.Sender;
 
-    uint256 constant EXPIRY_SECONDS = 1 days;
+    uint256 constant EXPIRY_SECONDS = 1 days + 5 minutes;
 
     IMentoConfig config;
     address sortedOracles;
