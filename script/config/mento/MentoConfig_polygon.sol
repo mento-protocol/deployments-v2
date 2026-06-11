@@ -67,6 +67,8 @@ contract MentoConfig_polygon is MentoConfig {
     function _initCollateral() internal virtual {
         _addCollateral("USDC", lookupOrFail("USDC"));
         _addReserveV2Collateral("USDC");
+        _addCollateral("EUROP", lookupOrFail("EUROP"));
+        _addReserveV2Collateral("EUROP");
     }
 
     /// ===================================================================
@@ -143,6 +145,37 @@ contract MentoConfig_polygon is MentoConfig {
             TokenLimits({limit0: 250_000, limit1: 1_000_000}),
             openLsConfigEUR
         );
+
+        // ── EURm / EUROP ───────────────────────────────────────────────
+        // Params copied from the base EURm/EURC pool.
+        LiquidityStrategyPoolConfig memory eurCollateralPoolsRlsConfig = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("EURm"),
+            cooldown: 300, // TODO: review before deployment
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0, // TODO: review before deployment
+            protocolIncentiveExpansion: 0, // TODO: review before deployment
+            liquiditySourceIncentiveContraction: 0, // TODO: review before deployment
+            protocolIncentiveContraction: 0 // TODO: review before deployment
+        });
+
+        _addFPMM(
+            "EURm",
+            "EUROP",
+            getRateFeedIdFromString("EUROP/EUR"),
+            IFPMM.FPMMParams({
+                lpFee: 24, // TODO: review before deployment
+                protocolFee: 16, // TODO: review before deployment
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1, // TODO: review before deployment
+                rebalanceThresholdAbove: 5000, // TODO: review before deployment
+                rebalanceThresholdBelow: 3333 // TODO: review before deployment
+            }),
+            TokenLimits({limit0: 100_000, limit1: 500_000}), // TODO: review before deployment
+            TokenLimits({limit0: 100_000, limit1: 500_000}), // TODO: review before deployment
+            eurCollateralPoolsRlsConfig
+        );
     }
 
     /// ===================================================================
@@ -172,6 +205,23 @@ contract MentoConfig_polygon is MentoConfig {
 
         _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
         _setRateFeedExpirySeconds("EUR/USD", 150 seconds);
+
+        // EUROP/EUR has no Chainlink feed. The migrationOwner is whitelisted
+        // as the only oracle and reports a fixed 1.0 rate with a ~unlimited
+        // expiry (see SetupEuropRateFeed script). The ValueDeltaBreaker lets
+        // the migrationOwner halt trading by reporting a rate that deviates
+        // more than the threshold from 1.0 (e.g. in case of a depeg).
+        _addRateFeed("EUROP/EUR");
+        // TODO: review expiry; the rate must be re-reported before it expires
+        _setRateFeedExpirySeconds("EUROP/EUR", 365 days);
+        _addToBreaker({
+            breakerId: valueBreakerId,
+            rateFeed: "EUROP/EUR",
+            cooldown: 1, // TODO: review before deployment (copied from base EURC/EUR)
+            threshold: 0.005 * 1e24, // TODO: review before deployment (copied from base EURC/EUR)
+            smoothingFactor: 0,
+            referenceValue: 1 * 1e24
+        });
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
