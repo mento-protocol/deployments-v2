@@ -24,11 +24,14 @@ contract UpdateCeloFeedsExpiry is TrebScript, ProxyHelper {
     using Senders for Senders.Sender;
 
     uint256 constant EXPIRY_SECONDS = 1 days + 5 minutes;
+    uint256 constant CELO_MAINNET_CHAIN_ID = 42220;
 
     IMentoConfig config;
     address sortedOracles;
 
     function setUp() public {
+        require(block.chainid == CELO_MAINNET_CHAIN_ID, "UpdateCeloFeedsExpiry: only runnable on Celo mainnet");
+
         config = Config.get();
         sortedOracles = lookupProxyOrFail("SortedOracles");
     }
