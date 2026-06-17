@@ -42,9 +42,7 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
         _eurocEurBreakerThreshold = 0.001 * 1e24;
         _celoEthRelayerMaxTimestampSpread = 10 minutes;
         _celoEthRelayerDescription = "CELOETH";
-        _includeCollateralRelayers = true;
         _useLongCrossPairDesc = false;
-        _includeCeloUsdRelayer = true;
         mockAggregatorReporter = 0xabcdE369CDdD1665E4EbD9214b8e9a595271272C;
         _setMockAggregatorSource("celo");
 
