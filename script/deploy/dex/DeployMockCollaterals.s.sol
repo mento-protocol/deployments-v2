@@ -24,9 +24,18 @@ contract DeployMockCollaterals is TrebScript {
 
         string[] memory mocks = config.getMockCollaterals();
 
+        console.log(unicode"\n=== 🪙 Mock Collaterals ===\n");
+
         for (uint256 i = 0; i < mocks.length; i++) {
             string memory symbol = mocks[i];
             uint256 decimals = config.getTokenDecimals(symbol);
+
+            address predicted = deployer.create3("MockERC20").setLabel(symbol).predict();
+            if (predicted.code.length > 0) {
+                console.log(unicode"  ⏭️  Skipped MockERC20 (%s), already exists", symbol);
+                console.log("        at %s\n", predicted);
+                continue;
+            }
 
             address addy = deployer.create3("MockERC20").setLabel(symbol)
                 .deploy(abi.encode(string.concat("Mento Mock ", symbol), symbol, decimals, deployer.account));
@@ -34,7 +43,8 @@ contract DeployMockCollaterals is TrebScript {
             MockERC20 coll = MockERC20(deployer.harness(addy));
             coll.mint(deployer.account, 1_000_000 * 10 ** decimals);
             IOwnable(address(coll)).transferOwnership(address(migrationOwner.account));
-            console.log("Deployed MockERC20 (%s) at %s", symbol, addy);
+            console.log(unicode"  ✅ Deployed MockERC20 (%s)", symbol);
+            console.log("        at %s\n", addy);
         }
     }
 }

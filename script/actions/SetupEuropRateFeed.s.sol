@@ -40,7 +40,7 @@ contract SetupEuropRateFeed is TrebScript, ProxyHelper {
     string internal constant RATE_FEED = "EUROP/EUR";
     uint256 internal constant FIXED_RATE = 1e24; // 1.0 in SortedOracles fixidity
 
-    /// @custom:senders migrationOwner
+    /// @custom:senders deployer, migrationOwner
     function run() public broadcast {
         IMentoConfig config = Config.get();
         Senders.Sender storage migrationOwner = sender("migrationOwner");
@@ -51,12 +51,16 @@ contract SetupEuropRateFeed is TrebScript, ProxyHelper {
 
         address rateFeedId = config.getRateFeedIdFromString(RATE_FEED);
 
+        console.log(unicode"\n=== 🇪🇺 Setup EUROP/EUR rate feed ===\n");
+
         // ── Step 1: Whitelist migrationOwner as the oracle for the feed ─────
         if (!sortedOraclesRead.isOracle(rateFeedId, migrationOwner.account)) {
             sortedOracles.addOracle(rateFeedId, migrationOwner.account);
-            console.log(string.concat("Added migrationOwner as oracle for ", RATE_FEED), migrationOwner.account);
+            console.log(unicode"  ✅ Added migrationOwner as oracle");
+            console.log("        at %s\n", migrationOwner.account);
         } else {
-            console.log(string.concat(unicode"  ✓ migrationOwner already an oracle for ", RATE_FEED));
+            console.log(unicode"  ✓  migrationOwner already an oracle");
+            console.log("        at %s\n", migrationOwner.account);
         }
 
         // ── Step 2: Set the per-feed report expiry from config ──────────────
@@ -65,21 +69,11 @@ contract SetupEuropRateFeed is TrebScript, ProxyHelper {
         uint256 currentExpiry = sortedOraclesRead.getTokenReportExpirySeconds(rateFeedId);
         if (currentExpiry != expiry) {
             sortedOracles.setTokenReportExpiry(rateFeedId, expiry);
-            console.log(
-                string.concat(
-                    unicode"  ⏰ Expiry updated  [",
-                    RATE_FEED,
-                    "]  ",
-                    vm.toString(currentExpiry),
-                    "s -> ",
-                    vm.toString(expiry),
-                    "s"
-                )
-            );
+            console.log(unicode"  ⏰ Expiry updated");
+            console.log(string.concat("        ", vm.toString(currentExpiry), "s -> ", vm.toString(expiry), "s\n"));
         } else {
-            console.log(
-                string.concat(unicode"  ✓ Expiry unchanged [", RATE_FEED, "]  ", vm.toString(currentExpiry), "s")
-            );
+            console.log(unicode"  ✓  Expiry unchanged");
+            console.log(string.concat("        ", vm.toString(currentExpiry), "s\n"));
         }
 
         // ── Step 3: Report the fixed 1.0 rate ────────────────────────────────
@@ -90,9 +84,9 @@ contract SetupEuropRateFeed is TrebScript, ProxyHelper {
         bool isFresh = reportTs + expiry / 2 > block.timestamp;
         if (median != FIXED_RATE || !isFresh) {
             sortedOracles.report(rateFeedId, FIXED_RATE, address(0), address(0));
-            console.log(string.concat(unicode"  📈 Reported 1.0 rate for ", RATE_FEED));
+            console.log(unicode"  📈 Reported 1.0 rate\n");
         } else {
-            console.log(string.concat(unicode"  ✓ Fresh 1.0 report already in place for ", RATE_FEED));
+            console.log(unicode"  ✓  Fresh 1.0 report already in place\n");
         }
     }
 }
