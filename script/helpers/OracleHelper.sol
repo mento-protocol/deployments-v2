@@ -30,8 +30,21 @@ library OracleHelper {
         }
     }
 
-    /// @notice Re-reports all configured rate feeds on the Anvil node via RPC
+    /// @notice Re-reports stale rate feeds on the Anvil node via RPC
     ///         impersonation so that rates persist for the execution fork.
+    ///         Feeds whose report is still within half its expiry window are
+    ///         skipped to avoid unnecessary RPC calls: they're fresh enough to
+    ///         stay valid through the execution phase without re-reporting.
+    ///
+    ///         Gotcha: this also happens to sidestep a nonce bug for EUROP/EUR.
+    ///         Its oracle is the migrationOwner, which is also a treb broadcast
+    ///         sender. Impersonating it here to re-report sends a real tx that
+    ///         bumps the sender's on-chain nonce outside treb's tracking,
+    ///         desyncing it and breaking the broadcast with "nonce too low".
+    ///         The freshness skip dodges this because EUROP/EUR has a very long
+    ///         (~1 year) expiry, so it's always within its half-window and never
+    ///         re-reported here. If a sender-oracle feed ever had a short expiry,
+    ///         this skip would not protect it and the nonce bug would resurface.
     function refreshOracleRatesAnvil(address sortedOracles, IMentoConfig config) internal {
         ISortedOracles so = ISortedOracles(sortedOracles);
         address[] memory rateFeedIDs = _collectRateFeedIDs(config);
@@ -40,6 +53,10 @@ library OracleHelper {
             address rateFeedID = rateFeedIDs[i];
             (uint256 rate,) = so.medianRate(rateFeedID);
             if (rate == 0) continue;
+
+            uint256 expiry = so.getTokenReportExpirySeconds(rateFeedID);
+            uint256 reportTs = so.medianTimestamp(rateFeedID);
+            if (reportTs + expiry / 2 > block.timestamp) continue;
 
             address[] memory oracles = so.getOracles(rateFeedID);
             if (oracles.length == 0) continue;
@@ -55,10 +72,13 @@ library OracleHelper {
     ///         Refreshes on both the simulation fork (vm.prank) and the Anvil
     ///         node (RPC impersonation) so rates are fresh for both phases.
     ///         No-op on live deployments.
+    ///         The Anvil refresh runs first: the vm.prank refresh updates
+    ///         medianTimestamp in simulation state, which would make every feed
+    ///         look fresh to the Anvil refresh's staleness check.
     function refreshOracleRatesIfFork(address sortedOracles, IMentoConfig config) internal {
         if (!vm.envOr("TREB_FORK_MODE", false)) return;
-        refreshOracleRates(sortedOracles, config);
         refreshOracleRatesAnvil(sortedOracles, config);
+        refreshOracleRates(sortedOracles, config);
     }
 
     /// @dev Collects unique rate feed IDs from both getRateFeeds() and getFPMMConfigs().
@@ -78,8 +98,10 @@ library OracleHelper {
             address id = fpmmConfigs[i].referenceRateFeedID;
             bool duplicate = false;
             for (uint256 j = 0; j < count; j++) {
-                if (all[j] == id) duplicate = true;
-                break;
+                if (all[j] == id) {
+                    duplicate = true;
+                    break;
+                }
             }
             if (!duplicate) {
                 all[count++] = id;
