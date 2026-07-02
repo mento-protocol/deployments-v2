@@ -164,8 +164,8 @@ contract MentoConfig_polygon is MentoConfig {
             "EUROP",
             getRateFeedIdFromString("EUROP/EUR"),
             IFPMM.FPMMParams({
-                lpFee: 8,
-                protocolFee: 2,
+                lpFee: 8, // TODO: review before deployment
+                protocolFee: 2, // TODO: review before deployment
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
                 rebalanceIncentive: 1, // TODO: review before deployment
@@ -173,8 +173,8 @@ contract MentoConfig_polygon is MentoConfig {
                 rebalanceThresholdBelow: 3333 // TODO: review before deployment
             }),
             // 5m/24h limits: $25k/$50k @ 0.87 USD/EUR
-            TokenLimits({limit0: 21_750, limit1: 43_500}),
-            TokenLimits({limit0: 21_750, limit1: 43_500}),
+            TokenLimits({limit0: 21_750, limit1: 43_500}), // TODO: review before deployment
+            TokenLimits({limit0: 21_750, limit1: 43_500}), // TODO: review before deployment
             eurCollateralPoolsRlsConfig
         );
     }
