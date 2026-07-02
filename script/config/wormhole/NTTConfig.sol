@@ -41,8 +41,6 @@ library NTTConfig {
     uint16 internal constant MONAD_WH_CHAIN_ID = 48;
     uint256 internal constant POLYGON_EVM_CHAIN_ID = 137;
     uint16 internal constant POLYGON_WH_CHAIN_ID = 5;
-    uint256 internal constant BASE_EVM_CHAIN_ID = 8453;
-    uint16 internal constant BASE_WH_CHAIN_ID = 30;
 
     // ── Rate limit constants ────────────────────────────────────────────
     uint256 internal constant USDm_RATE_LIMIT = 500_000e18;
@@ -123,13 +121,13 @@ library NTTConfig {
     }
 
     /// @notice Returns the full NTT bridge topology for EURm.
-    ///         EURm is burn-mint on Celo, Monad, Polygon, and Base.
+    ///         EURm is burn-mint on Celo, Monad, and Polygon.
     function getEURmConfig() internal pure returns (NTTTokenConfig memory config) {
         config.tokenName = "EURm";
         config.tokenDecimals = 18;
         config.ownerLabel = "migrationOwner";
 
-        config.chains = new NTTChainConfig[](4);
+        config.chains = new NTTChainConfig[](3);
         config.chains[0] = NTTChainConfig({
             chainName: "celo",
             evmChainId: CELO_EVM_CHAIN_ID,
@@ -154,20 +152,10 @@ library NTTConfig {
             isBurning: true,
             outboundLimit: EURm_RATE_LIMIT
         });
-        config.chains[3] = NTTChainConfig({
-            chainName: "base",
-            evmChainId: BASE_EVM_CHAIN_ID,
-            wormholeChainId: BASE_WH_CHAIN_ID,
-            tokenLabel: "EURm",
-            isBurning: true,
-            outboundLimit: EURm_RATE_LIMIT
-        });
-
-        config.inboundLimits = new NTTInboundLimit[](4);
+        config.inboundLimits = new NTTInboundLimit[](3);
         config.inboundLimits[0] = NTTInboundLimit({fromChainName: "monad", limit: EURm_RATE_LIMIT});
         config.inboundLimits[1] = NTTInboundLimit({fromChainName: "celo", limit: EURm_RATE_LIMIT});
         config.inboundLimits[2] = NTTInboundLimit({fromChainName: "polygon", limit: EURm_RATE_LIMIT});
-        config.inboundLimits[3] = NTTInboundLimit({fromChainName: "base", limit: EURm_RATE_LIMIT});
     }
 
     /// @notice Returns the full NTT bridge topology for JPYm.
