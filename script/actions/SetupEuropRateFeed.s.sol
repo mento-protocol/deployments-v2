@@ -51,7 +51,7 @@ contract SetupEuropRateFeed is TrebScript, ProxyHelper {
 
         address rateFeedId = config.getRateFeedIdFromString(RATE_FEED);
 
-        console.log(unicode"\n=== 🇪🇺 Setup EUROP/EUR rate feed ===\n");
+        console.log(unicode"\n=== 🇪🇺 Setup EUROP/EUR rate feed (%s) ===\n", rateFeedId);
 
         // ── Step 1: Whitelist migrationOwner as the oracle for the feed ─────
         if (!sortedOraclesRead.isOracle(rateFeedId, migrationOwner.account)) {
