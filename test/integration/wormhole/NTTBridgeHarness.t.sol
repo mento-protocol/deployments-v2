@@ -24,6 +24,13 @@ interface IWormholeTransceiverCore {
     function wormhole() external view returns (address);
 }
 
+/// @dev Minimal surface of StableTokenV3 needed to mint on the locking hub.
+interface ILockingHubToken {
+    function owner() external view returns (address);
+    function setMinter(address minter, bool isMinter) external;
+    function mint(address to, uint256 value) external returns (bool);
+}
+
 /// @title NTTBridgeHarness
 /// @notice Reusable base for NTT cross-chain bridge fork tests. Forks any two
 ///         configured chains and simulates a full Wormhole NTT transfer between
@@ -250,7 +257,42 @@ abstract contract NTTBridgeHarness is Test {
         );
     }
 
-    // ── Funding (burn-mint only) ────────────────────────────────────────
+    // ── Funding ─────────────────────────────────────────────────────────
+
+    /// @dev Mode-aware funding: prank-mints via the manager on burning chains,
+    ///      mints through the token's real minter path on locking chains (where
+    ///      the manager has no mint rights over the token). Celo is the only
+    ///      locking hub in the topology, so a locking manager anywhere else is
+    ///      a misdeployment.
+    function _fund(ChainCtx memory chain, address to, uint256 amount) internal {
+        if (chain.isBurning) {
+            _fundBurnMint(chain, to, amount);
+        } else {
+            require(
+                keccak256(bytes(chain.name)) == keccak256("celo"),
+                string.concat("locking manager found on non-hub chain: ", chain.name)
+            );
+            _fundLockingMint(chain, to, amount);
+        }
+    }
+
+    /// @dev Funds via the token's own mint path so totalSupply stays consistent:
+    ///      pranks the owner to grant a throwaway minter, mints, then revokes.
+    function _fundLockingMint(ChainCtx memory chain, address to, uint256 amount) internal {
+        vm.selectFork(chain.forkId);
+        ILockingHubToken token = ILockingHubToken(address(chain.token));
+        address owner = token.owner();
+        address tempMinter = address(1337);
+
+        vm.prank(owner);
+        token.setMinter(tempMinter, true);
+        vm.prank(tempMinter);
+        token.mint(to, amount);
+        vm.prank(owner);
+        token.setMinter(tempMinter, false);
+
+        require(chain.token.balanceOf(to) >= amount, "funding failed (locking mint)");
+    }
 
     /// @dev Funds `to` with `amount` of a burn-mint token by pranking the
     ///      NttManager's minter role. Only valid where the token is burn-mint.

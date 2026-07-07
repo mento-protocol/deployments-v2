@@ -65,8 +65,8 @@ contract NTTBridgeSweepTest is NTTBridgeHarness {
                 address sender = makeAddr(string.concat(tokenName, "-sender-", ctxs[s].name));
                 address recipient = makeAddr(string.concat(tokenName, "-recipient-", ctxs[d].name));
 
-                // Fund the source freshly for this lane (burn-mint mint()).
-                _fundBurnMint(ctxs[s], sender, amount);
+                // Fund the source freshly for this lane (mode-aware).
+                _fund(ctxs[s], sender, amount);
 
                 uint256 delivered = _bridge(ctxs[s], ctxs[d], amount, sender, recipient);
                 assertEq(
@@ -89,7 +89,7 @@ contract NTTBridgeSweepTest is NTTBridgeHarness {
         console.log(string.concat("--- round-trip ", tokenName, ": ", a.name, " -> ", b.name, " -> ", a.name, " ---"));
         address user = makeAddr(string.concat(tokenName, "-roundtrip"));
 
-        _fundBurnMint(a, user, amount);
+        _fund(a, user, amount);
 
         // A -> B
         uint256 gotOnB = _bridge(a, b, amount, user, user);

@@ -32,7 +32,7 @@ contract NTTBridgeLaneTest is NTTBridgeHarness {
         address sender = makeAddr("lane-sender");
         address recipient = makeAddr("lane-recipient");
 
-        _fundBurnMint(src, sender, amount);
+        _fund(src, sender, amount);
         uint256 delivered = _bridge(src, dst, amount, sender, recipient);
 
         assertEq(delivered, amount, "lane delivered wrong amount");
