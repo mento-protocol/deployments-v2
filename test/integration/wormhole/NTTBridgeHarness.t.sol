@@ -61,6 +61,7 @@ abstract contract NTTBridgeHarness is Test {
         address transceiver;
         IERC20 token;
         bool deployed; // NttDeployHelper present on this fork?
+        bool isBurning; // live manager mode: BURNING (true) or LOCKING (false)
     }
 
     // Cache forks by evmChainId so each chain is forked at most once per run.
@@ -135,6 +136,8 @@ abstract contract NTTBridgeHarness is Test {
         ctx.manager = INttManager(INttDeployHelper(helper).nttManagerProxy());
         ctx.transceiver = INttDeployHelper(helper).transceiverProxy();
         ctx.token = IERC20(ctx.manager.token());
+        // Mode enum: LOCKING = 0, BURNING = 1.
+        ctx.isBurning = ctx.manager.getMode() == 1;
         // Read the core bridge straight off the deployed transceiver, so no
         // per-chain addressbook lookup is needed here.
         ctx.coreBridge = IWormholeTransceiverCore(ctx.transceiver).wormhole();
@@ -165,11 +168,34 @@ abstract contract NTTBridgeHarness is Test {
         internal
         returns (uint256 delivered)
     {
-        // ── SOURCE: real outbound transfer ──────────────────────────────
+        bytes memory whPayload = _sendLeg(src, dst, amount, sender, recipient);
+
+        // ── DESTINATION: deliver via faked (but correctly-addressed) VAA ─
+        _mockVaaDelivery(src, dst, whPayload);
+        uint256 recipientBefore = dst.token.balanceOf(recipient);
+        IWormholeTransceiver(dst.transceiver).receiveMessage(whPayload);
+        vm.clearMockedCalls();
+
+        delivered = dst.token.balanceOf(recipient) - recipientBefore;
+        if (dst.isBurning) {
+            console.log("  [%s] recipient minted        = %s", dst.name, _fmt(delivered));
+        } else {
+            console.log("  [%s] recipient unlocked      = %s", dst.name, _fmt(delivered));
+        }
+        console.log("");
+    }
+
+    /// @dev Source half of `_bridge`: performs the real outbound transfer on
+    ///      `src` and returns the Wormhole payload published by the core bridge.
+    function _sendLeg(ChainCtx memory src, ChainCtx memory dst, uint256 amount, address sender, address recipient)
+        internal
+        returns (bytes memory whPayload)
+    {
         vm.selectFork(src.forkId);
         console.log("--- %s -> %s : bridging %s ------------", src.name, dst.name, _fmt(amount));
 
         uint256 srcSupplyBefore = src.token.totalSupply();
+        uint256 srcLockedBefore = src.token.balanceOf(address(src.manager));
         console.log("  [%s] sender balance before   = %s", src.name, _fmt(src.token.balanceOf(sender)));
         console.log("  [%s] total supply before     = %s", src.name, _fmt(srcSupplyBefore));
 
@@ -182,16 +208,29 @@ abstract contract NTTBridgeHarness is Test {
         src.manager.transfer{value: fee}(amount, dst.wormholeChainId, _toBytes32(recipient));
         vm.stopPrank();
 
-        uint256 srcSupplyAfter = src.token.totalSupply();
-        console.log("  [%s] total supply after      = %s", src.name, _fmt(srcSupplyAfter));
-        console.log("  [%s] burned/locked           = %s", src.name, _fmt(srcSupplyBefore - srcSupplyAfter));
+        console.log("  [%s] total supply after      = %s", src.name, _fmt(src.token.totalSupply()));
+        if (src.isBurning) {
+            console.log("  [%s] burned                  = %s", src.name, _fmt(srcSupplyBefore - src.token.totalSupply()));
+        } else {
+            console.log(
+                "  [%s] locked in manager       = %s",
+                src.name,
+                _fmt(src.token.balanceOf(address(src.manager)) - srcLockedBefore)
+            );
+        }
 
-        bytes memory whPayload = _captureWormholePayload(src.coreBridge);
+        whPayload = _captureWormholePayload(src.coreBridge);
         require(whPayload.length > 0, "no wormhole message published on source");
+    }
 
-        // ── DESTINATION: deliver via faked (but correctly-addressed) VAA ─
+    /// @dev Destination half of `_bridge`, minus the actual `receiveMessage`
+    ///      call: selects the `dst` fork and mocks `parseAndVerifyVM` to return
+    ///      a VAA correctly addressed from `src`'s transceiver. The caller then
+    ///      invokes `receiveMessage` itself — optionally under `expectRevert`
+    ///      for negative (misconfiguration) tests — and should call
+    ///      `vm.clearMockedCalls()` afterwards.
+    function _mockVaaDelivery(ChainCtx memory src, ChainCtx memory dst, bytes memory whPayload) internal {
         vm.selectFork(dst.forkId);
-        uint256 recipientBefore = dst.token.balanceOf(recipient);
 
         _vaaNonce++;
         IWormhole.VM memory vaa = _buildVM({
@@ -206,12 +245,6 @@ abstract contract NTTBridgeHarness is Test {
             abi.encodeWithSelector(IWormhole.parseAndVerifyVM.selector),
             abi.encode(vaa, true, "")
         );
-        IWormholeTransceiver(dst.transceiver).receiveMessage(whPayload);
-        vm.clearMockedCalls();
-
-        delivered = dst.token.balanceOf(recipient) - recipientBefore;
-        console.log("  [%s] recipient minted         = %s", dst.name, _fmt(delivered));
-        console.log("");
     }
 
     // ── Funding (burn-mint only) ────────────────────────────────────────
@@ -254,6 +287,19 @@ abstract contract NTTBridgeHarness is Test {
     }
 
     // ── Small utils ─────────────────────────────────────────────────────
+
+    function _chainByName(NTTTokenConfig memory cfg, string memory chainName)
+        internal
+        pure
+        returns (NTTChainConfig memory)
+    {
+        for (uint256 i = 0; i < cfg.chains.length; i++) {
+            if (keccak256(bytes(cfg.chains[i].chainName)) == keccak256(bytes(chainName))) {
+                return cfg.chains[i];
+            }
+        }
+        revert(string.concat("chain not in token config: ", chainName));
+    }
 
     function _toBytes32(address addr) internal pure returns (bytes32) {
         return bytes32(uint256(uint160(addr)));

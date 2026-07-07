@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 import {console2 as console} from "forge-std/console2.sol";
 import {NTTBridgeHarness} from "./NTTBridgeHarness.t.sol";
-import {NTTTokenConfig, NTTChainConfig} from "script/config/wormhole/NTTConfig.sol";
+import {NTTTokenConfig} from "script/config/wormhole/NTTConfig.sol";
 
 /// @title NTTBridgeLane
 /// @notice Single-lane bridge test parameterized by env vars, for iterating on
@@ -39,18 +39,5 @@ contract NTTBridgeLaneTest is NTTBridgeHarness {
 
         assertEq(delivered, amount, "lane delivered wrong amount");
         console.log("  lane OK: delivered %s %s to recipient", _fmt(delivered), tokenName);
-    }
-
-    function _chainByName(NTTTokenConfig memory cfg, string memory chainName)
-        internal
-        pure
-        returns (NTTChainConfig memory)
-    {
-        for (uint256 i = 0; i < cfg.chains.length; i++) {
-            if (keccak256(bytes(cfg.chains[i].chainName)) == keccak256(bytes(chainName))) {
-                return cfg.chains[i];
-            }
-        }
-        revert(string.concat("chain not in token config: ", chainName));
     }
 }
