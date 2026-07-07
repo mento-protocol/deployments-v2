@@ -51,12 +51,11 @@ contract NTTBridgeOneWayCeloPolygonTest is NTTBridgeHarness {
             polygonKnowsCelo = polygon.manager.getPeer(celo.wormholeChainId).peerAddress != bytes32(0);
         }
 
-        console.log("========================================================");
-        console.log(" One-way check: %s  celo <> polygon", tokenName);
+        _banner(string.concat(" One-way check: ", tokenName, "  celo <> polygon"));
         console.log("   polygon deployed:    %s", polygon.deployed);
         console.log("   celo knows polygon:  %s", celoKnowsPolygon);
         console.log("   polygon knows celo:  %s", polygonKnowsCelo);
-        console.log("========================================================");
+        console.log("");
 
         if (celoKnowsPolygon) {
             console.log("[skip] celo already has a polygon peer - fully configured; use NTTBridgeSweep");

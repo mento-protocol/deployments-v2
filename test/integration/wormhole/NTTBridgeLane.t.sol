@@ -27,9 +27,7 @@ contract NTTBridgeLaneTest is NTTBridgeHarness {
         require(src.deployed, string.concat("NTT not deployed on source: ", srcName));
         require(dst.deployed, string.concat("NTT not deployed on destination: ", dstName));
 
-        console.log("========================================================");
-        console.log(" NTT lane: %s  %s -> %s", tokenName, srcName, dstName);
-        console.log("========================================================");
+        _banner(string.concat(" NTT lane: ", tokenName, "  ", srcName, " -> ", dstName));
 
         address sender = makeAddr("lane-sender");
         address recipient = makeAddr("lane-recipient");

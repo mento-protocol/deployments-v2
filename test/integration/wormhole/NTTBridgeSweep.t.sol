@@ -32,25 +32,35 @@ contract NTTBridgeSweepTest is NTTBridgeHarness {
         uint256 amount = 100e18;
         NTTTokenConfig memory cfg = _loadTokenConfig(tokenName);
 
-        console.log("========================================================");
-        console.log(" NTT bridge sweep: %s across %d configured chains", tokenName, cfg.chains.length);
-        console.log("========================================================");
+        _banner(
+            string.concat(
+                " NTT bridge sweep: ", tokenName, " across ", vm.toString(cfg.chains.length), " configured chains"
+            )
+        );
 
         // Resolve every chain up front (forks are cached in the harness).
         ChainCtx[] memory ctxs = new ChainCtx[](cfg.chains.length);
+        uint256 deployedCount;
         for (uint256 i = 0; i < cfg.chains.length; i++) {
             ctxs[i] = _resolveChain(tokenName, cfg.chains[i]);
-            if (!ctxs[i].deployed) {
+            if (ctxs[i].deployed) {
+                deployedCount++;
+            } else {
                 console.log("  [skip] %s: NTT not deployed on this chain yet", cfg.chains[i].chainName);
             }
         }
+        console.log("");
 
         // Sweep every ordered pair.
+        uint256 totalLanes = deployedCount * (deployedCount - 1);
         uint256 lanesRun;
         for (uint256 s = 0; s < ctxs.length; s++) {
             if (!ctxs[s].deployed) continue;
             for (uint256 d = 0; d < ctxs.length; d++) {
                 if (s == d || !ctxs[d].deployed) continue;
+
+                lanesRun++;
+                console.log("lane %d/%d", lanesRun, totalLanes);
 
                 address sender = makeAddr(string.concat(tokenName, "-sender-", ctxs[s].name));
                 address recipient = makeAddr(string.concat(tokenName, "-recipient-", ctxs[d].name));
@@ -59,8 +69,9 @@ contract NTTBridgeSweepTest is NTTBridgeHarness {
                 _fundBurnMint(ctxs[s], sender, amount);
 
                 uint256 delivered = _bridge(ctxs[s], ctxs[d], amount, sender, recipient);
-                assertEq(delivered, amount, string.concat("lane delivered wrong amount: ", ctxs[s].name, "->", ctxs[d].name));
-                lanesRun++;
+                assertEq(
+                    delivered, amount, string.concat("lane delivered wrong amount: ", ctxs[s].name, "->", ctxs[d].name)
+                );
             }
         }
 
@@ -75,9 +86,7 @@ contract NTTBridgeSweepTest is NTTBridgeHarness {
     /// @dev A->B->A must leave the round-tripper with exactly what they started
     ///      (minus nothing — burn-mint is 1:1). Proves both directions wire up.
     function _assertRoundTrip(string memory tokenName, ChainCtx memory a, ChainCtx memory b, uint256 amount) internal {
-        console.log(
-            string.concat("--- round-trip ", tokenName, ": ", a.name, " -> ", b.name, " -> ", a.name, " ---")
-        );
+        console.log(string.concat("--- round-trip ", tokenName, ": ", a.name, " -> ", b.name, " -> ", a.name, " ---"));
         address user = makeAddr(string.concat(tokenName, "-roundtrip"));
 
         _fundBurnMint(a, user, amount);
@@ -99,13 +108,13 @@ contract NTTBridgeSweepTest is NTTBridgeHarness {
     }
 
     function _firstTwoDeployed(ChainCtx[] memory ctxs) internal pure returns (uint256 a, uint256 b) {
-        int256 first = -1;
+        bool foundFirst;
         for (uint256 i = 0; i < ctxs.length; i++) {
             if (!ctxs[i].deployed) continue;
-            if (first < 0) {
-                first = int256(i);
+            if (!foundFirst) {
+                (a, foundFirst) = (i, true);
             } else {
-                return (uint256(first), i);
+                return (a, i);
             }
         }
         revert("need >= 2 deployed chains for round-trip");

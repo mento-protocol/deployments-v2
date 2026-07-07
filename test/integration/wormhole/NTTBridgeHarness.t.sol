@@ -148,9 +148,8 @@ abstract contract NTTBridgeHarness is Test {
     ///      Returns address(0) if not present (chain not deployed for this token).
     function _registryHelper(string memory tokenName, uint256 evmChainId) internal view returns (address) {
         string memory json = vm.readFile(REGISTRY_PATH);
-        string memory key = string.concat(
-            ".", vm.toString(evmChainId), ".", NAMESPACE, "[\"NttDeployHelper:", tokenName, "\"]"
-        );
+        string memory key =
+            string.concat(".", vm.toString(evmChainId), ".", NAMESPACE, "[\"NttDeployHelper:", tokenName, "\"]");
         if (!vm.keyExistsJson(json, key)) return address(0);
         return vm.parseJsonAddress(json, key);
     }
@@ -172,15 +171,19 @@ abstract contract NTTBridgeHarness is Test {
 
         // ── DESTINATION: deliver via faked (but correctly-addressed) VAA ─
         _mockVaaDelivery(src, dst, whPayload);
+        uint256 dstSupplyBefore = dst.token.totalSupply();
         uint256 recipientBefore = dst.token.balanceOf(recipient);
+        console.log("  %s total supply before   = %s", _tag(dst.name), _fmt(dstSupplyBefore));
+
         IWormholeTransceiver(dst.transceiver).receiveMessage(whPayload);
         vm.clearMockedCalls();
 
+        console.log("  %s total supply after    = %s", _tag(dst.name), _fmt(dst.token.totalSupply()));
         delivered = dst.token.balanceOf(recipient) - recipientBefore;
         if (dst.isBurning) {
-            console.log("  [%s] recipient minted        = %s", dst.name, _fmt(delivered));
+            console.log("  %s recipient minted      = %s", _tag(dst.name), _fmt(delivered));
         } else {
-            console.log("  [%s] recipient unlocked      = %s", dst.name, _fmt(delivered));
+            console.log("  %s recipient unlocked    = %s", _tag(dst.name), _fmt(delivered));
         }
         console.log("");
     }
@@ -196,8 +199,8 @@ abstract contract NTTBridgeHarness is Test {
 
         uint256 srcSupplyBefore = src.token.totalSupply();
         uint256 srcLockedBefore = src.token.balanceOf(address(src.manager));
-        console.log("  [%s] sender balance before   = %s", src.name, _fmt(src.token.balanceOf(sender)));
-        console.log("  [%s] total supply before     = %s", src.name, _fmt(srcSupplyBefore));
+        console.log("  %s sender balance before = %s", _tag(src.name), _fmt(src.token.balanceOf(sender)));
+        console.log("  %s total supply before   = %s", _tag(src.name), _fmt(srcSupplyBefore));
 
         (, uint256 fee) = src.manager.quoteDeliveryPrice(dst.wormholeChainId, EMPTY_INSTRUCTIONS);
         vm.deal(sender, fee);
@@ -208,13 +211,15 @@ abstract contract NTTBridgeHarness is Test {
         src.manager.transfer{value: fee}(amount, dst.wormholeChainId, _toBytes32(recipient));
         vm.stopPrank();
 
-        console.log("  [%s] total supply after      = %s", src.name, _fmt(src.token.totalSupply()));
+        console.log("  %s total supply after    = %s", _tag(src.name), _fmt(src.token.totalSupply()));
         if (src.isBurning) {
-            console.log("  [%s] burned                  = %s", src.name, _fmt(srcSupplyBefore - src.token.totalSupply()));
+            console.log(
+                "  %s burned                = %s", _tag(src.name), _fmt(srcSupplyBefore - src.token.totalSupply())
+            );
         } else {
             console.log(
-                "  [%s] locked in manager       = %s",
-                src.name,
+                "  %s locked in manager     = %s",
+                _tag(src.name),
                 _fmt(src.token.balanceOf(address(src.manager)) - srcLockedBefore)
             );
         }
@@ -241,9 +246,7 @@ abstract contract NTTBridgeHarness is Test {
         });
 
         vm.mockCall(
-            dst.coreBridge,
-            abi.encodeWithSelector(IWormhole.parseAndVerifyVM.selector),
-            abi.encode(vaa, true, "")
+            dst.coreBridge, abi.encodeWithSelector(IWormhole.parseAndVerifyVM.selector), abi.encode(vaa, true, "")
         );
     }
 
@@ -287,6 +290,21 @@ abstract contract NTTBridgeHarness is Test {
     }
 
     // ── Small utils ─────────────────────────────────────────────────────
+
+    /// @dev Chain label padded to a fixed width so amounts align across chains.
+    function _tag(string memory chainName) internal pure returns (string memory tag) {
+        tag = string.concat("[", chainName, "]");
+        while (bytes(tag).length < 9) {
+            // 9 = len("[polygon]"), the widest configured chain
+            tag = string.concat(tag, " ");
+        }
+    }
+
+    function _banner(string memory title) internal view {
+        console.log("========================================================");
+        console.log(title);
+        console.log("========================================================");
+    }
 
     function _chainByName(NTTTokenConfig memory cfg, string memory chainName)
         internal
