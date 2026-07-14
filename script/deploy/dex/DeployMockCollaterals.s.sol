@@ -41,10 +41,27 @@ contract DeployMockCollaterals is TrebScript {
                 .deploy(abi.encode(string.concat("Mento Mock ", symbol), symbol, decimals, deployer.account));
 
             MockERC20 coll = MockERC20(deployer.harness(addy));
-            coll.mint(deployer.account, 1_000_000 * 10 ** decimals);
+            uint256 mintAmount = 1_000_000 * 10 ** decimals;
+            coll.mint(deployer.account, mintAmount);
             IOwnable(address(coll)).transferOwnership(address(migrationOwner.account));
+
+            uint256 balance = MockERC20(addy).balanceOf(deployer.account);
+            require(
+                balance == mintAmount,
+                string.concat(
+                    "Mock collateral mint failed for ",
+                    symbol,
+                    ": expected ",
+                    vm.toString(mintAmount),
+                    " got ",
+                    vm.toString(balance)
+                )
+            );
+
             console.log(unicode"  ✅ Deployed MockERC20 (%s)", symbol);
-            console.log("        at %s\n", addy);
+            console.log("        at %s", addy);
+            console.log("        minted %s (%s decimals) to %s", vm.toString(mintAmount), decimals, deployer.account);
+            console.log(unicode"        ✔ balanceOf(deployer) = %s\n", vm.toString(balance));
         }
     }
 }
