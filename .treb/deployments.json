@@ -31631,6 +31631,38 @@
     "createdAt": "2026-04-30T16:29:54.813973+02:00",
     "updatedAt": "2026-04-30T16:29:54.831523+02:00"
   },
+  "testnet-v2-rc5/80002/MockERC20:EUROP": {
+    "id": "testnet-v2-rc5/80002/MockERC20:EUROP",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 80002,
+    "contractName": "MockERC20",
+    "label": "EUROP",
+    "address": "0x62A5E599c4f4bFA1024effFA15799a7a2Bb29dEC",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700e6f4d87813817a2b5778f3",
+      "initCodeHash": "0xad2071462240baf21492906aa7015decc958040b95d9ed4560d832cf76d43bbb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000060000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000104d656e746f204d6f636b204555524f500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000054555524f50000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/MockERC20:EUROP"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "src/MockERC20.sol",
+      "compilerVersion": "0.8.33+commit.64118f21",
+      "bytecodeHash": "0x3214fe415269d585d2457a379afa1485632b7effd01de4746de90508b3633f4f",
+      "scriptPath": "script/deploy/dex/DeployMockCollaterals.s.sol",
+      "gitCommit": "83fec52bb2e260fe696a5f20b1f57ba30a448ddf"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-14T09:46:19.607992-04:00",
+    "updatedAt": "2026-07-14T09:46:19.631207-04:00"
+  },
   "testnet-v2-rc5/80002/MockERC20:USDC": {
     "id": "testnet-v2-rc5/80002/MockERC20:USDC",
     "namespace": "testnet-v2-rc5",
