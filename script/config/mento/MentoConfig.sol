@@ -541,9 +541,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
     ) internal {
         address debtAddress = _lookupTokenAddress(debt);
         address collateralAddress = _lookupTokenAddress(collateral);
-        if (debtAddress == address(0) || collateralAddress == address(0)) {
-            return;
-        }
+        require(debtAddress != address(0), string.concat("FPMM debt token not resolved: ", debt));
+        require(collateralAddress != address(0), string.concat("FPMM collateral token not resolved: ", collateral));
 
         address oracleAdapter = isCollateralAsset(debtAddress) || isCollateralAsset(collateralAddress)
             ? lookupProxy("OracleAdapterCollateral")
