@@ -16,18 +16,31 @@ import {NTTTokenConfig} from "script/config/wormhole/NTTConfig.sol";
 ///         Cells:
 ///           ok   lane bridged the full amount
 ///           X    lane reverted (reason listed under the matrix)
+///           nc   NTT deployed on both ends but peers not registered yet
+///                (listed under the matrix with which chain needs ConfigureNTT)
 ///           nd   NTT not deployed on src and/or dst yet
 ///           -    chain pair not part of this token's configured topology
 ///
-/// @dev Lanes run through an external self-call so a revert becomes an X cell
-///      instead of aborting the sweep. The test fails at the end if any lane
-///      is X; `nd` and `-` are neutral.
+/// @dev Lanes are preflighted with view calls (manager + transceiver peers on
+///      both ends), so a partially-rolled-out lane shows up as `nc` without
+///      ever reverting. Only lanes that *claim* to be configured are bridged;
+///      an unexpected revert there becomes an X via an external self-call
+///      try/catch (with cheatcode state reset, since pranks survive reverts).
+///      The test fails at the end if any lane is X; `nc`/`nd`/`-` are neutral.
 ///
 ///      Run:  forge test --mc NTTBridgeTopology -vv
 contract NTTBridgeTopologyTest is NTTBridgeHarness {
     uint256 internal constant AMOUNT = 100e18;
 
-    string[] internal _failures; // "token src->dst: reason"
+    /// @dev Lane notes accumulated in MEMORY on purpose: reverted lane calls
+    ///      hop forks, and storage writes interleaved with those reverts can be
+    ///      unwound by the fork journal — memory is immune to that.
+    struct Report {
+        string[] failures; // "token src->dst: reason"
+        uint256 failCount;
+        string[] unconfigured; // "token src->dst: needs ConfigureNTT on ..."
+        uint256 ncCount;
+    }
 
     function test_topology_all_tokens_all_lanes() public {
         string[5] memory tokens = ["USDm", "EURm", "GBPm", "JPYm", "CHFm"];
@@ -48,10 +61,14 @@ contract NTTBridgeTopologyTest is NTTBridgeHarness {
             }
         }
 
+        Report memory report;
+        report.failures = new string[](tokens.length * laneCount);
+        report.unconfigured = new string[](tokens.length * laneCount);
+
         // Run every token over every lane.
         string[][] memory cells = new string[][](tokens.length);
         for (uint256 t = 0; t < tokens.length; t++) {
-            cells[t] = _runToken(tokens[t], allChains);
+            cells[t] = _runToken(tokens[t], allChains, report);
         }
 
         // ── Print the matrix ────────────────────────────────────────────
@@ -73,22 +90,33 @@ contract NTTBridgeTopologyTest is NTTBridgeHarness {
         }
 
         console.log("");
-        console.log("legend: ok = bridged | X = failed | nd = not deployed | - = not in token config");
+        console.log("legend: ok = bridged | X = failed | nc = not configured | nd = not deployed | - = not in token config");
 
-        if (_failures.length > 0) {
+        if (report.ncCount > 0) {
+            console.log("");
+            console.log("not configured:");
+            for (uint256 i = 0; i < report.ncCount; i++) {
+                console.log("  %s", report.unconfigured[i]);
+            }
+        }
+
+        if (report.failCount > 0) {
             console.log("");
             console.log("failures:");
-            for (uint256 i = 0; i < _failures.length; i++) {
-                console.log("  %s", _failures[i]);
+            for (uint256 i = 0; i < report.failCount; i++) {
+                console.log("  %s", report.failures[i]);
             }
         }
         console.log("");
 
-        require(_failures.length == 0, "topology has failing lanes (see matrix above)");
+        require(report.failCount == 0, "topology has failing lanes (see matrix above)");
     }
 
     /// @dev Runs all union lanes for one token; returns one matrix cell per lane.
-    function _runToken(string memory tokenName, string[] memory allChains) internal returns (string[] memory cells) {
+    function _runToken(string memory tokenName, string[] memory allChains, Report memory report)
+        internal
+        returns (string[] memory cells)
+    {
         NTTTokenConfig memory cfg = _loadTokenConfig(tokenName);
 
         // Resolve the token's configured chains; map union index -> ctx (or absent).
@@ -108,29 +136,57 @@ contract NTTBridgeTopologyTest is NTTBridgeHarness {
         for (uint256 s = 0; s < allChains.length; s++) {
             for (uint256 d = 0; d < allChains.length; d++) {
                 if (s == d) continue;
-                cells[l++] = _laneCell(tokenName, byUnion, inConfig, s, d);
+                cells[l++] = _laneCell(tokenName, byUnion, inConfig, s, d, report);
             }
         }
     }
 
-    function _laneCell(string memory tokenName, ChainCtx[] memory byUnion, bool[] memory inConfig, uint256 s, uint256 d)
-        internal
-        returns (string memory)
-    {
+    function _laneCell(
+        string memory tokenName,
+        ChainCtx[] memory byUnion,
+        bool[] memory inConfig,
+        uint256 s,
+        uint256 d,
+        Report memory report
+    ) internal returns (string memory) {
         if (!inConfig[s] || !inConfig[d]) return "-";
         if (!byUnion[s].deployed || !byUnion[d].deployed) return "nd";
+
+        string memory missing = _preflightLane(byUnion[s], byUnion[d]);
+        if (bytes(missing).length > 0) {
+            report.unconfigured[report.ncCount++] = _laneNote(tokenName, byUnion[s].name, byUnion[d].name, missing);
+            return "nc";
+        }
 
         try this.runLaneExternal(byUnion[s], byUnion[d]) {
             return "ok";
         } catch Error(string memory reason) {
-            vm.clearMockedCalls();
-            _recordFailure(tokenName, byUnion[s].name, byUnion[d].name, reason);
+            _resetCheatcodes();
+            report.failures[report.failCount++] = _laneNote(tokenName, byUnion[s].name, byUnion[d].name, reason);
             return "X";
         } catch (bytes memory lowLevelData) {
-            vm.clearMockedCalls();
-            _recordFailure(tokenName, byUnion[s].name, byUnion[d].name, _describeRevert(lowLevelData));
+            _resetCheatcodes();
+            report.failures[report.failCount++] =
+                _laneNote(tokenName, byUnion[s].name, byUnion[d].name, _describeRevert(lowLevelData));
             return "X";
         }
+    }
+
+    /// @dev Checks the four peer registrations a lane needs (manager peer +
+    ///      transceiver wormhole peer, on each end) via view calls. Returns ""
+    ///      when fully wired, else which chain(s) still need ConfigureNTT.
+    function _preflightLane(ChainCtx memory src, ChainCtx memory dst) internal returns (string memory) {
+        vm.selectFork(src.forkId);
+        bool srcOk = src.manager.getPeer(dst.wormholeChainId).peerAddress != bytes32(0)
+            && IWormholeTransceiver(src.transceiver).getWormholePeer(dst.wormholeChainId) != bytes32(0);
+
+        vm.selectFork(dst.forkId);
+        bool dstOk = dst.manager.getPeer(src.wormholeChainId).peerAddress != bytes32(0)
+            && IWormholeTransceiver(dst.transceiver).getWormholePeer(src.wormholeChainId) != bytes32(0);
+
+        if (srcOk && dstOk) return "";
+        if (!srcOk && !dstOk) return string.concat("needs ConfigureNTT on ", src.name, " and ", dst.name);
+        return string.concat("needs ConfigureNTT on ", srcOk ? dst.name : src.name);
     }
 
     /// @dev External so lane reverts can be caught. Not a test function.
@@ -143,10 +199,12 @@ contract NTTBridgeTopologyTest is NTTBridgeHarness {
         require(delivered == AMOUNT, "delivered amount mismatch");
     }
 
-    function _recordFailure(string memory tokenName, string memory src, string memory dst, string memory reason)
+    function _laneNote(string memory tokenName, string memory src, string memory dst, string memory note)
         internal
+        pure
+        returns (string memory)
     {
-        _failures.push(string.concat(tokenName, " ", src, "->", dst, ": ", reason));
+        return string.concat(tokenName, " ", src, "->", dst, ": ", note);
     }
 
     /// @dev Maps well-known NTT misconfiguration errors to readable names;
@@ -160,7 +218,19 @@ contract NTTBridgeTopologyTest is NTTBridgeHarness {
         if (selector == IWormholeTransceiver.InvalidWormholePeer.selector) {
             return "InvalidWormholePeer: emitter not registered on destination transceiver";
         }
+        if (selector == bytes4(keccak256("CheatcodeError(string)"))) {
+            return string.concat("cheatcode error: ", _decodeStringPayload(data));
+        }
         return string.concat("custom error ", vm.toString(abi.encodePacked(selector)));
+    }
+
+    /// @dev Decodes the string argument of a `SomeError(string)` revert payload.
+    function _decodeStringPayload(bytes memory data) internal pure returns (string memory) {
+        bytes memory tail = new bytes(data.length - 4);
+        for (uint256 i = 4; i < data.length; i++) {
+            tail[i - 4] = data[i];
+        }
+        return abi.decode(tail, (string));
     }
 
     // ── Matrix formatting ───────────────────────────────────────────────

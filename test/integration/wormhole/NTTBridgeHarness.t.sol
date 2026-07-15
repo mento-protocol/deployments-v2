@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import {Test} from "forge-std/Test.sol";
-import {Vm} from "forge-std/Vm.sol";
+import {Vm, VmSafe} from "forge-std/Vm.sol";
 import {console2 as console} from "forge-std/console2.sol";
 
 import {INttManager} from "mento-stabletoken-ntt/src/interfaces/INttManager.sol";
@@ -301,6 +301,19 @@ abstract contract NTTBridgeHarness is Test {
         vm.prank(address(chain.manager));
         INttToken(address(chain.token)).mint(to, amount);
         require(chain.token.balanceOf(to) >= amount, "funding failed (not burn-mint?)");
+    }
+
+    /// @dev Clears cheatcode residue a reverted lane can leave behind: an active
+    ///      (start)prank and mocked calls survive EVM reverts, so a lane that
+    ///      reverts mid-`_sendLeg` would otherwise poison every lane after it
+    ///      (each later `vm.prank` fails with CheatcodeError "cannot override
+    ///      an ongoing prank"). Call from any `catch` around bridge lanes.
+    function _resetCheatcodes() internal {
+        (VmSafe.CallerMode mode,,) = vm.readCallers();
+        if (mode != VmSafe.CallerMode.None) {
+            vm.stopPrank();
+        }
+        vm.clearMockedCalls();
     }
 
     // ── Log capture / VAA construction ──────────────────────────────────
