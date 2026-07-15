@@ -626,6 +626,13 @@
       "VirtualPoolFactory:v3.0.0": "0x887955f28723B0e9Bddc358448CB5B1FDe692da4"
     }
   },
+  "137": {
+    "mainnet": {
+      "StableTokenSpoke:v3.0.0": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+      "TransparentUpgradeableProxy:EURm": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
+      "TransparentUpgradeableProxy:USDm": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115"
+    }
+  },
   "143": {
     "mainnet": {
       "AddressSortedLinkedListWithMedian": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
