@@ -89,11 +89,18 @@
       "gitCommit": "2d5be832f28cff18b8b6f68580677ef86f2a5d90"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-15T07:38:06.631588-04:00",
-    "updatedAt": "2026-07-15T07:38:06.656068-04:00"
+    "updatedAt": "2026-07-15T07:51:25.678116-04:00"
   },
   "mainnet/137/TransceiverStructs": {
     "id": "mainnet/137/TransceiverStructs",
@@ -121,11 +128,18 @@
       "gitCommit": "7fe572668ea20ff2d58b5a22eb51c026a0e39fd1"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-15T07:41:01.234158-04:00",
-    "updatedAt": "2026-07-15T07:41:01.255194-04:00"
+    "updatedAt": "2026-07-15T07:47:26.036116-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:EURm": {
     "id": "mainnet/137/TransparentUpgradeableProxy:EURm",
@@ -157,11 +171,18 @@
       "gitCommit": "2d5be832f28cff18b8b6f68580677ef86f2a5d90"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x4D502d735B4C574B487Ed641ae87cEaE884731C7#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x4D502d735B4C574B487Ed641ae87cEaE884731C7#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-15T07:39:53.135549-04:00",
-    "updatedAt": "2026-07-15T07:39:53.158696-04:00"
+    "updatedAt": "2026-07-15T07:51:46.363467-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:USDm": {
     "id": "mainnet/137/TransparentUpgradeableProxy:USDm",
@@ -193,11 +214,18 @@
       "gitCommit": "2d5be832f28cff18b8b6f68580677ef86f2a5d90"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-15T07:38:06.631588-04:00",
-    "updatedAt": "2026-07-15T07:38:06.656068-04:00"
+    "updatedAt": "2026-07-15T07:51:52.361972-04:00"
   },
   "mainnet/143/AddressSortedLinkedListWithMedian": {
     "id": "mainnet/143/AddressSortedLinkedListWithMedian",
