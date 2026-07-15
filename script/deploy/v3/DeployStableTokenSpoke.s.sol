@@ -85,7 +85,7 @@ contract DeployStableTokenSpoke is TrebScript, ProxyHelper, PostChecksHelper {
         string memory symbol = IERC20(stableTokenSpokeProxy).symbol();
 
         console.log(" > name:", name);
-        console.log(" > symbol: ", symbol);
+        console.log(" > symbol:", symbol);
 
         address proxyAdmin = getProxyAdmin(stableTokenSpokeProxy);
         address proxyAdminOwner = IOwnable(proxyAdmin).owner();
