@@ -628,7 +628,10 @@
   },
   "137": {
     "mainnet": {
+      "NttDeployHelper:EURm": "0x0e72e26E4e08779D08B2A52F59f41E6659a3547d",
+      "NttDeployHelper:USDm": "0x37316334108C816f9862baB52347A0aab7551127",
       "StableTokenSpoke:v3.0.0": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
+      "TransceiverStructs": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
       "TransparentUpgradeableProxy:EURm": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
       "TransparentUpgradeableProxy:USDm": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115"
     }
