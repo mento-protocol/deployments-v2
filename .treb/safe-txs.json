@@ -723,6 +723,19 @@
     "confirmations": [],
     "executionTxHash": "0x4e963a9a35e6a19658d06ac7d27cb1945aac84483b740c5fc9e01ca304e4cd37"
   },
+  "0x3857f1677f62be7efe87ca485571d71b3e2117096bf62eca310d7de5af6ce284": {
+    "safeTxHash": "0x3857f1677f62be7efe87ca485571d71b3e2117096bf62eca310d7de5af6ce284",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 137,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-07-16T11:44:42.445006-04:00",
+    "confirmations": [],
+    "executionTxHash": "0xfeaf8ba53417130fa9faadeb042f8c162b8ed320ed9f1dc56a9ca12da2dcdd82"
+  },
   "0x3a73766b296ea1f8949add5bc3c9bbe39064b65a2d631e90ebd78e4983fe9813": {
     "safeTxHash": "0x3a73766b296ea1f8949add5bc3c9bbe39064b65a2d631e90ebd78e4983fe9813",
     "safeAddress": "0x32CB58b145d3f7e28c45cE4B2Cc31fa94248b23F",
@@ -877,6 +890,19 @@
     "proposedAt": "2025-08-15T09:59:02.095946+02:00",
     "confirmations": [],
     "executionTxHash": "0x48c719421617b5b99a0b8ebd82d40caf418b5414b540a12823384754edd53a60"
+  },
+  "0x4f837f3643f8ad6f1ac5e4b02db69c57e6ee81fb7b0871e54036933ebef2d42b": {
+    "safeTxHash": "0x4f837f3643f8ad6f1ac5e4b02db69c57e6ee81fb7b0871e54036933ebef2d42b",
+    "safeAddress": "0xfdFf3fd0994fEd8bE208a7BEe49970eA9707E687",
+    "chainId": 137,
+    "status": "EXECUTED",
+    "nonce": 0,
+    "transactions": [],
+    "transactionIds": [],
+    "proposedBy": "0x2738F38Fde510743e0c589415E0598C4ceE6eAa7",
+    "proposedAt": "2026-07-16T11:45:56.675496-04:00",
+    "confirmations": [],
+    "executionTxHash": "0xdc6acbb4fa20ad3b297c2f67f3579c9026edf242ed6a7e41f3947d48549040d4"
   },
   "0x5030fa1b919b2859dac02a00909278e43e9b1df56f3c5c30f95e5ba23529ac6c": {
     "safeTxHash": "0x5030fa1b919b2859dac02a00909278e43e9b1df56f3c5c30f95e5ba23529ac6c",
