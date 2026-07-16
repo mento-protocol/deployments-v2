@@ -151,12 +151,12 @@ contract MentoConfig_polygon is MentoConfig {
         LiquidityStrategyPoolConfig memory eurCollateralPoolsRlsConfig = LiquidityStrategyPoolConfig({
             liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
             debtToken: _lookupTokenAddress("EURm"),
-            cooldown: 300, // TODO: review before deployment
+            cooldown: 300,
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
-            liquiditySourceIncentiveExpansion: 0, // TODO: review before deployment
-            protocolIncentiveExpansion: 0, // TODO: review before deployment
-            liquiditySourceIncentiveContraction: 0, // TODO: review before deployment
-            protocolIncentiveContraction: 0 // TODO: review before deployment
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
         });
 
         _addFPMM(
@@ -164,17 +164,17 @@ contract MentoConfig_polygon is MentoConfig {
             "EUROP",
             getRateFeedIdFromString("EUROP/EUR"),
             IFPMM.FPMMParams({
-                lpFee: 8, // TODO: review before deployment
-                protocolFee: 2, // TODO: review before deployment
+                lpFee: 3,
+                protocolFee: 2,
                 protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
                 feeSetter: lookupOrFail("FeeSetter"),
-                rebalanceIncentive: 1, // TODO: review before deployment
-                rebalanceThresholdAbove: 5000, // TODO: review before deployment
-                rebalanceThresholdBelow: 3333 // TODO: review before deployment
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
             }),
-            // 5m/24h limits: $25k/$50k @ 0.87 USD/EUR
-            TokenLimits({limit0: 21_750, limit1: 43_500}), // TODO: review before deployment
-            TokenLimits({limit0: 21_750, limit1: 43_500}), // TODO: review before deployment
+            // 5m/24h limits: $50k/$250k @ 0.87 USD/EUR
+            TokenLimits({limit0: 43_500, limit1: 217_500}),
+            TokenLimits({limit0: 43_500, limit1: 217_500}),
             eurCollateralPoolsRlsConfig
         );
     }
@@ -196,7 +196,7 @@ contract MentoConfig_polygon is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "USDC/USD",
             cooldown: 1,
-            threshold: 0.0015 * 1e24,
+            threshold: 0.0015 * 1e24, // 0.15%
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
@@ -213,13 +213,12 @@ contract MentoConfig_polygon is MentoConfig {
         // the migrationOwner halt trading by reporting a rate that deviates
         // more than the threshold from 1.0 (e.g. in case of a depeg).
         _addRateFeed("EUROP/EUR");
-        // TODO: review expiry; the rate must be re-reported before it expires
         _setRateFeedExpirySeconds("EUROP/EUR", 365 days);
         _addToBreaker({
             breakerId: valueBreakerId,
             rateFeed: "EUROP/EUR",
-            cooldown: 1, // TODO: review before deployment (copied from base EURC/EUR)
-            threshold: 0.005 * 1e24, // TODO: review before deployment (copied from base EURC/EUR)
+            cooldown: 1,
+            threshold: 0.005 * 1e24, // 0.5%
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
@@ -234,7 +233,7 @@ contract MentoConfig_polygon is MentoConfig {
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
             cooldown: 15 minutes,
-            threshold: 0.04 * 1e24,
+            threshold: 0.04 * 1e24, // 4%
             smoothingFactor: 0.005 * 1e24,
             referenceValue: 0
         });
