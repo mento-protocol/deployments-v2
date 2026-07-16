@@ -26,9 +26,7 @@ contract MentoConfig_celo is MentoConfig {
     uint256 internal _eurocEurBreakerThreshold;
     uint256 internal _celoEthRelayerMaxTimestampSpread;
     string internal _celoEthRelayerDescription;
-    bool internal _includeCollateralRelayers;
     bool internal _useLongCrossPairDesc; // true=mainnet: "A/B (A/USD:USD/B)" + 5min spread, false=sepolia: "A/B" + 1day spread
-    bool internal _includeCeloUsdRelayer; // false=mainnet (not deployed via factory), true=sepolia
 
     function _initialize() internal override {
         _configureParams();
@@ -61,9 +59,7 @@ contract MentoConfig_celo is MentoConfig {
         _eurocEurBreakerThreshold = 0.005 * 1e24;
         _celoEthRelayerMaxTimestampSpread = 1 days;
         _celoEthRelayerDescription = "CELO/ETH (CELO/USD:USD/ETH)";
-        _includeCollateralRelayers = false;
         _useLongCrossPairDesc = true;
-        _includeCeloUsdRelayer = false;
 
         _coreAggs = CoreAggregators({
             celoUsd: 0x0568fD19986748cEfF3301e55c0eb1E729E0Ab7e,
@@ -403,11 +399,9 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
-        if (_includeCollateralRelayers) {
-            _addChainlinkRelayer({
-                rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
-            });
-        }
+        _addChainlinkRelayer({
+            rateFeed: "USDCUSD", description: "USDC/USD", aggregator0: _coreAggs.usdcUsd, invert0: false
+        });
 
         _addRateFeed("USDTUSD");
         _addToBreaker({
@@ -431,17 +425,15 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
-        if (_includeCollateralRelayers) {
-            _addChainlinkRelayer({
-                rateFeed: "EUROCEUR",
-                description: "EUROC/EUR",
-                maxTimestampSpread: 1 days,
-                aggregator0: _coreAggs.eurcUsd,
-                invert0: false,
-                aggregator1: _fxAggs.eur,
-                invert1: true
-            });
-        }
+        _addChainlinkRelayer({
+            rateFeed: "EUROCEUR",
+            description: _useLongCrossPairDesc ? "EUROC/EUR (EUROC/USD:USD/EUR)" : "EUROC/EUR",
+            maxTimestampSpread: 5 minutes,
+            aggregator0: _coreAggs.eurcUsd,
+            invert0: false,
+            aggregator1: _fxAggs.eur,
+            invert1: true
+        });
 
         if (_useLegacyRateFeedIds) {
             _addRateFeed("CELOUSD", _lookupTokenAddress("USDm"));
@@ -456,11 +448,9 @@ contract MentoConfig_celo is MentoConfig {
             smoothingFactor: 1e24,
             referenceValue: 0
         });
-        if (_includeCeloUsdRelayer) {
-            _addChainlinkRelayer({
-                rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
-            });
-        }
+        _addChainlinkRelayer({
+            rateFeed: "CELOUSD", description: "CELOUSD", aggregator0: _coreAggs.celoUsd, invert0: false
+        });
 
         string memory celoEthFeed = string.concat(_rateFeedPrefix, "CELOETH");
         _addRateFeed(celoEthFeed);
@@ -476,9 +466,8 @@ contract MentoConfig_celo is MentoConfig {
 
         // Legacy currencies: on mainnet, CELO cross-pair rate feed IDs are the old stable token proxy addresses
         if (_useLegacyRateFeedIds) {
-            // CELO/EUR and CELO/BRL relayers are not deployed via factory on mainnet (pass 0 = skip cross-pair relayer)
-            _configureDefaultFxRateFeed("EUR", _fxAggs.eur, address(0), _lookupTokenAddress("EURm"), 0);
-            _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"), 0);
+            _configureDefaultFxRateFeed("EUR", _fxAggs.eur, address(0), _lookupTokenAddress("EURm"), 5 minutes);
+            _configureDefaultFxRateFeed("BRL", _fxAggs.brl, address(0), _lookupTokenAddress("BRLm"), 5 minutes);
             // CELO/XOF and CELO/KES are deployed with 5-minute maxTimestampSpread on mainnet
             _configureDefaultFxRateFeed("XOF", _fxAggs.xof, address(0), _lookupTokenAddress("XOFm"), 5 minutes);
             // KES: both the FX/USD feed (registered without relayed: prefix) and CELO cross-pair use non-standard IDs

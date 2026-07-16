@@ -23,6 +23,8 @@ fs_permissions = [
   { access = "read", path = "mgps/" },
 ]
 
+[profile.mainnet]
+
 [lint]
 ignore = ["**/*"]
 
