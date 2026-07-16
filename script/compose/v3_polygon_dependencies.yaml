@@ -9,23 +9,21 @@ components:
     deps:
       - AddressSortedLinkedListWithMedian
       - ProxyAdmin
-  SetupEuropRateFeed:
-    script: SetupEuropRateFeed
-    deps:
-      - SortedOracles
-  BreakerBox:
-    script: DeployBreakerBox
-    deps:
-      - ChainlinkRelayers
-      - SortedOracles
-      - SetupEuropRateFeed
-  MockChainlinkAggregators:
-    script: DeployMockAggregators
-  ChainlinkRelayers:
-    script: DeployChainlinkRelayers
-    deps:
-      - MockChainlinkAggregators
-      - ChainlinkRelayerFactory
+  # SetupEuropRateFeed:
+  #   script: SetupEuropRateFeed
+  #   deps:
+  #     - SortedOracles
+  # BreakerBox:
+  #   script: DeployBreakerBox
+  #   deps:
+  #     - ChainlinkRelayers
+  #     - SortedOracles
+  #     - SetupEuropRateFeed
+  # ChainlinkRelayers:
+  #   script: DeployChainlinkRelayers
+  #   deps:
+  #     - MockChainlinkAggregators
+  #     - ChainlinkRelayerFactory
   ChainlinkRelayerFactory:
     script: DeployChainlinkRelayerFactory
     deps:
