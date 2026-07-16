@@ -1,0 +1,33 @@
+group: Mento V3 Dependencies
+components:
+  ProxyAdmin:
+    script: DeployProxyAdmin
+  AddressSortedLinkedListWithMedian:
+    script: DeployAddressSortedLinkedListWithMedian
+  SortedOracles:
+    script: DeploySortedOracles
+    deps:
+      - AddressSortedLinkedListWithMedian
+      - ProxyAdmin
+  SetupEuropRateFeed:
+    script: SetupEuropRateFeed
+    deps:
+      - SortedOracles
+  BreakerBox:
+    script: DeployBreakerBox
+    deps:
+      - ChainlinkRelayers
+      - SortedOracles
+      - SetupEuropRateFeed
+  MockChainlinkAggregators:
+    script: DeployMockAggregators
+  ChainlinkRelayers:
+    script: DeployChainlinkRelayers
+    deps:
+      - MockChainlinkAggregators
+      - ChainlinkRelayerFactory
+  ChainlinkRelayerFactory:
+    script: DeployChainlinkRelayerFactory
+    deps:
+      - SortedOracles
+      - ProxyAdmin
