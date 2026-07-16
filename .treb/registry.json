@@ -630,6 +630,8 @@
     "mainnet": {
       "AddressSortedLinkedListWithMedian": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
       "ChainlinkRelayerFactory:v2.6.5": "0x9aFd679045B571066a6d8491C25d2D6ba5431d3f",
+      "ChainlinkRelayerV1:EUR/USD": "0xC5f7AcF94Fd76D2fD6c04ffC6C1D519cD16CE7dd",
+      "ChainlinkRelayerV1:USDC/USD": "0x1C267bE736fB7B750243E41b1575Ab872Ae626bb",
       "NttDeployHelper:EURm": "0x0e72e26E4e08779D08B2A52F59f41E6659a3547d",
       "NttDeployHelper:USDm": "0x37316334108C816f9862baB52347A0aab7551127",
       "ProxyAdmin": "0xf759073E3a6125fFF215427AeB313A49799FECCf",

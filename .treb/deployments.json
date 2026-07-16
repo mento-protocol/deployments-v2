@@ -63,6 +63,68 @@
     "createdAt": "2026-07-16T11:01:07.795516-04:00",
     "updatedAt": "2026-07-16T11:01:07.818777-04:00"
   },
+  "mainnet/137/ChainlinkRelayerV1:EUR/USD": {
+    "id": "mainnet/137/ChainlinkRelayerV1:EUR/USD",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "EUR/USD",
+    "address": "0xC5f7AcF94Fd76D2fD6c04ffC6C1D519cD16CE7dd",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0x08027c411febe5d03eb964750bc138a769e06e6b44bdc12077cb3ec20c3fc000",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000074555522f55534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000073366fe0aa0ded304479862808e02506fe556a980000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x3cfe15eb7994cf4a902c8816e8a3eb1670592b6a3638163ab88ff83af7b43d75",
+      "scriptPath": "script/deploy/oracles/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2450d39244de78877db9f3e1532bba56e3df6a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:01:44.26869-04:00",
+    "updatedAt": "2026-07-16T11:01:44.291215-04:00"
+  },
+  "mainnet/137/ChainlinkRelayerV1:USDC/USD": {
+    "id": "mainnet/137/ChainlinkRelayerV1:USDC/USD",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "ChainlinkRelayerV1",
+    "label": "USDC/USD",
+    "address": "0x1C267bE736fB7B750243E41b1575Ab872Ae626bb",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0x83438438b8b645ac5e1116c9dfcfd8c6f7ff01f7ce70a3cab7bc5cdeea52e47e",
+      "initCodeHash": "0xc4514bda59f160248e6ef7c0971e049d5922692f12644adb09e54e2507961dcc",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef0000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c00000000000000000000000000000000000000000000000000000000000000008555344432f5553440000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000fe4a8cc5b5b2366c1b58bea3858e81843581b2f70000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerV1.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0x3cfe15eb7994cf4a902c8816e8a3eb1670592b6a3638163ab88ff83af7b43d75",
+      "scriptPath": "script/deploy/oracles/DeployChainlinkRelayers.s.sol",
+      "gitCommit": "cf2450d39244de78877db9f3e1532bba56e3df6a"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:01:44.26869-04:00",
+    "updatedAt": "2026-07-16T11:01:44.291215-04:00"
+  },
   "mainnet/137/NttDeployHelper:EURm": {
     "id": "mainnet/137/NttDeployHelper:EURm",
     "namespace": "mainnet",
