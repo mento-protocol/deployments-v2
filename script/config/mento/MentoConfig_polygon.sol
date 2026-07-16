@@ -172,9 +172,8 @@ contract MentoConfig_polygon is MentoConfig {
                 rebalanceThresholdAbove: 5000,
                 rebalanceThresholdBelow: 3333
             }),
-            // 5m/24h limits: $50k/$250k @ 0.87 USD/EUR
-            TokenLimits({limit0: 43_500, limit1: 217_500}),
-            TokenLimits({limit0: 43_500, limit1: 217_500}),
+            TokenLimits({limit0: 50_000, limit1: 250_000}),
+            TokenLimits({limit0: 50_000, limit1: 250_000}),
             eurCollateralPoolsRlsConfig
         );
     }
