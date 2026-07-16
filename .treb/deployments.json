@@ -25,11 +25,18 @@
       "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x65052c55815F491094FD8F1D887d4B5C670abE3c#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x65052c55815F491094FD8F1D887d4B5C670abE3c#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:00:09.096483-04:00",
-    "updatedAt": "2026-07-16T11:00:09.120245-04:00"
+    "updatedAt": "2026-07-16T12:06:24.15945-04:00"
   },
   "mainnet/137/BreakerBox:v2.6.5": {
     "id": "mainnet/137/BreakerBox:v2.6.5",
@@ -89,11 +96,18 @@
       "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x9aFd679045B571066a6d8491C25d2D6ba5431d3f#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x9aFd679045B571066a6d8491C25d2D6ba5431d3f#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:01:07.795516-04:00",
-    "updatedAt": "2026-07-16T11:01:07.818777-04:00"
+    "updatedAt": "2026-07-16T12:07:03.20953-04:00"
   },
   "mainnet/137/ChainlinkRelayerV1:EUR/USD": {
     "id": "mainnet/137/ChainlinkRelayerV1:EUR/USD",
@@ -120,11 +134,18 @@
       "gitCommit": "cf2450d39244de78877db9f3e1532bba56e3df6a"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xC5f7AcF94Fd76D2fD6c04ffC6C1D519cD16CE7dd#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xC5f7AcF94Fd76D2fD6c04ffC6C1D519cD16CE7dd#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:01:44.26869-04:00",
-    "updatedAt": "2026-07-16T11:01:44.291215-04:00"
+    "updatedAt": "2026-07-16T12:09:24.724896-04:00"
   },
   "mainnet/137/ChainlinkRelayerV1:USDC/USD": {
     "id": "mainnet/137/ChainlinkRelayerV1:USDC/USD",
@@ -151,11 +172,18 @@
       "gitCommit": "cf2450d39244de78877db9f3e1532bba56e3df6a"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x1C267bE736fB7B750243E41b1575Ab872Ae626bb#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x1C267bE736fB7B750243E41b1575Ab872Ae626bb#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:01:44.26869-04:00",
-    "updatedAt": "2026-07-16T11:01:44.291215-04:00"
+    "updatedAt": "2026-07-16T12:09:27.409423-04:00"
   },
   "mainnet/137/FPMM:v3.0.0": {
     "id": "mainnet/137/FPMM:v3.0.0",
@@ -183,11 +211,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x8cB0518a0510Ab62450F79f3cD9EE0cbdDB77F30#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:10:38.307622-04:00"
   },
   "mainnet/137/FPMMFactory:v3.0.0": {
     "id": "mainnet/137/FPMMFactory:v3.0.0",
@@ -215,11 +250,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xCC5bB0ba252082213ce1303CBfbA8D56CD872A8a#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:10:58.466644-04:00"
   },
   "mainnet/137/FactoryRegistry:v3.0.0": {
     "id": "mainnet/137/FactoryRegistry:v3.0.0",
@@ -247,11 +289,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x8124b66595Ff4E79B7F0c1b1101AFa501d219311#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x8124b66595Ff4E79B7F0c1b1101AFa501d219311#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:10:17.265626-04:00"
   },
   "mainnet/137/MarketHoursBreaker:v3.0.0": {
     "id": "mainnet/137/MarketHoursBreaker:v3.0.0",
@@ -279,11 +328,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x0A18B8e7338eF8d6025529257aA5CCd5A14e0DAF#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:08:46.91067-04:00"
   },
   "mainnet/137/MarketHoursBreakerToggleable:v3.0.0": {
     "id": "mainnet/137/MarketHoursBreakerToggleable:v3.0.0",
@@ -311,11 +367,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x411e0876750eE59d7D7C131e2d1F0b1a71d2ef44#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:09:05.529842-04:00"
   },
   "mainnet/137/MedianDeltaBreaker:v2.6.5": {
     "id": "mainnet/137/MedianDeltaBreaker:v2.6.5",
@@ -439,11 +502,18 @@
       "gitCommit": "2a08dbddb7633ff9386e532bf0acfee48baf062b"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:50:03.9823-04:00",
-    "updatedAt": "2026-07-16T11:50:04.004683-04:00"
+    "updatedAt": "2026-07-16T12:11:56.087129-04:00"
   },
   "mainnet/137/OracleAdapter:v3.0.0": {
     "id": "mainnet/137/OracleAdapter:v3.0.0",
@@ -471,11 +541,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xc1B767756F582d124E76BB3e246f31e6aB256059#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xc1B767756F582d124E76BB3e246f31e6aB256059#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:09:55.382487-04:00"
   },
   "mainnet/137/ProxyAdmin": {
     "id": "mainnet/137/ProxyAdmin",
@@ -503,11 +580,18 @@
       "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xf759073E3a6125fFF215427AeB313A49799FECCf#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xf759073E3a6125fFF215427AeB313A49799FECCf#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:00:30.655755-04:00",
-    "updatedAt": "2026-07-16T11:00:30.675542-04:00"
+    "updatedAt": "2026-07-16T12:05:53.660484-04:00"
   },
   "mainnet/137/ReserveLiquidityStrategy:v3.0.1": {
     "id": "mainnet/137/ReserveLiquidityStrategy:v3.0.1",
@@ -535,11 +619,18 @@
       "gitCommit": "f66308021009b9a0e6b044d23ecafec44ced1bdb"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x420FbDB50dadF0286144BFF91ed62A6893dee148#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x420FbDB50dadF0286144BFF91ed62A6893dee148#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:45:56.675496-04:00",
-    "updatedAt": "2026-07-16T11:45:56.706232-04:00"
+    "updatedAt": "2026-07-16T12:11:49.562459-04:00"
   },
   "mainnet/137/ReserveV2:v3.0.0": {
     "id": "mainnet/137/ReserveV2:v3.0.0",
@@ -567,11 +658,18 @@
       "gitCommit": "f66308021009b9a0e6b044d23ecafec44ced1bdb"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xC16d23E4789e2B214D71C1Df7820a4dDAb1Df5FF#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:45:56.675496-04:00",
-    "updatedAt": "2026-07-16T11:45:56.706232-04:00"
+    "updatedAt": "2026-07-16T12:11:28.561605-04:00"
   },
   "mainnet/137/Router:v3.0.0": {
     "id": "mainnet/137/Router:v3.0.0",
@@ -599,11 +697,18 @@
       "gitCommit": "f66308021009b9a0e6b044d23ecafec44ced1bdb"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:45:56.675496-04:00",
-    "updatedAt": "2026-07-16T11:45:56.706232-04:00"
+    "updatedAt": "2026-07-16T12:13:10.809483-04:00"
   },
   "mainnet/137/SortedOracles:v2.6.5": {
     "id": "mainnet/137/SortedOracles:v2.6.5",
@@ -631,11 +736,18 @@
       "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xbEe346578929D70F02C3c236D709F0EfFb0cb192#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xbEe346578929D70F02C3c236D709F0EfFb0cb192#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:00:55.589761-04:00",
-    "updatedAt": "2026-07-16T11:00:55.611394-04:00"
+    "updatedAt": "2026-07-16T12:06:43.003344-04:00"
   },
   "mainnet/137/StableTokenSpoke:v3.0.0": {
     "id": "mainnet/137/StableTokenSpoke:v3.0.0",
@@ -702,11 +814,18 @@
       "gitCommit": "f66308021009b9a0e6b044d23ecafec44ced1bdb"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x4B9B0E94197B7b2b11D311239e1420106cE7a2a2#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:45:56.675496-04:00",
-    "updatedAt": "2026-07-16T11:45:56.706232-04:00"
+    "updatedAt": "2026-07-16T12:13:37.867235-04:00"
   },
   "mainnet/137/TransceiverStructs": {
     "id": "mainnet/137/TransceiverStructs",
@@ -777,11 +896,18 @@
       "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:01:07.795516-04:00",
-    "updatedAt": "2026-07-16T11:01:07.818777-04:00"
+    "updatedAt": "2026-07-16T12:07:05.107503-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:EURm": {
     "id": "mainnet/137/TransparentUpgradeableProxy:EURm",
@@ -856,11 +982,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xa849b475FE5a4B5C9C3280152c7a1945b907613b#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xa849b475FE5a4B5C9C3280152c7a1945b907613b#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:11:00.453468-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:FactoryRegistry": {
     "id": "mainnet/137/TransparentUpgradeableProxy:FactoryRegistry",
@@ -892,11 +1025,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x7b2f7d11eabD576782f77bF2CcA46a853410AdF6#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:10:19.339543-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
     "id": "mainnet/137/TransparentUpgradeableProxy:OpenLiquidityStrategy",
@@ -928,11 +1068,18 @@
       "gitCommit": "2a08dbddb7633ff9386e532bf0acfee48baf062b"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:50:03.9823-04:00",
-    "updatedAt": "2026-07-16T11:50:04.004683-04:00"
+    "updatedAt": "2026-07-16T12:11:59.33615-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "mainnet/137/TransparentUpgradeableProxy:OracleAdapter",
@@ -964,11 +1111,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xa472fBBF4b890A54381977ac392BdF82EeC4383a#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xa472fBBF4b890A54381977ac392BdF82EeC4383a#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:09:57.525-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:OracleAdapterCollateral": {
     "id": "mainnet/137/TransparentUpgradeableProxy:OracleAdapterCollateral",
@@ -1000,11 +1154,18 @@
       "gitCommit": "84e94e0a5d5de8b861424b6512a93d958e7e717d"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xEB23E1339b2119c0f4a0097Cb294E990C1fA6423#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
-    "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+    "updatedAt": "2026-07-16T12:09:59.238265-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:ReserveLiquidityStrategy": {
     "id": "mainnet/137/TransparentUpgradeableProxy:ReserveLiquidityStrategy",
@@ -1036,11 +1197,18 @@
       "gitCommit": "f66308021009b9a0e6b044d23ecafec44ced1bdb"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0xa0fB8b16ce6AF3634fF9F3f4F40E49E1C1ae4f0B#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:45:56.675496-04:00",
-    "updatedAt": "2026-07-16T11:45:56.706232-04:00"
+    "updatedAt": "2026-07-16T12:11:51.586744-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:ReserveV2": {
     "id": "mainnet/137/TransparentUpgradeableProxy:ReserveV2",
@@ -1072,11 +1240,18 @@
       "gitCommit": "f66308021009b9a0e6b044d23ecafec44ced1bdb"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x4255Cf38e51516766180b33122029A88Cb853806#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x4255Cf38e51516766180b33122029A88Cb853806#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:45:56.675496-04:00",
-    "updatedAt": "2026-07-16T11:45:56.706232-04:00"
+    "updatedAt": "2026-07-16T12:11:30.557417-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:SortedOracles": {
     "id": "mainnet/137/TransparentUpgradeableProxy:SortedOracles",
@@ -1108,11 +1283,18 @@
       "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
     },
     "verification": {
-      "status": "UNVERIFIED"
+      "status": "VERIFIED",
+      "etherscanUrl": "https://api.etherscan.io/v2/api?chainid=137/address/0x6f92C745346057a61b259579256159458a0a6A92#code",
+      "verifiers": {
+        "etherscan": {
+          "status": "verified",
+          "url": "https://api.etherscan.io/v2/api?chainid=137/address/0x6f92C745346057a61b259579256159458a0a6A92#code"
+        }
+      }
     },
     "tags": null,
     "createdAt": "2026-07-16T11:00:55.589761-04:00",
-    "updatedAt": "2026-07-16T11:00:55.611394-04:00"
+    "updatedAt": "2026-07-16T12:07:01.324195-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:USDm": {
     "id": "mainnet/137/TransparentUpgradeableProxy:USDm",
