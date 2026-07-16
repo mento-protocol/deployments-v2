@@ -31,6 +31,38 @@
     "createdAt": "2026-07-16T11:00:09.096483-04:00",
     "updatedAt": "2026-07-16T11:00:09.120245-04:00"
   },
+  "mainnet/137/BreakerBox:v2.6.5": {
+    "id": "mainnet/137/BreakerBox:v2.6.5",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "BreakerBox",
+    "label": "v2.6.5",
+    "address": "0x9fc1E0d10fb38954Da385B8B25aB2BbaF3241722",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700a899f1fe6fb3bdd2305a25",
+      "initCodeHash": "0x8ee238e0b5ee43164118c8b984289659bfb40a2b4582a807eaec28c88ae64aad",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000000000000000000000000000000000000000000600000000000000000000000006f92c745346057a61b259579256159458a0a6a9200000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458000000000000000000000000000000000000000000000000000000000000000300000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca000000000000000000000000c22418a83dfc262b10a1f57e25309db83e7ea79e",
+      "entropy": "mainnet/BreakerBox:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/BreakerBox.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x153242371bde11afd90ff1deecf4bdf7363efc08f1a85ea2f0d541b67e77a99f",
+      "scriptPath": "script/deploy/oracles/DeployBreakerBox.s.sol",
+      "gitCommit": "4adfddff27b8933ee5ad2ca7a03db73b7f05a80e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:21:32.128424-04:00",
+    "updatedAt": "2026-07-16T11:21:32.155556-04:00"
+  },
   "mainnet/137/ChainlinkRelayerFactory:v2.6.5": {
     "id": "mainnet/137/ChainlinkRelayerFactory:v2.6.5",
     "namespace": "mainnet",
@@ -124,6 +156,38 @@
     "tags": null,
     "createdAt": "2026-07-16T11:01:44.26869-04:00",
     "updatedAt": "2026-07-16T11:01:44.291215-04:00"
+  },
+  "mainnet/137/MedianDeltaBreaker:v2.6.5": {
+    "id": "mainnet/137/MedianDeltaBreaker:v2.6.5",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "MedianDeltaBreaker",
+    "label": "v2.6.5",
+    "address": "0x3E4F2Bca4f7192Be4C3c5E5bD4840F2E90a8Ba84",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e6870076a67550640a7c17ed94ce",
+      "initCodeHash": "0x33657767163a4508b142ad9461811f7afbc31fea392d24f6ba2ba13f63573404",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006f92c745346057a61b259579256159458a0a6a920000000000000000000000009fc1e0d10fb38954da385b8b25ab2bbaf324172200000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000140000000000000000000000000000000000000000000000000000000000000018000000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba4580000000000000000000000000000000000000000000000000000000000000001000000000000000000000000ec57482aa55e3ad026c315a0e4a692b776c318ca0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000878678326eac900000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000384",
+      "entropy": "mainnet/MedianDeltaBreaker:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/breakers/MedianDeltaBreaker.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xf5b5fec2493fa91dd492d0feb7b0d9e7e0ca8bef714e89c07f4e9c2b77a010e1",
+      "scriptPath": "script/deploy/oracles/DeployBreakerBox.s.sol",
+      "gitCommit": "4adfddff27b8933ee5ad2ca7a03db73b7f05a80e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:21:32.128424-04:00",
+    "updatedAt": "2026-07-16T11:21:32.155556-04:00"
   },
   "mainnet/137/NttDeployHelper:EURm": {
     "id": "mainnet/137/NttDeployHelper:EURm",
@@ -488,6 +552,38 @@
     "tags": null,
     "createdAt": "2026-07-15T07:38:06.631588-04:00",
     "updatedAt": "2026-07-15T07:51:52.361972-04:00"
+  },
+  "mainnet/137/ValueDeltaBreaker:v2.6.5": {
+    "id": "mainnet/137/ValueDeltaBreaker:v2.6.5",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "ValueDeltaBreaker",
+    "label": "v2.6.5",
+    "address": "0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700ca52bec5372d4ae98dfcac",
+      "initCodeHash": "0x82d66f1e42f9590e876557de733d8973721a4f322998d2e99df6a69b0fd1655d",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006f92c745346057a61b259579256159458a0a6a9200000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000001a000000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458000000000000000000000000000000000000000000000000000000000000000200000000000000000000000081a313ff894bfc6093d33b5514e34d7faa41b7ef000000000000000000000000c22418a83dfc262b10a1f57e25309db83e7ea79e000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000005150ae84a8cdf0000000000000000000000000000000000000000000000000010f0cf064dd59200000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/ValueDeltaBreaker:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/breakers/ValueDeltaBreaker.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x784d3562acb641ab2c97a9e2a29c68e88856aa16c653b53b078cb1c65f368915",
+      "scriptPath": "script/deploy/oracles/DeployBreakerBox.s.sol",
+      "gitCommit": "4adfddff27b8933ee5ad2ca7a03db73b7f05a80e"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:21:32.128424-04:00",
+    "updatedAt": "2026-07-16T11:21:32.155556-04:00"
   },
   "mainnet/143/AddressSortedLinkedListWithMedian": {
     "id": "mainnet/143/AddressSortedLinkedListWithMedian",
