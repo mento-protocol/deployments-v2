@@ -413,6 +413,38 @@
     "createdAt": "2026-07-15T07:42:25.648396-04:00",
     "updatedAt": "2026-07-15T07:42:25.670316-04:00"
   },
+  "mainnet/137/OpenLiquidityStrategy:v3.0.1": {
+    "id": "mainnet/137/OpenLiquidityStrategy:v3.0.1",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "OpenLiquidityStrategy",
+    "label": "v3.0.1",
+    "address": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687002087497ca67db0dc294e23",
+      "initCodeHash": "0xd3bfaabde3d2b774eeafe902e18eb9e9ab249867ed947d3ec491397994c3aa5c",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/OpenLiquidityStrategy:v3.0.1"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/liquidityStrategies/OpenLiquidityStrategy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xcd1f461294bbf8a9e70d5ffbe823b9e9f73e570314102dfb91706af2493c10c4",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "2a08dbddb7633ff9386e532bf0acfee48baf062b"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:50:03.9823-04:00",
+    "updatedAt": "2026-07-16T11:50:04.004683-04:00"
+  },
   "mainnet/137/OracleAdapter:v3.0.0": {
     "id": "mainnet/137/OracleAdapter:v3.0.0",
     "namespace": "mainnet",
@@ -865,6 +897,42 @@
     "tags": null,
     "createdAt": "2026-07-16T11:44:42.445006-04:00",
     "updatedAt": "2026-07-16T11:44:42.467676-04:00"
+  },
+  "mainnet/137/TransparentUpgradeableProxy:OpenLiquidityStrategy": {
+    "id": "mainnet/137/TransparentUpgradeableProxy:OpenLiquidityStrategy",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "OpenLiquidityStrategy",
+    "address": "0x54e2Ae8c8448912E17cE0b2453bAFB7B0D80E40f",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700e8aa7071e4787b8e9a4d15",
+      "initCodeHash": "0x0e055a7c0232d9c14a43ff327403f5608d34c042d8dda8277c6fa00f34fe0f53",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000010e9bd0b70716dd9e0d41ca274a5846ff513e2b7000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000024c4d66de800000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:OpenLiquidityStrategy"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x10e9bd0b70716dD9E0d41CA274A5846Ff513e2b7",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xddaedede1e674d0bc73c1ca30aad67eedb55f36038f33faa261fe0b8c0d79968",
+      "scriptPath": "script/deploy/v3/DeployOpenLiquidityStrategy.s.sol",
+      "gitCommit": "2a08dbddb7633ff9386e532bf0acfee48baf062b"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:50:03.9823-04:00",
+    "updatedAt": "2026-07-16T11:50:04.004683-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:OracleAdapter": {
     "id": "mainnet/137/TransparentUpgradeableProxy:OracleAdapter",
