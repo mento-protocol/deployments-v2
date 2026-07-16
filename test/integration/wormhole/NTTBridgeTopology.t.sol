@@ -90,7 +90,9 @@ contract NTTBridgeTopologyTest is NTTBridgeHarness {
         }
 
         console.log("");
-        console.log("legend: ok = bridged | X = failed | nc = not configured | nd = not deployed | - = not in token config");
+        console.log(
+            "legend: ok = bridged | X = failed | nc = not configured | nd = not deployed | - = not in token config"
+        );
 
         if (report.ncCount > 0) {
             console.log("");
