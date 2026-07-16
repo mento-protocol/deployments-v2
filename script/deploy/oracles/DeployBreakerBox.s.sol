@@ -134,7 +134,7 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
                 )
             );
 
-        IValueDeltaBreaker(deployer.harness(breakerAddy))
+        IValueDeltaBreaker(migrationOwner.harness(breakerAddy))
             .setReferenceValues(breakerConfig.rateFeedIds, breakerConfig.referenceValues);
     }
 
