@@ -628,11 +628,17 @@
   },
   "137": {
     "mainnet": {
+      "AddressSortedLinkedListWithMedian": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
+      "ChainlinkRelayerFactory:v2.6.5": "0x9aFd679045B571066a6d8491C25d2D6ba5431d3f",
       "NttDeployHelper:EURm": "0x0e72e26E4e08779D08B2A52F59f41E6659a3547d",
       "NttDeployHelper:USDm": "0x37316334108C816f9862baB52347A0aab7551127",
+      "ProxyAdmin": "0xf759073E3a6125fFF215427AeB313A49799FECCf",
+      "SortedOracles:v2.6.5": "0xbEe346578929D70F02C3c236D709F0EfFb0cb192",
       "StableTokenSpoke:v3.0.0": "0x6A8ff60A89F3f359Fa16F45076d6DD1712B5e62e",
       "TransceiverStructs": "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
+      "TransparentUpgradeableProxy:ChainlinkRelayerFactory": "0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A",
       "TransparentUpgradeableProxy:EURm": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
+      "TransparentUpgradeableProxy:SortedOracles": "0x6f92C745346057a61b259579256159458a0a6A92",
       "TransparentUpgradeableProxy:USDm": "0xBC69212B8E4d445b2307C9D32dD68E2A4Df00115"
     }
   },

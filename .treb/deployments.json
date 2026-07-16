@@ -1,4 +1,68 @@
 {
+  "mainnet/137/AddressSortedLinkedListWithMedian": {
+    "id": "mainnet/137/AddressSortedLinkedListWithMedian",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "AddressSortedLinkedListWithMedian",
+    "label": "",
+    "address": "0x65052c55815F491094FD8F1D887d4B5C670abE3c",
+    "type": "LIBRARY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE2",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700fbb883cfc5c279869cd158",
+      "initCodeHash": "0xd8d32da8d6d37b9ee242c210463e5c2d603e8211ca83b1c89f6bf6cfcb410784",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x",
+      "entropy": "mainnet/AddressSortedLinkedListWithMedian"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/node_modules/@celo/contracts/common/linkedlists/AddressSortedLinkedListWithMedian.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0xd8d32da8d6d37b9ee242c210463e5c2d603e8211ca83b1c89f6bf6cfcb410784",
+      "scriptPath": "script/deploy/DeployAddressSortedLinkedListWithMedian.s.sol",
+      "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:00:09.096483-04:00",
+    "updatedAt": "2026-07-16T11:00:09.120245-04:00"
+  },
+  "mainnet/137/ChainlinkRelayerFactory:v2.6.5": {
+    "id": "mainnet/137/ChainlinkRelayerFactory:v2.6.5",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "ChainlinkRelayerFactory",
+    "label": "v2.6.5",
+    "address": "0x9aFd679045B571066a6d8491C25d2D6ba5431d3f",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700a5644df8449580a1460cd5",
+      "initCodeHash": "0xd864231a1327aad8fa9835e8ae8628616c77a3f2c198eb6b4ff2a1326da7b358",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "mainnet/ChainlinkRelayerFactory:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/contracts/oracles/ChainlinkRelayerFactory.sol",
+      "compilerVersion": "0.8.19+commit.7dd6d404",
+      "bytecodeHash": "0xc8ef8aa255b3f6ba4e53f8e113b647afff1a312255793d33e89cdac3d6311a85",
+      "scriptPath": "script/deploy/oracles/DeployChainlinkRelayerFactory.s.sol",
+      "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:01:07.795516-04:00",
+    "updatedAt": "2026-07-16T11:01:07.818777-04:00"
+  },
   "mainnet/137/NttDeployHelper:EURm": {
     "id": "mainnet/137/NttDeployHelper:EURm",
     "namespace": "mainnet",
@@ -62,6 +126,70 @@
     "tags": null,
     "createdAt": "2026-07-15T07:42:25.648396-04:00",
     "updatedAt": "2026-07-15T07:42:25.670316-04:00"
+  },
+  "mainnet/137/ProxyAdmin": {
+    "id": "mainnet/137/ProxyAdmin",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "ProxyAdmin",
+    "label": "",
+    "address": "0xf759073E3a6125fFF215427AeB313A49799FECCf",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e687001ac34173fb91358e1c8bf1",
+      "initCodeHash": "0xbec7366df25c45f5d8e6f7680a3d7a12a7f16dafb61c9139bb0e112cad0a86eb",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba458",
+      "entropy": "mainnet/ProxyAdmin"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xec0585c8ce8414d34c78cadeceed65d6a0555815250047a4783ceaeea1ceceb4",
+      "scriptPath": "script/deploy/DeployProxyAdmin.s.sol",
+      "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:00:30.655755-04:00",
+    "updatedAt": "2026-07-16T11:00:30.675542-04:00"
+  },
+  "mainnet/137/SortedOracles:v2.6.5": {
+    "id": "mainnet/137/SortedOracles:v2.6.5",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "SortedOracles",
+    "label": "v2.6.5",
+    "address": "0xbEe346578929D70F02C3c236D709F0EfFb0cb192",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700f854ceba0827dab896d3e9",
+      "initCodeHash": "0x2158ac8fe241fc433bf43a32a9e302f37287db075098152b9c3938a7400965b6",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/SortedOracles:v2.6.5"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "lib/mento-core/node_modules/@celo/contracts/stability/SortedOracles.sol",
+      "compilerVersion": "0.5.17+commit.d19bba13",
+      "bytecodeHash": "0x085315bf8e47695b56dcdbcb509e1f4a36b8d0598a8271a82b7e4e4ca32c9dd1",
+      "scriptPath": "script/deploy/oracles/DeploySortedOracles.s.sol",
+      "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:00:55.589761-04:00",
+    "updatedAt": "2026-07-16T11:00:55.611394-04:00"
   },
   "mainnet/137/StableTokenSpoke:v3.0.0": {
     "id": "mainnet/137/StableTokenSpoke:v3.0.0",
@@ -141,6 +269,42 @@
     "createdAt": "2026-07-15T07:41:01.234158-04:00",
     "updatedAt": "2026-07-15T07:47:26.036116-04:00"
   },
+  "mainnet/137/TransparentUpgradeableProxy:ChainlinkRelayerFactory": {
+    "id": "mainnet/137/TransparentUpgradeableProxy:ChainlinkRelayerFactory",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "ChainlinkRelayerFactory",
+    "address": "0x71c2333928Af2dB247d9C0aa380DF1cCCa53899A",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e6870058698f1e0a73b765860615",
+      "initCodeHash": "0x6b27c914ec244baac430391a499c3aded3f2254b6c8f21372875b57873f1dade",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000009afd679045b571066a6d8491c25d2d6ba5431d3f000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000044485cc9550000000000000000000000006f92c745346057a61b259579256159458a0a6a9200000000000000000000000058099b74f4acd642da77b4b7966b4138ec5ba45800000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:ChainlinkRelayerFactory"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x9aFd679045B571066a6d8491C25d2D6ba5431d3f",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xddaedede1e674d0bc73c1ca30aad67eedb55f36038f33faa261fe0b8c0d79968",
+      "scriptPath": "script/deploy/oracles/DeployChainlinkRelayerFactory.s.sol",
+      "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:01:07.795516-04:00",
+    "updatedAt": "2026-07-16T11:01:07.818777-04:00"
+  },
   "mainnet/137/TransparentUpgradeableProxy:EURm": {
     "id": "mainnet/137/TransparentUpgradeableProxy:EURm",
     "namespace": "mainnet",
@@ -183,6 +347,42 @@
     "tags": null,
     "createdAt": "2026-07-15T07:39:53.135549-04:00",
     "updatedAt": "2026-07-15T07:51:46.363467-04:00"
+  },
+  "mainnet/137/TransparentUpgradeableProxy:SortedOracles": {
+    "id": "mainnet/137/TransparentUpgradeableProxy:SortedOracles",
+    "namespace": "mainnet",
+    "chainId": 137,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "SortedOracles",
+    "address": "0x6f92C745346057a61b259579256159458a0a6A92",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0xfdff3fd0994fed8be208a7bee49970ea9707e68700362957dfcb674cf218f80f",
+      "initCodeHash": "0x86315859e3199343858f8a80c62be13dce4e4bce7d6fe35d7e971a791a25aefc",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x000000000000000000000000bee346578929d70f02c3c236d709f0effb0cb192000000000000000000000000fdff3fd0994fed8be208a7bee49970ea9707e68700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "mainnet/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:SortedOracles"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0xbEe346578929D70F02C3c236D709F0EfFb0cb192",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xddaedede1e674d0bc73c1ca30aad67eedb55f36038f33faa261fe0b8c0d79968",
+      "scriptPath": "script/deploy/oracles/DeploySortedOracles.s.sol",
+      "gitCommit": "30111577cb4ce20ac0a72e6fcd31128301894eb7"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-07-16T11:00:55.589761-04:00",
+    "updatedAt": "2026-07-16T11:00:55.611394-04:00"
   },
   "mainnet/137/TransparentUpgradeableProxy:USDm": {
     "id": "mainnet/137/TransparentUpgradeableProxy:USDm",
