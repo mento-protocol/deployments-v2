@@ -496,7 +496,11 @@ export const ChainlinkRelayerFactoryv265 = {
     },
   ] as const,
   address: {
+    137: "0x9aFd679045B571066a6d8491C25d2D6ba5431d3f",
+    143: "0x9aFd679045B571066a6d8491C25d2D6ba5431d3f",
     10143: "0xBbDC14Ae898E7d8c11cca75bb157b55C35709479",
+    80002: "0xBbDC14Ae898E7d8c11cca75bb157b55C35709479",
+    84532: "0xBbDC14Ae898E7d8c11cca75bb157b55C35709479",
     11142220: "0x436a0eC7f23533E4aD109ECAb4AcF325d2173c28",
   } as Partial<Record<number, `0x${string}`>>,
 };

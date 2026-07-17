@@ -6,6 +6,78 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+#### Polygon mainnet (chain 137) — new chain
+
+Mento v3 is deployed on Polygon mainnet, adding 43 addresses under the
+`mainnet` namespace. This is the headline of the release: chain 137 was
+absent from the package entirely before now. It backs the EUROP/EURm FPMM
+pool, with EURm and USDm bridged in over Wormhole NTT.
+
+Tokens and collateral: `EURmSpoke`, `USDmSpoke`, `EUROP`, `USDC`.
+
+Core: `ReserveV2` (+ `ReserveV2v300`), `Routerv300`, `Routerv301`,
+`FPMMFactory` (+ `FPMMFactoryv300`), `FPMMv300`, `FactoryRegistry`
+(+ `FactoryRegistryv300`), `OpenLiquidityStrategy`
+(+ `OpenLiquidityStrategyv301`), `ReserveLiquidityStrategy`
+(+ `ReserveLiquidityStrategyv301`), `StableTokenSpokev300`,
+`StableTokenV3v300`, `ProxyAdmin`, `AddressSortedLinkedListWithMedian`.
+
+Oracles and breakers: `SortedOracles` (+ `SortedOraclesv265`),
+`OracleAdapter` (+ `OracleAdapterCollateral`, `OracleAdapterv300`),
+`ChainlinkRelayerFactory` (+ `ChainlinkRelayerFactoryv265`),
+`ChainlinkRelayerV1EURUSD`, `ChainlinkRelayerV1USDCUSD`,
+`BreakerBoxv265`, `MedianDeltaBreakerv265`, `ValueDeltaBreakerv265`,
+`MarketHoursBreakerv300`, `MarketHoursBreakerToggleablev300`.
+
+Bridge: `NttDeployHelperEURm`, `NttDeployHelperUSDm`, `TransceiverStructs`,
+`WormholeCoreBridge`.
+
+Governance and fees: `MigrationMultisig`, `ProtocolFeeRecipient`,
+`FeeSetter`, `ReserveSafe`.
+
+#### New typed exports
+
+- `Routerv301` — Polygon mainnet.
+- `StableTokenSpokev300` — Polygon mainnet (137), Monad mainnet (143),
+  Monad testnet (10143), Polygon Amoy (80002), Base Sepolia (84532).
+- `ChainlinkRelayerV1relayedCELOBRL`, `ChainlinkRelayerV1relayedCELOEUR` —
+  Celo mainnet.
+
+#### Backfill of previously-unpublished deployments
+
+The entries below are **not new on-chain**. They were deployed before this
+release but never reached the package, because `contracts:update` is run
+per-namespace and only for the namespaces a given PR happens to touch — so
+namespaces nobody regenerates drift silently. Regenerating `mainnet` and
+`testnet-v2-rc5` here swept them in. Tracked for a CI guard so this stops
+recurring.
+
+- **Celo mainnet (42220)** — 5 `ChainlinkRelayerV1` addresses, unpublished
+  since 0.8.1 (2026-05-20): `ChainlinkRelayerV1CELOUSD`,
+  `ChainlinkRelayerV1EUROCEUR`, `ChainlinkRelayerV1USDCUSD`,
+  `ChainlinkRelayerV1relayedCELOBRL`, `ChainlinkRelayerV1relayedCELOEUR`.
+- **Monad mainnet (143)** — 2 new addresses (`ChainlinkRelayerFactoryv265`,
+  `SortedOraclesv265`), plus `BreakerBoxv265`, `MedianDeltaBreakerv265`,
+  `StableTokenSpokev300` and `ValueDeltaBreakerv265` newly exposed under
+  versioned keys (same addresses as the existing unversioned keys).
+- **Polygon Amoy (80002)** — 41 addresses, the full v3 testnet set. Only
+  `MockERC20EUROP` is new in this release; the other 40 predate it.
+- **Base Sepolia (84532)** — 36 addresses, the full v3 testnet set, none
+  previously published.
+- **Monad testnet (10143)** — `StableTokenSpokev300`, a versioned alias of
+  the existing `StableTokenSpoke` address.
+
+See `contracts.json` for the complete per-chain address set.
+
+### Notes
+
+- **Nothing was removed and no address was re-pointed.** Every key present
+  in 0.8.1 keeps its address. The `minor` bump reflects Polygon mainnet
+  arriving as a new chain, not a breaking change — upgrading from 0.8.1
+  should be a drop-in.
+
 ## [0.8.1] - 2026-05-20
 
 ### Fixed

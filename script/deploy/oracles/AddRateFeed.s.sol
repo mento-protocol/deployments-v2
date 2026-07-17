@@ -93,16 +93,20 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             return;
         }
         uint256 current = sortedOraclesRead.reportExpirySeconds();
-        console.log(unicode"\n=== 🌐 SortedOracles global reportExpirySeconds ===");
+        console.log(unicode"\n=== 🌐 SortedOracles Global Report Expiry ===");
         if (current != desired) {
             sortedOracles.setReportExpiry(desired);
             console.log(
                 string.concat(
-                    unicode"  ⏰ Global expiry updated  ", vm.toString(current), "s -> ", vm.toString(desired), "s"
+                    unicode"  [+] Global expiry updated  ",
+                    vm.toString(current),
+                    "s -> ",
+                    vm.toString(desired),
+                    unicode"s 👀"
                 )
             );
         } else {
-            console.log(string.concat(unicode"  ✓ Global expiry unchanged  ", vm.toString(current), "s"));
+            console.log(string.concat("  [-] Global expiry already set  ", vm.toString(current), "s"));
         }
     }
 
@@ -116,24 +120,27 @@ contract AddRateFeed is TrebScript, ProxyHelper {
     ) internal {
         IMentoConfig.ChainlinkRelayerConfig[] memory relayerConfigs = config.getChainlinkRelayerConfigs();
 
+        console.log(unicode"\n=== 🔗 Chainlink Relayers & SortedOracles ===");
+
         if (relayerConfigs.length == 0) {
-            console.log("No Chainlink relayers configured");
+            console.log("  [-] No Chainlink relayers configured, skipping");
             return;
         }
 
-        console.log(unicode"\n=== ⏰ Per-feed report expiry ===");
         for (uint256 i = 0; i < relayerConfigs.length; i++) {
             address rateFeedId = relayerConfigs[i].rateFeedId;
             address existingRelayer = factoryRead.getRelayer(rateFeedId);
 
+            console.log(string.concat("\n  ", relayerConfigs[i].rateFeed));
+
             if (existingRelayer != address(0)) {
                 // Relayer already deployed — still ensure it's registered as oracle
+                console.log("    [-] Relayer already deployed ", existingRelayer);
                 if (!sortedOraclesRead.isOracle(rateFeedId, existingRelayer)) {
                     sortedOracles.addOracle(rateFeedId, existingRelayer);
-                    console.log(
-                        string.concat("Added existing relayer as oracle for ", relayerConfigs[i].rateFeed),
-                        existingRelayer
-                    );
+                    console.log(unicode"    [+] Registered existing relayer as oracle 👀");
+                } else {
+                    console.log("    [-] Relayer already registered as oracle");
                 }
             } else {
                 // Deploy new relayer through factory
@@ -145,10 +152,13 @@ contract AddRateFeed is TrebScript, ProxyHelper {
                 );
 
                 _emitRelayerDeployedEvent(factory, relayer, relayerConfigs[i]);
-                console.log(string.concat("Deployed Chainlink relayer for ", relayerConfigs[i].rateFeed), relayer);
+                console.log(
+                    string.concat(unicode"    [+] Deployed Chainlink relayer  ", vm.toString(relayer), unicode" 👀")
+                );
 
                 // Add relayer as oracle for this rate feed
                 sortedOracles.addOracle(rateFeedId, relayer);
+                console.log(unicode"    [+] Registered relayer as oracle 👀");
             }
 
             // Set report expiry if configured and not already set
@@ -159,25 +169,15 @@ contract AddRateFeed is TrebScript, ProxyHelper {
                     sortedOracles.setTokenReportExpiry(rateFeedId, expiry);
                     console.log(
                         string.concat(
-                            unicode"  ⏰ Expiry updated  [",
-                            relayerConfigs[i].rateFeed,
-                            "]  ",
+                            "    [+] Report expiry updated  ",
                             vm.toString(currentExpiry),
                             "s -> ",
                             vm.toString(expiry),
-                            "s"
+                            unicode"s 👀"
                         )
                     );
                 } else {
-                    console.log(
-                        string.concat(
-                            unicode"  ✓ Expiry unchanged [",
-                            relayerConfigs[i].rateFeed,
-                            "]  ",
-                            vm.toString(currentExpiry),
-                            "s"
-                        )
-                    );
+                    console.log(string.concat("    [-] Report expiry already set  ", vm.toString(currentExpiry), "s"));
                 }
             }
         }
@@ -220,12 +220,25 @@ contract AddRateFeed is TrebScript, ProxyHelper {
         IBreakerBox breakerBoxRead,
         Senders.Sender storage migrationOwner
     ) internal {
+        console.log(unicode"\n=== ⚡ Configuring BreakerBox ===");
+
         // First, ensure all rate feeds are added to the BreakerBox
+        console.log("\n  -- Rate feeds --");
         address[] memory rateFeedIds = config.getRateFeedIds();
         for (uint256 i = 0; i < rateFeedIds.length; i++) {
             if (!breakerBoxRead.rateFeedStatus(rateFeedIds[i])) {
                 breakerBox.addRateFeed(rateFeedIds[i]);
-                console.log(string.concat("BreakerBox: added rate feed ", vm.getLabel(rateFeedIds[i])), rateFeedIds[i]);
+                console.log(
+                    string.concat(
+                        "    [+] Added rate feed ",
+                        vm.getLabel(rateFeedIds[i]),
+                        " ",
+                        vm.toString(rateFeedIds[i]),
+                        unicode" 👀"
+                    )
+                );
+            } else {
+                console.log(string.concat("    [-] Rate feed ", vm.getLabel(rateFeedIds[i]), " already added"));
             }
         }
 
@@ -239,21 +252,27 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             address breakerAddress = _findBreakerByType(breakerConfigs[i].breakerType, existingBreakers);
             require(breakerAddress != address(0), "No deployed breaker found for breaker config index");
 
+            string memory breakerType =
+                breakerConfigs[i].breakerType == BreakerType.Value ? "ValueBreaker" : "MedianBreaker";
+            console.log(string.concat("\n  -- ", breakerType, " --"));
+
             // Create harnessed write address once per breaker
             address breakerWrite = migrationOwner.harness(breakerAddress);
 
             for (uint256 j = 0; j < breakerConfigs[i].rateFeedIds.length; j++) {
                 address rateFeedId = breakerConfigs[i].rateFeedIds[j];
 
+                console.log(string.concat("    ", vm.getLabel(rateFeedId)));
+
                 // Skip if rate feed is not in the BreakerBox
                 require(breakerBoxRead.rateFeedStatus(rateFeedId), "Rate feed not in BreakerBox");
 
                 // Enable breaker for this rate feed if not already enabled
                 if (!breakerBoxRead.isBreakerEnabled(breakerAddress, rateFeedId)) {
-                    string memory breakerType =
-                        breakerConfigs[i].breakerType == BreakerType.Value ? "ValueBreaker" : "MedianBreaker";
-                    console.log(string.concat("BreakerBox: enabling ", breakerType, " for ", vm.getLabel(rateFeedId)));
                     breakerBox.toggleBreaker(breakerAddress, rateFeedId, true);
+                    console.log(string.concat(unicode"      [+] Enabled ", breakerType, unicode" 👀"));
+                } else {
+                    console.log(string.concat("      [-] ", breakerType, " already enabled"));
                 }
 
                 // Configure breaker-specific parameters for new rate feeds
@@ -262,21 +281,43 @@ contract AddRateFeed is TrebScript, ProxyHelper {
         }
 
         // Set rate feed dependencies
+        console.log("\n  -- Rate feed dependencies --");
         for (uint256 i = 0; i < rateFeedIds.length; i++) {
             address[] memory deps = config.getRateFeedDependencies(rateFeedIds[i]);
             if (deps.length > 0) {
                 breakerBox.setRateFeedDependencies(rateFeedIds[i], deps);
+                console.log(
+                    string.concat(
+                        "    [+] Set ",
+                        vm.toString(deps.length),
+                        " dependency(ies) for ",
+                        vm.getLabel(rateFeedIds[i]),
+                        unicode" 👀"
+                    )
+                );
+            } else {
+                console.log(string.concat("    [-] No dependencies configured for ", vm.getLabel(rateFeedIds[i])));
             }
         }
 
         // Enable MarketHoursBreaker on FX Feeds.
         // TODO: Move this to the breakers config per network?
+        console.log("\n  -- MarketHoursBreaker (FX feeds) --");
         address[] memory fxFeedIds = config.getFxRateFeedIds();
         address marketHoursBreaker = lookupOrFail("MarketHoursBreaker:v3.0.0");
+        if (fxFeedIds.length == 0) {
+            console.log("    [-] No FX rate feeds configured, skipping");
+        }
         for (uint256 i = 0; i < fxFeedIds.length; i++) {
             if (!breakerBoxRead.isBreakerEnabled(marketHoursBreaker, fxFeedIds[i])) {
-                console.log(string.concat("BreakerBox: enabling MarketHoursBreaker for ", vm.getLabel(fxFeedIds[i])));
                 breakerBox.toggleBreaker(marketHoursBreaker, fxFeedIds[i], true);
+                console.log(
+                    string.concat(
+                        unicode"    [+] Enabled MarketHoursBreaker for ", vm.getLabel(fxFeedIds[i]), unicode" 👀"
+                    )
+                );
+            } else {
+                console.log(string.concat("    [-] MarketHoursBreaker already enabled for ", vm.getLabel(fxFeedIds[i])));
             }
         }
     }
@@ -313,7 +354,6 @@ contract AddRateFeed is TrebScript, ProxyHelper {
         uint256 rateFeedIndex
     ) internal {
         address rateFeedId = breakerConfig.rateFeedIds[rateFeedIndex];
-        string memory rateFeedName = vm.getLabel(rateFeedId);
 
         address[] memory rateFeedIds = new address[](1);
         rateFeedIds[0] = rateFeedId;
@@ -323,37 +363,53 @@ contract AddRateFeed is TrebScript, ProxyHelper {
             uint256[] memory thresholds = new uint256[](1);
             thresholds[0] = breakerConfig.thresholds[rateFeedIndex];
             if (IValueDeltaBreaker(breakerRead).rateChangeThreshold(rateFeedId) != thresholds[0]) {
-                console.log(string.concat("ValueBreaker: setting threshold for ", rateFeedName), thresholds[0]);
                 IValueDeltaBreaker(breakerWrite).setRateChangeThresholds(rateFeedIds, thresholds);
+                console.log(
+                    string.concat(unicode"      [+] Threshold set  ", vm.toString(thresholds[0]), unicode" 👀")
+                );
+            } else {
+                console.log("      [-] Threshold already set ", thresholds[0]);
             }
 
             uint256[] memory cooldowns = new uint256[](1);
             cooldowns[0] = breakerConfig.cooldownTimes[rateFeedIndex];
             if (IWithCooldown(breakerRead).getCooldown(rateFeedId) != cooldowns[0]) {
-                console.log(string.concat("ValueBreaker: setting cooldown for ", rateFeedName), cooldowns[0]);
                 IValueDeltaBreaker(breakerWrite).setCooldownTimes(rateFeedIds, cooldowns);
+                console.log(string.concat(unicode"      [+] Cooldown set  ", vm.toString(cooldowns[0]), unicode" 👀"));
+            } else {
+                console.log("      [-] Cooldown already set ", cooldowns[0]);
             }
 
             uint256[] memory refValues = new uint256[](1);
             refValues[0] = breakerConfig.referenceValues[rateFeedIndex];
             if (IValueDeltaBreaker(breakerRead).referenceValues(rateFeedId) != refValues[0]) {
-                console.log(string.concat("ValueBreaker: setting reference value for ", rateFeedName), refValues[0]);
                 IValueDeltaBreaker(breakerWrite).setReferenceValues(rateFeedIds, refValues);
+                console.log(
+                    string.concat(unicode"      [+] Reference value set  ", vm.toString(refValues[0]), unicode" 👀")
+                );
+            } else {
+                console.log("      [-] Reference value already set ", refValues[0]);
             }
         } else if (breakerConfig.breakerType == BreakerType.Median) {
             // Configure MedianDeltaBreaker for rate feed
             uint256[] memory thresholds = new uint256[](1);
             thresholds[0] = breakerConfig.thresholds[rateFeedIndex];
             if (IMedianDeltaBreaker(breakerRead).rateChangeThreshold(rateFeedId) != thresholds[0]) {
-                console.log(string.concat("MedianBreaker: setting threshold for ", rateFeedName), thresholds[0]);
                 IMedianDeltaBreaker(breakerWrite).setRateChangeThresholds(rateFeedIds, thresholds);
+                console.log(
+                    string.concat(unicode"      [+] Threshold set  ", vm.toString(thresholds[0]), unicode" 👀")
+                );
+            } else {
+                console.log("      [-] Threshold already set ", thresholds[0]);
             }
 
             uint256[] memory cooldowns = new uint256[](1);
             cooldowns[0] = breakerConfig.cooldownTimes[rateFeedIndex];
             if (IWithCooldown(breakerRead).getCooldown(rateFeedId) != cooldowns[0]) {
-                console.log(string.concat("MedianBreaker: setting cooldown for ", rateFeedName), cooldowns[0]);
                 IMedianDeltaBreaker(breakerWrite).setCooldownTime(rateFeedIds, cooldowns);
+                console.log(string.concat(unicode"      [+] Cooldown set  ", vm.toString(cooldowns[0]), unicode" 👀"));
+            } else {
+                console.log("      [-] Cooldown already set ", cooldowns[0]);
             }
 
             if (breakerConfig.smoothingFactors[rateFeedIndex] > 0) {
@@ -361,12 +417,19 @@ contract AddRateFeed is TrebScript, ProxyHelper {
                     IMedianDeltaBreaker(breakerRead).getSmoothingFactor(rateFeedId)
                         != breakerConfig.smoothingFactors[rateFeedIndex]
                 ) {
-                    console.log(
-                        string.concat("MedianBreaker: setting smoothing factor for ", rateFeedName),
-                        breakerConfig.smoothingFactors[rateFeedIndex]
-                    );
                     IMedianDeltaBreaker(breakerWrite)
                         .setSmoothingFactor(rateFeedId, breakerConfig.smoothingFactors[rateFeedIndex]);
+                    console.log(
+                        string.concat(
+                            unicode"      [+] Smoothing factor set  ",
+                            vm.toString(breakerConfig.smoothingFactors[rateFeedIndex]),
+                            unicode" 👀"
+                        )
+                    );
+                } else {
+                    console.log(
+                        "      [-] Smoothing factor already set ", breakerConfig.smoothingFactors[rateFeedIndex]
+                    );
                 }
             }
         }

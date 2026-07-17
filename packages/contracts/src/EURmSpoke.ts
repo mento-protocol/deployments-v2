@@ -621,8 +621,11 @@ export const EURmSpoke = {
     },
   ] as const,
   address: {
+    137: "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
     143: "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
     10143: "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
+    80002: "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
+    84532: "0x666D0a83cDbf3eC62bDb624d9bFcD8F6345Ba7D0",
   } as Partial<Record<number, `0x${string}`>>,
   decimals: 18,
 };

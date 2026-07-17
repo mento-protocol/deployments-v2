@@ -17,6 +17,8 @@ contract MentoConfig_polygon_testnet is MentoConfig_polygon {
         // _addCollateral("USDC", lookup("USDC")); // do we need this?
         _registerMockCollateral("USDC", 6);
         _addReserveV2Collateral("USDC");
+        _registerMockCollateral("EUROP", 6);
+        _addReserveV2Collateral("EUROP");
     }
 
     // ===================================================================

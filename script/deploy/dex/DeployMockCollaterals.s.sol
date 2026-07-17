@@ -24,17 +24,44 @@ contract DeployMockCollaterals is TrebScript {
 
         string[] memory mocks = config.getMockCollaterals();
 
+        console.log(unicode"\n=== 🪙 Mock Collaterals ===\n");
+
         for (uint256 i = 0; i < mocks.length; i++) {
             string memory symbol = mocks[i];
             uint256 decimals = config.getTokenDecimals(symbol);
+
+            address predicted = deployer.create3("MockERC20").setLabel(symbol).predict();
+            if (predicted.code.length > 0) {
+                console.log(unicode"  ⏭️  Skipped MockERC20 (%s), already exists", symbol);
+                console.log("        at %s\n", predicted);
+                continue;
+            }
 
             address addy = deployer.create3("MockERC20").setLabel(symbol)
                 .deploy(abi.encode(string.concat("Mento Mock ", symbol), symbol, decimals, deployer.account));
 
             MockERC20 coll = MockERC20(deployer.harness(addy));
-            coll.mint(deployer.account, 1_000_000 * 10 ** decimals);
+            uint256 mintAmount = 1_000_000 * 10 ** decimals;
+            coll.mint(deployer.account, mintAmount);
             IOwnable(address(coll)).transferOwnership(address(migrationOwner.account));
-            console.log("Deployed MockERC20 (%s) at %s", symbol, addy);
+
+            uint256 balance = MockERC20(addy).balanceOf(deployer.account);
+            require(
+                balance == mintAmount,
+                string.concat(
+                    "Mock collateral mint failed for ",
+                    symbol,
+                    ": expected ",
+                    vm.toString(mintAmount),
+                    " got ",
+                    vm.toString(balance)
+                )
+            );
+
+            console.log(unicode"  ✅ Deployed MockERC20 (%s)", symbol);
+            console.log("        at %s", addy);
+            console.log("        minted %s (%s decimals) to %s", vm.toString(mintAmount), decimals, deployer.account);
+            console.log(unicode"        ✔ balanceOf(deployer) = %s\n", vm.toString(balance));
         }
     }
 }

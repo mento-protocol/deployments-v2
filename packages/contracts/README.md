@@ -197,6 +197,7 @@ Decide on the bump type:
 | Change type                                     | Version bump |
 | ----------------------------------------------- | ------------ |
 | New contract added / address changed            | `patch`      |
+| New chain added                                 | `minor`      |
 | Existing contract renamed or removed (breaking) | `minor`      |
 | API redesign (breaking)                         | `major`      |
 
@@ -219,6 +220,37 @@ git push && git push --tags
 The `version` lifecycle hook renames `## [Unreleased]` in `CHANGELOG.md` to `## [<new-version>] - <today>` and stages it, so the version commit always carries the matching changelog entry. If you ran `npm run contracts:update` between regen and bump, those entries are exactly what gets released.
 
 The hook **fails the version bump** if `[Unreleased]` is empty, or if the new version heading already exists in `CHANGELOG.md`. To override either guard (e.g. for a metadata-only release), invoke the rename script directly with `--allow-empty`: `node ../../scripts/release-changelog.mjs <version> --allow-empty`.
+
+### Prereleases (beta)
+
+To ship addresses to a downstream consumer before the PR that deployed them is merged, publish a beta from the branch. Two flags are load-bearing:
+
+```bash
+cd packages/contracts
+
+# --no-git-tag-version: don't tag a commit that isn't on main yet
+# --ignore-scripts:     don't let the beta consume [Unreleased]
+npm version 0.9.0-beta.0 --no-git-tag-version --ignore-scripts
+
+# --tag beta: keep the `latest` dist-tag where it is
+npm publish --tag beta --access public
+```
+
+**Always pass `--tag beta`.** Without it npm moves the `latest` dist-tag to the prerelease, and every consumer running a fresh `npm install @mento-protocol/contracts` gets the beta. Republishing does not undo this — you would have to repoint the tag by hand with `npm dist-tag add @mento-protocol/contracts@<last-stable> latest`.
+
+**Always pass `--ignore-scripts` on the beta bump.** Otherwise the `version` hook renames `## [Unreleased]` to the beta's own heading, and the real release that follows finds an empty `[Unreleased]` and fails the bump (see the guard above).
+
+Commit the beta version along with the regenerated files, then cut the real release from `main` once the PR merges:
+
+```bash
+git checkout main && git pull
+cd packages/contracts
+npm version minor            # 0.9.0-beta.0 -> 0.9.0; hook writes the CHANGELOG entry and tags
+npm publish --access public  # no --tag, so this takes `latest`
+cd ../.. && git push && git push --tags
+```
+
+`npm version <patch|minor|major>` from a prerelease drops the prerelease suffix rather than adding to it — `0.9.0-beta.0` + `minor` is `0.9.0`, not `0.10.0`.
 
 Dedup notes for entries appended by `npm run contracts:update`:
 

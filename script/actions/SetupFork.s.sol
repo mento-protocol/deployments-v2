@@ -49,6 +49,7 @@ contract SetupFork is TrebForkScript, ProxyHelper {
     uint256 private constant CELO_SEPOLIA_CHAIN_ID = 11142220;
     uint256 private constant MONAD_MAINNET_CHAIN_ID = 143;
     uint256 private constant MONAD_TESTNET_CHAIN_ID = 10143;
+    uint256 private constant POLYGON_MAINNET_CHAIN_ID = 137;
 
     uint256 private constant CELO_MAINNET_STABLE_AMOUNT = 10;
     uint256 internal constant MINT_AMOUNT = 10_000_000 ether;
@@ -84,6 +85,10 @@ contract SetupFork is TrebForkScript, ProxyHelper {
         }
         if (block.chainid == MONAD_TESTNET_CHAIN_ID) {
             setupChain_monadTestnet();
+            return;
+        }
+        if (block.chainid == POLYGON_MAINNET_CHAIN_ID) {
+            setupChain_polygon();
             return;
         }
 
@@ -171,6 +176,15 @@ contract SetupFork is TrebForkScript, ProxyHelper {
             migrationOwnerSender.account,
             MINT_AMOUNT
         );
+    }
+
+    function setupChain_polygon() internal {
+        Senders.Sender storage signerSender = sender("signer");
+        Senders.Sender storage deployerSender = sender("deployer");
+        Senders.Sender storage migrationOwnerSender = sender("migrationOwner");
+
+        _ensureSafeIs1of1(deployerSender, signerSender.account, "deployer");
+        _ensureSafeIs1of1(migrationOwnerSender, signerSender.account, "migrationOwner");
     }
 
     function setupChain_monadTestnet() internal {

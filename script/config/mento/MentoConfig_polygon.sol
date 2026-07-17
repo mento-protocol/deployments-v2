@@ -67,6 +67,8 @@ contract MentoConfig_polygon is MentoConfig {
     function _initCollateral() internal virtual {
         _addCollateral("USDC", lookupOrFail("USDC"));
         _addReserveV2Collateral("USDC");
+        _addCollateral("EUROP", lookupOrFail("EUROP"));
+        _addReserveV2Collateral("EUROP");
     }
 
     /// ===================================================================
@@ -143,6 +145,37 @@ contract MentoConfig_polygon is MentoConfig {
             TokenLimits({limit0: 250_000, limit1: 1_000_000}),
             openLsConfigEUR
         );
+
+        // ── EURm / EUROP ───────────────────────────────────────────────
+        // Params copied from the base EURm/EURC pool.
+        LiquidityStrategyPoolConfig memory eurCollateralPoolsRlsConfig = LiquidityStrategyPoolConfig({
+            liquidityStrategy: lookupProxy("ReserveLiquidityStrategy"),
+            debtToken: _lookupTokenAddress("EURm"),
+            cooldown: 300,
+            protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+            liquiditySourceIncentiveExpansion: 0,
+            protocolIncentiveExpansion: 0,
+            liquiditySourceIncentiveContraction: 0,
+            protocolIncentiveContraction: 0
+        });
+
+        _addFPMM(
+            "EURm",
+            "EUROP",
+            getRateFeedIdFromString("EUROP/EUR"),
+            IFPMM.FPMMParams({
+                lpFee: 3,
+                protocolFee: 2,
+                protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"),
+                feeSetter: lookupOrFail("FeeSetter"),
+                rebalanceIncentive: 1,
+                rebalanceThresholdAbove: 5000,
+                rebalanceThresholdBelow: 3333
+            }),
+            TokenLimits({limit0: 50_000, limit1: 250_000}),
+            TokenLimits({limit0: 50_000, limit1: 250_000}),
+            eurCollateralPoolsRlsConfig
+        );
     }
 
     /// ===================================================================
@@ -162,7 +195,7 @@ contract MentoConfig_polygon is MentoConfig {
             breakerId: valueBreakerId,
             rateFeed: "USDC/USD",
             cooldown: 1,
-            threshold: 0.0015 * 1e24,
+            threshold: 0.0015 * 1e24, // 0.15%
             smoothingFactor: 0,
             referenceValue: 1 * 1e24
         });
@@ -172,6 +205,22 @@ contract MentoConfig_polygon is MentoConfig {
 
         _configureDefaultFxRateFeed("EUR/USD", _fxAggs.eur);
         _setRateFeedExpirySeconds("EUR/USD", 150 seconds);
+
+        // EUROP/EUR has no Chainlink feed. The migrationOwner is whitelisted
+        // as the only oracle and reports a fixed 1.0 rate with a ~unlimited
+        // expiry (see SetupEuropRateFeed script). The ValueDeltaBreaker lets
+        // the migrationOwner halt trading by reporting a rate that deviates
+        // more than the threshold from 1.0 (e.g. in case of a depeg).
+        _addRateFeed("EUROP/EUR");
+        _setRateFeedExpirySeconds("EUROP/EUR", 365 days);
+        _addToBreaker({
+            breakerId: valueBreakerId,
+            rateFeed: "EUROP/EUR",
+            cooldown: 1,
+            threshold: 0.005 * 1e24, // 0.5%
+            smoothingFactor: 0,
+            referenceValue: 1 * 1e24
+        });
     }
 
     /// @notice Helper function to configure an FX rate feed, they have
@@ -183,7 +232,7 @@ contract MentoConfig_polygon is MentoConfig {
             breakerId: medianBreakerId,
             rateFeed: rateFeed,
             cooldown: 15 minutes,
-            threshold: 0.04 * 1e24,
+            threshold: 0.04 * 1e24, // 4%
             smoothingFactor: 0.005 * 1e24,
             referenceValue: 0
         });
