@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "contracts:update": "tsx scripts/gen-contracts-package.ts",
+    "contracts:check-drift": "tsx scripts/check-namespace-drift.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -6,7 +6,7 @@ import {
   unlinkSync,
   writeFileSync,
 } from "fs";
-import { basename, dirname, join } from "path";
+import { basename, dirname, join, resolve } from "path";
 import { createInterface } from "readline";
 import { spawnSync } from "child_process";
 import { fileURLToPath } from "url";
@@ -64,7 +64,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, "..");
 const trebDir = join(repoRoot, ".treb");
 const outDir = join(repoRoot, "out");
-const packagesDir = join(repoRoot, "packages", "contracts");
+// The namespace-drift check (scripts/check-namespace-drift.ts) sets
+// CONTRACTS_OUT_DIR to a temp copy of the package so it can regenerate every
+// published namespace and compare against the committed output without
+// touching packages/contracts or running the formatter.
+const packagesDir = process.env.CONTRACTS_OUT_DIR
+  ? resolve(process.env.CONTRACTS_OUT_DIR)
+  : join(repoRoot, "packages", "contracts");
 const contractsJsonPath = join(packagesDir, "contracts.json");
 const abisDir = join(packagesDir, "abis");
 const srcDir = join(packagesDir, "src");
@@ -1854,11 +1860,15 @@ async function main() {
   // prettier wants unquoted TS-style keys. Rather than re-implement a TS-object
   // serialiser, run trunk fmt over the generated files. Skip silently if trunk
   // isn't on PATH — the CI will still flag the formatting issue.
+  // The drift check compares parsed JSON semantically, so formatting is
+  // irrelevant there — skip the (possibly unavailable) formatter in that mode.
   const fmtTargets = [srcDir, abisDir, contractsJsonPath, pkgJsonPath];
-  const fmtResult = spawnSync("trunk", ["fmt", ...fmtTargets], {
-    cwd: repoRoot,
-    stdio: "ignore",
-  });
+  const fmtResult = process.env.CONTRACTS_OUT_DIR
+    ? { status: 0, error: undefined }
+    : spawnSync("trunk", ["fmt", ...fmtTargets], {
+        cwd: repoRoot,
+        stdio: "ignore",
+      });
   if (fmtResult.status === 0) {
     console.log("✓ Formatted generated files via trunk fmt");
   } else if (
