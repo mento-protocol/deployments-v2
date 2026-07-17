@@ -1,0 +1,33 @@
+version: 2
+
+# Scoped to github-actions only: whenever an action we SHA-pin tags a new
+# release, Dependabot opens a PR so we can refresh the pinned commit SHA under
+# review. Without this the pins go stale silently and never pick up upstream
+# security fixes.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    # Wait 7 days after an action publishes a new release before opening a bump
+    # PR, so a freshly-published (possibly malicious or broken) tag isn't pinned
+    # here before the ecosystem has had time to flag it.
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: ci
+      include: scope
+    labels:
+      - dependencies
+    # Collapse the Monday batch into one PR per tier so minor/patch bumps
+    # review together, separate from majors that may need behavior checks.
+    groups:
+      actions-minor-patch:
+        update-types:
+          - minor
+          - patch
+      actions-major:
+        update-types:
+          - major
