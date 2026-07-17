@@ -27,7 +27,8 @@
       },
       "EUROP": {
         "address": "0x888883b5f5d21fb10dfeb70e8f9722b9fb0e5e51",
-        "type": "contract"
+        "type": "token",
+        "decimals": 6
       },
       "EURmSpoke": {
         "address": "0x4D502d735B4C574B487Ed641ae87cEaE884731C7",
@@ -1502,7 +1503,8 @@
       },
       "MockERC20EUROP": {
         "address": "0x62A5E599c4f4bFA1024effFA15799a7a2Bb29dEC",
-        "type": "token"
+        "type": "token",
+        "decimals": 6
       },
       "MockERC20USDC": {
         "address": "0xfbD2d6a7C3Cb4491647173D6eCb2a4473521cd66",

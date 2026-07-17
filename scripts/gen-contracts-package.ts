@@ -13,7 +13,7 @@ import { fileURLToPath } from "url";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-interface DeploymentEntry {
+export interface DeploymentEntry {
   id: string;
   namespace: string;
   chainId: number;
@@ -244,6 +244,38 @@ function safeWriteFile(path: string, content: string, context: string): void {
     }
     throw wrapped;
   }
+}
+
+// Recency of one specific deployment, keyed by (chainId, namespace, address).
+//
+// Deliberately NOT keyed by derived export name: `deriveExportName` appends the
+// label when a contract name is non-unique *within its namespace*, so deploying
+// an existing contract to one more chain renames every entry sharing that name
+// (e.g. `StableTokenSpoke` → `StableTokenSpokev300` once Polygon joined the
+// `mainnet` namespace alongside Monad). A name-keyed map silently orphans the
+// old key, the conflict resolver below reads it as "" (oldest), and a superseded
+// deployment in another namespace wins the chain. Address is stable under
+// renames, which is the property this tie-break needs.
+export function entryRecencyKey(
+  chainId: number | string,
+  namespace: string,
+  address: string,
+): string {
+  return `${chainId}:${namespace}:${address.toLowerCase()}`;
+}
+
+export function buildEntryRecency(
+  entries: DeploymentEntry[],
+): Map<string, string> {
+  const recency = new Map<string, string>();
+  for (const entry of entries) {
+    const ts = entry.updatedAt ?? entry.createdAt ?? "";
+    if (!ts) continue;
+    const key = entryRecencyKey(entry.chainId, entry.namespace, entry.address);
+    const prior = recency.get(key) ?? "";
+    if (ts > prior) recency.set(key, ts);
+  }
+  return recency;
 }
 
 function deriveExportName(
@@ -511,6 +543,7 @@ const KNOWN_TOKENS: Record<string, number> = {
   axlUSDC: 6,
   axlEUROC: 6,
   EURC: 6,
+  EUROP: 6,
   AUSD: 6,
   aUSD: 6,
   CELO: 18,
@@ -717,14 +750,38 @@ function extractChangedKey(line: string): string {
   return colon === -1 ? line : line.slice(0, colon);
 }
 
+// True when the `[Unreleased]` section body contains anything beyond the
+// machine-managed `### Added/Changed/Removed` bullet lists — i.e. a human has
+// hand-authored release notes (prose paragraphs, `####` subheadings, a
+// `### Notes` section). Such content is invisible to the bullet parser and
+// would be silently dropped by a naive rewrite, so `updateChangelog` preserves
+// the section verbatim when this returns true.
+export function hasNarrativeProse(sectionBody: string): boolean {
+  const MANAGED_HEADINGS = new Set(["### Added", "### Changed", "### Removed"]);
+  for (const raw of sectionBody.split("\n")) {
+    const line = raw.trim();
+    if (line === "") continue;
+    if (line.startsWith("- ")) continue;
+    if (line.startsWith("### ")) {
+      if (!MANAGED_HEADINGS.has(line)) return true; // e.g. `### Notes`
+      continue;
+    }
+    // Any other non-blank line (paragraph, `#### ...`, blockquote) is prose.
+    return true;
+  }
+  return false;
+}
+
 function parseUnreleased(body: string): {
   before: string;
   unreleased: ChangelogEntries;
+  rawSection: string;
   after: string;
 } {
   const empty: ChangelogEntries = { added: [], removed: [], changed: [] };
   const idx = body.indexOf(UNRELEASED_HEADING);
-  if (idx === -1) return { before: body, unreleased: empty, after: "" };
+  if (idx === -1)
+    return { before: body, unreleased: empty, rawSection: "", after: "" };
 
   const after = body.slice(idx + UNRELEASED_HEADING.length);
   // Section ends at the next "## " heading (a real release) or EOF.
@@ -746,7 +803,12 @@ function parseUnreleased(body: string): {
     }
   }
 
-  return { before: body.slice(0, idx), unreleased: buckets, after: tail };
+  return {
+    before: body.slice(0, idx),
+    unreleased: buckets,
+    rawSection: sectionBody,
+    after: tail,
+  };
 }
 
 function renderUnreleased(entries: ChangelogEntries): string {
@@ -765,17 +827,41 @@ function renderUnreleased(entries: ChangelogEntries): string {
   return sections.join("\n");
 }
 
+// Returns true when the [Unreleased] section was rewritten, false when it was
+// left untouched (hand-written narrative present) so the caller can report
+// accurately.
 function updateChangelog(
   changelogPath: string,
   added: string[],
   removed: string[],
   changed: string[],
-): void {
+): boolean {
   const existing = existsSync(changelogPath)
     ? readFileSync(changelogPath, "utf8")
     : `${CHANGELOG_HEADER}\n${UNRELEASED_HEADING}\n`;
 
   const parsed = parseUnreleased(existing);
+
+  // If a human has hand-authored release notes in [Unreleased], the bullet
+  // parser can't round-trip them — rewriting would silently delete the prose.
+  // Preserve the section verbatim and print what we would have added so the
+  // operator can fold it in by hand (or bump the version first). Matches the
+  // generator's "fail loudly rather than corrupt" convention.
+  if (hasNarrativeProse(parsed.rawSection)) {
+    const pending = [
+      ...added.map((s) => `+ \`${s}\``),
+      ...removed.map((s) => `- \`${s}\``),
+      ...changed,
+    ];
+    console.warn(
+      `\n⚠  CHANGELOG.md [Unreleased] has hand-written release notes — ` +
+        `not overwriting it.\n   ${pending.length} auto-detected change(s) ` +
+        `were NOT recorded; add them by hand or run 'npm version' first:\n` +
+        pending.map((p) => `     ${p}`).join("\n"),
+    );
+    return false;
+  }
+
   // Dedup added/removed by full string identity (the bullet is just a contract
   // identifier so byte equality is the right key).
   const dedupSimple = (existing: string[], next: string[]): string[] =>
@@ -810,6 +896,7 @@ function updateChangelog(
     `${before.replace(/\n+$/, "\n\n")}${renderUnreleased(merged)}${after}`,
     "CHANGELOG.md",
   );
+  return true;
 }
 
 function sortContractsByNamespace(contracts: ContractsJson): ContractsJson {
@@ -1439,22 +1526,12 @@ async function main() {
   // When the same (exportName, chainId) appears in multiple namespaces with
   // different addresses (e.g. an original Monad deploy in "monad-mainnet" that
   // was later superseded by a redeploy in "mainnet"), prefer the entry from the
-  // namespace whose *specific* treb deployment of that (exportName, chainId)
-  // is newer. Using per-contract recency rather than namespace-wide recency
-  // matters because one fresh deployment of contract X can otherwise make its
-  // namespace win conflicts on unrelated contract Y. Address-book entries have
-  // no treb backing; they rank oldest.
-  const entryRecency = new Map<string, string>();
-  for (const entry of Object.values(allDeployments)) {
-    const ts = entry.updatedAt ?? entry.createdAt ?? "";
-    if (!ts) continue;
-    const countsForNs = nameCountsByNs.get(entry.namespace);
-    const isNonUnique = (countsForNs?.get(entry.contractName) ?? 0) > 1;
-    const exportName = deriveExportName(entry, overrides, isNonUnique);
-    const key = `${entry.chainId}:${entry.namespace}:${exportName}`;
-    const prior = entryRecency.get(key) ?? "";
-    if (ts > prior) entryRecency.set(key, ts);
-  }
+  // namespace whose *specific* treb deployment at that address is newer. Using
+  // per-contract recency rather than namespace-wide recency matters because one
+  // fresh deployment of contract X can otherwise make its namespace win
+  // conflicts on unrelated contract Y. Address-book entries have no treb
+  // backing; they rank oldest.
+  const entryRecency = buildEntryRecency(Object.values(allDeployments));
 
   const addressesByName = new Map<string, Record<string, string>>();
   const decimalsByName = new Map<string, number>();
@@ -1475,9 +1552,11 @@ async function main() {
           // Pick the namespace whose treb deployment of this specific entry is
           // newer. Address-book entries have empty recency and rank oldest.
           const existingRecency =
-            entryRecency.get(`${chainId}:${existingNs ?? ""}:${name}`) ?? "";
+            entryRecency.get(
+              entryRecencyKey(chainId, existingNs ?? "", existingAddr),
+            ) ?? "";
           const thisRecency =
-            entryRecency.get(`${chainId}:${ns}:${name}`) ?? "";
+            entryRecency.get(entryRecencyKey(chainId, ns, entry.address)) ?? "";
           if (thisRecency > existingRecency) {
             console.warn(
               `⚠  Address conflict on "${name}" chain ${chainId}: "${existingNs}"=${existingAddr} vs "${ns}"=${entry.address}. Using "${ns}" (newer deployment).`,
@@ -1819,8 +1898,9 @@ async function main() {
     return;
   }
 
-  updateChangelog(changelogPath, added, removed, changed);
-  console.log(`✓ Updated CHANGELOG.md [Unreleased] section`);
+  if (updateChangelog(changelogPath, added, removed, changed)) {
+    console.log(`✓ Updated CHANGELOG.md [Unreleased] section`);
+  }
 
   console.log(
     "\n─── Changes ──────────────────────────────────────────────────",
