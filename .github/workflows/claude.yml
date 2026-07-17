@@ -1,50 +1,149 @@
-name: Claude Code
+name: Claude
 
 on:
   issue_comment:
     types: [created]
   pull_request_review_comment:
     types: [created]
-  issues:
-    types: [opened, assigned]
   pull_request_review:
     types: [submitted]
+  issues:
+    types: [opened]
+  # Auto-review fires on open, on draft → ready, and on every push
+  # (synchronize) so each new head commit is reviewed. Cleanup pushes from
+  # /ship will re-trigger; the concurrency group below cancels the stale run
+  # so only the latest head is reviewed.
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+    paths-ignore:
+      - "**/*.md"
+
+permissions: read-all
 
 jobs:
   claude:
+    # On-demand: only OWNER/MEMBER can trigger Claude with `@claude` so an
+    # outside commenter cannot spend quota or drive the action.
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      (
+        github.event_name == 'issue_comment' &&
+        contains(github.event.comment.body, '@claude') &&
+        contains(fromJSON('["OWNER","MEMBER"]'), github.event.comment.author_association)
+      ) ||
+      (
+        github.event_name == 'pull_request_review_comment' &&
+        contains(github.event.comment.body, '@claude') &&
+        contains(fromJSON('["OWNER","MEMBER"]'), github.event.comment.author_association)
+      ) ||
+      (
+        github.event_name == 'pull_request_review' &&
+        contains(github.event.review.body, '@claude') &&
+        contains(fromJSON('["OWNER","MEMBER"]'), github.event.review.author_association)
+      ) ||
+      (
+        github.event_name == 'issues' &&
+        (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) &&
+        contains(fromJSON('["OWNER","MEMBER"]'), github.event.issue.author_association)
+      )
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Review-only: the explicit github_token input below uses the workflow-scoped
+    # GITHUB_TOKEN, so the action cannot exchange OIDC for a broader GitHub App
+    # token and this job does not need id-token: write.
     permissions:
       contents: read
-      pull-requests: read
-      issues: read
-      id-token: write
-      actions: read # Required for Claude to read CI results on PRs
+      pull-requests: write
+      issues: write
+      actions: read
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      # Third-party actions are pinned to an immutable commit SHA (not a tag)
+      # so upstream tag retargeting or a compromised release cannot silently run
+      # new code here. Update via Dependabot (see .github/dependabot.yml).
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           fetch-depth: 1
+      - uses: anthropics/claude-code-action@f87768c6d25f92ae6efa7175e223ef77d4cbf97f # v1.0.166
+        with:
+          github_token: ${{ github.token }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          use_sticky_comment: true
+          # The inline-comment MCP server is gated behind explicit --allowedTools:
+          # without this flag the action neither installs github-inline-comment-server.ts
+          # nor adds the tool to ALLOWED_TOOLS, so Claude silently falls back to a
+          # sticky-only review even when the prompt instructs it to use inline comments.
+          claude_args: |
+            --allowedTools mcp__github_inline_comment__create_inline_comment
+          prompt: |
+            If this invocation is a code review (initial review, re-review, "review the changes", "check the diff"), use hybrid output:
 
-      - name: Run Claude Code
-        id: claude
-        uses: anthropics/claude-code-action@v1
+            INLINE COMMENTS — use `mcp__github_inline_comment__create_inline_comment` for findings tied to specific lines: correctness bugs, security issues (privileged addresses, access control, upgrade/proxy wiring), AGENTS.md violations, concrete actionable suggestions. One inline per finding, on the most relevant line. Be surgical — only inline when the suggestion really applies at that exact span. Skip [P3] nits as inline.
+
+            STICKY SUMMARY — post ONE sticky PR comment containing:
+              - Overall verdict (LGTM / needs-changes / needs-discussion)
+              - Cross-cutting concerns (deployment safety, address/config drift, missing test scenarios)
+              - A NUMBERED roll-up of EVERY finding (inline + summary-only) so downstream tooling can enumerate them
+
+            SEVERITY tag every finding: [P1] correctness/security/breaking, [P2] quality/maintainability, [P3] suggestion/style.
+
+            Otherwise (the user asked a specific question or for a fix/refactor/explain), follow their instruction directly — no review framing needed.
+
+            PROJECT CONVENTIONS — AGENTS.md is authoritative. This is a Foundry/Solidity deployments repo; pay attention to:
+              - `forge fmt --check` and `forge build`/`forge test` must stay green (see .github/workflows/test.yml).
+              - treb deployment records: `.treb/deployments.json` is the source of truth for addresses; the `@mento-protocol/contracts` npm package is generated from it by `scripts/gen-contracts-package.ts`. Flag any hand-edit of generated output (packages/contracts/contracts.json, typed exports) that should instead come from a regen.
+              - Namespace-scoped generation drifts silently: `contracts:update` regenerates only the namespaces a PR touches, so on-chain deployments can go unpublished (tracked in #77). Flag deployment changes that don't update the package for the affected namespace.
+              - No address should be silently re-pointed and nothing removed without a CHANGELOG note — the package is a downstream source of truth for the indexer and UI.
+              - Supply-chain: third-party GitHub Actions must be SHA-pinned, not tag-pinned.
+            Skip generic "consider adding a comment" or "consider extracting a helper" unless the benefit is concrete.
+
+  auto-review:
+    # Skip fork PRs and Dependabot PRs — both run without access to repo
+    # secrets (CLAUDE_CODE_OAUTH_TOKEN), so the action would fail with an empty
+    # token. To re-enable on Dependabot PRs, mirror the secret under
+    # Settings → Secrets and variables → Dependabot.
+    if: |
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.draft != true &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    concurrency:
+      group: claude-auto-review-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 1
+      - uses: anthropics/claude-code-action@f87768c6d25f92ae6efa7175e223ef77d4cbf97f # v1.0.166
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          use_sticky_comment: true
+          track_progress: true
+          # See note on the on-demand job above — without --allowedTools the action
+          # never installs the inline-comment MCP server, so the prompt's inline-comment
+          # instructions are no-ops.
+          claude_args: |
+            --allowedTools mcp__github_inline_comment__create_inline_comment
+          prompt: |
+            Review this PR using hybrid output:
 
-          # This is an optional setting that allows Claude to read CI results on PRs
-          additional_permissions: |
-            actions: read
+            INLINE COMMENTS — use `mcp__github_inline_comment__create_inline_comment` for findings tied to specific lines: correctness bugs, security issues (privileged addresses, access control, upgrade/proxy wiring), AGENTS.md violations, concrete actionable suggestions. One inline per finding, on the most relevant line. Be surgical — only inline when the suggestion really applies at that exact span. Skip [P3] nits as inline.
 
-          # Optional: Give a custom prompt to Claude. If this is not specified, Claude will perform the instructions specified in the comment that tagged it.
-          # prompt: 'Update the pull request description to include a summary of changes.'
+            STICKY SUMMARY — post ONE sticky PR comment containing:
+              - Overall verdict (LGTM / needs-changes / needs-discussion)
+              - Cross-cutting concerns (deployment safety, address/config drift, missing test scenarios)
+              - A NUMBERED roll-up of EVERY finding (inline + summary-only) so downstream tooling can enumerate them
 
-          # Optional: Add claude_args to customize behavior and configuration
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://code.claude.com/docs/en/cli-reference for available options
-          # claude_args: '--allowed-tools Bash(gh pr *)'
+            SEVERITY tag every finding: [P1] correctness/security/breaking, [P2] quality/maintainability, [P3] suggestion/style.
 
+            PROJECT CONVENTIONS — AGENTS.md is authoritative. This is a Foundry/Solidity deployments repo; pay attention to:
+              - `forge fmt --check` and `forge build`/`forge test` must stay green (see .github/workflows/test.yml).
+              - treb deployment records: `.treb/deployments.json` is the source of truth for addresses; the `@mento-protocol/contracts` npm package is generated from it by `scripts/gen-contracts-package.ts`. Flag any hand-edit of generated output (packages/contracts/contracts.json, typed exports) that should instead come from a regen.
+              - Namespace-scoped generation drifts silently: `contracts:update` regenerates only the namespaces a PR touches, so on-chain deployments can go unpublished (tracked in #77). Flag deployment changes that don't update the package for the affected namespace.
+              - No address should be silently re-pointed and nothing removed without a CHANGELOG note — the package is a downstream source of truth for the indexer and UI.
+              - Supply-chain: third-party GitHub Actions must be SHA-pinned, not tag-pinned.
+            Skip generic "consider adding a comment" or "consider extracting a helper" unless the benefit is concrete.
