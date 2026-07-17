@@ -23,7 +23,14 @@
  * guard here.
  */
 import { spawnSync } from "child_process";
-import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync } from "fs";
+import {
+  cpSync,
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  readdirSync,
+  rmSync,
+} from "fs";
 import { tmpdir } from "os";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
@@ -110,10 +117,10 @@ function regenerateInto(outDir: string, namespace: string): void {
     },
   );
   if (result.status !== 0) {
-    console.error(
-      `\n✖  Regeneration failed for namespace "${namespace}":\n${result.stdout ?? ""}${result.stderr ?? ""}`,
+    // Throw rather than process.exit so main()'s finally still cleans up tmp.
+    throw new Error(
+      `Regeneration failed for namespace "${namespace}":\n${result.stdout ?? ""}${result.stderr ?? ""}`,
     );
-    process.exit(1);
   }
 }
 
@@ -131,6 +138,18 @@ function main(): void {
     `Checking namespace drift for: ${namespaces.join(", ")}\n` +
       `(regenerating each into a temp copy and comparing against the committed package)\n`,
   );
+
+  // Fail fast if out/ is missing: the generator reads ABIs from there and would
+  // otherwise hit its interactive "Run forge build now?" prompt, which hangs
+  // forever under spawnSync's non-interactive (EOF) stdin.
+  const outDir = join(repoRoot, "out");
+  if (!existsSync(outDir) || readdirSync(outDir).length === 0) {
+    console.error(
+      "Foundry artifacts not found (out/ is missing or empty).\n" +
+        "Run `forge build` first, then re-run `pnpm contracts:check-drift`.",
+    );
+    process.exit(1);
+  }
 
   const tmp = mkdtempSync(join(tmpdir(), "contracts-drift-"));
   try {
@@ -182,7 +201,8 @@ function main(): void {
           .join("\n") +
         "\n",
     );
-    process.exit(1);
+    // Set the exit code instead of exiting, so the finally cleanup runs first.
+    process.exitCode = 1;
   } finally {
     rmSync(tmp, { recursive: true, force: true });
   }
@@ -191,4 +211,11 @@ function main(): void {
 // Only run when invoked directly, so tests can import the pure helpers.
 const invokedDirectly =
   process.argv[1] && import.meta.url === `file://${process.argv[1]}`;
-if (invokedDirectly) main();
+if (invokedDirectly) {
+  try {
+    main();
+  } catch (err) {
+    console.error(err instanceof Error ? err.message : err);
+    process.exit(1);
+  }
+}
