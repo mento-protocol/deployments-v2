@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/contracts",
-  "version": "0.9.0-beta.0",
+  "version": "0.9.0-beta.1",
   "description": "Mento protocol contract ABIs and addresses",
   "type": "module",
   "main": "./dist/index.js",
