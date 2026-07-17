@@ -56,9 +56,8 @@ contract RedeployRouterPolygon is TrebScript, ProxyHelper {
         console.log("  constructor arg _factoryRegistry:", factoryRegistry);
         console.log("  constructor arg _factory:        ", fpmmFactory);
 
-        router = deployer.create3("Router").setLabel(NEW_LABEL).deploy(
-            abi.encode(address(0), factoryRegistry, fpmmFactory)
-        );
+        router =
+            deployer.create3("Router").setLabel(NEW_LABEL).deploy(abi.encode(address(0), factoryRegistry, fpmmFactory));
 
         console.log("Router deployed at:", router);
 
@@ -110,10 +109,7 @@ contract RedeployRouterPolygon is TrebScript, ProxyHelper {
         require(router.code.length > 0, "POST-CHECK FAILED: Router has no code");
         console.log("[OK] Router has code at", router);
 
-        require(
-            router != brokenRouter,
-            "POST-CHECK FAILED: new Router address equals the broken v3.0.0 Router"
-        );
+        require(router != brokenRouter, "POST-CHECK FAILED: new Router address equals the broken v3.0.0 Router");
         console.log("[OK] Router address differs from broken v3.0.0 Router");
 
         IRouter routerContract = IRouter(router);
@@ -123,14 +119,8 @@ contract RedeployRouterPolygon is TrebScript, ProxyHelper {
         console.log("Router.factoryRegistry:", actualFactoryRegistry);
         console.log("Router.defaultFactory: ", actualDefaultFactory);
 
-        require(
-            actualFactoryRegistry != address(0),
-            "POST-CHECK FAILED: Router.factoryRegistry is zero"
-        );
-        require(
-            actualDefaultFactory != address(0),
-            "POST-CHECK FAILED: Router.defaultFactory is zero"
-        );
+        require(actualFactoryRegistry != address(0), "POST-CHECK FAILED: Router.factoryRegistry is zero");
+        require(actualDefaultFactory != address(0), "POST-CHECK FAILED: Router.defaultFactory is zero");
         require(
             actualFactoryRegistry == factoryRegistry,
             "POST-CHECK FAILED: Router.factoryRegistry does not equal the FactoryRegistry proxy"

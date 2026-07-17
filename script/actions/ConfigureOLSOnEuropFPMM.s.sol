@@ -234,7 +234,9 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
                 "  > (info) ReserveLiquidityStrategy (%s) enabled on this FPMM:", rls, fpmm.liquidityStrategy(rls)
             );
         }
-        console.log("  > (info) OpenLiquidityStrategy already enabled on this FPMM:", fpmm.liquidityStrategy(strategyAddy));
+        console.log(
+            "  > (info) OpenLiquidityStrategy already enabled on this FPMM:", fpmm.liquidityStrategy(strategyAddy)
+        );
         console.log(
             "  > (info) Pool already registered on OpenLiquidityStrategy:",
             ILiquidityStrategy(strategyAddy).isPoolRegistered(fpmmProxy)
@@ -301,7 +303,8 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
         pure
         returns (uint256)
     {
-        uint256 expansion = _combineIncentives(lsCfg.protocolIncentiveExpansion, lsCfg.liquiditySourceIncentiveExpansion);
+        uint256 expansion =
+            _combineIncentives(lsCfg.protocolIncentiveExpansion, lsCfg.liquiditySourceIncentiveExpansion);
         uint256 contraction =
             _combineIncentives(lsCfg.protocolIncentiveContraction, lsCfg.liquiditySourceIncentiveContraction);
         uint256 combined = expansion > contraction ? expansion : contraction;
@@ -346,9 +349,7 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
         console.log("\n----- Verification --------------------------------------------------");
 
         // rebalanceIncentive is at the target value
-        require(
-            IFPMM(fpmmProxy).rebalanceIncentive() == REBALANCE_INCENTIVE, "Verify: rebalanceIncentive mismatch"
-        );
+        require(IFPMM(fpmmProxy).rebalanceIncentive() == REBALANCE_INCENTIVE, "Verify: rebalanceIncentive mismatch");
         console.log("  > FPMM rebalanceIncentive is at target (%s bps): OK", REBALANCE_INCENTIVE);
 
         // Strategy is enabled on the FPMM
