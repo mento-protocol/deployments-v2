@@ -11,6 +11,11 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 10
+    # Wait 7 days after an action publishes a new release before opening a bump
+    # PR, so a freshly-published (possibly malicious or broken) tag isn't pinned
+    # here before the ecosystem has had time to flag it.
+    cooldown:
+      default-days: 7
     commit-message:
       prefix: ci
       include: scope
