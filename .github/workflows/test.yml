@@ -69,3 +69,10 @@ jobs:
         run: |
           forge test -vvv --no-match-path "test/integration/*"
         id: test
+
+      # Fail if .treb/deployments.json is ahead of the generated contracts
+      # package for any already-published namespace (issue #77). Reuses the
+      # out/ artifacts built above — the generator reads ABIs from there.
+      - name: Check contracts-package namespace drift
+        run: pnpm contracts:check-drift
+        id: drift

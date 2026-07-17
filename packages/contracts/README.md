@@ -183,6 +183,8 @@ The script merges results into a single `contracts.json` and regenerates `abis/`
 
 If `out/` is missing, the script will prompt you to run `forge build` first (needed to read ABIs from compiled Foundry artifacts).
 
+> **CI guards against forgetting this.** The `check` job in `.github/workflows/test.yml` runs `pnpm contracts:check-drift`, which regenerates every already-published namespace into a temp copy and fails the build if `.treb/deployments.json` is ahead of the committed package (issue #77). Run it locally with `pnpm contracts:check-drift`; if it fails it prints the exact `contracts:update` commands to run.
+
 ### Step 2 — Commit the generated files
 
 ```bash
