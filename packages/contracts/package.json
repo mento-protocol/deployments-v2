@@ -1,6 +1,6 @@
 {
   "name": "@mento-protocol/contracts",
-  "version": "0.8.1",
+  "version": "0.9.0-beta.0",
   "description": "Mento protocol contract ABIs and addresses",
   "type": "module",
   "main": "./dist/index.js",
@@ -101,17 +101,17 @@
       "types": "./dist/AddressSortedLinkedListWithMedian.d.ts",
       "import": "./dist/AddressSortedLinkedListWithMedian.js"
     },
-    "./BreakerBox": {
-      "types": "./dist/BreakerBox.d.ts",
-      "import": "./dist/BreakerBox.js"
-    },
-    "./CHFmSpoke": {
-      "types": "./dist/CHFmSpoke.d.ts",
-      "import": "./dist/CHFmSpoke.js"
+    "./BreakerBoxv265": {
+      "types": "./dist/BreakerBoxv265.d.ts",
+      "import": "./dist/BreakerBoxv265.js"
     },
     "./ChainlinkRelayerFactory": {
       "types": "./dist/ChainlinkRelayerFactory.d.ts",
       "import": "./dist/ChainlinkRelayerFactory.js"
+    },
+    "./ChainlinkRelayerFactoryv265": {
+      "types": "./dist/ChainlinkRelayerFactoryv265.d.ts",
+      "import": "./dist/ChainlinkRelayerFactoryv265.js"
     },
     "./EURmSpoke": {
       "types": "./dist/EURmSpoke.d.ts",
@@ -137,14 +137,6 @@
       "types": "./dist/FactoryRegistryv300.d.ts",
       "import": "./dist/FactoryRegistryv300.js"
     },
-    "./GBPmSpoke": {
-      "types": "./dist/GBPmSpoke.d.ts",
-      "import": "./dist/GBPmSpoke.js"
-    },
-    "./JPYmSpoke": {
-      "types": "./dist/JPYmSpoke.d.ts",
-      "import": "./dist/JPYmSpoke.js"
-    },
     "./MarketHoursBreakerToggleablev300": {
       "types": "./dist/MarketHoursBreakerToggleablev300.d.ts",
       "import": "./dist/MarketHoursBreakerToggleablev300.js"
@@ -153,17 +145,13 @@
       "types": "./dist/MarketHoursBreakerv300.d.ts",
       "import": "./dist/MarketHoursBreakerv300.js"
     },
-    "./MedianDeltaBreaker": {
-      "types": "./dist/MedianDeltaBreaker.d.ts",
-      "import": "./dist/MedianDeltaBreaker.js"
+    "./MedianDeltaBreakerv265": {
+      "types": "./dist/MedianDeltaBreakerv265.d.ts",
+      "import": "./dist/MedianDeltaBreakerv265.js"
     },
     "./OpenLiquidityStrategy": {
       "types": "./dist/OpenLiquidityStrategy.d.ts",
       "import": "./dist/OpenLiquidityStrategy.js"
-    },
-    "./OpenLiquidityStrategyv300": {
-      "types": "./dist/OpenLiquidityStrategyv300.d.ts",
-      "import": "./dist/OpenLiquidityStrategyv300.js"
     },
     "./OpenLiquidityStrategyv301": {
       "types": "./dist/OpenLiquidityStrategyv301.d.ts",
@@ -205,13 +193,21 @@
       "types": "./dist/Routerv300.d.ts",
       "import": "./dist/Routerv300.js"
     },
+    "./Routerv301": {
+      "types": "./dist/Routerv301.d.ts",
+      "import": "./dist/Routerv301.js"
+    },
     "./SortedOracles": {
       "types": "./dist/SortedOracles.d.ts",
       "import": "./dist/SortedOracles.js"
     },
-    "./StableTokenSpoke": {
-      "types": "./dist/StableTokenSpoke.d.ts",
-      "import": "./dist/StableTokenSpoke.js"
+    "./SortedOraclesv265": {
+      "types": "./dist/SortedOraclesv265.d.ts",
+      "import": "./dist/SortedOraclesv265.js"
+    },
+    "./StableTokenSpokev300": {
+      "types": "./dist/StableTokenSpokev300.d.ts",
+      "import": "./dist/StableTokenSpokev300.js"
     },
     "./StableTokenV3v300": {
       "types": "./dist/StableTokenV3v300.d.ts",
@@ -225,29 +221,41 @@
       "types": "./dist/USDmSpoke.d.ts",
       "import": "./dist/USDmSpoke.js"
     },
-    "./ValueDeltaBreaker": {
-      "types": "./dist/ValueDeltaBreaker.d.ts",
-      "import": "./dist/ValueDeltaBreaker.js"
-    },
-    "./BreakerBoxv265": {
-      "types": "./dist/BreakerBoxv265.d.ts",
-      "import": "./dist/BreakerBoxv265.js"
-    },
-    "./ChainlinkRelayerFactoryv265": {
-      "types": "./dist/ChainlinkRelayerFactoryv265.d.ts",
-      "import": "./dist/ChainlinkRelayerFactoryv265.js"
-    },
-    "./MedianDeltaBreakerv265": {
-      "types": "./dist/MedianDeltaBreakerv265.d.ts",
-      "import": "./dist/MedianDeltaBreakerv265.js"
-    },
-    "./SortedOraclesv265": {
-      "types": "./dist/SortedOraclesv265.d.ts",
-      "import": "./dist/SortedOraclesv265.js"
-    },
     "./ValueDeltaBreakerv265": {
       "types": "./dist/ValueDeltaBreakerv265.d.ts",
       "import": "./dist/ValueDeltaBreakerv265.js"
+    },
+    "./BreakerBox": {
+      "types": "./dist/BreakerBox.d.ts",
+      "import": "./dist/BreakerBox.js"
+    },
+    "./CHFmSpoke": {
+      "types": "./dist/CHFmSpoke.d.ts",
+      "import": "./dist/CHFmSpoke.js"
+    },
+    "./GBPmSpoke": {
+      "types": "./dist/GBPmSpoke.d.ts",
+      "import": "./dist/GBPmSpoke.js"
+    },
+    "./JPYmSpoke": {
+      "types": "./dist/JPYmSpoke.d.ts",
+      "import": "./dist/JPYmSpoke.js"
+    },
+    "./MedianDeltaBreaker": {
+      "types": "./dist/MedianDeltaBreaker.d.ts",
+      "import": "./dist/MedianDeltaBreaker.js"
+    },
+    "./OpenLiquidityStrategyv300": {
+      "types": "./dist/OpenLiquidityStrategyv300.d.ts",
+      "import": "./dist/OpenLiquidityStrategyv300.js"
+    },
+    "./StableTokenSpoke": {
+      "types": "./dist/StableTokenSpoke.d.ts",
+      "import": "./dist/StableTokenSpoke.js"
+    },
+    "./ValueDeltaBreaker": {
+      "types": "./dist/ValueDeltaBreaker.d.ts",
+      "import": "./dist/ValueDeltaBreaker.js"
     },
     "./AUDm": {
       "types": "./dist/AUDm.d.ts",
@@ -280,6 +288,14 @@
     "./COPm": {
       "types": "./dist/COPm.d.ts",
       "import": "./dist/COPm.js"
+    },
+    "./ChainlinkRelayerV1relayedCELOBRL": {
+      "types": "./dist/ChainlinkRelayerV1relayedCELOBRL.d.ts",
+      "import": "./dist/ChainlinkRelayerV1relayedCELOBRL.js"
+    },
+    "./ChainlinkRelayerV1relayedCELOEUR": {
+      "types": "./dist/ChainlinkRelayerV1relayedCELOEUR.d.ts",
+      "import": "./dist/ChainlinkRelayerV1relayedCELOEUR.js"
     },
     "./ConstantProductPricingModule": {
       "types": "./dist/ConstantProductPricingModule.d.ts",

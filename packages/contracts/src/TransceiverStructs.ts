@@ -791,6 +791,7 @@ export const TransceiverStructs = {
     },
   ] as const,
   address: {
+    137: "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
     143: "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
     42220: "0x7C2420401eB6bEB50501Fd5bc8b60DBfC2b0dEF0",
   } as Partial<Record<number, `0x${string}`>>,

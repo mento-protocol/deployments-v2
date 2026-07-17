@@ -479,7 +479,11 @@ export const ValueDeltaBreakerv265 = {
     },
   ] as const,
   address: {
+    137: "0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13",
+    143: "0xca2e7563dfC30bc94687F3deAcF682E1dBAffA13",
     10143: "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf",
+    80002: "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf",
+    84532: "0xbbD0D093F5F11D16D4456FBd6229c9a3b70B8Aaf",
     11142220: "0x03CDf2966185Eb0b980f2481Ad386B8aFdAB4534",
   } as Partial<Record<number, `0x${string}`>>,
 };

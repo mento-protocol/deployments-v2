@@ -1,4 +1,4 @@
-export const Routerv300 = {
+export const Routerv301 = {
   abi: [
     {
       type: "constructor",
@@ -978,12 +978,6 @@ export const Routerv300 = {
     },
   ] as const,
   address: {
-    137: "0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6",
-    143: "0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6",
-    10143: "0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd",
-    42220: "0x4861840C2EfB2b98312B0aE34d86fD73E8f9B6f6",
-    80002: "0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd",
-    84532: "0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd",
-    11142220: "0xcf6cD45210b3ffE3cA28379C4683F1e60D0C2CCd",
+    137: "0x1Eb1D6692057949D6129ee7742C53be019b22408",
   } as Partial<Record<number, `0x${string}`>>,
 };
