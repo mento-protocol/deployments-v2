@@ -46,14 +46,15 @@ interface ILiquidityStrategyPoolConfigs {
  *         EURm/EUROP FPMM. The pool was created by CreateFPMM with only a
  *         ReserveLiquidityStrategy; this script adds the OpenLiquidityStrategy
  *         alongside it, performing the exact same steps CreateFPMM does in
- *         _setupOpenLiquidityStrategy, plus a rebalanceIncentive bump:
+ *         _setupOpenLiquidityStrategy, plus an optional rebalanceIncentive update:
  *
- *           1. IFPMM.setRebalanceIncentive(REBALANCE_INCENTIVE) -- the pool was created as an
- *              RLS pool with rebalanceIncentive = 1 bps, but the FPMM requires the rebalancer
- *              to send in at least (1 - rebalanceIncentive) of fair value, while the OLS sends
- *              (1 - combined OLS incentives) = 2 bps less. With 1 bps the rebalance always
- *              reverts InsufficientAmountIn, so it is raised to 3 bps, matching the
- *              USDm/EURm OLS pool. Sent by migrationOwner, which is the pool's feeSetter.
+ *           1. IFPMM.setRebalanceIncentive(REBALANCE_INCENTIVE) -- only sent if the pool's
+ *              current value differs from the target. The FPMM requires a rebalancer to send
+ *              in at least (1 - rebalanceIncentive) of fair value, while the OLS sends
+ *              (1 - combined OLS incentives), so the pool's rebalanceIncentive must always
+ *              cover the combined OLS incentives or every OLS rebalance reverts
+ *              InsufficientAmountIn (enforced in the preflight checks). Sent by
+ *              migrationOwner, which is the pool's feeSetter.
  *           2. IFPMM.setLiquidityStrategy(strategy, true)   -- enable the strategy on the pool
  *           3. IOpenLiquidityStrategy.addPool(params)       -- register the pool on the strategy
  *           4. Verify the configuration landed on-chain (incl. reading back every
@@ -87,15 +88,15 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
     /// script/config/mento/MentoConfig_polygon.sol. Edit before running.
     ///
     /// TODO: BEFORE DEPLOYMENT confirm the final value of REBALANCE_INCENTIVE
-    /// and of EVERY field in _olsPoolConfig() below. The current values are
-    /// copied from the USDm/EURm OLS pool and have not been signed off for
-    /// the EURm/EUROP pool.
+    /// and of EVERY field in _olsPoolConfig() below.
     /// =====================================================================
 
     /// @dev The pool's rebalanceIncentive (in bps) must cover the combined OLS
     /// incentives below, or every OLS rebalance reverts InsufficientAmountIn.
-    /// 3 bps matches the USDm/EURm OLS pool in MentoConfig_polygon.
-    uint256 constant REBALANCE_INCENTIVE = 3; // TODO: confirm final value
+    /// 1 bps is the value the pool is currently configured with (i.e. no change);
+    /// raise it here if the OLS incentives are ever raised (for reference, the
+    /// USDm/EURm OLS pool uses 2 bps incentives with rebalanceIncentive = 3).
+    uint256 constant REBALANCE_INCENTIVE = 1; // TODO: confirm final value
 
     function _olsPoolConfig() internal returns (IMentoConfig.LiquidityStrategyPoolConfig memory) {
         return IMentoConfig.LiquidityStrategyPoolConfig({
@@ -103,9 +104,9 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
             debtToken: config.getAddress(DEBT_SYMBOL), // TODO: confirm final value
             cooldown: 300, // TODO: confirm final value
             protocolFeeRecipient: lookupOrFail("ProtocolFeeRecipient"), // TODO: confirm final value
-            liquiditySourceIncentiveExpansion: 0.0002e18, // 2bps / 0.02% -- TODO: confirm final value
+            liquiditySourceIncentiveExpansion: 0, // 0% -- TODO: confirm final value
             protocolIncentiveExpansion: 0, // 0% -- TODO: confirm final value
-            liquiditySourceIncentiveContraction: 0.0002e18, // 2bps / 0.02% -- TODO: confirm final value
+            liquiditySourceIncentiveContraction: 0, // 0% -- TODO: confirm final value
             protocolIncentiveContraction: 0 // 0% -- TODO: confirm final value
         });
     }
@@ -260,7 +261,7 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
 
         console.log("\n----- Actions -------------------------------------------------------");
 
-        // 1. Raise the pool's rebalanceIncentive so it covers the OLS incentives
+        // 1. Update the pool's rebalanceIncentive if it differs from the target
         if (IFPMM(fpmmProxy).rebalanceIncentive() == REBALANCE_INCENTIVE) {
             console.log("  [1/3] rebalanceIncentive already at target -- skipping setRebalanceIncentive");
         } else {
@@ -344,7 +345,7 @@ contract ConfigureOLSOnEuropFPMM is TrebScript, ProxyHelper, ConfigHelper, StdCh
 
         console.log("\n----- Verification --------------------------------------------------");
 
-        // rebalanceIncentive covers the OLS incentives
+        // rebalanceIncentive is at the target value
         require(
             IFPMM(fpmmProxy).rebalanceIncentive() == REBALANCE_INCENTIVE, "Verify: rebalanceIncentive mismatch"
         );
