@@ -40,6 +40,7 @@ interface IMentoConfig {
         IBiPoolManager.PoolExchange pool;
         ExchangeTradingLimitsConfig tradingLimits;
         bool createVirtual;
+        bool deprecated;
     }
 
     struct ExchangeTradingLimitsConfig {

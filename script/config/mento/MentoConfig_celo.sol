@@ -786,6 +786,23 @@ contract MentoConfig_celo is MentoConfig {
         ExchangeTradingLimitsConfig memory tradingLimits,
         bool createVirtual
     ) internal {
+        _addFxExchange({
+            currency: currency,
+            spread: spread,
+            tradingLimits: tradingLimits,
+            createVirtual: createVirtual,
+            deprecated: false
+        });
+    }
+
+    /// @notice Overload with a `deprecated` flag; see `MentoConfig._addExchange`.
+    function _addFxExchange(
+        string memory currency,
+        uint256 spread,
+        ExchangeTradingLimitsConfig memory tradingLimits,
+        bool createVirtual,
+        bool deprecated
+    ) internal {
         _addExchange({
             asset0: _symbolForCurrency["USD"],
             asset1: _symbolForCurrency[currency],
@@ -795,7 +812,8 @@ contract MentoConfig_celo is MentoConfig {
             resetFrequency: 6 minutes,
             stablePoolResetSize: 10_000_000 * 1e18,
             tradingLimits: tradingLimits,
-            createVirtual: createVirtual
+            createVirtual: createVirtual,
+            deprecated: deprecated
         });
     }
 

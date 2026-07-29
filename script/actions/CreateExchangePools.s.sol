@@ -43,6 +43,14 @@ contract CreateExchangePools is TrebScript, ProxyHelper, ConfigHelper {
 
             if (pickedExchangeId != bytes32(0) && exchangeId != pickedExchangeId) continue;
 
+            if (exchange.deprecated) {
+                console.log("Skipping deprecated pool:");
+                console.log("  exchangeId:", uint256(exchangeId));
+                console.log("  asset0:", exchange.pool.asset0);
+                console.log("  asset1:", exchange.pool.asset1);
+                continue;
+            }
+
             IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManagerAddy).exchanges(exchangeId);
 
             if (pool.asset0 != address(0)) {
