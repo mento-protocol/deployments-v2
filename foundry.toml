@@ -25,6 +25,8 @@ fs_permissions = [
 
 [profile.mainnet]
 
+[profile.testnet-v2-rc5]
+
 [lint]
 ignore = ["**/*"]
 
