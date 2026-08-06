@@ -15,11 +15,13 @@ Since these stables are not being migrated, we want to constrain how much their 
 - **FX asset**: the FX token's current total supply (rounded up to whole tokens).
 - **USDm**: the USD equivalent of that supply at the current oracle rate.
 
+Both limits carry a 5% buffer: the values are frozen into the proposal when it is created, but the supply keeps moving during the voting and timelock window. The buffer ensures that moderate supply growth in that window cannot strand tokens above the limit, at the cost of allowing the supply to grow by up to the same margin.
+
 For each asset, the limit is first **reset** (configured with no flags, which clears the accumulated global netflow) and then set to the new global-only value, so the new limits apply from a clean slate rather than on top of historical netflow.
 
 ### Why supply-sized global-only limits?
 
-- Setting the limit below the current supply would prevent the supply from fully contracting if holders wanted to exit the stable back into reserve collateral. Sizing the limit at exactly the outstanding supply (1x) guarantees the exit path while capping growth at effectively zero net new supply.
+- Setting the limit below the current supply would prevent the supply from fully contracting if holders wanted to exit the stable back into reserve collateral. Sizing the limit at the outstanding supply (1.05x) guarantees the exit path while keeping supply growth tightly capped.
 - The time-windowed limits (L0/L1) exist to smooth flow on actively growing pairs; for pairs intentionally kept static, a single lifetime cap is simpler and stricter.
 - Trading limits are denominated in whole tokens (the Broker scales amounts by the token's decimals before applying them).
 

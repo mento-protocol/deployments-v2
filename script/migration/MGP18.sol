@@ -43,6 +43,10 @@ contract MGP18 is TrebScript, ProxyHelper {
 
     uint8 internal constant LG = 4;
 
+    /// @dev Buffer applied to both limits (1.05x) to absorb supply drift between proposal
+    ///      creation and execution; see getProposedLimits.
+    uint256 internal constant LIMIT_BUFFER_PCT = 105;
+
     /// @param asset0 Registry name of the exchange's first asset (USDm).
     /// @param asset1 Registry name of the exchange's second asset (the FX stable).
     /// @param limitGlobal0 Proposed global limit for asset0, computed on-chain in applyLimits.
@@ -140,8 +144,9 @@ contract MGP18 is TrebScript, ProxyHelper {
 
     /// @notice Computes the proposed global limits for an exchange:
     ///         the FX token's current total supply (whole tokens, rounded up) and its USD
-    ///         equivalent at the current oracle rate. Trading limits are denominated in whole
-    ///         tokens: the Broker divides amounts by 10^decimals before applying them.
+    ///         equivalent at the current oracle rate, both scaled by LIMIT_BUFFER. Trading
+    ///         limits are denominated in whole tokens: the Broker divides amounts by
+    ///         10^decimals before applying them.
     /// @dev The oracle rate feeds for the FX exchanges ({CUR}USD) report USD per FX unit —
     ///      the same direction the BiPoolManager uses to derive the FX bucket from the USDm
     ///      bucket in getUpdatedBuckets.
@@ -150,7 +155,12 @@ contract MGP18 is TrebScript, ProxyHelper {
         view
         returns (int48 usdmLimit, int48 fxLimit, uint256 rateNumerator, uint256 rateDenominator)
     {
-        uint256 fxSupply = IERC20Metadata(fxToken).totalSupply();
+        // The limits are frozen into the proposal calldata now, but the supply keeps moving
+        // until the proposal executes after the voting/timelock window. If the supply grows in
+        // between, a 1x limit would leave the excess unable to exit back to USDm. The 5%
+        // buffer absorbs that drift, at the cost of allowing supply to grow by up to the same
+        // margin.
+        uint256 fxSupply = (IERC20Metadata(fxToken).totalSupply() * LIMIT_BUFFER_PCT) / 100;
 
         IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManagerProxy).getPoolExchange(exchangeId);
         (rateNumerator, rateDenominator) =
