@@ -238,9 +238,19 @@ contract MGP18 is TrebScript, ProxyHelper {
 
             checkGlobalOnlyLimit(pair, update.asset0, exchangeId, token0, update.limitGlobal0);
             checkGlobalOnlyLimit(pair, update.asset1, exchangeId, token1, update.limitGlobal1);
-            console.log(unicode" > 🟢 %s: global-only limits set on both assets", pair);
+            (uint256 fxSupply, uint256 amountOut) = checkSupplyCanExit(exchangeId, token0, token1);
 
-            checkSupplyCanExit(pair, exchangeId, token0, token1);
+            console.log(string.concat(pair, unicode" ✅"));
+            console.log("   ...global-only limits set on both assets");
+            console.log(
+                string.concat(
+                    "   ...full supply can exit to USDm (",
+                    groupDigits(fxSupply / 1e18),
+                    " in -> ",
+                    groupDigits(amountOut / 1e18),
+                    " out)"
+                )
+            );
         }
     }
 
@@ -266,10 +276,13 @@ contract MGP18 is TrebScript, ProxyHelper {
     ///      back to USDm through the Broker. Reverts if the new limits (or pool buckets) would
     ///      block the supply from fully exiting. State is snapshotted and reverted around the
     ///      simulation so post-proposal state stays untouched.
-    function checkSupplyCanExit(string memory pair, bytes32 exchangeId, address usdmToken, address fxToken) internal {
+    function checkSupplyCanExit(bytes32 exchangeId, address usdmToken, address fxToken)
+        internal
+        returns (uint256 fxSupply, uint256 amountOut)
+    {
         uint256 snapshot = vm.snapshotState();
 
-        uint256 fxSupply = IERC20Metadata(fxToken).totalSupply();
+        fxSupply = IERC20Metadata(fxToken).totalSupply();
         address prober = makeAddr("mgp18-supply-prober");
 
         vm.prank(brokerProxy);
@@ -277,16 +290,8 @@ contract MGP18 is TrebScript, ProxyHelper {
 
         vm.startPrank(prober);
         IERC20Metadata(fxToken).approve(brokerProxy, fxSupply);
-        uint256 amountOut =
-            IBroker(brokerProxy).swapIn(biPoolManagerProxy, exchangeId, fxToken, usdmToken, fxSupply, 0);
+        amountOut = IBroker(brokerProxy).swapIn(biPoolManagerProxy, exchangeId, fxToken, usdmToken, fxSupply, 0);
         vm.stopPrank();
-
-        console.log(
-            unicode" > 🟢 %s: full supply can exit to USDm (%s in -> %s out)",
-            pair,
-            groupDigits(fxSupply / 1e18),
-            groupDigits(amountOut / 1e18)
-        );
 
         vm.revertToState(snapshot);
     }
