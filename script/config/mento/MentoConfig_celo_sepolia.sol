@@ -180,7 +180,6 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
                 asset1: emptyTradingLimits()
             }),
             createVirtual: false,
-            // TESTING: exercise DeprecateExchangePools on sepolia; remove once verified.
             deprecated: true
         });
 
