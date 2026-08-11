@@ -1,5 +1,3 @@
-<!-- markdownlint-disable MD036 MD041 -->
-
 # MGP-18: Mento V2 Deprecation
 
 ## TL;DR
