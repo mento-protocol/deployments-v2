@@ -108,10 +108,7 @@ contract MGP18 is TrebScript, ProxyHelper {
             console.log(string.concat("Exchange (", update.asset0, "/", update.asset1, ")"));
             console.log(
                 string.concat(
-                    "   current ",
-                    update.asset1,
-                    " supply: ",
-                    groupDigits(IERC20Metadata(token1).totalSupply() / 1e18)
+                    "   current ", update.asset1, " supply: ", groupDigits(IERC20Metadata(token1).totalSupply() / 1e18)
                 )
             );
 

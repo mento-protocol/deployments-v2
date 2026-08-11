@@ -50,9 +50,7 @@ contract PrintVirtualPools is TrebScript, ProxyHelper {
             console.log(
                 string.concat(
                     _padRight(vm.toString(pools[i]), 44),
-                    _padRight(
-                        string.concat(IERC20Metadata(token0).symbol(), "/", IERC20Metadata(token1).symbol()), 16
-                    ),
+                    _padRight(string.concat(IERC20Metadata(token0).symbol(), "/", IERC20Metadata(token1).symbol()), 16),
                     _padRight(IVirtualPoolFactory(factory).isPoolDeprecated(pools[i]) ? "deprecated" : "active", 12),
                     live ? vm.toString(exchangeId) : "no live exchange"
                 )
