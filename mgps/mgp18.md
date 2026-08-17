@@ -19,13 +19,13 @@ Mento V3 has been running successfully since [March 2026](https://forum.mento.or
 
 The transition is now far enough along to start retiring V2 in two phases:
 
-1. **Keep FX stables on V2**: AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, and XOFm will not be immediately migrated to the CDP model. Their V2 pools against USDm stay live so that holders can always redeem, and we will work with the community to transition them to the CDP model as demand grows.
+1. **Keep FX stables on V2**: AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, and XOFm will not be migrated to the CDP model immediately. Their V2 pools against USDm will stay live so that holders can always redeem, and we will work with the community to transition them to the CDP model as demand grows.
 2. **Destroy collateral and 1:1 stable pools:**
    - USDm/{USDC, axlUSDC, USDT, CELO, EURm}
    - EURm/axlEUROC
-   - These pools are no longer needed on the legacy system and will be destroyed by the migration multisig.
+   - These pools are no longer needed on the legacy system and the migration multisig will destroy them.
 
-This proposal handles the first phase: it reconfigures the Broker’s trading limits on the FX stables so that the supply can fully contract, letting existing holders exit back to USDm whenever they wish.
+This proposal covers the first phase: it reconfigures the Broker’s trading limits on the FX stables so supply can fully contract, letting existing holders exit back to USDm whenever they wish.
 
 The second phase will be handled by the migration multisig outside of governance.
 
@@ -83,10 +83,10 @@ Separately from this proposal, the migration multisig ([`0x58099B74F4ACd642Da77b
 - USDm/EURm
 - EURm/axlEUROC
 
-Swaps for these assets are served by Mento V3 and the broader Celo DEX ecosystem.
+Mento V3 and the broader Celo DEX ecosystem serve swaps for these assets.
 
 ## Security Considerations
 
 - The governance transactions only touch trading-limit configuration on the Broker for existing, live exchanges. No ownership changes, no implementation upgrades, and no funds are involved.
 - Reducing limits is conservative: it restricts how much the FX stables’ supply can grow and thereby bounds the reserve’s FX exposure; it cannot enable any new minting capacity.
-- The exchange deprecations are performed by the same migration multisig that has owned the BiPoolManager since the V3 rollout began ([MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)). Ownership of the BiPoolManager as well as other V2 contracts will be transferred back to Mento Governance in a future MGP.
+- The same migration multisig that has owned the BiPoolManager since the V3 rollout began ([MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)) performs the exchange deprecations. Ownership of the BiPoolManager as well as other V2 contracts will be transferred back to Mento Governance in a future MGP.
