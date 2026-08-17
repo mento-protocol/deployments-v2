@@ -1,28 +1,42 @@
 ## TL;DR
 
-With Mento V3 live, we are winding down Mento V2. This proposal reduces the trading limits on the ten FX exchanges that remain on the V2 model, replacing the current time-windowed limits with a single global limit sized at the outstanding supply of each FX stable (plus a 5% buffer). This caps the reserve's exposure to FX risk going forward while guaranteeing that every existing holder can always exit back through the Broker.
+With Mento V3 live since March, we are winding down Mento V2. This proposal reduces the trading limits on the ten FX pools that remain on the V2 model, replacing the current time-windowed limits with a single global limit sized at the outstanding supply of each FX stable (plus a 10% buffer). This caps the reserve’s exposure to FX risk going forward while guaranteeing that every existing holder can always exit back through the Broker.
 
-Alongside this proposal (but outside of governance), the migration multisig that owns the BiPoolManager will deprecate the following V2 exchanges, which are no longer needed on the legacy system: USDm/USDC, USDm/axlUSDC, USDm/USDT, USDm/CELO, USDm/EURm, and EURm/axlEUROC.
+Alongside this proposal (but outside of governance), the migration multisig that currently owns the BiPoolManager will deprecate the following V2 pools, which are no longer needed on the legacy system:
+
+1. USDC/USDm
+2. axlUSDC/USDm
+3. USDT/USDm
+4. CELO/USDm
+5. EURm/USDm
+6. axlEUROC/EURm
+
+The respective Mento V3 pools (if they exist) will NOT be affected by this and will remain available.
 
 ## Overview
 
-Mento V3 has been running successfully since [March 2026](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103), with 15+ FPMMs deployed across three chains, over $80M in volume swapped, and three Mento stables migrated to a CDP-backed model (GBPm, CHFm, JPYm).
+Mento V3 has been running successfully since [March 2026](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103), with 15+ FPMM pools deployed across three chains, over $80M in volume swapped, and three Mento stables migrated to a CDP-backed model (GBPm, CHFm, JPYm).
 
-The transition is now far enough along to start retiring V2:
+The transition is now far enough along to start retiring V2 in two phases:
 
-- **Retired with V2**: the collateral and 1:1 stable exchanges (USDm against USDC, axlUSDC, USDT, CELO, and EURm, plus EURm/axlEUROC) are no longer needed on the legacy system and will be destroyed by the migration multisig (see below).
-- **Remaining on V2**: the ten FX stables — AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, and XOFm — will not be immediately migrated to the CDP model. Their V2 exchanges against USDm stay live so that holders can always redeem, and we will work with the community to transition them to the CDP model as demand grows.
+1. **Keep FX stables on V2**: AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, and XOFm will not be immediately migrated to the CDP model. Their V2 pools against USDm stay live so that holders can always redeem, and we will work with the community to transition them to the CDP model as demand grows.
+2. **Destroy collateral and 1:1 stable pools:**
+   - USDm/{USDC, axlUSDC, USDT, CELO, EURm}
+   - EURm/axlEUROC
+   - These pools are no longer needed on the legacy system and will be destroyed by the migration multisig.
 
-This proposal handles the second group: it reconfigures the Broker's trading limits on those ten exchanges so that the supply can fully contract, letting existing holders exit back to USDm whenever they wish.
+This proposal handles the first phase: it reconfigures the Broker’s trading limits on the FX stables so that the supply can fully contract, letting existing holders exit back to USDm whenever they wish.
+
+The second phase will be handled by the migration multisig outside of governance.
 
 ### How the new limits work
 
-The Broker enforces trading limits per exchange and per asset, as a combination of a 5-minute window limit (L0), a 1-day window limit (L1), and a lifetime global limit (LG) on net flows. This proposal replaces that configuration on both assets of each remaining exchange with a **global-only limit**:
+The Broker enforces trading limits per pool and per token, as a combination of a 5-minute window limit (L0), a 1-day window limit (L1), and a lifetime global limit (LG) on net flows. This proposal replaces that configuration on both tokens of each remaining pool with a **global-only limit**:
 
-- **FX asset**: the token's current total supply × 1.05.
-- **USDm**: the USD equivalent of that supply at the current oracle rate × 1.05.
+- **FX token**: the token’s current total supply × 1.1.
+- **USDm**: the USD equivalent of that supply at the current oracle rate × 1.1.
 
-Sizing the limit at the outstanding supply guarantees the exit path: the entire supply can be redeemed back to USDm through the Broker. Any lower value would strand the difference. At the same time, because the global limit bounds lifetime net flow symmetrically, net new minting is capped at the same 1.05x figure — the supply can at most roughly double from the snapshot at proposal time, compared to the far larger headroom under the current limits.
+Sizing the limit at the outstanding supply guarantees the exit path: the entire supply can be redeemed back to USDm through the Broker. Any lower value would strand the difference. At the same time, because the global limit bounds lifetime net flow symmetrically, net new minting is capped at the same 1.1x figure — the supply can at most roughly double from the snapshot at proposal time, compared to the far larger headroom under the current limits.
 
 Each limit is **reset before being set**: the Broker preserves the accumulated net flow when a global limit stays configured, so the first transaction clears the counter and the second applies the new limit from a clean slate.
 
@@ -34,12 +48,12 @@ All governance transactions call `configureTradingLimit(bytes32 exchangeId, addr
 
 The proposal contains **40 transactions** — 4 per exchange, repeated for each of the 10 exchanges:
 
-| TX#    | Target       | Function                | Parameters                                                  |
-| ------ | ------------ | ----------------------- | ----------------------------------------------------------- |
-| 4i + 0 | Broker Proxy | `configureTradingLimit` | exchangeId, FX token, empty config (reset net flow)         |
-| 4i + 1 | Broker Proxy | `configureTradingLimit` | exchangeId, FX token, global-only limit = supply × 1.05     |
-| 4i + 2 | Broker Proxy | `configureTradingLimit` | exchangeId, USDm, empty config (reset net flow)             |
-| 4i + 3 | Broker Proxy | `configureTradingLimit` | exchangeId, USDm, global-only limit = USD equivalent × 1.05 |
+| Target       | Function                | Parameters                                                 |
+| ------------ | ----------------------- | ---------------------------------------------------------- |
+| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, empty config (reset net flow)        |
+| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, global-only limit = supply × 1.1     |
+| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, empty config (reset net flow)            |
+| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, global-only limit = USD equivalent × 1.1 |
 
 The affected exchanges:
 
@@ -69,10 +83,10 @@ Separately from this proposal, the migration multisig ([`0x58099B74F4ACd642Da77b
 - USDm/EURm
 - EURm/axlEUROC
 
-Swaps for these assets are served by Mento V3 and the broader Celo DEX ecosystem; only the legacy V2 routes are removed.
+Swaps for these assets are served by Mento V3 and the broader Celo DEX ecosystem.
 
 ## Security Considerations
 
 - The governance transactions only touch trading-limit configuration on the Broker for existing, live exchanges. No ownership changes, no implementation upgrades, and no funds are involved.
-- Reducing limits is conservative: it restricts how much the FX stables' supply can grow and thereby bounds the reserve's FX exposure; it cannot enable any new minting capacity.
+- Reducing limits is conservative: it restricts how much the FX stables’ supply can grow and thereby bounds the reserve’s FX exposure; it cannot enable any new minting capacity.
 - The exchange deprecations are performed by the same migration multisig that has owned the BiPoolManager since the V3 rollout began ([MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)). Ownership of the BiPoolManager as well as other V2 contracts will be transferred back to Mento Governance in a future MGP.
