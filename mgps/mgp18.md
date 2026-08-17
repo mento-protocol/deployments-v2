@@ -1,5 +1,3 @@
-# MGP-18: Mento V2 Deprecation
-
 ## TL;DR
 
 With Mento V3 live, we are winding down Mento V2. This proposal reduces the trading limits on the ten FX exchanges that remain on the V2 model, replacing the current time-windowed limits with a single global limit sized at the outstanding supply of each FX stable (plus a 5% buffer). This caps the reserve's exposure to FX risk going forward while guaranteeing that every existing holder can always exit back through the Broker.
