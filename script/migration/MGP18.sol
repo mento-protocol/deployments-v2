@@ -43,9 +43,9 @@ contract MGP18 is TrebScript, ProxyHelper {
 
     uint8 internal constant LG = 4;
 
-    /// @dev Buffer applied to both limits (1.05x) to absorb supply drift between proposal
+    /// @dev Buffer applied to both limits (1.1x) to absorb supply drift between proposal
     ///      creation and execution; see getProposedLimits.
-    uint256 internal constant LIMIT_BUFFER_PCT = 105;
+    uint256 internal constant LIMIT_BUFFER_PCT = 110;
 
     /// @param asset0 Registry name of the exchange's first asset (USDm).
     /// @param asset1 Registry name of the exchange's second asset (the FX stable).
@@ -154,9 +154,9 @@ contract MGP18 is TrebScript, ProxyHelper {
     {
         // The limits are frozen into the proposal calldata now, but the supply keeps moving
         // until the proposal executes after the voting/timelock window. If the supply grows in
-        // between, a 1x limit would leave the excess unable to exit back to USDm. The 5%
-        // buffer absorbs that drift, at the cost of allowing supply to grow by up to the same
-        // margin.
+        // between, a 1x limit would leave the excess unable to exit back to USDm. The 10%
+        // buffer absorbs that drift, at the cost of adding the same margin to the minting
+        // headroom.
         uint256 fxSupply = (IERC20Metadata(fxToken).totalSupply() * LIMIT_BUFFER_PCT) / 100;
 
         IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManagerProxy).getPoolExchange(exchangeId);

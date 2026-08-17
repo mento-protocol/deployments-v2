@@ -40,7 +40,7 @@ Sizing the limit at the outstanding supply guarantees the exit path: the entire 
 
 Each limit is **reset before being set**: the Broker preserves the accumulated net flow when a global limit stays configured, so the first transaction clears the counter and the second applies the new limit from a clean slate.
 
-The 5% buffer exists because the limit values are frozen into the proposal when it is created, while supply keeps moving during the voting and timelock period. The buffer absorbs moderate drift in that window, at the cost of adding the same 5% to the minting headroom.
+The 10% buffer exists because the limit values are frozen into the proposal when it is created, while supply keeps moving during the voting and timelock period. The buffer absorbs moderate drift in that window, at the cost of adding the same 10% to the minting headroom.
 
 ## Transaction Details
 

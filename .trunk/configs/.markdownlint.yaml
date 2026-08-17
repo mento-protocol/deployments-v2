@@ -5,3 +5,8 @@ extends: markdownlint/style/prettier
 # release heading; that's by design, not a duplicate-content bug.
 MD024:
   siblings_only: true
+
+# MGP files in mgps/ double as the on-chain proposal description: they start at
+# `## TL;DR` (the title lives in the proposal itself) and can't carry inline
+# markdownlint directives, so first-line-H1 can't be enforced there.
+MD041: false
