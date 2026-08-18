@@ -204,7 +204,7 @@ contract MGP19 is TrebScript, ProxyHelper {
         require(govSender.account == timelock, "governor sender does not execute as the Mento timelock");
 
         OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-19: Returning the Mento Issuance Protocol to Celo");
+        ozGovSender.setTitle("MGP-19: Bringing Stable Asset Issuance Home to Celo Governance");
         ozGovSender.setProposalDescription("./mgps/mgp19.md");
 
         dependsOnProposalId = vm.envOr("dependsOnProposalId", uint256(0));

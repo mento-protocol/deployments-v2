@@ -2,14 +2,12 @@
 
 ## TL;DR
 
-This proposal returns the Mento Issuance Protocol to the Celo ecosystem, where it began, and refocuses Mento Labs on the Mento FX DEX. Specifically, it:
+This proposal brings governance of stable asset issuance home to Celo, where it began, and refocuses Mento Labs on the Mento FX DEX. Specifically, it:
 
 1. **Transfers on-chain governance of the issuance protocol** (stable assets, elastic mint/burn, CDPs, and associated reserve parameters) **to Celo Governance.** The FX DEX, the MENTO token, and all other functions remain under Mento Governance. This is the part of the proposal that executes on-chain: the transactions attached to this proposal, plus a companion batch from the Mento Labs migration multisig, hand every admin and owner role on the issuance contracts to Celo Governance (`0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972`). Full contract list under _Transaction details_.
 2. **Confirms the AP Reserve Foundation as steward of the Mento Reserve and its revenue**, operating under standing principles: principal is never drawn, the yield split is a mandate set by governance and can be altered through Celo Governance, and the Foundation reports publicly every quarter.
-3. **Ratifies a 2-year Reserve Rebalancing Services Agreement** between the Mento Protocol Foundation and Mento Labs GmbH. Consideration is **95% of the Reserve's remaining ETH-family holdings** ([X] ETH-equivalent, currently ~$[XXX,XXX]), drawn against the [MGP-15](https://governance.mento.org/proposals/9612927118152596303508629025446921820838883791262021704399949388476066345844) authorization. **No new allocation is requested.**
-4. **Resolves the Reserve's CELO position** (~$3.17M): **50% returns to the Celo Community Fund**, and **50% remains in the Reserve as an asset of last resort**: frozen, excluded from rebalancing, and drawable only under a recovery mechanism to be defined and approved by Celo Governance.
-
-This proposal does **not** wind down Mento Governance, the Mento DAO, or the MENTO token, and does **not** sell any CELO.
+3. **Ratifies a 2-year Reserve Rebalancing Services Agreement** between the Mento Protocol Foundation and Mento Labs GmbH. Consideration is **95% of the Reserve's remaining ETH-family holdings** ([X] ETH-equivalent, currently ~$610,000), drawn against the [MGP-15](https://governance.mento.org/proposals/9612927118152596303508629025446921820838883791262021704399949388476066345844) authorization. **No new allocation is requested.**
+4. **Resolves the Reserve's CELO position** (~$2.91M): **50% returns to the Celo Community Fund**, and **50% remains in the Reserve as an asset of last resort**: frozen, excluded from rebalancing, and drawable only under a recovery mechanism to be defined and approved by Celo Governance.
 
 ---
 
@@ -75,11 +73,11 @@ The AP Reserve Foundation is authorized as steward of the Reserve's assets and r
 
 Mento Labs GmbH continues as rebalancer and operator of record under a 24-month services agreement with the Mento Protocol Foundation, covering rebalance execution, peg-deviation response, infrastructure, incident response, and reporting.
 
-**Consideration: 95% of the Reserve's remaining ETH-family holdings** (ETH, stETH, WETH), amounting to [X] ETH-equivalent worth approximately **$[XXX,XXX]** at current prices [as of DATE], transferred as a single payment. The remaining 5% stays in the Reserve as its standing ETH allocation. The payment is drawn against the MGP-15 authorization (up to $3.75M from over-collateralization, with ETH on its approved asset list); this proposal converts part of that unspent authorization into a defined, term-limited contract with deliverables attached.
+**Consideration: 95% of the Reserve's remaining ETH-family holdings** (ETH, stETH, WETH), amounting to [X] ETH-equivalent worth approximately **$610,000** at current prices [as of DATE], transferred as a single payment. The remaining 5% stays in the Reserve as its standing ETH allocation. The payment is drawn against the MGP-15 authorization (up to $3.75M from over-collateralization, with ETH on its approved asset list); this proposal converts part of that unspent authorization into a defined, term-limited contract with deliverables attached.
 
 ### 4. The CELO position
 
-The Reserve holds ~$3.17M in CELO. Under this proposal:
+The Reserve holds ~$2.91M in CELO. Under this proposal:
 
 - **50% is returned to the Celo Community Fund.**
 - **50% remains in the Reserve as an asset of last resort**: excluded from the rebalancing set, subject to a no-sale covenant, and drawable only to make stablecoin holders whole if a primary reserve asset fails. No draw is automatic: the recovery mechanism (qualifying events, thresholds, authorization path) will be defined in a follow-up Celo Governance proposal, and the tranche is frozen until that passes.
@@ -88,10 +86,10 @@ The Reserve holds ~$3.17M in CELO. Under this proposal:
 
 | Metric | Assessment |
 | --- | --- |
-| Reserve assets today | ~$18.77M against ~$14.52M reserve debt (**~1.29×**) |
-| After ETH-family transfer (§3) | **~1.24×** |
-| After 50% CELO return (§4) | **~1.13×** |
-| Stable book alone | **~1.03×**; every stablecoin remains fully backed by stable assets, before counting the retained CELO or ETH |
+| Reserve assets today | ~$18.70M against ~$14.71M reserve debt (**~1.27×**) |
+| After ETH-family transfer (§3, ~$610k) | **~1.23×** |
+| After 50% CELO return (§4, ~$1.45M) | **~1.13×** |
+| Stable book alone (~$15.15M) | **~1.03×**; every stablecoin remains fully backed by stable assets, before counting the retained CELO or ETH |
 
 ---
 
