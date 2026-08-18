@@ -2,75 +2,113 @@
 
 ## TL;DR
 
-This proposal is the on-chain companion to the forum proposal _Returning the Mento Issuance Protocol to Celo_ (§1, "Transfer of issuance governance to Celo Governance"). It transfers on-chain governance of the **issuance side** of the Mento Protocol on Celo — the 15 Mento stable assets, the direct reserve mint/burn path (Broker, BiPoolManager, Reserve), the V3 reserve issuance contracts (ReserveV2, ReserveLiquidityStrategy, CDPLiquidityStrategy), the CDP branches (GBPm, CHFm, JPYm) and the oracle layer that gates minting and burning — to **Celo Governance** (`0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972`).
+This proposal returns the Mento Issuance Protocol to the Celo ecosystem, where it began, and refocuses Mento Labs on the Mento FX DEX. Specifically, it:
 
-Everything else stays exactly where it is: the Mento FX DEX (FPMM factory/registry, pools, router, virtual pools, OpenLiquidityStrategy, oracle adapters), the MENTO token, and Mento Governance itself remain under Mento Governance / Mento Labs.
+1. **Transfers on-chain governance of the issuance protocol** (stable assets, elastic mint/burn, CDPs, and associated reserve parameters) **to Celo Governance.** The FX DEX, the MENTO token, and all other functions remain under Mento Governance. This is the part of the proposal that executes on-chain: the transactions attached to this proposal, plus a companion batch from the Mento Labs migration multisig, hand every admin and owner role on the issuance contracts to Celo Governance (`0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972`). Full contract list under _Transaction details_.
+2. **Confirms the AP Reserve Foundation as steward of the Mento Reserve and its revenue**, operating under standing principles: principal is never drawn, the yield split is a mandate set by governance and can be altered through Celo Governance, and the Foundation reports publicly every quarter.
+3. **Ratifies a 2-year Reserve Rebalancing Services Agreement** between the Mento Protocol Foundation and Mento Labs GmbH. Consideration is **95% of the Reserve's remaining ETH-family holdings** ([X] ETH-equivalent, currently ~$[XXX,XXX]), drawn against the [MGP-15](https://governance.mento.org/proposals/9612927118152596303508629025446921820838883791262021704399949388476066345844) authorization. **No new allocation is requested.**
+4. **Resolves the Reserve's CELO position** (~$3.17M): **50% returns to the Celo Community Fund**, and **50% remains in the Reserve as an asset of last resort**: frozen, excluded from rebalancing, and drawable only under a recovery mechanism to be defined and approved by Celo Governance.
 
-The issuance rights are currently split between the Mento Governance timelock and the Mento Labs migration multisig, which received a number of them on a temporary basis in MGP-14 and MGP-16 for the V3 rollout. This proposal therefore has two legs that are generated from a single script:
-
-1. **This governance proposal (26 transactions)** — everything the Mento Governance timelock holds.
-2. **A migration-multisig batch (35 transactions)** — everything the migration multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`) still holds. Instead of first returning those rights to Mento Governance and then forwarding them, the multisig transfers them to Celo Governance directly, on approval of this proposal and after the operations described in MGP-18 are complete.
+This proposal does **not** wind down Mento Governance, the Mento DAO, or the MENTO token, and does **not** sell any CELO.
 
 ---
 
-## Overview
+## Motivation
 
-Mento has grown into two distinct products. **Issuance** — the stable assets, CDPs and direct reserve elastic mint/burn — belongs to a credibly decentralised community, and Celo Governance, where the protocol originated, is its natural home. **The FX DEX** — oracle-priced, zero-slippage stablecoin FX via FPMMs — is infrastructure best served by a focused operating team, and remains with Mento Governance and Mento Labs.
+Mento is two products with different needs.
 
-The transfer covers stable-asset mint/burn parameters and upgrades, CDP parameters, reserve composition policy and every admin/owner role on the issuance contracts. Concretely, for each contract in scope the following rights move to Celo Governance:
+The **issuance protocol**'s natural long-term home is with a broad, established, decentralized community. That home is Celo Governance: it is where the protocol originated, where the stable assets live, and its community bears the consequences of how the protocol is governed.
+
+The **FX DEX** (oracle-priced, zero-slippage stablecoin FX via FPMM pools, deployed under [MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)) is infrastructure with a clear market, best served by a focused operating team. Mento Labs will concentrate on it going forward, while remaining the Reserve's rebalancing operator under contract, so decentralized ownership does not mean operational neglect.
+
+Decentralization is a path, and this proposal is a deliberate and important step forward on it, not only in where votes happen but in how the protocol is structured. It distributes authority, custody, and execution across distinct entities, each with a defined mandate and none able to act alone: **Celo Governance** holds ultimate authority over the issuance protocol; the **foundations** steward the protocol mandate and the Reserve's assets under principles that governance sets and can change; and **Mento Labs** executes reserve operations under a term-limited services agreement with deliverables attached.
+
+Celo is where these assets live, not just where they trade. The Mento stables were created on Celo and have grown up with it: held in local wallets, moved in everyday payments, relied on by communities for whom a stablecoin is not a trading instrument but a working currency. Governance of the issuance protocol belongs with the people closest to it: a broad, established community that already governs the chain these assets call home.
+
+The separation extends to leadership, and it has been taking shape gradually rather than overnight: **Bogdan Dumitru has taken the CEO position at Mento Labs**, consolidating leadership of the operating company around the team building the FX DEX, while **Markus Franke steps down from Mento Labs entirely to lead the Mento Protocol Foundation and the AP Reserve Foundation, and to serve as Head of Stablecoins at the Celo Dev Co**, anchoring stewardship of the issuance protocol on the Celo ecosystem side. The natural endpoint of that evolution is this proposal. The people directing the protocol's stewardship and the people operating its infrastructure are no longer the same: authority, custody, and execution check one another, and no single party can move protocol assets on its own.
+
+---
+
+## Specification
+
+### 1. Issuance governance → Celo Governance
+
+On-chain ownership and governance authority over the issuance contracts transfers from Mento Governance to Celo Governance. This covers stable asset parameters, CDP parameters, reserve composition policy, and admin roles on the issuance contracts. Everything else, including the FX DEX, the MENTO token, and the remaining scope of this DAO, stays under Mento Governance.
+
+For each contract in scope, two rights move to Celo Governance:
 
 - **Proxy admin** — the right to upgrade the implementation (Celo legacy proxies: `_transferOwnership`; OpenZeppelin `TransparentUpgradeableProxy`: ownership of the proxy's `ProxyAdmin`).
 - **Contract owner** — the `Ownable` role that sets parameters and roles (`transferOwnership`).
 
-All ownership on these contracts is single-step (`Ownable` / `OwnableUpgradeable`), so no acceptance transaction from Celo Governance is required. After execution, Celo Governance exercises these rights through regular Celo governance proposals.
-
-### What moves to Celo Governance
+**What moves to Celo Governance**
 
 | Group | Contracts | Rights moved |
 | --- | --- | --- |
 | Stable assets (StableTokenV2) | BRLm, XOFm, KESm, PHPm, COPm, GHSm, ZARm, CADm, AUDm, NGNm | proxy admin + owner |
 | Stable assets (StableTokenV3) | USDm, EURm, GBPm, CHFm, JPYm | proxy admin + owner (incl. minter/burner/operator role management) |
 | Direct reserve mint/burn (Mento V2) | Broker, BiPoolManager, Reserve | proxy admin + owner |
-| Oracle layer | SortedOracles (proxy admin + owner), BreakerBox, MedianDeltaBreaker, ValueDeltaBreaker, ChainlinkRelayerFactory (owner) | see table below |
+| Oracle layer | SortedOracles (proxy admin + owner), BreakerBox, MedianDeltaBreaker, ValueDeltaBreaker, ChainlinkRelayerFactory (owner) | see tables below |
 | V3 reserve issuance | ReserveV2, ReserveLiquidityStrategy, CDPLiquidityStrategy, ReserveTroveFactory | ProxyAdmin owner + owner (ReserveTroveFactory: owner) |
-| CDP branches (GBPm, CHFm, JPYm) | FXPriceFeed ×3 (ProxyAdmin owner + owner), SystemParams ×3 and StabilityPool ×3 (ProxyAdmin owner — their parameters change only via upgrade) | see table below |
+| CDP branches (GBPm, CHFm, JPYm) | FXPriceFeed ×3 (ProxyAdmin owner + owner), SystemParams ×3 and StabilityPool ×3 (ProxyAdmin owner — their parameters change only via upgrade) | see tables below |
 
 The remaining CDP contracts (AddressesRegistry, BorrowerOperations, TroveManager, ActivePool, DefaultPool, CollSurplusPool, GasPool, SortedTroves, TroveNFT, MetadataNFT, HintHelpers, MultiTroveGetter, CollateralRegistry, FixedAssetReader) and the V2 pricing modules are immutable or have renounced ownership; there is nothing to transfer.
 
-### What stays with Mento Governance / Mento Labs
+**What stays with Mento Governance / Mento Labs**
 
 - **Mento FX DEX:** FPMMFactory, FactoryRegistry, all FPMM pools, Router, VirtualPoolFactory, OpenLiquidityStrategy, OracleAdapter, OracleAdapterCollateral, MarketHoursBreakerToggleable.
 - **Mento DAO:** MentoGovernor, TimelockController, Locking, MENTO token, Emission, Airgrab and the ProxyAdmin that administers the governance proxies.
 
-The script asserts before and after execution that none of these change hands.
+The proposal script asserts before and after execution that none of these change hands.
+
+All ownership on the contracts in scope is single-step (`Ownable` / `OwnableUpgradeable`), so no acceptance transaction from Celo Governance is required. Operational state — minter/burner roles, exchange configuration, oracle whitelists, breaker configuration — is unchanged: swaps, minting, burning and CDP operations continue exactly as before; only the ability to change them moves. After execution, Celo Governance exercises these rights through regular Celo governance proposals.
+
+### 2. Reserve stewardship
+
+The AP Reserve Foundation is authorized as steward of the Reserve's assets and revenue. As with MGP-15, this is an authorization: the Foundation determines the operational mechanics of asset management and yield distribution, bounded by standing principles that governance sets and can change:
+
+- **Principal is untouchable.** Only yield is distributed; reserve collateral is not drawn for operations.
+- **The yield split is a mandate from governance.** Yield is directed [XX]% to the AP Reserve Foundation to steward the issuance protocol and [XX]% to the Celo Community Fund. This mandate, like the rest of the Foundation's principles, can be altered at any time through Celo Governance. _(The Reserve currently generates ~$26-30k/month in gross yield.)_
+- **The asset-of-last-resort CELO tranche (§4) and a ~5% ETH allocation sit outside the Foundation's discretionary set.**
+- **Quarterly public reporting:** reserve composition, yield collected, distributions paid, and coverage ratio.
+
+### 3. Rebalancing services agreement
+
+Mento Labs GmbH continues as rebalancer and operator of record under a 24-month services agreement with the Mento Protocol Foundation, covering rebalance execution, peg-deviation response, infrastructure, incident response, and reporting.
+
+**Consideration: 95% of the Reserve's remaining ETH-family holdings** (ETH, stETH, WETH), amounting to [X] ETH-equivalent worth approximately **$[XXX,XXX]** at current prices [as of DATE], transferred as a single payment. The remaining 5% stays in the Reserve as its standing ETH allocation. The payment is drawn against the MGP-15 authorization (up to $3.75M from over-collateralization, with ETH on its approved asset list); this proposal converts part of that unspent authorization into a defined, term-limited contract with deliverables attached.
+
+### 4. The CELO position
+
+The Reserve holds ~$3.17M in CELO. Under this proposal:
+
+- **50% is returned to the Celo Community Fund.**
+- **50% remains in the Reserve as an asset of last resort**: excluded from the rebalancing set, subject to a no-sale covenant, and drawable only to make stablecoin holders whole if a primary reserve asset fails. No draw is automatic: the recovery mechanism (qualifying events, thresholds, authorization path) will be defined in a follow-up Celo Governance proposal, and the tranche is frozen until that passes.
+
+### Reserve impact
+
+| Metric | Assessment |
+| --- | --- |
+| Reserve assets today | ~$18.77M against ~$14.52M reserve debt (**~1.29×**) |
+| After ETH-family transfer (§3) | **~1.24×** |
+| After 50% CELO return (§4) | **~1.13×** |
+| Stable book alone | **~1.03×**; every stablecoin remains fully backed by stable assets, before counting the retained CELO or ETH |
 
 ---
 
-### Security Considerations
+## Transaction details
 
-**Risk Assessment**
+Following the MGP-15 precedent, §2–§4 are authorizations; their execution details (CELO movements, services payment) will be published per step. §1 executes on-chain as follows.
 
-- Ownership and upgrade rights over the issuance contracts move to Celo Governance, a well-established on-chain governance process with its own proposal, referendum and execution stages. No implementation is changed and no parameter is modified by this proposal.
-- The Mento FX DEX and the Mento DAO are out of scope; the proposal script verifies that their ownership is untouched.
-- Operational continuity: minter/burner roles, exchange configuration, oracle whitelists and breaker configuration are unchanged, so swaps, minting, burning and CDP operations continue exactly as before. Only the ability to change them moves.
-- The two legs are not atomic (a Mento Governance proposal and a multisig batch). Between them, some contracts are already under Celo Governance while others are still with the migration multisig — the same split that exists today.
+The issuance rights are currently split between the Mento Governance timelock and the Mento Labs migration multisig, which received a number of them on a temporary basis in [MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103) and MGP-16 for the V3 rollout. §1 is therefore executed in two legs, both generated from a single script (`script/migration/MGP19.sol` in [mento-deployments-v2](https://github.com/mento-protocol/mento-deployments-v2)):
 
-**Follow-ups (not part of this proposal)**
+- **Step 1 — this governance proposal (26 transactions, plus the ordering guard below):** everything the Mento Governance timelock holds.
+- **Step 2 — migration multisig batch (35 transactions):** everything the migration multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`) still holds. Instead of first returning those rights to Mento Governance and then forwarding them, the multisig transfers them to Celo Governance directly, on approval of this proposal and after the MGP-18 multisig operations are complete.
 
-- The `ProxyAdmin` of the ChainlinkRelayerFactory proxy (`0xba63992987f2e4C6B458922165fEd3C5f368F09b`) is owned by a legacy Mento Labs multisig (`0x655133d8E90F8190ed5c1F0f3710F602800C0150`, 3/8). It is not a signer configured for this script and will transfer that ProxyAdmin to Celo Governance in a separate multisig transaction. The factory's contract owner is transferred by this proposal.
-- The FXPriceFeeds of the CDP branches read prices through the `OracleAdapter` proxy, which is part of the FX DEX and stays with Mento Labs. Celo Governance can re-point each FXPriceFeed to any adapter it controls (`setOracleAdapter`); deploying a Celo-Governance-owned adapter for the CDP branches can be done in a follow-up.
-- Sequencing with MGP-18: the migration multisig deprecates the remaining V2 exchanges through the BiPoolManager under MGP-18. The multisig batch of this proposal (which hands the BiPoolManager owner role to Celo Governance) is executed after those operations are complete.
+**Ordering with MGP-18.** [MGP-18](https://forum.mento.org/t/mgp-18-mento-v2-deprecation/137) reconfigures Broker trading limits through Mento Governance and has the migration multisig deprecate the remaining V2 exchanges through the BiPoolManager. Both proposals can be voted on at the same time, but MGP-18 must execute first: once this proposal has executed, the Mento timelock no longer owns the Broker and MGP-18's transactions would revert. To make this ordering explicit on-chain, the first transaction of this proposal calls `ProposalDependencyGuard.requireSettled(MentoGovernor, <MGP-18 proposal id>)` — a stateless, permissionless helper that reverts while MGP-18 is Pending, Active, Succeeded or Queued. If executed too early, this proposal simply stays Queued in the timelock and can be executed once MGP-18 has executed (or has been defeated/canceled). The multisig batch (Step 2) is queued behind MGP-18's multisig operations.
 
-**Safety Measures**
+**Step 1: Mento Governance proposal (executed by the timelock `0x890DB8A597940165901372Dd7DB61C9f246e2147`)**
 
-- The proposal was generated and simulated with `treb` from `script/migration/MGP19.sol`. The script routes every right to whichever sender currently holds it and reverts if any right is held by anyone else, then verifies (a) that Celo Governance holds every right, (b) that all out-of-scope contracts are unchanged, and (c) that Celo Governance can exercise the transferred powers (upgrade each proxy, manage minters, configure Broker/BiPoolManager/Reserve, whitelist oracles, add breakers, configure the breakers and the relayer factory).
-- Transaction hashes will be shared on the forum for community verification.
-
----
-
-### Transaction Details
-
-**Step 1: Mento Governance proposal (26 transactions, executed by the timelock `0x890DB8A597940165901372Dd7DB61C9f246e2147`)**
+Transaction 0: `ProposalDependencyGuard.requireSettled(0x47036d78bB3169b4F5560dD77BF93f4412A59852, <MGP-18 proposal id>)` (guard address and id inserted at proposal creation).
 
 For each of the 10 StableTokenV2 assets, the Broker and the Reserve, two calls: `_transferOwnership(0xD533…7972)` on the proxy and `transferOwnership(0xD533…7972)` on the contract. For the BiPoolManager and SortedOracles, whose contract owner is the migration multisig (MGP-14), one call: `_transferOwnership(0xD533…7972)` on the proxy.
 
@@ -91,7 +129,7 @@ For each of the 10 StableTokenV2 assets, the Broker and the Reserve, two calls: 
 | BiPoolManager | 0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901 | `_transferOwnership` |
 | SortedOracles | 0xefB84935239dAcdecF7c5bA76d8dE40b077B7b33 | `_transferOwnership` |
 
-**Step 2: Migration multisig batch (35 transactions, executed by `0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`)**
+**Step 2: Migration multisig batch (executed by `0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`)**
 
 | Contract | Address | Calls |
 | --- | --- | --- |
@@ -121,3 +159,31 @@ For each of the 10 StableTokenV2 assets, the Broker and the Reserve, two calls: 
 | StabilityPool JPYm | 0x62A519b4D0693E976b78b195E34a548BcF1D2355 (ProxyAdmin 0xCEad352Df8eB785e90f23D1d1eEE9D593270fD3A) | ProxyAdmin `transferOwnership` |
 
 In every call the new owner is Celo Governance, `0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972` (Celo Registry entry `Governance`).
+
+### Security considerations
+
+- Ownership and upgrade rights over the issuance contracts move to Celo Governance, a well-established on-chain governance process with its own proposal, referendum and execution stages. No implementation is changed and no parameter is modified by this proposal.
+- The Mento FX DEX and the Mento DAO are out of scope; the proposal script verifies that their ownership is untouched.
+- The two legs are not atomic (a Mento Governance proposal and a multisig batch). Between them, some contracts are already under Celo Governance while others are still with the migration multisig — the same split that exists today.
+- The proposal was generated and simulated with `treb` from `script/migration/MGP19.sol`. The script routes every right to whichever sender currently holds it and reverts if any right is held by anyone else, then verifies (a) that Celo Governance holds every right, (b) that all out-of-scope contracts are unchanged, and (c) that Celo Governance can exercise the transferred powers (upgrade each proxy, manage minters, configure Broker/BiPoolManager/Reserve, whitelist oracles, add breakers, configure the breakers and the relayer factory). Transaction hashes will be shared on the forum for community verification.
+
+**Follow-ups (not part of this proposal)**
+
+- The `ProxyAdmin` of the ChainlinkRelayerFactory proxy (`0xba63992987f2e4C6B458922165fEd3C5f368F09b`) is owned by a legacy Mento Labs multisig (`0x655133d8E90F8190ed5c1F0f3710F602800C0150`, 3/8) that is not a signer configured for this script; it will transfer that ProxyAdmin to Celo Governance in a separate multisig transaction. The factory's contract owner is transferred by this proposal.
+- The FXPriceFeeds of the CDP branches read prices through the `OracleAdapter` proxy, which is part of the FX DEX and stays with Mento Labs. Celo Governance can re-point each FXPriceFeed to any adapter it controls (`setOracleAdapter`); deploying a Celo-Governance-owned adapter for the CDP branches can be done in a follow-up.
+
+## Timeline
+
+1. Issuance governance transfer to Celo Governance (Step 1 on execution of this proposal, after MGP-18; Step 2 by the migration multisig thereafter).
+2. Reserve Foundation assumes stewardship; first quarterly report within 90 days.
+3. ETH-family transfer upon countersignature of the services agreement.
+4. CELO split executed: 50% to the Community Fund, 50% tagged as the asset-of-last-resort tranche.
+5. Follow-up Celo Governance proposal defining the recovery mechanism.
+
+## References
+
+- [MGP-18: Mento V2 Deprecation](https://forum.mento.org/t/mgp-18-mento-v2-deprecation/137)
+- [MGP-15: Mento Protocol Foundation Funding Request](https://forum.mento.org/t/mgp-15-mento-protocol-foundation-funding-request/104)
+- [MGP-14: Mento V3 Deployment Phase 1](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)
+- [MGP-10: Restructuring the Mento Reserve](https://forum.mento.org/t/mgp-10-restructuring-the-mento-reserve-yield-on-mento-reserve-mento-funding/93)
+- Mento Reserve Dashboard: [reserve.mento.org](https://reserve.mento.org/)

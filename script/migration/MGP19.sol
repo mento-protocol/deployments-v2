@@ -49,6 +49,13 @@ interface IChainlinkRelayerFactoryAdmin {
     function setRelayerDeployer(address newRelayerDeployer) external;
 }
 
+/// @dev src/ProposalDependencyGuard.sol. `requireSettled` is deliberately declared non-view here so that a call
+///      through a treb harness is queued as a proposal transaction (a staticcall would only be forwarded).
+interface IProposalDependencyGuardCall {
+    function requireSettled(address governor, uint256 proposalId) external;
+    function isSettled(address governor, uint256 proposalId) external view returns (bool);
+}
+
 /**
  * @title MGP19
  * @notice Returns on-chain control of the Mento *issuance* protocol on Celo to Celo Governance.
@@ -76,6 +83,7 @@ interface IChainlinkRelayerFactoryAdmin {
  */
 contract MGP19 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
+    using Deployer for Deployer.Deployment;
     using Senders for Senders.Sender;
     using OZGovernor for OZGovernor.Sender;
 
@@ -119,6 +127,9 @@ contract MGP19 is TrebScript, ProxyHelper {
 
     uint256 internal governorTxCount;
     uint256 internal safeTxCount;
+
+    uint256 internal dependsOnProposalId;
+    address internal dependencyGuard;
 
     // ---------------------------------------------------------------------------------------------
     // Setup
@@ -181,6 +192,10 @@ contract MGP19 is TrebScript, ProxyHelper {
         addOZTUP(cdpAdminOnly, "StabilityPool:JPYm", Kind.OZTUPAdminOnly);
     }
 
+    /// @custom:env {uint256:optional} dependsOnProposalId Mento Governance proposal id (e.g. MGP-18) that must have
+    ///         settled before this proposal can execute. When set, the first proposal transaction calls
+    ///         ProposalDependencyGuard.requireSettled(governor, id), which reverts while that proposal is Pending,
+    ///         Active, Succeeded or Queued.
     /// @custom:senders deployer, governor, migrationOwner
     function run() public virtual broadcast {
         Senders.Sender storage govSender = sender("governor");
@@ -189,16 +204,68 @@ contract MGP19 is TrebScript, ProxyHelper {
         require(govSender.account == timelock, "governor sender does not execute as the Mento timelock");
 
         OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-19: Return the Mento Issuance Protocol to Celo Governance");
+        ozGovSender.setTitle("MGP-19: Returning the Mento Issuance Protocol to Celo");
         ozGovSender.setProposalDescription("./mgps/mgp19.md");
+
+        dependsOnProposalId = vm.envOr("dependsOnProposalId", uint256(0));
 
         setUpGuards();
 
         preChecks();
 
+        if (dependsOnProposalId != 0) {
+            queueDependencyGuard(govSender, ozGovSender.governor);
+        }
+
         transferAll();
 
         postChecks();
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    // Ordering with respect to another proposal (MGP-18)
+    // ---------------------------------------------------------------------------------------------
+
+    /// @dev Adds `ProposalDependencyGuard.requireSettled(governor, dependsOnProposalId)` as the first transaction
+    ///      of the governance proposal. The dependency is normally still in flight when this proposal is created,
+    ///      so the call is mocked for the simulation only; on-chain it is enforced at execution time (a revert
+    ///      keeps this proposal Queued until the dependency has executed or died).
+    function queueDependencyGuard(Senders.Sender storage govSender, address governor) internal {
+        console.log("");
+        console.log("== Ordering guard ==");
+        dependencyGuard = lookup("ProposalDependencyGuard");
+        if (dependencyGuard == address(0)) {
+            dependencyGuard = sender("deployer").create3("ProposalDependencyGuard").deploy();
+            console.log(" > deployed ProposalDependencyGuard at %s", dependencyGuard);
+        } else {
+            console.log(" > using ProposalDependencyGuard at %s", dependencyGuard);
+        }
+        console.log(" > proposal will not execute before proposal %d on %s has settled", dependsOnProposalId, governor);
+
+        bytes memory data = abi.encodeCall(IProposalDependencyGuardCall.requireSettled, (governor, dependsOnProposalId));
+        vm.mockCall(dependencyGuard, data, "");
+        IProposalDependencyGuardCall(govSender.harness(dependencyGuard)).requireSettled(governor, dependsOnProposalId);
+        vm.clearMockedCalls();
+        governorTxCount++;
+    }
+
+    function checkDependencyGuard(address governor) internal {
+        console.log("");
+        console.log(" (ordering guard)");
+        bool settled = IProposalDependencyGuardCall(dependencyGuard).isSettled(governor, dependsOnProposalId);
+        if (settled) {
+            IProposalDependencyGuardCall(dependencyGuard).requireSettled(governor, dependsOnProposalId);
+            console.log(
+                unicode"  > 🟢 proposal %d has settled; the guard lets this proposal execute", dependsOnProposalId
+            );
+        } else {
+            vm.expectRevert();
+            IProposalDependencyGuardCall(dependencyGuard).requireSettled(governor, dependsOnProposalId);
+            console.log(
+                unicode"  > 🟡 proposal %d has not settled yet; the guard currently blocks execution (as intended)",
+                dependsOnProposalId
+            );
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -382,6 +449,10 @@ contract MGP19 is TrebScript, ProxyHelper {
         checkCorePermissions();
         checkOraclePermissions();
         checkV3Permissions();
+
+        if (dependsOnProposalId != 0) {
+            checkDependencyGuard(sender("governor").ozGovernor().governor);
+        }
     }
 
     function checkTransferred(Target[] storage targets) internal view {
