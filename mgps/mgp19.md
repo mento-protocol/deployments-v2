@@ -99,10 +99,14 @@ Following the MGP-15 precedent, §2–§4 are authorizations; their execution de
 
 The issuance rights are currently split between the Mento Governance timelock and the Mento Labs migration multisig, which received a number of them on a temporary basis in [MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103) and MGP-16 for the V3 rollout. §1 is therefore executed in two legs, both generated from a single script (`script/migration/MGP19.sol` in [mento-deployments-v2](https://github.com/mento-protocol/mento-deployments-v2)):
 
-- **Step 1 — this governance proposal (26 transactions):** everything the Mento Governance timelock holds.
-- **Step 2 — migration multisig batch (35 transactions):** everything the migration multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`) still holds. Instead of first returning those rights to Mento Governance and then forwarding them, the multisig transfers them to Celo Governance directly, on approval of this proposal.
+- **Step 1 — this governance proposal (26 transactions, plus the ordering guard below):** everything the Mento Governance timelock holds.
+- **Step 2 — migration multisig batch (35 transactions):** everything the migration multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`) still holds. Instead of first returning those rights to Mento Governance and then forwarding them, the multisig transfers them to Celo Governance directly, on approval of this proposal and after the MGP-18 multisig operations are complete.
+
+**Ordering with MGP-18.** [MGP-18](https://forum.mento.org/t/mgp-18-mento-v2-deprecation/137) reconfigures Broker trading limits through Mento Governance and has the migration multisig deprecate the remaining V2 exchanges through the BiPoolManager. Both proposals can be voted on at the same time, but MGP-18 must execute first: once this proposal has executed, the Mento timelock no longer owns the Broker and MGP-18's transactions would revert. To make this ordering explicit on-chain, the first transaction of this proposal calls `ProposalDependencyGuard.requireSettled(MentoGovernor, <MGP-18 proposal id>)` — a stateless, permissionless helper that reverts while MGP-18 is Pending, Active, Succeeded or Queued. If executed too early, this proposal simply stays Queued in the timelock and can be executed once MGP-18 has executed (or has been defeated/canceled). The multisig batch (Step 2) is queued behind MGP-18's multisig operations.
 
 **Step 1: Mento Governance proposal (executed by the timelock `0x890DB8A597940165901372Dd7DB61C9f246e2147`)**
+
+Transaction 0: `ProposalDependencyGuard.requireSettled(0x47036d78bB3169b4F5560dD77BF93f4412A59852, <MGP-18 proposal id>)` (guard address and id inserted at proposal creation).
 
 For each of the 10 StableTokenV2 assets, the Broker and the Reserve, two calls: `_transferOwnership(0xD533…7972)` on the proxy and `transferOwnership(0xD533…7972)` on the contract. For the BiPoolManager and SortedOracles, whose contract owner is the migration multisig (MGP-14), one call: `_transferOwnership(0xD533…7972)` on the proxy.
 
@@ -168,7 +172,7 @@ In every call the new owner is Celo Governance, `0xD533Ca259b330c7A88f74E000a3Fa
 
 ## Timeline
 
-1. Issuance governance transfer to Celo Governance (Step 1 on execution of this proposal; Step 2 by the migration multisig thereafter).
+1. Issuance governance transfer to Celo Governance (Step 1 on execution of this proposal, after MGP-18; Step 2 by the migration multisig thereafter).
 2. Reserve Foundation assumes stewardship; first quarterly report within 90 days.
 3. ETH-family transfer upon countersignature of the services agreement.
 4. CELO split executed: 50% to the Community Fund, 50% tagged as the asset-of-last-resort tranche.
@@ -176,6 +180,7 @@ In every call the new owner is Celo Governance, `0xD533Ca259b330c7A88f74E000a3Fa
 
 ## References
 
+- [MGP-18: Mento V2 Deprecation](https://forum.mento.org/t/mgp-18-mento-v2-deprecation/137)
 - [MGP-15: Mento Protocol Foundation Funding Request](https://forum.mento.org/t/mgp-15-mento-protocol-foundation-funding-request/104)
 - [MGP-14: Mento V3 Deployment Phase 1](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)
 - [MGP-10: Restructuring the Mento Reserve](https://forum.mento.org/t/mgp-10-restructuring-the-mento-reserve-yield-on-mento-reserve-mento-funding/93)
