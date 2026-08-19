@@ -6,7 +6,7 @@ This proposal brings governance of stable asset issuance home to Celo, where it 
 
 1. **Transfers on-chain governance of the issuance protocol** (stable assets, elastic mint/burn, CDPs, and associated reserve parameters) **to Celo Governance.** The FX DEX, the MENTO token, and all other functions remain under Mento Governance. This is the part of the proposal that executes on-chain: the transactions attached to this proposal, plus a companion batch from the Mento Labs migration multisig, hand every admin and owner role on the issuance contracts to Celo Governance (`0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972`). Full contract list under _Transaction details_.
 2. **Confirms the AP Reserve Foundation as steward of the Mento Reserve and its revenue**, operating under standing principles: principal is never drawn, the yield split is a mandate set by governance and can be altered through Celo Governance, and the Foundation reports publicly every quarter.
-3. **Ratifies a 2-year Reserve Rebalancing Services Agreement** between the Mento Protocol Foundation and Mento Labs GmbH, covering reserve rebalancing as well as oracle relaying and the maintenance and monitoring of the oracle system. Consideration is **95% of the Reserve's remaining ETH-family holdings** ([X] ETH-equivalent, currently ~$610,000), drawn against the [MGP-15](https://governance.mento.org/proposals/9612927118152596303508629025446921820838883791262021704399949388476066345844) authorization. **No new allocation is requested.**
+3. **Ratifies a 2-year Reserve Operations Services Agreement** between the Mento Protocol Foundation and Mento Labs GmbH, covering reserve rebalancing as well as oracle relaying and the maintenance and monitoring of the oracle system. Consideration is **95% of the Reserve's remaining ETH-family holdings** ([X] ETH-equivalent, currently ~$610,000), drawn against the [MGP-15](https://governance.mento.org/proposals/9612927118152596303508629025446921820838883791262021704399949388476066345844) authorization. **No new allocation is requested.**
 4. **Resolves the Reserve's CELO position** (~$2.91M): **50% returns to the Celo Community Fund**, and **50% remains in the Reserve as an asset of last resort**: frozen, excluded from rebalancing, and drawable only under a recovery mechanism to be defined and approved by Celo Governance.
 
 ---
@@ -69,7 +69,7 @@ The AP Reserve Foundation is authorized as steward of the Reserve's assets and r
 - **The asset-of-last-resort CELO tranche (§4) and a ~5% ETH allocation sit outside the Foundation's discretionary set.**
 - **Quarterly public reporting:** reserve composition, yield collected, distributions paid, and coverage ratio.
 
-### 3. Rebalancing services agreement
+### 3. Reserve operations services agreement
 
 Mento Labs GmbH continues as rebalancer and operator of record under a 24-month services agreement with the Mento Protocol Foundation, covering rebalance execution, peg-deviation response, infrastructure, incident response, and reporting. The agreement also covers operation of the oracle system the issuance protocol depends on: running and paying for the oracle relayers that publish Chainlink prices into SortedOracles, and maintaining and monitoring the oracle and circuit-breaker stack (feed health, report expiry, breaker state), with incident response on the same terms as for rebalancing.
 
