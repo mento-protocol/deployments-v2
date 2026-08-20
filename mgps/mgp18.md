@@ -88,5 +88,5 @@ Mento V3 and the broader Celo DEX ecosystem serve swaps for these assets.
 ## Security Considerations
 
 - The governance transactions only touch trading-limit configuration on the Broker for existing, live exchanges. No ownership changes, no implementation upgrades, and no funds are involved.
-- Reducing limits is conservative: it restricts how much the FX stables’ supply can grow and thereby bounds the reserve’s FX exposure; it cannot enable any new minting capacity.
+- The reset clears each asset's accumulated global net flow before applying the new limit. If the previous limit had positive net flow, this restores the full 1.1× supply-sized positive headroom. The new global limit then bounds future net minting to that amount from the reset state, which is substantially less than the previous configuration but can provide new minting capacity relative to the consumed pre-reset limit.
 - The same migration multisig that has owned the BiPoolManager since the V3 rollout began ([MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)) performs the exchange deprecations. Ownership of the BiPoolManager as well as other V2 contracts will be transferred back to Mento Governance in a future MGP.

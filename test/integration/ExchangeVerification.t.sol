@@ -24,6 +24,8 @@ interface IBrokerTradingLimits {
  *         Matches on-chain pools to config entries by asset addresses and pricing module.
  */
 contract ExchangeVerification is V3IntegrationBase {
+    uint8 internal constant LG = 4;
+
     address internal biPoolManager;
 
     function setUp() public override {
@@ -224,7 +226,11 @@ contract ExchangeVerification is V3IntegrationBase {
 
             string memory label =
                 string.concat(_exchangeLabel(i, actual.asset0, actual.asset1), " asset0 trading limits");
-            _assertTradingLimitsEqual(actualLimits, cfg.tradingLimits.asset0, label);
+            if (_isMgp18Exchange(actual.asset0, actual.asset1) && actualLimits.flags == LG) {
+                _assertGlobalOnlyLimit(actualLimits, label);
+            } else {
+                _assertTradingLimitsEqual(actualLimits, cfg.tradingLimits.asset0, label);
+            }
         }
     }
 
@@ -244,7 +250,11 @@ contract ExchangeVerification is V3IntegrationBase {
 
             string memory label =
                 string.concat(_exchangeLabel(i, actual.asset0, actual.asset1), " asset1 trading limits");
-            _assertTradingLimitsEqual(actualLimits, cfg.tradingLimits.asset1, label);
+            if (_isMgp18Exchange(actual.asset0, actual.asset1) && actualLimits.flags == LG) {
+                _assertGlobalOnlyLimit(actualLimits, label);
+            } else {
+                _assertTradingLimitsEqual(actualLimits, cfg.tradingLimits.asset1, label);
+            }
         }
     }
 
@@ -256,6 +266,8 @@ contract ExchangeVerification is V3IntegrationBase {
         bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
 
         for (uint256 c = 0; c < exchanges.length; c++) {
+            if (exchanges[c].deprecated) continue;
+
             IBiPoolManager.PoolExchange memory expected = exchanges[c].pool;
             bool found = false;
 
@@ -282,6 +294,29 @@ contract ExchangeVerification is V3IntegrationBase {
     function _getTradingLimitsConfig(bytes32 limitId) internal view returns (ITradingLimits.Config memory cfg) {
         (cfg.timestep0, cfg.timestep1, cfg.limit0, cfg.limit1, cfg.limitGlobal, cfg.flags) =
             IBrokerTradingLimits(broker).tradingLimitsConfig(limitId);
+    }
+
+    /// @dev MGP-18 freezes its supply-derived values in proposal calldata, so persistent
+    ///      verification checks the post-migration shape. MGP18.postChecks verifies the exact
+    ///      values when the proposal is built and simulated.
+    function _assertGlobalOnlyLimit(ITradingLimits.Config memory actual, string memory label) internal pure {
+        assertEq(actual.timestep0, 0, string.concat(label, " timestep0 not cleared"));
+        assertEq(actual.timestep1, 0, string.concat(label, " timestep1 not cleared"));
+        assertEq(actual.limit0, 0, string.concat(label, " limit0 not cleared"));
+        assertEq(actual.limit1, 0, string.concat(label, " limit1 not cleared"));
+        assertGt(int256(actual.limitGlobal), 0, string.concat(label, " limitGlobal not positive"));
+        assertEq(actual.flags, LG, string.concat(label, " flags not LG-only"));
+    }
+
+    function _isMgp18Exchange(address asset0, address asset1) internal view returns (bool) {
+        address usdm = lookupProxyOrFail("USDm");
+        address fx = asset0 == usdm ? asset1 : asset1 == usdm ? asset0 : address(0);
+        if (fx == address(0)) return false;
+
+        return fx == lookupProxyOrFail("AUDm") || fx == lookupProxyOrFail("CADm") || fx == lookupProxyOrFail("ZARm")
+            || fx == lookupProxyOrFail("COPm") || fx == lookupProxyOrFail("BRLm") || fx == lookupProxyOrFail("PHPm")
+            || fx == lookupProxyOrFail("GHSm") || fx == lookupProxyOrFail("NGNm") || fx == lookupProxyOrFail("KESm")
+            || fx == lookupProxyOrFail("XOFm");
     }
 
     /// @dev Asserts all fields of two ITradingLimits.Config structs are equal.
