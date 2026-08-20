@@ -27,9 +27,9 @@ interface IBrokerTradingLimits {
  * @title MGP18
  * @notice Lowers the trading limits on the exchanges that remain in Mento v2.
  *         The FX stables staying on the v2 model (not migrated to v3/CDP) should not be able to
- *         grow their supply significantly, but the existing supply must always be able to fully
- *         contract back into collateral. So for each remaining exchange, the existing L0/L1/LG
- *         trading-limit configs are replaced with a global-only (LG) limit of:
+ *         grow their supply significantly, while the proposal-time supply must be able to fully
+ *         contract back into collateral at the snapshot oracle rate. For each remaining exchange,
+ *         the existing L0/L1/LG trading-limit configs are replaced with a global-only (LG) limit of:
  *           - FX asset:  the FX token's current total supply, and
  *           - USDm:      the USD equivalent of that supply at the current oracle rate.
  *         Each limit is first reset (configured with no flags, clearing the accumulated
@@ -141,9 +141,10 @@ contract MGP18 is TrebScript, ProxyHelper {
 
     /// @notice Computes the proposed global limits for an exchange:
     ///         the FX token's current total supply (whole tokens, rounded up) and its USD
-    ///         equivalent at the current oracle rate, both scaled by LIMIT_BUFFER. Trading
-    ///         limits are denominated in whole tokens: the Broker divides amounts by
-    ///         10^decimals before applying them.
+    ///         equivalent at the current oracle rate, both scaled by LIMIT_BUFFER. The USDm
+    ///         value is a snapshot, so later FX appreciation can consume the buffer and require
+    ///         governance to raise the USDm limit. Trading limits are denominated in whole tokens:
+    ///         the Broker divides amounts by 10^decimals before applying them.
     /// @dev The oracle rate feeds for the FX exchanges ({CUR}USD) report USD per FX unit —
     ///      the same direction the BiPoolManager uses to derive the FX bucket from the USDm
     ///      bucket in getUpdatedBuckets.
@@ -155,8 +156,8 @@ contract MGP18 is TrebScript, ProxyHelper {
         // The limits are frozen into the proposal calldata now, but the supply keeps moving
         // until the proposal executes after the voting/timelock window. If the supply grows in
         // between, a 1x limit would leave the excess unable to exit back to USDm. The 10%
-        // buffer absorbs that drift, at the cost of adding the same margin to the minting
-        // headroom.
+        // buffer absorbs moderate combined supply and exchange-rate drift, at the cost of adding
+        // the same margin to the minting headroom. It is not a permanent exchange-rate guarantee.
         uint256 fxSupply = (IERC20Metadata(fxToken).totalSupply() * LIMIT_BUFFER_PCT) / 100;
 
         IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManagerProxy).getPoolExchange(exchangeId);
@@ -223,7 +224,7 @@ contract MGP18 is TrebScript, ProxyHelper {
 
     /// @dev After: every configured pair must have a global-only limit on both assets (no L0,
     ///      no L1, only LG with the expected value), and the FX token's entire supply must be
-    ///      swappable back to USDm under the new limits.
+    ///      swappable back to USDm under the new limits at the current oracle rate.
     function postChecks() internal {
         console.log("");
         console.log("== Post-checks ==");
@@ -268,11 +269,11 @@ contract MGP18 is TrebScript, ProxyHelper {
         require(limit1 == 0 && timestep1 == 0, string.concat("L1 config not cleared for ", label));
     }
 
-    /// @dev Simulates the full contraction of the FX stable: mints the current total supply to a
-    ///      prober (pranking the Broker, which has mint rights on the stable) and swaps all of it
-    ///      back to USDm through the Broker. Reverts if the new limits (or pool buckets) would
-    ///      block the supply from fully exiting. State is snapshotted and reverted around the
-    ///      simulation so post-proposal state stays untouched.
+    /// @dev Simulates the full contraction of the FX stable at the current oracle rate: mints the
+    ///      current total supply to a prober (pranking the Broker, which has mint rights on the
+    ///      stable) and swaps all of it back to USDm through the Broker. Reverts if the new limits
+    ///      (or pool buckets) would block the snapshot supply from fully exiting. State is
+    ///      snapshotted and reverted around the simulation so post-proposal state stays untouched.
     function checkSupplyCanExit(bytes32 exchangeId, address usdmToken, address fxToken)
         internal
         returns (uint256 fxSupply, uint256 amountOut)
