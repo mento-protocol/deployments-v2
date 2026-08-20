@@ -3,9 +3,11 @@ pragma solidity ^0.8.0;
 
 import {V3IntegrationBase} from "./V3IntegrationBase.t.sol";
 import {IBiPoolManager, IPricingModule, FixidityLib} from "lib/mento-core/contracts/interfaces/IBiPoolManager.sol";
+import {IBroker} from "lib/mento-core/contracts/interfaces/IBroker.sol";
 import {ITradingLimits} from "lib/mento-core/contracts/interfaces/ITradingLimits.sol";
 import {IMentoConfig} from "script/config/IMentoConfig.sol";
 import {IERC20Metadata} from "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
+import {SafeCast} from "openzeppelin-contracts/contracts/utils/math/SafeCast.sol";
 
 /// @dev Minimal interface for the Broker's auto-generated public mapping getter.
 interface IBrokerTradingLimits {
@@ -13,6 +15,11 @@ interface IBrokerTradingLimits {
         external
         view
         returns (uint32 timestep0, uint32 timestep1, int48 limit0, int48 limit1, int48 limitGlobal, uint8 flags);
+
+    function tradingLimitsState(bytes32 limitId)
+        external
+        view
+        returns (uint32 lastUpdated0, uint32 lastUpdated1, int48 netflow0, int48 netflow1, int48 netflowGlobal);
 }
 
 /**
@@ -258,6 +265,40 @@ contract ExchangeVerification is V3IntegrationBase {
         }
     }
 
+    /// @notice Verify current global netflows leave enough capacity for every MGP-18 FX supply to exit to USDm.
+    function test_mgp18Exchanges_globalLimitsCoverFullSupplyExit() public view {
+        bytes32[] memory exchangeIds = IBiPoolManager(biPoolManager).getExchangeIds();
+        address usdm = lookupProxyOrFail("USDm");
+
+        for (uint256 i = 0; i < exchangeIds.length; i++) {
+            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(exchangeIds[i]);
+            if (!_isMgp18Exchange(pool.asset0, pool.asset1)) continue;
+
+            ITradingLimits.Config memory limits0 =
+                _getTradingLimitsConfig(exchangeIds[i] ^ bytes32(uint256(uint160(pool.asset0))));
+            ITradingLimits.Config memory limits1 =
+                _getTradingLimitsConfig(exchangeIds[i] ^ bytes32(uint256(uint160(pool.asset1))));
+
+            // Before MGP-18, both assets still use the static config checked by the tests above.
+            if (limits0.flags != LG && limits1.flags != LG) continue;
+
+            string memory label = _exchangeLabel(i, pool.asset0, pool.asset1);
+            _assertGlobalOnlyLimit(limits0, string.concat(label, " asset0 trading limits"));
+            _assertGlobalOnlyLimit(limits1, string.concat(label, " asset1 trading limits"));
+
+            address fx = pool.asset0 == usdm ? pool.asset1 : pool.asset0;
+            uint256 fxSupply = IERC20Metadata(fx).totalSupply();
+            uint256 usdmOut = IBroker(broker).getAmountOut(biPoolManager, exchangeIds[i], fx, usdm, fxSupply);
+
+            _assertGlobalLimitCapacity(
+                exchangeIds[i], fx, SafeCast.toInt256(fxSupply), string.concat(label, " FX inflow")
+            );
+            _assertGlobalLimitCapacity(
+                exchangeIds[i], usdm, -SafeCast.toInt256(usdmOut), string.concat(label, " USDm outflow")
+            );
+        }
+    }
+
     // ========== Bidirectional Consistency ==========
 
     /// @notice Every config exchange must have a matching on-chain exchange
@@ -306,6 +347,22 @@ contract ExchangeVerification is V3IntegrationBase {
         assertEq(actual.limit1, 0, string.concat(label, " limit1 not cleared"));
         assertGt(int256(actual.limitGlobal), 0, string.concat(label, " limitGlobal not positive"));
         assertEq(actual.flags, LG, string.concat(label, " flags not LG-only"));
+    }
+
+    function _assertGlobalLimitCapacity(bytes32 exchangeId, address token, int256 deltaFlow, string memory label)
+        internal
+        view
+    {
+        bytes32 limitId = exchangeId ^ bytes32(uint256(uint160(token)));
+        ITradingLimits.Config memory limits = _getTradingLimitsConfig(limitId);
+        (,,,, int48 netflowGlobal) = IBrokerTradingLimits(broker).tradingLimitsState(limitId);
+
+        int256 deltaFlowUnits = deltaFlow / int256(10 ** uint256(IERC20Metadata(token).decimals()));
+        if (deltaFlowUnits == 0 && deltaFlow != 0) deltaFlowUnits = deltaFlow > 0 ? int256(1) : int256(-1);
+
+        int256 resultingNetflow = int256(netflowGlobal) + deltaFlowUnits;
+        assertGe(resultingNetflow, -int256(limits.limitGlobal), string.concat(label, " exceeds negative LG"));
+        assertLe(resultingNetflow, int256(limits.limitGlobal), string.concat(label, " exceeds positive LG"));
     }
 
     function _isMgp18Exchange(address asset0, address asset1) internal view returns (bool) {
