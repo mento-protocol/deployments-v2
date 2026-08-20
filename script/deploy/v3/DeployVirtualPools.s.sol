@@ -30,7 +30,7 @@ contract DeployVirtualPools is TrebScript, ProxyHelper, PostChecksHelper {
     function setUp() public {
         config = Config.get();
         exchangeProvider = lookupProxyOrFail("BiPoolManager");
-        exchangeProvider = lookupProxyOrFail("FactoryRegistry");
+        factoryRegistry = lookupProxyOrFail("FactoryRegistry");
     }
 
     /// @custom:senders deployer, migrationOwner
