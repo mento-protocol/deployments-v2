@@ -6,7 +6,7 @@ _Signaling (proxy) proposal — no on-chain transactions are attached. This docu
 
 ## Summary
 
-Mento Governance proposal [MGP-19: Bringing Stable Asset Issuance Home to Celo Governance] transfers on-chain ownership of the Mento stable asset issuance protocol to Celo Governance and returns 90% of the Mento Reserve's CELO position (~$3.12M) to the Celo Community Fund. This proposal records the Celo community's acceptance of that transfer and of the governance role that comes with it. The contract handover executes from the Mento side once MGP-19 passes; no Celo Governance transaction is required to receive it.
+Mento Governance proposal [MGP-19: Bringing Stable Asset Issuance Home to Celo Governance] transfers on-chain ownership of the Mento stable asset issuance protocol to Celo Governance and returns 90% of the Mento Reserve's CELO position (~$3.12M) to the Celo Community Fund. This proposal records the Celo community's acceptance of that transfer and of the governance role that comes with it: its result directs how delegates vote on MGP-19 in Mento Governance with Celo Governance's MENTO allocation. The contract handover executes from the Mento side once MGP-19 passes; no Celo Governance transaction is required to receive it.
 
 ## Background
 
@@ -26,7 +26,7 @@ The Mento stables were created on Celo and have grown up with it: held in local 
 
 ## Specification
 
-This is a signaling proposal with no execution payload. On approval of MGP-19 by Mento Governance, ownership of the issuance contracts is transferred on-chain to the Celo Governance contract (`0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972`) by the Mento Governance timelock and the Mento Labs migration multisig, and the CELO transfer to the Community Fund is executed as described in MGP-19.
+This is a proxy (signaling) proposal with no execution payload: the CGP itself does not vote. Its outcome directs the delegates of Celo Governance's MENTO allocation, who cast the corresponding vote on MGP-19 in Mento Governance. On approval of MGP-19 by Mento Governance, ownership of the issuance contracts is transferred on-chain to the Celo Governance contract (`0xD533Ca259b330c7A88f74E000a3FaEa2d63B7972`) by the Mento Governance timelock and the Mento Labs migration multisig, and the CELO transfer to the Community Fund is executed as described in MGP-19.
 
 ## References
 
