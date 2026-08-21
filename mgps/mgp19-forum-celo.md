@@ -59,12 +59,16 @@ The Reserve holds ~$3.47M in CELO — its oldest asset, and the one with the str
 
 ## Reserve impact
 
-| Metric                                 | Assessment                                                                                                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Reserve assets today                   | ~$19.62M against ~$15.38M reserve debt (**~1.28×**)                                                          |
-| After ETH-family transfer (§3, ~$771k) | **~1.23×**                                                                                                   |
-| After 90% CELO return (§4, ~$3.12M)    | **~1.02×**                                                                                                   |
-| Stable book alone (~$15.33M)           | **~1.00×**; outstanding stables are covered by stable assets alone, before counting the retained CELO or ETH |
+Reserve debt — outstanding reserve-backed stables, net of reserve-held and irrecoverably lost supply — is **~$14.95M**. CDP-backed stables (GBPm, CHFm, JPYm) are backed by USDm locked in their troves, which is already counted in USDm's supply, so they add no further reserve debt. Against that debt the Reserve holds ~$19.61M today (~1.31×). After the transfers in this proposal, the protocol's backing builds up as follows:
+
+| Backing layer                                                           | Value    | Cumulative coverage                                                |
+| ----------------------------------------------------------------------- | -------- | ------------------------------------------------------------------ |
+| Stable book: reserve debt covered by stable assets alone                | ~$15.33M | **~1.03×**                                                         |
+| + standing ETH allocation (the 5% retained, §3)                         | ~$41k    | **~1.03×**                                                         |
+| + asset-of-last-resort tranche (10% of the CELO, staked for stCELO, §4) | ~$347k   | **~1.05×**                                                         |
+| Behind it: the Celo Community Fund (the 90% of CELO returned, §4)       | ~$3.12M  | last-resort backstop, case by case at Celo Governance's discretion |
+
+Every outstanding reserve-backed stablecoin is fully covered by stable assets alone; the retained ETH and staked CELO sit on top, and the Community Fund stands behind the protocol as its final backstop.
 
 ## Timeline
 
