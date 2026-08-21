@@ -2,7 +2,7 @@
 
 # CGP-[XX]: Accepting Governance of the Mento Stable Asset Issuance Protocol
 
-_Signaling (proxy) proposal — no on-chain transactions are attached. All dollar amounts are as of 21 August 2026._
+_Signaling (proxy) proposal — no on-chain transactions are attached. This document summarizes MGP-19 for the Celo community; the MGP-19 proposal text as voted on in Mento Governance is the final and authoritative reference for this proposal, and prevails over this summary in case of any discrepancy. All dollar amounts are as of 21 August 2026._
 
 ## Summary
 
@@ -30,6 +30,7 @@ This is a signaling proposal with no execution payload. On approval of MGP-19 by
 
 ## References
 
+- **MGP-19 proposal text (authoritative reference): [link TBD]**
 - MGP-19 forum post (Mento): [link TBD]
 - MGP-19 forum post (Celo): [link TBD]
 - Mento Reserve Dashboard: [reserve.mento.org](https://reserve.mento.org/)
