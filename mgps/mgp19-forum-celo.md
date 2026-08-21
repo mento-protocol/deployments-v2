@@ -2,16 +2,16 @@
 
 # Bringing Mento Stable Asset Issuance Home to Celo Governance (MGP-19)
 
-_Posted to the Celo forum to inform the Celo community: this proposal, if passed by Mento Governance as MGP-19, hands on-chain control of the Mento stable asset issuance protocol — the stablecoins, the reserve, the CDPs and their oracle layer — to Celo Governance, returns 90% of the Reserve's CELO to the Celo Community Fund, and directs an ongoing share of reserve yield to it. No Celo Governance action is required to receive the contracts; a follow-up Celo Governance proposal will define the recovery mechanism for the retained CELO tranche. The binding vote happens in Mento Governance; we are sharing it here first because Celo is the receiving side. All dollar amounts and reserve figures are as of 21 August 2026._
+_Posted to the Celo forum to inform the Celo community: this proposal, if passed by Mento Governance as MGP-19, hands on-chain control of the Mento stable asset issuance protocol — the stablecoins, the reserve, the CDPs and their oracle layer — to Celo Governance and returns 90% of the Reserve's CELO to the Celo Community Fund. No Celo Governance action is required to receive the contracts; a companion signaling proposal on Celo Governance records the community's acceptance. The binding vote happens in Mento Governance; we are sharing it here first because Celo is the receiving side. All dollar amounts and reserve figures are as of 21 August 2026._
 
 ## TL;DR
 
 This proposal brings governance of stable asset issuance home to Celo, where it began, and refocuses Mento Labs on the Mento FX DEX. Specifically, it:
 
 1. **Transfers on-chain governance of the issuance protocol** (stable assets, elastic mint/burn, CDPs, and associated reserve parameters) **to Celo Governance.** The FX DEX, the MENTO token, and all other functions remain under Mento Governance.
-2. **Confirms the AP Reserve Foundation as steward of the Mento Reserve and its revenue**, operating under standing principles: principal is never drawn, the yield split is a mandate set by governance and can be altered through Celo Governance, and the Foundation reports publicly every quarter.
+2. **Confirms the AP Reserve Foundation as steward of the Mento Reserve and its revenue**, operating under standing principles: principal is never drawn, reserve yield funds the Foundation's stewardship mandate — so the protocol's operating costs are carried by the Foundation rather than by funding requests to the community — and the Foundation reports publicly every quarter. Like all of the Foundation's principles, the use of yield can be altered at any time through Celo Governance.
 3. **Ratifies a 2-year Reserve Operations Services Agreement** between the Mento Protocol Foundation and Mento Labs GmbH, covering reserve rebalancing as well as oracle relaying and the maintenance and monitoring of the oracle system. Consideration is **95% of the Reserve's remaining ETH-family holdings** (~322 ETH-equivalent, currently ~$771,000), drawn against the [MGP-15](https://governance.mento.org/proposals/9612927118152596303508629025446921820838883791262021704399949388476066345844) authorization. **No new allocation is requested.**
-4. **Resolves the Reserve's CELO position** (~$3.47M): **90% returns to the Celo Community Fund**, and **10% remains in the Reserve as a staked asset of last resort**: excluded from rebalancing, staked to earn staking rewards, and drawable only under a recovery mechanism to be defined and approved by Celo Governance.
+4. **Resolves the Reserve's CELO position** (~$3.47M): **90% returns to the Celo Community Fund**, bringing home not just the asset but the authority over it — with Celo Governance, as the protocol's new owner, evaluating any reserve emergency case by case at its sole discretion. The remaining **10% stays in the Reserve as an asset of last resort**, removed from active rebalancing and staked for stCELO.
 
 ## Motivation
 
@@ -40,8 +40,8 @@ Everything else stays under Mento Governance: the FX DEX, the MENTO token, and t
 The AP Reserve Foundation is authorized as steward of the Reserve's assets and revenue. As with MGP-15, this is an authorization: the Foundation determines the operational mechanics of asset management and yield distribution, bounded by standing principles that governance sets and can change:
 
 - **Principal is untouchable.** Only yield is distributed; reserve collateral is not drawn for operations.
-- **The yield split is a mandate from governance.** Yield is directed [XX]% to the AP Reserve Foundation to steward the issuance protocol and [XX]% to the Celo Community Fund. This mandate, like the rest of the Foundation's principles, can be altered at any time through Celo Governance. _(The Reserve currently generates ~$26-30k/month in gross yield.)_
-- **The asset-of-last-resort CELO tranche and a ~5% ETH allocation sit outside the Foundation's discretionary set.**
+- **Reserve yield funds the stewardship mandate.** Yield accrues to the AP Reserve Foundation and covers the ongoing costs of running the issuance protocol: oracle operations, monitoring, audits, incident response, and reserve administration — so the protocol's operating budget no longer competes with community funds. Gross yield is modest — ~$26–30k/month today — next to the ~$3.1M in CELO and the protocol authority returning to the community under this proposal, and, like the rest of the Foundation's principles, its use can be altered at any time through Celo Governance.
+- **The asset-of-last-resort stCELO tranche and a ~5% ETH allocation sit outside the Foundation's discretionary set.**
 - **Quarterly public reporting:** reserve composition, yield collected, distributions paid, and coverage ratio.
 
 ### 3. Reserve operations services agreement
@@ -52,10 +52,10 @@ Mento Labs GmbH continues as rebalancer and operator of record under a 24-month 
 
 ### 4. The CELO position
 
-The Reserve holds ~$3.47M in CELO. Under this proposal:
+The Reserve holds ~$3.47M in CELO — its oldest asset, and the one with the strongest claim to belong to the Celo community. That claim has shaped how the Reserve has handled it: in the interest of all CELO holders, the Reserve has been consistently reluctant to sell CELO, even when rebalancing logic alone might have argued for it. We recognize that decisions of that weight are more community-aligned sitting with Celo Governance than with a reserve operator. Under this proposal:
 
-- **90% (~$3.12M) is returned to the Celo Community Fund.**
-- **10% (~$347k) remains in the Reserve as a staked asset of last resort**: staked to earn staking rewards (which accrue to the Reserve), excluded from the rebalancing set, subject to a no-sale covenant, and drawable only to make stablecoin holders whole if a primary reserve asset fails. No draw is automatic: the recovery mechanism will be defined in a follow-up Celo Governance proposal.
+- **90% (~$3.12M) is returned to the Celo Community Fund.** With the asset, the backstop role comes home too: by accepting ownership of the stable assets and their reserve, Celo Governance commits to evaluating any emergency involving the protocol's reserve assets on a case-by-case basis, at its sole discretion — the Community Fund standing behind the issuance protocol as its reserve of last resort. Nothing is automatic and nothing is pre-committed. For context: in roughly six years of operation, the Reserve has never been underwater.
+- **10% (~$347k) remains in the Reserve as an asset of last resort**: removed from the active rebalancing set and staked for stCELO, with staking rewards accruing to the Reserve.
 
 ## Reserve impact
 
@@ -71,8 +71,7 @@ The Reserve holds ~$3.47M in CELO. Under this proposal:
 1. Issuance governance transfer to Celo Governance.
 2. Reserve Foundation assumes stewardship; first quarterly report within 90 days.
 3. ETH-family transfer upon countersignature of the services agreement.
-4. CELO split executed: 90% to the Community Fund, 10% staked and tagged as the asset-of-last-resort tranche.
-5. Follow-up Celo Governance proposal defining the recovery mechanism.
+4. CELO split executed: 90% transferred to the Celo Community Fund, 10% moved to the asset-of-last-resort bucket and staked for stCELO.
 
 ## References
 
