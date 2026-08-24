@@ -2,7 +2,7 @@
 
 # Bringing Mento Stable Asset Issuance Home to Celo Governance (MGP-19)
 
-_Posted to the Celo forum to inform the Celo community: this proposal, if passed by Mento Governance as MGP-19, hands on-chain control of the Mento stable asset issuance protocol — the stablecoins, the reserve, the CDPs and their oracle layer — to Celo Governance and returns 90% of the Reserve's CELO to the Celo Community Fund. No Celo Governance action is required to receive the contracts; this post relates to an upcoming proxy vote in Celo Governance: the CGP itself carries no transactions, and its result directs how delegates vote on MGP-19 in Mento Governance with Celo Governance's MENTO allocation, recording the community's acceptance. The binding vote happens in Mento Governance; we are sharing it here first because Celo is the receiving side. All dollar amounts and reserve figures are as of 21 August 2026._
+_Posted to the Celo forum to inform the Celo community: this proposal, if passed by Mento Governance as MGP-19, hands on-chain control of the Mento stable asset issuance protocol — the stablecoins, the reserve, the CDPs and their oracle layer — to Celo Governance and returns 90% of the Reserve's CELO to the Celo Community Fund. No Celo Governance action is required to receive the contracts; this post relates to an upcoming proxy vote in Celo Governance: the CGP itself carries no transactions, and its result directs how delegates vote on MGP-19 in Mento Governance with the Celo Community Fund's MENTO allocation, recording the community's acceptance. The binding vote happens in Mento Governance; we are sharing it here first because Celo is the receiving side. All dollar amounts and reserve figures are as of 21 August 2026._
 
 ## TL;DR
 
