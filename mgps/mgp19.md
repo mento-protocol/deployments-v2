@@ -106,12 +106,10 @@ Following the MGP-15 precedent, §2–§4 are authorizations; their execution de
 
 The issuance rights are currently split between the Mento Governance timelock and the Mento Labs migration multisig, which received a number of them on a temporary basis in [MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103) and MGP-16 for the V3 rollout. §1 is therefore executed in two legs, both generated from a single script (`script/migration/MGP19.sol` in [mento-deployments-v2](https://github.com/mento-protocol/mento-deployments-v2)):
 
-- **Step 1 — this governance proposal (27 transactions):** everything the Mento Governance timelock holds.
+- **Step 1 — this governance proposal (26 transactions):** everything the Mento Governance timelock holds.
 - **Step 2 — migration multisig batch (35 transactions):** everything the migration multisig (`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`) still holds. Instead of first returning those rights to Mento Governance and then forwarding them, the multisig transfers them to Celo Governance directly, on approval of this proposal.
 
 **Step 1: Mento Governance proposal (executed by the timelock `0x890DB8A597940165901372Dd7DB61C9f246e2147`)**
-
-Transaction 0: `ProposalDependencyGuard.requireSettled(MentoGovernor, <MGP-18 proposal id>)` — a stateless helper call that reverts until MGP-18 has executed, so this proposal cannot execute ahead of it (it simply stays queued until then).
 
 For each of the 10 StableTokenV2 assets, the Broker and the Reserve, two calls: `_transferOwnership(0xD533…7972)` on the proxy and `transferOwnership(0xD533…7972)` on the contract. For the BiPoolManager and SortedOracles, whose contract owner is the migration multisig (MGP-14), one call: `_transferOwnership(0xD533…7972)` on the proxy.
 

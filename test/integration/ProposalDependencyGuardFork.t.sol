@@ -74,11 +74,12 @@ contract ExecutionProbe {
  * @notice Fork tests for ProposalDependencyGuard against the actually deployed
  *         MentoGovernor + TimelockController on Celo mainnet.
  *
- *         Simulates the MGP-19 proposal structure end to end: a dependent proposal
- *         carries `guard.requireSettled(governor, dependencyId)` as transaction 0
- *         (mirroring the MGP-19 bundle), and both proposals are driven through the
- *         real Bravo lifecycle: propose -> vote -> queue -> execute. Voting power is
- *         real veMENTO obtained by locking MENTO on the fork.
+ *         Simulates a dependent-proposal structure end to end: the dependent proposal
+ *         carries `guard.requireSettled(governor, dependencyId)` as transaction 0,
+ *         and both proposals are driven through the real Bravo lifecycle:
+ *         propose -> vote -> queue -> execute. Voting power is real veMENTO obtained
+ *         by locking MENTO on the fork. (MGP-19 itself no longer carries the guard —
+ *         the MGPs were staggered — but the guard remains available for future use.)
  *
  *         Verifies that the dependent proposal:
  *         - cannot execute before its timelock delay (baseline timelock behavior),
@@ -149,11 +150,11 @@ contract ProposalDependencyGuardForkTest is V3IntegrationBase {
         _advance(2);
     }
 
-    // ========== The MGP-19 ordering: dependent proposal waits for the dependency ==========
+    // ========== Ordering: the dependent proposal waits for the dependency ==========
 
-    /// @notice Full lifecycle on the deployed contracts: the dependent proposal (guard as tx 0,
-    ///         like MGP-19) is queued but cannot execute until the dependency proposal
-    ///         (stand-in for MGP-18) has gone through timelock execution.
+    /// @notice Full lifecycle on the deployed contracts: the dependent proposal (guard as tx 0)
+    ///         is queued but cannot execute until the dependency proposal has gone
+    ///         through timelock execution.
     function test_dependentProposal_executesOnlyAfterDependencyExecuted() public {
         // Dependency proposal "A" and dependent proposal "B" (tx 0 = guard, tx 1 = payload).
         (uint256 idA, address[] memory tA, bytes[] memory cA, bytes32 hA) = _proposeDependency();
@@ -227,7 +228,7 @@ contract ProposalDependencyGuardForkTest is V3IntegrationBase {
 
     // ========== Proposal drivers ==========
 
-    /// @dev The dependency proposal (stand-in for MGP-18): a single payload transaction.
+    /// @dev The dependency proposal: a single payload transaction.
     function _proposeDependency()
         internal
         returns (uint256 id, address[] memory targets, bytes[] memory calldatas, bytes32 descriptionHash)
@@ -236,13 +237,12 @@ contract ProposalDependencyGuardForkTest is V3IntegrationBase {
         calldatas = new bytes[](1);
         targets[0] = address(probeA);
         calldatas[0] = abi.encodeCall(ExecutionProbe.mark, ());
-        string memory description = "MGP-A: dependency (stand-in for MGP-18)";
+        string memory description = "Proposal A: the dependency";
         descriptionHash = keccak256(bytes(description));
         id = _propose(targets, calldatas, description);
     }
 
-    /// @dev The dependent proposal, structured like the MGP-19 bundle:
-    ///      transaction 0 is the guard call, the payload follows.
+    /// @dev The dependent proposal: transaction 0 is the guard call, the payload follows.
     function _proposeDependent(uint256 dependencyId)
         internal
         returns (uint256 id, address[] memory targets, bytes[] memory calldatas, bytes32 descriptionHash)
@@ -253,7 +253,7 @@ contract ProposalDependencyGuardForkTest is V3IntegrationBase {
         calldatas[0] = abi.encodeCall(ProposalDependencyGuard.requireSettled, (governor, dependencyId));
         targets[1] = address(probeB);
         calldatas[1] = abi.encodeCall(ExecutionProbe.mark, ());
-        string memory description = "MGP-B: dependent (stand-in for MGP-19)";
+        string memory description = "Proposal B: dependent on A via the guard";
         descriptionHash = keccak256(bytes(description));
         id = _propose(targets, calldatas, description);
     }
