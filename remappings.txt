@@ -6,3 +6,5 @@ safe-smart-account/=lib/treb-sol/lib/safe-utils/lib/safe-smart-account/contracts
 mento-core/=lib/mento-core/contracts/
 mento-stabletoken-ntt/=lib/mento-stabletoken-ntt/evm/
 wormhole-solidity-sdk/=lib/mento-stabletoken-ntt/evm/lib/wormhole-solidity-sdk/src/
+forge-std/=lib/forge-std/src/
+lib/treb-sol/:forge-std/=lib/forge-std/src/

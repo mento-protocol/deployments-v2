@@ -220,7 +220,8 @@ contract ProxyHelper is TrebScript, ProxyViewHelper {
         address implementation,
         bytes memory initData
     ) internal returns (address proxy) {
-        proxy = deployer.create3(OZTUP_ARTIFACT).setLabel(label)
+        proxy = deployer.create3(OZTUP_ARTIFACT)
+            .setLabel(label)
             .deploy(abi.encode(implementation, deployer.account, initData));
     }
 
