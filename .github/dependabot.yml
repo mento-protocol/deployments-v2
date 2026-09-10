@@ -2,7 +2,7 @@ version: 2
 
 # Two ecosystems:
 #
-# - npm keeps the pnpm workspace (root) and the published
+# - npm keeps the root package (pnpm lockfile) and the published
 #   @mento-protocol/contracts package (npm lockfile) current. Trunk Check runs
 #   osv-scanner against pnpm-lock.yaml on every push, so a lockfile advisory
 #   with no PR to carry the fix turns unrelated branches red (PRs #82, #93,
@@ -15,10 +15,10 @@ version: 2
 # Group and cooldown layout mirrors monitoring-monorepo and frontend-monorepo,
 # trimmed to the packages this repo actually has.
 updates:
-  # The root directory covers the pnpm workspace through pnpm-lock.yaml.
-  # packages/contracts is published with npm and keeps its own
-  # package-lock.json, so it needs its own directory entry; listing both here
-  # keeps a shared dependency in one grouped PR.
+  # Root and packages/contracts are two independent packages, not a pnpm
+  # workspace: the root has pnpm-lock.yaml, packages/contracts is published
+  # with npm and keeps its own package-lock.json. Listing both directories in
+  # one entry keeps a shared dependency in one grouped PR.
   - package-ecosystem: npm
     directories:
       - /
@@ -52,6 +52,8 @@ updates:
       # Chain and protocol packages: the highest-value supply-chain target in
       # this repo (@celo/contracts feeds the deploy scripts). Routine
       # minor/patch stay in one reviewed PR; majors arrive individually.
+      # Only @celo/* matches today; the other patterns are anticipatory so a
+      # future viem/@mento-protocol dependency lands in this group by default.
       chain-stack:
         applies-to: version-updates
         patterns:
