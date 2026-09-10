@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+#
+# CodeRabbit review profile, mirrored from monitoring-monorepo (ADR 0066
+# there) on 2026-09-10 when the Cursor Bugbot plan was cancelled. PR review on
+# this repo is CodeRabbit + Claude (.github/workflows/claude.yml) + Codex
+# (chatgpt-codex-connector, enabled server-side). CodeRabbit resolves this
+# file from the SOURCE branch of the PR it reviews.
+#
+# Key names and defaults follow docs.coderabbit.ai/reference/configuration.
+reviews:
+  # quiet | chill | assertive. `chill` is the documented default; pinned so a
+  # UI-level or vendor default change cannot silently raise verbosity.
+  profile: chill
+
+  # Off: enabling this adds a bot APPROVED review once comments resolve, and
+  # the main ruleset counts approvals (2 required, last-push approval).
+  request_changes_workflow: false
+
+  # Verbosity levers.
+  poem: false
+  sequence_diagrams: false
+  suggested_labels: false
+  suggested_reviewers: false
+  auto_apply_labels: false
+  collapse_walkthrough: true
+
+  # Machine-written trees. Reviewing them spends billable reviewed files on
+  # diffs no human authored. `.treb/deployments.json`,
+  # `packages/contracts/contracts.json` and `packages/contracts/src/**` stay
+  # reviewed: they carry addresses that downstream consumers depend on, and
+  # hand-edits there are a review finding (see the Claude prompt).
+  path_filters:
+    - "!pnpm-lock.yaml"
+    - "!**/pnpm-lock.yaml"
+    - "!packages/contracts/package-lock.json"
+    - "!foundry.lock"
+    # ABI copies written by scripts/gen-contracts-package.ts from out/.
+    - "!packages/contracts/abis/**"
+    # Forge broadcast run artifacts.
+    - "!broadcast/**/*.json"
+
+  auto_review:
+    enabled: true
+    # Empty means the default branch flow only.
+    base_branches: []
+    drafts: false
+    # Off, as in monitoring-monorepo: CodeRabbit bills per push delta, so every
+    # fix round re-bills the same files. CodeRabbit reviews a PR once when it
+    # opens; request a re-review of the final head with `@coderabbitai review`.
+    auto_incremental_review: false
+    auto_pause_after_reviewed_commits: 5
