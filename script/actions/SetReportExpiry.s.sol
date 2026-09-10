@@ -44,7 +44,9 @@ contract SetReportExpiry is TrebScript, ProxyHelper {
                 continue;
             }
 
-            stdstore.target(sortedOracles).sig("tokenReportExpirySeconds(address)").with_key(rateFeedId)
+            stdstore.target(sortedOracles)
+                .sig("tokenReportExpirySeconds(address)")
+                .with_key(rateFeedId)
                 .checked_write(EXPIRY_SECONDS);
 
             // Verify
