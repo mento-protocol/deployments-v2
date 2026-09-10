@@ -9,12 +9,13 @@ on:
     types: [submitted]
   issues:
     types: [opened]
-  # Auto-review fires on open, on draft → ready, and on every push
-  # (synchronize) so each new head commit is reviewed. Cleanup pushes from
-  # /ship will re-trigger; the concurrency group below cancels the stale run
-  # so only the latest head is reviewed.
+  # Auto-review fires on PR open and on draft → ready transitions only, not on
+  # every push (synchronize). After the first review, follow-up reviews are
+  # opt-in via `@claude review` in a comment — keeps quota usage predictable
+  # and avoids reviewing the same PR head twice when /ship runs cleanup
+  # commits. Mirrors monitoring-monorepo (2026-09-10).
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
+    types: [opened, ready_for_review]
     paths-ignore:
       - "**/*.md"
 
