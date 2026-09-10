@@ -23,6 +23,13 @@ reviews:
   suggested_reviewers: false
   auto_apply_labels: false
   collapse_walkthrough: true
+  # `collapse_walkthrough` only folds the walkthrough. These five sections
+  # default to true and are switched off here (CodeRabbit finding on #94).
+  changed_files_summary: false
+  estimate_code_review_effort: false
+  assess_linked_issues: false
+  related_issues: false
+  related_prs: false
 
   # Machine-written trees. Reviewing them spends billable reviewed files on
   # diffs no human authored. `.treb/deployments.json`,
