@@ -1,19 +1,182 @@
 version: 2
 
-# Scoped to github-actions only: whenever an action we SHA-pin tags a new
-# release, Dependabot opens a PR so we can refresh the pinned commit SHA under
-# review. Without this the pins go stale silently and never pick up upstream
-# security fixes.
+# Two ecosystems:
+#
+# - npm keeps the root package (pnpm lockfile) and the published
+#   @mento-protocol/contracts package (npm lockfile) current. Trunk Check runs
+#   osv-scanner against pnpm-lock.yaml on every push, so a lockfile advisory
+#   with no PR to carry the fix turns unrelated branches red (PRs #82, #93,
+#   #94; fixed by hand in #95). With this entry the fix arrives as a
+#   Dependabot PR instead.
+# - github-actions refreshes the commit SHAs we pin whenever an action tags a
+#   new release. Without it the pins go stale silently and never pick up
+#   upstream security fixes.
+#
+# Group and cooldown layout mirrors monitoring-monorepo and frontend-monorepo,
+# trimmed to the packages this repo actually has.
 updates:
+  # Root and packages/contracts are two independent packages, not a pnpm
+  # workspace: the root has pnpm-lock.yaml, packages/contracts is published
+  # with npm and keeps its own package-lock.json. Listing both directories in
+  # one entry keeps a shared dependency in one grouped PR.
+  - package-ecosystem: npm
+    directories:
+      - /
+      - /packages/contracts
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00" # trunk-ignore(yamllint/quoted-strings)
+      timezone: UTC
+
+    # Security updates bypass cooldown. Version updates wait so a malicious
+    # release that gets yanked days after publication never reaches a PR.
+    cooldown:
+      default-days: 7
+      semver-major-days: 21
+      semver-minor-days: 7
+      semver-patch-days: 7
+
+    # Worst case per Monday: four version groups plus one PR per ungrouped
+    # production major. Dependabot queues further PRs until the count drops.
+    open-pull-requests-limit: 6
+
+    labels:
+      - dependencies
+
+    commit-message:
+      prefix: chore(deps)
+      prefix-development: chore(deps-dev)
+
+    groups:
+      # Chain and protocol packages: the highest-value supply-chain target in
+      # this repo (@celo/contracts feeds the deploy scripts). Routine
+      # minor/patch stay in one reviewed PR; majors arrive individually.
+      # Only @celo/* matches today; the other patterns are anticipatory so a
+      # future viem/@mento-protocol dependency lands in this group by default.
+      chain-stack:
+        applies-to: version-updates
+        patterns:
+          - "@celo/*"
+          - "@mento-protocol/*"
+          - viem
+          - "@noble/*"
+          - "@scure/*"
+        update-types:
+          - minor
+          - patch
+
+      # vitest pulls vite, postcss and nanoid transitively; every osv-scanner
+      # finding so far came from this tree. Keep the toolchain together at
+      # every level so a major bump gets its own focused check.
+      test-toolchain:
+        applies-to: version-updates
+        dependency-type: development
+        patterns:
+          - vitest
+          - "@vitest/*"
+          - vite
+        update-types:
+          - major
+          - minor
+          - patch
+
+      # Catch-all so ungrouped production minor and patch stragglers arrive as
+      # one weekly PR. Production majors stay individual so each gets its own
+      # review. Exclusions mirror the named groups above so group order never
+      # matters.
+      production-misc:
+        applies-to: version-updates
+        dependency-type: production
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@celo/*"
+          - "@mento-protocol/*"
+          - viem
+          - "@noble/*"
+          - "@scure/*"
+        update-types:
+          - minor
+          - patch
+
+      # Remaining dev tooling (tsx, typescript, @types/*) at every level.
+      tooling:
+        applies-to: version-updates
+        dependency-type: development
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@celo/*"
+          - "@mento-protocol/*"
+          - viem
+          - "@noble/*"
+          - "@scure/*"
+          - vitest
+          - "@vitest/*"
+          - vite
+
+      # Security updates keep the same boundaries so a chain-stack advisory
+      # never shares a PR with an unrelated tooling fix.
+      chain-stack-security:
+        applies-to: security-updates
+        patterns:
+          - "@celo/*"
+          - "@mento-protocol/*"
+          - viem
+          - "@noble/*"
+          - "@scure/*"
+
+      test-toolchain-security:
+        applies-to: security-updates
+        patterns:
+          - vitest
+          - "@vitest/*"
+          - vite
+
+      security-tooling:
+        applies-to: security-updates
+        dependency-type: development
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@celo/*"
+          - "@mento-protocol/*"
+          - viem
+          - "@noble/*"
+          - "@scure/*"
+          - vitest
+          - "@vitest/*"
+          - vite
+
+      # Final catch-all with no dependency-type filter so production and
+      # indirect (transitive) advisories both land here instead of nowhere.
+      security-runtime:
+        applies-to: security-updates
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@celo/*"
+          - "@mento-protocol/*"
+          - viem
+          - "@noble/*"
+          - "@scure/*"
+          - vitest
+          - "@vitest/*"
+          - vite
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
       day: monday
+      time: "06:00" # trunk-ignore(yamllint/quoted-strings)
+      timezone: UTC
     open-pull-requests-limit: 10
     # Wait 7 days after an action publishes a new release before opening a bump
     # PR, so a freshly-published (possibly malicious or broken) tag isn't pinned
-    # here before the ecosystem has had time to flag it.
+    # here before the ecosystem has had time to flag it. Per-semver-tier
+    # cooldown is not supported for github-actions; only default-days applies.
     cooldown:
       default-days: 7
     commit-message:
