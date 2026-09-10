@@ -36,7 +36,8 @@ contract DeployCDPLiquidityStrategy is TrebScript, ProxyHelper, PostChecksHelper
 
         require(config.getCDPRedemptionShortfallTolerance() > 0, "redemption shortfall tolerance not set");
 
-        cdpLiquidityStrategyImpl = deployer.create3("CDPLiquidityStrategy").setLabel(label)
+        cdpLiquidityStrategyImpl = deployer.create3("CDPLiquidityStrategy")
+            .setLabel(label)
             .deploy(abi.encode(true, config.getCDPRedemptionShortfallTolerance()));
 
         cdpLiquidityStrategy = deployProxy(
