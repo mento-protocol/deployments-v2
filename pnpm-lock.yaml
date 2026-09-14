@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@celo/contracts':
-        specifier: ^13.0.0
-        version: 13.0.1
+        specifier: ^17.0.4
+        version: 17.0.4
     devDependencies:
       '@types/node':
         specifier: ^26.2.0
@@ -27,8 +27,8 @@ importers:
 
 packages:
 
-  '@celo/contracts@13.0.1':
-    resolution: {integrity: sha512-LBxKHMBjnH9Q8LkUpPAdIvLA2z8HLBTIRbGcPMIyLGThzVgA2blx570LvDkcPzZ+w48+k0T3AWaV+6d8CAG69Q==}
+  '@celo/contracts@17.0.4':
+    resolution: {integrity: sha512-I3c7H6X7G4tCLXmwszpmizmG6Jw9uPVKP3vHYKgFYed0TBje3CEeVKytswdLBu2ZHP++4B1gP8UhejmOvUnZuQ==}
 
   '@emnapi/core@1.11.1':
     resolution: {integrity: sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ==}
@@ -626,7 +626,7 @@ packages:
 
 snapshots:
 
-  '@celo/contracts@13.0.1': {}
+  '@celo/contracts@17.0.4': {}
 
   '@emnapi/core@1.11.1':
     dependencies:
