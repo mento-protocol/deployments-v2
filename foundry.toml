@@ -21,6 +21,7 @@ fs_permissions = [
   { access = "read", path = ".treb/addressbook.json" },
   { access = "read", path = "script/config/" },
   { access = "read", path = "mgps/" },
+  { access = "read", path = "broadcast/" },
 ]
 
 [profile.mainnet]
