@@ -16,8 +16,11 @@ interface ISortedOraclesExpiry {
 }
 
 /// @notice Updates the report expiry of all CELO/* rate feeds on Celo mainnet to 1 day + 5
-///         minutes (the extra 5 minutes gives enough headroom for the report to be relayed),
-///         excluding CELO/USD which intentionally stays at its existing (6 min) expiry.
+///         minutes (the extra 5 minutes gives enough headroom for the report to be relayed).
+///         CELO/USD was excluded from the June 2026 run and kept its 6 minute expiry; MGP-20
+///         (Part 2) brings it in line with the other CELO/* gas feeds, so every CELO/* feed
+///         is targeted. Feeds already at the target are skipped, so the script only touches
+///         whatever still differs at execution time.
 /// @dev SortedOracles is owned by the MigrationMultisig, so calls are routed through the
 ///      `migrationOwner` sender, which queues them into a Safe transaction batch.
 contract UpdateCeloFeedsExpiry is TrebScript, ProxyHelper {
@@ -45,7 +48,7 @@ contract UpdateCeloFeedsExpiry is TrebScript, ProxyHelper {
 
         IMentoConfig.RateFeed[] memory feeds = config.getRateFeeds();
 
-        console.log("\n===== Updating CELO/* rate feed report expiry (excl. CELO/USD) =====");
+        console.log("\n===== Updating CELO/* rate feed report expiry =====");
 
         uint256 updated;
         uint256 skipped;
@@ -95,15 +98,15 @@ contract UpdateCeloFeedsExpiry is TrebScript, ProxyHelper {
             require(onChain == EXPIRY_SECONDS, string.concat("Verify: expiry mismatch for ", feeds[i].rateFeed));
         }
 
-        console.log("\n  All targeted CELO/* feed expiries verified at %ss (CELO/USD excluded)", EXPIRY_SECONDS);
+        console.log("\n  All CELO/* feed expiries verified at %ss", EXPIRY_SECONDS);
     }
 
     // ========== Helpers ==========
 
-    /// @dev A feed is targeted if its name contains "CELO" but is not the CELO/USD feed,
-    ///      which intentionally stays at its existing (6 min) expiry.
+    /// @dev A feed is targeted if its name contains "CELO": the CELO/USD feed (legacy id, config
+    ///      name "CELOUSD") and every CELO/XXX cross pair. Non-CELO feeds are never touched.
     function _isTargetFeed(string memory rateFeed) internal pure returns (bool) {
-        return _contains(rateFeed, "CELO") && !_contains(rateFeed, "CELOUSD");
+        return _contains(rateFeed, "CELO");
     }
 
     /// @dev Returns true if `haystack` contains `needle` as a substring (case-sensitive).
