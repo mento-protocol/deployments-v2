@@ -15,6 +15,18 @@ contract PayloadHarness {
     {
         return MGP20Payload.validate(MGP20Payload.decodePropose(input), broker, pools);
     }
+
+    function parseCalldataFile(string calldata contents) external pure returns (bytes memory) {
+        return MGP20Payload.parseCalldataFile(contents);
+    }
+
+    function parseNumber(string calldata s) external pure returns (uint256) {
+        return MGP20Payload.parseNumber(s);
+    }
+
+    function trim(string calldata s) external pure returns (string memory) {
+        return MGP20Payload.trim(s);
+    }
 }
 
 /**
@@ -310,5 +322,48 @@ contract MGP20PayloadTest is Test {
         c[3] = configureCall(pools[1].exchangeId, pools[0].usdmToken, setConfig(limitsFor(0).usdm));
         expectReason("MGP20Payload: call #3 exchange id does not match its group");
         validate(encodePropose(t, v, c));
+    }
+
+    // ========== Raw calldata file path (MGP20_CALLDATA_FILE) ==========
+
+    function test_parseCalldataFile_ignoresSurroundingWhitespaceAndValidates() public view {
+        bytes memory payload = validPayload();
+        string memory contents = string.concat("  \t", vm.toString(payload), "\r\n\n");
+        bytes memory parsed = harness.parseCalldataFile(contents);
+        assertEq(parsed, payload, "parsed calldata differs from the encoded payload");
+        MGP20Payload.FrozenLimits[] memory frozen = validate(parsed);
+        assertEq(frozen.length, MGP20Payload.POOL_COUNT);
+    }
+
+    function test_parseCalldataFile_rejectsEmptyFile() public {
+        expectReason("MGP20Payload: calldata file is empty");
+        harness.parseCalldataFile(" \n");
+    }
+
+    function test_parseCalldataFile_rejectsNonHex() public {
+        vm.expectRevert();
+        harness.parseCalldataFile("0xzz\n");
+    }
+
+    function test_trim_stripsOnlyLeadingAndTrailingWhitespace() public view {
+        assertEq(harness.trim("\n 0xab cd\t\r\n"), "0xab cd");
+        assertEq(harness.trim(""), "");
+        assertEq(harness.trim("   "), "");
+    }
+
+    function test_parseNumber_acceptsDecimalAndHex() public view {
+        assertEq(harness.parseNumber("78975396"), 78975396);
+        assertEq(harness.parseNumber("0x4b511a4"), 78975396);
+        assertEq(harness.parseNumber("0X4B511A4"), 78975396);
+        assertEq(harness.parseNumber("0"), 0);
+    }
+
+    function test_parseNumber_rejectsGarbage() public {
+        expectReason("MGP20Payload: not a number");
+        harness.parseNumber("12a");
+        expectReason("MGP20Payload: not a hex digit");
+        harness.parseNumber("0x12g");
+        expectReason("MGP20Payload: empty number");
+        harness.parseNumber("");
     }
 }

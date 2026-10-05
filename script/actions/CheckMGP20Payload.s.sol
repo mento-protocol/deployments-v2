@@ -222,6 +222,55 @@ library MGP20Payload {
             out[i] = data[i + 4];
         }
     }
+
+    /// @notice Parses the contents of a raw calldata file: surrounding whitespace (including a
+    ///         trailing newline) is ignored and the remaining 0x-prefixed hex is decoded.
+    function parseCalldataFile(string memory contents) internal pure returns (bytes memory) {
+        string memory hexString = trim(contents);
+        require(bytes(hexString).length > 0, "MGP20Payload: calldata file is empty");
+        return vm.parseBytes(hexString);
+    }
+
+    /// @notice Parses a decimal or 0x-prefixed hex number (broadcast receipts store blockNumber as hex).
+    function parseNumber(string memory s) internal pure returns (uint256 value) {
+        bytes memory b = bytes(s);
+        require(b.length > 0, "MGP20Payload: empty number");
+        if (b.length > 2 && b[0] == "0" && (b[1] == "x" || b[1] == "X")) {
+            for (uint256 i = 2; i < b.length; i++) {
+                value = value * 16 + hexDigit(b[i]);
+            }
+            return value;
+        }
+        for (uint256 i = 0; i < b.length; i++) {
+            require(b[i] >= "0" && b[i] <= "9", "MGP20Payload: not a number");
+            value = value * 10 + (uint8(b[i]) - 48);
+        }
+    }
+
+    function hexDigit(bytes1 c) internal pure returns (uint256) {
+        if (c >= "0" && c <= "9") return uint8(c) - 48;
+        if (c >= "a" && c <= "f") return uint8(c) - 87;
+        if (c >= "A" && c <= "F") return uint8(c) - 55;
+        revert("MGP20Payload: not a hex digit");
+    }
+
+    /// @notice Strips leading and trailing spaces, tabs and line breaks.
+    function trim(string memory s) internal pure returns (string memory) {
+        bytes memory b = bytes(s);
+        uint256 start;
+        uint256 end = b.length;
+        while (start < end && isSpace(b[start])) start++;
+        while (end > start && isSpace(b[end - 1])) end--;
+        bytes memory out = new bytes(end - start);
+        for (uint256 i = 0; i < out.length; i++) {
+            out[i] = b[start + i];
+        }
+        return string(out);
+    }
+
+    function isSpace(bytes1 c) internal pure returns (bool) {
+        return c == " " || c == "\n" || c == "\r" || c == "\t";
+    }
 }
 
 /**
@@ -231,8 +280,12 @@ library MGP20Payload {
  *         proposal):
  *           1. loads the calldata from `broadcast/MGP20.sol/42220/run-latest.json` (or a raw hex file),
  *           2. binds it to the on-chain proposal (recomputed proposalId must exist on the governor),
- *           3. asserts the 40-call shape against the live BiPoolManager exchange set,
- *           4. proves the frozen limits equal the 110% sizing at the proposal block (fork pinned there),
+ *           3. asserts the 40-call shape against the expected exchange set: the ten USDm/FX pairs
+ *              (AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, XOFm) resolved from the treb
+ *              addressbook, each matched by asset addresses to exactly one live BiPoolManager exchange,
+ *              ten distinct ids, no live exchange outside that set, 18 decimals on USDm and every FX token,
+ *           4. verifies that the frozen limits equal the 110% sizing at the recorded proposal-time block
+ *              (fork pinned there; the MGP20 run output records the builder's block and parent hash),
  *           5. reports whether each frozen limit still covers 100% of today's supply / USD equivalent,
  *           6. replays the 40 calls pranked as the timelock on a fork at head and runs the MGP20
  *              post-checks against the frozen values, including the real full-supply swap.
@@ -242,9 +295,14 @@ library MGP20Payload {
  *        MGP20_RPC_URL           RPC to fork (default: CELO_RPC_URL). Pass the anvil URL explicitly on a treb fork.
  *        NAMESPACE               treb registry namespace (default: mainnet).
  *        MGP20_BROADCAST_FILE    broadcast artifact (default: broadcast/MGP20.sol/42220/run-latest.json).
- *        MGP20_CALLDATA_FILE     optional override: a file holding the raw propose calldata as hex (must live
- *                                under a path foundry.toml allows reading, e.g. broadcast/). Requires MGP20_SIZING_BLOCK.
- *        MGP20_SIZING_BLOCK      block at which MGP20.sol read supply and rates (default: the propose receipt block).
+ *        MGP20_CALLDATA_FILE     optional override: a file holding the raw propose calldata as 0x-prefixed hex
+ *                                (surrounding whitespace is ignored; the file must live under a path foundry.toml
+ *                                allows reading, e.g. broadcast/). There is no receipt to read the target and the
+ *                                block from, so this path requires MGP20_PAYLOAD_TARGET and MGP20_SIZING_BLOCK.
+ *        MGP20_PAYLOAD_TARGET    with MGP20_CALLDATA_FILE: the address the propose transaction was sent to; it
+ *                                must equal the MentoGovernor proxy of the namespace.
+ *        MGP20_SIZING_BLOCK      block at which MGP20.sol read supply and rates (default: the propose receipt
+ *                                block; required with MGP20_CALLDATA_FILE). Take it from the propose run output.
  *        MGP20_SIZING_SEARCH     how many earlier blocks to try when the sizing block does not match (default: 10).
  */
 contract CheckMGP20Payload is Script {
@@ -257,6 +315,11 @@ contract CheckMGP20Payload is Script {
     address internal broker;
     address internal biPoolManager;
     address internal usdm;
+
+    /// @dev The ten FX stables whose USDm pairs MGP-20 refreshes (the MGP20.sol pair list).
+    string[10] internal expectedFxNames =
+        ["AUDm", "CADm", "ZARm", "COPm", "BRLm", "PHPm", "GHSm", "NGNm", "KESm", "XOFm"];
+    address[10] internal expectedFx;
 
     uint256 internal uncovered;
 
@@ -284,25 +347,29 @@ contract CheckMGP20Payload is Script {
                 namespace
             )
         );
-        require(payloadTarget == governor, "propose transaction target is not the MentoGovernor proxy");
+        require(
+            payloadTarget == governor,
+            "propose transaction target (broadcast transaction.to or MGP20_PAYLOAD_TARGET) is not the MentoGovernor proxy"
+        );
 
         // 2. Decode and bind to the on-chain proposal.
         MGP20Payload.Proposal memory proposal = MGP20Payload.decodePropose(input);
         uint256 proposalId = bindToProposal(proposal);
 
-        // 3. Shape against the live exchange set.
+        // 3. Shape against the expected exchange set.
+        console.log("");
         MGP20Payload.ExpectedPool[] memory pools = livePools();
         MGP20Payload.FrozenLimits[] memory frozen = MGP20Payload.validate(proposal, broker, pools);
-        console.log("");
         console.log(
-            unicode" > 🟢 shape: 40 Broker.configureTradingLimit calls, reset-then-set on both legs of 10 distinct live exchanges"
+            unicode" > 🟢 shape: 40 Broker.configureTradingLimit calls, reset-then-set on both legs of the 10 expected exchanges"
         );
         printFrozen(frozen);
 
         // 4. Exact sizing at the proposal (sizing) block.
-        uint256 sizingBlock = vm.envOr("MGP20_SIZING_BLOCK", proposalBlock);
+        bool operatorBlock = vm.envExists("MGP20_SIZING_BLOCK");
+        uint256 sizingBlock = operatorBlock ? vm.envUint("MGP20_SIZING_BLOCK") : proposalBlock;
         uint256 searchWindow = vm.envOr("MGP20_SIZING_SEARCH", uint256(10));
-        checkExactSizing(rpc, sizingBlock, searchWindow, frozen);
+        checkExactSizing(rpc, sizingBlock, operatorBlock, searchWindow, frozen);
 
         // 5. Coverage at head.
         vm.selectFork(headFork);
@@ -325,11 +392,20 @@ contract CheckMGP20Payload is Script {
     {
         string memory rawFile = vm.envOr("MGP20_CALLDATA_FILE", string(""));
         if (bytes(rawFile).length > 0) {
-            input = vm.parseBytes(trim(vm.readFile(rawFile)));
-            // There is no receipt to read the block from: the operator passes the sizing block.
+            // A raw calldata file carries no receipt: the operator must name the transaction's
+            // target (checked against the governor proxy in run()) and the sizing block.
+            require(
+                vm.envExists("MGP20_PAYLOAD_TARGET"),
+                "MGP20_CALLDATA_FILE requires MGP20_PAYLOAD_TARGET (the address the propose transaction was sent to)"
+            );
+            require(
+                vm.envExists("MGP20_SIZING_BLOCK"),
+                "MGP20_CALLDATA_FILE requires MGP20_SIZING_BLOCK (the block printed by the MGP20 propose run)"
+            );
+            input = MGP20Payload.parseCalldataFile(vm.readFile(rawFile));
+            target = vm.envAddress("MGP20_PAYLOAD_TARGET");
             proposalBlock = vm.envUint("MGP20_SIZING_BLOCK");
-            target = vm.envOr("MGP20_PAYLOAD_TARGET", address(0));
-            source = string.concat("raw calldata file ", rawFile);
+            source = string.concat("raw calldata file ", rawFile, " (target and sizing block operator-supplied)");
             return (input, target, proposalBlock, source);
         }
 
@@ -343,7 +419,7 @@ contract CheckMGP20Payload is Script {
         );
         target = vm.parseJsonAddress(json, ".transactions[0].transaction.to");
         input = vm.parseJsonBytes(json, ".transactions[0].transaction.input");
-        proposalBlock = parseNumber(vm.parseJsonString(json, ".receipts[0].blockNumber"));
+        proposalBlock = MGP20Payload.parseNumber(vm.parseJsonString(json, ".receipts[0].blockNumber"));
         source = path;
     }
 
@@ -366,21 +442,57 @@ contract CheckMGP20Payload is Script {
         console.log(unicode" > 🟢 payload is bound to an existing on-chain proposal");
     }
 
-    /// =========== 3. Live exchange set ===========
+    /// =========== 3. Expected exchange set ===========
 
+    /// @dev Builds the expected pool set the payload must cover, the same way MGP20.sol resolves
+    ///      its pairs: for each of the ten intended FX stables (addresses from the treb
+    ///      addressbook, see resolveAddresses) exactly one live BiPoolManager exchange must pair
+    ///      it with USDm (zero or duplicate matches are rejected), the ten resolved ids must be
+    ///      distinct, every live exchange must belong to that set (so an unexpected eleventh
+    ///      pool, or a missing one, fails here rather than in the shape check), and USDm and every
+    ///      FX token must report 18 decimals on the fork this runs on (the USD conversion in the
+    ///      sizing check assumes equal scales). Exchange ids are matched by asset addresses only;
+    ///      on-chain ids were hashed from since-renamed symbols and cannot be recomputed.
     function livePools() internal view returns (MGP20Payload.ExpectedPool[] memory pools) {
         bytes32[] memory ids = IBiPoolManager(biPoolManager).getExchangeIds();
-        require(ids.length == MGP20Payload.POOL_COUNT, "BiPoolManager does not hold exactly 10 exchanges");
+        require(
+            ids.length == MGP20Payload.POOL_COUNT,
+            string.concat("BiPoolManager does not hold exactly 10 exchanges, found ", vm.toString(ids.length))
+        );
+        require(IERC20Metadata(usdm).decimals() == 18, "USDm is not 18 decimals");
 
-        pools = new MGP20Payload.ExpectedPool[](ids.length);
-        for (uint256 i = 0; i < ids.length; i++) {
-            IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(ids[i]);
-            address fx;
-            if (pool.asset0 == usdm) fx = pool.asset1;
-            else if (pool.asset1 == usdm) fx = pool.asset0;
-            else revert(string.concat("live exchange without a USDm leg: ", vm.toString(ids[i])));
-            pools[i] = MGP20Payload.ExpectedPool({exchangeId: ids[i], fxToken: fx, usdmToken: usdm});
+        pools = new MGP20Payload.ExpectedPool[](expectedFx.length);
+        bool[] memory claimed = new bool[](ids.length);
+        for (uint256 p = 0; p < expectedFx.length; p++) {
+            address fx = expectedFx[p];
+            string memory pair = string.concat("USDm/", expectedFxNames[p]);
+            require(IERC20Metadata(fx).decimals() == 18, string.concat(expectedFxNames[p], " is not 18 decimals"));
+
+            uint256 matches;
+            uint256 matched;
+            for (uint256 i = 0; i < ids.length; i++) {
+                IBiPoolManager.PoolExchange memory pool = IBiPoolManager(biPoolManager).getPoolExchange(ids[i]);
+                bool assetsMatch =
+                    (pool.asset0 == usdm && pool.asset1 == fx) || (pool.asset0 == fx && pool.asset1 == usdm);
+                if (assetsMatch) {
+                    matches++;
+                    matched = i;
+                }
+            }
+            require(matches > 0, string.concat("no live exchange for ", pair));
+            require(matches == 1, string.concat("more than one live exchange for ", pair));
+            require(!claimed[matched], string.concat("duplicate exchange id for ", pair));
+            claimed[matched] = true;
+
+            pools[p] = MGP20Payload.ExpectedPool({exchangeId: ids[matched], fxToken: fx, usdmToken: usdm});
         }
+
+        for (uint256 i = 0; i < ids.length; i++) {
+            require(claimed[i], string.concat("live exchange outside the expected USDm/FX set: ", vm.toString(ids[i])));
+        }
+        console.log(
+            unicode" > 🟢 expected set: 10 USDm/FX pairs resolved from the addressbook, each exactly one live exchange, 10 distinct ids, 18-decimal tokens"
+        );
     }
 
     function printFrozen(MGP20Payload.FrozenLimits[] memory frozen) internal view {
@@ -403,16 +515,29 @@ contract CheckMGP20Payload is Script {
     ///      requires equality with the frozen limits. MGP20.sol reads state in the forge
     ///      simulation a few blocks before the propose transaction is mined, so when the
     ///      receipt block does not match, up to `searchWindow` earlier blocks are tried and the
-    ///      matching block is reported. If none matches, the per-pool differences at
+    ///      matching block is reported. A match shows that the frozen limits equal the sizing at
+    ///      a state equivalent to the builder's; which block the builder actually used is recorded
+    ///      by the MGP20 run output (block and parent hash), and can be passed as
+    ///      MGP20_SIZING_BLOCK (`operatorBlock`). If nothing matches, the per-pool differences at
     ///      `sizingBlock` are printed and the check fails.
     function checkExactSizing(
         string memory rpc,
         uint256 sizingBlock,
+        bool operatorBlock,
         uint256 searchWindow,
         MGP20Payload.FrozenLimits[] memory frozen
     ) internal {
         console.log("");
-        console.log(string.concat("== Exact sizing check (starting at block ", vm.toString(sizingBlock), ") =="));
+        console.log(
+            string.concat(
+                "== Exact sizing check (starting at block ",
+                vm.toString(sizingBlock),
+                operatorBlock
+                    ? ", operator-supplied via MGP20_SIZING_BLOCK"
+                    : ", the propose receipt block from the broadcast artifact",
+                ") =="
+            )
+        );
 
         for (uint256 back = 0; back <= searchWindow; back++) {
             uint256 blockNumber = sizingBlock - back;
@@ -423,7 +548,8 @@ contract CheckMGP20Payload is Script {
                     string.concat(
                         unicode" > 🟢 all 20 frozen limits equal the 110% sizing at block ",
                         vm.toString(blockNumber),
-                        back == 0 ? "" : string.concat(" (", vm.toString(back), " blocks before the receipt block)")
+                        back == 0 ? "" : string.concat(" (", vm.toString(back), " blocks before the starting block)"),
+                        " (equivalent sizing state; the MGP20 run output records the builder's block)"
                     )
                 );
                 return;
@@ -654,6 +780,18 @@ contract CheckMGP20Payload is Script {
         broker = lookupOrFail(registryJson, addressbookJson, chainId, namespace, "Proxy:Broker");
         biPoolManager = lookupOrFail(registryJson, addressbookJson, chainId, namespace, "Proxy:BiPoolManager");
         usdm = lookupOrFail(registryJson, addressbookJson, chainId, namespace, "Proxy:USDm");
+        for (uint256 i = 0; i < expectedFxNames.length; i++) {
+            expectedFx[i] = lookupOrFail(
+                registryJson, addressbookJson, chainId, namespace, string.concat("Proxy:", expectedFxNames[i])
+            );
+            require(expectedFx[i] != usdm, string.concat(expectedFxNames[i], " resolves to the USDm proxy"));
+            for (uint256 j = 0; j < i; j++) {
+                require(
+                    expectedFx[j] != expectedFx[i],
+                    string.concat(expectedFxNames[i], " resolves to the same proxy as ", expectedFxNames[j])
+                );
+            }
+        }
         require(IGovernorPayload(governor).timelock() == timelock, "governor timelock differs from registry");
     }
 
@@ -701,45 +839,6 @@ contract CheckMGP20Payload is Script {
         string[8] memory names =
             ["Pending", "Active", "Canceled", "Defeated", "Succeeded", "Queued", "Expired", "Executed"];
         return state < 8 ? names[state] : "Unknown";
-    }
-
-    /// @dev Parses a decimal or 0x-prefixed hex number (broadcast receipts store blockNumber as hex).
-    function parseNumber(string memory s) internal pure returns (uint256 value) {
-        bytes memory b = bytes(s);
-        if (b.length > 2 && b[0] == "0" && (b[1] == "x" || b[1] == "X")) {
-            for (uint256 i = 2; i < b.length; i++) {
-                value = value * 16 + hexDigit(b[i]);
-            }
-            return value;
-        }
-        for (uint256 i = 0; i < b.length; i++) {
-            require(b[i] >= "0" && b[i] <= "9", "not a number");
-            value = value * 10 + (uint8(b[i]) - 48);
-        }
-    }
-
-    function hexDigit(bytes1 c) internal pure returns (uint256) {
-        if (c >= "0" && c <= "9") return uint8(c) - 48;
-        if (c >= "a" && c <= "f") return uint8(c) - 87;
-        if (c >= "A" && c <= "F") return uint8(c) - 55;
-        revert("not a hex digit");
-    }
-
-    function trim(string memory s) internal pure returns (string memory) {
-        bytes memory b = bytes(s);
-        uint256 start;
-        uint256 end = b.length;
-        while (start < end && isSpace(b[start])) start++;
-        while (end > start && isSpace(b[end - 1])) end--;
-        bytes memory out = new bytes(end - start);
-        for (uint256 i = 0; i < out.length; i++) {
-            out[i] = b[start + i];
-        }
-        return string(out);
-    }
-
-    function isSpace(bytes1 c) internal pure returns (bool) {
-        return c == " " || c == "\n" || c == "\r" || c == "\t";
     }
 
     function formatSigned(int256 value) internal pure returns (string memory) {

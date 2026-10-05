@@ -37,7 +37,8 @@ interface IBrokerTradingLimits {
  *         USDm -> AUDm swaps revert), while XOFm and KESm shrank and sit far below their caps.
  *         Each pair is re-sized with the MGP-18 method from live state at proposal creation:
  *           - FX asset:  the FX token's current total supply x 1.1, rounded up to whole tokens, and
- *           - USDm:      the USD equivalent of that amount at the current oracle rate x 1.1.
+ *           - USDm:      the USD equivalent of that buffered FX amount at the pool's current oracle
+ *                        rate, rounded up to whole USDm.
  *         Each limit is first reset (configured with no flags, clearing the accumulated
  *         netflowGlobal) and then set to the new global-only value, so the new limits apply
  *         from a clean slate rather than on top of historical netflow. The reset is the safety
@@ -243,6 +244,10 @@ contract MGP20 is TrebScript, ProxyHelper {
     ///      config expects for the pair (with a nonzero median), and both legs must still carry
     ///      the MGP-18 limit shape (LG only, L0/L1 and timesteps zero, positive limitGlobal).
     ///      Captures the live state and the proposed limits, then prints them as a table.
+    ///      The header records the sizing block and the hash of its parent block
+    ///      (`blockhash(block.number - 1)`; the hash of the current block is not available in
+    ///      the EVM), so the propose run documents which chain state built the payload and the
+    ///      payload checker can be pointed at that block with MGP20_SIZING_BLOCK.
     function preChecks() internal {
         console.log("== Pre-checks ==");
         console.log(
@@ -253,6 +258,17 @@ contract MGP20 is TrebScript, ProxyHelper {
                 vm.toString(block.number),
                 ", timestamp ",
                 vm.toString(block.timestamp)
+            )
+        );
+        console.log(
+            string.concat(
+                "sizing state: supply and oracle rates read at block ",
+                vm.toString(block.number),
+                " (parent block ",
+                vm.toString(block.number - 1),
+                " hash ",
+                vm.toString(blockhash(block.number - 1)),
+                ")"
             )
         );
 
