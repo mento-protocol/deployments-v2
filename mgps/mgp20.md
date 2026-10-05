@@ -1,6 +1,6 @@
 ## TL;DR
 
-[MGP-18](https://forum.mento.org/t/137) replaced the time-windowed trading limits on the ten FX pools that remain on Mento V2 with a single global limit (LG) sized at each FX stable's supply on 31 August 2026, plus a 10% buffer. Supply has moved since: AUDm has used up its limit on both legs, so USDm/AUDm swaps through the Broker revert today, while the XOFm, KESm, ZARm and CADm caps are now far larger than their supply needs. This proposal refreshes all twenty limits with the same method, sized from on-chain state at proposal creation: 40 `Broker.configureTradingLimit` calls that reset each pool's accumulated net flow and set a new global-only limit on both legs.
+[MGP-18](https://forum.mento.org/t/137) replaced the time-windowed trading limits on the ten FX pools that remain on Mento V2 with a single global limit (LG) sized at each FX stable's supply on 31 August 2026, plus a 10% buffer. Supply has moved since: AUDm has used up its limit on both legs, so USDm -> AUDm swaps (minting AUDm) through the Broker revert today and the remaining AUDm -> USDm capacity is well below the AUDm supply, so full redemption is not possible either, while the XOFm, KESm, ZARm and CADm caps are now far larger than their supply needs. This proposal refreshes all twenty limits with the same method, sized from on-chain state at proposal creation: 40 `Broker.configureTradingLimit` calls that reset each pool's accumulated net flow and set a new global-only limit on both legs.
 
 Alongside this proposal (but outside of governance), the migration multisig that owns SortedOracles will raise the CELO/USD report expiry from 6 minutes to 1 day + 5 minutes, and Mento Labs will then move the CELO/USD oracle relayer from a per-minute to a daily schedule, in line with every other CELO/XXX gas feed since June 2026.
 
@@ -17,7 +17,7 @@ This proposal re-sizes all twenty limits with the MGP-18 method from the supply 
 
 ### Indicative values
 
-The table below is the dry run of the script at block 78,975,146 (2026-10-01 17:31:44 UTC). These values are **indicative**. The final limits are computed from on-chain state at the moment the proposal is created and are the ones frozen into the proposal calldata; they will be published in `broadcast/MGP20.sol/42220/` together with the output of the payload checker (`script/actions/CheckMGP20Payload.s.sol`), which decodes the submitted calldata, binds it to the on-chain proposal and proves it equals the 110% sizing at the proposal block. The on-chain proposal description cannot be edited after submission, so the forum post, not this text, carries the final table.
+The table below is the dry run of the script at block 78,975,146 (2026-10-01 17:31:44 UTC). These values are **indicative**. The final limits are computed from on-chain state at the moment the proposal is created and are the ones frozen into the proposal calldata; they will be published in `broadcast/MGP20.sol/42220/` together with the output of the payload checker (`script/actions/CheckMGP20Payload.s.sol`), which decodes the submitted calldata, binds it to the on-chain proposal and verifies that the frozen limits equal the 110% sizing at the recorded proposal-time block. The on-chain proposal description cannot be edited after submission, so the forum post, not this text, carries the final table.
 
 | Pool      |  FX supply | FX net flow |  FX LG now |        FX LG proposed | USDm net flow | USDm LG now |   USDm LG proposed | Rate (USD per FX) |
 | --------- | ---------: | ----------: | ---------: | --------------------: | ------------: | ----------: | -----------------: | ----------------: |
@@ -43,7 +43,7 @@ The values are frozen into calldata at proposal creation, while supply and oracl
 The Broker enforces trading limits per pool and per token as a combination of a 5-minute window limit (L0), a 1-day window limit (L1) and a lifetime global limit (LG) on net flows. Since MGP-18 both tokens of each remaining pool carry a **global-only limit**, and this proposal keeps that shape:
 
 - **FX token**: the token's current total supply x 1.1, rounded up to whole tokens.
-- **USDm**: the USD equivalent of that amount at the pool's current oracle rate x 1.1, rounded up to whole USDm.
+- **USDm**: the USD equivalent of that buffered FX amount at the pool's current oracle rate, rounded up to whole USDm.
 
 Sizing the limits this way lets the proposal-time supply exit to USDm at the proposal-time oracle rate, within the 10% buffer. It does not guarantee full redemption at every future rate or supply. LG bounds the signed net flow from the reset state, so it also permits Broker-mediated issuance up to the same amount; it does not cap total supply or cumulative gross minting.
 
