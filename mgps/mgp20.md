@@ -1,6 +1,6 @@
 ## TL;DR
 
-[MGP-18](https://forum.mento.org/t/137) replaced the time-windowed trading limits on the ten FX pools that remain on Mento V2 with a single global limit (LG) sized at each FX stable's supply on 31 August 2026, plus a 10% buffer. Supply has moved since: AUDm has used up its limit on both legs, so USDm -> AUDm swaps (minting AUDm) through the Broker revert today and the remaining AUDm -> USDm capacity is well below the AUDm supply, so full redemption is not possible either, while the XOFm, KESm, ZARm and CADm caps are now far larger than their supply needs. This proposal refreshes all twenty limits with the same method, sized from on-chain state at proposal creation: 40 `Broker.configureTradingLimit` calls that reset each pool's accumulated net flow and set a new global-only limit on both legs.
+[MGP-18](https://forum.mento.org/t/137) replaced the time-windowed trading limits on the ten FX pools that remain on Mento V2 with a single global limit (LG) sized at each FX stable's supply on 31 August 2026, plus a 10% buffer. Supply has moved since: AUDm has used up its limit on both legs, so USDm -> AUDm swaps (minting AUDm) through the Broker revert today and the remaining AUDm -> USDm capacity is well below the AUDm supply, so full redemption is not possible either, while the XOFm, KESm, ZARm and CADm caps are now far larger than their supply needs. This proposal refreshes all twenty limits with the same method, sized from on-chain state at proposal creation, with one addition: no limit is set below 10,000 USD, so pools with a very small supply still get usable limits. It consists of 40 `Broker.configureTradingLimit` calls that reset each pool's accumulated net flow and set a new global-only limit on both legs.
 
 Alongside this proposal (but outside of governance), the migration multisig that owns SortedOracles will raise the CELO/USD report expiry from 6 minutes to 1 day + 5 minutes, and Mento Labs will then move the CELO/USD oracle relayer from a per-minute to a daily schedule, in line with every other CELO/XXX gas feed since June 2026.
 
@@ -13,26 +13,28 @@ Two things have changed since then (values read on Celo mainnet, chain ID 42220,
 1. **AUDm supply grew past its limit.** AUDm supply is 8,603 against a global limit of 1,597 on the AUDm leg and 1,144 on the USDm leg, both effectively consumed (net flow -1,595 and +1,144). USDm -> AUDm swaps revert with `LG Exceeded`, and only the capacity still inside the limit can leave through the Broker. This is the `CUSD_CAUD_POOL_CAUD_LIMIT` alert visible on the monitoring dashboards.
 2. **XOFm and KESm supply shrank**, so their caps (set at 21.1M XOFm and 23.4M KESm) are several times the current supply; the ZARm and CADm caps were already oversized relative to their small supplies.
 
-This proposal re-sizes all twenty limits with the MGP-18 method from the supply and oracle rates at proposal creation. The script that builds the proposal, `script/migration/MGP20.sol` in the [deployments repository](https://github.com/mento-protocol/deployments-v2), reads every value from the chain when the proposal is created; nothing is hardcoded.
+This proposal re-sizes all twenty limits with the MGP-18 method from the supply and oracle rates at proposal creation, with a minimum of 10,000 USD per limit (see [How the limits work](#how-the-limits-work)). The script that builds the proposal, `script/migration/MGP20.sol` in the [deployments repository](https://github.com/mento-protocol/deployments-v2), reads every value from the chain when the proposal is created; nothing is hardcoded.
 
 ### Indicative values
 
-The table below is the dry run of the script at block 78,975,146 (2026-10-01 17:31:44 UTC). These values are **indicative**. The final limits are computed from on-chain state at the moment the proposal is created and are the ones frozen into the proposal calldata; they will be published in `broadcast/MGP20.sol/42220/` together with the output of the payload checker (`script/actions/CheckMGP20Payload.s.sol`), which decodes the submitted calldata, binds it to the on-chain proposal and verifies that the frozen limits equal the 110% sizing at the recorded proposal-time block. The on-chain proposal description cannot be edited after submission, so the forum post, not this text, carries the final table.
+The table below is the dry run of the script at block 79,393,729. These values are **indicative**. The final limits are computed from on-chain state at the moment the proposal is created and are the ones frozen into the proposal calldata; they will be published in `broadcast/MGP20.sol/42220/` together with the output of the payload checker (`script/actions/CheckMGP20Payload.s.sol`), which decodes the submitted calldata, binds it to the on-chain proposal and verifies that the frozen limits equal the 110% sizing, with the 10,000 USD minimum, at the recorded proposal-time block. The on-chain proposal description cannot be edited after submission, so the forum post, not this text, carries the final table.
 
-| Pool      |  FX supply | FX net flow |  FX LG now |        FX LG proposed | USDm net flow | USDm LG now |   USDm LG proposed | Rate (USD per FX) |
-| --------- | ---------: | ----------: | ---------: | --------------------: | ------------: | ----------: | -----------------: | ----------------: |
-| USDm/AUDm |      8,603 |      -1,595 |      1,597 |      9,465 (increase) |         1,144 |       1,144 |   6,553 (increase) |            0.6923 |
-| USDm/CADm |        971 |          -3 |     37,506 |        1,069 (reduce) |             2 |      27,284 |       751 (reduce) |            0.7024 |
-| USDm/ZARm |     11,107 |        -152 |    895,818 |       12,218 (reduce) |             7 |      55,913 |       734 (reduce) |            0.0600 |
-| USDm/COPm | 75,384,483 |  -6,677,753 | 75,081,743 | 82,922,932 (increase) |         2,114 |      24,479 |  24,944 (increase) |            0.0003 |
-| USDm/BRLm |  1,143,764 |      -8,441 |  1,249,837 |  1,258,142 (increase) |         1,542 |     240,571 | 240,728 (increase) |            0.1913 |
-| USDm/PHPm |  1,616,088 |      -4,900 |  1,764,829 |  1,777,698 (increase) |            79 |      28,599 |    28,308 (reduce) |            0.0159 |
-| USDm/GHSm |    276,727 |        -962 |    301,302 |    304,401 (increase) |            82 |      27,072 |    25,964 (reduce) |            0.0852 |
-| USDm/NGNm | 63,930,581 |   7,663,617 | 81,435,214 |   70,323,640 (reduce) |        -5,684 |      60,395 |    52,955 (reduce) |            0.0007 |
-| USDm/KESm |  8,800,527 |   1,545,912 | 23,420,075 |    9,680,581 (reduce) |       -11,785 |     180,850 |    74,647 (reduce) |            0.0077 |
-| USDm/XOFm |  5,348,991 |  13,806,267 | 21,070,766 |    5,883,891 (reduce) |       -23,924 |      37,611 |    10,110 (reduce) |            0.0017 |
+| Pool      |  FX supply | FX net flow |  FX LG now |        FX LG proposed | USDm net flow | USDm LG now |    USDm LG proposed | Rate (USD per FX) |
+| --------- | ---------: | ----------: | ---------: | --------------------: | ------------: | ----------: | ------------------: | ----------------: |
+| USDm/AUDm |      8,603 |      -1,595 |      1,597 |   14,329 (increase)\* |         1,144 |       1,144 | 10,000 (increase)\* |            0.6979 |
+| USDm/CADm |        971 |          -3 |     37,506 |     14,247 (reduce)\* |             2 |      27,284 |   10,000 (reduce)\* |            0.7019 |
+| USDm/ZARm |     11,107 |        -152 |    895,818 |    165,373 (reduce)\* |             7 |      55,913 |   10,000 (reduce)\* |            0.0604 |
+| USDm/COPm | 80,932,166 | -12,225,439 | 75,081,743 | 89,025,383 (increase) |         3,858 |      24,479 |   27,760 (increase) |            0.0003 |
+| USDm/BRLm |  1,018,521 |     116,781 |  1,249,837 |    1,120,374 (reduce) |       -23,168 |     240,571 |    225,462 (reduce) |            0.2012 |
+| USDm/PHPm |  1,616,088 |      -4,900 |  1,764,829 |  1,777,698 (increase) |            79 |      28,599 |     28,344 (reduce) |            0.0159 |
+| USDm/GHSm |    276,934 |      -1,167 |    301,302 |    304,629 (increase) |            99 |      27,072 |     25,892 (reduce) |            0.0849 |
+| USDm/NGNm | 67,876,095 |   3,718,104 | 81,435,214 |   74,663,705 (reduce) |        -2,686 |      60,395 |     56,354 (reduce) |            0.0007 |
+| USDm/KESm |  8,797,270 |   1,549,166 | 23,420,075 |    9,676,998 (reduce) |       -11,805 |     180,850 |     74,554 (reduce) |            0.0077 |
+| USDm/XOFm |  5,366,598 |  13,788,663 | 21,070,766 |    5,903,258 (reduce) |       -23,895 |      37,611 |     10,125 (reduce) |            0.0017 |
 
-At block 78,975,146 this raises 8 limits and reduces 12 (whole tokens; "net flow" is the Broker's accumulated signed flow for that leg, negative when tokens left the pool to users).
+\* Set by the 10,000 USD minimum: the 1.1 x supply sizing is worth less than 10,000 USD for these pools (about 6,600, 750 and 740 USD respectively).
+
+At block 79,393,729 this raises 6 limits and reduces 14 (whole tokens; "net flow" is the Broker's accumulated signed flow for that leg, negative when tokens left the pool to users).
 
 The values are frozen into calldata at proposal creation, while supply and oracle rates keep moving through the 8-day voting period and the 2-day timelock. The 10% buffer covers moderate drift until execution. If the combined supply growth and FX appreciation of a pool exceed the buffer before execution, governance must refresh that pool's limits again. The execution owner named below monitors supply and oracle rates during voting and timelock with the payload checker, which reports for each pool whether the frozen limits still cover 100% of the current supply and its USD equivalent and whether the full supply can still exit in one swap.
 
@@ -44,10 +46,11 @@ The Broker enforces trading limits per pool and per token as a combination of a 
 
 - **FX token**: the token's current total supply x 1.1, rounded up to whole tokens.
 - **USDm**: the USD equivalent of that buffered FX amount at the pool's current oracle rate, rounded up to whole USDm.
+- **Minimum**: if that USD equivalent is below 10,000 USD, the USDm limit is set to 10,000 and the FX limit to the FX amount worth 10,000 USD at the same oracle rate (rounded up). Without it, pools with a very small supply, such as CADm and ZARm, would get limits worth a few hundred dollars. The 10% buffer already covers supply drift for larger pools; the minimum is new in this proposal.
 
 Sizing the limits this way lets the proposal-time supply exit to USDm at the proposal-time oracle rate, within the 10% buffer. It does not guarantee full redemption at every future rate or supply. LG bounds the signed net flow from the reset state, so it also permits Broker-mediated issuance up to the same amount; it does not cap total supply or cumulative gross minting.
 
-Each limit is **reset before being set**. The Broker preserves the accumulated net flow while a global limit stays configured, so the first transaction on each leg applies an empty configuration (no limits), which clears the counter, and the second applies the new global-only limit from a clean slate. The reset is the safety mechanism of this proposal, not cleanup: the XOFm leg currently carries a net flow of +13,806,267 XOFm against a proposed cap of 5,883,891; setting the smaller limit without clearing the counter would leave the pool over its limit and block XOFm redemptions immediately.
+Each limit is **reset before being set**. The Broker preserves the accumulated net flow while a global limit stays configured, so the first transaction on each leg applies an empty configuration (no limits), which clears the counter, and the second applies the new global-only limit from a clean slate. The reset is the safety mechanism of this proposal, not cleanup: the XOFm leg currently carries a net flow of +13,788,663 XOFm against a proposed cap of 5,903,258; setting the smaller limit without clearing the counter would leave the pool over its limit and block XOFm redemptions immediately.
 
 ## Transaction Details
 
@@ -55,12 +58,12 @@ All governance transactions call `configureTradingLimit(bytes32 exchangeId, addr
 
 The proposal contains **40 transactions**, 4 per exchange, repeated for each of the 10 exchanges, in this order:
 
-| Target       | Function                | Parameters                                                 |
-| ------------ | ----------------------- | ---------------------------------------------------------- |
-| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, empty config (reset net flow)        |
-| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, global-only limit = supply x 1.1     |
-| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, empty config (reset net flow)            |
-| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, global-only limit = USD equivalent x 1.1 |
+| Target       | Function                | Parameters                                                                        |
+| ------------ | ----------------------- | --------------------------------------------------------------------------------- |
+| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, empty config (reset net flow)                               |
+| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, global-only limit = supply x 1.1, at least 10,000 USD worth |
+| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, empty config (reset net flow)                                   |
+| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, global-only limit = USD equivalent x 1.1, at least 10,000 USDm  |
 
 The affected exchanges (unchanged since MGP-18 and verified against the live BiPoolManager at block 78,975,146):
 
@@ -96,6 +99,7 @@ Separately from this proposal, and only after it has passed, two operational cha
 
 - The governance transactions only touch trading-limit configuration on the Broker for the ten existing, live exchanges. No ownership changes, no implementation upgrades, and no funds are involved. The payload is verified in three places: the pre- and post-checks inside the proposal script, the forge simulation of the full proposal, and the payload checker that decodes the submitted calldata, binds it to the on-chain proposal and replays it against a fork.
 - The reset clears each leg's accumulated global net flow before applying the new limit. For AUDm this restores the full 1.1 x supply-sized headroom in both directions; for every pool it means the new bound applies from zero, including minting headroom up to the new cap. The limit bounds signed net flow from the reset state; it does not cap total supply or cumulative gross minting.
-- For XOFm the reset is what makes a smaller cap possible: the current net flow (+13,806,267 XOFm at block 78,975,146) is larger than the proposed cap (5,883,891). The script applies the empty configuration first on every leg and the post-checks require a zero net flow after the set, so this ordering is enforced, not assumed.
+- For XOFm the reset is what makes a smaller cap possible: the current net flow (+13,788,663 XOFm at block 79,393,729) is larger than the proposed cap (5,903,258). The script applies the empty configuration first on every leg and the post-checks require a zero net flow after the set, so this ordering is enforced, not assumed.
+- For pools sized by the 10,000 USD minimum, the minting headroom is up to 10,000 USD worth of the FX stable from the reset state, which is more than 10% of their current supply (CADm's supply is about 680 USD). The minimum is a fixed, small amount chosen so these pools stay usable; it does not grow with supply.
 - The USDm limits use proposal-time oracle rates and supplies. Supply growth and FX appreciation share the 10% buffer until execution. If their combined movement exceeds it for a pool, that pool's full supply can no longer exit in one direction until governance refreshes the limit again; the execution owner monitors this through voting and timelock.
 - The CELO/USD change is operational and reversible, executed by the migration multisig and Mento Labs only after this proposal passes. It widens the accepted staleness of the USDm gas price from minutes to about a day (bounds above) and makes relay-failure alerting a prerequisite of the schedule change. Ownership of SortedOracles and the other V2 contracts remains with the migration multisig, as since [MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103), and will be transferred back to Mento Governance in a future MGP.

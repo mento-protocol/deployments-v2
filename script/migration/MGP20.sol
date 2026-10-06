@@ -39,13 +39,16 @@ interface IBrokerTradingLimits {
  *           - FX asset:  the FX token's current total supply x 1.1, rounded up to whole tokens, and
  *           - USDm:      the USD equivalent of that buffered FX amount at the pool's current oracle
  *                        rate, rounded up to whole USDm.
+ *         Unlike MGP-18, both legs are floored at MIN_LIMIT_USD (10,000 USD): a pool whose
+ *         buffered supply is worth less gets 10,000 USDm and the FX amount worth 10,000 USD at
+ *         the same rate, so small pools do not end up with limits of a few hundred dollars.
  *         Each limit is first reset (configured with no flags, clearing the accumulated
  *         netflowGlobal) and then set to the new global-only value, so the new limits apply
  *         from a clean slate rather than on top of historical netflow. The reset is the safety
  *         mechanism, not cleanup: a pool whose cap shrinks below its accumulated netflow (XOFm)
  *         would be bricked by setting the smaller limit directly.
- *         The sizing arithmetic is copied from MGP18.sol unchanged (see getProposedLimits);
- *         the pre- and post-checks are stricter than MGP-18's.
+ *         Apart from that floor, the sizing arithmetic is copied from MGP18.sol unchanged (see
+ *         getProposedLimits); the pre- and post-checks are stricter than MGP-18's.
  */
 contract MGP20 is TrebScript, ProxyHelper {
     using Deployer for Senders.Sender;
@@ -61,6 +64,9 @@ contract MGP20 is TrebScript, ProxyHelper {
     /// @dev Buffer applied to both limits (1.1x) to absorb supply drift between proposal
     ///      creation and execution; see getProposedLimits.
     uint256 internal constant LIMIT_BUFFER_PCT = 110;
+
+    /// @dev Minimum size of both limits, in USD (18 decimals); see getProposedLimits.
+    uint256 internal constant MIN_LIMIT_USD = 10_000e18;
 
     /// @param asset0 Registry name of the exchange's first asset (USDm).
     /// @param asset1 Registry name of the exchange's second asset (the FX stable).
@@ -175,17 +181,20 @@ contract MGP20 is TrebScript, ProxyHelper {
     ///         the FX token's current total supply (whole tokens, rounded up) and its USD
     ///         equivalent at the current oracle rate, both scaled by LIMIT_BUFFER. The USDm
     ///         value is a snapshot, so later FX appreciation can consume the buffer and require
-    ///         governance to raise the USDm limit. Trading limits are denominated in whole tokens:
-    ///         the Broker divides amounts by 10^decimals before applying them.
+    ///         governance to raise the USDm limit. If the buffered supply is worth less than
+    ///         MIN_LIMIT_USD, both limits are raised to MIN_LIMIT_USD and its FX equivalent at the
+    ///         same rate, so the two legs stay consistent. Trading limits are denominated in
+    ///         whole tokens: the Broker divides amounts by 10^decimals before applying them.
     /// @dev The oracle rate feeds for the FX exchanges ({CUR}USD) report USD per FX unit —
     ///      the same direction the BiPoolManager uses to derive the FX bucket from the USDm
     ///      bucket in getUpdatedBuckets.
-    /// @dev Arithmetic kept byte-for-byte identical to MGP18.getProposedLimits on purpose. The
-    ///      engineering handoff writes the 110% step as a ceiling; this implementation floors it
-    ///      in wei (integer division) and only rounds up when converting to whole tokens. The
-    ///      difference is at most 1 wei in the buffered FX amount and a few wei in the USD
-    ///      equivalent, which can only change a whole-token limit when the amount sits within
-    ///      those wei of a 10^18 boundary. The deviation is accepted; do not "fix" it here.
+    /// @dev Apart from the MIN_LIMIT_USD floor, arithmetic kept identical to
+    ///      MGP18.getProposedLimits on purpose. The engineering handoff writes the 110% step as
+    ///      a ceiling; this implementation floors it in wei (integer division) and only rounds up
+    ///      when converting to whole tokens. The difference is at most 1 wei in the buffered FX
+    ///      amount and a few wei in the USD equivalent, which can only change a whole-token limit
+    ///      when the amount sits within those wei of a 10^18 boundary. The deviation is accepted;
+    ///      do not "fix" it here.
     function getProposedLimits(bytes32 exchangeId, address usdmToken, address fxToken)
         internal
         view
@@ -204,6 +213,13 @@ contract MGP20 is TrebScript, ProxyHelper {
         require(rateNumerator > 0 && rateDenominator > 0, "no oracle rate for exchange");
 
         uint256 usdmEquivalent = (fxSupply * rateNumerator) / rateDenominator;
+
+        // Floor small pools at MIN_LIMIT_USD on both legs. The FX amount is rounded up so it is
+        // worth at least MIN_LIMIT_USD at the oracle rate.
+        if (usdmEquivalent < MIN_LIMIT_USD) {
+            usdmEquivalent = MIN_LIMIT_USD;
+            fxSupply = (MIN_LIMIT_USD * rateDenominator + rateNumerator - 1) / rateNumerator;
+        }
 
         fxLimit = toWholeTokenLimit(fxSupply, IERC20Metadata(fxToken).decimals());
         usdmLimit = toWholeTokenLimit(usdmEquivalent, IERC20Metadata(usdmToken).decimals());

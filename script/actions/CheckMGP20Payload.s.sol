@@ -284,8 +284,9 @@ library MGP20Payload {
  *              (AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, XOFm) resolved from the treb
  *              addressbook, each matched by asset addresses to exactly one live BiPoolManager exchange,
  *              ten distinct ids, no live exchange outside that set, 18 decimals on USDm and every FX token,
- *           4. verifies that the frozen limits equal the 110% sizing at the recorded proposal-time block
- *              (fork pinned there; the MGP20 run output records the builder's block and parent hash),
+ *           4. verifies that the frozen limits equal the 110% sizing, floored at 10,000 USD, at the
+ *              recorded proposal-time block (fork pinned there; the MGP20 run output records the
+ *              builder's block and parent hash),
  *           5. reports whether each frozen limit still covers 100% of today's supply / USD equivalent,
  *           6. replays the 40 calls pranked as the timelock on a fork at head and runs the MGP20
  *              post-checks against the frozen values, including the real full-supply swap.
@@ -308,6 +309,7 @@ library MGP20Payload {
 contract CheckMGP20Payload is Script {
     uint8 internal constant LG = 4;
     uint256 internal constant LIMIT_BUFFER_PCT = 110;
+    uint256 internal constant MIN_LIMIT_USD = 10_000e18;
     uint256 internal constant CELO_MAINNET_CHAIN_ID = 42220;
 
     address internal governor;
@@ -546,7 +548,7 @@ contract CheckMGP20Payload is Script {
             if (mismatches == 0) {
                 console.log(
                     string.concat(
-                        unicode" > 🟢 all 20 frozen limits equal the 110% sizing at block ",
+                        unicode" > 🟢 all 20 frozen limits equal the 110% sizing (10,000 USD floor) at block ",
                         vm.toString(blockNumber),
                         back == 0 ? "" : string.concat(" (", vm.toString(back), " blocks before the starting block)"),
                         " (equivalent sizing state; the MGP20 run output records the builder's block)"
@@ -557,7 +559,7 @@ contract CheckMGP20Payload is Script {
         }
 
         revert(
-            "frozen limits do not equal the 110% sizing at the proposal block; pass MGP20_SIZING_BLOCK=<block printed by the propose run>"
+            "frozen limits do not equal the 110% sizing (10,000 USD floor) at the proposal block; pass MGP20_SIZING_BLOCK=<block printed by the propose run>"
         );
     }
 
@@ -573,7 +575,7 @@ contract CheckMGP20Payload is Script {
             console.log("| --- | ---: | ---: | --- | ---: | ---: | ---: | ---: | --- |");
         }
         for (uint256 i = 0; i < frozen.length; i++) {
-            Sizing memory s = sizeLimits(frozen[i], LIMIT_BUFFER_PCT);
+            Sizing memory s = sizeLimits(frozen[i], LIMIT_BUFFER_PCT, MIN_LIMIT_USD);
             bool ok = s.fxLimit == frozen[i].fxLimit && s.usdmLimit == frozen[i].usdmLimit;
             if (!ok) mismatches++;
             if (verbose) console.log(sizingRow(frozen[i], s, ok));
@@ -604,10 +606,15 @@ contract CheckMGP20Payload is Script {
         uint256 rateDenominator;
     }
 
-    /// @dev Independent re-derivation of MGP20.getProposedLimits (and of MGP18's): buffered supply
-    ///      floored in wei, USD equivalent at the pool's reference rate, both rounded up to whole
-    ///      tokens. With bufferPct = 100 it yields the 100% requirement used by the coverage check.
-    function sizeLimits(MGP20Payload.FrozenLimits memory f, uint256 bufferPct) internal view returns (Sizing memory s) {
+    /// @dev Independent re-derivation of MGP20.getProposedLimits: buffered supply floored in wei,
+    ///      USD equivalent at the pool's reference rate, both raised to `minUsd` (and its FX
+    ///      equivalent, rounded up in wei) when worth less, then rounded up to whole tokens. With
+    ///      bufferPct = 100 and minUsd = 0 it yields the 100% requirement used by the coverage check.
+    function sizeLimits(MGP20Payload.FrozenLimits memory f, uint256 bufferPct, uint256 minUsd)
+        internal
+        view
+        returns (Sizing memory s)
+    {
         s.supply = IERC20Metadata(f.fxToken).totalSupply();
         uint256 fxAmount = (s.supply * bufferPct) / 100;
 
@@ -617,6 +624,10 @@ contract CheckMGP20Payload is Script {
         require(s.rateNumerator > 0 && s.rateDenominator > 0, "no oracle rate for exchange");
 
         uint256 usdmEquivalent = (fxAmount * s.rateNumerator) / s.rateDenominator;
+        if (usdmEquivalent < minUsd) {
+            usdmEquivalent = minUsd;
+            fxAmount = (minUsd * s.rateDenominator + s.rateNumerator - 1) / s.rateNumerator;
+        }
         s.fxLimit = toWholeTokenLimit(fxAmount, IERC20Metadata(f.fxToken).decimals());
         s.usdmLimit = toWholeTokenLimit(usdmEquivalent, IERC20Metadata(f.usdmToken).decimals());
     }
@@ -648,7 +659,7 @@ contract CheckMGP20Payload is Script {
 
         uncovered = 0;
         for (uint256 i = 0; i < frozen.length; i++) {
-            Sizing memory required = sizeLimits(frozen[i], 100);
+            Sizing memory required = sizeLimits(frozen[i], 100, 0);
             bool covered = frozen[i].fxLimit >= required.fxLimit && frozen[i].usdmLimit >= required.usdmLimit;
             if (!covered) uncovered++;
             console.log(coverageRow(frozen[i], required, covered));

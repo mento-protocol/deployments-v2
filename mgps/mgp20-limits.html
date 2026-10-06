@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MGP-20 Trading Limits</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+    <style>
+      /* Layout: one reading column; summary strip, notes, then a two-row-per-pool ledger table and the exact oracle rates. */
+      :root {
+        --bg: #f6f7f6;
+        --surface: #ffffff;
+        --fg: #17201d;
+        --muted: #5d6a65;
+        --line: #dde3e0;
+        --accent: #0f6b5c;
+        --raise: #1f5fbf;
+        --raise-bg: #e6eefb;
+        --reduce: #a35a00;
+        --reduce-bg: #fbefdf;
+        --crit: #b42318;
+        --crit-bg: #fde8e6;
+        --bar: #c9d3cf;
+        --font-ui: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+        --font-num: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #101513;
+          --surface: #171e1b;
+          --fg: #e4ebe8;
+          --muted: #94a39d;
+          --line: #2a3531;
+          --accent: #4cc2a8;
+          --raise: #7aa8f0;
+          --raise-bg: #1a2638;
+          --reduce: #e7a552;
+          --reduce-bg: #33261a;
+          --crit: #f2867c;
+          --crit-bg: #3a1d1a;
+          --bar: #34413c;
+          color-scheme: dark;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #101513;
+        --surface: #171e1b;
+        --fg: #e4ebe8;
+        --muted: #94a39d;
+        --line: #2a3531;
+        --accent: #4cc2a8;
+        --raise: #7aa8f0;
+        --raise-bg: #1a2638;
+        --reduce: #e7a552;
+        --reduce-bg: #33261a;
+        --crit: #f2867c;
+        --crit-bg: #3a1d1a;
+        --bar: #34413c;
+        color-scheme: dark;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        font-family: var(--font-ui);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+      .wrap {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding-inline: 20px;
+        padding-block: 40px 64px;
+        display: grid;
+        gap: 32px;
+      }
+      .num {
+        font-family: var(--font-num);
+        font-variant-numeric: tabular-nums;
+      }
+
+      header {
+        display: grid;
+        gap: 10px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 600;
+      }
+      h1 {
+        font-size: clamp(26px, 4vw, 34px);
+        line-height: 1.15;
+        margin: 0;
+        font-weight: 700;
+        text-wrap: balance;
+      }
+      h2 {
+        font-size: 18px;
+        margin: 0;
+        font-weight: 600;
+        text-wrap: balance;
+      }
+      .lede {
+        margin: 0;
+        color: var(--muted);
+        max-width: 70ch;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 20px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .meta b {
+        color: var(--fg);
+        font-weight: 500;
+      }
+
+      .summary {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 12px 16px;
+        display: grid;
+        gap: 2px;
+        min-width: 140px;
+      }
+      .stat .v {
+        font-size: 24px;
+        font-weight: 500;
+      }
+      .stat .k {
+        font-size: 12px;
+        color: var(--muted);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .stat.raise .v {
+        color: var(--raise);
+      }
+      .stat.reduce .v {
+        color: var(--reduce);
+      }
+
+      .notes {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        max-width: 80ch;
+      }
+      .notes li {
+        display: grid;
+        grid-template-columns: 10px 1fr;
+        gap: 12px;
+        align-items: baseline;
+      }
+      .notes li::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        background: var(--muted);
+        transform: translateY(-1px);
+      }
+      .notes li.crit::before {
+        background: var(--crit);
+      }
+      .notes li.warn::before {
+        background: var(--reduce);
+      }
+
+      section {
+        display: grid;
+        gap: 14px;
+        min-width: 0;
+      }
+      .legend {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0;
+        max-width: 85ch;
+      }
+      .scroller {
+        overflow-x: auto;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        min-width: 860px;
+        font-size: 14px;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      th.r,
+      td.r {
+        text-align: right;
+      }
+      td {
+        padding: 9px 14px;
+        vertical-align: middle;
+        white-space: nowrap;
+      }
+      tbody + tbody tr:first-child td {
+        border-top: 1px solid var(--line);
+      }
+      td.pool {
+        vertical-align: top;
+        padding-top: 12px;
+      }
+      .pool-name {
+        font-weight: 600;
+        font-size: 15px;
+      }
+      .pool-sub {
+        font-size: 12px;
+        color: var(--muted);
+        display: block;
+        line-height: 1.45;
+      }
+      .leg {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .leg b {
+        color: var(--fg);
+        font-weight: 600;
+      }
+
+      .usage {
+        display: grid;
+        grid-template-columns: auto 72px;
+        gap: 10px;
+        align-items: center;
+        justify-content: end;
+      }
+      .track {
+        height: 6px;
+        border-radius: 3px;
+        background: var(--bar);
+        overflow: hidden;
+      }
+      .fill {
+        height: 100%;
+        background: var(--muted);
+      }
+      .fill.crit {
+        background: var(--crit);
+      }
+      .fill.warn {
+        background: var(--reduce);
+      }
+      .pct {
+        font-size: 11px;
+        color: var(--muted);
+        display: block;
+        text-align: right;
+      }
+      .pct.crit {
+        color: var(--crit);
+        font-weight: 500;
+      }
+
+      .chip {
+        display: inline-flex;
+        gap: 4px;
+        align-items: center;
+        font-family: var(--font-num);
+        font-size: 12.5px;
+        font-weight: 500;
+        padding: 2px 8px;
+        border-radius: 999px;
+      }
+      .chip.up {
+        color: var(--raise);
+        background: var(--raise-bg);
+      }
+      .chip.down {
+        color: var(--reduce);
+        background: var(--reduce-bg);
+      }
+      .chip.flat {
+        color: var(--muted);
+        background: var(--bar);
+      }
+      .delta {
+        display: block;
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .proposed {
+        font-weight: 600;
+      }
+      .min-tag {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        color: var(--accent);
+        border: 1px solid currentColor;
+        border-radius: 4px;
+        padding: 1px 6px;
+      }
+
+      .rates td {
+        font-size: 13px;
+      }
+      footer {
+        font-size: 12.5px;
+        color: var(--muted);
+        max-width: 85ch;
+      }
+      code {
+        font-family: var(--font-num);
+        font-size: 0.92em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">Mento governance · MGP-20</div>
+        <h1>Proposed trading limit changes</h1>
+        <p class="lede">
+          Global-only (LG) trading limits on the ten USDm/FX exchanges left in
+          Mento v2, re-sized from live supply. Each FX limit is 110% of the
+          token's supply. Each USDm limit is the USD value of that amount at the
+          pool's oracle rate. No limit goes below 10,000 USD: smaller pools get
+          10,000 USDm and 10,000 USD worth of the FX token. Every leg's netflow
+          is reset to zero before the new limit is set.
+        </p>
+        <div class="meta">
+          <span>Network <b>Celo mainnet (42220)</b></span>
+          <span>Sizing block <b class="num">79,393,729</b></span>
+          <span>Units <b>whole tokens</b></span>
+          <span>Source <b>MGP20.sol simulation output</b></span>
+        </div>
+      </header>
+
+      <div class="summary" id="summary"></div>
+
+      <section>
+        <h2>What stands out</h2>
+        <ul class="notes">
+          <li class="crit">
+            <span
+              ><b>AUDm is exhausted on both legs.</b> FX netflow is −1,595 of a
+              1,597 cap and USDm netflow is 1,144 of 1,144, so USDm → AUDm swaps
+              revert today. Both limits rise about 9×.</span
+            >
+          </li>
+          <li class="crit">
+            <span
+              ><b>XOFm already has more netflow than its new cap.</b> FX netflow
+              is 13,788,663 against a proposed cap of 5,903,258. Setting the
+              smaller limit without the reset would block the pool, which is why
+              every leg is reset first.</span
+            >
+          </li>
+          <li class="warn">
+            <span
+              ><b>AUDm, CADm and ZARm are set by the 10,000 USD minimum.</b> At
+              110% of supply they would be worth about 6,600, 750 and 740 USD.
+              XOFm is just above the minimum at 10,125 USD.</span
+            >
+          </li>
+          <li>
+            <span
+              ><b
+                >The largest cuts are on ZARm (about −82%) and XOFm (about
+                −72%)</b
+              >, on both legs. COPm's supply (80.9M) is now above its current FX
+              cap (75.1M), so its limits go up.</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Limits by pool</h2>
+        <p class="legend">
+          Netflow is from the pool's point of view: positive means tokens flowed
+          into the pool, negative means they flowed out to users. The bar shows
+          how much of the current cap that netflow uses. Change is proposed vs.
+          current limit. Pools tagged “10k USD minimum” are sized by the minimum
+          rather than by supply.
+        </p>
+        <div class="scroller">
+          <table>
+            <thead>
+              <tr>
+                <th>Pool</th>
+                <th>Leg</th>
+                <th class="r">Current limit</th>
+                <th class="r">Netflow now</th>
+                <th class="r">Cap used</th>
+                <th class="r">Proposed limit</th>
+                <th class="r">Change</th>
+              </tr>
+            </thead>
+            <tbody id="rows-placeholder"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Oracle rates used</h2>
+        <p class="legend">
+          Median rate from SortedOracles for each pool's reference feed at the
+          sizing block. The exact fraction is what the script used. The other
+          columns are rounded for reading.
+        </p>
+        <div class="scroller">
+          <table class="rates">
+            <thead>
+              <tr>
+                <th>Feed</th>
+                <th class="r">USD per FX</th>
+                <th class="r">FX per USD</th>
+                <th class="r">Exact fraction (numerator / 10<sup>24</sup>)</th>
+              </tr>
+            </thead>
+            <tbody id="rates"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>
+        Figures are copied from the <code>== Proposed limits ==</code> table
+        printed by <code>script/migration/MGP20.sol</code> at block 79,393,729.
+        Supply is shown rounded down to whole tokens; limits are rounded up. The
+        values in the submitted proposal are fixed at that block; check them
+        with <code>CheckMGP20Payload</code> after submission.
+      </footer>
+    </div>
+
+    <script>
+      // [pair, fxSupply, fxNow, fxNetflow, fxProposed, usdNow, usdNetflow, usdProposed, rateNumerator]
+      // rate denominator is 1e24 for every pool.
+      const DATA = [
+        [
+          "AUDm",
+          8603,
+          1597,
+          -1595,
+          14329,
+          1144,
+          1144,
+          10000,
+          "697900000000000000000000",
+        ],
+        [
+          "CADm",
+          971,
+          37506,
+          -3,
+          14247,
+          27284,
+          2,
+          10000,
+          "701951420000000000000000",
+        ],
+        [
+          "ZARm",
+          11107,
+          895818,
+          -152,
+          165373,
+          55913,
+          7,
+          10000,
+          "60469500000000000000000",
+        ],
+        [
+          "COPm",
+          80932166,
+          75081743,
+          -12225439,
+          89025383,
+          24479,
+          3858,
+          27760,
+          "311810000000000000000",
+        ],
+        [
+          "BRLm",
+          1018521,
+          1249837,
+          116781,
+          1120374,
+          240571,
+          -23168,
+          225462,
+          "201237610000000000000000",
+        ],
+        [
+          "PHPm",
+          1616088,
+          1764829,
+          -4900,
+          1777698,
+          28599,
+          79,
+          28344,
+          "15944130000000000000000",
+        ],
+        [
+          "GHSm",
+          276934,
+          301302,
+          -1167,
+          304629,
+          27072,
+          99,
+          25892,
+          "84994260000000000000000",
+        ],
+        [
+          "NGNm",
+          67876095,
+          81435214,
+          3718104,
+          74663705,
+          60395,
+          -2686,
+          56354,
+          "754770000000000000000",
+        ],
+        [
+          "KESm",
+          8797270,
+          23420075,
+          1549166,
+          9676998,
+          180850,
+          -11805,
+          74554,
+          "7704160246533127000000",
+        ],
+        [
+          "XOFm",
+          5366598,
+          21070766,
+          13788663,
+          5903258,
+          37611,
+          -23895,
+          10125,
+          "1715000000000000000000",
+        ],
+      ];
+
+      const MIN_LIMIT_USD = 10000;
+      const fmt = (n) => n.toLocaleString("en-US");
+      const signed = (n) => (n > 0 ? "+" : n < 0 ? "−" : "") + fmt(Math.abs(n));
+      const rateOf = (num) => Number(num) / 1e24;
+      const sig = (x, d) =>
+        Number(x.toPrecision(d)).toLocaleString("en-US", {
+          maximumSignificantDigits: d,
+        });
+
+      function changeCell(now, proposed) {
+        const diff = proposed - now;
+        const pct = (diff / now) * 100;
+        const cls = diff > 0 ? "up" : diff < 0 ? "down" : "flat";
+        const arrow = diff > 0 ? "↑" : diff < 0 ? "↓" : "=";
+        const pctText =
+          diff === 0
+            ? "0%"
+            : (pct > 0 ? "+" : "−") +
+              Math.abs(pct).toFixed(Math.abs(pct) < 10 ? 1 : 0) +
+              "%";
+        return `<td class="r"><span class="chip ${cls}">${arrow} ${pctText}</span><span class="delta num">${signed(diff)}</span></td>`;
+      }
+
+      function usageCell(netflow, cap) {
+        const used = Math.abs(netflow) / cap;
+        const pct = used * 100;
+        const level = used >= 0.9 ? "crit" : used >= 0.5 ? "warn" : "";
+        const label =
+          pct > 0 && pct < 0.1 ? "<0.1%" : pct.toFixed(pct < 10 ? 1 : 0) + "%";
+        return `<td class="r"><div class="usage"><div class="track" style="width:80px"><div class="fill ${level}" style="width:${Math.min(pct, 100)}%"></div></div><span class="pct num ${level}">${label}</span></div></td>`;
+      }
+
+      function legRow(label, asset, now, netflow, proposed) {
+        return `<td><span class="leg"><b>${asset}</b> ${label}</span></td>
+      <td class="r num">${fmt(now)}</td>
+      <td class="r num">${signed(netflow)}</td>
+      ${usageCell(netflow, now)}
+      <td class="r num proposed">${fmt(proposed)}</td>
+      ${changeCell(now, proposed)}`;
+      }
+
+      const table = document
+        .getElementById("rows-placeholder")
+        .closest("table");
+      document.getElementById("rows-placeholder").remove();
+      let raised = 0,
+        reduced = 0,
+        unchanged = 0;
+      const count = (now, p) => {
+        p > now ? raised++ : p < now ? reduced++ : unchanged++;
+      };
+
+      for (const [
+        fx,
+        supply,
+        fxNow,
+        fxNf,
+        fxP,
+        usdNow,
+        usdNf,
+        usdP,
+        num,
+      ] of DATA) {
+        count(fxNow, fxP);
+        count(usdNow, usdP);
+        const rate = rateOf(num);
+        const tb = document.createElement("tbody");
+        tb.innerHTML = `
+      <tr>
+        <td class="pool" rowspan="2">
+          <span class="pool-name">USDm/${fx}</span>
+          <span class="pool-sub">Supply <span class="num">${fmt(supply)}</span> ${fx}</span>
+          <span class="pool-sub">1 ${fx} = <span class="num">${sig(rate, 4)}</span> USD</span>
+          ${usdP === MIN_LIMIT_USD ? '<span class="min-tag">10k USD minimum</span>' : ""}
+        </td>
+        ${legRow("leg", fx, fxNow, fxNf, fxP)}
+      </tr>
+      <tr>${legRow("leg", "USDm", usdNow, usdNf, usdP)}</tr>`;
+        table.appendChild(tb);
+
+        document.getElementById("rates").insertAdjacentHTML(
+          "beforeend",
+          `
+      <tr>
+        <td>${fx.slice(0, 3)}/USD</td>
+        <td class="r num">${sig(rate, 6)}</td>
+        <td class="r num">${sig(1 / rate, 6)}</td>
+        <td class="r num">${num}</td>
+      </tr>`,
+        );
+      }
+
+      const stats = [
+        ["", DATA.length * 2, `limits on ${DATA.length} exchanges`],
+        ["raise", raised, "raised"],
+        ["reduce", reduced, "reduced"],
+        ["", unchanged, "unchanged"],
+      ];
+      document.getElementById("summary").innerHTML = stats
+        .map(
+          ([cls, v, k]) =>
+            `<div class="stat ${cls}"><span class="v num">${v}</span><span class="k">${k}</span></div>`,
+        )
+        .join("");
+    </script>
+  </body>
+</html>
