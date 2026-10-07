@@ -29,7 +29,15 @@ contract MGP20Sepolia is MGP20 {
         Senders.Sender storage govSender = sender("governor");
 
         OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-20 (Celo Sepolia rehearsal): Refresh trading limits on remaining Mento v2 exchanges");
+        // A governor proposal id is the hash of its calls and description. Testnet supplies and
+        // rates rarely move, so re-running after a defeated or expired rehearsal would produce the
+        // same id and revert with "proposal already exists"; an optional suffix makes it unique.
+        ozGovSender.setTitle(
+            string.concat(
+                "MGP-20 (Celo Sepolia rehearsal): Refresh trading limits on remaining Mento v2 exchanges",
+                vm.envOr("MGP20_SEPOLIA_TITLE_SUFFIX", string(""))
+            )
+        );
         ozGovSender.setProposalDescription("./mgps/mgp20.md");
 
         preChecks();
