@@ -1,5 +1,9 @@
 [profile.default]
 src = "src"
+# Forge >= 1.8 defaults to isolate = true, which runs every top-level call as its own
+# transaction under the chain block gas limit; deploying the network config in Config.get()
+# (and treb-sol's registry) then runs out of gas. Keep the pre-1.8 behaviour.
+isolate = false
 out = "out"
 libs = ["lib"]
 optimizer = true
@@ -21,6 +25,7 @@ fs_permissions = [
   { access = "read", path = ".treb/addressbook.json" },
   { access = "read", path = "script/config/" },
   { access = "read", path = "mgps/" },
+  { access = "read", path = "broadcast/" },
 ]
 
 [profile.mainnet]
