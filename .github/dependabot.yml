@@ -12,6 +12,13 @@ version: 2
 #   new release. Without it the pins go stale silently and never pick up
 #   upstream security fixes.
 #
+# Schedule: every second Monday at 06:00 UTC. Dependabot parses cron with the
+# fugit library, and `mon%2` matches Mondays whose week count since Monday
+# 2018-12-31 is even. That gives an exact 14-day cadence; the next runs are
+# 2026-10-26 and 2026-11-09. Plain cron cannot express "every other week".
+# Security updates ignore the schedule and still open immediately.
+# Source: https://github.com/dependabot/dependabot-core/issues/12246
+#
 # Group and cooldown layout mirrors monitoring-monorepo and frontend-monorepo,
 # trimmed to the packages this repo actually has.
 updates:
@@ -24,9 +31,8 @@ updates:
       - /
       - /packages/contracts
     schedule:
-      interval: weekly
-      day: monday
-      time: "06:00" # trunk-ignore(yamllint/quoted-strings)
+      interval: cron
+      cronjob: "0 6 * * mon%2" # trunk-ignore(yamllint/quoted-strings)
       timezone: UTC
 
     # Security updates bypass cooldown. Version updates wait so a malicious
@@ -37,7 +43,7 @@ updates:
       semver-minor-days: 7
       semver-patch-days: 7
 
-    # Worst case per Monday: four version groups plus one PR per ungrouped
+    # Worst case per run: four version groups plus one PR per ungrouped
     # production major. Dependabot queues further PRs until the count drops.
     open-pull-requests-limit: 6
 
@@ -82,7 +88,7 @@ updates:
           - patch
 
       # Catch-all so ungrouped production minor and patch stragglers arrive as
-      # one weekly PR. Production majors stay individual so each gets its own
+      # one PR per run. Production majors stay individual so each gets its own
       # review. Exclusions mirror the named groups above so group order never
       # matters.
       production-misc:
@@ -168,9 +174,8 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-      day: monday
-      time: "06:00" # trunk-ignore(yamllint/quoted-strings)
+      interval: cron
+      cronjob: "0 6 * * mon%2" # trunk-ignore(yamllint/quoted-strings)
       timezone: UTC
     open-pull-requests-limit: 10
     # Wait 7 days after an action publishes a new release before opening a bump
@@ -184,7 +189,7 @@ updates:
       include: scope
     labels:
       - dependencies
-    # Collapse the Monday batch into one PR per tier so minor/patch bumps
+    # Collapse each run's batch into one PR per tier so minor/patch bumps
     # review together, separate from majors that may need behavior checks.
     groups:
       actions-minor-patch:
