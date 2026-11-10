@@ -95,7 +95,8 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         internal
         returns (address breakerAddy)
     {
-        breakerAddy = deployer.create3("MedianDeltaBreaker").setLabel("v2.6.5")
+        breakerAddy = deployer.create3("MedianDeltaBreaker")
+            .setLabel("v2.6.5")
             .deploy(
                 abi.encode(
                     breakerConfig.defaultCooldownTime,
@@ -121,7 +122,8 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         internal
         returns (address breakerAddy)
     {
-        breakerAddy = deployer.create3("ValueDeltaBreaker").setLabel("v2.6.5")
+        breakerAddy = deployer.create3("ValueDeltaBreaker")
+            .setLabel("v2.6.5")
             .deploy(
                 abi.encode(
                     breakerConfig.defaultCooldownTime,
@@ -143,7 +145,8 @@ contract DeployBreakerBox is TrebScript, ProxyHelper, ConfigHelper {
         address[] memory rateFeedIds = config.getRateFeedIds();
         require(rateFeedIds.length > 0);
 
-        breakerBoxAddy = deployer.create3("BreakerBox").setLabel("v2.6.5")
+        breakerBoxAddy = deployer.create3("BreakerBox")
+            .setLabel("v2.6.5")
             .deploy(abi.encode(rateFeedIds, sortedOraclesProxy, migrationOwner.account));
     }
 }

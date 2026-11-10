@@ -59,7 +59,8 @@ contract DeployNTT is NTTScriptBase {
         //    A single CREATE3 deployment that bootstraps NttManager +
         //    WormholeTransceiver proxies, initializes them, registers the
         //    transceiver, and transfers ownership to the migrationOwner.
-        address helper = deployer.create3("NttDeployHelper").setLabel(config.tokenName)
+        address helper = deployer.create3("NttDeployHelper")
+            .setLabel(config.tokenName)
             .deploy(abi.encode(token, mode, chainConfig.wormholeChainId, wormholeCoreBridge, CONSISTENCY_LEVEL, owner));
 
         // ── Read deployed addresses ─────────────────────────────────────

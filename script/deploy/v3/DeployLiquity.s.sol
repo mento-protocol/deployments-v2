@@ -125,14 +125,16 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         _deploySystemParams();
 
         deployedContracts.addressesRegistry = deployer.create3("AddressesRegistry.sol:AddressesRegistry")
-            .setLabel(cfg.singletonLabel).deploy(abi.encode(deployer.account));
+            .setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(deployer.account));
 
         // Pre-compute all addresses before any contract that depends on them
         precomputedAddresses.troveManager = _predict("TroveManager.sol:TroveManager", deployer, cfg.singletonLabel);
 
         _deployCollateralRegistry();
 
-        deployedContracts.hintHelpers = deployer.create3("HintHelpers.sol:HintHelpers").setLabel(cfg.singletonLabel)
+        deployedContracts.hintHelpers = deployer.create3("HintHelpers.sol:HintHelpers")
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     ICollateralRegistry(deployedContracts.collateralRegistry),
@@ -141,7 +143,8 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             );
 
         deployedContracts.multiTroveGetter = deployer.create3("MultiTroveGetter.sol:MultiTroveGetter")
-            .setLabel(cfg.singletonLabel).deploy(abi.encode(ICollateralRegistry(deployedContracts.collateralRegistry)));
+            .setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(ICollateralRegistry(deployedContracts.collateralRegistry)));
 
         precomputedAddresses.borrowerOperations =
             _predict("BorrowerOperations.sol:BorrowerOperations", deployer, cfg.singletonLabel);
@@ -169,7 +172,8 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 )
             );
 
-        deployedContracts.troveManager = deployer.create3("TroveManager.sol:TroveManager").setLabel(cfg.singletonLabel)
+        deployedContracts.troveManager = deployer.create3("TroveManager.sol:TroveManager")
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     IAddressesRegistry(deployedContracts.addressesRegistry),
@@ -177,12 +181,15 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
                 )
             );
 
-        deployedContracts.troveNFT = deployer.create3("TroveNFT.sol:TroveNFT").setLabel(cfg.singletonLabel)
+        deployedContracts.troveNFT = deployer.create3("TroveNFT.sol:TroveNFT")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(IAddressesRegistry(deployedContracts.addressesRegistry)));
 
         upgradeableContractsImplementations.stabilityPoolImplementation = deployer.create3(
                 "StabilityPool.sol:StabilityPool"
-            ).setLabel(cfg.singletonLabel).deploy(abi.encode(true, ISystemParams(deployedContracts.systemParamsProxy)));
+            )
+            .setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(true, ISystemParams(deployedContracts.systemParamsProxy)));
 
         deployedContracts.stabilityPoolProxy = deployOztupProxy(
             deployer,
@@ -193,19 +200,24 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
             )
         );
 
-        deployedContracts.activePool = deployer.create3("ActivePool.sol:ActivePool").setLabel(cfg.singletonLabel)
+        deployedContracts.activePool = deployer.create3("ActivePool.sol:ActivePool")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry, ISystemParams(deployedContracts.systemParamsProxy)));
 
-        deployedContracts.defaultPool = deployer.create3("DefaultPool.sol:DefaultPool").setLabel(cfg.singletonLabel)
+        deployedContracts.defaultPool = deployer.create3("DefaultPool.sol:DefaultPool")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
-        deployedContracts.gasPool = deployer.create3("GasPool.sol:GasPool").setLabel(cfg.singletonLabel)
+        deployedContracts.gasPool = deployer.create3("GasPool.sol:GasPool")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
         deployedContracts.collSurplusPool = deployer.create3("CollSurplusPool.sol:CollSurplusPool")
-            .setLabel(cfg.singletonLabel).deploy(abi.encode(deployedContracts.addressesRegistry));
+            .setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(deployedContracts.addressesRegistry));
 
-        deployedContracts.sortedTroves = deployer.create3("SortedTroves.sol:SortedTroves").setLabel(cfg.singletonLabel)
+        deployedContracts.sortedTroves = deployer.create3("SortedTroves.sol:SortedTroves")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(deployedContracts.addressesRegistry));
 
         assert(deployedContracts.borrowerOperations == precomputedAddresses.borrowerOperations);
@@ -282,7 +294,8 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
 
         upgradeableContractsImplementations.systemParamsImplementation = deployer.create3(
                 "SystemParams.sol:SystemParams"
-            ).setLabel(cfg.singletonLabel)
+            )
+            .setLabel(cfg.singletonLabel)
             .deploy(
                 abi.encode(
                     true, // disableInitializers for implementation
@@ -455,7 +468,8 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
 
         // Deploy SSTORE2DataPointer which calls SSTORE2.write in its constructor
         address dataPointerContract = deployer.create3("SSTORE2DataPointer.sol:SSTORE2DataPointer")
-            .setLabel(cfg.singletonLabel).deploy(abi.encode(allData));
+            .setLabel(cfg.singletonLabel)
+            .deploy(abi.encode(allData));
         address pointer = SSTORE2DataPointer(dataPointerContract).pointer();
 
         // Deploy FixedAssetReader via create3
@@ -469,11 +483,13 @@ contract DeployLiquityV2 is TrebScript, ProxyHelper {
         metadataAssets[1] = FixedAssetReader.Asset(debtLogoEnd, collLogoEnd);
         metadataAssets[2] = FixedAssetReader.Asset(collLogoEnd, fontEnd);
 
-        address fixedAssetReader = deployer.create3("FixedAssets.sol:FixedAssetReader").setLabel(cfg.singletonLabel)
+        address fixedAssetReader = deployer.create3("FixedAssets.sol:FixedAssetReader")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(pointer, sigs, metadataAssets));
 
         // Deploy MetadataNFT via create3
-        deployedContracts.metadataNFT = deployer.create3("MetadataNFT.sol:MetadataNFT").setLabel(cfg.singletonLabel)
+        deployedContracts.metadataNFT = deployer.create3("MetadataNFT.sol:MetadataNFT")
+            .setLabel(cfg.singletonLabel)
             .deploy(abi.encode(FixedAssetReader(fixedAssetReader)));
     }
 

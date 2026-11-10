@@ -490,6 +490,35 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
         ExchangeTradingLimitsConfig memory tradingLimits,
         bool createVirtual
     ) internal {
+        _addExchange({
+            asset0: asset0,
+            asset1: asset1,
+            pricingModule: pricingModule,
+            spread: spread,
+            rateFeed: rateFeed,
+            resetFrequency: resetFrequency,
+            stablePoolResetSize: stablePoolResetSize,
+            tradingLimits: tradingLimits,
+            createVirtual: createVirtual,
+            deprecated: false
+        });
+    }
+
+    /// @dev Overload with a `deprecated` flag: keep the original `_addExchange` entry in place and flip
+    ///      the flag to mark the pool for on-chain deprecation (see DeprecateExchangePools action).
+    ///      The entry is retained as a historical record and so the exchangeId stays derivable.
+    function _addExchange(
+        string memory asset0,
+        string memory asset1,
+        string memory pricingModule,
+        uint256 spread,
+        string memory rateFeed,
+        uint256 resetFrequency,
+        uint256 stablePoolResetSize,
+        ExchangeTradingLimitsConfig memory tradingLimits,
+        bool createVirtual,
+        bool deprecated
+    ) internal {
         require(_isStableToken[asset0], string.concat("MentoConfig: ", asset0, " is not a registered stableToken"));
         require(
             _isStableToken[asset1] || _collateral[asset1] != address(0),
@@ -525,7 +554,8 @@ abstract contract MentoConfig is TrebScript, ProxyHelper, IMentoConfig {
                     config: poolConfig
                 }),
                 tradingLimits: tradingLimits,
-                createVirtual: createVirtual
+                createVirtual: createVirtual,
+                deprecated: deprecated
             })
         );
     }

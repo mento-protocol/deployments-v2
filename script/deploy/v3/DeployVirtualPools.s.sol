@@ -30,7 +30,7 @@ contract DeployVirtualPools is TrebScript, ProxyHelper, PostChecksHelper {
     function setUp() public {
         config = Config.get();
         exchangeProvider = lookupProxyOrFail("BiPoolManager");
-        exchangeProvider = lookupProxyOrFail("FactoryRegistry");
+        factoryRegistry = lookupProxyOrFail("FactoryRegistry");
     }
 
     /// @custom:senders deployer, migrationOwner
@@ -56,7 +56,7 @@ contract DeployVirtualPools is TrebScript, ProxyHelper, PostChecksHelper {
             string memory name =
                 string.concat(IERC20Metadata(pool.asset0).symbol(), "/", IERC20Metadata(pool.asset1).symbol());
 
-            if (!found || !exchangeConfig.createVirtual) {
+            if (!found || !exchangeConfig.createVirtual || exchangeConfig.deprecated) {
                 continue;
             }
 

@@ -9,12 +9,13 @@ on:
     types: [submitted]
   issues:
     types: [opened]
-  # Auto-review fires on open, on draft → ready, and on every push
-  # (synchronize) so each new head commit is reviewed. Cleanup pushes from
-  # /ship will re-trigger; the concurrency group below cancels the stale run
-  # so only the latest head is reviewed.
+  # Auto-review fires on PR open and on draft → ready transitions only, not on
+  # every push (synchronize). After the first review, follow-up reviews are
+  # opt-in via `@claude review` in a comment — keeps quota usage predictable
+  # and avoids reviewing the same PR head twice when /ship runs cleanup
+  # commits. Mirrors monitoring-monorepo (2026-09-10).
   pull_request:
-    types: [opened, synchronize, ready_for_review, reopened]
+    types: [opened, ready_for_review]
     paths-ignore:
       - "**/*.md"
 
@@ -59,10 +60,10 @@ jobs:
       # Third-party actions are pinned to an immutable commit SHA (not a tag)
       # so upstream tag retargeting or a compromised release cannot silently run
       # new code here. Update via Dependabot (see .github/dependabot.yml).
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
-      - uses: anthropics/claude-code-action@536f2c32a39763739000b0e1ac69ca2647d97ce9 # v1.0.170
+      - uses: anthropics/claude-code-action@d535f5172dec02b204866b393d6b20b9b2aaf98d # v1.0.266
         with:
           github_token: ${{ github.token }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -115,10 +116,10 @@ jobs:
       pull-requests: write
       id-token: write
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
-      - uses: anthropics/claude-code-action@536f2c32a39763739000b0e1ac69ca2647d97ce9 # v1.0.170
+      - uses: anthropics/claude-code-action@d535f5172dec02b204866b393d6b20b9b2aaf98d # v1.0.266
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           use_sticky_comment: true

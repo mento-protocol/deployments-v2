@@ -9,6 +9,13 @@
 type = "private_key"
 private_key = "${DEPLOYER_PRIVATE_KEY}"
 
+# Hyphen-free alias of dev-pk: treb-sol resolves an oz_governor proposer by sender *name*,
+# treb rejects hyphens in sender names, and on Sepolia the dev key is not pulled in as a Safe
+# signer dependency the way it is on mainnet. See script/migration/sepolia/MGP20Sepolia.sol.
+[accounts.devpk]
+type = "private_key"
+private_key = "${DEPLOYER_PRIVATE_KEY}"
+
 [accounts.reporter-pk]
 type = "private_key"
 private_key = "${REPORTER_PRIVATE_KEY}"
@@ -33,7 +40,7 @@ proposer = "dev-pk"
 type = "oz_governor"
 governor = "0x23173Ac37b8E4e5a60d787aC543B3F51e8f398b4"
 timelock = "0x74c44Be99937815173A3C56274331e0A05611e0D"
-proposer = "dev-pk"
+proposer = "devpk"
 
 [accounts.migration-safe]
 type = "safe"
@@ -51,6 +58,7 @@ migrationOwner = "migration-safe"
 
 [namespace.testnet-v2-rc5.senders]
 deployer = "dev-pk"
+devpk = "devpk"
 governor = "mento-gov-celo-sepolia"
 migrationOwner = "dev-pk"
 reporter = "reporter-pk"

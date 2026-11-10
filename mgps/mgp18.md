@@ -1,0 +1,93 @@
+## TL;DR
+
+With Mento V3 live since March, we are winding down Mento V2. This proposal reduces the trading limits on the ten FX pools that remain on the V2 model, replacing the current time-windowed limits with a single global limit sized at the outstanding supply of each FX stable (plus a 10% buffer). This caps the reserve’s exposure to FX risk while allowing the proposal-time supply to exit through the Broker at the snapshot oracle rates.
+
+Alongside this proposal (but outside of governance), the migration multisig that currently owns the BiPoolManager will deprecate the following V2 pools, which are no longer needed on the legacy system:
+
+1. USDC/USDm
+2. axlUSDC/USDm
+3. USDT/USDm
+4. CELO/USDm
+5. EURm/USDm
+6. axlEUROC/EURm
+
+The respective Mento V3 pools (if they exist) will NOT be affected by this and will remain available.
+
+## Overview
+
+Mento V3 has been running successfully since [March 2026](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103), with 15+ FPMM pools deployed across three chains, over $80M in volume swapped, and three Mento stables migrated to a CDP-backed model (GBPm, CHFm, JPYm).
+
+The transition is now far enough along to start retiring V2 in two phases:
+
+1. **Keep FX stables on V2**: AUDm, CADm, ZARm, COPm, BRLm, PHPm, GHSm, NGNm, KESm, and XOFm will not be migrated to the CDP model immediately. Their V2 pools against USDm will stay live to support redemptions, and we will work with the community to transition them to the CDP model as demand grows.
+2. **Destroy collateral and 1:1 stable pools:**
+   - USDm/{USDC, axlUSDC, USDT, CELO, EURm}
+   - EURm/axlEUROC
+   - These pools are no longer needed on the legacy system and the migration multisig will destroy them.
+
+This proposal covers the first phase: it reconfigures the Broker’s trading limits so the proposal-time FX supply can fully contract at the snapshot oracle rates. Later supply or exchange-rate movement can consume the buffer and require a governance limit update.
+
+The second phase will be handled by the migration multisig outside of governance.
+
+### How the new limits work
+
+The Broker enforces trading limits per pool and per token, as a combination of a 5-minute window limit (L0), a 1-day window limit (L1), and a lifetime global limit (LG) on net flows. This proposal replaces that configuration on both tokens of each remaining pool with a **global-only limit**:
+
+- **FX token**: the token’s current total supply × 1.1.
+- **USDm**: the USD equivalent of that supply at the current oracle rate × 1.1.
+
+Sizing the limits this way covers redemption of the proposal-time supply at the snapshot oracle rate. It does not guarantee full redemption at every future rate. If an FX currency appreciates enough to consume the 10% margin, governance must raise that pool’s USDm limit before the full outstanding supply can exit in one direction. The post-reset FX net-flow limit is fixed at 1.1× the proposal-time supply. This limits net Broker-mediated FX issuance from the reset state. It does not cap total supply or cumulative gross minting because supply can change before execution and later redemptions can create room for more minting within the signed net-flow bound.
+
+Each limit is **reset before being set**: the Broker preserves the accumulated net flow when a global limit stays configured, so the first transaction clears the counter and the second applies the new limit from a clean slate.
+
+The 10% buffer exists because the limit values are frozen into the proposal when it is created, while supply and oracle rates can move during the voting and timelock period. The buffer absorbs moderate combined drift in those values. It also adds the same 10% to the minting headroom. It is not a permanent exchange-rate guarantee.
+
+## Transaction Details
+
+All governance transactions call `configureTradingLimit(bytes32 exchangeId, address token, Config config)` on the Broker proxy ([`0x777A8255cA72412f0d706dc03C9D1987306B4CaD`](https://celoscan.io/address/0x777A8255cA72412f0d706dc03C9D1987306B4CaD)).
+
+The proposal contains **40 transactions** — 4 per exchange, repeated for each of the 10 exchanges:
+
+| Target       | Function                | Parameters                                                 |
+| ------------ | ----------------------- | ---------------------------------------------------------- |
+| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, empty config (reset net flow)        |
+| Broker Proxy | `configureTradingLimit` | exchangeId, FX token, global-only limit = supply × 1.1     |
+| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, empty config (reset net flow)            |
+| Broker Proxy | `configureTradingLimit` | exchangeId, USDm, global-only limit = USD equivalent × 1.1 |
+
+The affected exchanges:
+
+| Exchange  | Exchange ID                                                          |
+| --------- | -------------------------------------------------------------------- |
+| USDm/AUDm | `0xd580d237231109e6a96d67d82450611c610a805a26660c90281bdc0cd04a95c7` |
+| USDm/CADm | `0x517ccc3bcab9f35e2e24143a0c1809068efc649f740846cfb6a1c5703735c1ee` |
+| USDm/ZARm | `0x4206e101b13bf29e40b2bfed4cf167271c41677720f2ee786ac1bf5efac101cb` |
+| USDm/COPm | `0x1c9378bd0973ff313a599d3effc654ba759f8ccca655ab6d6ce5bd39a212943b` |
+| USDm/BRLm | `0xd11d52b973ddbb983cc2087aabcafd915fc3140cf9996aacc61db9710d1bde05` |
+| USDm/PHPm | `0x7952984d7278ca3417febf52815c321984ac3147ced2c02bb6a02b0bcab08413` |
+| USDm/GHSm | `0x3562f9d29eba092b857480a82b03375839c752346b9ebe93a57ab82410328187` |
+| USDm/NGNm | `0x67a5122dab72931be57196e0abba81690461f327bc60fb98ca7eef0ac58906cc` |
+| USDm/KESm | `0x89de88b8eb790de26f4649f543cb6893d93635c728ac857f0926e842fb0d298b` |
+| USDm/XOFm | `0xc9664df358594c5eaf2f410ab371e2deb8b532ca26162d2bc36d99b8d174567b` |
+
+The exact limit values are computed from on-chain state (token total supplies and oracle rates) when the proposal is created, by `script/migration/MGP18.sol` in the [deployments repository](https://github.com/mento-protocol/deployments-v2), and can be independently reproduced by re-running the script in dry-run mode.
+
+### Accompanying migration multisig operation
+
+Separately from this proposal, the migration multisig ([`0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458`](https://celoscan.io/address/0x58099B74F4ACd642Da77b4B7966b4138ec5Ba458)), which owns the BiPoolManager ([`0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901`](https://celoscan.io/address/0x22d9db95E6Ae61c104A7B6F6C78D7993B94ec901)), will deprecate the six V2 exchanges mentioned above by calling `destroyExchange` for:
+
+- USDm/USDC
+- USDm/axlUSDC
+- USDm/USDT
+- USDm/CELO
+- USDm/EURm
+- EURm/axlEUROC
+
+Mento V3 and the broader Celo DEX ecosystem serve swaps for these assets.
+
+## Security Considerations
+
+- The governance transactions only touch trading-limit configuration on the Broker for existing, live exchanges. No ownership changes, no implementation upgrades, and no funds are involved.
+- The reset clears each asset's accumulated global net flow before applying the new limit. If the previous limit had positive net flow, this restores the full 1.1× supply-sized positive headroom. The new limit bounds signed net flow to that amount from the reset state. It can provide new minting capacity relative to the consumed pre-reset limit, and it does not cap total supply or cumulative gross minting.
+- The USDm limits use proposal-time oracle rates. Supply growth and FX appreciation share the 10% buffer. If their combined movement exceeds it, governance must update the affected USDm limit to restore full one-direction exit capacity.
+- The same migration multisig that has owned the BiPoolManager since the V3 rollout began ([MGP-14](https://forum.mento.org/t/mgp-14-mento-v3-deployment-phase-1/103)) performs the exchange deprecations. Ownership of the BiPoolManager as well as other V2 contracts will be transferred back to Mento Governance in a future MGP.

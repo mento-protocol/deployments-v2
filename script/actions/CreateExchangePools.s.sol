@@ -38,6 +38,13 @@ contract CreateExchangePools is TrebScript, ProxyHelper, ConfigHelper {
 
         for (uint256 i = 0; i < exchanges.length; i++) {
             IMentoConfig.ExchangeConfig memory exchange = exchanges[i];
+            if (exchange.deprecated) {
+                console.log("Skipping deprecated pool:");
+                console.log("  asset0:", exchange.pool.asset0);
+                console.log("  asset1:", exchange.pool.asset1);
+                continue;
+            }
+
             bytes32 exchangeId =
                 config.getExchangeId(exchange.pool.asset0, exchange.pool.asset1, address(exchange.pool.pricingModule));
 

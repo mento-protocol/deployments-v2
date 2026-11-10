@@ -110,7 +110,8 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
                 }),
                 asset1: emptyTradingLimits()
             }),
-            createVirtual: false
+            createVirtual: false,
+            deprecated: true
         });
 
         _addExchange({
@@ -132,7 +133,8 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
                 }),
                 asset1: emptyTradingLimits()
             }),
-            createVirtual: false
+            createVirtual: false,
+            deprecated: true
         });
 
         _addExchange({
@@ -154,7 +156,8 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
                 }),
                 asset1: emptyTradingLimits()
             }),
-            createVirtual: false
+            createVirtual: false,
+            deprecated: true
         });
 
         _addExchange({
@@ -176,7 +179,8 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
                 }),
                 asset1: emptyTradingLimits()
             }),
-            createVirtual: false
+            createVirtual: false,
+            deprecated: true
         });
 
         _addExchange({
@@ -205,14 +209,16 @@ contract MentoConfig_celo_sepolia is MentoConfig_celo {
                     flags: 1 | 2
                 })
             }),
-            createVirtual: false
+            createVirtual: false,
+            deprecated: true
         });
 
         _addFxExchange({
             currency: "EUR",
             spread: 0.005 * 1e24,
             tradingLimits: _tier1FxTradingLimits(0.86 * 1e3),
-            createVirtual: false
+            createVirtual: false,
+            deprecated: true
         });
         _addFxExchange({
             currency: "AUD",
