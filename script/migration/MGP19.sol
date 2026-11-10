@@ -189,15 +189,18 @@ contract MGP19 is TrebScript, ProxyHelper {
         require(migrationSafe != address(0), "migrationOwner not configured");
         require(govSender.account == timelock, "governor sender does not execute as the Mento timelock");
 
-        OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
-        ozGovSender.setTitle("MGP-19: Bringing Stable Asset Issuance Home to Celo Governance");
-        ozGovSender.setProposalDescription("./mgps/mgp19.md");
+        // Step 1 (governance proposal) already executed on 2026-11-09. Title/description are
+        // intentionally unset so that OZGovernorSender.broadcast reverts if anything is queued for it.
+        // OZGovernor.Sender storage ozGovSender = govSender.ozGovernor();
+        // ozGovSender.setTitle("MGP-19: Bringing Stable Asset Issuance Home to Celo Governance");
+        // ozGovSender.setProposalDescription("./mgps/mgp19.md");
 
         setUpGuards();
 
         preChecks();
 
         transferAll();
+        require(governorTxCount == 0, "MGP-19 step 1 already executed: governor leg must be empty");
 
         postChecks();
     }
@@ -253,8 +256,9 @@ contract MGP19 is TrebScript, ProxyHelper {
 
     function transferCeloProxyAdmin(Target storage t) internal {
         address holder = ICeloProxy(t.addr)._getOwner();
+        if (holder == celoGovernance) return logAlreadyTransferred(t, "proxy admin");
         Senders.Sender storage s = senderFor(holder, t.name, "proxy admin");
-        console.log("  > %s (%s) proxy admin: %s -> Celo Governance", t.name, t.addr, s.name);
+        console.log(unicode"  > 👀 %s (%s) proxy admin: %s -> Celo Governance", t.name, t.addr, s.name);
         ICeloProxy(s.harness(t.addr))._transferOwnership(celoGovernance);
         count(s);
     }
@@ -262,16 +266,18 @@ contract MGP19 is TrebScript, ProxyHelper {
     function transferOZProxyAdmin(Target storage t) internal {
         address proxyAdmin = getProxyAdmin(t.addr);
         address holder = IProxyAdminV5(proxyAdmin).owner();
+        if (holder == celoGovernance) return logAlreadyTransferred(t, "ProxyAdmin owner");
         Senders.Sender storage s = senderFor(holder, t.name, "ProxyAdmin owner");
-        console.log("  > %s (%s) ProxyAdmin owner: %s -> Celo Governance", t.name, t.addr, s.name);
+        console.log(unicode"  > 👀 %s (%s) ProxyAdmin owner: %s -> Celo Governance", t.name, t.addr, s.name);
         transferProxyAdminOwnership(s, t.addr, celoGovernance);
         count(s);
     }
 
     function transferContractOwner(Target storage t) internal {
         address holder = IOwnable(t.addr).owner();
+        if (holder == celoGovernance) return logAlreadyTransferred(t, "owner");
         Senders.Sender storage s = senderFor(holder, t.name, "owner");
-        console.log("  > %s (%s) owner: %s -> Celo Governance", t.name, t.addr, s.name);
+        console.log(unicode"  > 👀 %s (%s) owner: %s -> Celo Governance", t.name, t.addr, s.name);
         IOwnable(s.harness(t.addr)).transferOwnership(celoGovernance);
         count(s);
     }
@@ -286,6 +292,15 @@ contract MGP19 is TrebScript, ProxyHelper {
         if (holder == timelock) return sender("governor");
         if (holder == migrationSafe) return sender("migrationOwner");
         revert(string.concat(name, " ", right, " is held by neither the Mento timelock nor the migration multisig"));
+    }
+
+    /// @dev Pre-check variant of senderFor: rights already held by Celo Governance (moved in Step 1) are fine.
+    function checkHolder(address holder, string memory name, string memory right) internal view {
+        if (holder != celoGovernance) senderFor(holder, name, right);
+    }
+
+    function logAlreadyTransferred(Target storage t, string memory right) internal view {
+        console.log("        - %s (%s) %s: already Celo Governance, skipped", t.name, t.addr, right);
     }
 
     function count(Senders.Sender storage s) internal {
@@ -328,7 +343,7 @@ contract MGP19 is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < guards.length; ++i) {
             require(guardHolder(guards[i]) == guards[i].expected, string.concat(guards[i].name, ": unexpected holder"));
         }
-        console.log(unicode" > 🟢 every right is held by the Mento timelock or the migration multisig");
+        console.log(unicode" > 🟢 every right is held by the Mento timelock, the migration multisig or Celo Governance");
 
         address relayerFactory = lookupProxy("ChainlinkRelayerFactory", ProxyType.OZTUP);
         if (relayerFactory != address(0)) {
@@ -343,15 +358,15 @@ contract MGP19 is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < targets.length; ++i) {
             Target storage t = targets[i];
             if (t.kind == Kind.CeloProxy) {
-                senderFor(ICeloProxy(t.addr)._getOwner(), t.name, "proxy admin");
-                senderFor(IOwnable(t.addr).owner(), t.name, "owner");
+                checkHolder(ICeloProxy(t.addr)._getOwner(), t.name, "proxy admin");
+                checkHolder(IOwnable(t.addr).owner(), t.name, "owner");
             } else if (t.kind == Kind.OZTUP) {
-                senderFor(IProxyAdminV5(getProxyAdmin(t.addr)).owner(), t.name, "ProxyAdmin owner");
-                senderFor(IOwnable(t.addr).owner(), t.name, "owner");
+                checkHolder(IProxyAdminV5(getProxyAdmin(t.addr)).owner(), t.name, "ProxyAdmin owner");
+                checkHolder(IOwnable(t.addr).owner(), t.name, "owner");
             } else if (t.kind == Kind.OZTUPAdminOnly) {
-                senderFor(IProxyAdminV5(getProxyAdmin(t.addr)).owner(), t.name, "ProxyAdmin owner");
+                checkHolder(IProxyAdminV5(getProxyAdmin(t.addr)).owner(), t.name, "ProxyAdmin owner");
             } else {
-                senderFor(IOwnable(t.addr).owner(), t.name, "owner");
+                checkHolder(IOwnable(t.addr).owner(), t.name, "owner");
             }
         }
     }
