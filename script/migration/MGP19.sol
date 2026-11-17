@@ -343,7 +343,9 @@ contract MGP19 is TrebScript, ProxyHelper {
         for (uint256 i = 0; i < guards.length; ++i) {
             require(guardHolder(guards[i]) == guards[i].expected, string.concat(guards[i].name, ": unexpected holder"));
         }
-        console.log(unicode" > 🟢 every right is held by the Mento timelock, the migration multisig or Celo Governance");
+        console.log(
+            unicode" > 🟢 every right is held by the Mento timelock, the migration multisig or Celo Governance"
+        );
 
         address relayerFactory = lookupProxy("ChainlinkRelayerFactory", ProxyType.OZTUP);
         if (relayerFactory != address(0)) {
