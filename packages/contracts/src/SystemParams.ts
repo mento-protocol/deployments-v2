@@ -486,6 +486,7 @@ export const SystemParams = {
     },
     JPYm: {
       42220: "0xC7829C5D1701aB366D248ca384C4caefD87EcDF1",
+      11142220: "0xa36e3f72B52561614AC1B71965b9649438b84A33",
     },
   } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

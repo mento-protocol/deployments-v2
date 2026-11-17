@@ -2081,12 +2081,20 @@
         "address": "0x78eE16e1b0E6103b4A00db42178a99A6D681d539",
         "type": "contract"
       },
+      "FXPriceFeedProxyJPYm": {
+        "address": "0xeD2aE3d1aF45956d5Fcfb519a998E91b8cd3546b",
+        "type": "contract"
+      },
       "FXPriceFeedv300CHFm": {
         "address": "0xe1Fe00Fcde8dD644011d2718D33e6a12BCfa702d",
         "type": "contract"
       },
       "FXPriceFeedv300GBPm": {
         "address": "0x40e9403712ED5b991710224e73655470E077a398",
+        "type": "contract"
+      },
+      "FXPriceFeedv300JPYm": {
+        "address": "0x5AfFF8Ff152cc0CA23F4b14ab2C6B3642Fea71dE",
         "type": "contract"
       },
       "FactoryRegistry": {
@@ -2504,12 +2512,20 @@
         "address": "0x70855d7826d3Ae92b2B3ae154eE6945754dD4Fe5",
         "type": "contract"
       },
+      "SystemParamsProxyJPYm": {
+        "address": "0xa36e3f72B52561614AC1B71965b9649438b84A33",
+        "type": "contract"
+      },
       "SystemParamsv300CHFm": {
         "address": "0x5faa9594DB6848786Aaacae27519B88F6358DA56",
         "type": "contract"
       },
       "SystemParamsv300GBPm": {
         "address": "0xdf1E9330f328Ea8Fd3E974b1a2510A9791712318",
+        "type": "contract"
+      },
+      "SystemParamsv300JPYm": {
+        "address": "0x99E9b4999e896a0925fB8B42D768141c19a4fFeD",
         "type": "contract"
       },
       "TimelockController": {

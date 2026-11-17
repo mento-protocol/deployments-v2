@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- `11142220/testnet-v2-rc5/FXPriceFeedProxyJPYm`
+- `11142220/testnet-v2-rc5/FXPriceFeedv300JPYm`
+- `11142220/testnet-v2-rc5/SystemParamsProxyJPYm`
+- `11142220/testnet-v2-rc5/SystemParamsv300JPYm`
+
 ## [0.9.0] - 2026-07-17
 
 ### Added
