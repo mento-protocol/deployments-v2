@@ -454,6 +454,7 @@ export const FXPriceFeed = {
     },
     JPYm: {
       42220: "0x8409587c8BA4f6850AEE09A32B86022C3E88AD33",
+      11142220: "0xeD2aE3d1aF45956d5Fcfb519a998E91b8cd3546b",
     },
   } as Record<string, Partial<Record<number, `0x${string}`>>>,
 };

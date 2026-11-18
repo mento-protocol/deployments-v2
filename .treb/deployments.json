@@ -28094,6 +28094,38 @@
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
   },
+  "testnet-v2-rc5/11142220/FXPriceFeed:v3.0.0-JPYm": {
+    "id": "testnet-v2-rc5/11142220/FXPriceFeed:v3.0.0-JPYm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "FXPriceFeed",
+    "label": "v3.0.0-JPYm",
+    "address": "0x5AfFF8Ff152cc0CA23F4b14ab2C6B3642Fea71dE",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa7007900377fb3f12ce1706bab",
+      "initCodeHash": "0xb86ed4adfba46a52fe29008f7357b486dba7a2ce605c1b8a5b5563b01d58dd0e",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "entropy": "testnet-v2-rc5/FXPriceFeed.sol:FXPriceFeed:v3.0.0-JPYm"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "",
+      "compilerVersion": "unknown",
+      "bytecodeHash": "0x250b56a752a2d728d35d459d68b7026214ca36dfed857896757cbc350a1b9a19",
+      "scriptPath": "script/deploy/v3/DeployLiquity.s.sol",
+      "gitCommit": "273ee36662c44b926f118c8ab0c482889f260add"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-23T16:42:38+02:00",
+    "updatedAt": "2026-04-23T16:42:38+02:00"
+  },
   "testnet-v2-rc5/11142220/FactoryRegistry:v3.0.0": {
     "id": "testnet-v2-rc5/11142220/FactoryRegistry:v3.0.0",
     "namespace": "testnet-v2-rc5",
@@ -31652,6 +31684,38 @@
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
   },
+  "testnet-v2-rc5/11142220/SystemParams:v3.0.0-JPYm": {
+    "id": "testnet-v2-rc5/11142220/SystemParams:v3.0.0-JPYm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "SystemParams",
+    "label": "v3.0.0-JPYm",
+    "address": "0x99E9b4999e896a0925fB8B42D768141c19a4fFeD",
+    "type": "SINGLETON",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700b7dd4becdd621269048973",
+      "initCodeHash": "0x2f68b0ffc659d82636ab1ea69c2f1edc93cc1f7a501204c916c451ef7b571612",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000002a5a058fc295ed00000000000000000000000000000000000000000000000000000000b1a2bc2ec50000000000000000000000000000000000000000000000000000016345785d8a000000000000000000000000000000000000000000000000000000000000000000c80000000000000000000000000000000000000000000000008ac7230489e800000000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000012bc29d8eec700000000000000000000000000000000000000000000000000000f43fc2c04ee00000000000000000000000000000000000000000000000000000f43fc2c04ee0000000000000000000000000000000000000000000000000000016345785d8a000000000000000000000000000000000000000000000000000000071afd498d00000000000000000000000000000000000000000000000000000011c37937e080000000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000db7e843a16f6c0000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000a688906bd8b000000000000000000000000000000000000000000000000000ad78ebc5ac620000000000000000000000000000000000000000000000000d3c21bcecceda1000000",
+      "entropy": "testnet-v2-rc5/SystemParams.sol:SystemParams:v3.0.0-JPYm"
+    },
+    "proxyInfo": null,
+    "artifact": {
+      "path": "",
+      "compilerVersion": "unknown",
+      "bytecodeHash": "0xc7036b39d28991ed58537bc8325644ae1bb60dbe6bec583623f4e5adc06a296a",
+      "scriptPath": "script/deploy/v3/DeployLiquity.s.sol",
+      "gitCommit": "273ee36662c44b926f118c8ab0c482889f260add"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-23T16:42:19+02:00",
+    "updatedAt": "2026-04-23T16:42:19+02:00"
+  },
   "testnet-v2-rc5/11142220/TimelockController:v2.6.5": {
     "id": "testnet-v2-rc5/11142220/TimelockController:v2.6.5",
     "namespace": "testnet-v2-rc5",
@@ -31925,6 +31989,42 @@
     "tags": null,
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:FXPriceFeedProxy:JPYm": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:FXPriceFeedProxy:JPYm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "FXPriceFeedProxy:JPYm",
+    "address": "0xeD2aE3d1aF45956d5Fcfb519a998E91b8cd3546b",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700d7e16b88dfe80ea66e116c",
+      "initCodeHash": "0x85d0af8d24e97d9c949188a3ac54b6e1de582ac24aabc68335409f1db9196a49",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x0000000000000000000000005afff8ff152cc0ca23f4b14ab2c6b3642fea71de0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa7000000000000000000000000000000000000000000000000000000000000006000000000000000000000000000000000000000000000000000000000000000e4ddbb18e500000000000000000000000026eff54e2f0e8825996b83119b7df5ef2c882dd7000000000000000000000000403ea4186ce479ff162636c37fdf4086bd286f8c000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000004b00000000000000000000000006eecde8082e2c6039fea88a66fb71145c216bbfd0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa70000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:FXPriceFeedProxy:JPYm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x5AfFF8Ff152cc0CA23F4b14ab2C6B3642Fea71dE",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xe8c0354b2621bc4d29c1fe39c5b56b5d9cfc716c38e670bcf84e8520884fee4c",
+      "scriptPath": "script/deploy/v3/DeployLiquity.s.sol",
+      "gitCommit": "273ee36662c44b926f118c8ab0c482889f260add"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-23T16:42:42+02:00",
+    "updatedAt": "2026-04-23T16:42:42+02:00"
   },
   "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:FactoryRegistry": {
     "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:FactoryRegistry",
@@ -32425,6 +32525,42 @@
     "tags": null,
     "createdAt": "2026-03-02T17:11:14.416317Z",
     "updatedAt": "2026-03-02T17:11:14.419439238Z"
+  },
+  "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:SystemParamsProxy:JPYm": {
+    "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:SystemParamsProxy:JPYm",
+    "namespace": "testnet-v2-rc5",
+    "chainId": 11142220,
+    "contractName": "TransparentUpgradeableProxy",
+    "label": "SystemParamsProxy:JPYm",
+    "address": "0xa36e3f72B52561614AC1B71965b9649438b84A33",
+    "type": "PROXY",
+    "transactionId": "",
+    "deploymentStrategy": {
+      "method": "CREATE3",
+      "salt": "0x2738f38fde510743e0c589415e0598c4cee6eaa700d1cb29bd21bdceaf099dde",
+      "initCodeHash": "0xff5d8df291c189d87179302e4c35d73f522a8e7c9fe7154d5335d632f0b43463",
+      "factory": "0xba5Ed099633D3B313e4D5F7bdc1305d3c28ba5Ed",
+      "constructorArgs": "0x00000000000000000000000099e9b4999e896a0925fb8b42d768141c19a4ffed0000000000000000000000002738f38fde510743e0c589415e0598c4cee6eaa700000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000",
+      "entropy": "testnet-v2-rc5/lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy:SystemParamsProxy:JPYm"
+    },
+    "proxyInfo": {
+      "type": "UUPS",
+      "implementation": "0x99E9b4999e896a0925fB8B42D768141c19a4fFeD",
+      "history": []
+    },
+    "artifact": {
+      "path": "lib/openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
+      "compilerVersion": "0.8.24+commit.e11b9ed9",
+      "bytecodeHash": "0xe8c0354b2621bc4d29c1fe39c5b56b5d9cfc716c38e670bcf84e8520884fee4c",
+      "scriptPath": "script/deploy/v3/DeployLiquity.s.sol",
+      "gitCommit": "273ee36662c44b926f118c8ab0c482889f260add"
+    },
+    "verification": {
+      "status": "UNVERIFIED"
+    },
+    "tags": null,
+    "createdAt": "2026-04-23T16:42:23+02:00",
+    "updatedAt": "2026-04-23T16:42:23+02:00"
   },
   "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:TimelockController": {
     "id": "testnet-v2-rc5/11142220/TransparentUpgradeableProxy:TimelockController",
